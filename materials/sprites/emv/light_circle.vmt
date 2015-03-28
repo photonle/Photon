@@ -1,0 +1,9 @@
+"UnlitGeneric"
+{
+	"$basetexture"		"sprites/emv/light_circle"
+	"$nocull" 1
+	"$additive" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+	"$selfillum"	1
+}

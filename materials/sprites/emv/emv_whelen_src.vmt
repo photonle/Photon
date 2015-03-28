@@ -1,0 +1,9 @@
+"UnLitGeneric"
+{
+	"$basetexture"		"sprites/emv/emv_whelen_src"
+	"$selfillum"	1
+	"$nocull" 1
+	"$additive" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}

@@ -1,0 +1,8 @@
+"UnLitGeneric"
+{
+	"$basetexture"		"sprites/emv/st_charger_rear_outer_a"
+	"$nocull" 1
+	"$additive" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}
