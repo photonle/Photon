@@ -4,7 +4,7 @@ AddCSLuaFile()
 
 -- If you're a developer or server owner, change these as needed to avoid datatable conflicts
 
-local BOOL_CONST_OFFSET = 0
+local BOOL_CONST_OFFSET = 20
 
 // booleans //
 EMV_LIGHTS_ON        = BOOL_CONST_OFFSET + 0
@@ -20,12 +20,15 @@ EMV_ILLUM_ON		 = BOOL_CONST_OFFSET + 9
 EMV_TRF_ON			 = BOOL_CONST_OFFSET + 10
 
 // integers //
-EMV_LIGHT_OPTION     = 0
-EMV_SIREN_OPTION     = 1
-EMV_SIREN_SET        = 2
-CAR_BLINKER			 = 3
-EMV_ILLUM_OPTION	 = 4
-EMV_TRF_OPTION		 = 5
+
+local INT_CONST_OFFSET = 20
+
+EMV_LIGHT_OPTION     = INT_CONST_OFFSET + 0
+EMV_SIREN_OPTION     = INT_CONST_OFFSET + 1
+EMV_SIREN_SET        = INT_CONST_OFFSET + 2
+CAR_BLINKER			 = INT_CONST_OFFSET + 3
+EMV_ILLUM_OPTION	 = INT_CONST_OFFSET + 4
+EMV_TRF_OPTION		 = INT_CONST_OFFSET + 5
 
 // strings //
 EMV_INDEX            = 3
