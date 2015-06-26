@@ -5,8 +5,31 @@ function EMVU.Helper:GetVectors( name )
 	return EMVU.Positions[name]
 end
 
-function EMVU.Helper:GetSequence( name, option )
-	return EMVU.Sequences[name]["Sequences"][option]["Components"]
+function EMVU.Helper:GetSequence( name, option, vehicle )
+	
+	local resultTable = {}
+	
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Sequences"][option]["BG_Components"] ) then
+		local bodygroups = vehicle:GetBodyGroups() -- BodyGroups of vehicle
+		local bgtable = EMVU.Sequences[name]["Sequences"][option]["BG_Components"] -- BodyGroups defined in vehicle specification file
+		for id,data in pairs( bodygroups ) do -- for index,value in each vehicle bodygroup
+			local indexId = id - 1
+			if bgtable[ data["name"] ] then  -- if this index is defined in the vehicle specifications
+				local selected = vehicle:GetBodygroup( indexId )
+				if bgtable[ data["name"] ][ tostring( selected ) ] then
+					for component,option in pairs( bgtable[ data["name"] ][ tostring( selected ) ] ) do
+						resultTable[ component ] = option
+					end
+				end
+			end
+		end
+	end
+	
+	for component, option in pairs( EMVU.Sequences[name]["Sequences"][option]["Components"] ) do
+		resultTable[ component ] = option
+	end
+	
+	return resultTable
 end
 
 function EMVU.Helper:GetIllumSequence( name, option )

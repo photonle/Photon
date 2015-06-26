@@ -192,8 +192,14 @@ EMV.Sequences = {
 		{
 			Name = "CODE 1",
 			Components = {
-				["rear"] = "alt_slow",
-				["lightbar"] = "code1"
+				["rear"] = "alt_slow"
+			},
+			BG_Components = {
+				["Lightbar"] = { -- master index, ie lightbar
+					["0"] = { -- bodygroup option
+						["lightbar"] = "code1"
+					}
+				}	
 			},
 			Disconnect = {}
 		},
@@ -202,8 +208,14 @@ EMV.Sequences = {
 			Components = {
 				["front"] = "alt",
 				["rear"] = "alt_med",
-				["lightbar"] = "alt",
-				["lightbar_rear"] = "med"
+			},
+			BG_Components = {
+				["Lightbar"] = {
+					["0"] = {
+						["lightbar"] = "alt",
+						["lightbar_rear"] = "med"
+					}
+				}
 			},
 			Disconnect = {}
 		},
@@ -215,8 +227,14 @@ EMV.Sequences = {
 				["low beams"] = "flash",
 				["high beams"] = "wigwag",
 				["rearhide"] = "flash",
-				["lightbar_rear"] = "rapid",
-				["lightbar"] = "priority"
+			},
+			BG_Components = {
+				["Lightbar"] = {
+					["0"] = {
+						["lightbar_rear"] = "rapid",
+						["lightbar"] = "priority"
+					}
+				}
 			},
 			Disconnect = { 10, 11 }
 		},

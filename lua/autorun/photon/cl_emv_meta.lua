@@ -104,7 +104,7 @@ function EMVU:MakeEMV( emv, name )
 		if not IsValid( self ) then return false end
 		local option = self:LightOption()
 		if not option then option = 1 end
-		local result = EMVU.Helper:GetSequence( self.VehicleName, option )
+		local result = EMVU.Helper:GetSequence( self.VehicleName, option, self )
 		return result
 	end
 

@@ -1,6 +1,6 @@
 {
-"title" : "Photon: Lighting Engine [Beta]",
+"title" : "Photon: Lighting Engine",
 "type" : "tool",
 "tags" : ["realism","roleplay"],
-"ignore" : ["*.psd", "*.vcproj", "*.svn*", "*.md", ".git"]
+"ignore" : ["*.psd", "*.vcproj", "*.svn*"]
 }
