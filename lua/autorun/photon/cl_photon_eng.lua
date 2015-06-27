@@ -106,9 +106,11 @@ function Photon:DrawLight( colors, lpos, lang, meta, pixvis, lnum, brght )
 
 		local brightness = 1
 		local rawBrightness = 1
-
+		local pulseOverride = false
+		
 		if brght and istable(brght) then -- a table in place of the brightness index indicates pulsing light info, which will take over the brightess variable
 			brightness = EMVU.Helper:PulsingLight( brght[1], brght[2], brght[3] )
+			pulseOverride = true
 		elseif isnumber( brght ) then
 			brightness = brght
 			rawBrightness = brght
@@ -130,9 +132,9 @@ function Photon:DrawLight( colors, lpos, lang, meta, pixvis, lnum, brght )
 
 		local up1 = Vector()
 		up1:Set( worldPos )
-		local ua = self:LocalToWorldAngles(al)
+		local ua = self:LocalToWorldAngles( al )
 
-		for k,v in pairs(colors) do -- modifies the alpha of the colors based on the brightness
+		for k,v in pairs( colors ) do -- modifies the alpha of the colors based on the brightness
 			UC[k] = v
 		end
 
@@ -143,6 +145,7 @@ function Photon:DrawLight( colors, lpos, lang, meta, pixvis, lnum, brght )
 			srcColor.g = UC.src.g
 			srcColor.b = UC.src.b
 			srcColor.a = UC.src.a * rawBrightness
+			if pulseOverride then srcColor.a = ( srcColor.a * brightness ) end
 			if istable(UC["dim"]) then
 				srcColor.r = Lerp( viewDot, UC.dim.r, UC.src.r )
 				srcColor.g = Lerp( viewDot, UC.dim.g, UC.src.g )
@@ -151,7 +154,7 @@ function Photon:DrawLight( colors, lpos, lang, meta, pixvis, lnum, brght )
 			end
 		end
 
-		if PHOTON_DEBUG then srcColor = Color( 255, 255, 0, 255 ) end
+		if PHOTON_DEBUG and !PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 255, 255, 0, 255 ) elseif PHOTON_DEBUG and PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 0, 0, 0, 0 ) end
 		if PHOTON_DEBUG and PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then srcColor = Color( 0, 255, 255 ) end
 		-- render.SuppressEngineLighting(true)
 		cam.Start3D(EyePos(), EyeAngles())

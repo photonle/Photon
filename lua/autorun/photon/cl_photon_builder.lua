@@ -7,6 +7,7 @@ PHOTON_DEBUG_INDEX = PHOTON_DEBUG_INDEX or 1
 PHOTON_DEBUG_MODE = PHOTON_DEBUG_MODE or "UNKNOWN"
 PHOTON_DEBUG_NAME = PHOTON_DEBUG_NAME or "UNKNOWN"
 PHOTON_DEBUG_VECTOR = PHOTON_DEBUG_VECTOR or false
+PHOTON_DEBUG_EXCLUSIVE = PHOTON_DEBUG_EXCLUSIVE or false
 
 local GRACE_PRESS = .4
 local SLIDE_TIMER = .1
@@ -285,6 +286,14 @@ hook.Add( "Think", "Photon.Debug.ButtonPress", function()
 		P_KP_DIVIDE = false
 	end
 
+	if input.IsKeyDown( KEY_PAD_DECIMAL ) and not P_KP_DECIMAL then
+		surface.PlaySound( EMVU.Sounds.Up )
+		PHOTON_DEBUG_EXCLUSIVE = !PHOTON_DEBUG_EXCLUSIVE
+		P_KP_DECIMAL = true
+	elseif not input.IsKeyDown( KEY_PAD_DECIMAL ) then
+		P_KP_DECIMAL = false
+	end
+		
 end)
 
 function PhotonDebugTarget( ply, args )
@@ -344,6 +353,7 @@ hook.Add( "PostDrawHUD", "Photon.Debug.HUDPaint", function()
 		local lightAngle = "Angle( " .. math.Round( PHOTON_DEBUG_LIGHT[2].p, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[2].y, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[2].r, 2 ) .. " )"
 		local vehicleName = PHOTON_DEBUG_NAME or "UNKNOWN"
 		local lightIndex = "INDEX [" .. PHOTON_DEBUG_MODE .. "]: " .. PHOTON_DEBUG_INDEX
+		local exclusiveModeText = "Only Show Active: " .. tostring( PHOTON_DEBUG_EXCLUSIVE )
 		local angColor = Color( 255, 255, 255, 255 )
 		local vecColor = Color( 255, 255, 255, 255 )
 		if !PHOTON_DEBUG_VECTOR then
@@ -359,6 +369,8 @@ hook.Add( "PostDrawHUD", "Photon.Debug.HUDPaint", function()
 		draw.DrawText( vehicleName, "PHOTON_Debug", ScrW() - 16, 80, Color( 100, 200, 255 ), TEXT_ALIGN_RIGHT )
 		draw.DrawText( lightIndex, "PHOTON_Debug", ScrW() - 16, 98, Color( 0, 0, 0 ), TEXT_ALIGN_RIGHT )
 		draw.DrawText( lightIndex, "PHOTON_Debug", ScrW() - 16, 97, Color( 100, 200, 255 ), TEXT_ALIGN_RIGHT )
+		draw.DrawText( exclusiveModeText, "PHOTON_Debug", ScrW() - 16, 118, Color( 0, 0, 0 ), TEXT_ALIGN_RIGHT )
+		draw.DrawText( exclusiveModeText, "PHOTON_Debug", ScrW() - 16, 119, Color( 100, 200, 255 ), TEXT_ALIGN_RIGHT )
 	end
 end)
 
