@@ -168,6 +168,24 @@ EMVU.Sirens = {
 			{Name = "SIRENE", Sound = "emv/sirens/german/de_feuerwehr_sirene.wav"},
 		}
 	},
+	[21] = { -- provided by Super Mighty
+		Name = "GTA V",  
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/gta/emv_wail.wav"},
+			{Name = "YELP", Sound = "emv/sirens/gta/emv_yelp.wav"},
+			{Name = "PIER", Sound = "emv/sirens/gta/emv_pier.wav"},
+		}
+	},
+	[22] = { -- provided by Super Mighty
+		Name = "D&R INTIMIDATOR", 
+		Set = { -- 
+			{Name = "WAIL", Sound = "emv/sirens/canada/emv_wail.wav"},
+			{Name = "YELP", Sound = "emv/sirens/canada/emv_yelp.wav"},
+			{Name = "HYPER-YELP", Sound = "emv/sirens/canada/emv_phaser.wav"},
+			{Name = "HI-LO", Sound = "emv/sirens/canada/emv_hilo.wav"},
+		},
+		Horn = "emv/sirens/canada/emv_bullhorn.wav",
+	},
 }
 
 EMVU.Horns = {
