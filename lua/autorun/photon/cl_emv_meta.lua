@@ -265,9 +265,11 @@ function EMVU:MakeEMV( emv, name )
 		end
 		
 		local disconnect = self:GetELOverride()
-		if disconnect then
-			for k,v in pairs(disconnect) do
-				self:DisconnectLight( v )
+		if self:Lights() then
+			if disconnect then
+				for k,v in pairs(disconnect) do
+					self:DisconnectLight( v )
+				end
 			end
 		end
 
