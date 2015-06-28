@@ -32,8 +32,32 @@ function EMVU.Helper:GetSequence( name, option, vehicle )
 	return resultTable
 end
 
-function EMVU.Helper:GetIllumSequence( name, option )
-	return EMVU.Sequences[name]["Illumination"][option]["Components"]
+function EMVU.Helper:GetIllumSequence( name, option, vehicle )
+	
+	local resultTable = {}
+	
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Illumination"][option]["BG_Components"] ) then
+		local bodygroups = vehicle:GetBodyGroups() -- BodyGroups of vehicle
+		local bgtable = EMVU.Sequences[name]["Illumination"][option]["BG_Components"] -- BodyGroups defined in vehicle specification file
+		for id,data in pairs( bodygroups ) do -- for index,value in each vehicle bodygroup
+			local indexId = id - 1
+			if bgtable[ data["name"] ] then  -- if this index is defined in the vehicle specifications
+				local selected = vehicle:GetBodygroup( indexId )
+				if bgtable[ data["name"] ][ tostring( selected ) ] then
+					for component,option in pairs( bgtable[ data["name"] ][ tostring( selected ) ] ) do
+						resultTable[ component ] = option
+					end
+				end
+			end
+		end
+	end
+	
+	for component, option in pairs( EMVU.Sequences[name]["Illumination"][option]["Components"] ) do
+		resultTable[ component ] = option
+	end
+	
+	return resultTable
+
 end
 
 function EMVU.Helper:GetSequenceName( name, option )
@@ -99,8 +123,31 @@ function EMVU.Helper:HasTrafficAdvisor( name )
 	if istable( EMVU.Sequences[name].Traffic ) and istable( EMVU.Sequences[name].Traffic[1] ) then return true end
 end
 
-function EMVU.Helper:GetTASequence( name, option )
-	return EMVU.Sequences[name]["Traffic"][option]["Components"]
+function EMVU.Helper:GetTASequence( name, option, vehicle )
+	
+	local resultTable = {}
+	
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["BG_Components"] ) then
+		local bodygroups = vehicle:GetBodyGroups() -- BodyGroups of vehicle
+		local bgtable = EMVU.Sequences[name]["Traffic"][option]["BG_Components"] -- BodyGroups defined in vehicle specification file
+		for id,data in pairs( bodygroups ) do -- for index,value in each vehicle bodygroup
+			local indexId = id - 1
+			if bgtable[ data["name"] ] then  -- if this index is defined in the vehicle specifications
+				local selected = vehicle:GetBodygroup( indexId )
+				if bgtable[ data["name"] ][ tostring( selected ) ] then
+					for component,option in pairs( bgtable[ data["name"] ][ tostring( selected ) ] ) do
+						resultTable[ component ] = option
+					end
+				end
+			end
+		end
+	end
+	
+	for component, option in pairs( EMVU.Sequences[name]["Traffic"][option]["Components"] ) do
+		resultTable[ component ] = option
+	end
+	
+	return resultTable
 end
 
 function EMVU.Helper:GetTrafficAdvisorName( name, option )
