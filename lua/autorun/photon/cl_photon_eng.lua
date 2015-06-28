@@ -85,10 +85,10 @@ function Photon:DrawLight( colors, lpos, lang, meta, pixvis, lnum, brght )
 
 	end
 
-	local function getViewFlare( dot )
+	local function getViewFlare( dot, brght )
 		local dif = dot - .99
 		if dif < 0 then return 0 end
-		local calc = dif * 1000
+		local calc = (dif * 1000) * math.Clamp( brght, 0, 1 )
 		return math.pow( calc, 1.4 ) / 10
 	end
 
@@ -119,7 +119,7 @@ function Photon:DrawLight( colors, lpos, lang, meta, pixvis, lnum, brght )
 		brightness = brightness * lightMod
 
 		viewDot = viewDot * brightness
-		local viewFlare = getViewFlare( viewPercent )
+		local viewFlare = getViewFlare( viewPercent, brightness )
 
 		if meta.SourceOnly == true then 
 			srcOnly = true 
