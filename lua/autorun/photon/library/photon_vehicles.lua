@@ -21,6 +21,7 @@ Photon.VehicleIndex = {
 	["models/tdmcars/hsvw427.mdl"] = "tdm_hsv",
 	["models/sentry/15hellcat_cop.mdl"] = "st_charger",
 	["models/sentry/15hellcat.mdl"] = "st_charger",
+	["models/tdmcars/emergency/for_crownvic.mdl"] = "tdm_cvpi",
 }
 
 Photon.EMVIndex = {
@@ -28,6 +29,7 @@ Photon.EMVIndex = {
 	["models/LoneWolfie/chev_tahoe_police.mdl"] = "Chevrolet Tahoe Secret Service",
 	["models/LoneWolfie/chev_suburban_pol_und.mdl"] = "Chevrolet Suburban Police Cruiser Undercover",
 	["models/tdmcars/hsvw427_pol.mdl"] = "Holden HSV W427 Police",
+	["models/tdmcars/emergency/for_crownvic.mdl"] = "Ford Crown Victoria",
 }
 
 Photon.DefaultMapping = {
@@ -48,6 +50,7 @@ Photon.DefaultMapping = {
 	["models/tdmcars/hsvw427.mdl"] = "hsvw427tdm",
 	["models/sentry/15hellcat_cop.mdl"] = "15hellcat_cop_sgm",
 	["models/sentry/15hellcat.mdl"] = "15hellcat_sgm",
+	["models/tdmcars/emergency/for_crownvic.mdl"] = "forcrownvicpoltdm",
 }
 
 local indexed_vehicles = {
@@ -60,6 +63,7 @@ local indexed_vehicles = {
 	"tdm_citroenc1",
 	"tdm_hsv",
 	"st_charger",
+	"tdm_cvpi",
 }
 
 local indexed_emvs = {
@@ -67,6 +71,7 @@ local indexed_emvs = {
 	"default_lw_tahoe",
 	"default_lw_suburban_und",
 	"default_tdm_hsv",
+	"default_tdm_cvpi"
 }
 
 for _,car in pairs( indexed_vehicles ) do

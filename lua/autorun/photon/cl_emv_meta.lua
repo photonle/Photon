@@ -64,7 +64,7 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:IllumLights()
 		if not IsValid( self ) then return {} end
-		return EMVU.Helper:GetIllumSequence( self.VehicleName, self:IllumOption() )
+		return EMVU.Helper:GetIllumSequence( self.VehicleName, self:IllumOption(), self )
 	end
 
 	function emv:HasIllum()
@@ -112,7 +112,7 @@ function EMVU:MakeEMV( emv, name )
 		if not IsValid( self ) then return false end
 		local option = self:TrafficAdvisorOption()
 		if not option then option = 1 end
-		local result = EMVU.Helper:GetTASequence( self.VehicleName, option )
+		local result = EMVU.Helper:GetTASequence( self.VehicleName, option, self )
 		return result
 	end
 
