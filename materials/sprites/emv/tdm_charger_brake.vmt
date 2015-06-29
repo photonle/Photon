@@ -1,0 +1,8 @@
+"UnLitGeneric"
+{
+	"$basetexture"		"sprites/emv/tdm_charger_brake"
+	"$nocull" 1
+	"$additive" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}
