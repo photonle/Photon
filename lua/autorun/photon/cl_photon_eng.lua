@@ -2,9 +2,36 @@ AddCSLuaFile()
 
 -- this is where the magic happens
 
-function Photon:DrawLight( colors, lpos, lang, meta, pixvis, lnum, brght )
-	if not colors or not lpos or not lang or not meta then return end
+local lpos = Vector()
 
+
+local clamp = math.Clamp
+local pow = math.pow
+local round = math.Round
+
+local function getViewFlare( dot, brght )
+	local dif = dot - .99
+	if dif < 0 then return 0 end
+	local calc = (dif * 1000) * clamp( brght, 0, 1 )
+	return pow( calc, 1.4 ) / 10
+end
+
+function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
+	if not colors or not ilpos or not lang or not meta then return end
+	
+	local offset = meta.AngleOffset
+
+	lpos:Set( ilpos )
+	
+	local rotating = false
+		
+	if offset == "R" or offset == "RR" then -- R indicates a rotating light
+		local speed = 2
+		if meta.Speed then speed = meta.Speed end
+		offset = EMVU.Helper:RotatingLight(speed, 10)
+		rotating = true
+	end
+	
 	if not self.PhotonLightCache then self.PhotonLightCache = {} end
 
 	local function CacheLight( index, wpos, viewDot )
@@ -47,6 +74,13 @@ function Photon:DrawLight( colors, lpos, lang, meta, pixvis, lnum, brght )
 		visible = util.PixelVisible( worldPos, visRadius * EMV_PIXVIS_MULTIPLIER, pixvis )
 	else
 
+		if meta.AngleOffset and meta.AngleOffset == "RR" then
+			local lposMod = EMVU.Helper:RadiusLight( 1, 4 )
+			lpos.x = lpos.x + lposMod
+			lpos.y = lpos.y + lposMod
+			
+		end
+		
 		worldPos = self:LocalToWorld(lpos)
 		visible = util.PixelVisible( worldPos, visRadius * EMV_PIXVIS_MULTIPLIER, pixvis ) -- this line needs to be run asap to prevent needless calculations below
 
@@ -59,16 +93,7 @@ function Photon:DrawLight( colors, lpos, lang, meta, pixvis, lnum, brght )
 		if not meta.WMult then meta.WMult = 1 end
 
 		local ca = self:GetAngles()
-		local offset = meta.AngleOffset
-		local rotating = false
-
-		if offset == "R" then -- R indicates a rotating light
-			local speed = 2
-			if meta.Speed then speed = meta.Speed end
-			offset = EMVU.Helper:RotatingLight(speed, 0)
-			rotating = true
-		end
-
+		
 		ca:RotateAroundAxis(self:GetUp(), (lang.y + offset))
 		local lightNormal = ca:Forward()
 		lightNormal:Normalize()
@@ -85,17 +110,10 @@ function Photon:DrawLight( colors, lpos, lang, meta, pixvis, lnum, brght )
 
 	end
 
-	local function getViewFlare( dot, brght )
-		local dif = dot - .99
-		if dif < 0 then return 0 end
-		local calc = (dif * 1000) * math.Clamp( brght, 0, 1 )
-		return math.pow( calc, 1.4 ) / 10
-	end
-
 	if( visible and visible > 0) and ( viewDot and viewDot >= 0) then
 
 		local curLight = render.GetLightColor( worldPos )
-		local lightMod = math.Clamp(1 - math.Round(((( curLight.x * curLight.y * curLight.z ) / 3) * 10) * 2, 5), .66, 1)
+		local lightMod = clamp(1 - round(((( curLight.x * curLight.y * curLight.z ) / 3) * 10) * 2, 5), .66, 1)
 
 		local srcOnly = false
 		local srcSkip = false

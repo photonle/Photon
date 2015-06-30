@@ -94,6 +94,10 @@ function EMVU.Helper:RotatingLight( speed, offset )
 	return math.Round( CurTime() * 100 ) * speed + offset
 end
 
+function EMVU.Helper:RadiusLight( speed, radius )
+	return math.sin( CurTime() * speed ) * radius
+end
+
 function EMVU.Helper:PulsingLight( speed, min, offset )
 	return math.Clamp( ( (math.sin( (CurTime() + offset) * speed ) * .5 ) + .5), min, 1 )
 end
