@@ -9,12 +9,24 @@ local clamp = math.Clamp
 local pow = math.pow
 local round = math.Round
 
+local getLightColor = render.GetLightColor
+
 local function getViewFlare( dot, brght )
 	local dif = dot - .99
 	if dif < 0 then return 0 end
 	local calc = (dif * 1000) * clamp( brght, 0, 1 )
 	return pow( calc, 1.4 ) / 10
 end
+
+local setMaterial = render.SetMaterial
+local drawSprite = render.DrawSprite
+
+local mat1 = Material("sprites/light_ignorez")
+local mat2 = Material("sprites/emv/emv_smoothglow")
+local mat3 = Material("sprites/emv/emv_lightglow")
+local mat4 = Material("sprites/emv/flare_primary")
+
+
 
 function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
 	if not colors or not ilpos or not lang or not meta then return end
@@ -112,7 +124,7 @@ function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
 
 	if( visible and visible > 0) and ( viewDot and viewDot >= 0) then
 
-		local curLight = render.GetLightColor( worldPos )
+		local curLight = getLightColor( worldPos )
 		local lightMod = clamp(1 - round(((( curLight.x * curLight.y * curLight.z ) / 3) * 10) * 2, 5), .66, 1)
 
 		local srcOnly = false
@@ -120,7 +132,7 @@ function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
 
 		if (meta.Sprite and meta.Sprite == "sprites/emv/blank") or meta.Cheap then srcSkip = true end
 
-		local UC = {}
+		local UC = { true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true }
 
 		local brightness = 1
 		local rawBrightness = 1
@@ -196,27 +208,27 @@ function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
 
 			if not srcOnly then
 
-				render.SetMaterial( Material("sprites/light_ignorez") )
-				render.DrawSprite( worldPos, (48*meta.Scale*viewDot), (32*meta.Scale*viewDot), UC.glw )
+				setMaterial( mat1 )
+				drawSprite( worldPos, (48*meta.Scale*viewDot), (32*meta.Scale*viewDot), UC.glw )
 
-				render.SetMaterial(Material("sprites/emv/emv_smoothglow"))
-				render.DrawSprite( worldPos, (256*meta.Scale*viewDot), (256*meta.Scale*viewDot), UC.amb )
+				setMaterial( mat2 )
+				drawSprite( worldPos, (256*meta.Scale*viewDot), (256*meta.Scale*viewDot), UC.amb )
 
-				render.SetMaterial(Material("sprites/emv/emv_smoothglow"))
-				render.DrawSprite( worldPos, (64*meta.Scale*viewDot), 48*meta.Scale*viewDot, UC.blm )
+				setMaterial( mat2 )
+				drawSprite( worldPos, (64*meta.Scale*viewDot), 48*meta.Scale*viewDot, UC.blm )
 
-				render.SetMaterial(Material("sprites/emv/emv_lightglow"))
-		 		render.DrawSprite( worldPos, 12*meta.Scale*meta.WMult*viewDot, 12*meta.Scale*viewDot, UC.med )
+				setMaterial( mat3 )
+		 		drawSprite( worldPos, 12*meta.Scale*meta.WMult*viewDot, 12*meta.Scale*viewDot, UC.med )
 
 		 		if viewFlare and UC["flr"] and lightMod > .83 and not cheapLight then
-		 			render.SetMaterial( Material("sprites/light_ignorez") )
-					render.DrawSprite( worldPos, ( 96 * meta.Scale * viewFlare), ( 2 * meta.Scale * viewFlare ), UC.flr )
+		 			setMaterial( mat1 )
+					drawSprite( worldPos, ( 96 * meta.Scale * viewFlare), ( 2 * meta.Scale * viewFlare ), UC.flr )
 
-					render.SetMaterial( Material("sprites/emv/emv_smoothglow") )
-					render.DrawSprite( worldPos, ( 1024 * meta.Scale * viewFlare), ( 1024 * meta.Scale * viewFlare ), UC.amb )
+					setMaterial( mat2 )
+					drawSprite( worldPos, ( 1024 * meta.Scale * viewFlare), ( 1024 * meta.Scale * viewFlare ), UC.amb )
 
-					render.SetMaterial( Material("sprites/emv/flare_primary") )
-					render.DrawSprite( worldPos, ( 64 * meta.Scale * viewFlare), ( 64 * meta.Scale * viewFlare ), UC.raw )
+					setMaterial( mat4 )
+					drawSprite( worldPos, ( 64 * meta.Scale * viewFlare), ( 64 * meta.Scale * viewFlare ), UC.raw )
 
 					-- render.SetMaterial( Material("sprites/emv/glare_overlay") )
 					-- render.DrawScreenQuad()
