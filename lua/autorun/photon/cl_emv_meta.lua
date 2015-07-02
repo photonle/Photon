@@ -143,21 +143,21 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:SetupFrames()
 		if not IsValid( self ) then return false end
-
+		local start = CurTime()
 		for k,v in pairs( self:ELS_GetPatterns() ) do
 
 			self.EL.Frames[k] = {}
 
 			for a,b in pairs(v) do
 				
-				self.EL.Frames[k][a] = {}
-				self.EL.Frames[k][a].On = 1
-				self.EL.Frames[k][a].Max = #v[a]
+				self.EL.Frames[k][a] = { 1, #v[a] }
 
 			end
 
 		end
+		local endTime = CurTime()
 
+		print( "Setup Frames Time: " .. tostring( endTime - start ) )
 	end
 
 	-- Calculates whether we should increment the frame/pattern --
@@ -191,14 +191,14 @@ function EMVU:MakeEMV( emv, name )
 		if not self.EL.Frames[k] then print("[Photon] Invalid component name: " .. tostring( component ) ) return end
 
 		if inc then
-			if self.EL.Frames[k][a].On >= self.EL.Frames[k][a].Max then
-				self.EL.Frames[k][a].On = 1
+			if self.EL.Frames[k][a][1] >= self.EL.Frames[k][a][2] then
+				self.EL.Frames[k][a][1] = 1
 			else
-				self.EL.Frames[k][a].On = self.EL.Frames[k][a].On + 1
+				self.EL.Frames[k][a][1] = self.EL.Frames[k][a][1] + 1
 			end
 		end
 
-		local frame = self.EL.Frames[k][a].On
+		local frame = self.EL.Frames[k][a][1]
 
 		return EMVU.Helper:GetFrame( self.VehicleName, component, index, frame )
 
@@ -292,10 +292,13 @@ function EMVU:MakeEMV( emv, name )
 		local positions = self:GetELPositions()
 		local meta = self:GetELMeta()
 
-		for a,b in pairs( RenderTable ) do
+		local b = true
+		local pos = true
 
+		for a=1,#RenderTable do
+			b = RenderTable[a]
 			if not handles[b[1]] then self:SetupVisHandles() return end
-			local pos = positions[b[1]]
+			pos = positions[b[1]]
 			if positions[b[1]] and handles[a] then
 				self:DrawEL( 
 
@@ -309,6 +312,7 @@ function EMVU:MakeEMV( emv, name )
 					)
 			end
 		end
+
 	end
 
 	function emv:RenderIllum()
@@ -322,17 +326,25 @@ function EMVU:MakeEMV( emv, name )
 	end
 
 	function emv:ProcessPixVis()
+
 		if not IsValid( self ) then return false end
+
 		local handles = self.EL.VisHandles
-		for i,pos in pairs( self:GetELPositions() ) do
+		local ELPositions = self:GetELPositions()
+
+		local pos = true
+		local handle = true
+
+		for i=1,#ELPositions do
 			if not handles[i] then self:SetupVisHandles() return end
 			local handle = handles[i]
 			self:CalcPixVis(
-				pos[1],
+				ELPositions[i][1],
 				handle,
 				64
 			)
 		end
+
 	end
 
 	function emv:CalculateELFrames()

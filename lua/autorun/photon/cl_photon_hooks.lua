@@ -2,6 +2,8 @@ AddCSLuaFile()
 
 PHOTON_REG_ENABLED = true
 
+local PHOTON_REG_ENABLED = PHOTON_REG_ENABLED
+
 function DrawCarLights()
 	local photonDebug = PHOTON_DEBUG
 	for _,ent in pairs(ents.GetAll()) do
@@ -17,7 +19,6 @@ function DrawCarLights()
 					ent:Hazards(), 
 					photonDebug
 					) end
-
 				if ent:IsEMV() then ent:ScanEMVProps() end
 			elseif ent:Photon() and not ent.RenderLights then
 				Photon:SetupCar( ent, ent:Photon() )

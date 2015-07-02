@@ -63,7 +63,9 @@ function Photon:SetupCar( ent, index )
 	end
 
 	function ent:DisconnectLight( index )
+
 		if not IsValid( self ) then return false end
+		//local disconnectTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
 		if not table.HasValue( self.Lighting.Disconnected, index ) then
 			table.insert( self.Lighting.Disconnected, index )
 		end
@@ -123,7 +125,7 @@ function Photon:SetupCar( ent, index )
 
 		if not self.LastPhotonRenderCache or self.LastPhotonRenderCache + .05 < CurTime() then self.PhotonRenderCache = nil end
 
-		local RenderTable = {}
+		local RenderTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
 
 		if istable( self.PhotonRenderCache ) then
 
@@ -191,23 +193,27 @@ function Photon:SetupCar( ent, index )
 		local lightDisconnect = self.LightDisconnected
 		local drawLight = self.DrawLight
 
-		for i,light in pairs( RenderTable ) do
-			if not handles[light[1]] then setupVis( self ) return end -- for debugging mostly
-			local pos = positions[light[1]]
-			if pos and handles[i] and not lightDisconnect( self, light[1] ) then
-				drawLight(
-					self,
-					EMVU.Colors[light[2]], -- color
-					pos[1], -- positions
-					pos[2], -- angle
-					meta[pos[3]], -- meta data
-					handles[light[1]], -- handle
-					i, -- dynamic light number
-					light[3] -- brightness
-				)
+		local light = false
+		
+		for i=1,#RenderTable do
+			light = RenderTable[i]
+			if light != true then
+				if not handles[light[1]] then setupVis( self ) return end -- for debugging mostly
+				local pos = positions[light[1]]
+				if pos and handles[i] and not lightDisconnect( self, light[1] ) then
+					drawLight(
+						self,
+						EMVU.Colors[light[2]], -- color
+						pos[1], -- positions
+						pos[2], -- angle
+						meta[pos[3]], -- meta data
+						handles[light[1]], -- handle
+						i, -- dynamic light number
+						light[3] -- brightness
+					)
+				end
 			end
 		end
-
 	end
 
 	ent.Lighting = {}
