@@ -38,3 +38,6 @@ end
 
 include( "library/photon_vehicles.lua" )
 include( "sh_photon_vehicles.lua" )
+
+include( "../properties/siren.lua" )
+include( "../properties/menubar.lua" )
