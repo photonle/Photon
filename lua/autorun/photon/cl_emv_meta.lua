@@ -341,7 +341,7 @@ function EMVU:MakeEMV( emv, name )
 			self:CalcPixVis(
 				ELPositions[i][1],
 				handle,
-				64
+				4
 			)
 		end
 

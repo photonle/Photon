@@ -26,7 +26,7 @@ local mat2 = Material("sprites/emv/emv_smoothglow")
 local mat3 = Material("sprites/emv/emv_lightglow")
 local mat4 = Material("sprites/emv/flare_primary")
 
-
+local up1 = Vector()
 
 function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
 	if not colors or not ilpos or not lang or not meta then return end
@@ -160,7 +160,6 @@ function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
 		al.r = al.r - 90
 		if rotating then al.y = offset - 90 end
 
-		local up1 = Vector()
 		up1:Set( worldPos )
 		local ua = self:LocalToWorldAngles( al )
 
@@ -297,7 +296,7 @@ function Photon:CalculatePixVis( lpos, handle, a_radius )
 
 	local pos = self:LocalToWorld( lpos )
 	local radius = .01
-	if a_radius then readius = a_radius end
+	if a_radius then radius = a_radius end
 
 	return util.PixelVisible( pos, radius, handle )
 end
