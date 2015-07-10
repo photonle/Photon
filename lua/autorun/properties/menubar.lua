@@ -14,7 +14,7 @@ hook.Add( "PopulateMenuBar", "PhotonOptions_MenuBar", function( menubar )
 
 	dTarget:SetDeleteSelf( false )
 
-	dTarget:AddCVar( "Regular Lighting", "photon_debug", "REG" )
-	dTarget:AddCVar( "Emergency Lighting", "photon_debug", "ELS" )
+	dTarget:AddCVar( "Regular Lighting", "photon_debugtarget", "REG" )
+	dTarget:AddCVar( "Emergency Lighting", "photon_debugtarget", "ELS" )
 
 end )
