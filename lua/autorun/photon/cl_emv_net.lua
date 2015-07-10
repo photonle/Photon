@@ -55,3 +55,9 @@ function EMVU.Net:Manual( arg )
 		net.WriteBit( arg )
 	net.SendToServer()
 end
+
+function EMVU.Net:Preset( arg )
+	net.Start( "emvu_preset" )
+		net.WriteInt( arg, 8 )
+	net.SendToServer()
+end

@@ -10,6 +10,7 @@ util.AddNetworkString( "emvu_manual" )
 util.AddNetworkString( "emvu_traffic" )
 util.AddNetworkString( "photon_signal" )
 util.AddNetworkString( "photon_menu" )
+util.AddNetworkString( "emvu_preset" )
 
 EMVU.Net = {}
 
@@ -87,6 +88,17 @@ function EMVU.Net:SirenSet( ply )
 end
 net.Receive("emvu_sirenset", function( len, ply )
 	EMVU.Net:SirenSet( ply )
+end)
+
+function EMVU.Net:Preset( ply, args )
+	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
+	local emv = ply:GetVehicle()
+	local recv = net.ReadInt(8)
+	if recv != 0 then emv:ELS_PresetOption( recv ) return end
+	print( "setting to " .. tostring( recv ) )
+end
+net.Receive( "emvu_preset", function( len, ply ) 
+	EMVU.Net:Preset( ply )
 end)
 
 function EMVU.Net:Blackout( ply, arg )

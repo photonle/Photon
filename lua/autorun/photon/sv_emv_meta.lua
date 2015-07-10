@@ -91,6 +91,19 @@ function EMVU:MakeEMV( ent, emv )
 		return self:GetDTInt( EMV_ILLUM_OPTION )
 	end
 
+	function ent:ELS_PresetOption( val )
+		if not IsValid( self ) then return 0 end
+		if (val!=nil) then 
+			val = math.Clamp( val, 0, #EMVU.PresetIndex[ self.Name ] )
+			self:SetDTInt( EMV_PRE_OPTION, val )
+			local bgData = EMVU.Helper:BodygroupPreset( self, val )
+			for _,bg in pairs( bgData ) do
+				self:SetBodygroup( bg[1], bg[2] )
+			end
+		end
+		return self:GetDTInt( EMV_PRE_OPTION )
+	end
+
 	function ent:ELS_IllumOn()
 		if not IsValid( self ) then return end
 		local usesLamps = EMVU.Helper:HasLamps( self.Name )
@@ -349,6 +362,10 @@ function EMVU:MakeEMV( ent, emv )
 		ent:ELS_SetSirenSet( emv.Siren )
 	else
 		ent:ELS_SetSirenSet( 1 )
+	end
+
+	if istable( emv.Auto ) and emv.Auto[1] then
+		ent:ELS_PresetOption( 1 )
 	end
 
 	ent:ELS_SirenOption( 1 )
