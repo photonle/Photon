@@ -25,10 +25,20 @@ function EMVU.Helper:GetSequence( name, option, vehicle )
 		end
 	end
 	
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Sequences"][option]["Preset_Components"] ) then
+		local preset = vehicle:ELPresetOption()
+		local ptable = EMVU.Sequences[name]["Sequences"][option]["Preset_Components"][preset]
+		if istable( ptable ) then
+			for id,data in pairs( ptable ) do
+				resultTable[ id ] = data
+			end
+		end
+	end
+
 	for component, option in pairs( EMVU.Sequences[name]["Sequences"][option]["Components"] ) do
 		resultTable[ component ] = option
 	end
-	
+
 	return resultTable
 end
 
@@ -71,6 +81,7 @@ end
 
 function EMVU.Helper:GetPattern( name, option, frame )
 	local pattern = EMVU.Helper:GetSequence( name, option )[frame]
+	PrintTable( EMVU.Patterns[name][pattern] )
 	return EMVU.Patterns[name][pattern]
 end
 
@@ -102,8 +113,55 @@ function EMVU.Helper:PulsingLight( speed, min, offset )
 	return math.Clamp( ( (math.sin( (CurTime() + offset) * speed ) * .5 ) + .5), min, 1 )
 end
 
-function EMVU.Helper:GetProps( name )
-	return EMVU.Props[name]
+// function EMVU.Helper:GetProps( name )
+// 	return EMVU.Props[name]
+// end
+
+function EMVU.Helper:GetProps( name, ent )
+	local results = {} -- ALL ABOUT THAT PRECACHIN
+	if istable( EMVU.Props[name] ) then
+		for i=1,#EMVU.Props[name] do
+			results[i] = EMVU.Props[name][i]
+		end
+	end
+	if ent:PresetEnabled() then
+		local presetData = EMVU.Helper:GetPresetData( name, ent:ELPresetOption() )
+		if istable( presetData.Auto ) then
+			for _,id in pairs( presetData.Auto ) do
+				local preset = EMVU.AutoIndex[ name ][ id ]
+				local propData = EMVU.Helper:GetAutoModel( preset[ "ID" ] )
+				propData.Pos = preset.Pos
+				propData.Ang = preset.Ang
+				propData.Scale = preset.Scale
+				results[ #results + 1 ] = propData
+			end
+		end
+		if istable( presetData.Props ) then
+			for _,prop in pairs( presetData.Props ) do
+				results[ #results + 1 ] = prop
+			end
+		end
+	end
+	--PrintTable( results )
+	return results
+end
+
+function EMVU.Helper:GetAutoModel( id )
+	local modelData = EMVU.Auto[ id ]
+	return {
+		Model = modelData.Model,
+		Skin = modelData.Skin or 0,
+		BodyGroups = modelData.Bodygroups or {}
+	}
+end
+
+function EMVU.Helper:BodygroupPreset( ent, index )
+	local presetData = EMVU.Helper:GetPresetData( ent.Name, index )
+	return presetData.Bodygroups or {}
+end
+
+function EMVU.Helper:GetPresetData( name, index )
+	return EMVU.PresetIndex[ name ][ index ]
 end
 
 function EMVU.Helper:GetIlluminationName( name, option )
