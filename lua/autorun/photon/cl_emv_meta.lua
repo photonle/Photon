@@ -4,6 +4,17 @@ EMVU.DebugInfo = {}
 EMVU.DebugInfo.Last = CurTime()
 EMVU.Calculations = 0
 
+local EMVColors = nil
+if EMVU.Colors then EMVColors = EMVU.Colors end
+
+local EMVHelper = nil
+if EMVU.Helper then EMVHelper = EMVU.Helper end
+
+hook.Add( "Initialize", "PhotonEMV.LocalColorSet", function() 
+	EMVColors = EMVU.Colors; 
+	EMVHelper = EMVU.Helper;
+end )
+
 function EMVU:MakeEMV( emv, name )
 
 	if not emv or not emv:IsValid() or not emv:IsVehicle() then return false end
@@ -64,12 +75,12 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:IllumLights()
 		if not IsValid( self ) then return {} end
-		return EMVU.Helper:GetIllumSequence( self.VehicleName, self:IllumOption(), self )
+		return EMVHelper:GetIllumSequence( self.VehicleName, self:IllumOption(), self )
 	end
 
 	function emv:HasIllum()
 		if not IsValid( self ) then return 1 end
-		if self.ELSIllum == nil then self.ELSIllum = EMVU.Helper:HasLamps( self.VehicleName ) end
+		if self.ELSIllum == nil then self.ELSIllum = EMVHelper:HasLamps( self.VehicleName ) end
 		return self.ELSIllum
 	end
 
@@ -84,27 +95,37 @@ function EMVU:MakeEMV( emv, name )
 	end
 
 	function emv:HasTrafficAdvisor()
-		if self.ELSTraffic == nil then self.ELSTraffic = EMVU.Helper:HasTrafficAdvisor( self.VehicleName ) end
+		if self.ELSTraffic == nil then self.ELSTraffic = EMVHelper:HasTrafficAdvisor( self.VehicleName ) end
 		return self.ELSTraffic
+	end
+
+	function emv:ELPresetOption()
+		if not IsValid( self ) then return 0 end
+		return self:GetDTInt( EMV_PRE_OPTION )
+	end
+
+	function emv:PresetEnabled()
+		if not IsValid( self ) then return false end
+		return !( self:ELPresetOption() == 0 )
 	end
 
 	-- Helper Functions --
 
 	function emv:GetELPositions()
 		if not IsValid( self ) then return false end
-		return EMVU.Helper:GetVectors( self.VehicleName )
+		return EMVHelper:GetVectors( self.VehicleName )
 	end
 
 	function emv:GetELPattern( option, frame )
 		if not IsValid( self ) then return false end
-		return EMVU.Helper:GetPattern( self.VehicleName, option, frame )
+		return EMVHelper:GetPattern( self.VehicleName, option, frame )
 	end
 
 	function emv:GetELSequence()
 		if not IsValid( self ) then return false end
 		local option = self:LightOption()
 		if not option then option = 1 end
-		local result = EMVU.Helper:GetSequence( self.VehicleName, option, self )
+		local result = EMVHelper:GetSequence( self.VehicleName, option, self )
 		return result
 	end
 
@@ -112,26 +133,26 @@ function EMVU:MakeEMV( emv, name )
 		if not IsValid( self ) then return false end
 		local option = self:TrafficAdvisorOption()
 		if not option then option = 1 end
-		local result = EMVU.Helper:GetTASequence( self.VehicleName, option, self )
+		local result = EMVHelper:GetTASequence( self.VehicleName, option, self )
 		return result
 	end
 
 	function emv:ELS_GetPatterns()
 		if not IsValid( self ) then return false end
-		return EMVU.Helper:GetPatterns( self.VehicleName )
+		return EMVHelper:GetPatterns( self.VehicleName )
 	end
 
 	function emv:ELS_GetSequenceName()
 		if not IsValid( self ) then return false end
 		local option = self:LightOption()
 		if not option then option = 1 end
-		local result =  EMVU.Helper:GetSequenceName( self.VehicleName, option )
+		local result =  EMVHelper:GetSequenceName( self.VehicleName, option )
 		return result
 	end
 
 	function emv:GetELMeta()
 		if not IsValid( self ) then return false end
-		return EMVU.Helper:GetMeta( self.VehicleName )
+		return EMVHelper:GetMeta( self.VehicleName )
 	end
 
 	function emv:SetupVisHandles()
@@ -143,7 +164,6 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:SetupFrames()
 		if not IsValid( self ) then return false end
-		local start = CurTime()
 		for k,v in pairs( self:ELS_GetPatterns() ) do
 
 			self.EL.Frames[k] = {}
@@ -155,9 +175,6 @@ function EMVU:MakeEMV( emv, name )
 			end
 
 		end
-		local endTime = CurTime()
-
-		print( "Setup Frames Time: " .. tostring( endTime - start ) )
 	end
 
 	-- Calculates whether we should increment the frame/pattern --
@@ -200,16 +217,16 @@ function EMVU:MakeEMV( emv, name )
 
 		local frame = self.EL.Frames[k][a][1]
 
-		return EMVU.Helper:GetFrame( self.VehicleName, component, index, frame )
+		return EMVHelper:GetFrame( self.VehicleName, component, index, frame )
 
 	end
 
 	function emv:GetLightSection( component, frame )
-		return EMVU.Helper:GetLightSection( self.VehicleName, component, frame )
+		return EMVHelper:GetLightSection( self.VehicleName, component, frame )
 	end
 
 	function emv:GetELOverride()
-		return EMVU.Helper:GetModeDisconnect( self.VehicleName, self:LightOption() )
+		return EMVHelper:GetModeDisconnect( self.VehicleName, self:LightOption() )
 	end
 
 	function emv:AlertPhotonMissingRequirements()
@@ -295,20 +312,38 @@ function EMVU:MakeEMV( emv, name )
 		local b = true
 		local pos = true
 
+		local colorRecycle = { true, true }
+
 		for a=1,#RenderTable do
 			b = RenderTable[a]
+			if (b==true) then continue end
 			if not handles[b[1]] then self:SetupVisHandles() return end
 			pos = positions[b[1]]
-			if positions[b[1]] and handles[a] then
-				self:DrawEL( 
 
-						EMVU.Colors[b[2]], -- color of the light (colors)
+			if positions[b[1]] and handles[a] then
+				local colString = b[2]
+				local col = false
+				local multiColor = false
+
+				if string.find(colString, "/") then
+					local cols = string.Explode("/", colString)
+					colorRecycle = { EMVColors[cols[1]], EMVColors[cols[2]] }
+					col = colorRecycle
+					multiColor = true
+					
+				else
+					col = EMVColors[b[2]]
+				end
+				
+				self:DrawEL( 
+						col, -- color of the light (colors)
 						pos[1], -- position (lpos)
 						pos[2], -- angle (lang)
 						meta[pos[3]], -- meta data (meta)
 						handles[b[1]], -- pixvis handle (pixvis)
 						a, -- int for dynamic light (lnum)
-						b[3] -- brightness
+						b[3], -- brightness
+						multiColor
 					)
 			end
 		end
@@ -341,7 +376,7 @@ function EMVU:MakeEMV( emv, name )
 			self:CalcPixVis(
 				ELPositions[i][1],
 				handle,
-				4
+				1
 			)
 		end
 
@@ -373,7 +408,22 @@ function EMVU:MakeEMV( emv, name )
 			if self:Lights() then 
 				for k,v in pairs( sequence ) do
 					local frame = self:GetFrame( k, v, increment )
-					if frame and not skipComponents[k] then table.Add( RenderTable, self:GetLightSection( k, frame ) ) end
+					if frame and not skipComponents[k] then
+						if istable(frame) then
+							for _,index in pairs( frame ) do
+								table.Add( RenderTable, self:GetLightSection( k, index ) )
+							end
+						else
+							table.Add( RenderTable, self:GetLightSection( k, frame ) )
+						end
+						
+						// local addTable = self:GetLightSection( k, frame )
+						// if istable( addTable ) then
+						// 	for a,b in pairs( addTable ) do
+						// 		RenderTable[a] = b
+						// 	end
+						// end
+					end
 				end
 			end
 
@@ -389,13 +439,14 @@ function EMVU:MakeEMV( emv, name )
 	function emv:SetupEMVProps()
 		if not IsValid( self ) then return false end
 
-		local emvProps = EMVU.Helper:GetProps( self.VehicleName )
+		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
 		if emvProps then
 
 		emv.EMVProps = {}
 
 		for _,p in pairs( emvProps ) do
 
+			if p == true then continue end
 			local rendergroup = p.RenderGroup or RENDERGROUP_TRANSLUCENT
 			local rendermode = p.RenderMode or RENDERMODE_TRANSALPHA
 			util.PrecacheModel( p.Model )
@@ -457,10 +508,16 @@ function EMVU:MakeEMV( emv, name )
 		
 		if not IsValid( self ) then return end
 
-		if self.LastEMVPropScan and self.LastEMVPropScan + 2 > CurTime() and not PHOTON_DEBUG then return end
+		if self.LastPresetOption != self:ELPresetOption() then 
+			self:RemoveEMVProps( true ) 
+			self.LastPresetOption = self:ELPresetOption() 
+			return
+		end
+
+		if ( self.LastEMVPropScan and self.LastEMVPropScan + .5 > CurTime() and not PHOTON_DEBUG ) then return end
 
 		if not self.EMVProps then return end
-		local emvProps = EMVU.Helper:GetProps( self.VehicleName )
+		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
 
 		if emvProps then 
 			for index,prop in ipairs( self.EMVProps ) do
@@ -473,11 +530,11 @@ function EMVU:MakeEMV( emv, name )
 				prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
 			end
 		end
-
 		self.LastEMVPropScan = CurTime()
 
 	end
 
+	emv.LastPresetOption = 0
 	emv:SetupEMVProps()
 
 end
