@@ -15,7 +15,7 @@ local function getViewFlare( dot, brght )
 	local dif = dot - .99
 	if dif < 0 then return 0 end
 	local calc = (dif * 1000) * clamp( brght, 0, 1 )
-	return pow( calc, 1.4 ) / 10
+	return pow( calc, 1.4 ) * .1
 end
 
 local setMaterial = render.SetMaterial
@@ -28,9 +28,29 @@ local mat4 = Material("sprites/emv/flare_primary")
 
 local up1 = Vector()
 
-function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
-	if not colors or not ilpos or not lang or not meta then return end
-	
+
+local function CacheLight( self, index, wpos, viewDot )
+	self.PhotonLightCache[index] = {
+		WorldPos = wpos,
+		ViewDot = viewDot,
+		LastCache = CurTime()
+	}
+end
+
+local function GetLightCache( self, index )
+	if true then return false end
+	if self.PhotonLightCache[index] then 
+		if self.PhotonLightCache[index].LastCache + .033 > CurTime() then
+			return self.PhotonLightCache[index]
+		end
+	end
+	return false
+end
+
+function Photon:DrawLight( incolors, ilpos, lang, meta, pixvis, lnum, brght, multicolor )
+	// if true then return end
+	if not incolors or not ilpos or not lang or not meta then return end
+	local colors = incolors
 	local offset = meta.AngleOffset
 
 	lpos:Set( ilpos )
@@ -42,27 +62,19 @@ function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
 		if meta.Speed then speed = meta.Speed end
 		offset = EMVU.Helper:RotatingLight(speed, 10)
 		rotating = true
+		local degrees = offset % 360
+		if multicolor then
+			if ( degrees > 0 and degrees < 180 ) then
+				colors = incolors[2]
+			else
+				colors = incolors[1]
+			end
+		end
 	end
 	
 	if not self.PhotonLightCache then self.PhotonLightCache = {} end
 
-	local function CacheLight( index, wpos, viewDot )
-		self.PhotonLightCache[index] = {
-			WorldPos = wpos,
-			ViewDot = viewDot,
-			LastCache = CurTime()
-		}
-	end
-
-	local function GetLightCache( index )
-		if true then return false end
-		if self.PhotonLightCache[index] then
-			if self.PhotonLightCache[index].LastCache + .033 > CurTime() then
-				return self.PhotonLightCache[index]
-			end
-		end
-		return false
-	end
+	
 
 	local visRadius = .1
 	local cheapLight = false
@@ -76,16 +88,6 @@ function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
 	local visible = 0
 	local viewPercent = 0
 
-	local CachedLight = GetLightCache( lpos )
-
-	if CachedLight then
-		PrintTable( CachedLight )
-		worldPos = CachedLight.WorldPos
-		viewDot = CachedLight.viewDot
-		viewPercent = viewDot
-		visible = util.PixelVisible( worldPos, visRadius * EMV_PIXVIS_MULTIPLIER, pixvis )
-	else
-
 		if meta.AngleOffset and meta.AngleOffset == "RR" then
 			local lposMod = EMVU.Helper:RadiusLight( 1, 4 )
 			lpos.x = lpos.x + lposMod
@@ -93,39 +95,35 @@ function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
 			
 		end
 		
-		worldPos = self:LocalToWorld(lpos)
-		visible = util.PixelVisible( worldPos, visRadius * EMV_PIXVIS_MULTIPLIER, pixvis ) -- this line needs to be run asap to prevent needless calculations below
+	worldPos = self:LocalToWorld(lpos)
+	visible = util.PixelVisible( worldPos, visRadius * EMV_PIXVIS_MULTIPLIER, pixvis ) -- this line needs to be run asap to prevent needless calculations below
+	//visible = 1
+	if EMV_DEBUG then visible = 1 end
+	if EMV_DEBUG then viewDot = 1 end
+	if not visible or visible <= 0 then return end
 
-		if EMV_DEBUG then visible = 1 end
-		if EMV_DEBUG then viewDot = 1 end
-		if not visible or visible <= 0 then return end
+	--if EMV_DEBUG or PHOTON_DEBUG then colors.src = Color(255,0,255,255) end -- EMV_DEBUG global is useful for light placement, but is rather buggy to toggle
+	if not meta.Scale then meta.Scale = 1 end
+	if not meta.WMult then meta.WMult = 1 end
 
-		--if EMV_DEBUG or PHOTON_DEBUG then colors.src = Color(255,0,255,255) end -- EMV_DEBUG global is useful for light placement, but is rather buggy to toggle
-		if not meta.Scale then meta.Scale = 1 end
-		if not meta.WMult then meta.WMult = 1 end
+	local ca = self:GetAngles()
+	
+	ca:RotateAroundAxis(self:GetUp(), (lang.y + offset))
+	local lightNormal = ca:Forward()
+	lightNormal:Normalize()
+	local ViewNormal = worldPos - EyePos()
+	local Distance = ViewNormal:Length()
+	ViewNormal:Normalize()
+	viewDot = ViewNormal:Dot(lightNormal)
+	viewPercent = viewDot
+	local viewMod = viewDot * 10
 
-		local ca = self:GetAngles()
-		
-		ca:RotateAroundAxis(self:GetUp(), (lang.y + offset))
-		local lightNormal = ca:Forward()
-		lightNormal:Normalize()
-		local ViewNormal = worldPos - EyePos()
-		local Distance = ViewNormal:Length()
-		ViewNormal:Normalize()
-		viewDot = ViewNormal:Dot(lightNormal)
-		viewPercent = viewDot
-		local viewMod = viewDot * 10
-
-		viewDot = math.pow( viewMod, 1.25 ) / 10
-
-		CacheLight( lpos, worldPos, viewPercent )
-
-	end
+	viewDot = math.pow( viewMod, 1.25 ) * .1
 
 	if( visible and visible > 0) and ( viewDot and viewDot >= 0) then
 
 		local curLight = getLightColor( worldPos )
-		local lightMod = clamp(1 - round(((( curLight.x * curLight.y * curLight.z ) / 3) * 10) * 2, 5), .66, 1)
+		local lightMod = clamp(1 - round(((( curLight.x * curLight.y * curLight.z ) * .3) * 10) * 2, 5), .66, 1)
 
 		local srcOnly = false
 		local srcSkip = false
@@ -185,11 +183,12 @@ function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
 
 		if PHOTON_DEBUG and !PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 255, 255, 0, 255 ) elseif PHOTON_DEBUG and PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 0, 0, 0, 0 ) end
 		if PHOTON_DEBUG and PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then srcColor = Color( 0, 255, 255 ) end
-		-- render.SuppressEngineLighting(true)
+		render.SuppressEngineLighting(true)
 		cam.Start3D(EyePos(), EyeAngles())
 
 			if not srcSkip then
 				cam.Start3D2D(up1, ua, 1)
+
 					render.SetLightingMode( 2 )
 					render.SetMaterial(Material(meta.Sprite))
 					render.DrawQuad(
@@ -199,7 +198,55 @@ function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
 						Vector(meta.W/2,-meta.H/2,0),
 						srcColor
 					)
-			 		render.SetLightingMode( 0 )
+					render.SetLightingMode( 0 )
+
+					if false then
+						local w = 48 * meta.Scale * viewDot
+						local h = 32 * meta.Scale * viewDot
+						render.SetMaterial( mat1 )
+						render.DrawQuad(
+							Vector( w*.5, h*.5, 0 ),
+							Vector( -w*.5, h*.5, 0 ),
+							Vector( -w*.5, -h*.5, 0 ),
+							Vector( w*.5, -h*.5, 0 ),
+							UC.glw
+						)
+
+						w = 256 * meta.Scale * viewDot
+						h = 256 * meta.Scale * viewDot
+						render.SetMaterial( mat2 )
+						render.DrawQuad(
+							Vector( w*.5, h*.5, 0 ),
+							Vector( -w*.5, h*.5, 0 ),
+							Vector( -w*.5, -h*.5, 0 ),
+							Vector( w*.5, -h*.5, 0 ),
+							UC.amb
+						)
+
+						w = 64 * meta.Scale * viewDot
+						h = 48 * meta.Scale * viewDot
+						render.SetMaterial( mat2 )
+						render.DrawQuad(
+							Vector( w*.5, h*.5, 0 ),
+							Vector( -w*.5, h*.5, 0 ),
+							Vector( -w*.5, -h*.5, 0 ),
+							Vector( w*.5, -h*.5, 0 ),
+							UC.blm
+						)
+
+						w = 12 * meta.Scale * viewDot
+						h = 12 * meta.Scale * viewDot
+						render.SetMaterial( mat3 )
+						render.DrawQuad(
+							Vector( w*.5, h*.5, 0 ),
+							Vector( -w*.5, h*.5, 0 ),
+							Vector( -w*.5, -h*.5, 0 ),
+							Vector( w*.5, -h*.5, 0 ),
+							UC.med
+						)
+					end
+
+
 				cam.End3D2D()
 			end
 
@@ -241,12 +288,13 @@ function Photon:DrawLight( colors, ilpos, lang, meta, pixvis, lnum, brght )
 					-- } )
 
 		 		end
-		 		-- render.SuppressEngineLighting(false)
+		 		
 		 	end
 
 		 	end
 
 		cam.End3D()
+		render.SuppressEngineLighting(false)
 
 	end
 
@@ -295,8 +343,9 @@ function Photon:CalculatePixVis( lpos, handle, a_radius )
 	if not self or not self:IsValid() or not self:IsVehicle() then return 0 end
 
 	local pos = self:LocalToWorld( lpos )
-	local radius = .01
+	local radius = 1
 	if a_radius then radius = a_radius end
 
 	return util.PixelVisible( pos, radius, handle )
+	//return 1
 end
