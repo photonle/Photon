@@ -288,7 +288,7 @@ EMV.Meta = {
 		AngleOffset = -90,
 		W = 13,
 		H = 14,
-		Sprite = "sprites/emv/crownvic_headlight",
+		Sprite = "sprites/emv/blank",
 		Scale = 2,
 		WMult = 1
 	},

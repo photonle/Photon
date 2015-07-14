@@ -96,6 +96,15 @@ PI.Meta = {
 	}
 }
 
+PI.StateMaterials = {
+	["main"] = {
+		Index = 22,
+		States = {
+			["running"] = "photon/override/tdm_dc12_running"
+		}
+	}
+}
+
 PI.Positions = {
 
 	[1] = { Vector( 36.9, 104.91, 38.5 ), Angle( 0, 2, 0 ), "headlight" },
@@ -137,7 +146,7 @@ PI.States.Reverse = {
 PI.States.Running = {
 	{ 1, SW }, { 2, SW },
 	{ 3, A }, { 4, A },
-	{ 5, DR }, { 6, DR }
+	{ "_main", "running" }
 }
 
 Photon.VehicleLibrary[ "tdm_dc12" ] = PI

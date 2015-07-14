@@ -42,7 +42,8 @@ PI.Meta = {
 		AngleOffset = -90,
 		W = 13,
 		H = 14,
-		Sprite = "sprites/emv/crownvic_headlight",
+		Sprite = "sprites/emv/blank",
+		//Sprite = "sprites/emv/crownvic_headlight",
 		Scale = 2,
 		WMult = 1
 	},
@@ -51,7 +52,8 @@ PI.Meta = {
 		AngleOffset = -90,
 		W = 14,
 		H = 14,
-		Sprite = "sprites/emv/crownvic_marker",
+		Sprite = "sprites/emv/blank",
+		//Sprite = "sprites/emv/crownvic_marker",
 		Scale = 3,
 		WMult = .4
 	},
@@ -69,10 +71,20 @@ PI.Meta = {
 		AngleOffset = -90,
 		W = 9,
 		H = 9.8,
-		Sprite = "sprites/emv/cvpi_corner_marker",
+		//Sprite = "sprites/emv/cvpi_corner_marker",
+		Sprite = "sprites/emv/blank",
 		Scale = 1.6,
 	}
 
+}
+
+PI.StateMaterials = {
+	["basic_lights"] = {
+		Index = 30,
+		States = {
+			["running"] = "photon/override/tdm_cvpi_running"
+		}
+	}
 }
 
 PI.Positions = {
@@ -132,6 +144,7 @@ PI.States.Running = {
 	{ 6, SW, 1 }, { 7, SW, 1 },
 	{ 15, A, .88 }, { 14, A, .88 },
 	{ 8, A, .5 }, { 9, A, .5 },
+	{ "_basic_lights", "running" }
 }
 
 Photon.VehicleLibrary["tdm_cvpi"] = PI
