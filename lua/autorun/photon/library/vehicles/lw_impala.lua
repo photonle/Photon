@@ -39,6 +39,15 @@ PI.Positions = {
 	{ Vector(25.1,109.6,30.2), Angle(-40,-46,29), "front_turn" }, --  17
 }
 
+PI.StateMaterials = {
+	["main"] = {
+		Index = 0,
+		States = {
+			["running"] = "photon/override/lw_ci09_main"
+		}
+	}
+}
+
 PI.Meta = {
 	brake_light = {
 		AngleOffset = 90,
@@ -130,6 +139,7 @@ PI.States.Reverse = {
 
 PI.States.Running = {
 	{4, DR, .25}, {5, DR, .25}, {6, DR, .1}, {7, DR, .1}, {8, A, .9}, {9, A, .9}, {10, SW, 1}, {11, SW, 1}, 
+	{ "_main", "running" }
 }
 
 --Photon:OverwriteIndex("NYPD Impala", PI)
