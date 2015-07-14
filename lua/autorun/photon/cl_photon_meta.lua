@@ -1,5 +1,9 @@
 AddCSLuaFile()
 
+local PhotonColors = nil
+if EMVU and EMVU.Colors then PhotonColors = EMVU.Colors end
+hook.Add( "Initialize", "Photon.LocalColorSet", function() PhotonColors = EMVU.Colors; end )
+
 function Photon:SetupCar( ent, index )
 
 	ent.VehicleName = index
@@ -120,9 +124,26 @@ function Photon:SetupCar( ent, index )
 		return false
 	end
 
+	function ent:SetStateMaterial( index, value )
+		//print(tostring(index))
+		//PrintTable( Photon.Vehicles.StateMaterials[ self.VehicleName ] )
+		local stateData = Photon.Vehicles.StateMaterials[ self.VehicleName ][ index ]
+		local matNumber = stateData.Index
+		local matValue = stateData.States[ value ]
+		self:SetSubMaterial( matNumber, matValue )
+		self.PhotonMaterials[ index ] = value
+	end
+
+	function ent:ResetStateMaterials()
+		for k,v in pairs( self.PhotonMaterials ) do
+			self:SetStateMaterial( k, 0 )
+			self.PhotonMaterials[k] = nil
+		end
+	end
+
 	function ent:RenderLights( headlights, running, reversing, braking, left, right, hazards, pdebug )
 		if not IsValid( self ) then return false end
-
+		self:ResetStateMaterials()
 		if not self.LastPhotonRenderCache or self.LastPhotonRenderCache + .05 < CurTime() then self.PhotonRenderCache = nil end
 
 		local RenderTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
@@ -195,22 +216,25 @@ function Photon:SetupCar( ent, index )
 
 		local light = false
 		
-		for i=1,#RenderTable do
-			light = RenderTable[i]
+		for i,light in pairs( RenderTable ) do
 			if light != true then
-				if not handles[light[1]] then setupVis( self ) return end -- for debugging mostly
-				local pos = positions[light[1]]
-				if pos and handles[i] and not lightDisconnect( self, light[1] ) then
-					drawLight(
-						self,
-						EMVU.Colors[light[2]], -- color
-						pos[1], -- positions
-						pos[2], -- angle
-						meta[pos[3]], -- meta data
-						handles[light[1]], -- handle
-						i, -- dynamic light number
-						light[3] -- brightness
-					)
+				if string.StartWith(tostring(i), "_") then
+					self:SetStateMaterial( string.sub( tostring(i), 2 ), light[2] )
+				else
+					if not handles[light[1]] then setupVis( self ) return end -- for debugging mostly
+					local pos = positions[light[1]]
+					if pos and handles[i] and not lightDisconnect( self, light[1] ) then
+						drawLight(
+							self,
+							PhotonColors[light[2]], -- color
+							pos[1], -- positions
+							pos[2], -- angle
+							meta[pos[3]], -- meta data
+							handles[light[1]], -- handle
+							i, -- dynamic light number
+							light[3] -- brightness
+						)
+					end
 				end
 			end
 		end
@@ -222,6 +246,8 @@ function Photon:SetupCar( ent, index )
 	ent.Lighting.Disconnected = {}
 	ent.Lighting.LastBlink = CurTime()
 	ent.Lighting.Blink = false
+
+	ent.PhotonMaterials = {}
 
 	ent:SetupCarVisHandles()
 

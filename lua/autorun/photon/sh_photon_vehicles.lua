@@ -163,6 +163,14 @@ function Photon:PreloadVehicle( car )
 		Photon.Vehicles.Config[ car.Name ] = {}
 	end
 
+	if car.Photon.StateMaterials and istable( car.Photon.StateMaterials ) then
+		Photon.Vehicles.StateMaterials[ car.Name ] = car.Photon.StateMaterials
+	elseif car.Photon.StateMaterials and isstring( car.Photon.StateMaterials ) then
+		Photon.Vehicles.StateMaterials[ car.Name ] = Photon.Vehicles.StateMaterials[ car.Photon.StateMaterials ]
+	else
+		Photon.Vehicles.StateMaterials[ car.Name ] = {}
+	end
+
 end
 
 function Photon:OverwriteIndex( name, data )
@@ -176,4 +184,5 @@ function Photon:OverwriteIndex( name, data )
 	if data.States.Reverse != nil then Photon.Vehicles.States.Reverse[name] = data.States.Reverse end
 	if data.States.Running != nil then Photon.Vehicles.States.Running[name] = data.States.Running end
 	if data.Config != nil then Photon.Vehicles.Config[name] = data.Config end
+	if data.StateMaterials then Photon.Vehicles.StateMaterials[name] = data.StateMaterials end
 end

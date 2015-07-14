@@ -9,6 +9,7 @@ if not Photon then
 	Photon.Vehicles.Positions = {}
 	Photon.Vehicles.Meta = {}
 	Photon.Vehicles.Config = {}
+	Photon.Vehicles.StateMaterials = {}
 	Photon.Vehicles.States = {}
 
 	Photon.Vehicles.States.Headlights = {}
