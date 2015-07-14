@@ -1,0 +1,29 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "photon/override/tdm_dc12_running"
+	"$bumpmap" "models/tdmcars/charger12/lights_nrm"
+	"$nodecal" "1"
+	"$halflambert" 1
+	"$phong" "1" 
+	"$phongboost" "0.5" 
+	"$phongfresnelranges" "[1 1 1]" 
+	"$phongexponent" 50
+	"$rimlight" "1"
+	"$rimlightexponent" "10"
+	"$rimlightboost" ".1"
+	"$rimmask" "1"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[0.02 0.02 0.02]"
+	"$normalmapalphaenvmapmask" 1
+	"$colorfix" "{255 255 255}"
+	"$Selfillum" "1"
+	"$selfillumtint" "[ 1 1 1 ]"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
