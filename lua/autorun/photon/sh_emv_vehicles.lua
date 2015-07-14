@@ -99,11 +99,96 @@ function EMVU:OverwriteIndex( name, data )
 		EMVU.Patterns[name] = data.Patterns
 		EMVU.Sequences[name] = data.Sequences
 		EMVU.Sections[name] = data.Sections
-		if istable(data.Lamps) then EMVU.Lamps[name] = data.Lamps end
-		if istable(data.Props) then EMVU.Props[name] = data.Props end
+		if istable( data.Lamps ) then EMVU.Lamps[ name ] = data.Lamps end
+		if istable( data.Props ) then EMVU.Props[ name ] = data.Props end
+		if istable( data.Auto ) then 
+			EMVU.AutoIndex[ name ] = data.Auto
+			EMVU:CalculateAuto( name, data.Auto ) 
+		end
+		if istable( data.Presets ) then EMVU.PresetIndex[ name ] = data.Presets end
 	else
 		error("data must be table with valid Meta, Positions, Patterns and Sequences")
 	end
+end
+
+function EMVU:CalculateAuto( name, data )
+	if not istable( data ) then return end
+
+	for i=1,#data do -- for each component in the vehicle's auto
+		// print( "Auto ID: " .. tostring( data[ i ].ID ) )
+		local component = EMVU.Auto[ data[ i ].ID ]
+		local autoData = data[i]
+		local autoPos = autoData.Pos
+		local autoAng = autoData.Ang
+		local autoScale = autoData.Scale or 1
+
+		//print("Component Scale: " .. tostring( autoScale ) )
+
+		for id,metadata in pairs( component.Meta ) do -- add meta template data
+			EMVU.LightMeta[ name ][ id ] = metadata
+			for prop,val in pairs( metadata ) do
+				local resultVal = val
+				if prop == "W" then resultVal = val * autoScale end
+				if prop == "H" then resultVal = val * autoScale end
+				EMVU.LightMeta[ name ][ id ][ prop ] = resultVal
+			end
+		end
+
+		local offset = #EMVU.Positions[ name ] -- count of current meta values
+
+		for id,section in pairs( component.Sections ) do -- for each section ["lightbar"] = { { 1, B } } *SECTION
+
+			// print( "Looping, ID: " .. tostring( id ) )
+			// print( "Section: " .. tostring( section ) )
+
+			EMVU.Sections[ name ][ id ] = {}
+
+			for index=1,#section do -- { { 1, B } } *FRAME
+
+				EMVU.Sections[ name ][ id ][ index ] = {}
+
+				local values = section[ index ]
+
+				// print( "Values: " .. tostring( values ) )
+
+				for light, lightData in pairs( values ) do -- { 1, B } *LIGHT
+
+					// print( "light: " .. tostring( light ) )
+					// print( "lightdata: " .. tostring( lightData ) )
+
+					EMVU.Sections[ name ][ id ][ index ][ light ] = { lightData[1] + offset, lightData[2] }
+
+				end
+
+			end
+
+		end
+
+		for id,pattern in pairs( component.Patterns ) do -- add pattern data
+			EMVU.Patterns[ name ][ id ] = pattern
+		end
+
+		for id=1,#component.Positions do
+			local posData = component.Positions[ id ]
+			local newPos = Vector()
+			newPos:Set( posData[1] )
+			newPos:Mul( autoScale )			
+			newPos:Add( autoPos )
+			local newAng = Angle()
+			newAng:Set( posData[2] )
+			EMVU.Positions[ name ][ offset + id ] = {
+				newPos, newAng, posData[3]
+			}
+
+		end
+
+		--PrintTable( EMVU.Patterns[ name ])
+		--PrintTable( EMVU.Sections[ name ] )
+		--PrintTable( EMVU.LightMeta[ name ] )
+		// PrintTable( EMVU.Positions[name] )
+	end
+
+
 end
 
 hook.Add("Initialize", "EMVU.LoadVehicles", function()
