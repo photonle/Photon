@@ -40,3 +40,25 @@ include( "library/emv_props.lua" )
 include( "library/emv_lamps.lua" )
 include( "library/emv_auto.lua" )
 include( "library/emv_presets.lua" )
+
+local emvVehicleTable = {}
+local emvLastScan = 0
+
+function EMVU:AllVehicles()
+	if CurTime() > emvLastScan + .5 then
+		self:UpdateVehicles()
+	end
+	return emvVehicleTable
+end
+
+function EMVU:UpdateVehicles()
+	for k,_ in pairs( emvVehicleTable ) do
+		emvVehicleTable[k] = nil
+	end
+
+	for _,ent in pairs( ents.GetAll() ) do
+		if IsValid( ent ) and ent.IsEMV and ent:IsEMV() then
+			emvVehicleTable[ #emvVehicleTable + 1 ] = ent
+		end
+	end
+end

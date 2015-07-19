@@ -30,8 +30,8 @@ function Photon:EntityCreated( ent )
 			if ent.VehicleTable and istable(ent.VehicleTable) then
 				Photon:SpawnedVehicle( ent )
 				EMVU:SpawnedVehicle( ent )
-				timer.Destroy( timerId )
 				timer.Stop( timerId )
+				timer.Destroy( timerId )
 			end
 			if timer.RepsLeft( timerId ) == 0 and SERVER then
 				local default = Photon:RecoverVehicleTable( ent )

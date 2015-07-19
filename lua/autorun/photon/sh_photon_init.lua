@@ -42,3 +42,25 @@ include( "sh_photon_vehicles.lua" )
 
 include( "../properties/siren.lua" )
 include( "../properties/menubar.lua" )
+
+local photonVehicleTable = {}
+local photonLastScan = 0
+
+function Photon:AllVehicles()
+	if CurTime() > photonLastScan + .5 then
+		self:UpdateVehicles()
+	end
+	return photonVehicleTable
+end
+
+function Photon:UpdateVehicles()
+	for k,_ in pairs( photonVehicleTable ) do
+		photonVehicleTable[k] = nil
+	end
+
+	for _,ent in pairs( ents.GetAll() ) do
+		if IsValid( ent ) and ent:Photon() then
+			photonVehicleTable[ #photonVehicleTable + 1 ] = ent
+		end
+	end
+end

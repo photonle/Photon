@@ -11,26 +11,18 @@ include( "cl_photon_builder.lua" )
 include( "cl_photon_menu.lua" )
 
 function DrawEMVLights()
-	for k,v in pairs(ents.GetAll()) do
+	for k,v in pairs( EMVU:AllVehicles() ) do
 		if IsValid( v ) and v.IsEMV and v:IsEMV() and v.RenderEL then v:RenderEL() elseif v:IsEMV() then EMVU:MakeEMV(v, v:EMVName()) end
 		if IsValid( v ) and v.IsEMV and v:IsEMV() and v.RenderIllum then v:RenderIllum() end
-	end
-	-- for _,ent in pairs( ents.GetAll() ) do
-	-- 	if ent and ent:IsValid() and ent.IsEMV and ent:IsEMV() then
-	-- 		--if ent.RenderEL then ent:RenderEL() end
-	-- 		-- if ent.RenderIllum then ent:RenderIllum() end
-	-- 	elseif ent:IsEMV() then
-	-- 		--EMVU:MakeEMV( ent, ent:EMVName() )
-	-- 	end
-	-- end
+	end	
 end
-hook.Add("PostDrawTranslucentRenderables", "EMVU.Scan", DrawEMVLights)
+hook.Add("PreRender", "EMVU.Scan", DrawEMVLights)
 
 function EMVU:CalculateFrames()
-	for _,ent in pairs(ents.GetAll()) do
-		if IsValid( ent ) and ent.HasELS and ent:HasELS() and (ent:Lights() or ent:TrafficAdvisor()) then ent:CalculateELFrames() end
+	for _,ent in pairs( EMVU:AllVehicles() ) do
+		if IsValid( ent ) and ent.HasELS and ent:HasELS() and (ent.Lights and ent:Lights() or ent.TrafficAdvisor and ent:TrafficAdvisor()) then ent:CalculateELFrames() end
 	end
 end
-hook.Add("Think", "EMVU.CalculateFrames", function()
+timer.Create("EMVU.CalculateFrames", .03, 0, function()
 	EMVU:CalculateFrames()
 end)

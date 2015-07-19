@@ -96,8 +96,8 @@ function Photon:DrawLight( incolors, ilpos, lang, meta, pixvis, lnum, brght, mul
 		end
 		
 	worldPos = self:LocalToWorld(lpos)
-	visible = util.PixelVisible( worldPos, visRadius * EMV_PIXVIS_MULTIPLIER, pixvis ) -- this line needs to be run asap to prevent needless calculations below
-	//visible = 1
+	//visible = util.PixelVisible( worldPos, visRadius * EMV_PIXVIS_MULTIPLIER, pixvis ) -- this line needs to be run asap to prevent needless calculations below
+	visible = 1
 	if EMV_DEBUG then visible = 1 end
 	if EMV_DEBUG then viewDot = 1 end
 	if not visible or visible <= 0 then return end
@@ -336,6 +336,240 @@ function Photon:DrawLight( incolors, ilpos, lang, meta, pixvis, lnum, brght, mul
  --        dlight.DieTime = CurTime() + .06
  --        dlight.NoModel = true -- unless you want to turn the car into a pink-ass piece of shit, I suggest you leave this
  --    end
+
+end
+
+local photonRenderTable = {}
+
+function Photon:RenderQueue()
+	render.SuppressEngineLighting( true )
+	cam.Start3D( EyePos(), EyeAngles() )
+		for i=1, #photonRenderTable do
+			if photonRenderTable[i] != nil then 
+				self:QuickDraw( photonRenderTable[i] )
+			end
+		end
+	cam.End3D()
+	render.SuppressEngineLighting( false )
+end
+hook.Add( "PostDrawTranslucentRenderables", "Photon.RenderQueue", function() 
+	Photon:RenderQueue()
+end )
+
+function Photon:AddLightToQueue( lightInfo )
+	photonRenderTable[ #photonRenderTable + 1 ] = lightInfo
+end
+
+function Photon:ClearLightQueue()
+	table.Empty( photonRenderTable )
+end
+hook.Add( "PostRender", "Photon.ClearRenderQueue", function()
+	Photon:ClearLightQueue()
+end)
+
+function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis, lnum, brght, multicolor  )
+	if not incolors or not ilpos or not lang or not meta then return end
+
+	local resultTable = {}
+
+	local colors = incolors
+	local offset = meta.AngleOffset
+
+	lpos:Set( ilpos )
+	
+	local rotating = false
+		
+	if offset == "R" or offset == "RR" then -- R indicates a rotating light
+		local speed = 2
+		if meta.Speed then speed = meta.Speed end
+		offset = EMVU.Helper:RotatingLight(speed, 10)
+		rotating = true
+		local degrees = offset % 360
+		if multicolor then
+			if ( degrees > 0 and degrees < 180 ) then
+				colors = incolors[2]
+			else
+				colors = incolors[1]
+			end
+		end
+	end
+
+	local visRadius = .1
+	local cheapLight = false
+	if meta.Cheap then cheapLight = true end
+
+	if meta.VisRadius then visRadius = meta.VisRadius end
+
+
+	local worldPos = Vector()
+	local viewDot = 0
+	local visible = 0
+	local viewPercent = 0
+
+		if meta.AngleOffset and meta.AngleOffset == "RR" then
+			local lposMod = EMVU.Helper:RadiusLight( 1, 4 )
+			lpos.x = lpos.x + lposMod
+			lpos.y = lpos.y + lposMod
+			
+		end
+		
+	worldPos = parent:LocalToWorld(lpos)
+	visible = util.PixelVisible( worldPos, visRadius * EMV_PIXVIS_MULTIPLIER, pixvis ) -- this line needs to be run asap to prevent needless calculations below
+
+	if EMV_DEBUG then visible = 1 end
+	if EMV_DEBUG then viewDot = 1 end
+	if not visible or visible <= 0 then return end
+
+	--if EMV_DEBUG or PHOTON_DEBUG then colors.src = Color(255,0,255,255) end -- EMV_DEBUG global is useful for light placement, but is rather buggy to toggle
+	if not meta.Scale then meta.Scale = 1 end
+	if not meta.WMult then meta.WMult = 1 end
+
+	local ca = parent:GetAngles()
+	
+	ca:RotateAroundAxis(parent:GetUp(), (lang.y + offset))
+	local lightNormal = ca:Forward()
+	lightNormal:Normalize()
+	local ViewNormal = worldPos - EyePos()
+	local Distance = ViewNormal:Length()
+	ViewNormal:Normalize()
+	viewDot = ViewNormal:Dot(lightNormal)
+	viewPercent = viewDot
+	local viewMod = viewDot * 10
+
+	viewDot = math.pow( viewMod, 1.25 ) * .1
+
+	if( visible and visible > 0) and ( viewDot and viewDot >= 0) then
+
+		local curLight = getLightColor( worldPos )
+		local lightMod = clamp(1 - round(((( curLight.x * curLight.y * curLight.z ) * .3) * 10) * 2, 5), .66, 1)
+
+		local srcOnly = false
+		local srcSkip = false
+
+		if (meta.Sprite and meta.Sprite == "sprites/emv/blank") or meta.Cheap then srcSkip = true end
+
+		local UC = { true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true }
+
+		local brightness = 1
+		local rawBrightness = 1
+		local pulseOverride = false
+		
+		if brght and istable(brght) then -- a table in place of the brightness index indicates pulsing light info, which will take over the brightess variable
+			brightness = EMVU.Helper:PulsingLight( brght[1], brght[2], brght[3] )
+			pulseOverride = true
+		elseif isnumber( brght ) then
+			brightness = brght
+			rawBrightness = brght
+		end
+
+		brightness = brightness * lightMod
+
+		viewDot = viewDot * brightness
+		local viewFlare = getViewFlare( viewPercent, brightness )
+
+		if meta.SourceOnly == true then 
+			srcOnly = true 
+		end
+
+		local al = Angle()
+		al:Set(lang)
+		al.r = al.r - 90
+		if rotating then al.y = offset - 90 end
+
+		up1:Set( worldPos )
+		local ua = parent:LocalToWorldAngles( al )
+
+		for k,v in pairs( colors ) do -- modifies the alpha of the colors based on the brightness
+			UC[k] = v
+		end
+
+		local srcColor = Color(255,255,255,255)
+
+		if not srcSkip then
+			srcColor.r = UC.src.r
+			srcColor.g = UC.src.g
+			srcColor.b = UC.src.b
+			srcColor.a = UC.src.a * rawBrightness
+			if pulseOverride then srcColor.a = ( srcColor.a * brightness ) end
+			if istable(UC["dim"]) then
+				srcColor.r = Lerp( viewDot, UC.dim.r, UC.src.r )
+				srcColor.g = Lerp( viewDot, UC.dim.g, UC.src.g )
+				srcColor.b = Lerp( viewDot, UC.dim.b, UC.src.b )
+				--srcColor.a = Lerp( viewDot, UC.dim.a, UC.src.a )
+			end
+		end
+
+		if PHOTON_DEBUG and !PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 255, 255, 0, 255 ) elseif PHOTON_DEBUG and PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 0, 0, 0, 0 ) end
+		if PHOTON_DEBUG and PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then srcColor = Color( 0, 255, 255 ) end
+
+		resultTable.srcOnly = srcOnly
+		resultTable.drawSrc = !srcSkip
+		resultTable.camPos = worldPos
+		resultTable.camAng = ua
+		resultTable.srcSprite = Material( meta.Sprite )
+		resultTable.srcT = Vector( meta.W * .5, meta.H * .5, 0 )
+		resultTable.srcR = Vector( -meta.W * .5, meta.H * .5, 0 )
+		resultTable.srcB = Vector( -meta.W * .5, -meta.H * .5, 0 )
+		resultTable.srcL = Vector( meta.W * .5, -meta.H * .5, 0 )
+		resultTable.worldPos = worldPos
+		resultTable.bloomScale = meta.Scale * viewDot
+		resultTable.flareScale = meta.Scale * viewFlare
+		resultTable.widthScale = meta.Scale * meta.WMult*viewDot
+		resultTable.colSrc = srcColor
+		resultTable.colMed = UC.med
+		resultTable.colAmb = UC.amb
+		resultTable.colBlm = UC.blm
+		resultTable.colGlw = UC.glw
+		resultTable.colRaw = UC.raw
+		resultTable.colFlr = UC.flr
+
+		resultTable.lightMod = lightMod
+		resultTable.cheap = cheapLight
+		resultTable.viewFlare = viewFlare
+
+		self:AddLightToQueue( resultTable )
+
+	end
+end
+
+function Photon:QuickDraw( data )
+
+	if data.drawSrc then
+		cam.Start3D2D( data.camPos, data.camAng, 1 )
+			render.SetLightingMode( 2 )
+			render.SetMaterial( data.srcSprite )
+			render.DrawQuad( data.srcT, data.srcR, data.srcB, data.srcL, data.colSrc )
+			render.SetLightingMode( 0 )
+		cam.End3D2D()
+	end
+	
+	if not data.srcOnly then
+		setMaterial( mat1 )
+		drawSprite( data.worldPos, (48 * data.bloomScale), (32 * data.bloomScale), data.colGlw )
+
+		setMaterial( mat2 )
+		drawSprite( data.worldPos, (256 * data.bloomScale), (256 * data.bloomScale), data.colAmb )
+
+		setMaterial( mat2 )
+		drawSprite( data.worldPos, (64 * data.bloomScale), 48 * data.bloomScale, data.colBlm )
+
+		setMaterial( mat3 )
+		drawSprite( data.worldPos, 12 * data.widthScale, 12 * data.bloomScale, data.colMed )
+
+		if data.viewFlare and data.colFlr and data.lightMod > .83 and not data.cheap then
+
+			setMaterial( mat1 )
+			drawSprite( data.worldPos, ( 96 * data.flareScale), ( 2 * data.flareScale ), data.colFlr )
+
+			setMaterial( mat2 )
+			drawSprite( data.worldPos, ( 1024 * data.flareScale), ( 1024 * data.flareScale ), data.colAmb )
+
+			setMaterial( mat4 )
+			drawSprite( data.worldPos, ( 64 * data.flareScale), ( 64 * data.flareScale ), data.colAmb )
+
+		end 
+	end
+	
 
 end
 

@@ -335,7 +335,8 @@ function EMVU:MakeEMV( emv, name )
 					col = EMVColors[b[2]]
 				end
 				
-				self:DrawEL( 
+				Photon:PrepareVehicleLight(
+						self, -- parent
 						col, -- color of the light (colors)
 						pos[1], -- position (lpos)
 						pos[2], -- angle (lang)

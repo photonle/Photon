@@ -1,26 +1,3 @@
-
-local photonVehicleTable = {}
-local photonLastScan = 0
-
-function Photon:AllVehicles()
-	if CurTime() > photonLastScan + .5 then
-		self:UpdateVehicles()
-	end
-	return photonVehicleTable
-end
-
-function Photon:UpdateVehicles()
-	for k,_ in pairs( photonVehicleTable ) do
-		photonVehicleTable[k] = nil
-	end
-
-	for _,ent in pairs( ents.GetAll() ) do
-		if IsValid( ent ) and ent:Photon() then
-			photonVehicleTable[ #photonVehicleTable + 1 ] = ent
-		end
-	end
-end
-
 function Photon:RunningScan()
 	for k,v in pairs( self:AllVehicles() ) do
 		if IsValid( v) and v:GetDriver():IsValid() and v:GetDriver():IsPlayer() then
@@ -38,7 +15,7 @@ function Photon:RunningScan()
 
 			v.LastSpeed = v:Photon_GetSpeed()
 
-		elseif IsValid( v ) and not v:GetDriver():IsValid() and not v:GetDriver():IsPlayer() and not v:StayOn() then
+		elseif IsValid( v) and not v:GetDriver():IsValid() and not v:GetDriver():IsPlayer() and not v:StayOn() then
 			v:CAR_Running( false )
 			v:CAR_Braking( false )
 			v:CAR_Reversing( false )

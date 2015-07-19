@@ -6,7 +6,7 @@ local PHOTON_REG_ENABLED = PHOTON_REG_ENABLED
 
 function DrawCarLights()
 	local photonDebug = PHOTON_DEBUG
-	for _,ent in pairs(ents.GetAll()) do
+	for _,ent in pairs( Photon:AllVehicles() ) do
 		if IsValid( ent ) then
 			if ent:Photon() and ent.RenderLights then
 				if PHOTON_REG_ENABLED then ent:RenderLights( 
@@ -19,14 +19,14 @@ function DrawCarLights()
 					ent:Hazards(), 
 					photonDebug
 					) end
-				if ent:IsEMV() then ent:ScanEMVProps() end
+				if ent:IsEMV() and ent.ScanEMVProps then ent:ScanEMVProps() end
 			elseif ent:Photon() and not ent.RenderLights then
 				Photon:SetupCar( ent, ent:Photon() )
 			end
 		end
 	end
 end
-hook.Add("PostDrawTranslucentRenderables", "Photon.Scan", DrawCarLights)
+hook.Add( "PreRender", "Photon.Scan", DrawCarLights )
 
 function Photon:AdjustFrameTime()
 	if FrameTime() >= EMV_FRAME_DUR or FrameTime() < EMV_FRAME_DUR and FrameTime() > EMV_FRAME_CONST then 
