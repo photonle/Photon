@@ -1,7 +1,29 @@
 
+local photonVehicleTable = {}
+local photonLastScan = 0
+
+function Photon:AllVehicles()
+	if CurTime() > photonLastScan + .5 then
+		self:UpdateVehicles()
+	end
+	return photonVehicleTable
+end
+
+function Photon:UpdateVehicles()
+	for k,_ in pairs( photonVehicleTable ) do
+		photonVehicleTable[k] = nil
+	end
+
+	for _,ent in pairs( ents.GetAll() ) do
+		if IsValid( ent ) and ent:Photon() then
+			photonVehicleTable[ #photonVehicleTable + 1 ] = ent
+		end
+	end
+end
+
 function Photon:RunningScan()
-	for k,v in pairs( ents.GetAll() ) do
-		if IsValid( v ) and v:Photon() and v:GetDriver():IsValid() and v:GetDriver():IsPlayer() then
+	for k,v in pairs( self:AllVehicles() ) do
+		if IsValid( v) and v:GetDriver():IsValid() and v:GetDriver():IsPlayer() then
 
 			if v:HasELS() and v.ELS.Blackout then 
 				v:CAR_Running( false )
@@ -16,7 +38,7 @@ function Photon:RunningScan()
 
 			v.LastSpeed = v:Photon_GetSpeed()
 
-		elseif v:Photon() and not v:GetDriver():IsValid() and not v:GetDriver():IsPlayer() and not v:StayOn() then
+		elseif IsValid( v ) and not v:GetDriver():IsValid() and not v:GetDriver():IsPlayer() and not v:StayOn() then
 			v:CAR_Running( false )
 			v:CAR_Braking( false )
 			v:CAR_Reversing( false )
@@ -27,10 +49,8 @@ function Photon:RunningScan()
 			end
 		end
 	end
-
 end
-
-hook.Add( "Think", "Photon.RunScan", function()
+timer.Create("Photon.RunScan", .1, 0, function()
 	Photon:RunningScan()
 end)
 
@@ -48,3 +68,20 @@ end)
 hook.Add( "PlayerInitialSpawn", "Photon.InitialNotify", function( ply )
 	ply:ChatPrint( "Photon Lighting Engine [Beta] is active. Type !photon for help and information." )
 end)
+
+-- dev functions --
+
+concommand.Add( "photon_mat", function( ply, cmd, args )
+	local veh = ply:GetVehicle()
+	//veh:GetSubMaterial()
+	//veh:SetSubMaterial(0)
+	veh:SetSubMaterial( 1, "photon/override/lw_dc15_headlights" )
+	//PrintTable( veh:GetMaterials() )
+end)
+
+// local ply = player.GetBySteamID("STEAM_0:0:0")
+// local veh = ply:GetVehicle()
+
+// // veh:SetSubMaterial(4, "photon/override/lw_glhs_running" )
+// // veh:SetSubMaterial(6, "photon/override/lw_glhs_trans_running" )
+// veh:SetSubMaterial( 1, "photon/override/lw_dc15_headlights" )
