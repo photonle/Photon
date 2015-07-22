@@ -231,11 +231,26 @@ function EMVU:MakeEMV( ent, emv )
 		self:ELS_Siren( true )
 	end
 
-	function ent:ELS_SirenContinue()
+	function ent:ELS_SirenPause()
+		if self:ELS_Siren() then
+			self.ELS.SirenPaused = true
+			self.ELS.Siren:Stop()
+		end
+	end
+
+	function ent:ELS_SirenResume()
+		if self:ELS_Siren() then
+			self:ELS_SirenContinue( true )
+			self.ELS.SirenPaused = false
+		end
+	end
+
+	function ent:ELS_SirenContinue( force )
 		if not IsValid( self ) then return end
 		if not self:ELS_Siren() then return end
 		if not self.ELS.Siren then return end
-		if self.ELS.SirenContinue and self.ELS.SirenContinue + 2 > CurTime() then return end
+		if self.ELS.SirenPaused and not force then return end
+		if ( self.ELS.SirenContinue and self.ELS.SirenContinue + 2 > CurTime() ) and not force then return end
 		self.ELS.Siren:PlayEx( 0, 100 )
 		self.ELS.Siren:ChangeVolume( 2, 0 )
 		self.ELS.SirenContinue = CurTime()
@@ -287,10 +302,23 @@ function EMVU:MakeEMV( ent, emv )
 		if not IsValid( self ) then return end
 		if self:ELS_NoSiren() then return end
 		if state then
-			if self:ELS_SirenOption() == 1 and self:ELS_Siren() then return end
+			//if self:ELS_SirenOption() == 1 and self:ELS_Siren() then return end
 			self:SetDTBool( CAR_MANUAL, true )
 			local manSiren = EMVU.Sirens[self:ELS_SirenSet()].Set[1].Sound
 			if EMVU.Sirens[self:ELS_SirenSet()].Manual then manSiren = EMVU.Sirens[self:ELS_SirenSet()].Manual end
+			if self:ELS_Siren() then
+				local manualToneIndex = self:ELS_SirenOption() + 1
+				local manualTone = EMVU.Horns[1]
+				if manualToneIndex <= #EMVU.Sirens[ self:ELS_SirenSet() ].Set 
+					and EMVU.Sirens[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Name != "HI-LO"
+				 then
+					manualTone = EMVU.Sirens[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Sound
+				elseif EMVU.Sirens[self:ELS_SirenSet()].Horn then
+					manualTone = EMVU.Sirens[self:ELS_SirenSet()].Horn
+				end
+				self:ELS_SirenPause()
+				manSiren = manualTone
+			end
 			self.ELS.Manual = CreateSound( self, manSiren )
 			self.ELS.Manual:SetSoundLevel( 75 )
 			self.ELS.Manual:PlayEx( 0, 100 )
@@ -298,6 +326,9 @@ function EMVU:MakeEMV( ent, emv )
 		else
 			self:SetDTBool( CAR_MANUAL, false )
 			if self.ELS.Manual then self.ELS.Manual:Stop() end
+			if self:ELS_Siren() then
+				self:ELS_SirenResume()
+			end
  		end
 	end
 
