@@ -15,11 +15,28 @@ properties.Add( "photon_siren", {
 	end,
 
 	MenuOpen = function( self, option, ent )
+		
 		local options = EMVU.Sirens
 		local submenu = option:AddSubMenu()
+
+		local categories = {}
+		categories["Other"] = true
+		for k,v in ipairs( options ) do
+			if v.Category then
+				categories[ v.Category ] = true
+			end
+		end
+
+		for k,v in pairs( categories ) do
+			categories[k] = submenu:AddSubMenu( k )
+		end
+
+		PrintTable( categories )
+
 		for k,v in ipairs( options ) do
 			local isSelected = ( tostring( k ) == tostring( ent:SirenSet() ) )
-			local option = submenu:AddOption( v.Name, function() EMVU.Net:SirenSet( k ) end )
+			local category = v.Category or "Other"
+			local option = categories[ category ]:AddOption( v.Name, function() EMVU.Net:SirenSet( k ) end )
 			if isSelected then
 				option:SetChecked( true )
 			end
