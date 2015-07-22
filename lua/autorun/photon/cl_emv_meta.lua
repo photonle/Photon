@@ -221,8 +221,8 @@ function EMVU:MakeEMV( emv, name )
 
 	end
 
-	function emv:GetLightSection( component, frame )
-		return EMVHelper:GetLightSection( self.VehicleName, component, frame )
+	function emv:GetLightSection( component, frame, skip )
+		return EMVHelper:GetLightSection( self.VehicleName, component, frame, skip )
 	end
 
 	function emv:GetELOverride()
@@ -250,6 +250,7 @@ function EMVU:MakeEMV( emv, name )
 	emv.EL.Frames = {}
 	emv.EL.RenderCache = {}
 	emv.EL.PixVisCache = {}
+	emv.EL.TrafficDisconnect = {}
 	emv.EL.Horn = false
 	emv.EL.Manual = false
 
@@ -393,6 +394,7 @@ function EMVU:MakeEMV( emv, name )
 		if increment or not self.EL.RenderCache then
 
 			local skipComponents = {}
+			local skipELIndexes = {}
 
 			if self:HasTrafficAdvisor() then
 				if self:TrafficAdvisor() then
@@ -403,6 +405,14 @@ function EMVU:MakeEMV( emv, name )
 						local frame = self:GetFrame( index, light, increment )
 						if frame then table.Add( RenderTable, self:GetLightSection( index, frame ) ) end
 					end
+
+					local disconnectTable = EMVU.Helper:GetTrafficELDisconnect( self.VehicleName, self:TrafficAdvisorOption() )
+					if istable( disconnectTable ) then
+						for i=1, #disconnectTable do
+							skipELIndexes[ disconnectTable[ i ] ] = true
+						end
+					end
+
 				end
 			end
 
@@ -412,10 +422,10 @@ function EMVU:MakeEMV( emv, name )
 					if frame and not skipComponents[k] then
 						if istable(frame) then
 							for _,index in pairs( frame ) do
-								table.Add( RenderTable, self:GetLightSection( k, index ) )
+								table.Add( RenderTable, self:GetLightSection( k, index, skipELIndexes ) )
 							end
 						else
-							table.Add( RenderTable, self:GetLightSection( k, frame ) )
+							table.Add( RenderTable, self:GetLightSection( k, frame, skipELIndexes ) )
 						end
 						
 						// local addTable = self:GetLightSection( k, frame )

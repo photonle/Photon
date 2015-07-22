@@ -1,3 +1,4 @@
+
 function Photon:RunningScan()
 	for k,v in pairs( self:AllVehicles() ) do
 		if IsValid( v) and v:GetDriver():IsValid() and v:GetDriver():IsPlayer() then

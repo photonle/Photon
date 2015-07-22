@@ -182,6 +182,24 @@ function EMVU:CalculateAuto( name, data )
 
 		end
 
+		if istable( EMVU.Sequences[ name ]["Traffic"] ) and istable( component.TrafficDisconnect ) then
+			for _,sequence in pairs( EMVU.Sequences[ name ]["Traffic"] ) do
+				if istable( sequence.Preset_Components )  then
+					for __,preset in pairs( sequence.Preset_Components ) do
+						for componentName, ___ in pairs( preset ) do
+							if istable( component.TrafficDisconnect[ componentName ] ) then
+								local disconnectIndexes = component.TrafficDisconnect[ componentName ]
+								if not istable( sequence.EL_Disconnect ) then sequence.EL_Disconnect = {} end
+								for ____, lightIndex in pairs( disconnectIndexes ) do
+									sequence.EL_Disconnect[ #sequence.EL_Disconnect + 1 ] = lightIndex + offset
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+		--PrintTable( EMVU.Sequences[ name ] )
 		--PrintTable( EMVU.Patterns[ name ])
 		--PrintTable( EMVU.Sections[ name ] )
 		--PrintTable( EMVU.LightMeta[ name ] )

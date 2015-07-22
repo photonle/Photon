@@ -342,15 +342,21 @@ end
 local photonRenderTable = {}
 
 function Photon:RenderQueue()
-	render.SuppressEngineLighting( true )
-	cam.Start3D( EyePos(), EyeAngles() )
-		for i=1, #photonRenderTable do
-			if photonRenderTable[i] != nil then 
-				self:QuickDraw( photonRenderTable[i] )
+	local startTime = os.clock()
+	local count = #photonRenderTable
+	if ( count > 0 ) then
+		cam.Start3D( EyePos(), EyeAngles() )
+			for i=1, count do
+				if photonRenderTable[i] != nil then 
+					self:QuickDraw( photonRenderTable[i] )
+				end
 			end
-		end
-	cam.End3D()
-	render.SuppressEngineLighting( false )
+		cam.End3D()
+	end
+	// local endTime = os.clock() - startTime
+	// if endTime > 0 then
+	// 	print("[Photon] Queue render time: " .. tostring( endTime ) )
+	// end
 end
 hook.Add( "PostDrawTranslucentRenderables", "Photon.RenderQueue", function() 
 	Photon:RenderQueue()
@@ -366,6 +372,29 @@ end
 hook.Add( "PostRender", "Photon.ClearRenderQueue", function()
 	Photon:ClearLightQueue()
 end)
+
+local photonResultTable = {
+	srcOnly = true,
+	drawSrc = true,
+	camPos = true,
+	camAng = true,
+	srcSprite = true,
+	srcT = true,
+	srcR = true,
+	srcB = true,
+	srcL = true,
+	worldPos = true,
+	bloomScale = true,
+	flareScale = true,
+	widthScale = true,
+	colSrc = true,
+	colMed = true,
+	colAmb = true,
+	colBlm = true,
+	colGlw = true,
+	colRaw = true,
+	colFlr = true
+}
 
 function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis, lnum, brght, multicolor  )
 	if not incolors or not ilpos or not lang or not meta then return end

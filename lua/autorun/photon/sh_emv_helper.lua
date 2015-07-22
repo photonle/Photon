@@ -79,9 +79,21 @@ function EMVU.Helper:GetModeDisconnect( name, option )
 	return false
 end
 
+function EMVU.Helper:GetTrafficOptions( name )
+	return EMVU.Sequences[ name ][ "Traffic" ]
+end
+
+function EMVU.Helper:GetTrafficELDisconnect( name, option )
+	if istable( EMVU.Sequences[ name ][ "Traffic" ][ option ]["EL_Disconnect"] ) then
+		return EMVU.Sequences[ name ][ "Traffic" ][ option ]["EL_Disconnect"]
+	else
+		return {}
+	end
+end
+
 function EMVU.Helper:GetPattern( name, option, frame )
 	local pattern = EMVU.Helper:GetSequence( name, option )[frame]
-	PrintTable( EMVU.Patterns[name][pattern] )
+	--PrintTable( EMVU.Patterns[name][pattern] )
 	return EMVU.Patterns[name][pattern]
 end
 
@@ -97,8 +109,23 @@ function EMVU.Helper:GetFrame( name, component, index, frame )
 	return EMVU.Patterns[name][component][index][frame]
 end
 
-function EMVU.Helper:GetLightSection( name, component, frame )
-	return EMVU.Sections[name][component][frame]
+function EMVU.Helper:GetLightSection( name, component, frame, skip )
+	if istable( skip ) then
+		local lights = EMVU.Sections[name][component][frame]
+		local resultTable = {}
+		if istable( lights ) then
+			for _,light in pairs( lights ) do
+				if not skip[ light[1] ] then
+					resultTable[ #resultTable + 1 ] = light
+				end
+			end
+			return resultTable
+		else
+			return EMVU.Sections[name][component][frame]
+		end
+	else
+		return EMVU.Sections[name][component][frame]
+	end
 end
 
 function EMVU.Helper:RotatingLight( speed, offset )
@@ -205,6 +232,16 @@ function EMVU.Helper:GetTASequence( name, option, vehicle )
 		end
 	end
 	
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["Preset_Components"] ) then
+		local preset = vehicle:ELPresetOption()
+		local ptable = EMVU.Sequences[name]["Traffic"][option]["Preset_Components"][preset]
+		if istable( ptable ) then
+			for id,data in pairs( ptable ) do
+				resultTable[ id ] = data
+			end
+		end
+	end
+
 	for component, option in pairs( EMVU.Sequences[name]["Traffic"][option]["Components"] ) do
 		resultTable[ component ] = option
 	end
