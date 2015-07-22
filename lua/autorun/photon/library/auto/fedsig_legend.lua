@@ -23,7 +23,7 @@ COMPONENT.Meta = {
 		W = 7.2,
 		H = 7.2,
 		Sprite = "sprites/emv/legend_wide",
-		Scale = 1.25,
+		Scale = 1.5,
 		WMult = 1.5,
 	},
 	legend_forward_nar = {
@@ -31,7 +31,7 @@ COMPONENT.Meta = {
 		W = 7.2,
 		H = 7.2,
 		Sprite = "sprites/emv/legend_narrow",
-		Scale = 1.25,
+		Scale = 1.5,
 		WMult = 1,
 	},
 	legend_rear_nar = {
@@ -39,7 +39,7 @@ COMPONENT.Meta = {
 		W = 7.2,
 		H = 7.2,
 		Sprite = "sprites/emv/legend_narrow",
-		Scale = 1.25,
+		Scale = 1.5,
 		WMult = 1,
 	},
 	legend_rear = {
@@ -47,7 +47,7 @@ COMPONENT.Meta = {
 		W = 7.2,
 		H = 7.2,
 		Sprite = "sprites/emv/legend_wide",
-		Scale = 1.25,
+		Scale = 1.5,
 		WMult = 1.5,
 	},
 }
@@ -114,11 +114,11 @@ COMPONENT.Sections = {
 
 		},
 		[2] = { -- RED SIDE
-			{ 1, R }, { 3, R }, { 5, R }, { 7, R }, { 9, R }, { 11, R },
+			{ 3, R }, { 5, R }, { 7, R }, { 9, R }, { 11, R },
 			{ 13, R }, { 15, R }, { 17, R }, { 19, R }, { 21, R }, { 23, R }, { 25, R }
 		},
 		[3] = { -- BLUE SIDE
-			{ 2, B }, { 4, B }, { 6, B }, { 8, B }, { 10, B }, { 12, B }, { 14, B },
+			{ 4, B }, { 6, B }, { 8, B }, { 10, B }, { 12, B }, { 14, B },
 			{ 16, B }, { 18, B }, { 20, B }, { 22, B }, { 24, B }, { 26, B }, 
 		},
 		[4] = {
@@ -167,7 +167,7 @@ COMPONENT.Sections = {
 		},
 		-- FULL RED
 		[18] = {
-			{ 1, R }, { 3, R }, { 5, R }, { 7, R }, { 9, R }, { 11, R }, { 13, R }, { 15, R }, { 17, R }, { 19, R }, { 21, R }, { 23, A }, { 25, A }
+			{ 3, R }, { 5, R }, { 7, R }, { 9, R }, { 11, R }, { 13, R }, { 15, R }, { 17, R }, { 19, R }, { 21, R }, { 23, A }, { 25, A }
 		},
 		-- Pattern 6 BLUE
 		[19] = {
@@ -190,7 +190,7 @@ COMPONENT.Sections = {
 		},
 		-- FULL BLUE
 		[25] = {
-			{ 2, B }, { 4, B }, { 6, B }, { 8, B }, { 10, B }, { 12, B }, { 14, B }, { 16, B }, { 18, B }, { 20, B }, { 22, B }, { 24, A }, { 26, A }
+			{ 4, B }, { 6, B }, { 8, B }, { 10, B }, { 12, B }, { 14, B }, { 16, B }, { 18, B }, { 20, B }, { 22, B }, { 24, A }, { 26, A }
 		},
 		-- Pattern 7
 		[26] = {
@@ -199,7 +199,7 @@ COMPONENT.Sections = {
 		[27] = {
 			{ 4, B }, { 24, A }, { 26, A }
 		},
-		-- code 2
+		-- code 3
 		[28] = {
 			{ 7, R }, { 9, R }, { 11, R }, { 13, R }, { 15, R }, { 17, R }, { 19, R },
 			{ 8, B }, { 10, B }, { 12, B }, { 14, B }, { 16, B }, { 18, B }, { 20, B }
@@ -208,11 +208,21 @@ COMPONENT.Sections = {
 			{ 5, R }, { 21, R }, { 6, B }, { 22, B }
 		},
 		[30] = {
-			{ 3, R }, { 23, R }, { 4, B }, { 24, B }
+			{ 3, R }, { 23, A }, { 4, B }, { 24, A }
 		},
 		[31] = {
-			{ 1, R }, { 25, R }, { 2, B }, { 26, B }
+			{ 25, A }, { 26, A }
 		},
+		-- code 2
+		[32] = {
+			{ 3, R }, { 4, B }, { 23, A }, { 24, A }
+		},
+		[33] = {
+			{ 5, R }, { 6, B }, { 21, R }, { 22, B }
+		},
+		[34] = {
+			{ 25, A }, { 26, A }
+		}
 	},
 	["auto_fedsig_legend_corner"] = {
 		[1] = {
@@ -221,10 +231,28 @@ COMPONENT.Sections = {
 		[2] = {
 			{ 8, B }, { 10, B }, { 12, B }, { 14, B }, { 16, B }, { 18, B }, { 20, B }
 		}
+	},
+	["auto_fedsig_legend_signalmaster"] = {
+		[1] = { { 23, A } },
+		[2] = { { 23, A }, { 25, A } },
+		[3] = { { 23, A }, { 25, A }, { 26, A } },
+
+		[4] = { { 23, A }, { 25, A }, { 26, A }, { 24, A } },
+
+		[5] = { { 24, A } },
+		[6] = { { 26, A }, { 24, A } },
+		[7] = { { 25, A }, { 26, A }, { 24, A } },
+
+		[8] = { { 25, A }, { 26, A }}
 	}
 }
 
 COMPONENT.Patterns = {
+	["auto_fedsig_legend_signalmaster"] = {
+		["left"] = { 5, 5, 6, 6, 7, 7, 4, 4, 0, 0, 0, 0 },
+		["right"] = { 1, 1, 2, 2, 3, 3, 4, 4, 0, 0, 0, 0 },
+		["diverge"] = { 8, 8, 8, 4, 4, 4, 0, 0, 0, 0, 0, 0 }
+	},
 	["auto_fedsig_legend"] = {
 		["all"] = { 1, 0, 1, 0, 1, 0 },
 		["alt_slow"] = { 2, 2, 2, 2, 0, 3, 3, 3, 3, 0 },
@@ -239,13 +267,25 @@ COMPONENT.Patterns = {
 		},
 		["pattern_7"] = { 26, 26, 26, 26, 0, 27, 27, 27, 27, 0, 18, 18, 18, 18, 0, 25, 25, 25, 25, 0 },
 		["code2"] = {
+			33, 33, { 33, 33 }, { 33, 32 }, 32, 32, 34, 34
+		},
+		["code3"] = {
 			{ 28, 29 }, 0, { 29, 30 }, 0, { 30, 31 }, 0, { 30, 29 }, 0
 		}
 	},
 	["auto_fedsig_legend_corner"] = {
 		["code2"] = {
+			{ 1, 2 }, { 1, 2 }, 0, 0
+		},
+		["code3"] = {
 			1, 0, 1, 0, 2, 0, 2, 0
 		}
+	}
+}
+
+COMPONENT.TrafficDisconnect = { 
+	["auto_fedsig_legend_signalmaster"] = {
+		23, 25, 26, 24 
 	}
 }
 
