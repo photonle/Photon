@@ -10,6 +10,7 @@ local pow = math.pow
 local round = math.Round
 
 local getLightColor = render.GetLightColor
+local utilPixVis = util.PixelVisible
 
 local function getViewFlare( dot, brght )
 	local dif = dot - .99
@@ -96,8 +97,8 @@ function Photon:DrawLight( incolors, ilpos, lang, meta, pixvis, lnum, brght, mul
 		end
 		
 	worldPos = self:LocalToWorld(lpos)
-	//visible = util.PixelVisible( worldPos, visRadius * EMV_PIXVIS_MULTIPLIER, pixvis ) -- this line needs to be run asap to prevent needless calculations below
-	visible = 1
+	visible = utilPixVis( worldPos, visRadius * EMV_PIXVIS_MULTIPLIER, pixvis ) -- this line needs to be run asap to prevent needless calculations below
+	// visible = 1
 	if EMV_DEBUG then visible = 1 end
 	if EMV_DEBUG then viewDot = 1 end
 	if not visible or visible <= 0 then return end
@@ -341,25 +342,42 @@ end
 
 local photonRenderTable = {}
 
-function Photon:RenderQueue()
-	local startTime = os.clock()
+function Photon:RenderSourcePoints()
 	local count = #photonRenderTable
 	if ( count > 0 ) then
 		cam.Start3D( EyePos(), EyeAngles() )
 			for i=1, count do
-				if photonRenderTable[i] != nil then 
-					self:QuickDraw( photonRenderTable[i] )
+				if photonRenderTable[i] != nil then
+					local data = photonRenderTable[i]
+					if data[2] then
+						self:QuickDrawSource( data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[14] )
+					end
 				end
 			end
 		cam.End3D()
 	end
-	// local endTime = os.clock() - startTime
-	// if endTime > 0 then
-	// 	print("[Photon] Queue render time: " .. tostring( endTime ) )
-	// end
 end
-hook.Add( "PostDrawTranslucentRenderables", "Photon.RenderQueue", function() 
-	Photon:RenderQueue()
+hook.Add( "PreDrawEffects", "Photon.RenderSourcePoints", function() 
+	//Photon:RenderSourcePoints()
+end )
+
+function Photon:RenderLightEffects()
+local count = #photonRenderTable
+	if ( count > 0 ) then
+		cam.Start3D()
+			for i=1, count do
+				if photonRenderTable[i] != nil then
+					local data = photonRenderTable[i]
+					if not data[1] then
+						self:QuickDrawEffects( data[10], data[11], data[12], data[13], data[15], data[16], data[17], data[18], data[19], data[20], data[21], data[22], data[23] )
+					end
+				end
+			end
+		cam.End3D()
+	end
+end
+hook.Add( "PreDrawEffects", "Photon.RenderLightEffects", function() 
+	//Photon:RenderLightEffects()
 end )
 
 function Photon:AddLightToQueue( lightInfo )
@@ -372,6 +390,42 @@ end
 hook.Add( "PostRender", "Photon.ClearRenderQueue", function()
 	Photon:ClearLightQueue()
 end)
+
+function Photon:QuickDrawSource( camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, colSrc )
+	cam.Start3D2D( camPos, camAng, 1 )
+		render.SetLightingMode( 2 )
+		render.SetMaterial( srcSprite )
+		render.DrawQuad( srcT, srcR, srcB, srcL, colSrc )
+		render.SetLightingMode( 0 )
+	cam.End3D2D()
+end
+
+function Photon:QuickDrawEffects( worldPos, bloomScale, flareScale, widthScale, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare )
+	setMaterial( mat1 )
+	drawSprite( worldPos, (48 * bloomScale), (32 * bloomScale), colGlw )
+
+	setMaterial( mat2 )
+	drawSprite( worldPos, (256 * bloomScale), (256 * bloomScale), colAmb )
+
+	setMaterial( mat2 )
+	drawSprite( worldPos, (64 * bloomScale), 48 * bloomScale, colBlm )
+
+	setMaterial( mat3 )
+	drawSprite( worldPos, 12 * widthScale, 12 * bloomScale, colMed )
+
+	// if viewFlare and colFlr and lightMod > .83 and not cheap then
+
+	// 	setMaterial( mat1 )
+	// 	drawSprite( worldPos, ( 96 * flareScale), ( 2 * flareScale ), colFlr )
+
+	// 	setMaterial( mat2 )
+	// 	drawSprite( worldPos, ( 1024 * flareScale), ( 1024 * flareScale ), colAmb )
+
+	// 	setMaterial( mat4 )
+	// 	drawSprite( worldPos, ( 64 * flareScale), ( 64 * flareScale ), colAmb )
+
+	// end 
+end
 
 local photonResultTable = {
 	srcOnly = true,
@@ -397,9 +451,10 @@ local photonResultTable = {
 }
 
 function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis, lnum, brght, multicolor  )
+	//if true then return end
 	if not incolors or not ilpos or not lang or not meta then return end
 
-	local resultTable = {}
+	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
 
 	local colors = incolors
 	local offset = meta.AngleOffset
@@ -439,11 +494,13 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis
 			local lposMod = EMVU.Helper:RadiusLight( 1, 4 )
 			lpos.x = lpos.x + lposMod
 			lpos.y = lpos.y + lposMod
-			
 		end
 		
 	worldPos = parent:LocalToWorld(lpos)
-	visible = util.PixelVisible( worldPos, visRadius * EMV_PIXVIS_MULTIPLIER, pixvis ) -- this line needs to be run asap to prevent needless calculations below
+
+	visible = utilPixVis( worldPos, visRadius, pixvis ) -- this line needs to be run asap to prevent needless calculations below
+
+	if( visible and visible > 0) then
 
 	if EMV_DEBUG then visible = 1 end
 	if EMV_DEBUG then viewDot = 1 end
@@ -465,9 +522,9 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis
 	viewPercent = viewDot
 	local viewMod = viewDot * 10
 
-	viewDot = math.pow( viewMod, 1.25 ) * .1
+	viewDot = pow( viewMod, 1.25 ) * .1
 
-	if( visible and visible > 0) and ( viewDot and viewDot >= 0) then
+	if ( viewDot and viewDot >= 0) then
 
 		local curLight = getLightColor( worldPos )
 		local lightMod = clamp(1 - round(((( curLight.x * curLight.y * curLight.z ) * .3) * 10) * 2, 5), .66, 1)
@@ -531,35 +588,129 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis
 		if PHOTON_DEBUG and !PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 255, 255, 0, 255 ) elseif PHOTON_DEBUG and PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 0, 0, 0, 0 ) end
 		if PHOTON_DEBUG and PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then srcColor = Color( 0, 255, 255 ) end
 
-		resultTable.srcOnly = srcOnly
-		resultTable.drawSrc = !srcSkip
-		resultTable.camPos = worldPos
-		resultTable.camAng = ua
-		resultTable.srcSprite = Material( meta.Sprite )
-		resultTable.srcT = Vector( meta.W * .5, meta.H * .5, 0 )
-		resultTable.srcR = Vector( -meta.W * .5, meta.H * .5, 0 )
-		resultTable.srcB = Vector( -meta.W * .5, -meta.H * .5, 0 )
-		resultTable.srcL = Vector( meta.W * .5, -meta.H * .5, 0 )
-		resultTable.worldPos = worldPos
-		resultTable.bloomScale = meta.Scale * viewDot
-		resultTable.flareScale = meta.Scale * viewFlare
-		resultTable.widthScale = meta.Scale * meta.WMult*viewDot
-		resultTable.colSrc = srcColor
-		resultTable.colMed = UC.med
-		resultTable.colAmb = UC.amb
-		resultTable.colBlm = UC.blm
-		resultTable.colGlw = UC.glw
-		resultTable.colRaw = UC.raw
-		resultTable.colFlr = UC.flr
+		// resultTable.srcOnly = srcOnly
+		// resultTable.drawSrc = !srcSkip
+		// resultTable.camPos = worldPos
+		// resultTable.camAng = ua
+		// resultTable.srcSprite = Material( meta.Sprite )
+		// resultTable.srcT = Vector( meta.W * .5, meta.H * .5, 0 )
+		// resultTable.srcR = Vector( -meta.W * .5, meta.H * .5, 0 )
+		// resultTable.srcB = Vector( -meta.W * .5, -meta.H * .5, 0 )
+		// resultTable.srcL = Vector( meta.W * .5, -meta.H * .5, 0 )
+		// resultTable.worldPos = worldPos
+		// resultTable.bloomScale = meta.Scale * viewDot
+		// resultTable.flareScale = meta.Scale * viewFlare
+		// resultTable.widthScale = meta.Scale * meta.WMult*viewDot
+		// resultTable.colSrc = srcColor
+		// resultTable.colMed = UC.med
+		// resultTable.colAmb = UC.amb
+		// resultTable.colBlm = UC.blm
+		// resultTable.colGlw = UC.glw
+		// resultTable.colRaw = UC.raw
+		// resultTable.colFlr = UC.flr
 
-		resultTable.lightMod = lightMod
-		resultTable.cheap = cheapLight
-		resultTable.viewFlare = viewFlare
+		// resultTable.lightMod = lightMod
+		// resultTable.cheap = cheapLight
+		// resultTable.viewFlare = viewFlare
+
+		resultTable[1] = srcOnly
+		resultTable[2] = !srcSkip
+		resultTable[3] = worldPos
+		resultTable[4] = ua
+		resultTable[5] = Material( meta.Sprite )
+		resultTable[6] = Vector( meta.W * .5, meta.H * .5, 0 )
+		resultTable[7] = Vector( -meta.W * .5, meta.H * .5, 0 )
+		resultTable[8] = Vector( -meta.W * .5, -meta.H * .5, 0 )
+		resultTable[9] = Vector( meta.W * .5, -meta.H * .5, 0 )
+		resultTable[10] = worldPos
+		resultTable[11] = meta.Scale * viewDot
+		resultTable[12] = meta.Scale * viewFlare
+		resultTable[13] = meta.Scale * meta.WMult*viewDot
+		resultTable[14] = srcColor
+
+		resultTable[15] = UC.med
+		resultTable[16] = UC.amb
+		resultTable[17] = UC.blm
+		resultTable[18] = UC.glw
+		resultTable[19] = UC.raw
+		resultTable[20] = UC.flr
+
+		resultTable[21] = lightMod
+		resultTable[22] = cheapLight
+		resultTable[23] = viewFlare
+
 
 		self:AddLightToQueue( resultTable )
-
+	end
 	end
 end
+
+
+local startCam = cam.Start3D2D
+local setRenderLighting = render.SetLightingMode
+local drawQuad = render.DrawQuad
+local endCam = cam.End3D2D
+function Photon:QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare )
+	if true then return end
+	if drawSrc then
+		startCam( camPos, camAng, 1 )
+			setRenderLighting( 2 )
+			setMaterial( srcSprite )
+			drawQuad( srcT, srcR, srcB, srcL, colSrc )
+			setRenderLighting( 0 )
+		endCam()
+	end
+
+	if not srcOnly then
+		setMaterial( mat1 )
+		drawSprite( worldPos, (48 * bloomScale), (32 * bloomScale), colGlw )
+
+		setMaterial( mat2 )
+		drawSprite( worldPos, (256 * bloomScale), (256 * bloomScale), colAmb )
+
+		setMaterial( mat2 )
+		drawSprite( worldPos, (64 * bloomScale), 48 * bloomScale, colBlm )
+
+		setMaterial( mat3 )
+		drawSprite( worldPos, 12 * widthScale, 12 * bloomScale, colMed )
+
+		if viewFlare and colFlr and lightMod > .83 and not cheap then
+
+			setMaterial( mat1 )
+			drawSprite( worldPos, ( 96 * flareScale), ( 2 * flareScale ), colFlr )
+
+			setMaterial( mat2 )
+			drawSprite( worldPos, ( 1024 * flareScale), ( 1024 * flareScale ), colAmb )
+
+			setMaterial( mat4 )
+			drawSprite( worldPos, ( 64 * flareScale), ( 64 * flareScale ), colRaw )
+
+		end 
+	end
+
+end
+
+local quickDrawNoTable = Photon.QuickDrawNoTable
+local cam3d = cam.Start3D
+local endCam3d = cam.End3D2D
+function Photon:RenderQueue()
+	local count = #photonRenderTable
+	if ( count > 0 ) then
+		cam3d( EyePos(), EyeAngles() )
+			for i=1, count do
+				if photonRenderTable[i] != nil then
+					local data = photonRenderTable[i]
+					quickDrawNoTable( self, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
+											data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24] )
+					// self:QuickDraw( data )
+				end
+			end
+		endCam3d()
+	end
+end
+hook.Add( "PreDrawEffects", "Photon.RenderQueue", function() 
+	Photon:RenderQueue()
+end )
 
 function Photon:QuickDraw( data )
 
@@ -572,28 +723,29 @@ function Photon:QuickDraw( data )
 		cam.End3D2D()
 	end
 	
+	//if true then return end
 	if not data.srcOnly then
-		setMaterial( mat1 )
+		--setMaterial( mat1 )
 		drawSprite( data.worldPos, (48 * data.bloomScale), (32 * data.bloomScale), data.colGlw )
 
-		setMaterial( mat2 )
+		--setMaterial( mat2 )
 		drawSprite( data.worldPos, (256 * data.bloomScale), (256 * data.bloomScale), data.colAmb )
 
-		setMaterial( mat2 )
+		--setMaterial( mat2 )
 		drawSprite( data.worldPos, (64 * data.bloomScale), 48 * data.bloomScale, data.colBlm )
 
-		setMaterial( mat3 )
+		--setMaterial( mat3 )
 		drawSprite( data.worldPos, 12 * data.widthScale, 12 * data.bloomScale, data.colMed )
 
 		if data.viewFlare and data.colFlr and data.lightMod > .83 and not data.cheap then
 
-			setMaterial( mat1 )
+			--setMaterial( mat1 )
 			drawSprite( data.worldPos, ( 96 * data.flareScale), ( 2 * data.flareScale ), data.colFlr )
 
-			setMaterial( mat2 )
+			--setMaterial( mat2 )
 			drawSprite( data.worldPos, ( 1024 * data.flareScale), ( 1024 * data.flareScale ), data.colAmb )
 
-			setMaterial( mat4 )
+			--setMaterial( mat4 )
 			drawSprite( data.worldPos, ( 64 * data.flareScale), ( 64 * data.flareScale ), data.colAmb )
 
 		end 

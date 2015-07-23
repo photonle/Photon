@@ -115,8 +115,8 @@ PI.Positions = {
 	[11] = { Vector( 11.7, -125.4, 38.3 ), Angle( 0, 1, -3.1 ), "reverse" },
 
 	-- TAIL GLOWS --
-	[12] = { Vector(-32.3,-109.5,40), Angle(0,20,-30), "tail_glow" },
-	[13] = { Vector(32.3,-109.5,40), Angle(0,20,30), "tail_glow" },
+	[12] = { Vector(-32.3,-125.5,40), Angle(0,20,-30), "tail_glow" },
+	[13] = { Vector(32.3,-125.5,40), Angle(0,20,30), "tail_glow" },
 
 	-- OUT MARKERS --
 	[14] = { Vector( -36.65, 110.57, 34.3 ), Angle( -1.72 - 180, 48.57, 180 - 11.47 ), "out_markers" },
@@ -131,16 +131,18 @@ PI.States.Brakes = {
 	{ 1, DR, 1 }, { 2, DR, 1 }, { 3, DR, 1 }, { 4, DR, 1 }, { 5, DR, 1 }
 }
 PI.States.Blink_Left = {
-	{ 1, R }, { 3, R }, { 12, R }, { 8, A, 1 },
+	{ 1, R }, { 3, R }, --{ 12, R }, 
+	{ 8, A, 1 },
 }
 PI.States.Blink_Right = {
-	{ 2, R }, { 4, R }, { 13, R }, { 9, A, 1 },
+	{ 2, R }, { 4, R }, --{ 13, R }, 
+	{ 9, A, 1 },
 }
 PI.States.Reverse = {
 	{ 10, SW }, { 11, SW }
 }
 PI.States.Running = {
-	{ 1, DR, .25 }, { 2, DR, .25 }, { 3, DR, .25 }, { 4, DR, .25 },  { 12, DR, .25 }, { 13, DR, .25 }, 
+	{ 1, DR, .25 }, { 2, DR, .25 }, { 3, DR, .25 }, { 4, DR, .25 },  --{ 12, DR, .25 }, { 13, DR, .25 }, 
 	{ 6, SW, 1 }, { 7, SW, 1 },
 	{ 15, A, .88 }, { 14, A, .88 },
 	{ 8, A, .5 }, { 9, A, .5 },

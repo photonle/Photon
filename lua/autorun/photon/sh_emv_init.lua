@@ -61,4 +61,5 @@ function EMVU:UpdateVehicles()
 			emvVehicleTable[ #emvVehicleTable + 1 ] = ent
 		end
 	end
+	emvLastScan = CurTime()
 end

@@ -8,6 +8,7 @@
 	"$colorfix" "{255 255 255}"
 	"$Selfillum" "1"
 	"$selfillumtint" "[ 1 1 1 ]"
+	"$selfIllumFresnelMinMaxExp" "[0 0 0]"
 	"Proxies"
 	{
 		"Equals"

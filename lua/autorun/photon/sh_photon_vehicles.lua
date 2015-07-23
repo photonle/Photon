@@ -86,7 +86,7 @@ function Photon:PreloadVehicle( car )
 	if isstring( car.Photon ) and istable( Photon.VehicleLibrary[car.Photon] ) then
 		car.Photon = Photon.VehicleLibrary[car.Photon]
 	elseif car.Photon and isstring( car.Photon ) then
-		if not Photon.VehicleLibrary[car.Photon] then print( "[Photon] Failed to load " .. car.Photon .. " because the Photon parameter was not valid." ) end
+		if not Photon.VehicleLibrary[car.Photon] then print( "[Photon] Failed to load " .. car.Photon .. " because the Photon parameter was not valid." ) return end
 	else
 		--if SERVER then print( "[Photon]: " .. tostring(car) .. " has an invalid declaration for Photon. Car lighting will not render.") end
 	end

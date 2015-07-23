@@ -63,4 +63,5 @@ function Photon:UpdateVehicles()
 			photonVehicleTable[ #photonVehicleTable + 1 ] = ent
 		end
 	end
+	photonLastScan = CurTime()
 end
