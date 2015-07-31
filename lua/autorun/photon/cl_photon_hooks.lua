@@ -1,24 +1,31 @@
 AddCSLuaFile()
 
+local should_render = GetConVar( "photon_stand_enabled" )
+
+hook.Add( "Initialize", "Photon.InitStandShouldRender", function() 
+	should_render = GetConVar( "photon_stand_enabled" )
+end )
+
 PHOTON_REG_ENABLED = true
 
 local PHOTON_REG_ENABLED = PHOTON_REG_ENABLED
 
-function DrawCarLights()
+local function DrawCarLights()
+	if not should_render:GetBool() then return end
 	local photonDebug = PHOTON_DEBUG
 	for _,ent in pairs( Photon:AllVehicles() ) do
 		if IsValid( ent ) then
 			if ent:Photon() and ent.RenderLights then
-				if PHOTON_REG_ENABLED then ent:RenderLights( 
-					ent:HeadlightsOn(), 
-					ent:IsRunning(), 
-					ent:IsReversing(), 
-					ent:IsBraking(), 
-					ent:TurningLeft(), 
-					ent:TurningRight(), 
-					ent:Hazards(), 
-					photonDebug
-					) end
+					ent:RenderLights( 
+						ent:HeadlightsOn(), 
+						ent:IsRunning(), 
+						ent:IsReversing(), 
+						ent:IsBraking(), 
+						ent:TurningLeft(), 
+						ent:TurningRight(), 
+						ent:Hazards(), 
+						photonDebug
+					)
 				if ent:IsEMV() and ent.ScanEMVProps then ent:ScanEMVProps() end
 			elseif ent:Photon() and not ent.RenderLights then
 				Photon:SetupCar( ent, ent:Photon() )
@@ -26,7 +33,9 @@ function DrawCarLights()
 		end
 	end
 end
-hook.Add( "PreRender", "Photon.Scan", DrawCarLights )
+hook.Add( "PreRender", "Photon.Scan", function()
+	DrawCarLights()
+end)
 
 function Photon:AdjustFrameTime()
 	if FrameTime() >= EMV_FRAME_DUR or FrameTime() < EMV_FRAME_DUR and FrameTime() > EMV_FRAME_CONST then 
@@ -40,6 +49,7 @@ hook.Add("PreRender", "Photon.AdjustFrameTime", function()
 end)
 
 local function TurnScan()
+	if not should_render:GetBool() then return end
 	local ply = LocalPlayer()
 	if not ply or not ply:IsValid() or not ply:InVehicle() or not ply:GetVehicle() then return end
 	local car = ply:GetVehicle()
