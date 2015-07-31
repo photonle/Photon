@@ -44,7 +44,7 @@ hook.Add("EntityRemoved", "Photon.VehicleRemoved", function(e)
 end)
 
 hook.Add( "PlayerInitialSpawn", "Photon.InitialNotify", function( ply )
-	ply:ChatPrint( "Photon Lighting Engine [Beta] is active. Type !photon for help and information." )
+	ply:ChatPrint( "Photon Lighting Engine is active. Type !photon or press C and click Photon for help and information." )
 end)
 
 -- dev functions --
@@ -59,8 +59,8 @@ end)
 
 // local ply = player.GetBySteamID("STEAM_0:0:0")
 // local veh = ply:GetVehicle()
+// veh:SetSubMaterial( 1, "photon/override/lw_dc15_headlights" )
 
 // // veh:SetSubMaterial(4, "photon/override/lw_glhs_running" )
 // // veh:SetSubMaterial(6, "photon/override/lw_glhs_trans_running" )
-// veh:SetSubMaterial( 1, "photon/override/lw_dc15_headlights" )
 // veh:SetSubMaterial( 26, "models/tdmcars/emergency/lightbar/plastic" )

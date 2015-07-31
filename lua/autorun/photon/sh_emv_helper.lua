@@ -62,6 +62,16 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 		end
 	end
 	
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Illumination"][option]["Preset_Components"] ) then
+		local preset = vehicle:ELPresetOption()
+		local ptable = EMVU.Sequences[name]["Illumination"][option]["Preset_Components"][preset]
+		if istable( ptable ) then
+			for id,data in pairs( ptable ) do
+				resultTable[ id ] = data
+			end
+		end
+	end
+
 	for component, option in pairs( EMVU.Sequences[name]["Illumination"][option]["Components"] ) do
 		resultTable[ component ] = option
 	end

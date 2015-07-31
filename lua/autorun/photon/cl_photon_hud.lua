@@ -131,7 +131,7 @@ function PhotonHUD:GetCurrentState()
 	local data = {}
 	local ply = LocalPlayer()
 	local ent = ply:GetVehicle()
-	if not IsValid(ply) or not IsValid(ent) or not ent:Photon() then return false end
+	if not IsValid(ply) or not IsValid(ent) or not ent:Photon() or not ent:IsEMV() then return false end
 	data.EMV = ent:IsEMV()
 	local name = ent.VehicleName
 	if data.EMV then

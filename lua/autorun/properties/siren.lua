@@ -21,16 +21,16 @@ properties.Add( "photon_siren", {
 
 		local categories = {}
 		categories["Other"] = true
-		for k,v in ipairs( options ) do
+		for k,v in pairs( options ) do
 			if v.Category then
 				categories[ v.Category ] = true
 			end
 		end
 
-		for k,v in pairs( categories ) do
+		for k,v in SortedPairs( categories ) do
 			categories[k] = submenu:AddSubMenu( k )
 		end
-		
+
 		for k,v in ipairs( options ) do
 			local isSelected = ( tostring( k ) == tostring( ent:SirenSet() ) )
 			local category = v.Category or "Other"

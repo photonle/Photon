@@ -1,10 +1,10 @@
 "VertexLitGeneric"
 {
-	"$basetexture"		"schmal/fedsig_valor/emerglights_cover"
+	"$basetexture"		"schmal/fedsig_integrity/emerglights_cover"
 	"$translucent" 1
 	"$halflambert" 1
 	"$phong" "1" 
-	"$phongboost" "255" 
+	"$phongboost" "0" 
 	"$phongfresnelranges" "[1 1 1]"
 	"$surfaceprop" "Glass"
 	"$nocull" 1
