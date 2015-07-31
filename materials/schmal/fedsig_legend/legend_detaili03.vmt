@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"schmal/fedsig_legend/legend"
+	"$bumpmap"		"schmal/fedsig_legend/legend_normal"
+}
+

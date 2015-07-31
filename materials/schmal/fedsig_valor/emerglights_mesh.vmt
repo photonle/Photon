@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"schmal/fedsig_valor/emerglights"
+	"$bumpmap"		"schmal/fedsig_valor/emerglights_normal"
+}
