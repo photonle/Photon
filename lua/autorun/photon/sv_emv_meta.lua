@@ -310,7 +310,7 @@ function EMVU:MakeEMV( ent, emv )
 				local manualToneIndex = self:ELS_SirenOption() + 1
 				local manualTone = EMVU.Horns[1]
 				if manualToneIndex <= #EMVU.Sirens[ self:ELS_SirenSet() ].Set 
-					and EMVU.Sirens[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Name != "HI-LO"
+					and EMVU.Sirens[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Name != "HILO"
 				 then
 					manualTone = EMVU.Sirens[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Sound
 				elseif EMVU.Sirens[self:ELS_SirenSet()].Horn then
