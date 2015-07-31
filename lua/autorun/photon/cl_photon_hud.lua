@@ -32,7 +32,6 @@ function PhotonHUD:Init()
 	PhotonHUD.Panel:SetPaintedManually( true )
 	PhotonHUD.Panel:SetSize( 512, 512 )
 	PhotonHUD.Panel:SetMouseInputEnabled( false )
-	// PhotonHUD.Panel:OpenURL( "C:/Users/Alex/Creative Cloud Files/Photon/HUD/export.html" )
 	PhotonHUD.Panel:SetHTML( hudCode )
 end
 
