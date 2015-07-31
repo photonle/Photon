@@ -12,6 +12,9 @@ util.AddNetworkString( "photon_signal" )
 util.AddNetworkString( "photon_menu" )
 util.AddNetworkString( "emvu_preset" )
 
+local can_change_siren_model = GetConVar( "photon_emv_changesirens" )
+local can_change_light_presets = GetConVar( "photon_emv_changepresets" )
+
 EMVU.Net = {}
 
 function EMVU.Net:Lights( ply, args )
@@ -80,7 +83,7 @@ net.Receive( "emvu_traffic", function (len, ply )
 end)
 
 function EMVU.Net:SirenSet( ply )
-	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
+	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() or not can_change_siren_model:GetBool() then return end
 	local emv = ply:GetVehicle()
 	local recv = net.ReadInt(8)
 	if recv != 0 then emv:ELS_SetSirenSet(recv) return end
@@ -91,7 +94,7 @@ net.Receive("emvu_sirenset", function( len, ply )
 end)
 
 function EMVU.Net:Preset( ply, args )
-	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
+	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() or not can_change_light_presets:GetBool() then return end
 	local emv = ply:GetVehicle()
 	local recv = net.ReadInt(8)
 	if recv != 0 then emv:ELS_PresetOption( recv ) return end

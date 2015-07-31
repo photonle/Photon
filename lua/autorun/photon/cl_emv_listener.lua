@@ -1,5 +1,27 @@
 AddCSLuaFile()
 
+local key_primary_toggle = true
+local key_primary_alt = true
+local key_siren_toggle = true
+local key_siren_alt = true
+local key_auxiliary = true
+local key_blackout = true
+local key_horn = true
+local key_manual = true
+local key_illum = true
+
+hook.Add( "Initialize", "Photon.SetupLocalKeyBinds", function()
+	key_primary_toggle = GetConVar( "photon_key_primary_toggle" )
+	key_primary_alt = GetConVar( "photon_key_primary_alt" )
+	key_siren_toggle = GetConVar( "photon_key_siren_toggle" )
+	key_siren_alt = GetConVar( "photon_key_siren_alt" )
+	key_auxiliary = GetConVar( "photon_key_auxiliary" )
+	key_blackout = GetConVar( "photon_key_blackout" )
+	key_horn = GetConVar( "photon_key_horn" )
+	key_manual = GetConVar( "photon_key_manual" )
+	key_illum = GetConVar( "photon_key_illum" )
+end)
+
 function EMVU:Listener( ply, bind, press )
 	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
 	local emv = ply:GetVehicle()
@@ -31,20 +53,32 @@ hook.Add("PlayerBindPress", "EMVU.Listener", function( pl, b, p )
 	EMVU:Listener( pl, b, p )
 end)
 
-hook.Add( "Think", "Photon.ButtonPress", function()
+local inputKeyDown = input.IsKeyDown
+local inputMouseDown = input.IsMouseDown
 
+local function keyDown( key )
+	if (key > 0 and key < 107) then
+		return inputKeyDown( tonumber( key ) )
+	end
+	if (key > 107 and key < 114) then
+		return inputMouseDown( tonumber( key ) )
+	end
+	return false
+end
+
+hook.Add( "Think", "Photon.ButtonPress", function()
 	if not LocalPlayer():InVehicle() or not IsValid( LocalPlayer():GetVehicle() ) or not LocalPlayer():GetVehicle():IsEMV() then return end
 	local emv = LocalPlayer():GetVehicle()
 	if input.IsKeyTrapping() then return end
 	if vgui.CursorVisible() then return end
 	
 	if not X_DOWN then
-		if input.IsKeyDown( KEY_X ) then
+		if keyDown( key_illum:GetInt() ) then
 			if emv:Illumination() then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
 			X_DOWN = true
 			X_PRESS = CurTime()
 		end
-	elseif X_DOWN and not input.IsKeyDown ( KEY_X ) then
+	elseif X_DOWN and not keyDown ( key_illum:GetInt() ) then
 		local cmd = "on"
 		if emv:Illumination() and X_PRESS + .25 > CurTime() then 
 			cmd = "off"
@@ -58,12 +92,12 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 
 	if emv:HasTrafficAdvisor() then 
 		if not PHOTON_B_DOWN then
-			if input.IsKeyDown( KEY_B ) then
+			if keyDown( key_auxiliary:GetInt() ) then
 				if emv:TrafficAdvisor() then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
 				PHOTON_B_DOWN = true
 				PHOTON_B_PRESS = CurTime()
 			end
-		elseif PHOTON_B_DOWN and not input.IsKeyDown ( KEY_B ) then
+		elseif PHOTON_B_DOWN and not keyDown ( key_auxiliary:GetInt() ) then
 			local cmd = "on"
 			if emv:TrafficAdvisor() and PHOTON_B_PRESS + .25 > CurTime() then 
 				cmd = "off"
@@ -76,14 +110,14 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 		end
 	end
 
-	if not LIGHTON_DOWN and input.IsKeyDown( KEY_F ) then
+	if not LIGHTON_DOWN and keyDown( key_primary_toggle:GetInt() ) then
 		if emv:Lights() then 
 			surface.PlaySound( EMVU.Sounds.Up )
 		else
 			surface.PlaySound( EMVU.Sounds.Down )
 		end
 		LIGHTON_DOWN = true
-	elseif LIGHTON_DOWN and not input.IsKeyDown( KEY_F ) then
+	elseif LIGHTON_DOWN and not keyDown( key_primary_toggle:GetInt() ) then
 		if emv:Lights() then
 			surface.PlaySound( EMVU.Sounds.Down )
 			EMVU.Net:Lights( "off" )
@@ -94,18 +128,18 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 		LIGHTON_DOWN = false
 	end
 
-	if not SIRENON_DOWN and input.IsKeyDown( KEY_R ) then
+	if not SIRENON_DOWN and keyDown( key_siren_toggle:GetInt() ) then
 		SIRENON_DOWN = true
 		if emv:Siren() then
 			EMVU.Net:Siren( "off" )
 		else
 			EMVU.Net:Siren( "on" )
 		end
-	elseif SIRENON_DOWN and not input.IsKeyDown( KEY_R ) then
+	elseif SIRENON_DOWN and not keyDown( key_siren_toggle:GetInt() ) then
 		SIRENON_DOWN = false
 	end
 
-	if not LIGHTTOG_DOWN and input.IsKeyDown( KEY_LALT ) then
+	if not LIGHTTOG_DOWN and keyDown( key_primary_alt:GetInt() ) then
 		if emv:Lights() then
 			surface.PlaySound( EMVU.Sounds.Up )
 		else
@@ -113,11 +147,11 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 		end
 		EMVU.Net:Lights("tog")
 		LIGHTTOG_DOWN = true
-	elseif LIGHTTOG_DOWN and not input.IsKeyDown( KEY_LALT ) then
+	elseif LIGHTTOG_DOWN and not keyDown( key_primary_alt:GetInt() ) then
 		LIGHTTOG_DOWN = false
 	end
 
-	if not SIRENTOGGLE_DOWN and input.IsMouseDown( MOUSE_RIGHT ) then
+	if not SIRENTOGGLE_DOWN and keyDown( key_siren_alt:GetInt() ) then
 		if emv:Lights() then
 			surface.PlaySound( EMVU.Sounds.Up )
 		else
@@ -125,18 +159,18 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 		end
 		EMVU.Net:Siren("tog")
 		SIRENTOGGLE_DOWN = true
-	elseif SIRENTOGGLE_DOWN and not input.IsMouseDown( MOUSE_RIGHT ) then
+	elseif SIRENTOGGLE_DOWN and not keyDown( key_siren_alt:GetInt() ) then
 		SIRENTOGGLE_DOWN = false
 	end
 
-	if not BLKOUTON_DOWN and input.IsKeyDown( KEY_H ) then
+	if not BLKOUTON_DOWN and keyDown( key_blackout:GetInt() ) then
 		if emv:IsRunning() then 
 			surface.PlaySound( EMVU.Sounds.Down )
 		else
 			surface.PlaySound( EMVU.Sounds.Up )
 		end
 		BLKOUTON_DOWN = true
-	elseif BLKOUTON_DOWN and not input.IsKeyDown( KEY_H ) then
+	elseif BLKOUTON_DOWN and not keyDown( key_blackout:GetInt() ) then
 		if emv:IsRunning() then
 			surface.PlaySound( EMVU.Sounds.Up )
 			EMVU.Net:Blackout( true )
@@ -147,18 +181,18 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 		BLKOUTON_DOWN = false
 	end
 
-	if not HORNTOG_DOWN and input.IsKeyDown( KEY_G ) then
+	if not HORNTOG_DOWN and keyDown( key_horn:GetInt() ) then
 		EMVU.Net:Horn( true )
 		HORNTOG_DOWN = true
-	elseif HORNTOG_DOWN and not input.IsKeyDown( KEY_G ) then
+	elseif HORNTOG_DOWN and not keyDown( key_horn:GetInt() ) then
 		EMVU.Net:Horn( false )
 		HORNTOG_DOWN = false
 	end
 
-	if not MANUALTOG_DOWN and input.IsKeyDown( KEY_T ) then
+	if not MANUALTOG_DOWN and keyDown( key_manual:GetInt() ) then
 		EMVU.Net:Manual( true )
 		MANUALTOG_DOWN = true
-	elseif MANUALTOG_DOWN and not input.IsKeyDown( KEY_T ) then
+	elseif MANUALTOG_DOWN and not keyDown( key_manual:GetInt() ) then
 		EMVU.Net:Manual( false )
 		MANUALTOG_DOWN = false
 	end
