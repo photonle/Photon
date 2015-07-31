@@ -119,10 +119,12 @@ function EMVU:CalculateAuto( name, data )
 		local component = EMVU.Auto[ data[ i ].ID ]
 		local autoData = data[i]
 		local autoPos = autoData.Pos
-		local autoAng = autoData.Ang
+		local autoAng = autoData.Ang 
 		local autoScale = autoData.Scale or 1
-
-		//print("Component Scale: " .. tostring( autoScale ) )
+		local adjustAng = Angle()
+		adjustAng.p = autoAng.r
+		adjustAng.y = autoAng.y - 90
+		adjustAng.r = autoAng.p * -1
 
 		for id,metadata in pairs( component.Meta ) do -- add meta template data
 			EMVU.LightMeta[ name ][ id ] = metadata
@@ -137,31 +139,14 @@ function EMVU:CalculateAuto( name, data )
 		local offset = #EMVU.Positions[ name ] -- count of current meta values
 
 		for id,section in pairs( component.Sections ) do -- for each section ["lightbar"] = { { 1, B } } *SECTION
-
-			// print( "Looping, ID: " .. tostring( id ) )
-			// print( "Section: " .. tostring( section ) )
-
 			EMVU.Sections[ name ][ id ] = {}
-
 			for index=1,#section do -- { { 1, B } } *FRAME
-
 				EMVU.Sections[ name ][ id ][ index ] = {}
-
 				local values = section[ index ]
-
-				// print( "Values: " .. tostring( values ) )
-
 				for light, lightData in pairs( values ) do -- { 1, B } *LIGHT
-
-					// print( "light: " .. tostring( light ) )
-					// print( "lightdata: " .. tostring( lightData ) )
-
 					EMVU.Sections[ name ][ id ][ index ][ light ] = { lightData[1] + offset, lightData[2] }
-
 				end
-
 			end
-
 		end
 
 		for id,pattern in pairs( component.Patterns ) do -- add pattern data
@@ -172,10 +157,13 @@ function EMVU:CalculateAuto( name, data )
 			local posData = component.Positions[ id ]
 			local newPos = Vector()
 			newPos:Set( posData[1] )
-			newPos:Mul( autoScale )			
+			newPos:Rotate( adjustAng )
+			newPos:Mul( autoScale )
 			newPos:Add( autoPos )
 			local newAng = Angle()
+			newAng.y = newAng.y + 90
 			newAng:Set( posData[2] )
+			newAng:RotateAroundAxis( autoAng:Right(), -1*autoAng.p )
 			EMVU.Positions[ name ][ offset + id ] = {
 				newPos, newAng, posData[3]
 			}
@@ -199,11 +187,7 @@ function EMVU:CalculateAuto( name, data )
 				end
 			end
 		end
-		--PrintTable( EMVU.Sequences[ name ] )
-		--PrintTable( EMVU.Patterns[ name ])
-		--PrintTable( EMVU.Sections[ name ] )
-		--PrintTable( EMVU.LightMeta[ name ] )
-		// PrintTable( EMVU.Positions[name] )
+
 	end
 
 
