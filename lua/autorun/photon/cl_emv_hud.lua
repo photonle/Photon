@@ -191,7 +191,7 @@ local function EMV_Hud()
 	end
 
 end
-hook.Add("HUDPaint", "EMV_Draw_HUD", EMV_Hud)
+//hook.Add("HUDPaint", "EMV_Draw_HUD", EMV_Hud)
 
 function PhotonHUD()
 	if not LocalPlayer():InVehicle() or not LocalPlayer():GetVehicle():Photon() then return end
@@ -238,4 +238,4 @@ function PhotonHUD()
 	surface.SetMaterial( hazard_icon )
 	surface.DrawTexturedRect( rX + 86, rY, 32, 32 )
 end
-hook.Add("HUDPaint", "PHOTON_Draw_HUD", PhotonHUD)
+//hook.Add("HUDPaint", "PHOTON_Draw_HUD", PhotonHUD)
