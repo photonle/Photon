@@ -101,21 +101,81 @@ COMPONENT.Sections = {
 			{ 2, W }, { 3, W },
 			{ 4, R }, { 5, R },
 			{ 6, RB }, { 7, RB },
+		},
+		{
+			{ 6, RB }, { 7, RB },
+		},
+		{
+			{ 1, R },
+			{ 4, R }, { 5, R },
+			{ 6, RB }, { 7, RB },
 		}
 	},
 	["auto_fedsig_visionslr_traffic"] = {
 		{ { 8, A }, { 9, A }, { 10, A }, { 11, A } },
 		{ { 12, A }, { 13, A } },
-	}
+		{ { 9, A }, { 11, A }, { 13, A } },
+		{ { 8, A }, { 10, A }, { 12, A } },
+		{ { 8, A } },
+		{ { 8, A }, { 10, A } },
+		{ { 8, A }, { 10, A }, { 12, A } },
+		{ { 8, A }, { 10, A }, { 12, A }, { 13, A } },
+		{ { 8, A }, { 10, A }, { 12, A }, { 13, A }, { 11, A } },
+		{ { 8, A }, { 10, A }, { 12, A }, { 13, A }, { 11, A }, { 9, A } },
+		{ { 9, A } },
+		{ { 11, A }, { 9, A } },
+		{ { 13, A }, { 11, A }, { 9, A } },
+		{ { 12, A }, { 13, A }, { 11, A }, { 9, A } },
+		{ { 10, A }, { 12, A }, { 13, A }, { 11, A }, { 9, A } },
+		[16] = { { 12, A }, { 13, A }, },
+		[17] = { { 10, A }, { 12, A }, { 13, A }, { 11, A }, },
+	},
 }
 
 COMPONENT.Patterns = {
 	["auto_fedsig_visionslr"] = {
 		["all"] = { 1 },
-		["code2"] = { 2 }
+		["code1"] = { 3 },
+		["code2"] = { 4 },
+		["code3"] = { 2 }
 	},
 	["auto_fedsig_visionslr_traffic"] = {
-		["warn"] = { 1, 1, 1, 1, 0, 2, 2, 2, 2, 0 } 
+		["warn"] = { 1, 1, 1, 1, 0, 2, 2, 2, 2, 0 },
+		["code1"] = { 3, 3, 3, 3, 3, 4, 4, 4, 4, 4 },
+		["right"] = { 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 10, 10, 0, 0 },
+		["left"] = { 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 10, 10, 10, 10, 0, 0 },
+		["diverge"] = { 16, 16, 16, 17, 17, 17, 10, 10, 10, 10, 0, 0 }
+	}
+}
+
+COMPONENT.Modes = {
+	Primary = {
+			M1 = {
+				["auto_fedsig_visionslr"] = "code1",
+				["auto_fedsig_visionslr_traffic"] = "code1",
+			},
+			M2 = {
+				["auto_fedsig_visionslr"] = "code2",
+				["auto_fedsig_visionslr_traffic"] = "warn",
+			},
+			M3 = {
+				["auto_fedsig_visionslr"] = "code3",
+				["auto_fedsig_visionslr_traffic"] = "warn",
+			}
+		},
+	Auxiliary = {
+			L = {
+				["auto_fedsig_visionslr_traffic"] = "left"
+			},
+			R = {
+				["auto_fedsig_visionslr_traffic"] = "right"
+			},
+			D = {
+				["auto_fedsig_visionslr_traffic"] = "diverge"
+			}
+		},
+	Illumination = {
+
 	}
 }
 

@@ -93,6 +93,7 @@ function EMVU:MakeEMV( ent, emv )
 
 	function ent:ELS_PresetOption( val )
 		if not IsValid( self ) then return 0 end
+		if not EMVU.PresetIndex[ self.Name ] then print( "[Photon] No presets found for " .. tostring( self.Name ) .. ". Please check for errors above." ) return end
 		if (val!=nil) then 
 			val = math.Clamp( val, 0, #EMVU.PresetIndex[ self.Name ] )
 			self:SetDTInt( EMV_PRE_OPTION, val )

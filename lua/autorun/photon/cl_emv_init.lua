@@ -13,6 +13,7 @@ include( "cl_photon_menu.lua" )
 local should_render = GetConVar( "photon_emerg_enabled" )
 
 local function DrawEMVLights()
+	Photon:ClearLightQueue()
 	if not should_render:GetBool() then return end
 	for k,v in pairs( EMVU:AllVehicles() ) do
 		if IsValid( v ) and v.IsEMV and v:IsEMV() and v.RenderEL then v:RenderEL() elseif v:IsEMV() then EMVU:MakeEMV(v, v:EMVName()) end

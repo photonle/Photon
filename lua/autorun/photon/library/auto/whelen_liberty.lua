@@ -110,17 +110,143 @@ COMPONENT.Sections = {
 			{ 5, R }, { 6, B },
 			{ 7, R }, { 8, B },
 			{ 9, R }, { 10, B },
-			{ 11, R }, { 12, B },
-			{ 13, R }, { 14, B },
+			{ 11, A }, { 12, A },
+			{ 13, A }, { 14, A },
 			{ 15, W }, { 16, W },
 			{ 17, W }, { 18, W },
+		},
+		[2] = {
+			{ 1, R }, { 4, R }, { 10, B }, 
+		},
+		[3] = {
+			{ 2, B }, { 3, B }, { 9, R }, 
+		},
+		[4] = {
+			{ 3, B }, { 4, R },
+		},
+		[5] = {
+			{ 1, R }, { 2, B }, { 9, R }, { 10, B }
 		}
+	},
+	["auto_whelen_liberty_sx_corner"] = {
+		[1] = {
+			{ 5, R }, { 7, R }
+		},
+		[2] = {
+			{ 6, B }, { 8, B }
+		}
+	},
+	["auto_whelen_liberty_sx_traffic"] = {
+		[1] = {
+			{ 11, A }, { 13, A }
+		},
+		[2] = {
+			{ 12, A }, { 14, A }
+		},
+		[3] = {
+			{ 11, A }, { 12, A }
+		},
+		[4] = {
+			{ 13, A }, { 14, A }
+		},
+		[5] = { { 9, R }, { 11, A }, { 13, A }, { 14, A }, { 12, A }, { 10, B } },
+		[6] = { { 9, R } },
+		[7] = { { 9, R }, { 11, A } },
+		[8] = { { 9, R }, { 11, A }, { 13, A } },
+		[9] = { { 9, R }, { 11, A }, { 13, A }, { 14, A } },
+		[10] = { { 9, R }, { 11, A }, { 13, A }, { 14, A }, { 12, A } },
+		[11] = { { 10, B } },
+		[12] = { { 12, A }, { 10, B } },
+		[13] = { { 14, A }, { 12, A }, { 10, B } },
+		[14] = { { 13, A }, { 14, A }, { 12, A }, { 10, B } },
+		[15] = { { 11, A }, { 13, A }, { 14, A }, { 12, A }, { 10, B } },
+		[16] = { { 13, A }, { 14, A } },
+		[17] = { { 11, A }, { 13, A }, { 14, A }, { 12, A } },
+	},
+	["auto_whelen_liberty_sx_corner_illum"] = {
+		[1] = { { 15, W }, { 17, W } },
+		[2] = { { 16, W }, { 18, W } },
 	}
 }
 
 COMPONENT.Patterns = {
 	["auto_whelen_liberty_sx"] = {
 		["all"] = { 1 },
+		["code1"] = { 2, 2, 2, 2, 0, 3, 3, 3, 3, 0 },
+		["code2"] = { 2, 0, 2, 2, 2, 0, 3, 0, 3, 3, 3, 0, },
+		["code3"] = { 
+			4, 4, 5, 5, 4, 4, 5, 5, 4, 4, 5, 5, 4, 4, 5, 5, 
+			2, 2, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3,
+			2, 2, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3,
+			2, 3, 2, 3,2, 3, 2, 3,2, 3, 2, 3,2, 3, 2, 3,2, 3, 2, 3,
+		},
+	},
+	["auto_whelen_liberty_sx_traffic"] = {
+		["code1"] = { 1, 1, 2, 2 },
+		["code2"] = { 3, 3, 4, 4 },
+		["code3"] = { 
+			3, 3, 4, 4, 1, 1, 2, 2,
+		},
+		["left"] = {
+			11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 5, 5, 5, 5, 0, 0
+		},
+		["right"] = {
+			6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 5, 5, 5, 5, 0, 0
+		},
+		["diverge"] = {
+			16, 16, 16, 17, 17, 17, 5, 5, 5, 5, 0, 0
+		}
+	}, 
+	["auto_whelen_liberty_sx_corner"] = {
+		["code1"] = { 1, 1, 1, 0, 2, 2, 2, 0 },
+		["code2"] = { 1, 1, 0, 2, 2, 0 },
+		["code3"] = { 1, 2 },
+	},
+	["auto_whelen_liberty_sx_corner_illum"] = {
+		["code3"] = {
+			1, 1, 2, 2,
+		}
+	}
+}
+
+COMPONENT.TrafficDisconnect = { 
+	["auto_whelen_legacy_traffic"] = {
+		9, 10, 11, 12, 13, 14
+	}
+}
+
+COMPONENT.Modes = {
+	Primary = {
+			M1 = {
+				["auto_whelen_liberty_sx"] = "code1",
+				["auto_whelen_liberty_sx_corner"] = "code1",
+				["auto_whelen_liberty_sx_traffic"] = "code1"
+			},
+			M2 = {
+				["auto_whelen_liberty_sx"] = "code2",
+				["auto_whelen_liberty_sx_corner"] = "code2",
+				["auto_whelen_liberty_sx_traffic"] = "code2"
+			},
+			M3 = {
+				["auto_whelen_liberty_sx"] = "code3",
+				["auto_whelen_liberty_sx_corner"] = "code3",
+				["auto_whelen_liberty_sx_traffic"] = "code3",
+				["auto_whelen_liberty_sx_corner_illum"] = "code3"
+			}
+		},
+	Auxiliary = {
+			L = {
+				["auto_whelen_liberty_sx_traffic"] = "left"
+			},
+			R = {
+				["auto_whelen_liberty_sx_traffic"] = "right"
+			},
+			D = {
+				["auto_whelen_liberty_sx_traffic"] = "diverge"
+			}
+		},
+	Illumination = {
+
 	}
 }
 

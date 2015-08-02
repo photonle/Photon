@@ -5,6 +5,8 @@ local lpos = Vector()
 local clamp = math.Clamp
 local pow = math.pow
 local round = math.Round
+local useEyePos = Vector( 0, 0, 0 )
+local useEyeAng = Angle( 0, 0, 0 )
 
 local getLightColor = render.GetLightColor
 local utilPixVis = util.PixelVisible
@@ -117,7 +119,7 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis
 
 	local ViewNormal = Vector()
 	ViewNormal:Set(worldPos)
-	ViewNormal:Sub(EyePos())
+	ViewNormal:Sub( useEyePos )
 	ViewNormal:Normalize()
 	viewDot = ViewNormal:Dot( lightNormal )
 
@@ -229,8 +231,7 @@ local setRenderLighting = render.SetLightingMode
 local drawQuad = render.DrawQuad
 local endCam = cam.End3D2D
 
-function Photon:QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare )
-
+function Photon:QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, debug_mode )
 	if drawSrc then
 		startCam( camPos, camAng, 1 )
 			setRenderLighting( 2 )
@@ -240,6 +241,7 @@ function Photon:QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 		endCam()
 	end
 
+	if debug_mode == true then return end
 	if not srcOnly then
 		setMaterial( mat1 )
 		drawSprite( worldPos, (48 * bloomScale), (32 * bloomScale), colGlw )
@@ -273,19 +275,21 @@ local quickDrawNoTable = Photon.QuickDrawNoTable
 local cam3d = cam.Start3D
 local endCam3d = cam.End3D2D
 function Photon:RenderQueue()
+
 	local count = #photonRenderTable
 	if ( count > 0 ) then
+		local debug_mode = PHOTON_DEBUG
 		cam3d( EyePos(), EyeAngles() )
 			for i=1, count do
 				if photonRenderTable[i] != nil then
 					local data = photonRenderTable[i]
 					quickDrawNoTable( self, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
-											data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24] )
+											data[17], data[18], data[19], data[20], data[21], data[22], data[23], debug_mode )
 				end
 			end
 		endCam3d()
 	end
-	Photon:ClearLightQueue()
+
 end
 hook.Add( "PreDrawEffects", "Photon.RenderQueue", function() 
 	Photon:RenderQueue()
@@ -300,3 +304,10 @@ function Photon:CalculatePixVis( lpos, handle, a_radius )
 
 	return util.PixelVisible( pos, radius, handle )
 end
+
+local EyePos = EyePos
+local EyeAngles = EyeAngles
+hook.Add( "PostDrawTranslucentRenderables", "Photon.UpdateLocalEyeInfo", function()
+	useEyePos = EyePos()
+	useEyeAng = EyeAngles()
+end)

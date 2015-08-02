@@ -289,4 +289,34 @@ COMPONENT.TrafficDisconnect = {
 	}
 }
 
+COMPONENT.Modes = {
+	Primary = {
+			M1 = {
+				["auto_fedsig_legend"] = "pattern_7",
+			},
+			M2 = {
+				["auto_fedsig_legend"] = "code2",
+				["auto_fedsig_legend_corner"] = "code2"
+			},
+			M3 = {
+				["auto_fedsig_legend"] = "code3",
+				["auto_fedsig_legend_corner"] = "code3"
+			}
+		},
+	Auxiliary = {
+			L = {
+				["auto_fedsig_legend_signalmaster"] = "left"
+			},
+			R = {
+				["auto_fedsig_legend_signalmaster"] = "right"
+			},
+			D = {
+				["auto_fedsig_legend_signalmaster"] = "diverge"
+			}
+		},
+	Illumination = {
+
+	}
+}
+
 EMVU:AddAutoComponent( COMPONENT, name )

@@ -205,7 +205,8 @@ function EMVU:MakeEMV( emv, name )
 		local k = component
 		local a = index
 
-		if not self.EL.Frames[k] then print("[Photon] Invalid component name: " .. tostring( component ) ) return end
+		if not self.EL.Frames[k] then print("[Photon] Unregistered component name: " .. tostring( component ) .. " defined in vehicle: " .. tostring( self.VehicleName ) ) return end
+		if not self.EL.Frames[k][a] then print("[Photon] Unregistered pattern: " .. tostring( index ) .. " under component: " ..tostring( component ) .. " defined in vehicle: " .. tostring( self.VehicleName ) ) return end
 
 		if inc then
 			if self.EL.Frames[k][a][1] >= self.EL.Frames[k][a][2] then

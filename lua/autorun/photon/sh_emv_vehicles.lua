@@ -136,6 +136,38 @@ function EMVU:CalculateAuto( name, data )
 			end
 		end
 
+		if istable( component.Modes ) and autoData.AutoPatterns != false then
+
+			for modeIndex, modeData in pairs( component.Modes.Primary ) do
+				for _,sequence in pairs( EMVU.Sequences[ name ].Sequences ) do
+					if sequence.Stage and sequence.Stage == modeIndex then
+						if not istable( sequence.Preset_Components ) then sequence.Preset_Components = {} end
+						sequence.Preset_Components[i] = {}
+						for componentIndex, patternIndex in pairs( modeData ) do
+							sequence.Preset_Components[i][ componentIndex ] = patternIndex
+						end
+					end
+				end
+			end
+
+		end
+
+		if istable( component.Modes ) and autoData.AutoPatterns != false and EMVU.Sequences[ name ].Traffic then
+			
+			for modeIndex, modeData in pairs( component.Modes.Auxiliary ) do
+				for _,sequence in pairs( EMVU.Sequences[ name ].Traffic ) do
+					if sequence.Stage and sequence.Stage == modeIndex then
+						if not istable( sequence.Preset_Components ) then sequence.Preset_Components = {} end
+						sequence.Preset_Components[i] = {}
+						for componentIndex, patternIndex in pairs( modeData ) do
+							sequence.Preset_Components[i][ componentIndex ] = patternIndex
+						end
+					end
+				end
+			end
+
+		end
+
 		local offset = #EMVU.Positions[ name ] -- count of current meta values
 
 		for id,section in pairs( component.Sections ) do -- for each section ["lightbar"] = { { 1, B } } *SECTION
@@ -144,6 +176,7 @@ function EMVU:CalculateAuto( name, data )
 				EMVU.Sections[ name ][ id ][ index ] = {}
 				local values = section[ index ]
 				for light, lightData in pairs( values ) do -- { 1, B } *LIGHT
+					if not istable( lightData ) then print( "[Photon] Auto-component failed to initialize because of an invalid variable type: " .. tostring( lightData ) .. ". Make sure the Sections table has correctly nested tables." ) return end
 					EMVU.Sections[ name ][ id ][ index ][ light ] = { lightData[1] + offset, lightData[2] }
 				end
 			end

@@ -9,7 +9,7 @@ local CW = "C_WHITE"
 local SW = "S_WHITE"
 local G = "GREEN"
 
-local name = "Federal Signal Integrity"
+local name = "Federal Signal Integrity SenCo"
 
 local COMPONENT = {}
 
@@ -107,77 +107,77 @@ COMPONENT.Positions = {
 }
 
 COMPONENT.Sections = {
-	["auto_fedsig_integrity"] = {
+	["auto_fedsig_integrity_senco"] = {
 		{
-			{ 1, B }, { 2, R },
-			{ 3, B }, { 4, R },
-			{ 5, B }, { 6, R },
-			{ 7, B }, { 8, R },
-			{ 9, B }, { 10, R },
-			{ 11, B }, { 12, R },
-			{ 13, B }, { 14, R },
-			{ 15, B }, { 16, R },
-			{ 17, B }, { 18, R },
-			{ 19, B }, { 20, R },
-			{ 21, B }, { 22, R },
+			{ 1, A }, { 2, A },
+			{ 3, A }, { 4, A },
+			{ 5, A }, { 6, A },
+			{ 7, A }, { 8, A },
+			{ 9, G }, { 10, G },
+			{ 11, A }, { 12, A },
+			{ 13, A }, { 14, A },
+			{ 15, A }, { 16, A },
+			{ 17, A }, { 18, A },
+			{ 19, A }, { 20, A },
+			{ 21, A }, { 22, A },
 		},
 		{
-			{ 1, B }, { 3, B }, { 5, B }, { 7, B }, { 9, B },
-			{ 11, B }, { 13, B }, { 15, B }, { 17, B }, { 19, B }, { 21, B }
+			{ 1, A }, { 3, A }, { 5, A }, { 7, A }, { 9, G },
+			{ 11, G }, { 13, A }, { 15, A }, { 17, A }, { 19, A }, { 21, A }
 		},
 		{
-			{ 2, R }, { 4, R }, { 6, R }, { 8, R }, { 10, R }, { 12, R },
-			{ 14, R }, { 16, R }, { 18, R }, { 20, R }, { 22, R }
+			{ 2, A }, { 4, A }, { 6, A }, { 8, A }, { 10, G }, { 12, G },
+			{ 14, A }, { 16, A }, { 18, A }, { 20, A }, { 22, A }
 		},
 		{
-			{ 8, R }, { 10, R }, { 12, R }, { 14, R }
+			{ 8, A }, { 10, G }, { 12, G }, { 14, A }
 		},
 		{ 
-			{ 7, B }, { 9, B }, { 11, B }, { 13, B }
+			{ 7, A }, { 9, G }, { 11, G }, { 13, A }
 		},
 		{
-			{ 2, R }, { 4, R }, { 6, R },
-			{ 22, R }, { 16, R }, { 18, R }, { 20, R }
+			{ 2, A }, { 4, A }, { 6, A },
+			{ 22, A }, { 16, A }, { 18, A }, { 20, A }
 		},
 		{
-			{ 1, B }, { 3, B }, { 5, B },
-			{ 21, B }, { 19, B }, { 17, B }, { 15, B }
+			{ 1, A }, { 3, A }, { 5, A },
+			{ 21, A }, { 19, A }, { 17, A }, { 15, A }
 		},
 		[8] = {
-			{ 6, R }, { 2, R }, { 16, R }, { 22, R }
+			{ 6, A }, { 2, A }, { 16, A }, { 22, A }
 		},
 		[9] = {
-			{ 1, B }, { 5, B }, { 21, B }, { 15, B }
+			{ 1, A }, { 5, A }, { 21, A }, { 15, A }
 		},
 		[10] = {
-			{ 4, R }, { 18, R }, { 20, R },
+			{ 4, A }, { 18, A }, { 20, A },
 		},
 		[11] = {
-			{ 3, B }, { 17, B }, { 19, B }
+			{ 3, A }, { 17, A }, { 19, A }
 		},
 		[12] = {
-			{ 6, R }, { 4, R }, { 3, B }, { 5, B },
-			{ 16, R }, { 18, R }, { 15, B }, { 17, B }
+			{ 6, A }, { 4, A }, { 3, A }, { 5, A },
+			{ 16, A }, { 18, A }, { 15, A }, { 17, A }
 		},
 		[13] = {
 			{ 2, W }, { 1, W },
-			{ 20, R }, { 22, R },
-			{ 21, B }, { 19, B }
+			{ 20, A }, { 22, A },
+			{ 21, A }, { 19, A }
 		}
 	},
-	["auto_fedsig_integrity_corner"] = {
+	["auto_fedsig_integrity_senco_corner"] = {
 		{
-			{ 8, R }, { 10, R }, { 12, R }, { 14, R }
+			{ 8, A }, { 10, G }, { 12, G }, { 14, A }
 		},
 		{
-			{ 7, B }, { 9, B }, { 11, B }, { 13, B }
+			{ 7, A }, { 9, G }, { 11, G }, { 13, A }
 		},
 		{
-			{ 7, B }, { 9, B }, { 11, B }, { 13, B },
-			{ 8, R }, { 10, R }, { 12, R }, { 14, R }
+			{ 7, A }, { 9, G }, { 11, G }, { 13, A },
+			{ 8, A }, { 10, G }, { 12, G }, { 14, A }
 		}
 	},
-	["auto_fedsig_integrity_signalmaster"] = {
+	["auto_fedsig_integrity_senco_signalmaster"] = {
 		-- right
 		[1] = { { 16, A }, },
 		[2] = { { 16, A }, { 18, A }, },
@@ -202,7 +202,7 @@ COMPONENT.Sections = {
 }
 
 COMPONENT.Patterns = {
-	["auto_fedsig_integrity_signalmaster"] = {
+	["auto_fedsig_integrity_senco_signalmaster"] = {
 		["left"] = {
 			8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 7, 7, 7, 7, 0, 0, 0, 0,
 		},
@@ -213,7 +213,7 @@ COMPONENT.Patterns = {
 			14, 14, 15, 15, 16, 16, 7, 7, 7, 7, 0, 0, 0, 0
 		}
 	},
-	["auto_fedsig_integrity"] = {
+	["auto_fedsig_integrity_senco"] = {
 		["all"] = { 1, 0, 1, 0, 1, 0 },
 		["pattern_1"] = { 2, 2, 2, 2, 3, 3, 3, 3, },
 		["code2"] = { 
@@ -254,7 +254,7 @@ COMPONENT.Patterns = {
 			13, 0, 13, 0, 13, 0,
 		}
 	},
-	["auto_fedsig_integrity_corner"] = {
+	["auto_fedsig_integrity_senco_corner"] = {
 		["alt_slow"] = { 1, 1, 1, 1, 2, 2, 2, },
 		["code3"] = { 
 			1, 0, 1, 0, 1,
@@ -264,7 +264,7 @@ COMPONENT.Patterns = {
 }
 
 COMPONENT.TrafficDisconnect = { 
-	["auto_fedsig_integrity_signalmaster"] = {
+	["auto_fedsig_integrity_senco_signalmaster"] = {
 		15, 16, 17, 18, 19, 20, 21, 22 
 	}
 }
@@ -272,30 +272,30 @@ COMPONENT.TrafficDisconnect = {
 COMPONENT.Modes = {
 	Primary = {
 			M1 = {
-				["auto_fedsig_integrity"] = "pattern_1",
+				["auto_fedsig_integrity_senco"] = "pattern_1",
 			},
 			M2 = {
-				["auto_fedsig_integrity"] = "code2",
-				["auto_fedsig_integrity_corner"] = "alt_slow"
+				["auto_fedsig_integrity_senco"] = "code2",
+				["auto_fedsig_integrity_senco_corner"] = "alt_slow"
 			},
 			M3 = {
-				["auto_fedsig_integrity"] = "code3",
-				["auto_fedsig_integrity_corner"] = "code3"
+				["auto_fedsig_integrity_senco"] = "code3",
+				["auto_fedsig_integrity_senco_corner"] = "code3"
 			}
 		},
 	Auxiliary = {
 			L = {
-				["auto_fedsig_integrity_signalmaster"] = "left"
+				["auto_fedsig_integrity_senco_signalmaster"] = "left"
 			},
 			R = {
-				["auto_fedsig_integrity_signalmaster"] = "right"
+				["auto_fedsig_integrity_senco_signalmaster"] = "right"
 			},
 			D = {
-				["auto_fedsig_integrity_signalmaster"] = "diverge"
+				["auto_fedsig_integrity_senco_signalmaster"] = "diverge"
 			}
 		},
 	Illumination = {
-
+		
 	}
 }
 

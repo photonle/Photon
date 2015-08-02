@@ -88,6 +88,7 @@ function PhotonHUD:UpdateState()
 		end
 	end
 	if istable( newData.AuxLights ) then
+		if not oldData.AuxLights then PhotonHUD:Reset( newData ) return end
 		if newData.AuxLights.Enabled != oldData.AuxLights.Enabled then
 			PhotonHUD.Panel:RunJavascript( "photonUI.setAux(" .. tostring( newData.AuxLights.Enabled ) .. ");" )
 		end
