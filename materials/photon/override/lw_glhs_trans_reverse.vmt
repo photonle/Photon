@@ -1,0 +1,28 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "photon/override/lw_glhs_reverse"
+	"$bumpmap" "models/LoneWolfiesCars/shared/skin_nm"
+	"$selfillum" 1
+	"$normalmapalphaenvmapmask" 1
+	"$nodecal" "1"
+	"$halflambert" 1
+	"$translucent" 1
+
+	"$phong" "1" 
+	"$phongboost" "1" 
+	"$phongfresnelranges" "[.3 .5 1]" 
+	"$phongexponent" 20
+
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[0.1 0.1 0.1]"
+
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
