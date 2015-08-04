@@ -23,148 +23,155 @@ function EMVU:MakeEMV( emv, name )
 
 	-- Datatable Functions --
 
-	function emv:Lights()
+	function emv:Photon_Lights()
 		if not IsValid( self ) then return false end
 		return self:GetDTBool( EMV_LIGHTS_ON )
 	end
 
-	function emv:LightOption()
+	function emv:Photon_LightOption()
 		if not IsValid( self ) then return 1 end
 		return self:GetDTInt( EMV_LIGHT_OPTION )
 	end
 
-	function emv:Siren()
+	function emv:Photon_Siren()
 		if not IsValid( self ) then return false end
 		return self:GetDTBool( EMV_SIREN_ON )
 	end
 
-	function emv:SirenOption()
+	function emv:Photon_SirenOption()
 		if not IsValid( self ) then return 1 end
 		return self:GetDTInt( EMV_SIREN_OPTION )
 	end
 
-	function emv:SirenSet()
+	function emv:Photon_SirenSet()
 		if not IsValid( self ) then return 1 end
 		return self:GetDTInt( EMV_SIREN_SET )
 	end
 
-	function emv:ManualSiren()
+	function emv:Photon_ManualSiren()
 		if not IsValid( self ) then return false end
 		return self:GetDTBool( CAR_MANUAL )
 	end
 
-	function emv:ManualHorn()
+	function emv:Photon_ManualHorn()
 		if not IsValid( self ) then return false end
 		return self:GetDTBool( EMV_HORN )
 	end
 
-	function emv:NoSiren()
+	function emv:Photon_NoSiren()
 		if not IsValid( self ) then return true end
-		return self:SirenSet() == 0
+		return self:Photon_SirenSet() == 0
 	end
 
-	function emv:Illumination()
+	function emv:Photon_Illumination()
 		if not IsValid( self ) then return false end
 		return self:GetDTBool( EMV_ILLUM_ON )
 	end
 
-	function emv:IllumOption()
+	function emv:Photon_IllumOption()
 		if not IsValid( self ) then return 1 end
 		return self:GetDTInt( EMV_ILLUM_OPTION )
 	end
 
-	function emv:IllumLights()
+	function emv:Photon_IllumLights()
 		if not IsValid( self ) then return {} end
-		return EMVHelper:GetIllumSequence( self.VehicleName, self:IllumOption(), self )
+		// local renderIllum = EMVHelper:GetIllumSequence( self.VehicleName, self:Photon_IllumOption(), self )
+		// local resultTable = {}
+		// for key,value in pairs( renderIllum ) do
+		// 	if isstring( key ) then
+		// 		local subTable = EMVU.Patterns[ self.VehicleName ]
+		// 	end
+		// end
+		return EMVHelper:GetIllumSequence( self.VehicleName, self:Photon_IllumOption(), self )
 	end
 
-	function emv:HasIllum()
+	function emv:Photon_HasIllum()
 		if not IsValid( self ) then return 1 end
 		if self.ELSIllum == nil then self.ELSIllum = EMVHelper:HasLamps( self.VehicleName ) end
 		return self.ELSIllum
 	end
 
-	function emv:TrafficAdvisor()
+	function emv:Photon_TrafficAdvisor()
 		if not IsValid( self ) then return false end
 		return self:GetDTBool( EMV_TRF_ON )
 	end
 
-	function emv:TrafficAdvisorOption()
+	function emv:Photon_TrafficAdvisorOption()
 		if not IsValid( self ) then return 1 end
 		return self:GetDTInt( EMV_TRF_OPTION )
 	end
 
-	function emv:HasTrafficAdvisor()
+	function emv:Photon_HasTrafficAdvisor()
 		if self.ELSTraffic == nil then self.ELSTraffic = EMVHelper:HasTrafficAdvisor( self.VehicleName ) end
 		return self.ELSTraffic
 	end
 
-	function emv:ELPresetOption()
+	function emv:Photon_ELPresetOption()
 		if not IsValid( self ) then return 0 end
 		return self:GetDTInt( EMV_PRE_OPTION )
 	end
 
-	function emv:PresetEnabled()
+	function emv:Photon_PresetEnabled()
 		if not IsValid( self ) then return false end
-		return !( self:ELPresetOption() == 0 )
+		return !( self:Photon_ELPresetOption() == 0 )
 	end
 
 	-- Helper Functions --
 
-	function emv:GetELPositions()
+	function emv:Photon_GetELPositions()
 		if not IsValid( self ) then return false end
 		return EMVHelper:GetVectors( self.VehicleName )
 	end
 
-	function emv:GetELPattern( option, frame )
+	function emv:Photon_GetELPattern( option, frame )
 		if not IsValid( self ) then return false end
 		return EMVHelper:GetPattern( self.VehicleName, option, frame )
 	end
 
-	function emv:GetELSequence()
+	function emv:Photon_GetELSequence()
 		if not IsValid( self ) then return false end
-		local option = self:LightOption()
+		local option = self:Photon_LightOption()
 		if not option then option = 1 end
 		local result = EMVHelper:GetSequence( self.VehicleName, option, self )
 		return result
 	end
 
-	function emv:GetTASequence()
+	function emv:Photon_GetTASequence()
 		if not IsValid( self ) then return false end
-		local option = self:TrafficAdvisorOption()
+		local option = self:Photon_TrafficAdvisorOption()
 		if not option then option = 1 end
 		local result = EMVHelper:GetTASequence( self.VehicleName, option, self )
 		return result
 	end
 
-	function emv:ELS_GetPatterns()
+	function emv:Photon_ELS_GetPatterns()
 		if not IsValid( self ) then return false end
 		return EMVHelper:GetPatterns( self.VehicleName )
 	end
 
-	function emv:ELS_GetSequenceName()
+	function emv:Photon_ELS_GetSequenceName()
 		if not IsValid( self ) then return false end
-		local option = self:LightOption()
+		local option = self:Photon_LightOption()
 		if not option then option = 1 end
 		local result =  EMVHelper:GetSequenceName( self.VehicleName, option )
 		return result
 	end
 
-	function emv:GetELMeta()
+	function emv:Photon_GetELMeta()
 		if not IsValid( self ) then return false end
 		return EMVHelper:GetMeta( self.VehicleName )
 	end
 
-	function emv:SetupVisHandles()
+	function emv:Photon_SetupVisHandles()
 		if not IsValid( self ) then return false end
-		for k,v in pairs( self:GetELPositions() ) do
+		for k,v in pairs( self:Photon_GetELPositions() ) do
 			self.EL.VisHandles[k] = util.GetPixelVisibleHandle()
 		end
 	end
 
-	function emv:SetupFrames()
+	function emv:Photon_SetupFrames()
 		if not IsValid( self ) then return false end
-		for k,v in pairs( self:ELS_GetPatterns() ) do
+		for k,v in pairs( self:Photon_ELS_GetPatterns() ) do
 
 			self.EL.Frames[k] = {}
 
@@ -178,7 +185,7 @@ function EMVU:MakeEMV( emv, name )
 	end
 
 	-- Calculates whether we should increment the frame/pattern --
-	function emv:ShiftELFrames( frames )
+	function emv:Photon_ShiftELFrames( frames )
 		if not IsValid( self ) then return false end
 		if ( ( CurTime() - self.EL.Last ) >= EMV_FRAME_DUR ) then
 			self.EL.Sequence = self.EL.Sequence + 1
@@ -187,7 +194,7 @@ function EMVU:MakeEMV( emv, name )
 		end
 	end
 
-	function emv:ELShiftFrames()
+	function emv:Photon_ELShiftFrames()
 		if not IsValid( self ) then return false end
 		if ( ( CurTime() - self.EL.Last ) >= EMV_FRAME_DUR ) then
 			self.EL.Last = CurTime()
@@ -198,7 +205,7 @@ function EMVU:MakeEMV( emv, name )
 	end
 
 	 -- Component = key (ie lightbar), index = value/pattern, inc = increment frame
-	function emv:GetFrame( component, index, inc )
+	function emv:Photon_GetFrame( component, index, inc )
 
 		if not IsValid( self ) then return false end
 
@@ -218,16 +225,16 @@ function EMVU:MakeEMV( emv, name )
 
 		local frame = self.EL.Frames[k][a][1]
 
-		return EMVHelper:GetFrame( self.VehicleName, component, index, frame )
+		return EMVHelper:Photon_GetFrame( self.VehicleName, component, index, frame )
 
 	end
 
-	function emv:GetLightSection( component, frame, skip )
-		return EMVHelper:GetLightSection( self.VehicleName, component, frame, skip )
+	function emv:Photon_GetLightSection( component, frame, skip )
+		return EMVHelper:Photon_GetLightSection( self.VehicleName, component, frame, skip )
 	end
 
-	function emv:GetELOverride()
-		return EMVHelper:GetModeDisconnect( self.VehicleName, self:LightOption() )
+	function emv:Photon_GetELOverride()
+		return EMVHelper:GetModeDisconnect( self.VehicleName, self:Photon_LightOption() )
 	end
 
 	function emv:AlertPhotonMissingRequirements()
@@ -256,17 +263,17 @@ function EMVU:MakeEMV( emv, name )
 	emv.EL.Manual = false
 
 	-- Initializer Functions --
-	emv:SetupFrames()
-	emv:SetupVisHandles()
+	emv:Photon_SetupFrames()
+	emv:Photon_SetupVisHandles()
 
 	-- Rendering Functions --
 
 	-- Render Emergency Lights --
-	function emv:RenderEL()
+	function emv:Photon_RenderEL()
 		if not IsValid( self ) then return false end
-		if not self:Lights() and not self:TrafficAdvisor() then
+		if not self:Photon_Lights() and not self:Photon_TrafficAdvisor() then
 			if self.ReconnectLights then 
-				self:ReconnectLights()
+				self:Photon_ReconnectLights()
 			elseif not self.RenderELPrimaryError then
 				--error("[Photon] Catastrophic error occurred on clientside vehicle setup (" .. tostring(self.VehicleName) .. ")." )
 				self.RenderELPrimaryError = true
@@ -274,20 +281,20 @@ function EMVU:MakeEMV( emv, name )
 			return 
 		end
 
-		self:ProcessPixVis()
+		self:Photon_ProcessPixVis()
 		local RenderTable = self.EL.RenderCache
 
 		if not RenderTable then return end
 
 		if self.ReconnectLights then 
-			self:ReconnectLights()
+			self:Photon_ReconnectLights()
 		end
 		
-		local disconnect = self:GetELOverride()
-		if self:Lights() then
+		local disconnect = self:Photon_GetELOverride()
+		if self:Photon_Lights() then
 			if disconnect then
 				for k,v in pairs(disconnect) do
-					self:DisconnectLight( v )
+					self:Photon_DisconnectLight( v )
 				end
 			end
 		end
@@ -300,16 +307,16 @@ function EMVU:MakeEMV( emv, name )
 			end
 		end
 
-		self:RenderLightTable( RenderTable )
+		self:Photon_RenderLightTable( RenderTable )
 		
 	end
 
-	function emv:RenderLightTable( RenderTable )
+	function emv:Photon_RenderLightTable( RenderTable )
 		if not IsValid( self ) then return false end
 
 		local handles = self.EL.VisHandles
-		local positions = self:GetELPositions()
-		local meta = self:GetELMeta()
+		local positions = self:Photon_GetELPositions()
+		local meta = self:Photon_GetELMeta()
 
 		local b = true
 		local pos = true
@@ -319,7 +326,7 @@ function EMVU:MakeEMV( emv, name )
 		for a=1,#RenderTable do
 			b = RenderTable[a]
 			if (b==true) then continue end
-			if not handles[b[1]] then self:SetupVisHandles() return end
+			if not handles[b[1]] then self:Photon_SetupVisHandles() return end
 			pos = positions[b[1]]
 
 			if positions[b[1]] and handles[a] then
@@ -353,28 +360,28 @@ function EMVU:MakeEMV( emv, name )
 
 	end
 
-	function emv:RenderIllum()
+	function emv:Photon_RenderIllum()
 		if not IsValid( self ) then return false end
-		if not self:Illumination() then return end
+		if not self:Photon_Illumination() then return end
 		local handles = self.EL.VisHandles
-		local positions = self:GetELPositions()
-		local meta = self:GetELMeta()
-		local RenderTable = self:IllumLights()
-		if RenderTable then self:RenderLightTable( RenderTable ) end
+		local positions = self:Photon_GetELPositions()
+		local meta = self:Photon_GetELMeta()
+		local RenderTable = self:Photon_IllumLights()
+		if RenderTable then self:Photon_RenderLightTable( RenderTable ) end
 	end
 
-	function emv:ProcessPixVis()
+	function emv:Photon_ProcessPixVis()
 
 		if not IsValid( self ) then return false end
 
 		local handles = self.EL.VisHandles
-		local ELPositions = self:GetELPositions()
+		local ELPositions = self:Photon_GetELPositions()
 
 		local pos = true
 		local handle = true
 
 		for i=1,#ELPositions do
-			if not handles[i] then self:SetupVisHandles() return end
+			if not handles[i] then self:Photon_SetupVisHandles() return end
 			local handle = handles[i]
 			self:CalcPixVis(
 				ELPositions[i][1],
@@ -385,11 +392,11 @@ function EMVU:MakeEMV( emv, name )
 
 	end
 
-	function emv:CalculateELFrames()
+	function emv:Photon_CalculateELFrames()
 		if not IsValid( self ) then return false end
-		if not self:Lights() and not self:TrafficAdvisor() then return end
-		local increment = self:ELShiftFrames()
-		local sequence = self:GetELSequence()
+		if not self:Photon_Lights() and not self:Photon_TrafficAdvisor() then return end
+		local increment = self:Photon_ELShiftFrames()
+		local sequence = self:Photon_GetELSequence()
 		local RenderTable = {}
 
 		if increment or not self.EL.RenderCache then
@@ -397,17 +404,17 @@ function EMVU:MakeEMV( emv, name )
 			local skipComponents = {}
 			local skipELIndexes = {}
 
-			if self:HasTrafficAdvisor() then
-				if self:TrafficAdvisor() then
-					local taSequence = self:GetTASequence()
+			if self:Photon_HasTrafficAdvisor() then
+				if self:Photon_TrafficAdvisor() then
+					local taSequence = self:Photon_GetTASequence()
 
 					for index, light in pairs( taSequence ) do
 						skipComponents[index] = true
-						local frame = self:GetFrame( index, light, increment )
-						if frame then table.Add( RenderTable, self:GetLightSection( index, frame ) ) end
+						local frame = self:Photon_GetFrame( index, light, increment )
+						if frame then table.Add( RenderTable, self:Photon_GetLightSection( index, frame ) ) end
 					end
 
-					local disconnectTable = EMVU.Helper:GetTrafficELDisconnect( self.VehicleName, self:TrafficAdvisorOption() )
+					local disconnectTable = EMVU.Helper:GetTrafficELDisconnect( self.VehicleName, self:Photon_TrafficAdvisorOption() )
 					if istable( disconnectTable ) then
 						for i=1, #disconnectTable do
 							skipELIndexes[ disconnectTable[ i ] ] = true
@@ -417,19 +424,19 @@ function EMVU:MakeEMV( emv, name )
 				end
 			end
 
-			if self:Lights() then 
+			if self:Photon_Lights() then 
 				for k,v in pairs( sequence ) do
-					local frame = self:GetFrame( k, v, increment )
+					local frame = self:Photon_GetFrame( k, v, increment )
 					if frame and not skipComponents[k] then
 						if istable(frame) then
 							for _,index in pairs( frame ) do
-								table.Add( RenderTable, self:GetLightSection( k, index, skipELIndexes ) )
+								table.Add( RenderTable, self:Photon_GetLightSection( k, index, skipELIndexes ) )
 							end
 						else
-							table.Add( RenderTable, self:GetLightSection( k, frame, skipELIndexes ) )
+							table.Add( RenderTable, self:Photon_GetLightSection( k, frame, skipELIndexes ) )
 						end
 						
-						// local addTable = self:GetLightSection( k, frame )
+						// local addTable = self:Photon_GetLightSection( k, frame )
 						// if istable( addTable ) then
 						// 	for a,b in pairs( addTable ) do
 						// 		RenderTable[a] = b
@@ -448,7 +455,7 @@ function EMVU:MakeEMV( emv, name )
 	emv.DrawEL = Photon.DrawLight
 	emv.CalcPixVis = Photon.CalculatePixVis
 
-	function emv:SetupEMVProps()
+	function emv:Photon_SetupEMVProps()
 		if not IsValid( self ) then return false end
 
 		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
@@ -501,7 +508,7 @@ function EMVU:MakeEMV( emv, name )
 
 	end
 
-	function emv:RemoveEMVProps( readd )
+	function emv:Photon_RemoveEMVProps( readd )
 		if not IsValid( self ) then return false end
 
 		if self.EMVProps then
@@ -511,18 +518,17 @@ function EMVU:MakeEMV( emv, name )
 		end
 
 		if readd then
-			self:SetupEMVProps()
+			self:Photon_SetupEMVProps()
 		end
 
 	end
 
-	function emv:ScanEMVProps()
-		
+	function emv:Photon_ScanEMVProps()
 		if not IsValid( self ) then return end
 
-		if self.LastPresetOption != self:ELPresetOption() then 
-			self:RemoveEMVProps( true ) 
-			self.LastPresetOption = self:ELPresetOption() 
+		if self.LastPresetOption != self:Photon_ELPresetOption() then 
+			self:Photon_RemoveEMVProps( true ) 
+			self.LastPresetOption = self:Photon_ELPresetOption() 
 			return
 		end
 
@@ -534,7 +540,7 @@ function EMVU:MakeEMV( emv, name )
 		if emvProps then 
 			for index,prop in ipairs( self.EMVProps ) do
 				if not IsValid( prop ) then
-					self:RemoveEMVProps( true )
+					self:Photon_RemoveEMVProps( true )
 					break
 				end
 				prop:SetParent( self )
@@ -547,6 +553,6 @@ function EMVU:MakeEMV( emv, name )
 	end
 
 	emv.LastPresetOption = 0
-	emv:SetupEMVProps()
+	emv:Photon_SetupEMVProps()
 
 end

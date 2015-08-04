@@ -28,4 +28,4 @@ CreateClientConVar( "photon_emerg_enabled", "1", true )
 CreateClientConVar( "photon_stand_enabled", "1", true )
 CreateClientConVar( "photon_hud_opacity", "1", true )
 
-CreateClientConVar( "photon_debug", "0", false )
+// CreateClientConVar( "photon_debug", "0", false )

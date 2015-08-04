@@ -101,11 +101,11 @@ function EMVU:OverwriteIndex( name, data )
 		EMVU.Sections[name] = data.Sections
 		if istable( data.Lamps ) then EMVU.Lamps[ name ] = data.Lamps end
 		if istable( data.Props ) then EMVU.Props[ name ] = data.Props end
+		if istable( data.Presets ) then EMVU.PresetIndex[ name ] = data.Presets end
 		if istable( data.Auto ) then 
 			EMVU.AutoIndex[ name ] = data.Auto
 			EMVU:CalculateAuto( name, data.Auto ) 
 		end
-		if istable( data.Presets ) then EMVU.PresetIndex[ name ] = data.Presets end
 	else
 		error("data must be table with valid Meta, Positions, Patterns and Sequences")
 	end
@@ -122,34 +122,54 @@ function EMVU:CalculateAuto( name, data )
 		local autoAng = autoData.Ang 
 		local autoScale = autoData.Scale or 1
 		local adjustAng = Angle()
-		adjustAng.p = autoAng.r
-		adjustAng.y = autoAng.y - 90
-		adjustAng.r = autoAng.p * -1
+
+		if not autoData.AutoPatterns or autoData.AutoPatterns != false then autoData.AutoPatterns = true end
+
+		if not component.NotLegacy then
+			adjustAng.p = autoAng.r
+			adjustAng.y = autoAng.y - 90
+			adjustAng.r = autoAng.p * -1
+		else
+			adjustAng.p = autoAng.p
+			adjustAng.y = autoAng.y
+			adjustAng.r = autoAng.r
+		end
+
+		if not component then print( "[Photon] Auto component: " .. tostring( data[i].ID ) .. " was not found in the library. Requested in: " .. tostring( name ) .. ".") continue end
+
+		local usedPresets = {}
+		for presetIndex,presetData in pairs( EMVU.PresetIndex[ name ] ) do
+			for _,_autoIndex in pairs( presetData.Auto ) do
+				if _autoIndex == i then usedPresets[ #usedPresets + 1 ] = presetIndex end
+			end
+		end
 
 		for id,metadata in pairs( component.Meta ) do -- add meta template data
-			EMVU.LightMeta[ name ][ id ] = metadata
+			local useId = tostring( tostring( id ) .. "_" .. tostring( i ) )
+			EMVU.LightMeta[ name ][ useId ]  = {}
 			for prop,val in pairs( metadata ) do
 				local resultVal = val
 				if prop == "W" then resultVal = val * autoScale end
 				if prop == "H" then resultVal = val * autoScale end
-				EMVU.LightMeta[ name ][ id ][ prop ] = resultVal
+				EMVU.LightMeta[ name ][ useId ][ prop ] = resultVal
 			end
 		end
 
 		if istable( component.Modes ) and autoData.AutoPatterns != false then
-
 			for modeIndex, modeData in pairs( component.Modes.Primary ) do
 				for _,sequence in pairs( EMVU.Sequences[ name ].Sequences ) do
 					if sequence.Stage and sequence.Stage == modeIndex then
 						if not istable( sequence.Preset_Components ) then sequence.Preset_Components = {} end
-						sequence.Preset_Components[i] = {}
-						for componentIndex, patternIndex in pairs( modeData ) do
-							sequence.Preset_Components[i][ componentIndex ] = patternIndex
+						for __,presetIndex in pairs( usedPresets ) do
+							if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
+							for componentIndex, patternIndex in pairs( modeData ) do
+								local patternPhase = autoData.Phase or ""
+								sequence.Preset_Components[presetIndex][ componentIndex .. "_" .. i ] = tostring( patternIndex .. patternPhase )
+							end
 						end
 					end
 				end
 			end
-
 		end
 
 		if istable( component.Modes ) and autoData.AutoPatterns != false and EMVU.Sequences[ name ].Traffic then
@@ -158,9 +178,11 @@ function EMVU:CalculateAuto( name, data )
 				for _,sequence in pairs( EMVU.Sequences[ name ].Traffic ) do
 					if sequence.Stage and sequence.Stage == modeIndex then
 						if not istable( sequence.Preset_Components ) then sequence.Preset_Components = {} end
-						sequence.Preset_Components[i] = {}
-						for componentIndex, patternIndex in pairs( modeData ) do
-							sequence.Preset_Components[i][ componentIndex ] = patternIndex
+						for __,presetIndex in pairs( usedPresets ) do
+							if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
+							for componentIndex, patternIndex in pairs( modeData ) do
+								sequence.Preset_Components[presetIndex][ componentIndex .. "_" .. i ] = patternIndex
+							end
 						end
 					end
 				end
@@ -168,22 +190,36 @@ function EMVU:CalculateAuto( name, data )
 
 		end
 
+		// PrintTable( component.Modes )
+
 		local offset = #EMVU.Positions[ name ] -- count of current meta values
 
 		for id,section in pairs( component.Sections ) do -- for each section ["lightbar"] = { { 1, B } } *SECTION
+			id = tostring( id .. "_" .. i )
 			EMVU.Sections[ name ][ id ] = {}
 			for index=1,#section do -- { { 1, B } } *FRAME
 				EMVU.Sections[ name ][ id ][ index ] = {}
 				local values = section[ index ]
 				for light, lightData in pairs( values ) do -- { 1, B } *LIGHT
 					if not istable( lightData ) then print( "[Photon] Auto-component failed to initialize because of an invalid variable type: " .. tostring( lightData ) .. ". Make sure the Sections table has correctly nested tables." ) return end
-					EMVU.Sections[ name ][ id ][ index ][ light ] = { lightData[1] + offset, lightData[2] }
+					local lightColor = lightData[2]
+					if isnumber(component.ColorInput) then 
+						if string.StartWith( lightColor, "_" ) then
+							local colorIndex = string.sub( lightColor, 2 )
+							if autoData["Color" .. tostring( colorIndex )] then
+								lightColor = autoData["Color" .. tostring( colorIndex )]
+							else
+								lightColor = component.DefaultColors[colorIndex] or "WHITE"
+							end
+						end
+					end
+					EMVU.Sections[ name ][ id ][ index ][ light ] = { lightData[1] + offset, lightColor }
 				end
 			end
 		end
 
 		for id,pattern in pairs( component.Patterns ) do -- add pattern data
-			EMVU.Patterns[ name ][ id ] = pattern
+			EMVU.Patterns[ name ][ tostring( id .. "_" .. i )] = pattern
 		end
 
 		for id=1,#component.Positions do
@@ -191,14 +227,23 @@ function EMVU:CalculateAuto( name, data )
 			local newPos = Vector()
 			newPos:Set( posData[1] )
 			newPos:Rotate( adjustAng )
+			// print(tostring(adjustAng))
 			newPos:Mul( autoScale )
 			newPos:Add( autoPos )
 			local newAng = Angle()
-			newAng.y = newAng.y + 90
-			newAng:Set( posData[2] )
-			newAng:RotateAroundAxis( autoAng:Right(), -1*autoAng.p )
+			if not component.NotLegacy then
+				newAng.y = newAng.y + 90
+				newAng:Set( posData[2] )
+				newAng:RotateAroundAxis( autoAng:Right(), -1*autoAng.p )
+				newAng:RotateAroundAxis( autoAng:Up(), -1*autoAng.r )
+			else
+				newAng:Set( posData[2] )
+				newAng.p = newAng.p + autoAng.p
+				newAng.y = newAng.y + autoAng.y
+				newAng.r = newAng.r + autoAng.r
+			end
 			EMVU.Positions[ name ][ offset + id ] = {
-				newPos, newAng, posData[3]
+				newPos, newAng, tostring( posData[3] .. "_" .. i )
 			}
 
 		end
@@ -208,8 +253,13 @@ function EMVU:CalculateAuto( name, data )
 				if istable( sequence.Preset_Components )  then
 					for __,preset in pairs( sequence.Preset_Components ) do
 						for componentName, ___ in pairs( preset ) do
-							if istable( component.TrafficDisconnect[ componentName ] ) then
-								local disconnectIndexes = component.TrafficDisconnect[ componentName ]
+							local moddedComponentName = tostring( componentName )
+							if autoData.AutoPatterns then
+								local stPos, edPos = string.find( componentName, "_", -4 )
+								moddedComponentName = string.sub( componentName, 1, edPos - 1 )
+							end
+							if istable( component.TrafficDisconnect[ moddedComponentName ] ) then
+								local disconnectIndexes = component.TrafficDisconnect[ moddedComponentName ]
 								if not istable( sequence.EL_Disconnect ) then sequence.EL_Disconnect = {} end
 								for ____, lightIndex in pairs( disconnectIndexes ) do
 									sequence.EL_Disconnect[ #sequence.EL_Disconnect + 1 ] = lightIndex + offset
@@ -219,6 +269,26 @@ function EMVU:CalculateAuto( name, data )
 					end
 				end
 			end
+		end
+
+		if istable( component.Modes ) and autoData.AutoPatterns != false and EMVU.Sequences[ name ].Illumination then
+			
+			for modeIndex, modeData in pairs( component.Modes.Illumination ) do
+				for _,sequence in pairs( EMVU.Sequences[ name ].Illumination ) do
+					if sequence.Stage and sequence.Stage == modeIndex then
+						if not istable( sequence.Preset_Components ) then sequence.Preset_Components = {} end
+						for __,presetIndex in pairs( usedPresets ) do
+							if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
+							for _, lightInfo in pairs( modeData ) do
+								sequence.Preset_Components[presetIndex][ #sequence.Preset_Components[presetIndex] + 1 ] = {
+									lightInfo[1] + offset, lightInfo[2]
+								}
+							end
+						end
+					end
+				end
+			end
+
 		end
 
 	end

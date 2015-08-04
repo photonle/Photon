@@ -15,19 +15,19 @@ local function DrawCarLights()
 	local photonDebug = PHOTON_DEBUG
 	for _,ent in pairs( Photon:AllVehicles() ) do
 		if IsValid( ent ) then
-			if ent:Photon() and ent.RenderLights then
-					ent:RenderLights( 
-						ent:HeadlightsOn(), 
-						ent:IsRunning(), 
-						ent:IsReversing(), 
-						ent:IsBraking(), 
-						ent:TurningLeft(), 
-						ent:TurningRight(), 
-						ent:Hazards(), 
+			if ent:Photon() and ent.Photon_RenderLights then
+					ent:Photon_RenderLights( 
+						ent:Photon_HeadlightsOn(), 
+						ent:Photon_IsRunning(), 
+						ent:Photon_IsReversing(), 
+						ent:Photon_IsBraking(), 
+						ent:Photon_TurningLeft(), 
+						ent:Photon_TurningRight(), 
+						ent:Photon_Hazards(), 
 						photonDebug
 					)
-				if ent:IsEMV() and ent.ScanEMVProps then ent:ScanEMVProps() end
-			elseif ent:Photon() and not ent.RenderLights then
+				if ent:IsEMV() and ent.Photon_ScanEMVProps then ent:Photon_ScanEMVProps() end
+			elseif ent:Photon() and not ent.Photon_RenderLights then
 				Photon:SetupCar( ent, ent:Photon() )
 			end
 		end
@@ -55,7 +55,7 @@ local function TurnScan()
 	local car = ply:GetVehicle()
 	if not IsValid( car ) then return end
 	if not car:Photon() then return end
-	if ply:KeyDown( IN_MOVERIGHT ) and car:TurningRight() then 
+	if ply:KeyDown( IN_MOVERIGHT ) and car:Photon_TurningRight() then 
 		car.Lighting.GoingForward = false
 		return
 	end
@@ -63,7 +63,7 @@ local function TurnScan()
 		car.Lighting.GoingForward = false
 		return
 	end
-	if car:TurningLeft() and ply:KeyDown( IN_MOVELEFT ) then
+	if car:Photon_TurningLeft() and ply:KeyDown( IN_MOVELEFT ) then
 		car.Lighting.GoingForward = false
 		return
 	end

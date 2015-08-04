@@ -74,15 +74,15 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 	
 	if not X_DOWN then
 		if keyDown( key_illum:GetInt() ) then
-			if emv:Illumination() then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
+			if emv:Photon_Illumination() then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
 			X_DOWN = true
 			X_PRESS = CurTime()
 		end
 	elseif X_DOWN and not keyDown ( key_illum:GetInt() ) then
 		local cmd = "on"
-		if emv:Illumination() and X_PRESS + .25 > CurTime() then 
+		if emv:Photon_Illumination() and X_PRESS + .25 > CurTime() then 
 			cmd = "off"
-		elseif emv:Illumination() then
+		elseif emv:Photon_Illumination() then
 			cmd = "tog"
 		end
 		if cmd == "on" or cmd == "tog" then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
@@ -90,18 +90,18 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 		X_DOWN = false
 	end
 
-	if emv:HasTrafficAdvisor() then 
+	if emv:Photon_HasTrafficAdvisor() then 
 		if not PHOTON_B_DOWN then
 			if keyDown( key_auxiliary:GetInt() ) then
-				if emv:TrafficAdvisor() then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
+				if emv:Photon_TrafficAdvisor() then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
 				PHOTON_B_DOWN = true
 				PHOTON_B_PRESS = CurTime()
 			end
 		elseif PHOTON_B_DOWN and not keyDown ( key_auxiliary:GetInt() ) then
 			local cmd = "on"
-			if emv:TrafficAdvisor() and PHOTON_B_PRESS + .25 > CurTime() then 
+			if emv:Photon_TrafficAdvisor() and PHOTON_B_PRESS + .25 > CurTime() then 
 				cmd = "off"
-			elseif emv:TrafficAdvisor() then
+			elseif emv:Photon_TrafficAdvisor() then
 				cmd = "tog"
 			end
 			if cmd == "on" or cmd == "tog" then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
@@ -111,14 +111,14 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 	end
 
 	if not LIGHTON_DOWN and keyDown( key_primary_toggle:GetInt() ) then
-		if emv:Lights() then 
+		if emv:Photon_Lights() then 
 			surface.PlaySound( EMVU.Sounds.Up )
 		else
 			surface.PlaySound( EMVU.Sounds.Down )
 		end
 		LIGHTON_DOWN = true
 	elseif LIGHTON_DOWN and not keyDown( key_primary_toggle:GetInt() ) then
-		if emv:Lights() then
+		if emv:Photon_Lights() then
 			surface.PlaySound( EMVU.Sounds.Down )
 			EMVU.Net:Lights( "off" )
 		else
@@ -130,7 +130,7 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 
 	if not SIRENON_DOWN and keyDown( key_siren_toggle:GetInt() ) then
 		SIRENON_DOWN = true
-		if emv:Siren() then
+		if emv:Photon_Siren() then
 			EMVU.Net:Siren( "off" )
 		else
 			EMVU.Net:Siren( "on" )
@@ -140,7 +140,7 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 	end
 
 	if not LIGHTTOG_DOWN and keyDown( key_primary_alt:GetInt() ) then
-		if emv:Lights() then
+		if emv:Photon_Lights() then
 			surface.PlaySound( EMVU.Sounds.Up )
 		else
 			surface.PlaySound( EMVU.Sounds.Down )
@@ -152,7 +152,7 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 	end
 
 	if not SIRENTOGGLE_DOWN and keyDown( key_siren_alt:GetInt() ) then
-		if emv:Lights() then
+		if emv:Photon_Lights() then
 			surface.PlaySound( EMVU.Sounds.Up )
 		else
 			surface.PlaySound( EMVU.Sounds.Down )
@@ -164,14 +164,14 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 	end
 
 	if not BLKOUTON_DOWN and keyDown( key_blackout:GetInt() ) then
-		if emv:IsRunning() then 
+		if emv:Photon_IsRunning() then 
 			surface.PlaySound( EMVU.Sounds.Down )
 		else
 			surface.PlaySound( EMVU.Sounds.Up )
 		end
 		BLKOUTON_DOWN = true
 	elseif BLKOUTON_DOWN and not keyDown( key_blackout:GetInt() ) then
-		if emv:IsRunning() then
+		if emv:Photon_IsRunning() then
 			surface.PlaySound( EMVU.Sounds.Up )
 			EMVU.Net:Blackout( true )
 		else
@@ -245,14 +245,14 @@ function Photon:CarSignal( arg )
 	local car = LocalPlayer():GetVehicle()
 	if arg == "left" then 
 		Photon.Net:Signal( CAR_TURNING_LEFT )
-		if not car:TurningLeft() then surface.PlaySound( EMVU.Sounds.SignalOn ) else surface.PlaySound( EMVU.Sounds.SignalOff ) end
+		if not car:Photon_TurningLeft() then surface.PlaySound( EMVU.Sounds.SignalOn ) else surface.PlaySound( EMVU.Sounds.SignalOff ) end
 		return
 	end
 	if arg == "right" then 
 		Photon.Net:Signal( CAR_TURNING_RIGHT )
-		if not car:TurningRight() then surface.PlaySound( EMVU.Sounds.SignalOn ) else surface.PlaySound( EMVU.Sounds.SignalOff ) end
+		if not car:Photon_TurningRight() then surface.PlaySound( EMVU.Sounds.SignalOn ) else surface.PlaySound( EMVU.Sounds.SignalOff ) end
 		return
 	end
 	if arg == "hazard" then Photon.Net:Signal( CAR_HAZARD ) return end
-	if arg == "none" and (car:BlinkState() != 0) then Photon.Net:Signal( 0 ); surface.PlaySound( EMVU.Sounds.SignalOff ) return end
+	if arg == "none" and (car:Photon_BlinkState() != 0) then Photon.Net:Signal( 0 ); surface.PlaySound( EMVU.Sounds.SignalOff ) return end
 end

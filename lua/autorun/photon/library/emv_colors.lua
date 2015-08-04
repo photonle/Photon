@@ -63,13 +63,13 @@ EMVU.Colors = {
 	},
 	GREEN = {
 		src = Color( 255, 255, 255, 255 ),
-		med = Color( 0, 255, 0, 200 ),
-		glw = Color( 150, 255, 0, 150 ),
-		blm = Color( 0, 255, 0, 10 ),
-		amb = Color( 0, 255, 0, 2 ),
-		raw = Color( 255, 255, 0, 255 ),
-		flr = Color( 48, 48, 0, 255),
-		dim = Color( 225, 225, 0, 255 )
+		med = Color( 128, 255, 0, 200 ),
+		glw = Color( 24, 255, 0, 120 ),
+		blm = Color( 10, 255, 0, 70 ),
+		amb = Color( 0, 255, 0, 5 ),
+		raw = Color( 0, 255, 0, 255 ),
+		flr = Color( 8, 64, 0, 255),
+		dim = Color( 100, 255, 0, 255 )
 	},
 	WHITE = { -- led
 		src = Color( 200, 200, 255, 255 ),

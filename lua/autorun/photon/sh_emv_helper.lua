@@ -26,7 +26,7 @@ function EMVU.Helper:GetSequence( name, option, vehicle )
 	end
 	
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Sequences"][option]["Preset_Components"] ) then
-		local preset = vehicle:ELPresetOption()
+		local preset = vehicle:Photon_ELPresetOption()
 		local ptable = EMVU.Sequences[name]["Sequences"][option]["Preset_Components"][preset]
 		if istable( ptable ) then
 			for id,data in pairs( ptable ) do
@@ -39,6 +39,43 @@ function EMVU.Helper:GetSequence( name, option, vehicle )
 		resultTable[ component ] = option
 	end
 
+	return resultTable
+end
+
+function EMVU.Helper:GetTASequence( name, option, vehicle )
+	
+	local resultTable = {}
+	
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["BG_Components"] ) then
+		local bodygroups = vehicle:GetBodyGroups() -- BodyGroups of vehicle
+		local bgtable = EMVU.Sequences[name]["Traffic"][option]["BG_Components"] -- BodyGroups defined in vehicle specification file
+		for id,data in pairs( bodygroups ) do -- for index,value in each vehicle bodygroup
+			local indexId = id - 1
+			if bgtable[ data["name"] ] then  -- if this index is defined in the vehicle specifications
+				local selected = vehicle:GetBodygroup( indexId )
+				if bgtable[ data["name"] ][ tostring( selected ) ] then
+					for component,option in pairs( bgtable[ data["name"] ][ tostring( selected ) ] ) do
+						resultTable[ component ] = option
+					end
+				end
+			end
+		end
+	end
+	
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["Preset_Components"] ) then
+		local preset = vehicle:Photon_ELPresetOption()
+		local ptable = EMVU.Sequences[name]["Traffic"][option]["Preset_Components"][preset]
+		if istable( ptable ) then
+			for id,data in pairs( ptable ) do
+				resultTable[ id ] = data
+			end
+		end
+	end
+
+	for component, option in pairs( EMVU.Sequences[name]["Traffic"][option]["Components"] ) do
+		resultTable[ component ] = option
+	end
+	
 	return resultTable
 end
 
@@ -63,7 +100,7 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 	end
 	
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Illumination"][option]["Preset_Components"] ) then
-		local preset = vehicle:ELPresetOption()
+		local preset = vehicle:Photon_ELPresetOption()
 		local ptable = EMVU.Sequences[name]["Illumination"][option]["Preset_Components"][preset]
 		if istable( ptable ) then
 			for id,data in pairs( ptable ) do
@@ -75,7 +112,7 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 	for component, option in pairs( EMVU.Sequences[name]["Illumination"][option]["Components"] ) do
 		resultTable[ component ] = option
 	end
-	
+
 	return resultTable
 
 end
@@ -115,11 +152,11 @@ function EMVU.Helper:GetMeta( name )
 	return EMVU.LightMeta[name]
 end
 
-function EMVU.Helper:GetFrame( name, component, index, frame )
+function EMVU.Helper:Photon_GetFrame( name, component, index, frame )
 	return EMVU.Patterns[name][component][index][frame]
 end
 
-function EMVU.Helper:GetLightSection( name, component, frame, skip )
+function EMVU.Helper:Photon_GetLightSection( name, component, frame, skip )
 	if istable( skip ) then
 		local lights = EMVU.Sections[name][component][frame]
 		local resultTable = {}
@@ -161,8 +198,8 @@ function EMVU.Helper:GetProps( name, ent )
 			results[i] = EMVU.Props[name][i]
 		end
 	end
-	if ent:PresetEnabled() then
-		local presetData = EMVU.Helper:GetPresetData( name, ent:ELPresetOption() )
+	if ent:Photon_PresetEnabled() then
+		local presetData = EMVU.Helper:GetPresetData( name, ent:Photon_ELPresetOption() )
 		if istable( presetData.Auto ) then
 			for _,id in pairs( presetData.Auto ) do
 				local preset = EMVU.AutoIndex[ name ][ id ]
@@ -220,43 +257,6 @@ end
 
 function EMVU.Helper:HasTrafficAdvisor( name )
 	if istable( EMVU.Sequences[name].Traffic ) and istable( EMVU.Sequences[name].Traffic[1] ) then return true end
-end
-
-function EMVU.Helper:GetTASequence( name, option, vehicle )
-	
-	local resultTable = {}
-	
-	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["BG_Components"] ) then
-		local bodygroups = vehicle:GetBodyGroups() -- BodyGroups of vehicle
-		local bgtable = EMVU.Sequences[name]["Traffic"][option]["BG_Components"] -- BodyGroups defined in vehicle specification file
-		for id,data in pairs( bodygroups ) do -- for index,value in each vehicle bodygroup
-			local indexId = id - 1
-			if bgtable[ data["name"] ] then  -- if this index is defined in the vehicle specifications
-				local selected = vehicle:GetBodygroup( indexId )
-				if bgtable[ data["name"] ][ tostring( selected ) ] then
-					for component,option in pairs( bgtable[ data["name"] ][ tostring( selected ) ] ) do
-						resultTable[ component ] = option
-					end
-				end
-			end
-		end
-	end
-	
-	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["Preset_Components"] ) then
-		local preset = vehicle:ELPresetOption()
-		local ptable = EMVU.Sequences[name]["Traffic"][option]["Preset_Components"][preset]
-		if istable( ptable ) then
-			for id,data in pairs( ptable ) do
-				resultTable[ id ] = data
-			end
-		end
-	end
-
-	for component, option in pairs( EMVU.Sequences[name]["Traffic"][option]["Components"] ) do
-		resultTable[ component ] = option
-	end
-	
-	return resultTable
 end
 
 function EMVU.Helper:GetTrafficAdvisorName( name, option )

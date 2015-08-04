@@ -106,6 +106,7 @@ function PhotonHUD:UpdateState()
 		end
 	end
 	if istable( newData.Illumination ) then
+		if not oldData.Illumination then PhotonHUD:Reset( newData ) return end
 		if oldData.Illumination.Enabled != newData.Illumination.Enabled or oldData.Illumination.Active != newData.Illumination.Active then
 			local state = 1
 			if newData.Illumination.Enabled then state = 2 end
@@ -140,22 +141,22 @@ function PhotonHUD:GetCurrentState()
 		if istable(primaryLights) then
 			data.PrimaryLights = {}
 			data.PrimaryLights.Max = #primaryLights
-			data.PrimaryLights.Enabled = ent:Lights()
-			data.PrimaryLights.SelectedIndex = ent:LightOption()
-			data.PrimaryLights.Name = ent:ELS_GetSequenceName()
+			data.PrimaryLights.Enabled = ent:Photon_Lights()
+			data.PrimaryLights.SelectedIndex = ent:Photon_LightOption()
+			data.PrimaryLights.Name = ent:Photon_ELS_GetSequenceName()
 		end
 		local auxLights = EMVU.Sequences[name]["Traffic"]
 		if istable( auxLights ) then
 			data.AuxLights = {}
 			data.AuxLights.Max = #auxLights
-			data.AuxLights.Enabled = ent:TrafficAdvisor()
-			data.AuxLights.SelectedIndex = ent:TrafficAdvisorOption()
-			data.AuxLights.Name = tostring( EMVU.Helper:GetTrafficAdvisorName( name, ent:TrafficAdvisorOption() ) )
+			data.AuxLights.Enabled = ent:Photon_TrafficAdvisor()
+			data.AuxLights.SelectedIndex = ent:Photon_TrafficAdvisorOption()
+			data.AuxLights.Name = tostring( EMVU.Helper:GetTrafficAdvisorName( name, ent:Photon_TrafficAdvisorOption() ) )
 		end
-		if not ent:NoSiren() then
-			local activeSiren = ent:SirenOption()
-			local sirenOption = ent:SirenSet()
-			local sirenOn = ent:Siren()
+		if not ent:Photon_NoSiren() then
+			local activeSiren = ent:Photon_SirenOption()
+			local sirenOption = ent:Photon_SirenSet()
+			local sirenOn = ent:Photon_Siren()
 			data.Siren = {}
 			data.Siren.Name = EMVU.Sirens[sirenOption]["Name"] or "Unknown"
 			data.Siren.Model = EMVU.Sirens[sirenOption]["Category"] or "Unknown"
@@ -180,28 +181,28 @@ function PhotonHUD:GetCurrentState()
 
 			data.Functions = {}
 			local useState = 0
-			if ent:ManualSiren() then useState = 2 else useState = 0 end
+			if ent:Photon_ManualSiren() then useState = 2 else useState = 0 end
 			data.Functions[1] = {
 				Name = "Man",
 				Icon = "manual",
 				State = useState
 			}
-			if ent:ManualHorn() then useState = 2 else useState = 0 end
+			if ent:Photon_ManualHorn() then useState = 2 else useState = 0 end
 			data.Functions[2] = {
 				Name = "Horn",
 				Icon = "horn",
 				State = useState
 			}
-			if not ent:IsRunning() then useState = 2 else useState = 0 end
+			if not ent:Photon_IsRunning() then useState = 2 else useState = 0 end
 			data.Functions[3] = {
 				Name = "",
 				Icon = "blackout",
 				State = useState
 			}
 		end
-		if ent:HasIllum() then
-			local activeOption = ent:IllumOption()
-			local isOn = ent:Illumination()
+		if ent:Photon_HasIllum() then
+			local activeOption = ent:Photon_IllumOption()
+			local isOn = ent:Photon_Illumination()
 			data.Illumination = {}
 			data.Illumination.Active = activeOption
 			data.Illumination.Enabled = isOn

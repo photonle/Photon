@@ -26,6 +26,14 @@ COMPONENT.Meta = {
 		Scale = 1.25,
 		WMult = 1.5,
 	},
+	integrity_forward_illum = {
+		AngleOffset = -90,
+		W = 6.1,
+		H = 4.4,
+		Sprite = "sprites/emv/fs_valor",
+		Scale = 2,
+		WMult = 1.5,
+	},
 	integrity_forward_outer = {
 		AngleOffset = -90,
 		W = 5.8,
@@ -48,6 +56,14 @@ COMPONENT.Meta = {
 		H = 4.4,
 		Sprite = "sprites/emv/fs_valor",
 		Scale = 1.25,
+		WMult = 1.5,
+	},
+	integrity_side_illum = {
+		AngleOffset = -90,
+		W = 6.8,
+		H = 4.4,
+		Sprite = "sprites/emv/fs_valor",
+		Scale = 1.75,
 		WMult = 1.5,
 	},
 	integrity_rear = {
@@ -103,6 +119,12 @@ COMPONENT.Positions = {
 
 	[21] = { Vector( 3.24, -4.93, 0.87 ), Angle( 0, 0, 0 ), "integrity_rear_inner" },
 	[22] = { Vector( -3.24, -4.93, 0.87 ), Angle( 0, 0, 0 ), "integrity_rear_inner" },
+
+	[23] = { Vector( 15.07, 7.97, 0.87 ), Angle( 0, 0, 0 ), "integrity_forward_illum" },
+	[24] = { Vector( -15.07, 7.97, 0.87 ), Angle( 0, 0, 0 ), "integrity_forward_illum" },
+
+	[25] = { Vector( 28.55, 0.6, 0.87 ), Angle( 0, -79.8, 0 ), "integrity_side_illum" },
+	[26] = { Vector( -28.55, 0.6, 0.87 ), Angle( 0, 79.8, 0 ), "integrity_side_illum" },
 
 }
 
@@ -160,21 +182,21 @@ COMPONENT.Sections = {
 			{ 16, A }, { 18, A }, { 15, A }, { 17, A }
 		},
 		[13] = {
-			{ 2, W }, { 1, W },
+			{ 2, A }, { 1, A },
 			{ 20, A }, { 22, A },
 			{ 21, A }, { 19, A }
 		}
 	},
 	["auto_fedsig_integrity_senco_corner"] = {
 		{
-			{ 8, A }, { 10, G }, { 12, G }, { 14, A }
+			{ 8, A }, { 10, A }, { 12, G }, { 14, A }
 		},
 		{
-			{ 7, A }, { 9, G }, { 11, G }, { 13, A }
+			{ 7, A }, { 9, A }, { 11, G }, { 13, A }
 		},
 		{
-			{ 7, A }, { 9, G }, { 11, G }, { 13, A },
-			{ 8, A }, { 10, G }, { 12, G }, { 14, A }
+			{ 7, A }, { 9, A }, { 11, G }, { 13, A },
+			{ 8, A }, { 10, A }, { 12, G }, { 14, A }
 		}
 	},
 	["auto_fedsig_integrity_senco_signalmaster"] = {
@@ -198,6 +220,12 @@ COMPONENT.Sections = {
 		[14] = { { 22, A }, { 21, A }, },
 		[15] = { { 20, A }, { 22, A }, { 21, A }, { 19, A }, },
 		[16] = { { 18, A }, { 20, A }, { 22, A }, { 21, A }, { 19, A }, { 17, A }, },
+	},
+	["auto_fedsig_integrity_senco_illum"] = {
+		[1] = { { 6, W }, { 7, W }, { 11, W }, { 12, W } },
+		[2] = { { 6, W }, { 7, W } },
+		[3] = { { 11, W } },
+		[4] = { { 12, W } }
 	}
 }
 
@@ -260,6 +288,12 @@ COMPONENT.Patterns = {
 			1, 0, 1, 0, 1,
 			2, 0, 2, 0, 2,
 		}
+	},
+	["auto_fedsig_integrity_senco_illum"] = {
+		["front"] = { 1 },
+		["all"] = { 2 },
+		["left"] = { 3 },
+		["right"] = { 4 },
 	}
 }
 
@@ -295,7 +329,18 @@ COMPONENT.Modes = {
 			}
 		},
 	Illumination = {
-		
+			T = { -- takedown
+					{ 24, W }, { 23, W }
+				},
+			A = { -- all
+					{ 24, W }, { 23, W }, { 25, W }, { 26, W }
+				},
+			L = {
+
+				},
+			R = {
+
+			}
 	}
 }
 

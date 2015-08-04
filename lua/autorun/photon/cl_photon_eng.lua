@@ -58,6 +58,8 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis
 
 	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
 
+	local legacy = true
+	if meta.NoLegacy == true then legacy = false end
 	local colors = incolors
 	local offset = meta.AngleOffset
 
@@ -110,11 +112,16 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis
 	
 	if not meta.Scale then meta.Scale = 1 end
 	if not meta.WMult then meta.WMult = 1 end
-
 	local ca = parent:GetAngles()
-	
-	ca:RotateAroundAxis(parent:GetUp(), (lang.y + offset))
-	local lightNormal = ca:Forward()
+	local lightNormal = Angle()
+	if legacy then
+		ca:RotateAroundAxis( parent:GetUp(), ( lang.y + offset ) )
+	else
+		if meta.DirAxis then
+			ca:RotateAroundAxis( parent["Get"..meta.DirAxis](parent), lang.r - meta.DirOffset )
+		end
+	end
+	lightNormal = ca:Forward()
 	lightNormal:Normalize()
 
 	local ViewNormal = Vector()

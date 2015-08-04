@@ -32,7 +32,7 @@ properties.Add( "photon_siren", {
 		end
 
 		for k,v in ipairs( options ) do
-			local isSelected = ( tostring( k ) == tostring( ent:SirenSet() ) )
+			local isSelected = ( tostring( k ) == tostring( ent:Photon_SirenSet() ) )
 			local category = v.Category or "Other"
 			local option = categories[ category ]:AddOption( v.Name, function() EMVU.Net:SirenSet( k ) end )
 			if isSelected then
@@ -53,7 +53,7 @@ properties.Add( "photon_preset", {
 		if not IsValid( ent ) then return false end
 		if not ent:Photon() then return false end
 		if not ent:IsEMV() then return false end
-		if not ent:PresetEnabled() then return false end
+		if not ent:Photon_PresetEnabled() then return false end
 		if not ply:InVehicle() then return false end
 		if not ply:GetVehicle() == ent then return false end
 		return true
@@ -63,7 +63,7 @@ properties.Add( "photon_preset", {
 		local options = EMVU.PresetIndex[ ent.VehicleName ]
 		local submenu = option:AddSubMenu()
 		for k,v in ipairs( options ) do
-			local isSelected = ( tostring( k ) == tostring( ent:ELPresetOption() ) )
+			local isSelected = ( tostring( k ) == tostring( ent:Photon_ELPresetOption() ) )
 			local option = submenu:AddOption( v.Name, function() EMVU.Net:Preset( k ) end )
 			if isSelected then
 				option:SetChecked( true )

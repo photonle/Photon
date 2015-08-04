@@ -1293,7 +1293,7 @@ EMV.Sequences = {
 						["traffic"] = "code3"	
 					},
 					["1"] = {
-						["rear_int_vipers"] = "code3"
+						["rear_int_vipers"] = "code2"
 					}
 				},
 				["push bar"] = {
