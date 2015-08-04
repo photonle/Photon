@@ -374,11 +374,11 @@ function EMVU:MakeEMV( ent, emv )
 		return self:ELS_SirenSet() == 0
 	end
 
-	function ent:ApplySmartSkin( mat, index )
+	function ent:ApplySmartSkin( mat, index, skin )
 		if not IsValid( self ) then return end
 		local submaterialIndex = false
-		if index then 
-			submaterialIndex = index
+		if skin then 
+			submaterialIndex = skin
 		else
 			local materials = self:GetMaterials()
 			for i=1,#materials do
@@ -386,20 +386,21 @@ function EMVU:MakeEMV( ent, emv )
 				print( "Checking name: " .. tostring( thisMat ) )
 				if string.EndsWith( thisMat, "/skin" ) then
 					submaterialIndex = i - 1
-					print( "Found match: " .. tostring( submaterialIndex ) )
 					break
 				end
 			end
 		end
 		if submaterialIndex == false then return end
-		self:SetSkin( 0 )
+		if index then self:SetSkin( index ) else self:SetSkin( 0 ) end
 		print( "Applying: " .. tostring( mat ) )
 		self:SetSubMaterial( submaterialIndex, tostring( mat ) )
 	end
 
-	function ent:ApplyPhotonSkin( skin )
+	function ent:ApplyPhotonSkin( skin, index, mat )
 		if isnumber( skin ) then
 			self:SetSkin( skin )
+		elseif isstring( skin ) and index != nil and mat != nil then
+			self:ApplySmartSkin( skin, index, mat )
 		elseif isstring( skin ) then
 			self:ApplySmartSkin( skin )
 		end
@@ -410,7 +411,7 @@ function EMVU:MakeEMV( ent, emv )
 
 	//---- APPLY EMV PARAMETERS ----//
 
-	if emv.Skin then ent:ApplyPhotonSkin( emv.Skin, ent.SkinIndex ) end
+	if emv.Skin then ent:ApplyPhotonSkin( emv.Skin, emv.SkinIndex, emv.SkinMaterialIndex ) end
 
 	if emv.Color then ent:SetColor( emv.Color ) end
 

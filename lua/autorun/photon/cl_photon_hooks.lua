@@ -14,11 +14,12 @@ local photon_ready = photon_ready or false
 
 local function DrawCarLights()
 	if not photon_ready then return end
-	if not should_render:GetBool() then return end
+	// if not should_render:GetBool() then return end
 	local photonDebug = PHOTON_DEBUG
 	for _,ent in pairs( Photon:AllVehicles() ) do
 		if IsValid( ent ) then
 			if ent:Photon() and ent.Photon_RenderLights then
+				if( should_render:GetBool() ) then
 					ent:Photon_RenderLights( 
 						ent:Photon_HeadlightsOn(), 
 						ent:Photon_IsRunning(), 
@@ -29,6 +30,7 @@ local function DrawCarLights()
 						ent:Photon_Hazards(), 
 						photonDebug
 					)
+				end
 				if ent:IsEMV() and ent.Photon_ScanEMVProps then ent:Photon_ScanEMVProps() end
 			elseif ent:Photon() and not ent.Photon_RenderLights then
 				Photon:SetupCar( ent, ent:Photon() )

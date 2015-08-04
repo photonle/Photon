@@ -25,7 +25,7 @@ COMPONENT.Meta = {
 		W = 8,
 		H = 4,
 		Sprite = "sprites/emv/visionslr",
-		Scale = 1.75,
+		Scale = 2,
 		WMult = 1.33,
 	},
 	visionslr_b = {
@@ -35,7 +35,7 @@ COMPONENT.Meta = {
 		Speed = 8,
 		Sprite = "sprites/emv/visionslr",
 		Scale = 1,
-		WMult = 1.33,
+		WMult = 1.5,
 	},
 	visionslr_rear = {
 		AngleOffset = 90,

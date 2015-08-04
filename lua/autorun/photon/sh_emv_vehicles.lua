@@ -209,7 +209,7 @@ function EMVU:CalculateAuto( name, data )
 							if autoData["Color" .. tostring( colorIndex )] then
 								lightColor = autoData["Color" .. tostring( colorIndex )]
 							else
-								lightColor = component.DefaultColors[colorIndex] or "WHITE"
+								lightColor = component.DefaultColors[tonumber(colorIndex)] or "WHITE"
 							end
 						end
 					end

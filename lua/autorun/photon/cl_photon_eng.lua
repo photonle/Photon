@@ -119,6 +119,7 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis
 	else
 		if meta.DirAxis then
 			ca:RotateAroundAxis( parent["Get"..meta.DirAxis](parent), lang.r - meta.DirOffset )
+			ca:RotateAroundAxis( parent:GetUp(), lang.y )
 		end
 	end
 	lightNormal = ca:Forward()

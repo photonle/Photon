@@ -272,7 +272,7 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_RenderEL()
 		if not IsValid( self ) then return false end
 		if not self:Photon_Lights() and not self:Photon_TrafficAdvisor() then
-			if self.ReconnectLights then 
+			if self.Photon_ReconnectLights then 
 				self:Photon_ReconnectLights()
 			elseif not self.RenderELPrimaryError then
 				--error("[Photon] Catastrophic error occurred on clientside vehicle setup (" .. tostring(self.VehicleName) .. ")." )
@@ -286,7 +286,7 @@ function EMVU:MakeEMV( emv, name )
 
 		if not RenderTable then return end
 
-		if self.ReconnectLights then 
+		if self.Photon_ReconnectLights then 
 			self:Photon_ReconnectLights()
 		end
 		
@@ -303,7 +303,7 @@ function EMVU:MakeEMV( emv, name )
 				end
 			end
 		end
-		
+
 		if PHOTON_DEBUG then
 			RenderTable = {}
 			local count = #EMVU.Positions[ self.VehicleName ]
