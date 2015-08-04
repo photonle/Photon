@@ -10,7 +10,10 @@ PHOTON_REG_ENABLED = true
 
 local PHOTON_REG_ENABLED = PHOTON_REG_ENABLED
 
+local photon_ready = photon_ready or false
+
 local function DrawCarLights()
+	if not photon_ready then return end
 	if not should_render:GetBool() then return end
 	local photonDebug = PHOTON_DEBUG
 	for _,ent in pairs( Photon:AllVehicles() ) do
@@ -35,6 +38,10 @@ local function DrawCarLights()
 end
 hook.Add( "PreRender", "Photon.Scan", function()
 	DrawCarLights()
+end)
+
+hook.Add( "InitPostEntity", "Photon.ReadyReg", function()
+	photon_ready = true
 end)
 
 function Photon:AdjustFrameTime()

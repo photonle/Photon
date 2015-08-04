@@ -12,7 +12,14 @@ include( "cl_photon_menu.lua" )
 
 local should_render = GetConVar( "photon_emerg_enabled" )
 
+local photon_ready = photon_ready or false
+
+hook.Add( "InitPostEntity", "Photon.ReadyEL", function()
+	photon_ready = true
+end)
+
 local function DrawEMVLights()
+	if not photon_ready then return end
 	Photon:ClearLightQueue()
 	if not should_render:GetBool() then return end
 	for k,v in pairs( EMVU:AllVehicles() ) do
@@ -23,6 +30,7 @@ end
 hook.Add("PreRender", "EMVU.Scan", DrawEMVLights)
 
 function EMVU:CalculateFrames()
+	if not photon_ready then return end
 	if not should_render:GetBool() then return end
 	for _,ent in pairs( EMVU:AllVehicles() ) do
 		if IsValid( ent ) and ent.HasELS and ent:HasELS() and (ent.Photon_Lights and ent:Photon_Lights() or ent.Photon_TrafficAdvisor and ent:Photon_TrafficAdvisor()) then ent:Photon_CalculateELFrames() end

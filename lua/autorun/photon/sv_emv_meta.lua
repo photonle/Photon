@@ -218,6 +218,7 @@ function EMVU:MakeEMV( ent, emv )
 		self.ELS.SirenContinue = nil
 		self.ELS.Siren:Stop()
 		self:ELS_Siren(false)
+		self.ELS.SirenPaused = false
 	end
 
 	// Turn the siren on
