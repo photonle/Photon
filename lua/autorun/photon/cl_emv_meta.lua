@@ -290,15 +290,20 @@ function EMVU:MakeEMV( emv, name )
 			self:Photon_ReconnectLights()
 		end
 		
-		local disconnect = self:Photon_GetELOverride()
-		if self:Photon_Lights() then
-			if disconnect then
-				for k,v in pairs(disconnect) do
-					self:Photon_DisconnectLight( v )
+		if self.Photon_DisconnectLight then
+			local disconnect = self:Photon_GetELOverride()
+			if self:Photon_Lights() then
+				if disconnect then
+					for k,v in pairs(disconnect) do
+						if self.Photon_DisconnectLight then
+							self:Photon_DisconnectLight( v )
+						end
+						
+					end
 				end
 			end
 		end
-
+		
 		if PHOTON_DEBUG then
 			RenderTable = {}
 			local count = #EMVU.Positions[ self.VehicleName ]
