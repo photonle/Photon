@@ -11,6 +11,7 @@ util.AddNetworkString( "emvu_traffic" )
 util.AddNetworkString( "photon_signal" )
 util.AddNetworkString( "photon_menu" )
 util.AddNetworkString( "emvu_preset" )
+util.AddNetworkString( "emvu_livery" )
 
 local can_change_siren_model = GetConVar( "photon_emv_changesirens" )
 local can_change_light_presets = GetConVar( "photon_emv_changepresets" )
@@ -129,6 +130,15 @@ function EMVU.Net:Manual( ply, arg )
 end
 net.Receive( "emvu_manual", function( len, ply ) 
 	EMVU.Net:Manual( ply, tobool( net.ReadBit() ))
+end)
+
+function EMVU.Net:Livery( ply, category, skin )
+	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
+	local emv = ply:GetVehicle()
+	emv:Photon_ApplyLivery( category, skin )
+end
+net.Receive( "emvu_livery", function( len, ply ) 
+	EMVU.Net:Livery( ply, tostring( net.ReadString() ), tostring( net.ReadString() ) )
 end)
 
 function Photon.Net:Signal( ply )

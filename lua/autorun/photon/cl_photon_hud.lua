@@ -17,7 +17,7 @@ local mathRound = math.Round
 local drawTexture = false
 
 local HUD_OPACITY = GetConVar( "photon_hud_opacity" )
-hook.Add( "Initialize", "Photon.HudOpacityInit", function() HUD_OPACITY = GetConVar( "photon_hud_opacity" ); end)
+hook.Add( "InitPostEntity", "Photon.HudOpacityInit", function() HUD_OPACITY = GetConVar( "photon_hud_opacity" ); end)
 
 local PhotonHUD = {}
 

@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 local PhotonColors = nil
 if EMVU and EMVU.Colors then PhotonColors = EMVU.Colors end
-hook.Add( "Initialize", "Photon.LocalColorSet", function() PhotonColors = EMVU.Colors; end )
+hook.Add( "InitPostEntity", "Photon.LocalColorSet", function() PhotonColors = EMVU.Colors; end )
 
 function Photon:SetupCar( ent, index )
 

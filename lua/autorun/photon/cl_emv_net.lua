@@ -61,3 +61,10 @@ function EMVU.Net:Preset( arg )
 		net.WriteInt( arg, 8 )
 	net.SendToServer()
 end
+
+function EMVU.Net:Livery( category, index )
+	net.Start( "emvu_livery" )
+		net.WriteString( category )
+		net.WriteString( index )
+	net.SendToServer()
+end

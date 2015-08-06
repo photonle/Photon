@@ -406,6 +406,11 @@ function EMVU:MakeEMV( ent, emv )
 		end
 	end
 
+	function ent:Photon_ApplyLivery( category, index )
+		print( "instructed to apply: " .. index .. " from " .. category )
+		local availableLiveries = EMVU.Liveries[ self.Name ]
+	end
+
 	ent.IsEMV = true
 	ent:SetDTString( EMV_INDEX, "*" .. tostring(ent.Name) ) // Al
 

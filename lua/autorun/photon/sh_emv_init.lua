@@ -1,5 +1,6 @@
 AddCSLuaFile()
 if not EMVU then EMVU = {} end
+EMVU.Liveries = {}
 
 AddCSLuaFile( "sh_emv_init.lua" )
 AddCSLuaFile( "sh_emv_meta.lua" )

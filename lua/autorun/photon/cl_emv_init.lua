@@ -3,7 +3,6 @@ AddCSLuaFile()
 if not CLIENT then return end
 
 include( "cl_emv_meta.lua" )
-include( "cl_emv_hud.lua" )
 include( "cl_emv_listener.lua" )
 include( "cl_emv_net.lua" )
 include( "cl_frame_adjust.lua" )
@@ -29,8 +28,11 @@ local function DrawEMVLights()
 end
 hook.Add("PreRender", "EMVU.Scan", DrawEMVLights)
 
+local photon_pause = false
+
 function EMVU:CalculateFrames()
 	if not photon_ready then return end
+	if photon_pause then return end
 	if not should_render:GetBool() then return end
 	for _,ent in pairs( EMVU:AllVehicles() ) do
 		if IsValid( ent ) and ent.HasELS and ent:HasELS() and (ent.Photon_Lights and ent:Photon_Lights() or ent.Photon_TrafficAdvisor and ent:Photon_TrafficAdvisor()) then ent:Photon_CalculateELFrames() end
@@ -38,4 +40,8 @@ function EMVU:CalculateFrames()
 end
 timer.Create("EMVU.CalculateFrames", .03, 0, function()
 	EMVU:CalculateFrames()
+end)
+
+concommand.Add( "photon_pause", function()
+	photon_pause = !photon_pause
 end)

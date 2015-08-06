@@ -78,7 +78,7 @@ function Photon:LoadVehicles()
 	end
 end
 
-hook.Add("Initialize", "Photon.LoadVehicles", function()
+hook.Add("InitPostEntity", "Photon.LoadVehicles", function()
 	timer.Simple(1, function() Photon:LoadVehicles() end)
 end)
 

@@ -10,7 +10,7 @@ local key_horn = true
 local key_manual = true
 local key_illum = true
 
-hook.Add( "Initialize", "Photon.SetupLocalKeyBinds", function()
+hook.Add( "InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	key_primary_toggle = GetConVar( "photon_key_primary_toggle" )
 	key_primary_alt = GetConVar( "photon_key_primary_alt" )
 	key_siren_toggle = GetConVar( "photon_key_siren_toggle" )

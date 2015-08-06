@@ -10,11 +10,11 @@ local useEyeAng = Angle( 0, 0, 0 )
 
 local getLightColor = render.GetLightColor
 local utilPixVis = util.PixelVisible
-local rotatingLight = true
-local pulsingLight = true
-local emvHelp = true
+local rotatingLight = rotatingLight or false
+local pulsingLight = pulsingLight or false
+local emvHelp = emvHelp or false
 
-hook.Add( "Initialize", "Photon.AddHelperLocalVars", function()
+hook.Add( "InitPostEntity", "Photon.AddHelperLocalVars", function()
 	rotatingLight = EMVU.Helper.RotatingLight
 	pulsingLight = EMVU.Helper.PulsingLight
 	emvHelp = EMVU.Helper
@@ -316,6 +316,6 @@ end
 local EyePos = EyePos
 local EyeAngles = EyeAngles
 hook.Add( "PostDrawTranslucentRenderables", "Photon.UpdateLocalEyeInfo", function()
-	useEyePos = EyePos()
-	useEyeAng = EyeAngles()
+	useEyePos:Set( EyePos() )
+	useEyeAng:Set( EyeAngles() )
 end)

@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
-local should_render = GetConVar( "photon_stand_enabled" )
+local should_render = false
 
-hook.Add( "Initialize", "Photon.InitStandShouldRender", function() 
+hook.Add( "InitPostEntity", "Photon.InitStandShouldRender", function() 
 	should_render = GetConVar( "photon_stand_enabled" )
 end )
 
@@ -58,6 +58,7 @@ hook.Add("PreRender", "Photon.AdjustFrameTime", function()
 end)
 
 local function TurnScan()
+	if not should_render then return end
 	if not should_render:GetBool() then return end
 	local ply = LocalPlayer()
 	if not ply or not ply:IsValid() or not ply:InVehicle() or not ply:GetVehicle() then return end

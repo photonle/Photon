@@ -90,6 +90,12 @@ function EMVU:PreloadVehicle( car )
 		EMVU.Lamps[ car.Name ] = EMVU.Lamps[car.EMV.Lamps]
 	end
 
+	if car.EMV.Liveries and istable( car.EMV.Liveries ) then
+		EMVU.Liveries[ car.Name ] = car.EMV.Liveries
+	elseif isstring( car.EMV.Liveries ) then
+		EMVU.Liveries[ car.Name ] = EMVU.Liveries[ car.EMV.Liveries ]
+	end
+
 end
 
 function EMVU:OverwriteIndex( name, data )
@@ -102,6 +108,7 @@ function EMVU:OverwriteIndex( name, data )
 		if istable( data.Lamps ) then EMVU.Lamps[ name ] = data.Lamps end
 		if istable( data.Props ) then EMVU.Props[ name ] = data.Props end
 		if istable( data.Presets ) then EMVU.PresetIndex[ name ] = data.Presets end
+		if istable( data.Liveries ) then EMVU.Liveries[ name ] = data.Liveries end
 		if istable( data.Auto ) then 
 			EMVU.AutoIndex[ name ] = data.Auto
 			EMVU:CalculateAuto( name, data.Auto ) 
@@ -296,6 +303,6 @@ function EMVU:CalculateAuto( name, data )
 
 end
 
-hook.Add("Initialize", "EMVU.LoadVehicles", function()
+hook.Add("InitPostEntity", "EMVU.LoadVehicles", function()
 	EMVU:LoadVehicles()
 end)
