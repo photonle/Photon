@@ -283,21 +283,22 @@ local quickDrawNoTable = Photon.QuickDrawNoTable
 local cam3d = cam.Start3D
 local endCam3d = cam.End3D2D
 function Photon:RenderQueue()
+	local eyePos = EyePos()
+	local eyeAng = EyeAngles()
 
 	local count = #photonRenderTable
+	cam3d( eyePos, eyeAng )
 	if ( count > 0 ) then
 		local debug_mode = PHOTON_DEBUG
-		cam3d( EyePos(), EyeAngles() )
-			for i=1, count do
-				if photonRenderTable[i] != nil then
-					local data = photonRenderTable[i]
-					quickDrawNoTable( self, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
-											data[17], data[18], data[19], data[20], data[21], data[22], data[23], debug_mode )
-				end
+		for i=1, count do
+			if photonRenderTable[i] != nil then
+				local data = photonRenderTable[i]
+				quickDrawNoTable( self, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
+										data[17], data[18], data[19], data[20], data[21], data[22], data[23], debug_mode )
 			end
-		endCam3d()
+		end
 	end
-
+	endCam3d()
 end
 hook.Add( "PreDrawEffects", "Photon.RenderQueue", function() 
 	Photon:RenderQueue()
