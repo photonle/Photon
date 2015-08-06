@@ -281,7 +281,7 @@ end
 
 local quickDrawNoTable = Photon.QuickDrawNoTable
 local cam3d = cam.Start3D
-local endCam3d = cam.End3D2D
+local endCam3d = cam.End3D
 function Photon:RenderQueue()
 	local eyePos = EyePos()
 	local eyeAng = EyeAngles()
