@@ -397,6 +397,7 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	function ent:ApplyPhotonSkin( skin, index, mat )
+
 		if isnumber( skin ) then
 			self:SetSkin( skin )
 		elseif isstring( skin ) and index != nil and mat != nil then
@@ -407,8 +408,11 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	function ent:Photon_ApplyLivery( category, index )
+		if not IsValid( self ) then return end
 		print( "instructed to apply: " .. index .. " from " .. category )
-		local availableLiveries = EMVU.Liveries[ self.Name ]
+		local available = EMVU.Liveries[ self.Name ]
+		if not available[category] or not available[category][index] then return end
+		self:ApplyPhotonSkin( available[category][index] )
 	end
 
 	ent.IsEMV = true

@@ -44,6 +44,36 @@ properties.Add( "photon_siren", {
 
 })
 
+properties.Add( "photon_liveries", {
+	MenuLabel = "Vehicle Livery",
+	Order = 3,
+	MenuIcon = "photon/ui/menu-livery.png",
+
+	Filter = function( self, ent, ply )
+		if not IsValid( ent ) then return false end
+		if not ent:Photon() then return false end
+		if not ent:IsEMV() then return false end
+		if not ent.VehicleName then return false end
+		local liveries = EMVU.Liveries[ ent.VehicleName ]
+		if not liveries then return false end
+		return true
+	end,
+
+	MenuOpen = function( self, option, ent )
+		local liveries = EMVU.Liveries[ ent.VehicleName ]
+		local submenu = option:AddSubMenu()
+
+		for key,data in SortedPairs( liveries ) do
+			local category = submenu
+			if (#liveries > 1) then category = submenu:AddSubMenu( key ) end
+			for name,mat in SortedPairs( data ) do
+				category:AddOption( name, function() EMVU.Net:Livery( key, name ) end )
+			end
+		end
+
+	end
+})
+
 properties.Add( "photon_preset", {
 	MenuLabel = "Emergency Lights",
 	Order = 1,
