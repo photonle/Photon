@@ -132,7 +132,11 @@ COMPONENT.Modes = {
 		M3 = { ["auto_tdm_int_lightbar"] = "code3", },
 	},
 	Auxiliary = {},
-	Illumination = {}
+	Illumination = {
+		T = {
+			{ 1, W }, { 2, W }
+		}
+	}
 }
 
 EMVU:AddAutoComponent( COMPONENT, name )

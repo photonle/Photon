@@ -16,6 +16,11 @@ local COMPONENT = {}
 COMPONENT.Model = "models/schmal/fedsig_integrity/integrity_lightbar.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
+COMPONENT.ColorInput = 1
+COMPONENT.DefaultColors = {
+	[1] = "RED",
+	[2] = "BLUE"
+}
 
 COMPONENT.Meta = {
 	integrity_forward = {
@@ -109,72 +114,72 @@ COMPONENT.Positions = {
 COMPONENT.Sections = {
 	["auto_fedsig_integrity"] = {
 		{
-			{ 1, B }, { 2, R },
-			{ 3, B }, { 4, R },
-			{ 5, B }, { 6, R },
-			{ 7, B }, { 8, R },
-			{ 9, B }, { 10, R },
-			{ 11, B }, { 12, R },
-			{ 13, B }, { 14, R },
-			{ 15, B }, { 16, R },
-			{ 17, B }, { 18, R },
-			{ 19, B }, { 20, R },
-			{ 21, B }, { 22, R },
+			{ 1, "_2" }, { 2, "_1"},
+			{ 3, "_2" }, { 4, "_1"},
+			{ 5, "_2" }, { 6, "_1"},
+			{ 7, "_2" }, { 8, "_1"},
+			{ 9, "_2" }, { 10, "_1"},
+			{ 11, "_2" }, { 12, "_1"},
+			{ 13, "_2" }, { 14, "_1"},
+			{ 15, "_2" }, { 16, "_1"},
+			{ 17, "_2" }, { 18, "_1"},
+			{ 19, "_2" }, { 20, "_1"},
+			{ 21, "_2" }, { 22, "_1"},
 		},
 		{
-			{ 1, B }, { 3, B }, { 5, B }, { 7, B }, { 9, B },
-			{ 11, B }, { 13, B }, { 15, B }, { 17, B }, { 19, B }, { 21, B }
+			{ 1, "_2" }, { 3, "_2" }, { 5, "_2" }, { 7, "_2" }, { 9, "_2" },
+			{ 11, "_2" }, { 13, "_2" }, { 15, "_2" }, { 17, "_2" }, { 19, "_2" }, { 21, "_2" }
 		},
 		{
-			{ 2, R }, { 4, R }, { 6, R }, { 8, R }, { 10, R }, { 12, R },
-			{ 14, R }, { 16, R }, { 18, R }, { 20, R }, { 22, R }
+			{ 2, "_1"}, { 4, "_1"}, { 6, "_1"}, { 8, "_1"}, { 10, "_1"}, { 12, "_1"},
+			{ 14, "_1"}, { 16, "_1"}, { 18, "_1"}, { 20, "_1"}, { 22, "_1"}
 		},
 		{
-			{ 8, R }, { 10, R }, { 12, R }, { 14, R }
+			{ 8, "_1"}, { 10, "_1"}, { 12, "_1"}, { 14, "_1"}
 		},
 		{ 
-			{ 7, B }, { 9, B }, { 11, B }, { 13, B }
+			{ 7, "_2" }, { 9, "_2" }, { 11, "_2" }, { 13, "_2" }
 		},
 		{
-			{ 2, R }, { 4, R }, { 6, R },
-			{ 22, R }, { 16, R }, { 18, R }, { 20, R }
+			{ 2, "_1"}, { 4, "_1"}, { 6, "_1"},
+			{ 22, "_1"}, { 16, "_1"}, { 18, "_1"}, { 20, "_1"}
 		},
 		{
-			{ 1, B }, { 3, B }, { 5, B },
-			{ 21, B }, { 19, B }, { 17, B }, { 15, B }
+			{ 1, "_2" }, { 3, "_2" }, { 5, "_2" },
+			{ 21, "_2" }, { 19, "_2" }, { 17, "_2" }, { 15, "_2" }
 		},
 		[8] = {
-			{ 6, R }, { 2, R }, { 16, R }, { 22, R }
+			{ 6, "_1"}, { 2, "_1"}, { 16, "_1"}, { 22, "_1"}
 		},
 		[9] = {
-			{ 1, B }, { 5, B }, { 21, B }, { 15, B }
+			{ 1, "_2" }, { 5, "_2" }, { 21, "_2" }, { 15, "_2" }
 		},
 		[10] = {
-			{ 4, R }, { 18, R }, { 20, R },
+			{ 4, "_1"}, { 18, "_1"}, { 20, "_1"},
 		},
 		[11] = {
-			{ 3, B }, { 17, B }, { 19, B }
+			{ 3, "_2" }, { 17, "_2" }, { 19, "_2" }
 		},
 		[12] = {
-			{ 6, R }, { 4, R }, { 3, B }, { 5, B },
-			{ 16, R }, { 18, R }, { 15, B }, { 17, B }
+			{ 6, "_1"}, { 4, "_1"}, { 3, "_2" }, { 5, "_2" },
+			{ 16, "_1"}, { 18, "_1"}, { 15, "_2" }, { 17, "_2" }
 		},
 		[13] = {
 			{ 2, W }, { 1, W },
-			{ 20, R }, { 22, R },
-			{ 21, B }, { 19, B }
+			{ 20, "_1"}, { 22, "_1"},
+			{ 21, "_2" }, { 19, "_2" }
 		}
 	},
 	["auto_fedsig_integrity_corner"] = {
 		{
-			{ 8, R }, { 10, R }, { 12, R }, { 14, R }
+			{ 8, "_1"}, { 10, "_1"}, { 12, "_1"}, { 14, "_1"}
 		},
 		{
-			{ 7, B }, { 9, B }, { 11, B }, { 13, B }
+			{ 7, "_2" }, { 9, "_2" }, { 11, "_2" }, { 13, "_2" }
 		},
 		{
-			{ 7, B }, { 9, B }, { 11, B }, { 13, B },
-			{ 8, R }, { 10, R }, { 12, R }, { 14, R }
+			{ 7, "_2" }, { 9, "_2" }, { 11, "_2" }, { 13, "_2" },
+			{ 8, "_1"}, { 10, "_1"}, { 12, "_1"}, { 14, "_1"}
 		}
 	},
 	["auto_fedsig_integrity_signalmaster"] = {
@@ -271,31 +276,33 @@ COMPONENT.TrafficDisconnect = {
 
 COMPONENT.Modes = {
 	Primary = {
-			M1 = {
-				["auto_fedsig_integrity"] = "pattern_1",
-			},
-			M2 = {
-				["auto_fedsig_integrity"] = "code2",
-				["auto_fedsig_integrity_corner"] = "alt_slow"
-			},
-			M3 = {
-				["auto_fedsig_integrity"] = "code3",
-				["auto_fedsig_integrity_corner"] = "code3"
-			}
+		M1 = {
+			["auto_fedsig_integrity"] = "pattern_1",
 		},
+		M2 = {
+			["auto_fedsig_integrity"] = "code2",
+			["auto_fedsig_integrity_corner"] = "alt_slow"
+		},
+		M3 = {
+			["auto_fedsig_integrity"] = "code3",
+			["auto_fedsig_integrity_corner"] = "code3"
+		}
+	},
 	Auxiliary = {
-			L = {
-				["auto_fedsig_integrity_signalmaster"] = "left"
-			},
-			R = {
-				["auto_fedsig_integrity_signalmaster"] = "right"
-			},
-			D = {
-				["auto_fedsig_integrity_signalmaster"] = "diverge"
-			}
+		L = {
+			["auto_fedsig_integrity_signalmaster"] = "left"
 		},
+		R = {
+			["auto_fedsig_integrity_signalmaster"] = "right"
+		},
+		D = {
+			["auto_fedsig_integrity_signalmaster"] = "diverge"
+		}
+	},
 	Illumination = {
-
+		 T = {
+		 	{ 1, W }, { 2, W }
+		 }
 	}
 }
 

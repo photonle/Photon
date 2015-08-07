@@ -9,13 +9,15 @@ local CW = "C_WHITE"
 local SW = "S_WHITE"
 local G = "GREEN"
 local RB = "BLUE/RED"
+local WB = "WHITE/BLUE"
+local WR = "WHITE/RED"
 
-local name = "Federal Signal Vision SLR"
+local name = "Federal Signal Vision SLR Clear"
 
 local COMPONENT = {}
 
 COMPONENT.Model = "models/schmal/fedsig_visionslr/vision_lightbar.mdl"
-COMPONENT.Skin = 0
+COMPONENT.Skin = 3
 COMPONENT.Bodygroups = {}
 
 COMPONENT.Meta = {
@@ -25,7 +27,7 @@ COMPONENT.Meta = {
 		W = 8,
 		H = 4,
 		Sprite = "sprites/emv/visionslr",
-		Scale = 2,
+		Scale = 2.5,
 		WMult = 1.33,
 	},
 	visionslr_b = {
@@ -34,7 +36,7 @@ COMPONENT.Meta = {
 		H = 4,
 		Speed = 8,
 		Sprite = "sprites/emv/visionslr",
-		Scale = 1.5,
+		Scale = 1.75,
 		WMult = 1.33,
 	},
 	visionslr_rear = {
@@ -65,16 +67,16 @@ COMPONENT.Meta = {
 
 COMPONENT.Positions = {
 
-	[1] = { Vector( 0, 16.78, 2.05 ), Angle( 0, 0, 0 ), "visionslr_a" },
+	[1] = { Vector( 0, 16.78, 2.05 ), Angle( 0, 90, 0 ), "visionslr_a" },
 
-	[2] = { Vector( -8.02, 10.28, 2.05 ), Angle( 0, 0, 0 ), "visionslr_b" },
-	[3] = { Vector( 8.02, 10.28, 2.05 ), Angle( 0, 0, 0 ), "visionslr_b" },
+	[2] = { Vector( -8.02, 10.28, 2.05 ), Angle( 0, -90, 0 ), "visionslr_a" },
+	[3] = { Vector( 8.02, 10.28, 2.05 ), Angle( 0, -90, 0 ), "visionslr_a" },
 
 	[4] = { Vector( -16.03, 2.6, 2.05 ), Angle( 0, 90, 0 ), "visionslr_a" },
 	[5] = { Vector( 16.03, 2.6, 2.05 ), Angle( 0, 90, 0 ), "visionslr_a" },
 
-	[6] = { Vector( -24.13, -5.03, 2.05 ), Angle( 0, 180, 0 ), "visionslr_a" },
-	[7] = { Vector( 24.13, -5.03, 2.05 ), Angle( 0, 180, 0 ), "visionslr_a" },
+	[6] = { Vector( -24.13, -5.03, 2.05 ), Angle( 0, -90, 0 ), "visionslr_a" },
+	[7] = { Vector( 24.13, -5.03, 2.05 ), Angle( 0, -90, 0 ), "visionslr_a" },
 
 	[8] = { Vector( -15.48, -13.16, 0.03 ), Angle( 0, 0, 0 ), "visionslr_rear" },
 	[9] = { Vector( 15.48, -13.16, 0.03 ), Angle( 0, 0, 0 ), "visionslr_rear" },
@@ -94,35 +96,23 @@ COMPONENT.Positions = {
 }
 
 COMPONENT.Sections = {
-	["auto_fedsig_visionslr"] = {
+	["auto_fedsig_visionslr_clear"] = {
+		{},
 		{
-			{ 1, R },
-			{ 2, W }, { 3, W },
-			{ 4, R }, { 5, R },
-			{ 6, RB }, { 7, RB },
-
-			{ 8, A }, { 9, A },
-			{ 10, A }, { 11, A },
-			{ 12, A }, { 13, A },
-
-			{ 14, W }, { 15, W },
-		},
-		{
-			{ 1, R },
-			{ 2, W }, { 3, W },
-			{ 4, R }, { 5, R },
+			{ 1, RB },
+			{ 2, WR }, { 3, WB },
+			{ 4, RB }, { 5, RB },
 			{ 6, RB }, { 7, RB },
 		},
 		{
-			{ 6, RB }, { 7, RB },
+			{ 6, R }, { 7, B },
 		},
 		{
-			{ 1, R },
-			{ 4, R }, { 5, R },
+			{ 2, WB }, { 3, WR },
 			{ 6, RB }, { 7, RB },
 		}
 	},
-	["auto_fedsig_visionslr_traffic"] = {
+	["auto_fedsig_visionslr_clear_traffic"] = {
 		{ { 8, A }, { 9, A }, { 10, A }, { 11, A } },
 		{ { 12, A }, { 13, A } },
 		{ { 9, A }, { 11, A }, { 13, A } },
@@ -144,13 +134,13 @@ COMPONENT.Sections = {
 }
 
 COMPONENT.Patterns = {
-	["auto_fedsig_visionslr"] = {
+	["auto_fedsig_visionslr_clear"] = {
 		["all"] = { 1 },
 		["code1"] = { 3 },
 		["code2"] = { 4 },
 		["code3"] = { 2 }
 	},
-	["auto_fedsig_visionslr_traffic"] = {
+	["auto_fedsig_visionslr_clear_traffic"] = {
 		["warn"] = { 1, 1, 1, 1, 0, 2, 2, 2, 2, 0 },
 		["code1"] = { 3, 3, 3, 3, 3, 4, 4, 4, 4, 4 },
 		["right"] = { 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 10, 10, 0, 0 },
@@ -162,27 +152,27 @@ COMPONENT.Patterns = {
 COMPONENT.Modes = {
 	Primary = {
 			M1 = {
-				["auto_fedsig_visionslr"] = "code1",
-				["auto_fedsig_visionslr_traffic"] = "code1",
+				["auto_fedsig_visionslr_clear"] = "code1",
+				["auto_fedsig_visionslr_clear_traffic"] = "code1",
 			},
 			M2 = {
-				["auto_fedsig_visionslr"] = "code2",
-				["auto_fedsig_visionslr_traffic"] = "warn",
+				["auto_fedsig_visionslr_clear"] = "code2",
+				["auto_fedsig_visionslr_clear_traffic"] = "warn",
 			},
 			M3 = {
-				["auto_fedsig_visionslr"] = "code3",
-				["auto_fedsig_visionslr_traffic"] = "warn",
+				["auto_fedsig_visionslr_clear"] = "code3",
+				["auto_fedsig_visionslr_clear_traffic"] = "warn",
 			}
 		},
 	Auxiliary = {
 			L = {
-				["auto_fedsig_visionslr_traffic"] = "left"
+				["auto_fedsig_visionslr_clear_traffic"] = "left"
 			},
 			R = {
-				["auto_fedsig_visionslr_traffic"] = "right"
+				["auto_fedsig_visionslr_clear_traffic"] = "right"
 			},
 			D = {
-				["auto_fedsig_visionslr_traffic"] = "diverge"
+				["auto_fedsig_visionslr_clear_traffic"] = "diverge"
 			}
 		},
 	Illumination = {

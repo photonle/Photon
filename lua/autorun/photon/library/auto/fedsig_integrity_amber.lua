@@ -9,7 +9,7 @@ local CW = "C_WHITE"
 local SW = "S_WHITE"
 local G = "GREEN"
 
-local name = "Federal Signal Integrity Amber"
+local name = "Federal Signal Integrity Single"
 
 local COMPONENT = {}
 

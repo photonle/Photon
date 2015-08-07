@@ -54,6 +54,8 @@ properties.Add( "photon_liveries", {
 		if not ent:Photon() then return false end
 		if not ent:IsEMV() then return false end
 		if not ent.VehicleName then return false end
+		if not ply:InVehicle() then return false end
+		if not ply:GetVehicle() == ent then return false end
 		local liveries = EMVU.Liveries[ ent.VehicleName ]
 		if not liveries then return false end
 		return true

@@ -19,8 +19,7 @@ COMPONENT.Required = "489864412"
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
-COMPONENT.ColorInput = 1
-COMPONENT.Default = {
+COMPONENT.DefaultColors = {
 	[1] = "WHITE"
 }
 
@@ -33,13 +32,13 @@ COMPONENT.Meta = {
 		Scale = 1,
 		NoLegacy = true,
 		DirAxis = "Up",
-		DirOffset = 90
+		DirOffset = -90
 	},
 }
 
 COMPONENT.Positions = {
 
-	[1] = { Vector( 0, 0, 0.32 ), Angle( 0, -90, -90 ), "auto_vertex" },
+	[1] = { Vector( 0, 0, 0.32 ), Angle( 0, 0, -90 ), "auto_vertex" },
 
 }
 

@@ -383,7 +383,6 @@ function EMVU:MakeEMV( ent, emv )
 			local materials = self:GetMaterials()
 			for i=1,#materials do
 				local thisMat = tostring( materials[i] )
-				print( "Checking name: " .. tostring( thisMat ) )
 				if string.EndsWith( thisMat, "/skin" ) then
 					submaterialIndex = i - 1
 					break
@@ -392,7 +391,6 @@ function EMVU:MakeEMV( ent, emv )
 		end
 		if submaterialIndex == false then return end
 		if index then self:SetSkin( index ) else self:SetSkin( 0 ) end
-		print( "Applying: " .. tostring( mat ) )
 		self:SetSubMaterial( submaterialIndex, tostring( mat ) )
 	end
 

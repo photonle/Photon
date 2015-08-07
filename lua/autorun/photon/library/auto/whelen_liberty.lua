@@ -246,7 +246,9 @@ COMPONENT.Modes = {
 			}
 		},
 	Illumination = {
-
+		T = {
+			{ 15, W }, { 16, W }
+		}
 	}
 }
 

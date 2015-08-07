@@ -96,6 +96,15 @@ function EMVU:PreloadVehicle( car )
 		EMVU.Liveries[ car.Name ] = EMVU.Liveries[ car.EMV.Liveries ]
 	end
 
+	if car.EMV.Presets and istable( car.EMV.Presets ) then
+		EMVU.PresetIndex[ car.Name ] = car.EMV.Presets
+	end
+
+	if car.EMV.Auto and istable( car.EMV.Auto ) then
+		EMVU.AutoIndex[ car.Name ] = car.EMV.Auto
+		EMVU:CalculateAuto( car.Name, car.EMV.Auto )
+	end
+
 end
 
 function EMVU:OverwriteIndex( name, data )
@@ -132,6 +141,8 @@ function EMVU:CalculateAuto( name, data )
 
 		if not autoData.AutoPatterns or autoData.AutoPatterns != false then autoData.AutoPatterns = true end
 
+		if not component then print( "[Photon] Auto component: " .. tostring( data[i].ID ) .. " was not found in the library. Requested in: " .. tostring( name ) .. ".") continue end
+
 		if not component.NotLegacy then
 			adjustAng.p = autoAng.r
 			adjustAng.y = autoAng.y - 90
@@ -142,7 +153,6 @@ function EMVU:CalculateAuto( name, data )
 			adjustAng.r = autoAng.r
 		end
 
-		if not component then print( "[Photon] Auto component: " .. tostring( data[i].ID ) .. " was not found in the library. Requested in: " .. tostring( name ) .. ".") continue end
 
 		local usedPresets = {}
 		for presetIndex,presetData in pairs( EMVU.PresetIndex[ name ] ) do
@@ -210,7 +220,7 @@ function EMVU:CalculateAuto( name, data )
 				for light, lightData in pairs( values ) do -- { 1, B } *LIGHT
 					if not istable( lightData ) then print( "[Photon] Auto-component failed to initialize because of an invalid variable type: " .. tostring( lightData ) .. ". Make sure the Sections table has correctly nested tables." ) return end
 					local lightColor = lightData[2]
-					if isnumber(component.ColorInput) then 
+					if istable(component.DefaultColors) and (#component.DefaultColors > 0) then 
 						if string.StartWith( lightColor, "_" ) then
 							local colorIndex = string.sub( lightColor, 2 )
 							if autoData["Color" .. tostring( colorIndex )] then
