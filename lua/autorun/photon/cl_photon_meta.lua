@@ -211,7 +211,7 @@ function Photon:SetupCar( ent, index )
 		local meta = self:Photon_GetLightingMeta()
 		local positions = self:Photon_GetLightingPositions()
 
-		local setupVis = self.SetupVisHandles
+		local setupVis = self.Photon_SetupCarVisHandles
 		local lightDisconnect = self.Photon_LightDisconnected
 		local drawLight = Photon.PrepareVehicleLight
 

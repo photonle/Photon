@@ -19,6 +19,7 @@ COMPONENT.Required = "489864412"
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
+COMPONENT.ForwardTranslation = true
 COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "BLUE",
@@ -34,7 +35,7 @@ COMPONENT.Meta = {
 		Scale = 1.5,
 		NoLegacy = true,
 		DirAxis = "Up",
-		DirOffset = -90
+		DirOffset = -90,
 	},
 }
 
@@ -47,22 +48,21 @@ COMPONENT.Positions = {
 
 COMPONENT.Sections = {
 	["auto_fedsig_viper_dual"] = {
-		[1] = { { 1, "_1" }, { 2, "_2" } }
+		[1] = { { 1, "_1" }, { 2, "_2" } },
+		[2] = { { 1, "_1" } },
+		[3] = { { 2, "_2" } },
 	},
 }
 
 COMPONENT.Patterns = {
 	["auto_fedsig_viper_dual"] = {
-		["code1"] = { 1, 1, 1, 0, },
-		["code1A"] = { 1, 1, 1, 0, 0, 0, 0, 0, },
-		["code1B"] = { 0, 0, 0, 0, 1, 1, 1, 0 },
-		["code2"] = { 1, 0, 1, 1, 1, 0, 0, 0 },
-		["code2A"] = { 1, 0, 1, 1, 1, 0, 0, 0, 0, 0 },
-		["code2B"] = { 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, },
-		["code3"] = { 1, 0 },
-		["code3A"] = { 1, 0, 1, 0, 0, 0 },
-		["code3B"] = { 0, 0, 0, 1, 0, 1 },
-		["all"] = { 1 },
+		["code1"] = { 2, 0, 2, 2, 2, 0, 0, 0, 3, 0, 3, 3, 3, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0 },
+		["code1A"] = { 2, 0, 2, 2, 2, 0, 0, 0, 3, 0, 3, 3, 3, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0 },
+		["code1B"] = { 3, 0, 3, 3, 3, 0, 0, 0, 2, 0, 2, 2, 2, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0 },
+		["code2A"] = { 2, 2, 0, 3, 3, 0 },
+		["code2B"] = { 3, 3, 0, 2, 2, 0 },
+		["code3A"] = { 3, 0, 3, 0, 2, 0, 2, 0 },
+		["code3B"] = { 0, 2, 0, 2, 0, 3, 0, 3 },
 	}
 }
 

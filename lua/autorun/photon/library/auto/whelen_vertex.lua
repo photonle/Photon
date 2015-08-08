@@ -51,6 +51,14 @@ COMPONENT.Sections = {
 COMPONENT.Patterns = {
 	["auto_whelen_vertex"] = {
 		["code1"] = { 1, 0, 1, 1, 1, 0, 0, 0 },
+		["code1A"] = { 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		["code1B"] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, },
+		["code2"] = { 1, 0, 1, 1, 1, 0, },
+		["code2A"] = { 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		["code2B"] = { 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, },
+		["code3"] = { 1, 0 },
+		["code3A"] = { 1, 0, 1, 0, 1, 0, 0, 0, 0, 0 },
+		["code3B"] = { 0, 0, 0, 0, 0, 1, 0, 1, 0, 1 },
 		["all"] = { 1 },
 	}
 }
@@ -61,10 +69,10 @@ COMPONENT.Modes = {
 				["auto_whelen_vertex"] = "code1",
 			},
 			M2 = {
-				["auto_whelen_vertex"] = "code1",
+				["auto_whelen_vertex"] = "code2",
 			},
 			M3 = {
-				["auto_whelen_vertex"] = "code1",
+				["auto_whelen_vertex"] = "code3",
 			}
 		},
 	Auxiliary = {},

@@ -383,7 +383,7 @@ function EMVU:MakeEMV( ent, emv )
 			local materials = self:GetMaterials()
 			for i=1,#materials do
 				local thisMat = tostring( materials[i] )
-				if string.EndsWith( thisMat, "/skin" ) then
+				if string.EndsWith( thisMat, "/skin" ) or string.EndsWith( thisMat, "/skin0" ) then
 					submaterialIndex = i - 1
 					break
 				end

@@ -28,6 +28,7 @@ AddCSLuaFile( "library/photon_vehicles.lua" )
 AddCSLuaFile( "sh_photon_vehicles.lua" )
 AddCSLuaFile( "cl_photon_hud.lua" )
 AddCSLuaFile( "cl_photon_toolmenu.lua" )
+AddCSLuaFile( "cl_auto_livery.lua" )
 
 if CLIENT then
 	include( "cl_photon_eng.lua" )
@@ -36,6 +37,7 @@ if CLIENT then
 	include( "cl_photon_hud.lua" )
 	include( "cl_photon_settings.lua" )
 	include( "cl_photon_toolmenu.lua" )
+	include( "cl_auto_livery.lua" )
 end
 
 if SERVER then

@@ -255,9 +255,15 @@ function EMVU:CalculateAuto( name, data )
 				newAng:RotateAroundAxis( autoAng:Up(), -1*autoAng.r )
 			else
 				newAng:Set( posData[2] )
-				newAng.p = newAng.p + autoAng.p
-				newAng.y = newAng.y + autoAng.y
-				newAng.r = newAng.r + autoAng.r
+				if component.ForwardTranslation then
+					newAng.p = newAng.p + (autoAng.r *-1)
+					newAng.y = newAng.y + autoAng.y
+					newAng.r = newAng.r + autoAng.p
+				else
+					newAng.p = newAng.p + autoAng.p
+					newAng.y = newAng.y + autoAng.y
+					newAng.r = newAng.r + autoAng.r
+				end
 			end
 			EMVU.Positions[ name ][ offset + id ] = {
 				newPos, newAng, tostring( posData[3] .. "_" .. i )
