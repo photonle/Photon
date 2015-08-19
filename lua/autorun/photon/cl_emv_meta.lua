@@ -15,6 +15,8 @@ hook.Add( "InitPostEntity", "PhotonEMV.LocalColorSet", function()
 	EMVHelper = EMVU.Helper;
 end )
 
+local IsValid = IsValid
+
 function EMVU:MakeEMV( emv, name )
 
 	if not emv or not emv:IsValid() or not emv:IsVehicle() then return false end
@@ -123,6 +125,16 @@ function EMVU:MakeEMV( emv, name )
 		return EMVHelper:GetVectors( self.VehicleName )
 	end
 
+	function emv:Photon_GetELUsedLights()
+		if not self.PhotonUsedEL then self:Photon_CalculateUsedLights() end
+		return self.PhotonUsedEL
+	end
+
+	function emv:Photon_CalculateUsedLights()
+		self.PhotonUsedEL = EMVHelper.FetchUsedLights( self )
+		return self.PhotonUsedEL
+	end
+
 	function emv:Photon_GetELPattern( option, frame )
 		if not IsValid( self ) then return false end
 		return EMVHelper:GetPattern( self.VehicleName, option, frame )
@@ -165,7 +177,7 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_SetupVisHandles()
 		if not IsValid( self ) then return false end
 		for k,v in pairs( self:Photon_GetELPositions() ) do
-			self.EL.VisHandles[k] = util.GetPixelVisibleHandle()
+			self.EL.VisHandles[tostring(k)] = util.GetPixelVisibleHandle()
 		end
 	end
 
@@ -244,10 +256,20 @@ function EMVU:MakeEMV( emv, name )
 		self.PhotonAlertedMissingRequirements = true
 	end
 
+	function emv:Photon_UpdateFrameLightPositions()
+		local lights = self:Photon_GetELUsedLights()
+		local posData = EMVU.Positions[ self.VehicleName ]
+		local resultTable = {}
+		for key,_ in pairs( lights ) do
+			resultTable[key] = self:LocalToWorld( posData[tonumber(key)][1] )
+		end
+		self.PhotonELFramePositions = resultTable
+		return self.PhotonELFramePositions
+	end
+
 	-- Basic KV Shit --
 
 	emv.EMV = true
-	emv.PixVis = util.GetPixelVisibleHandle()
 
 	emv.VehicleName = name
 
@@ -281,10 +303,12 @@ function EMVU:MakeEMV( emv, name )
 			return 
 		end
 
-		self:Photon_ProcessPixVis()
+
 		local RenderTable = self.EL.RenderCache
 
 		if not RenderTable then return end
+		self:Photon_UpdateFrameLightPositions()
+		self:Photon_RefreshELPixVis()
 
 		if self.Photon_ReconnectLights then 
 			self:Photon_ReconnectLights()
@@ -313,28 +337,28 @@ function EMVU:MakeEMV( emv, name )
 		end
 
 		self:Photon_RenderLightTable( RenderTable )
-		
 	end
 
 	function emv:Photon_RenderLightTable( RenderTable )
 		if not IsValid( self ) then return false end
+		if not self.PhotonELFramePositions then return false end
 
-		local handles = self.EL.VisHandles
 		local positions = self:Photon_GetELPositions()
 		local meta = self:Photon_GetELMeta()
+		local gpos = self.PhotonELFramePositions
+		local pixviscache = self.EL.PixVisCache
 
 		local b = true
 		local pos = true
-
+		// PrintTable( RenderTable )
 		local colorRecycle = { true, true }
 
 		for a=1,#RenderTable do
 			b = RenderTable[a]
 			if (b==true) then continue end
-			if not handles[b[1]] then self:Photon_SetupVisHandles() return end
 			pos = positions[b[1]]
 
-			if positions[b[1]] and handles[a] then
+			if positions[b[1]] then
 				local colString = b[2]
 				local col = false
 				local multiColor = false
@@ -348,14 +372,15 @@ function EMVU:MakeEMV( emv, name )
 				else
 					col = EMVColors[b[2]]
 				end
-				
+				// print(pixviscache[tostring(b[1])])
 				Photon:PrepareVehicleLight(
 						self, -- parent
 						col, -- color of the light (colors)
-						pos[1], -- position (lpos)
+						pos[1], -- local pos if needed
+						gpos[tostring(b[1])], -- position (GLOBAL POS)
 						pos[2], -- angle (lang)
 						meta[pos[3]], -- meta data (meta)
-						handles[b[1]], -- pixvis handle (pixvis)
+						pixviscache[tostring(b[1])], -- pixvis handle (pixvis)
 						a, -- int for dynamic light (lnum)
 						b[3], -- brightness
 						multiColor
@@ -375,26 +400,15 @@ function EMVU:MakeEMV( emv, name )
 		if RenderTable then self:Photon_RenderLightTable( RenderTable ) end
 	end
 
-	function emv:Photon_ProcessPixVis()
-
+	function emv:Photon_RefreshELPixVis()
 		if not IsValid( self ) then return false end
-
 		local handles = self.EL.VisHandles
-		local ELPositions = self:Photon_GetELPositions()
-
-		local pos = true
-		local handle = true
-
-		for i=1,#ELPositions do
-			if not handles[i] then self:Photon_SetupVisHandles() return end
-			local handle = handles[i]
-			self:CalcPixVis(
-				ELPositions[i][1],
-				handle,
-				1
-			)
+		local usedLights = self:Photon_GetELUsedLights()
+		local usedPositions = self.PhotonELFramePositions
+		for index,_ in pairs( usedLights ) do
+			if not handles[tostring(index)] then self:Photon_SetupVisHandles() return end
+			self.EL.PixVisCache[ tostring(index) ] = util.PixelVisible( usedPositions[tostring(index)], 1, handles[tostring(index)] )
 		end
-
 	end
 
 	function emv:Photon_CalculateELFrames()
@@ -405,6 +419,8 @@ function EMVU:MakeEMV( emv, name )
 		local RenderTable = {}
 
 		if increment or not self.EL.RenderCache then
+
+			self:Photon_CalculateUsedLights()
 
 			local skipComponents = {}
 			local skipELIndexes = {}
@@ -486,7 +502,6 @@ function EMVU:MakeEMV( emv, name )
 			prop:SetParent( emv )
 			prop:SetPos( emv:LocalToWorld( p.Pos ) )
 			prop:SetAngles( emv:LocalToWorldAngles( p.Ang ) )
-			prop:DrawShadow( false )
 			prop:SetRenderMode( rendermode )
 
 			if p.Skin then prop:SetSkin(p.Skin) end
@@ -498,6 +513,7 @@ function EMVU:MakeEMV( emv, name )
 			prop:SetCollisionGroup( COLLISION_GROUP_IN_VEHICLE )
 			prop:Activate()
 			prop:Spawn()
+			prop:DrawShadow( false )
 
 			if p.BodyGroups then 
 				for _,group in pairs( p.BodyGroups ) do

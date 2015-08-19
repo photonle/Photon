@@ -7,7 +7,7 @@ EMVU.Colors = {
 		glw = Color( 0, 0, 255, 255 ),
 		blm = Color( 0, 0, 255, 50 ),
 		amb = Color( 0, 0, 255, 5 ),
-		flr = Color( 0, 8, 64, 255 ),
+		flr = Color( 0, 64, 225, 255 ),
 		dim = Color( 128, 225, 255, 255 ),
 		raw = Color( 0, 0, 255, 255 ),
 	},
@@ -24,7 +24,7 @@ EMVU.Colors = {
 		glw = Color( 255, 24, 0, 120 ),
 		blm = Color( 255, 10, 0, 70 ),
 		amb = Color( 255, 0, 0, 5 ),
-		flr = Color( 64, 8, 0, 255 ),
+		flr = Color( 128, 8, 0, 255 ),
 		dim = Color( 255, 128, 64, 255 ),
 		raw = Color( 255, 0, 0, 255 )
 	},

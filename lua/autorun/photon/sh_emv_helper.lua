@@ -43,7 +43,7 @@ function EMVU.Helper:GetSequence( name, option, vehicle )
 end
 
 function EMVU.Helper:GetTASequence( name, option, vehicle )
-	
+	if not istable( EMVU.Sequences[ name ].Traffic ) then return end
 	local resultTable = {}
 	
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["BG_Components"] ) then
@@ -80,7 +80,7 @@ function EMVU.Helper:GetTASequence( name, option, vehicle )
 end
 
 function EMVU.Helper:GetIllumSequence( name, option, vehicle )
-	
+	if not istable( EMVU.Sequences[ name ].Illumination ) then return end
 	local resultTable = {}
 	
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Illumination"][option]["BG_Components"] ) then
@@ -115,6 +115,36 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 
 	return resultTable
 
+end
+
+function EMVU.Helper.GetUsedLightsFromComponent( name, component )
+	local resultTable = {}
+	local componentTable = EMVU.Sections[ name ][ component ]
+	if not componentTable then return {} end -- error is thrown elsewhere for this
+	for _,frame in pairs( componentTable ) do
+		for __,lightData in pairs( frame ) do
+			resultTable[ tostring( lightData[1] ) ] = true
+		end
+	end
+	return resultTable
+end
+
+function EMVU.Helper.FetchUsedLights( vehicle )
+	if not IsValid( vehicle ) then return end
+	local name = vehicle.VehicleName
+	local primaryOption = vehicle:Photon_LightOption()
+	local auxOption = vehicle:Photon_LightOption()
+	local illumOption = vehicle:Photon_IllumOption()
+	local resultTable = {}
+	local primaryLights = EMVU.Helper:GetSequence( name, primaryOption, vehicle )
+	local auxiliaryLights = EMVU.Helper:GetTASequence( name, auxOption, vehicle )
+	local illumLights = EMVU.Helper:GetIllumSequence( name, illumOption, vehicle )
+	for component,_ in pairs( primaryLights, auxiliaryLights, illumLights ) do
+		for key,_ in pairs( EMVU.Helper.GetUsedLightsFromComponent( name, component ) ) do
+			resultTable[tostring(key)] = true
+		end
+	end
+	return resultTable
 end
 
 function EMVU.Helper:GetSequenceName( name, option )
