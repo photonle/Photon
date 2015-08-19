@@ -1,14 +1,14 @@
 AddCSLuaFile()
 
-local key_primary_toggle = true
-local key_primary_alt = true
-local key_siren_toggle = true
-local key_siren_alt = true
-local key_auxiliary = true
-local key_blackout = true
-local key_horn = true
-local key_manual = true
-local key_illum = true
+local key_primary_toggle = key_primary_toggle or false
+local key_primary_alt = key_primary_alt or false
+local key_siren_toggle = key_siren_toggle or false
+local key_siren_alt = key_siren_alt or false
+local key_auxiliary = key_auxiliary or false
+local key_blackout = key_blackout or false
+local key_horn = key_horn or false
+local key_manual = key_manual or false
+local key_illum = key_illum or false
 
 hook.Add( "InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	key_primary_toggle = GetConVar( "photon_key_primary_toggle" )
