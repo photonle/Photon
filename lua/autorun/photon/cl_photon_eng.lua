@@ -27,10 +27,10 @@ local ColorAlpha = ColorAlpha
 local Lerp = Lerp
 
 local function getViewFlare( dot, brght )
-	local dif = dot - .99
+	local dif = dot - .85
 	if dif < 0 then return 0 end
 	local calc = (dif * 1000) * clamp( brght, 0, 1 )
-	return pow( calc, 1.4 ) * .1
+	return pow( calc, 1.01 ) * .025
 end
 
 local setMaterial = render.SetMaterial
@@ -40,6 +40,8 @@ local mat1 = Material("sprites/emv/flare_secondary")
 local mat2 = Material("sprites/emv/emv_smoothglow")
 local mat3 = Material("sprites/emv/light_initial")
 local mat4 = Material("sprites/emv/flare_primary")
+local mat5 = Material("sprites/emv/effect_artifact1")
+local mat6 = Material("sprites/emv/effect_artifact2")
 
 local up1 = Vector()
 
@@ -53,10 +55,10 @@ function Photon:ClearLightQueue()
 	table.Empty( photonRenderTable )
 end
 
-function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis, lnum, brght, multicolor )
+function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor )
 	if not incolors or not ilpos or not lang or not meta then return end
 
-	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
+	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,  }
 
 	local legacy = true
 	if meta.NoLegacy == true then legacy = false end
@@ -88,7 +90,6 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis
 
 	if meta.VisRadius then visRadius = meta.VisRadius end
 
-	local worldPos = Vector()
 	local viewDot = 0
 	local visible = 0
 	local viewPercent = 0
@@ -99,9 +100,13 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis
 		lpos[2] = lpos[2] + lposMod
 	end
 		
-	worldPos = parent:LocalToWorld(lpos)
+	local worldPos = gpos
+	// local worldPos = parent:LocalToWorld(lpos)
 
-	visible = utilPixVis( worldPos, visRadius, pixvis )
+	// visible = 1
+	//visible = utilPixVis( worldPos, visRadius, pixvis )
+	visible = pixvis
+	
 	if( visible and visible > 0) then
 
 
@@ -117,8 +122,11 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis
 	if legacy then
 		ca:RotateAroundAxis( parent:GetUp(), ( lang.y + offset ) )
 	else
-		if meta.DirAxis then
+		if meta.DirAxis and not rotating then
 			ca:RotateAroundAxis( parent["Get"..meta.DirAxis](parent), lang.r - meta.DirOffset )
+			ca:RotateAroundAxis( parent:GetUp(), lang.y )
+		elseif meta.DirAxis and rotating then
+			ca:RotateAroundAxis( parent["Get"..meta.DirAxis](parent), lang.r - meta.DirOffset - offset )
 			ca:RotateAroundAxis( parent:GetUp(), lang.y )
 		end
 	end
@@ -163,6 +171,10 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, lang, meta, pixvis
 
 		viewDot = viewDot * brightness
 		local viewFlare = getViewFlare( viewPercent, brightness )
+		local dist = worldPos:Distance( EyePos() )
+		local distModifier = ( 1 - clamp( ( dist / 512 ), 0, 1) )
+		// print(distModifier)
+		viewFlare = viewFlare * distModifier
 
 		if meta.SourceOnly == true then 
 			srcOnly = true 
@@ -262,56 +274,114 @@ function Photon:QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 
 		setMaterial( mat3 )
 		drawSprite( worldPos, 12 * widthScale, 12 * bloomScale, colMed )
-
-		if viewFlare and colFlr and lightMod > .83 and not cheap then
-
-			setMaterial( mat1 )
-			drawSprite( worldPos, ( 96 * flareScale), ( 2 * flareScale ), colFlr )
-
-			setMaterial( mat2 )
-			drawSprite( worldPos, ( 1024 * flareScale), ( 1024 * flareScale ), colAmb )
-
-			setMaterial( mat4 )
-			drawSprite( worldPos, ( 64 * flareScale), ( 64 * flareScale ), colRaw )
-
-		end 
 	end
 
 end
 
+local drawW = ScrW() * .5
+local drawH = ScrH() * .5
+
+local setSurfaceMaterial = surface.SetMaterial
+local setSurfaceColor = surface.SetDrawColor
+local drawTexturedRect = surface.DrawTexturedRect
+
+function Photon.DrawScreenEffects( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, debug_mode )
+	if false then return end
+	if viewFlare and colFlr and viewFlare > 0 and not cheap then
+		local width = drawW
+		local height = drawH
+		local screenPos = worldPos:ToScreen()
+		local percentVertical = 1 - math.abs((drawW - screenPos.x) / drawW)
+		local percentHorizontal = 1 - math.abs((drawH - screenPos.y) / drawH)
+		local averageCenterPercent = (percentVertical + percentHorizontal) * .5
+
+		artifact1x = screenPos.x + ( ( width - screenPos.x ) * .15 )
+		artifact1y = screenPos.y + ( ( height - screenPos.y ) * .15 )
+		artifact2x = screenPos.x + ( ( width - screenPos.x ) * .6 )
+		artifact2y = screenPos.y + ( ( height - screenPos.y ) * .6 )
+		artifact3x = screenPos.x
+		artifact3y = screenPos.y
+		artifact4x = screenPos.x + ( ( width - screenPos.x ) * .3 )
+		artifact4y = screenPos.y + ( ( height - screenPos.y ) * .3 )
+
+		flareScale = flareScale * averageCenterPercent
+
+		local alphaMod = ( ( flareScale ) * colAmb.a)
+
+		setSurfaceMaterial( mat2 )
+		setSurfaceColor( ColorAlpha( colAmb, alphaMod ) )
+		local size = 2048 * flareScale
+		local halfSize = size * .5
+		drawTexturedRect( screenPos.x - halfSize, screenPos.y - halfSize, size, size )
+
+		setSurfaceMaterial( mat5 )
+		size = 32 * flareScale
+		halfSize = size * .5
+		drawTexturedRect( artifact2x - halfSize, artifact2y - halfSize, size, size )
+
+		size = 128 * flareScale
+		halfSize = size * .5
+		drawTexturedRect( artifact4x - halfSize, artifact4y - halfSize, size, size )
+
+		alphaMod = ( ( flareScale * .25 ) * colFlr.a )
+		setSurfaceMaterial( mat6 )
+		setSurfaceColor( ColorAlpha( colFlr, alphaMod ) )
+		size = 48 * flareScale
+		halfSize = size * .5
+		drawTexturedRect( artifact1x - halfSize, artifact1y - halfSize, size, size )
+		setSurfaceMaterial( mat1 )
+		setSurfaceColor( colFlr )
+
+		local flareMultiplier = 1
+		local flareW = 256 * ( flareScale * flareMultiplier )
+		local flareH = 4 * ( flareScale * flareMultiplier )
+		drawTexturedRect( ( artifact3x - ( flareW * .5 ) ), ( artifact3y - ( flareH * .5 ) ), flareW, flareH )
+
+		
+	end
+end
+
 local quickDrawNoTable = Photon.QuickDrawNoTable
+local photonScreenEffects = Photon.DrawScreenEffects
 local cam3d = cam.Start3D
+local cam2d = cam.Start2D
+local endCam2d = cam.End2D
 local endCam3d = cam.End3D
-function Photon:RenderQueue()
+function Photon:RenderQueue( effects )
 	local eyePos = EyePos()
 	local eyeAng = EyeAngles()
-
 	local count = #photonRenderTable
-	cam3d( eyePos, eyeAng )
+	if not effects then cam3d( eyePos, eyeAng ) else cam2d( eyePos, eyeAng ) end
 	if ( count > 0 ) then
 		local debug_mode = PHOTON_DEBUG
 		for i=1, count do
 			if photonRenderTable[i] != nil then
 				local data = photonRenderTable[i]
-				quickDrawNoTable( self, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
+				if not effects then
+					quickDrawNoTable( self, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
 										data[17], data[18], data[19], data[20], data[21], data[22], data[23], debug_mode )
+				else
+					photonScreenEffects( data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
+										data[17], data[18], data[19], data[20], data[21], data[22], data[23], debug_mode )
+				end
 			end
 		end
 	end
-	endCam3d()
+	if not effects then endCam3d() else endCam2d() end
 end
 hook.Add( "PreDrawEffects", "Photon.RenderQueue", function() 
-	Photon:RenderQueue()
+	Photon:RenderQueue( false )
+	Photon:RenderQueue( true )
 end )
+hook.Add( "HUDPaintBackground", "Photon.ScreenEffects", function() 
+	
+end)
 
-function Photon:CalculatePixVis( lpos, handle, a_radius )
-	if not self or not self:IsValid() or not self:IsVehicle() then return 0 end
-
-	local pos = self:LocalToWorld( lpos )
-	local radius = 1
-	if a_radius then radius = a_radius end
-
-	return util.PixelVisible( pos, radius, handle )
+local IsValid = IsValid
+function Photon:CalculatePixVis( pos, handle, a_radius )
+	if not IsValid( self ) then return 0 end
+	local radius = a_radius or 1
+	return utilPixVis( pos, radius, handle )
 end
 
 local EyePos = EyePos
