@@ -24,6 +24,9 @@ local function buildClientSettings( panel )
 
 	panel:AddControl( "Header", { Description = "Change HUD settings" } )
 	panel:AddControl( "Slider", { Label = "Opacity", Command = "photon_hud_opacity", Type = "Float", Min = "0", Max = "1" } )
+
+	panel:AddControl( "Header", { Description = "Personal Options" } )
+	panel:AddControl( "TextBox", { Label = "Unit ID", Command = "photon_emerg_unit", WaitForEnter = "1", MaxLength = "3" })
 end
 
 local function buildServerSettings( panel )

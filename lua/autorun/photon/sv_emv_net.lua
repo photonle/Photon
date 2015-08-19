@@ -12,6 +12,7 @@ util.AddNetworkString( "photon_signal" )
 util.AddNetworkString( "photon_menu" )
 util.AddNetworkString( "emvu_preset" )
 util.AddNetworkString( "emvu_livery" )
+util.AddNetworkString( "photon_liveryupdate" )
 
 local can_change_siren_model = GetConVar( "photon_emv_changesirens" )
 local can_change_light_presets = GetConVar( "photon_emv_changepresets" )
@@ -132,13 +133,13 @@ net.Receive( "emvu_manual", function( len, ply )
 	EMVU.Net:Manual( ply, tobool( net.ReadBit() ))
 end)
 
-function EMVU.Net:Livery( ply, category, skin )
+function EMVU.Net:Livery( ply, category, skin, unit )
 	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
 	local emv = ply:GetVehicle()
-	emv:Photon_ApplyLivery( category, skin )
+	emv:Photon_ApplyLivery( category, skin, unit )
 end
 net.Receive( "emvu_livery", function( len, ply ) 
-	EMVU.Net:Livery( ply, tostring( net.ReadString() ), tostring( net.ReadString() ) )
+	EMVU.Net:Livery( ply, tostring( net.ReadString() ), tostring( net.ReadString() ), tostring( net.ReadString() ) )
 end)
 
 function Photon.Net:Signal( ply )
@@ -170,3 +171,11 @@ concommand.Add( "photon_stick", function( ply, cmd, args )
 	if not IsValid( car ) or not car:Photon() then return end
 	car:StayOn( !car:StayOn() )
 end )
+
+function Photon.Net:NotifyLiveryUpdate( id, unit, ent )
+	net.Start( "photon_liveryupdate" )
+		net.WriteString( id )
+		net.WriteString( unit )
+		net.WriteEntity( ent )
+	net.Broadcast()
+end

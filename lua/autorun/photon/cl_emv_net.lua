@@ -62,9 +62,19 @@ function EMVU.Net:Preset( arg )
 	net.SendToServer()
 end
 
+local unitid_pref = GetConVar( "photon_emerg_unit" )
+
 function EMVU.Net:Livery( category, index )
 	net.Start( "emvu_livery" )
 		net.WriteString( category )
 		net.WriteString( index )
+		net.WriteString( unitid_pref:GetString() or "" )
 	net.SendToServer()
 end
+
+function EMVU.Net:ReceiveLiveryUpdate( id, unit, ent )
+	Photon.AutoLivery.Apply( id, unit, ent )
+end
+net.Receive( "photon_liveryupdate", function() 
+	EMVU.Net:ReceiveLiveryUpdate( net.ReadString(), net.ReadString(), net.ReadEntity() )
+end)

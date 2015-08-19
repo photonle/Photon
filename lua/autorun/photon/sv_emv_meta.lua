@@ -395,7 +395,6 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	function ent:ApplyPhotonSkin( skin, index, mat )
-
 		if isnumber( skin ) then
 			self:SetSkin( skin )
 		elseif isstring( skin ) and index != nil and mat != nil then
@@ -405,16 +404,44 @@ function EMVU:MakeEMV( ent, emv )
 		end
 	end
 
-	function ent:Photon_ApplyLivery( category, index )
+	function ent:Photon_ApplyLivery( category, index, unit )
 		if not IsValid( self ) then return end
-		print( "instructed to apply: " .. index .. " from " .. category )
+		print( "instructed to apply: " .. index .. " from " .. category .. " with unit #" .. tostring( unit ) )
 		local available = EMVU.Liveries[ self.Name ]
 		if not available[category] or not available[category][index] then return end
-		self:ApplyPhotonSkin( available[category][index] )
+		local liveryData = available[category][index]
+		if istable( liveryData ) then
+			if liveryData[1] and liveryData[2] then
+				local liveryId = liveryData[2]
+				local cleanUnit = self:Photon_SetUnitNumber( unit )
+				self:Photon_SetLiveryId( liveryId )
+				Photon.Net:NotifyLiveryUpdate( liveryId, cleanUnit, self )
+			end
+		elseif isstring( liveryData ) then
+			self:ApplyPhotonSkin( liveryData )
+			// self:ApplyPhotonSkin( liveryData[1] )
+			// self:Photon_SetLiveryId( liveryData[2] )
+		end
+	end
+
+	function ent:Photon_SetLiveryId( val )
+		local curdata = string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )
+		curdata[4] = val
+		self:SetDTString( EMV_INDEX, ( table.concat( curdata, "ö" ) )
+ )	end
+
+	function ent:Photon_SetUnitNumber( val )
+		val = string.upper( tostring( val ) )
+		if string.len( val ) > 3 then val = string.sub( val, 1, 3 ) end
+		if not string.match( val, "%w" ) then val = "" end
+		local curdata = string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )
+		curdata[3] = val
+		self:SetDTString( EMV_INDEX, table.concat( curdata, "ö" ) )
+		return val
 	end
 
 	ent.IsEMV = true
-	ent:SetDTString( EMV_INDEX, "*" .. tostring(ent.Name) ) // Al
+	ent:SetDTString( EMV_INDEX, "ö" .. tostring( ent.Name ) .. "öö" ) // Al
 
 	//---- APPLY EMV PARAMETERS ----//
 

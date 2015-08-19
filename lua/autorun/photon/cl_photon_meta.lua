@@ -95,17 +95,17 @@ function Photon:SetupCar( ent, index )
 
 	function ent:Photon_BlinkOn()
 		if not IsValid( self ) then return false end
-		if not self.Lighting.LastBlink then self.Lighting.LastBlink = CurTime() end
+		if not self.Lighting.LastBlink then self.Lighting.LastBlink = RealTime() end
 		local driving = (LocalPlayer():GetVehicle() == self)
 		local result = nil
-		if (self.Lighting.LastBlink + self:Photon_GetBlinkRate()) <= CurTime() and CurTime() <= (self.Lighting.LastBlink + (self:Photon_GetBlinkRate() * 2)) then
+		if (self.Lighting.LastBlink + self:Photon_GetBlinkRate()) <= RealTime() and RealTime() <= (self.Lighting.LastBlink + (self:Photon_GetBlinkRate() * 2)) then
 			result = false
 			if not self.Lighting.WasOff and driving then surface.PlaySound( EMVU.Sounds.Tick ) end 
 			self.Lighting.WasOff = true
-		elseif CurTime() > (self.Lighting.LastBlink + (self:Photon_GetBlinkRate() * 2)) then
+		elseif RealTime() > (self.Lighting.LastBlink + (self:Photon_GetBlinkRate() * 2)) then
 			result = false
 			self.Lighting.WasOff = true
-			self.Lighting.LastBlink = CurTime()
+			self.Lighting.LastBlink = RealTime()
 		else
 			if self.Lighting.WasOff and driving then surface.PlaySound( EMVU.Sounds.Tock ) end 
 			result = true
@@ -145,7 +145,7 @@ function Photon:SetupCar( ent, index )
 	function ent:Photon_RenderLights( headlights, running, reversing, braking, left, right, hazards, pdebug )
 		if not IsValid( self ) then return false end
 		self:ResetStateMaterials()
-		if not self.LastPhotonRenderCache or self.LastPhotonRenderCache + .05 < CurTime() then self.PhotonRenderCache = nil end
+		if not self.LastPhotonRenderCache or self.LastPhotonRenderCache + .05 < RealTime() then self.PhotonRenderCache = nil end
 
 		local RenderTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
 
@@ -186,7 +186,7 @@ function Photon:SetupCar( ent, index )
 				end
 			end
 
-			if (left and running or hazards) and self:Photon_BlinkOn() or pdebug then
+			if ((left and running) or hazards) and self:Photon_BlinkOn() or pdebug then
 				if Photon.Vehicles.States.Blink_Left[self.VehicleName] then
 					for _,l in pairs(Photon.Vehicles.States.Blink_Left[self.VehicleName]) do
 						RenderTable[l[1]] = l
@@ -194,7 +194,7 @@ function Photon:SetupCar( ent, index )
 				end
 			end
 
-			if (right and running or hazards) and self:Photon_BlinkOn() or pdebug then
+			if ((right and running) or hazards) and self:Photon_BlinkOn() or pdebug then
 				if Photon.Vehicles.States.Blink_Right[self.VehicleName] then
 					for _,l in pairs(Photon.Vehicles.States.Blink_Right[self.VehicleName]) do
 						RenderTable[l[1]] = l
@@ -203,7 +203,7 @@ function Photon:SetupCar( ent, index )
 			end
 
 			self.PhotonRenderCache = RenderTable
-			self.LastPhotonRenderCache = CurTime()
+			self.LastPhotonRenderCache = RealTime()
 
 		end
 
@@ -225,14 +225,17 @@ function Photon:SetupCar( ent, index )
 					if not handles[light[1]] then setupVis( self ) return end -- for debugging mostly
 					local pos = positions[light[1]]
 					if pos and handles[i] and not lightDisconnect( self, light[1] ) then
+					local gpos = self:LocalToWorld(pos[1])
 						drawLight(
 							Photon,
 							self,
 							PhotonColors[light[2]], -- color
-							pos[1], -- positions
+							pos[1], -- local pos
+							gpos, -- worldpos
 							pos[2], -- angle
 							meta[pos[3]], -- meta data
-							handles[light[1]], -- handle
+							// handles[light[1]], -- handle
+							util.PixelVisible( gpos, 1, handles[light[1]]), -- handle
 							i, -- dynamic light number
 							light[3] -- brightness
 						)
@@ -243,10 +246,10 @@ function Photon:SetupCar( ent, index )
 	end
 
 	ent.Lighting = {}
-	ent.Lighting.Clock = CurTime()
+	ent.Lighting.Clock = RealTime()
 	ent.Lighting.Handles = {}
 	ent.Lighting.Disconnected = {}
-	ent.Lighting.LastBlink = CurTime()
+	ent.Lighting.LastBlink = RealTime()
 	ent.Lighting.Blink = false
 
 	ent.PhotonMaterials = {}
