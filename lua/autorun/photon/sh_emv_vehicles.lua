@@ -294,7 +294,7 @@ function EMVU:CalculateAuto( name, data )
 			end
 		end
 
-		if istable( component.Modes ) and autoData.AutoPatterns != false and EMVU.Sequences[ name ].Illumination then
+		if istable( component.Modes ) and autoData.AutoPatterns != false and EMVU.Sequences[ name ].Illumination and component.Modes.Illumination then
 			
 			for modeIndex, modeData in pairs( component.Modes.Illumination ) do
 				for _,sequence in pairs( EMVU.Sequences[ name ].Illumination ) do
