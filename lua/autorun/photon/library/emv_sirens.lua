@@ -62,8 +62,8 @@ EMVU.Sirens = {
 		}
 	},
 	[6] = {
-		Name = "Denmark", -- This is specifically based off Denmark sirens, but is common in the Scandanavian region
-		Category = "Denmark",
+		Name = "Danmark (DK)",
+		Category = "European",
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/whelen std/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/danish/emv_yelp.wav", Icon="yelp"},
@@ -132,42 +132,42 @@ EMVU.Sirens = {
 	},
 	[13] = {
 		Name = "Police Nationale",
-		Category = "Français",
+		Category = "Français (FR)",
 		Set = {
 			{Name = "HILO", Sound = "emv/sirens/french/fr_pn.wav", Icon="hilo"},
 		},
 	},
 	[14] = {
 		Name = "VSAV/AR",
-		Category = "Français",
+		Category = "Français (FR)",
 		Set = {
 			{Name = "HILO", Sound = "emv/sirens/french/fr_vsav-ar.wav", Icon="hilo"},
 		},
 	},
 	[15] = {
 		Name = "Gendarmerie",
-		Category = "Français",
+		Category = "Français (FR)",
 		Set = {
 			{Name = "HILO", Sound = "emv/sirens/french/fr_gendarmerie.wav", Icon="hilo"},
 		},
 	},
 	[16] = {
 		Name = "SAMU",
-		Category = "Français",
+		Category = "Français (FR)",
 		Set = {
 			{Name = "HILO", Sound = "emv/sirens/french/fr_samu.wav", Icon="hilo"},
 		},
 	},
 	[17] = {
 		Name = "CCFM",
-		Category = "Français",
+		Category = "Français (FR)",
 		Set = {
 			{Name = "HILO", Sound = "emv/sirens/french/fr_ccfm.wav", Icon="hilo"},
 		},
 	},
 	[18] = {
 		Name = "Polizei",
-		Category = "Deutsche",
+		Category = "Deutsche (DE)",
 		Set = {
 			{Name = "SRNE", Sound = "emv/sirens/german/de_polizei_sirene.wav", Icon="hilo"},
 			{Name = "LAND", Sound = "emv/sirens/german/de_polizei_land.wav", Icon="hilo"},
@@ -176,7 +176,7 @@ EMVU.Sirens = {
 	},
 	[19] = {
 		Name = "Notarzt",
-		Category = "Deutsche",
+		Category = "Deutsche (DE)",
 		Set = {
 			{Name = "KOMP", Sound = "emv/sirens/german/de_notarzt_kompressor.wav", Icon="hilo"},
 			{Name = "LAND", Sound = "emv/sirens/german/de_notarzt_land.wav", Icon="hilo"},
@@ -185,7 +185,7 @@ EMVU.Sirens = {
 	},
 	[20] = {
 		Name = "Feuerwehr",
-		Category = "Deutsche",
+		Category = "Deutsche (DE)",
 		Set = {
 			{Name = "SRNE", Sound = "emv/sirens/german/de_feuerwehr_sirene.wav", Icon="hilo"},
 		}
@@ -231,6 +231,164 @@ EMVU.Sirens = {
 			{Name = "HILO", Sound = "emv/sirens/code3 z3/emv_hilo.wav", Icon="hilo"},
 		},
 		Horn = "emv/sirens/code3 z3/emv_horn.wav",
+	},
+	[25] = {
+		Name = "Cal. Highway Patrol", -- THANK YOU POLECAT
+		Category = "Other",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/chp/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/chp/emv_yelp.wav", Icon="yelp"},
+		},
+	},
+	[26] = {
+		Name = "SQ Zone", 
+		Category = "Other",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/sq zone/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/sq zone/emv_yelp.wav", Icon="yelp"},
+		},
+	},
+	[27] = {
+		Name = "PA 300",
+		Category = "Federal Signal",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/federal signal pa 300/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/federal signal pa 300/emv_yelp.wav", Icon="yelp"},
+			{Name = "HILO", Sound = "emv/sirens/federal signal pa 300/emv_hilo.wav", Icon="hilo"},
+		},
+		Horn = "emv/sirens/federal signal pa 300/emv_horn.wav",
+		Manual = "emv/sirens/federal signal pa 300/emv_manual.wav",
+	},
+	[28] = {
+		Name = "H2 Covert",
+		Category = "Code 3",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/code 3 h2/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/code 3 h2/emv_yelp.wav", Icon="yelp"},
+			{Name = "HPYP", Sound = "emv/sirens/code 3 h2/emv_hyperyelp.wav", Icon="phaser"},
+			// {Name = "HPYP", Sound = "emv/sirens/code 3 h2/emv_whoop.wav", Icon="hilo"},
+		},
+		Horn = "emv/sirens/code 3 h2/emv_horn.wav"
+	},
+	[29] = {
+		Name = "Norge (NO)",
+		Category = "European",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/code3 norway/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/code3 norway/emv_yelp.wav", Icon="yelp"},
+		},
+	},
+	[30] = {
+		Name = "Rettung", -- ambulance
+		Category = "Österreich (AT)",
+		Set = {
+			{Name = "HILO", Sound = "emv/sirens/code3 austria/hilo_ambulance.wav", Icon="hilo"},
+		},
+	},
+	[31] = {
+		Name = "DIN", -- no idea what the fuck this is
+		Category = "Österreich (AT)",
+		Set = {
+			{Name = "HILO", Sound = "emv/sirens/code3 austria/hilo_din.wav", Icon="hilo"},
+		},
+	},
+	[32] = {
+		Name = "Feuerwehr", -- fire
+		Category = "Österreich (AT)",
+		Set = {
+			{Name = "HILO", Sound = "emv/sirens/code3 austria/hilo_fire.wav", Icon="hilo"},
+		},
+	},
+	[33] = {
+		Name = "Polizei", -- police
+		Category = "Österreich (AT)",
+		Set = {
+			{Name = "HILO", Sound = "emv/sirens/code3 austria/hilo_police.wav", Icon="hilo"},
+		},
+	},
+	[34] = {
+		Name = "Sverige (SE)",
+		Category = "European",
+		Set = {
+			{Name = "HILO", Sound = "emv/sirens/code3 sweden/emv_hilo.wav", Icon="hilo"},
+			{Name = "YELP", Sound = "emv/sirens/code3 sweden/emv_yelp.wav", Icon="yelp"},
+		},
+	},
+	[35] = {
+		Name = "Xcel",
+		Category = "Code 3",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/code3 excel/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/code3 excel/emv_yelp.wav", Icon="yelp"},
+			{Name = "HPYP", Sound = "emv/sirens/code3 excel/emv_hyperyelp.wav", Icon="phaser"},
+		},
+		Horn = "emv/sirens/code3 excel/emv_horn.wav",
+	},
+	[36] = {
+		Name = "Banshee",
+		Category = "Code 3",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/code3 banshee/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/code3 banshee/emv_yelp.wav", Icon="yelp"},
+			{Name = "HPYP", Sound = "emv/sirens/code3 banshee/emv_hyperyelp.wav", Icon="phaser"},
+			{Name = "CMND", Sound = "emv/sirens/code3 banshee/emv_command.wav", Icon="yelp"},
+		},
+		Horn = "emv/sirens/code3 excel/emv_horn.wav",
+	},
+	[37] = {
+		Name = "Motorcycle 3955",
+		Category = "Code 3",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/code3 3955/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/code3 3955/emv_yelp.wav", Icon="yelp"},
+		},
+		Horn = "emv/sirens/code3 excel/emv_horn.wav",
+	},
+	[38] = {
+		Name = "RLS",
+		Category = "Code 3",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/code3 rls/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/code3 rls/emv_yelp.wav", Icon="yelp"},
+			{Name = "HPYP", Sound = "emv/sirens/code3 rls/emv_hyperyelp.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/code3 rls/emv_hilo.wav", Icon="hilo"},
+		},
+		Horn = "emv/sirens/code3 rls/emv_horn.wav",
+	},
+	[39] = {
+		Name = "Sprinter",
+		Category = "Code 3",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/code3 sprinter/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/code3 sprinter/emv_yelp.wav", Icon="yelp"},
+			{Name = "HILO", Sound = "emv/sirens/code3 sprinter/emv_hilo.wav", Icon="hilo"},
+		},
+		Horn = "emv/sirens/code3 rls/emv_horn.wav",
+	},
+	[40] = {
+		Name = "Schweizerische (CH)",
+		Category = "European",
+		Set = {
+			{Name = "HILO", Sound = "emv/sirens/code3 swiss/emv_hilo.wav", Icon="hilo"},
+		},
+	},
+	[41] = {
+		Name = "Suomi (FI)",
+		Category = "European",
+		Set = {
+			{Name = "HILO", Sound = "emv/sirens/code3 finnish/emv_hilo.wav", Icon="hilo"},
+			{Name = "YELP", Sound = "emv/sirens/code3 sweden/emv_yelp.wav", Icon="yelp"}
+		},
+	},
+	[42] = {
+		Name = "PA 500",
+		Category = "Federal Signal",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/federal signal pa 500/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/federal signal pa 500/emv_yelp.wav", Icon="yelp"},
+			{Name = "HILO", Sound = "emv/sirens/federal signal pa 500/emv_hilo.wav", Icon="hilo"},
+		},
+		Horn = "emv/sirens/federal signal pa 300/emv_horn.wav",
 	},
 }
 
