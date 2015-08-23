@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"schmal/whelen_freedom/freedom"
+	"$bumpmap"		"schmal/whelen_freedom/freedom_normal"
+}

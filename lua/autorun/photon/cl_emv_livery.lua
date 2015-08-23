@@ -12,10 +12,10 @@ Photon.AutoLivery.DownloadMaterial = function( car, id, val, ent, cback, failedc
 	if not file.Exists( "photon/liveries", "DATA" ) then file.CreateDir( "photon/liveries" ) end
 	ent.PhotonLiveryDownloadInProgress = true
 	local fetchUrl = string.format( "https://photon.lighting/generator/unit_number.php?car=%s&num=%s&id=%s", tostring( car ), tostring( val ), tostring( id ) )
-	print( fetchUrl )
+	// print( fetchUrl )
 	http.Fetch( fetchUrl,
 		function( body, len, headers, code )
-			print( "[Photon] Livery download success." )
+			// print( "[Photon] Livery download success." )
 			file.Write( "photon/liveries/" .. Photon.AutoLivery.FormatName( car, id, val ), body )
 			if isfunction( cback ) then
 				cback( car, id, val, ent, true )
@@ -107,7 +107,7 @@ Photon.AutoLivery.LoadLivery = function( car, id, val )
 end
 
 Photon.AutoLivery.Apply = function( id, val, ent )
-	print( "Applying livery on " .. tostring( ent ) )
+	// print( "Applying livery on " .. tostring( ent ) )
 	if not IsValid( ent ) or not ent:IsVehicle() then return end
 	local carMdl = ent:GetModel()
 	local car = Photon.AutoLivery.TranslationTable[ tostring( carMdl ) ]

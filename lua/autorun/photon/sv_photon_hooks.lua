@@ -58,7 +58,6 @@ concommand.Add( "photon_mat", function( ply, cmd, args )
 end)
 
 hook.Add( "Photon.EntityChangedSkin", "Photon.LiverySkinCheck", function( ent, skin ) 
-	print( "Entity: " .. tostring( ent ) .. " changed skin index to " .. tostring( skin ) )
 	if IsValid( ent ) and ent:IsEMV() and ent:Photon_GetLiveryID() != "" and skin > 0 then
 		ent:Photon_SetLiveryId("")
 	end

@@ -1,0 +1,14 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"schmal/dome_light/generic"
+	"$halflambert" 1
+	
+	"$phong" "1" 
+	"$nocull" 1
+   	 "$rimlight" "100"
+	"$rimlightexponent" "2"
+	"$rimlightboost" "0.01"
+	"$rimmask" "0"
+	
+	"$normalmapalphaenvmapmask" 1
+}

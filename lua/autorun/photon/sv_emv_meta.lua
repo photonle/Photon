@@ -406,7 +406,7 @@ function EMVU:MakeEMV( ent, emv )
 
 	function ent:Photon_ApplyLivery( category, index, unit )
 		if not IsValid( self ) then return end
-		print( "instructed to apply: " .. index .. " from " .. category .. " with unit #" .. tostring( unit ) )
+		// print( "instructed to apply: " .. index .. " from " .. category .. " with unit #" .. tostring( unit ) )
 		local available = EMVU.Liveries[ self.Name ]
 		if not available[category] or not available[category][index] then return end
 		local liveryData = available[category][index]
@@ -450,12 +450,6 @@ function EMVU:MakeEMV( ent, emv )
 				end
 			end
 		end
-	end
-
-	ent.LegacySetSkin = ent.SetSkin
-	function ent.SetSkin( self, index )
-		print( "Setting skin to: " .. tostring( index ) )
-		// self:LegacySetSkin( index )
 	end
 
 	ent.IsEMV = true

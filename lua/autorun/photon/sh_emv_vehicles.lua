@@ -141,8 +141,8 @@ function EMVU.LoadModeData( name, data )
 			Preset_Components = {}
 		}
 
-		if lastSequence.Components then data.Components = lastSequence.Components end
-		if lastSequence.BG_Components then data.BG_Components = lastSequence.BG_Components end
+		if lastSequence.Components then data.Alert.Components = lastSequence.Components end
+		if lastSequence.BG_Components then data.Alert.BG_Components = lastSequence.BG_Components end
 
 	end
 
@@ -350,14 +350,6 @@ function EMVU:CalculateAuto( name, data )
 					end
 				end
 			end
-		end
-
-		if istable( EMVU.Sequences[ name ].Alert ) and autoData.AutoPatterns != false then
-			
-			if component.Modes.Primary.ALERT then
-				
-			end
-
 		end
 
 	end
