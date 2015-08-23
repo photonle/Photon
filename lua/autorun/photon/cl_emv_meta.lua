@@ -55,6 +55,10 @@ function EMVU:MakeEMV( emv, name )
 		return self:GetDTBool( CAR_MANUAL )
 	end
 
+	function emv:Photon_AlertMode()
+		return ( self:Photon_ManualSiren() and self:Photon_Siren() )
+	end
+
 	function emv:Photon_ManualHorn()
 		if not IsValid( self ) then return false end
 		return self:GetDTBool( EMV_HORN )
@@ -142,9 +146,14 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:Photon_GetELSequence()
 		if not IsValid( self ) then return false end
-		local option = self:Photon_LightOption()
-		if not option then option = 1 end
-		local result = EMVHelper:GetSequence( self.VehicleName, option, self )
+		local result
+		if self:Photon_AlertMode() then
+			result = EMVHelper.GetAlertSequence( self.VehicleName, self )
+		else
+			local option = self:Photon_LightOption()
+			if not option then option = 1 end
+			result = EMVHelper:GetSequence( self.VehicleName, option, self )
+		end
 		return result
 	end
 
@@ -567,6 +576,15 @@ function EMVU:MakeEMV( emv, name )
 				prop:SetParent( self )
 				prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
 				prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
+				if PHOTON_DEBUG then 
+					if isvector( emvProps[index].Scale ) then
+						local mat = Matrix()
+						mat:Scale( emvProps[index].Scale )
+						prop:EnableMatrix( "RenderMultiply", mat )
+					elseif isnumber( emvProps[index].Scale ) then
+						prop:SetModelScale( emvProps[index].Scale, 0 )
+					end
+				end
 			end
 		end
 		self.LastEMVPropScan = CurTime()

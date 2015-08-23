@@ -135,6 +135,16 @@ end)
 
 function EMVU.Net:Livery( ply, category, skin, unit )
 	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
+	if game.SinglePlayer() == false then
+		print("checking")
+		if not ply.LastLiveryChange then ply.LastLiveryChange = 0 end
+		if RealTime() < ply.LastLiveryChange + PHOTON_LIVERY_COOLDOWN then 
+			ply:ChatPrint( "[Photon] Please wait a few seconds before changing the vehicle livery again." ); 
+			ply.LastLiveryChange = RealTime();
+			return 
+		end 
+	end
+	ply.LastLiveryChange = RealTime();
 	local emv = ply:GetVehicle()
 	emv:Photon_ApplyLivery( category, skin, unit )
 end

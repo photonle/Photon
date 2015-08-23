@@ -7,20 +7,25 @@ Photon.AutoLivery.TranslationTable = {
 	["models/sentry/taurussho.mdl"] = "sgmt"
 }
 
-Photon.AutoLivery.DownloadMaterial = function( car, id, val, ent, cback )
+Photon.AutoLivery.DownloadMaterial = function( car, id, val, ent, cback, failedcback )
 	if not file.Exists( "photon", "DATA" ) then file.CreateDir( "photon" ) end
 	if not file.Exists( "photon/liveries", "DATA" ) then file.CreateDir( "photon/liveries" ) end
-	print(tostring(string.format( "https://photon.lighting/generator/unit_number.php?car=%s&num=%s&id=%s", tostring( car ), tostring( val ), tostring( id ))))
-	http.Fetch( string.format( "https://photon.lighting/generator/unit_number.php?car=%s&num=%s&id=%s", tostring( car ), tostring( val ), tostring( id ) ),
+	ent.PhotonLiveryDownloadInProgress = true
+	local fetchUrl = string.format( "https://photon.lighting/generator/unit_number.php?car=%s&num=%s&id=%s", tostring( car ), tostring( val ), tostring( id ) )
+	print( fetchUrl )
+	http.Fetch( fetchUrl,
 		function( body, len, headers, code )
+			print( "[Photon] Livery download success." )
 			file.Write( "photon/liveries/" .. Photon.AutoLivery.FormatName( car, id, val ), body )
 			if isfunction( cback ) then
-				cback( car, id, val, ent )
+				cback( car, id, val, ent, true )
 			end
-			print( "SUCCESS BABY" )
 		end,
 		function( error )
-			print( "OH FUCK IT FAILED " .. tostring(error) )
+			print( "[Photon] Failed to fetch custom livery, reverting to fallback. Error: " .. tostring(error) )
+			if isfunction( cback ) then
+				cback( car, id, val, ent, false )
+			end
 		end
 	);
 end
@@ -32,25 +37,47 @@ end
 Photon.AutoLivery.LoadMaterial = function( car, id, val, ent )
 	local checkFile = "photon/liveries/" .. Photon.AutoLivery.FormatName( car, id, val )
 	if file.Exists( checkFile, "DATA" ) then
-		Photon.AutoLivery.ApplyTexture( Photon.AutoLivery.LoadLivery( car, id, val ), ent )
+		Photon.AutoLivery.ApplyTexture( Photon.AutoLivery.LoadLivery( car, id, val ), ent, car, val, id )
 	else
-		Photon.AutoLivery.DownloadMaterial( car, id, val, ent, 
-			function( car, id, val, ent )
-				local loadedmaterial = Photon.AutoLivery.LoadLivery( car, id, val )
-				Photon.AutoLivery.ApplyTexture( loadedmaterial, ent )
-			end)
+		Photon.AutoLivery.DownloadMaterial( car, id, val, ent, Photon.AutoLivery.LoadCallback )
 	end
 end
 
-Photon.AutoLivery.ApplyFallback = function()
-
+Photon.AutoLivery.LoadCallback = function( car, id, val, ent, success )
+	ent.PhotonLiveryDownloadInProgress = false
+	if success then
+		Photon.AutoLivery.ApplyTexture( Photon.AutoLivery.LoadLivery( car, id, val ), ent, car, val, id )
+	else
+		Photon.AutoLivery.ApplyFallback( ent, id )
+	end
 end
 
-Photon.AutoLivery.ApplyTexture = function( mat, ent )
+Photon.AutoLivery.FindFallback = function( name, id )
+	if not EMVU.Liveries[ tostring( ent.VehicleName ) ] then return "" end
+	local liveryTable = EMVU.Liveries[ name ]
+	for category,subtable in pairs( liveryTable ) do
+		for displayName, liveryData in pairs( subtable ) do
+			if liveryData[2] == id then return liveryData[1] end
+		end
+	end
+	return ""
+end
+
+Photon.AutoLivery.ApplyFallback = function( ent, id )
+	if tostring( ent.VehicleName ) != "nil" then
+		local fallbackMaterial = Photon.AutoLivery.FindFallback( ent.VehicleName, id )
+		if fallbackMaterial != "" then 
+			local applyIndex = ent:Photon_GetAutoSkinIndex()
+			if applyIndex then
+				ent:SetSubMaterial( applyIndex, fallbackMaterial )
+			end
+		end
+	end
+end
+
+Photon.AutoLivery.ApplyTexture = function( mat, ent, car, val, id )
 	local veh = LocalPlayer():GetVehicle()
 	if not IsValid( ent ) then return end
-	print("APPLYING")
-	print(tostring( mat:GetString( "$basetexture" )))
 	local matParams = {
 		["$basetexture"] = mat:GetString( "$basetexture" ) .. ".png",
 		["$bumpmap"] =  "models/LoneWolfiesCars/shared/skin_nm",
@@ -65,9 +92,13 @@ Photon.AutoLivery.ApplyTexture = function( mat, ent )
 		["$envmaptint"] =  "[0.1 0.1 0.1]",
 		["$colorfix"] = "{255 255 255}",
 	}
-	local newLivery = CreateMaterial( "photon_livery" .. string.Replace( tostring( CurTime() ), ".", "") , "VertexlitGeneric", matParams )
+	local newLivery = CreateMaterial( string.format( "photon_livery_%s_%s_%s", car, val, id ) , "VertexlitGeneric", matParams )
 	local applyIndex = ent:Photon_GetAutoSkinIndex()
 	veh:SetSubMaterial( applyIndex, "!" .. tostring( newLivery:GetName() ) )
+	veh.Photon_LiveryData = {
+		UnitID = veh:Photon_GetUnitNumber(),
+		LiveryID = veh:Photon_GetLiveryID()
+	}
 end
 
 Photon.AutoLivery.LoadLivery = function( car, id, val )
@@ -76,9 +107,24 @@ Photon.AutoLivery.LoadLivery = function( car, id, val )
 end
 
 Photon.AutoLivery.Apply = function( id, val, ent )
+	print( "Applying livery on " .. tostring( ent ) )
 	if not IsValid( ent ) or not ent:IsVehicle() then return end
 	local carMdl = ent:GetModel()
 	local car = Photon.AutoLivery.TranslationTable[ tostring( carMdl ) ]
 	if not car then print( string.format( "[Photon] %s is not a supported livery model.", carMdl )); return false end
 	Photon.AutoLivery.LoadMaterial( car, id, val, ent )
 end
+
+Photon.AutoLivery.Scan = function()
+	for _,car in pairs( EMVU:AllVehicles() ) do
+		if not IsValid( car ) then continue end
+		if car:Photon_GetLiveryID() == "" then continue end
+		if car.PhotonLiveryDownloadInProgress == true then continue end
+		if istable( car.Photon_LiveryData ) and tostring( car.Photon_LiveryData.UnitID ) == car:Photon_GetUnitNumber() and tostring( car.Photon_LiveryData.LiveryID ) == car:Photon_GetLiveryID() then continue end
+		Photon.AutoLivery.Apply( car:Photon_GetLiveryID(), car:Photon_GetUnitNumber(), car )
+	end
+end
+
+timer.Create("Photon.AutoLiveryScan", 10, 0, function()
+	Photon.AutoLivery.Scan()
+end)

@@ -58,3 +58,9 @@ function ent:Photon_GetAutoSkinIndex()
 	end
 	return false
 end
+
+ent.LegacySetSkin = ent.SetSkin
+function ent:SetSkin( index )
+	self:LegacySetSkin( index )
+	hook.Call( "Photon.EntityChangedSkin", GM, self, index )
+end

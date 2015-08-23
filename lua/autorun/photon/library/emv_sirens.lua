@@ -110,7 +110,7 @@ EMVU.Sirens = {
 		Horn = "emv/sirens/federal sig 80k/emv_horn.wav"
 	},
 	[11] = {
-		Name = "650",
+		Name = "650 Series",
 		Category = "Federal Signal",
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/federal sig 650/emv_wail.wav", Icon="wail"},
@@ -249,7 +249,7 @@ EMVU.Sirens = {
 		},
 	},
 	[27] = {
-		Name = "PA 300",
+		Name = "PA300",
 		Category = "Federal Signal",
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/federal signal pa 300/emv_wail.wav", Icon="wail"},
@@ -381,7 +381,7 @@ EMVU.Sirens = {
 		},
 	},
 	[42] = {
-		Name = "PA 500",
+		Name = "PA500",
 		Category = "Federal Signal",
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/federal signal pa 500/emv_wail.wav", Icon="wail"},
@@ -389,6 +389,36 @@ EMVU.Sirens = {
 			{Name = "HILO", Sound = "emv/sirens/federal signal pa 500/emv_hilo.wav", Icon="hilo"},
 		},
 		Horn = "emv/sirens/federal signal pa 300/emv_horn.wav",
+	},
+	[43] = {
+		Name = "Storm Pro",
+		Category = "Feniex",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/feniex storm pro/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/feniex storm pro/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/feniex storm pro/emv_phaser.wav", Icon="phaser"},
+		},
+		Horn = "emv/sirens/feniex storm pro/emv_horn.wav",
+	},
+	[44] = {
+		Name = "nFORCE 400",
+		Category = "SoundOff Signal",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/soundoff nforce 400/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/soundoff nforce 400/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/soundoff nforce 400/emv_pier.wav", Icon="phaser"},
+		}
+	},
+	[44] = {
+		Name = "PA640",
+		Category = "Federal Signal",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/federal signal pa 640/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/federal signal pa 640/emv_yelp.wav", Icon="yelp"},
+			{Name = "PRTY", Sound = "emv/sirens/federal signal pa 640/emv_priority.wav", Icon="phaser"},
+		},
+		Horn = "emv/sirens/federal signal pa 640/emv_horn.wav",
+		Manual = "emv/sirens/federal signal pa 640/emv_manual.wav",
 	},
 }
 

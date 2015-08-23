@@ -256,6 +256,7 @@ COMPONENT.Patterns = {
 			7, 0, 8, 0, 7, 0, 8, 0,
 			7, 0, 8, 0, 7, 0, 8, 0,
 		},
+		["alert"] = { 2, 3 }
 	},
 	["auto_whelen_legacy_corner"] = {
 		["code2"] = { 1, 1, 0, 2, 2, 0 },

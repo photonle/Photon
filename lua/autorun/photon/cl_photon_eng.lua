@@ -10,9 +10,13 @@ local useEyeAng = Angle( 0, 0, 0 )
 
 local getLightColor = render.GetLightColor
 local utilPixVis = util.PixelVisible
-local rotatingLight = rotatingLight or false
-local pulsingLight = pulsingLight or false
-local emvHelp = emvHelp or false
+local rotatingLight, pulsingLight, emvHelp
+
+if EMVU and istable( EMVU.Helper ) then
+	rotatingLight = EMVU.Helper.RotatingLight
+	pulsingLight = EMVU.Helper.PulsingLight
+	emvHelp = EMVU.Helper
+end
 
 hook.Add( "InitPostEntity", "Photon.AddHelperLocalVars", function()
 	rotatingLight = EMVU.Helper.RotatingLight
@@ -337,7 +341,33 @@ function Photon.DrawScreenEffects( srcOnly, drawSrc, camPos, camAng, srcSprite, 
 		local flareH = 4 * ( flareScale * flareMultiplier )
 		drawTexturedRect( ( artifact3x - ( flareW * .5 ) ), ( artifact3y - ( flareH * .5 ) ), flareW, flareH )
 
-		
+		if false then
+		local sizeX, sizeY
+
+		setSurfaceMaterial( mat1 )
+		setSurfaceColor( colGlw )
+		sizeX = (48 * bloomScale) * flareScale
+		sizeY = (32 * bloomScale) * flareScale
+		drawTexturedRect( screenPos.x - (sizeX * .5), screenPos.y - (sizeY * .5), sizeX, sizeY )
+
+		setSurfaceMaterial( mat2 )
+		setSurfaceColor( colAmb )
+		sizeX = (256 * bloomScale) * flareScale
+		sizeY = (256 * bloomScale) * flareScale
+		drawTexturedRect( screenPos.x - (sizeX * .5), screenPos.y - (sizeY * .5), sizeX, sizeY )
+
+		setSurfaceMaterial( mat2 )
+		setSurfaceColor( colBlm )
+		sizeX = (64 * bloomScale) * flareScale
+		sizeY = (48 * bloomScale) * flareScale
+		drawTexturedRect( screenPos.x - (sizeX * .5), screenPos.y - (sizeY * .5), sizeX, sizeY )
+
+		setSurfaceMaterial( mat3 )
+		setSurfaceColor( colMed )
+		sizeX = (12 * bloomScale) * flareScale
+		sizeY = (12 * bloomScale) * flareScale
+		drawTexturedRect( screenPos.x - (sizeX * .5), screenPos.y - (sizeY * .5), sizeX, sizeY )
+		end
 	end
 end
 
@@ -347,6 +377,10 @@ local cam3d = cam.Start3D
 local cam2d = cam.Start2D
 local endCam2d = cam.End2D
 local endCam3d = cam.End3D
+local draw_effects = GetConVar( "photon_lens_effects" )
+hook.Add( "InitPostEntity", "Photon.DrawEffectsConvar", function()
+	draw_effects = GetConVar( "photon_lens_effects" )
+end)
 function Photon:RenderQueue( effects )
 	local eyePos = EyePos()
 	local eyeAng = EyeAngles()
@@ -371,7 +405,9 @@ function Photon:RenderQueue( effects )
 end
 hook.Add( "PreDrawEffects", "Photon.RenderQueue", function() 
 	Photon:RenderQueue( false )
-	Photon:RenderQueue( true )
+	if draw_effects:GetBool() then
+		Photon:RenderQueue( true )
+	end
 end )
 hook.Add( "HUDPaintBackground", "Photon.ScreenEffects", function() 
 	

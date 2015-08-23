@@ -96,6 +96,9 @@ COMPONENT.Patterns = {
 			8, 0, 9, 0, 10, 0, 11, 0,
 			8, 0, 9, 0, 10, 0, 11, 0,
 			8, 0, 9, 0, 10, 0, 11, 0,
+		},
+		["alert"] = {
+			2, 3
 		}
 	},
 	["auto_tdm_pushbar_inner"] = {
@@ -125,6 +128,9 @@ COMPONENT.Modes = {
 			["auto_tdm_pushbar_mid"] = "code3",
 			["auto_tdm_pushbar_outter"] = "code3",
 		},
+		ALERT = {
+			["auto_tdm_pushbar"] = "alert"
+		}
 	},
 	Auxiliary = {},
 	Illumination = {}

@@ -62,6 +62,9 @@ COMPONENT.Patterns = {
 		["code3"] = { 1, 0 },
 		["code3A"] = { 1, 0, 1, 0, 0, 0 },
 		["code3B"] = { 0, 0, 0, 1, 0, 1 },
+		["alert"] = { 1, 0 },
+		["alertA"] = { 0, 1 },
+		["alertB"] = { 1, 0 },
 		["all"] = { 1 },
 	}
 }

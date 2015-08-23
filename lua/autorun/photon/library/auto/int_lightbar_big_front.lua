@@ -121,7 +121,8 @@ COMPONENT.Patterns = {
 			8, 0, 9, 0, 10, 0, 11, 0,
 			8, 0, 9, 0, 10, 0, 11, 0,
 			8, 0, 9, 0, 10, 0, 11, 0,
-		}
+		},
+		["alert"] = { 4, 5 }
 	}
 }
 
@@ -130,6 +131,7 @@ COMPONENT.Modes = {
 		M1 = { ["auto_tdm_int_lightbar"] = "code1", },
 		M2 = { ["auto_tdm_int_lightbar"] = "code2", },
 		M3 = { ["auto_tdm_int_lightbar"] = "code3", },
+		ALERT = { ["auto_tdm_int_lightbar"] = "alert", },
 	},
 	Auxiliary = {},
 	Illumination = {

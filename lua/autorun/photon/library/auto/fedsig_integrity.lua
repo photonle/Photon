@@ -168,7 +168,15 @@ COMPONENT.Sections = {
 			{ 2, W }, { 1, W },
 			{ 20, "_1"}, { 22, "_1"},
 			{ 21, "_2" }, { 19, "_2" }
-		}
+		},
+		[14] = {
+			{ 2, W }, { 4, W }, { 6, W }, { 8, W }, { 10, W }, { 12, W },
+			{ 14, A }, { 16, A }, { 18, A }, { 20, A }, { 22, A },
+		},
+		[15] = {
+			{ 1, W }, { 3, W }, { 5, W }, { 7, W }, { 9, W },
+			{ 11, A }, { 13, A }, { 15, A }, { 17, A }, { 19, A }, { 21, A }
+		},
 	},
 	["auto_fedsig_integrity_corner"] = {
 		{
@@ -257,7 +265,8 @@ COMPONENT.Patterns = {
 			13, 0, 13, 0, 13, 0,
 			12, 0, 12, 0, 12, 0,
 			13, 0, 13, 0, 13, 0,
-		}
+		},
+		["alert"] = { 3, 15, 14, 2 }
 	},
 	["auto_fedsig_integrity_corner"] = {
 		["alt_slow"] = { 1, 1, 1, 1, 2, 2, 2, },
@@ -286,6 +295,9 @@ COMPONENT.Modes = {
 		M3 = {
 			["auto_fedsig_integrity"] = "code3",
 			["auto_fedsig_integrity_corner"] = "code3"
+		},
+		ALERT = {
+			["auto_fedsig_integrity"] = "alert",
 		}
 	},
 	Auxiliary = {

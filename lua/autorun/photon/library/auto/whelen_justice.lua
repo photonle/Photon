@@ -217,7 +217,8 @@ COMPONENT.Patterns = {
 			13, 14, 13, 14, 13, 14, 13, 14,
 			13, 14, 13, 14, 13, 14, 13, 14,
 			13, 14, 13, 14, 13, 14, 13, 14,
-		}
+		},
+		["alert"] = { 2, 3 }
 	},
 	["auto_whelen_justice_corner"] = {
 		["code2"] = { 1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0 },
@@ -253,6 +254,9 @@ COMPONENT.Modes = {
 				["auto_whelen_justice_corner"] = "code3",
 				["auto_whelen_justice_middle"] = "code3",
 				["auto_whelen_justice_illum"] = "code3"
+			},
+			ALERT = {
+				["auto_whelen_justice"] = "alert"
 			}
 		},
 	Auxiliary = {

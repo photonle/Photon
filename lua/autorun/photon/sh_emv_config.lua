@@ -1,10 +1,21 @@
 AddCSLuaFile()
 
+// HERP DERP //
+PHOTON_BANNED_UNIT_IDS = {
+	["fag"] = true,
+	["f4g"] = true,
+	["nig"] = true,
+	["n1g"] = true
+}
+
 //         DATATABLE CONFIGURATIONS    //
 
 -- If you're a developer or server owner, change these as needed to avoid datatable conflicts
 
 local BOOL_CONST_OFFSET = 20
+
+PHOTON_UPDATE = 47
+PHOTON_SERIES = "Aurora"
 
 // booleans //
 EMV_LIGHTS_ON        = BOOL_CONST_OFFSET + 0
@@ -46,7 +57,7 @@ EMV_FRAME_CONST		 = .05
 
 //			GLOBALS					///	
 
-EMV_PIXVIS_MULTIPLIER= 1
+EMV_PIXVIS_MULTIPLIER = 1
 PHO_DEFAULT_BLINK	 = .4
 PHOTON_TRF_LEFT 						= 1
 PHOTON_TRF_DIVERGE 						= 2
@@ -56,3 +67,6 @@ PHOTON_TRF_WARN							= 4
 -- This is the frame speed, it will affect how fast the lights appear to flash.
 -- At .05 seconds, anything below 20 FPS will likely have stutters where frames are skipped.
 -- If you encounter this problem, increase this number and then buy a new fucking computer. Jesus Christ.
+
+// SECONDS A PLAYER MUST WAIT FOR UNTIL THEY CAN CHANGE LIVERY AGAIN //
+PHOTON_LIVERY_COOLDOWN = 3 

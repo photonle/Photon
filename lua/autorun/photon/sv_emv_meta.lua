@@ -434,10 +434,28 @@ function EMVU:MakeEMV( ent, emv )
 		val = string.upper( tostring( val ) )
 		if string.len( val ) > 3 then val = string.sub( val, 1, 3 ) end
 		if not string.match( val, "%w" ) then val = "" end
+		if PHOTON_BANNED_UNIT_IDS[ string.lower( val ) ] then val = "" end
 		local curdata = string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )
 		curdata[3] = val
 		self:SetDTString( EMV_INDEX, table.concat( curdata, "ö" ) )
 		return val
+	end
+
+	function ent:Photon_ApplySubMaterials()
+		if istable( EMVU.SubMaterials[ self.Name ] ) then
+			local submaterials = EMVU.SubMaterials[ self.Name ]
+			for index, value in pairs( submaterials ) do
+				if isnumber( tonumber( index ) ) then
+					self:SetSubMaterial( tonumber( index ), value )
+				end
+			end
+		end
+	end
+
+	ent.LegacySetSkin = ent.SetSkin
+	function ent.SetSkin( self, index )
+		print( "Setting skin to: " .. tostring( index ) )
+		// self:LegacySetSkin( index )
 	end
 
 	ent.IsEMV = true
@@ -474,7 +492,7 @@ function EMVU:MakeEMV( ent, emv )
 	ent:ELS_SirenOff()
 	ent:ELS_LightsOff()
 	ent:ELS_Enabled( true )
-
+	ent:Photon_ApplySubMaterials()
 end
 
 concommand.Add("makecaronme", function(ply)

@@ -1,13 +1,14 @@
 AddCSLuaFile()
+
 if not EMVU then EMVU = {} end
 EMVU.Liveries = {}
+EMVU.SubMaterials = {}
 
 AddCSLuaFile( "sh_emv_init.lua" )
 AddCSLuaFile( "sh_emv_meta.lua" )
 AddCSLuaFile( "sh_emv_vehicles.lua")
 AddCSLuaFile( "cl_emv_init.lua" )
 AddCSLuaFile( "cl_emv_meta.lua" )
-AddCSLuaFile( "cl_emv_hud.lua" )
 AddCSLuaFile( "cl_emv_net.lua" )
 AddCSLuaFile( "cl_frame_adjust.lua" )
 AddCSLuaFile( "cl_emv_listener.lua" )

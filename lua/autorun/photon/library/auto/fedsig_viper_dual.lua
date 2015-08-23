@@ -72,6 +72,9 @@ COMPONENT.Patterns = {
 			2, 3, 2, 3, 2, 3, 2, 3,
 			2, 3, 2, 3, 2, 3, 2, 3,
 		},
+		["alert"] = { 2, 3 },
+		["alertA"] = { 2, 3 },
+		["alertB"] = { 3, 2 },
 	}
 }
 
@@ -79,7 +82,8 @@ COMPONENT.Modes = {
 	Primary = {
 		M1 = { ["auto_fedsig_viper_dual"] = "code1", },
 		M2 = { ["auto_fedsig_viper_dual"] = "code2", },
-		M3 = { ["auto_fedsig_viper_dual"] = "code3", }
+		M3 = { ["auto_fedsig_viper_dual"] = "code3", },
+		ALERT = { ["auto_fedsig_viper_dual"] = "alert", },
 	},
 	Auxiliary = {},
 	Illumination = {}

@@ -98,13 +98,45 @@ COMPONENT.Sections = {
 		},
 	},
 	["auto_fedsig_arjent_steady"] = {
-		[1] = {
-			{ 3, R }, { 4, B }
-		}
+		[1] = { { 3, R }, { 4, B } },
+
 	},
-	["auto_fedsig_arjent_rear"] = {
-		[1] = { { 15, A } },
-		[2] = { { 16, A } }
+	["auto_fedsig_arjent_inboard"] = {
+		[1] = { { 1, R } },
+		[2] = { { 2, B } },
+		[3] = { { 1, R }, { 2, B } },
+	},
+	["auto_fedsig_arjent_out_mid"] = {
+		[1] = { { 5, R }, { 12, B } },
+		[2] = { { 6, B }, { 11, R } },
+		[3] = { { 5, R }, { 6, B }, { 11, R }, { 12, B } },
+	},
+	["auto_fedsig_arjent_outter"] = {
+		[1] = { { 7, R }, { 10, B } },
+		[2] = { { 8, B }, { 9, R } },
+		[3] = { { 7, R }, { 8, B }, { 9, R }, { 10, B } },
+	},
+	["auto_fedsig_arjent_takedown"] = {
+		[1] = { { 19, SW, { 16, .25, 0 } }, { 20, SW, { 16, .25, 8 } } }
+	},
+	["auto_fedsig_arjent_signalmaster"] = {
+		[1] = { { 13, A }, { 15, A }, { 16, A }, { 14, A } },
+		[2] = { { 17, A }, { 18, A } },
+		[3] = { { 13, A }, { 15, A }, { 17, A }, { 18, A }, { 16, A }, { 14, A } },
+		[4] = { { 13, A } },
+		[5] = { { 13, A }, { 15, A } },
+		[6] = { { 13, A }, { 15, A }, { 17, A } },
+		[7] = { { 13, A }, { 15, A }, { 17, A }, { 18, A } },
+		[8] = { { 13, A }, { 15, A }, { 17, A }, { 18, A }, { 16, A } },
+		[9] = { { 14, A } },
+		[10] = { { 16, A }, { 14, A } },
+		[11] = { { 18, A }, { 16, A }, { 14, A } },
+		[12] = { { 17, A }, { 18, A }, { 16, A }, { 14, A } },
+		[13] = { { 15, A }, { 17, A }, { 18, A }, { 16, A }, { 14, A } },
+		[14] = { { 17, A }, { 18, A } },
+		[15] = { { 15, A }, { 17, A }, { 18, A }, { 16, A } },
+		[16] = { { 15, A } },
+		[17] = { { 16, A } },
 	}
 }
 
@@ -115,14 +147,33 @@ COMPONENT.Patterns = {
 	["auto_fedsig_arjent_steady"] = {
 		["on"] = { 1 },
 	},
-	["auto_fedsig_arjent_rear"] = {
-		["code1"] = { 1, 1, 1, 1, 0, 2, 2, 2, 2, 0 }
-	}
+	["auto_fedsig_arjent_inboard"] = {
+		["code2"] = { 1, 1, 1, 0, 2, 2, 2, 0, 1, 1, 1, 0, 2, 2, 2, 0, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 0 },
+		["code3"] = { 2, 2, 0, 1, 1, 0 }
+	},
+	["auto_fedsig_arjent_out_mid"] = {
+		["code2"] = { 1, 1, 1, 1, 2, 2, 2 },
+		["code3"] = { 1, 1, 0, 2, 2, 0 }
+	},
+	["auto_fedsig_arjent_outter"] = {
+		["code2"] = { 1, 1, 1, 1, 0, 2, 2, 2, 2, 0 },
+	},
+	["auto_fedsig_arjent_takedown"] = {
+		["wigwag"] = { 1 }	
+	},
+	["auto_fedsig_arjent_signalmaster"] = {
+		["warn"] = { 1, 1, 1, 1, 0, 2, 2, 2, 2, 0 },
+		["right"] = { 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 3, 3, 3, 3, 0, 0, 0, 0 },
+		["left"] = { 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 3, 3, 3, 3, 0, 0, 0, 0 },
+		["diverge"] = { 14, 14, 14, 15, 15, 15, 3, 3, 3, 3, 3, 0, 0, 0, 0 },
+		["code1"] = { 16, 16, 16, 16, 0, 17, 17, 17, 17, 0 },
+	},
+
 }
 
-COMPONENT.TrafficDisconnect = { 
-	["auto_fedsig_arjent_signalmaster"] = {
-		
+COMPONENT.TrafficDisconnect = {
+	["auto_fedsig_arjent_signalmaster"] ={
+		13, 15, 17, 18, 16, 14
 	}
 }
 
@@ -130,23 +181,32 @@ COMPONENT.Modes = {
 	Primary = {
 		M1 = {
 			["auto_fedsig_arjent_steady"] = "on",
-			["auto_fedsig_arjent_rear"] = "code1"
+			["auto_fedsig_arjent_signalmaster"] = "code1"
 		},
 		M2 = {
-			["auto_fedsig_arjent"] = "all",
+			["auto_fedsig_arjent_steady"] = "on",
+			["auto_fedsig_arjent_inboard"] = "code2",
+			["auto_fedsig_arjent_out_mid"] = "code2",
+			["auto_fedsig_arjent_outter"] = "code2",
+			["auto_fedsig_arjent_signalmaster"] = "warn"
 		},
 		M3 = {
-			["auto_fedsig_arjent"] = "all",
+			["auto_fedsig_arjent_steady"] = "on",
+			["auto_fedsig_arjent_inboard"] = "code3",
+			["auto_fedsig_arjent_out_mid"] = "code3",
+			["auto_fedsig_arjent_outter"] = "code2",
+			["auto_fedsig_arjent_signalmaster"] = "warn",
+			["auto_fedsig_arjent_takedown"] = "wigwag"
 		}
 	},
 	Auxiliary = {
-		L = {},
-		R = {},
-		D = {}
+		L = { ["auto_fedsig_arjent_signalmaster"] = "left" },
+		R = { ["auto_fedsig_arjent_signalmaster"] = "right" },
+		D = { ["auto_fedsig_arjent_signalmaster"] = "diverge" }
 	},
 	Illumination = {
 		 T = {
-		 	{ 1, W }, { 2, W }
+		 	{ 19, SW }, { 20, SW }
 		 }
 	}
 }

@@ -44,7 +44,7 @@ hook.Add("EntityRemoved", "Photon.VehicleRemoved", function(e)
 end)
 
 hook.Add( "PlayerInitialSpawn", "Photon.InitialNotify", function( ply )
-	ply:ChatPrint( "Photon Lighting Engine is active. Type !photon or press C and click Photon for help and information." )
+	ply:ChatPrint( string.format( "Photon Lighting Engine (%s #%s) is active. Type !photon or press C and click Photon for help and information.", tostring( PHOTON_SERIES), tostring(PHOTON_UPDATE) ) )
 end)
 
 -- dev functions --
@@ -57,9 +57,17 @@ concommand.Add( "photon_mat", function( ply, cmd, args )
 	PrintTable( veh:GetMaterials() )
 end)
 
+hook.Add( "Photon.EntityChangedSkin", "Photon.LiverySkinCheck", function( ent, skin ) 
+	print( "Entity: " .. tostring( ent ) .. " changed skin index to " .. tostring( skin ) )
+	if IsValid( ent ) and ent:IsEMV() and ent:Photon_GetLiveryID() != "" and skin > 0 then
+		ent:Photon_SetLiveryId("")
+	end
+end )
+
 // local ply = player.GetBySteamID("STEAM_0:0:0")
 // local veh = ply:GetVehicle()
-// veh:SetSubMaterial( 1, "photon/override/lw_dc15_headlights" )
+// veh:SetSubMaterial( 0, "photon/override/tal_f150_running" )
+// veh:SetSubMaterial( 7, "photon/override/sgm_fordexplorer/interior" )
 
 // // veh:SetSubMaterial(4, "photon/override/lw_glhs_running" )
 // // veh:SetSubMaterial(6, "photon/override/lw_glhs_trans_running" )

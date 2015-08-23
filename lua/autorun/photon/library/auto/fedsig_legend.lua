@@ -271,6 +271,9 @@ COMPONENT.Patterns = {
 		},
 		["code3"] = {
 			{ 28, 29 }, 0, { 29, 30 }, 0, { 30, 31 }, 0, { 30, 29 }, 0
+		},
+		["alert"] = {
+			{ 28, 29 }, { 30, 31 },
 		}
 	},
 	["auto_fedsig_legend_corner"] = {
@@ -279,6 +282,9 @@ COMPONENT.Patterns = {
 		},
 		["code3"] = {
 			1, 0, 1, 0, 2, 0, 2, 0
+		},
+		["alert"] = {
+			2, 1
 		}
 	}
 }
@@ -301,6 +307,10 @@ COMPONENT.Modes = {
 			M3 = {
 				["auto_fedsig_legend"] = "code3",
 				["auto_fedsig_legend_corner"] = "code3"
+			},
+			ALERT = {
+				["auto_fedsig_legend"] = "alert",
+				["auto_fedsig_legend_corner"] = "alert"
 			}
 		},
 	Auxiliary = {

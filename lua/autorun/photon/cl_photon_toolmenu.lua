@@ -4,8 +4,21 @@ hook.Add( "AddToolMenuCategories", "Photon.AddMenuCategory", function()
 	spawnmenu.AddToolCategory( "Utilities", "Photon", "Photon" )
 end)
 
+local function logoHeader( panel )
+	panel:AddControl( "Header", { Description = ( string.format( "Photon Lighting Engine | %s | Update #%s", tostring( PHOTON_SERIES ), tostring( PHOTON_UPDATE ) ) ) } )
+	local parent = vgui.Create( "DPanel" )
+	parent:SetSize( 300, 256 )
+	parent:SetBackgroundColor( Color( 0, 0, 0, 0 ) )
+	local header = vgui.Create( "DImage", parent )
+	header:SetImage( "photon/ui/settings_logo.png" )
+	header:SetSize( 256, 256 )
+	panel:AddPanel( parent )
+	header:Center()
+end
+
 local function buildControlsMenu( panel )
 	panel:ClearControls()
+	logoHeader( panel )
 	panel:AddControl( "Header", { Description = "Adjust the keys for Photon controls" } )
 
 	panel:AddControl( "Numpad", { Label = "Primary Lights On/Off", Command="photon_key_primary_toggle", Label2 = "Primary Lights Mode", Command2="photon_key_primary_alt" } )
@@ -17,11 +30,12 @@ end
 
 local function buildClientSettings( panel )
 	panel:ClearControls()
+	logoHeader( panel )
 	panel:AddControl( "Header", { Description = "Adjust your local Photon settings" } )
 
 	panel:AddControl( "CheckBox", { Label = "Enable Emergency Lighting", Command = "photon_emerg_enabled" } )
 	panel:AddControl( "CheckBox", { Label = "Enable Standard Lighting", Command = "photon_stand_enabled" } )
-
+	panel:AddControl( "CheckBox", { Label = "Enable Lens Flare Effects", Command = "photon_lens_effects" } )
 	panel:AddControl( "Header", { Description = "Change HUD settings" } )
 	panel:AddControl( "Slider", { Label = "Opacity", Command = "photon_hud_opacity", Type = "Float", Min = "0", Max = "1" } )
 
@@ -31,6 +45,7 @@ end
 
 local function buildServerSettings( panel )
 	panel:ClearControls()
+	logoHeader( panel )
 	panel:AddControl( "Header", { Description = "Adjust server Photon settings" } )
 
 	panel:AddControl( "CheckBox", { Label = "Enable Changing Siren Model", Command = "photon_emv_changesirens" } )

@@ -45,11 +45,8 @@ function EMVU:CheckForELS( model )
 end
 
 function EMVU:PreloadVehicle( car )
-	if istable( car.EMV.Sequences ) then
-		EMVU.Sequences[ car.Name ] = car.EMV.Sequences
-	elseif isstring(car.EMV.Sequences) then
-		EMVU.Sequences[ car.Name ] = EMVU.Sequences[car.EMV.Sequences]
-	end
+
+	if istable( car.EMV.Sequences ) then EMVU.LoadModeData( car.Name, car.EMV.Sequences ) end 
 
 	if istable( car.EMV.Positions ) then
 		EMVU.Positions[ car.Name ] = car.EMV.Positions
@@ -105,6 +102,10 @@ function EMVU:PreloadVehicle( car )
 		EMVU:CalculateAuto( car.Name, car.EMV.Auto )
 	end
 
+	if car.EMV.SubMaterials and istable( car.EMV.SubMaterials ) then
+		EMVU.SubMaterials[ car.Name ] = car.EMV.SubMaterials
+	end
+
 end
 
 function EMVU:OverwriteIndex( name, data )
@@ -112,12 +113,13 @@ function EMVU:OverwriteIndex( name, data )
 		EMVU.LightMeta[name] = data.Meta
 		EMVU.Positions[name] = data.Positions
 		EMVU.Patterns[name] = data.Patterns
-		EMVU.Sequences[name] = data.Sequences
+		if istable( data.Sequences ) then EMVU.LoadModeData( name, data.Sequences ) end 
 		EMVU.Sections[name] = data.Sections
 		if istable( data.Lamps ) then EMVU.Lamps[ name ] = data.Lamps end
 		if istable( data.Props ) then EMVU.Props[ name ] = data.Props end
 		if istable( data.Presets ) then EMVU.PresetIndex[ name ] = data.Presets end
 		if istable( data.Liveries ) then EMVU.Liveries[ name ] = data.Liveries end
+		if istable( data.SubMaterials ) then EMVU.SubMaterials[ name ] = data.SubMaterials end
 		if istable( data.Auto ) then 
 			EMVU.AutoIndex[ name ] = data.Auto
 			EMVU:CalculateAuto( name, data.Auto ) 
@@ -125,6 +127,27 @@ function EMVU:OverwriteIndex( name, data )
 	else
 		error("data must be table with valid Meta, Positions, Patterns and Sequences")
 	end
+end
+
+function EMVU.LoadModeData( name, data )
+
+	local lastSequence = data.Sequences[ #data.Sequences ] or {}
+
+	if not data["Alert"] then
+
+		data.Alert = {
+			Components = {},
+			BG_Components = {},
+			Preset_Components = {}
+		}
+
+		if lastSequence.Components then data.Components = lastSequence.Components end
+		if lastSequence.BG_Components then data.BG_Components = lastSequence.BG_Components end
+
+	end
+
+	EMVU.Sequences[ name ] = data
+
 end
 
 function EMVU:CalculateAuto( name, data )
@@ -173,6 +196,7 @@ function EMVU:CalculateAuto( name, data )
 		end
 
 		if istable( component.Modes ) and autoData.AutoPatterns != false then
+
 			for modeIndex, modeData in pairs( component.Modes.Primary ) do
 				for _,sequence in pairs( EMVU.Sequences[ name ].Sequences ) do
 					if sequence.Stage and sequence.Stage == modeIndex then
@@ -187,6 +211,20 @@ function EMVU:CalculateAuto( name, data )
 					end
 				end
 			end
+
+			if istable( component.Modes.Primary.ALERT ) or ( component.Modes.Primary.M3 ) then
+				local targetCopy = component.Modes.Primary.ALERT or component.Modes.Primary.M3
+				local sequence = EMVU.Sequences[name].Alert
+				// PrintTable( sequence )
+				for __,presetIndex in pairs( usedPresets ) do
+					if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
+					for componentIndex, patternIndex in pairs( targetCopy ) do
+						local patternPhase = autoData.Phase or ""
+						sequence.Preset_Components[presetIndex][ componentIndex .. "_" .. i ] = tostring( patternIndex .. patternPhase )
+					end
+				end
+			end
+
 		end
 
 		if istable( component.Modes ) and autoData.AutoPatterns != false and EMVU.Sequences[ name ].Traffic then
@@ -230,7 +268,8 @@ function EMVU:CalculateAuto( name, data )
 							end
 						end
 					end
-					EMVU.Sections[ name ][ id ][ index ][ light ] = { lightData[1] + offset, lightColor }
+					local additionalParams = lightData[3]
+					EMVU.Sections[ name ][ id ][ index ][ light ] = { lightData[1] + offset, lightColor, additionalParams }
 				end
 			end
 		end
@@ -310,6 +349,13 @@ function EMVU:CalculateAuto( name, data )
 						end
 					end
 				end
+			end
+		end
+
+		if istable( EMVU.Sequences[ name ].Alert ) and autoData.AutoPatterns != false then
+			
+			if component.Modes.Primary.ALERT then
+				
 			end
 
 		end
