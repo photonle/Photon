@@ -76,7 +76,7 @@ Photon.AutoLivery.ApplyFallback = function( ent, id )
 end
 
 Photon.AutoLivery.ApplyTexture = function( mat, ent, car, val, id )
-	local veh = LocalPlayer():GetVehicle()
+	local veh = ent
 	if not IsValid( ent ) then return end
 	local matParams = {
 		["$basetexture"] = mat:GetString( "$basetexture" ) .. ".png",

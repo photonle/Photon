@@ -15,6 +15,7 @@ local COMPONENT = {}
 
 COMPONENT.Model = "models/schmal/fedsig_integrity/integrity_lightbar.mdl"
 COMPONENT.Skin = 0
+COMPONENT.Lightbar = true
 COMPONENT.Bodygroups = {}
 COMPONENT.ColorInput = 1
 COMPONENT.DefaultColors = {

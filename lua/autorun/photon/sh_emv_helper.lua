@@ -169,7 +169,7 @@ function EMVU.Helper.FetchUsedLights( vehicle )
 	if not IsValid( vehicle ) then return end
 	local name = vehicle.VehicleName
 	local primaryOption = vehicle:Photon_LightOption()
-	local auxOption = vehicle:Photon_LightOption()
+	local auxOption = vehicle:Photon_TrafficAdvisorOption()
 	local illumOption = vehicle:Photon_IllumOption()
 	local resultTable = {}
 	local primaryLights = EMVU.Helper:GetSequence( name, primaryOption, vehicle )

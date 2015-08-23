@@ -405,7 +405,7 @@ function Photon:RenderQueue( effects )
 end
 hook.Add( "PreDrawEffects", "Photon.RenderQueue", function() 
 	Photon:RenderQueue( false )
-	if draw_effects:GetBool() then
+	if draw_effects and draw_effects:GetBool() then
 		Photon:RenderQueue( true )
 	end
 end )

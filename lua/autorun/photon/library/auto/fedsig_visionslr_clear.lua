@@ -18,6 +18,7 @@ local COMPONENT = {}
 
 COMPONENT.Model = "models/schmal/fedsig_visionslr/vision_lightbar.mdl"
 COMPONENT.Skin = 3
+COMPONENT.Lightbar = true
 COMPONENT.Bodygroups = {}
 
 COMPONENT.Meta = {

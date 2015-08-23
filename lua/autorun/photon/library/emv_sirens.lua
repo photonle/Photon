@@ -401,15 +401,6 @@ EMVU.Sirens = {
 		Horn = "emv/sirens/feniex storm pro/emv_horn.wav",
 	},
 	[44] = {
-		Name = "nFORCE 400",
-		Category = "SoundOff Signal",
-		Set = {
-			{Name = "WAIL", Sound = "emv/sirens/soundoff nforce 400/emv_wail.wav", Icon="wail"},
-			{Name = "YELP", Sound = "emv/sirens/soundoff nforce 400/emv_yelp.wav", Icon="yelp"},
-			{Name = "PHSR", Sound = "emv/sirens/soundoff nforce 400/emv_pier.wav", Icon="phaser"},
-		}
-	},
-	[44] = {
 		Name = "PA640",
 		Category = "Federal Signal",
 		Set = {
@@ -419,6 +410,15 @@ EMVU.Sirens = {
 		},
 		Horn = "emv/sirens/federal signal pa 640/emv_horn.wav",
 		Manual = "emv/sirens/federal signal pa 640/emv_manual.wav",
+	},
+	[45] = {
+		Name = "nFORCE 400",
+		Category = "SoundOff Signal",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/soundoff nforce 400/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/soundoff nforce 400/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/soundoff nforce 400/emv_pier.wav", Icon="phaser"},
+		}
 	},
 }
 

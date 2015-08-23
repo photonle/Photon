@@ -52,24 +52,32 @@ function EMVU:PreloadVehicle( car )
 		EMVU.Positions[ car.Name ] = car.EMV.Positions
 	elseif isstring(car.EMV.Positions) then
 		EMVU.Positions[ car.Name ] = EMVU.Positions[car.EMV.Positions]
+	else
+		EMVU.Positions[ car.Name ] = {}
 	end
 
 	if istable( car.EMV.Meta ) then
 		EMVU.LightMeta[ car.Name ] = car.EMV.Meta
 	elseif isstring(car.EMV.Meta) then
 		EMVU.LightMeta[ car.Name ] = EMVU.LightMeta[car.EMV.Meta]
+	else
+		EMVU.LightMeta[ car.Name ] = {}
 	end
 
 	if istable( car.EMV.Patterns ) then
 		EMVU.Patterns[ car.Name ] = car.EMV.Patterns
 	elseif isstring(car.EMV.Patterns) then
 		EMVU.Patterns[ car.Name ] = EMVU.Patterns[car.EMV.Patterns]
+	else
+		EMVU.Patterns[ car.Name ] = {}
 	end
 
 	if istable( car.EMV.Sections ) then
 		EMVU.Sections[ car.Name ] = car.EMV.Sections
 	elseif isstring(car.EMV.Sections) then
 		EMVU.Sections[ car.Name ] = EMVU.Sections[car.EMV.Sections]
+	else
+		EMVU.Sections[ car.Name ] = {}
 	end
 
 	if car.EMV.Props and istable( car.EMV.Props ) then
@@ -79,6 +87,8 @@ function EMVU:PreloadVehicle( car )
 		end
 	elseif isstring(car.EMV.Props) then
 		EMVU.Props[ car.Name ] = EMVU.Props[car.EMV.Props]
+	else
+		EMVU.Props[ car.Name ] = {}
 	end
 
 	if car.EMV.Lamps and istable( car.EMV.Lamps ) then
@@ -95,6 +105,8 @@ function EMVU:PreloadVehicle( car )
 
 	if car.EMV.Presets and istable( car.EMV.Presets ) then
 		EMVU.PresetIndex[ car.Name ] = car.EMV.Presets
+	else
+		EMVU.LoadPresetDefault( car.Name, car.EMV )
 	end
 
 	if car.EMV.Auto and istable( car.EMV.Auto ) then
@@ -109,15 +121,15 @@ function EMVU:PreloadVehicle( car )
 end
 
 function EMVU:OverwriteIndex( name, data )
-	if data and istable(data.Meta) and istable(data.Positions) and istable(data.Patterns) and istable(data.Sequences) and istable(data.Sections) then
-		EMVU.LightMeta[name] = data.Meta
-		EMVU.Positions[name] = data.Positions
-		EMVU.Patterns[name] = data.Patterns
+	if data then
+		EMVU.LightMeta[name] = data.Meta or {}
+		EMVU.Positions[name] = data.Positions or {}
+		EMVU.Patterns[name] = data.Patterns or {}
 		if istable( data.Sequences ) then EMVU.LoadModeData( name, data.Sequences ) end 
-		EMVU.Sections[name] = data.Sections
+		EMVU.Sections[name] = data.Sections or {}
 		if istable( data.Lamps ) then EMVU.Lamps[ name ] = data.Lamps end
 		if istable( data.Props ) then EMVU.Props[ name ] = data.Props end
-		if istable( data.Presets ) then EMVU.PresetIndex[ name ] = data.Presets end
+		if istable( data.Presets ) then EMVU.PresetIndex[ name ] = data.Presets else EMVU.LoadPresetDefault( name, data ) end
 		if istable( data.Liveries ) then EMVU.Liveries[ name ] = data.Liveries end
 		if istable( data.SubMaterials ) then EMVU.SubMaterials[ name ] = data.SubMaterials end
 		if istable( data.Auto ) then 
@@ -125,7 +137,22 @@ function EMVU:OverwriteIndex( name, data )
 			EMVU:CalculateAuto( name, data.Auto ) 
 		end
 	else
-		error("data must be table with valid Meta, Positions, Patterns and Sequences")
+		print("[Photon] Data must be table with valid Meta, Positions, Patterns and Sequences. Overwrite failed.")
+	end
+end
+
+function EMVU.LoadPresetDefault( name, data )
+	if istable( data.Auto ) and not istable( data.Presets ) then
+		data.Presets = {}
+		data.Presets[1] = {}
+		data.Presets[1].Name = "Default"
+		data.Presets[1].Bodygroups = {}
+		data.Presets[1].Props = {}
+		data.Presets[1].Auto = {}
+		for index,_ in pairs( data.Auto ) do
+			data.Presets[1].Auto[ #data.Presets[1].Auto + 1 ] = index
+		end
+		EMVU.PresetIndex[ name ] = data.Presets
 	end
 end
 

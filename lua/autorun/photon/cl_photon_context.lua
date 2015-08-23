@@ -88,6 +88,8 @@ properties.Add( "photon_preset", {
 		if not ent:Photon_PresetEnabled() then return false end
 		if not ply:InVehicle() then return false end
 		if not ply:GetVehicle() == ent then return false end
+		local options = EMVU.PresetIndex[ ent.VehicleName ]
+		if not options or not istable( options ) or #options <= 1 then return false end
 		return true
 	end,
 

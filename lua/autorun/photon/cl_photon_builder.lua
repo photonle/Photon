@@ -380,3 +380,144 @@ concommand.Add("photon_debug_bg", function( ply )
 	if not vehicle then return end
 	PrintTable( vehicle:GetBodyGroups() )
 end)
+
+local PHOTON_CREATOR_TEMPLATE = [[
+AddCSLuaFile()
+
+local VehicleName = "%PREF_NAME"
+
+local EMV = {}
+
+EMV.Siren = %PREF_SIREN
+EMV.Skin = %ENT_SKIN
+EMV.Color = %ENT_COLOR
+
+EMV.BodyGroups = %ENT_BODYGROUPS
+
+EMV.Auto = %PREF_LIGHTBAR
+
+EMV.Sequences = {
+	Sequences = {
+		{ Name = "CODE 1", Stage = "M1", Components = {}, Disconnect = {} },
+		{ Name = "CODE 2", Stage = "M2", Components = {}, Disconnect = {} },
+		{ Name = "CODE 3", Stage = "M3", Components = {}, Disconnect = {} }
+	},
+	Traffic = {
+		{ Name = "LEFT", Stage = "L", Components = {}, Disconnect = {} },
+		{ Name = "DIVERGE", Stage = "D", Components = {}, Disconnect = {} },
+		{ Name = "RIGHT", Stage = "R", Components = {}, Disconnect = {} }
+	}
+}
+
+local V = {
+	Name = VehicleName,
+	Class = "prop_vehicle_jeep",
+	Category = "%PREF_CATEGORY",
+	Author = "%AUTHOR_NAME",
+	Model = "%ENT_MODEL",
+	KeyValues = { vehiclescript = "%ENT_SCRIPT" },
+	IsEMV = true,
+	EMV = EMV,
+	HasPhoton = true,
+	Photon = "PHOTON_INHERIT"
+}
+list.Set( "Vehicles", VehicleName, V )
+
+if EMVU then EMVU:OverwriteIndex( VehicleName, EMV ) end
+]]
+
+local photon_creator_name, photon_creator_category, photon_creator_siren, photon_creator_lightbar
+
+local function PhotonTemplateReplace( text, inject )
+	for key,value in pairs( inject ) do
+		text = string.Replace( text, "%" .. key, tostring( value ) )
+	end
+	return text
+end
+
+local function GetVehicleScript( model )
+	local vehicles = list.Get( "Vehicles" )
+	for index, data in pairs( vehicles ) do
+		if string.lower( data["Model"] ) == model then
+			if data["KeyValues"] then
+				for key, value in pairs( data["KeyValues"] ) do
+					if string.lower(tostring(key)) == "vehiclescript" then
+						return data["KeyValues"][key]
+					end
+				end
+			end
+		end
+	end
+	return ""
+end
+
+local function FormatLightbarChoice( id )
+	if not id or not EMVU.Auto[ id ] then return "{}" end
+	return string.format([[
+{
+	{
+		ID = "%s",
+		Scale = 1,
+		Pos = Vector( 0, 0, 100 ),
+		Ang = Angle( 0, 90, 0 ),
+		AutoPatterns = true
+	}
+}
+]], id )
+end
+
+local function FormatBodygroupChoices( ent )
+	local groups = ent:GetBodyGroups()
+	local resultTable = "{\n"
+	for _,bg in pairs( groups ) do
+		resultTable = resultTable .. string.format( "	{ %s, %s }, -- %s\n", tostring( bg.id ), tostring( ent:GetBodygroup( bg.id ) ), tostring( bg.name ) )
+	end
+	resultTable = resultTable .. "}"
+	return resultTable
+end
+
+local function PhotonCompileCreatorData( prefName, prefCategory, prefSiren, prefLightbar, ent )
+	local authorName = LocalPlayer():Nick()
+	local col = ent:GetColor()
+	local formatColor = string.format( "Color(%s,%s,%s)", col.r, col.g, col.b )
+	local injectTable = {
+		["PREF_NAME"] = prefName or "",
+		["PREF_SIREN"] = prefSiren or "1",
+		["ENT_SKIN"] = ent:GetSkin(),
+		["ENT_BODYGROUPS"] = FormatBodygroupChoices( ent ),
+		["ENT_COLOR"] = formatColor,
+		["PREF_LIGHTBAR"] = FormatLightbarChoice( prefLightbar ),
+		["PREF_CATEGORY"] = prefCategory or "Emergency Vehicles",
+		["ENT_MODEL"] = ent:GetModel(),
+		["AUTHOR_NAME"] = authorName,
+		["ENT_SCRIPT"] = GetVehicleScript( ent:GetModel() )
+	}
+	return PhotonTemplateReplace( PHOTON_CREATOR_TEMPLATE, injectTable )
+end
+
+function PhotonCopyConfiguration()
+	local car = LocalPlayer():GetVehicle()
+	if not IsValid( car ) then LocalPlayer():ChatPrint( "[Photon] You must be driving the target vehicle." ) return end
+	local returnCode = PhotonCompileCreatorData( photon_creator_name, photon_creator_category, photon_creator_siren, photon_creator_lightbar, car )
+	// print( returnCode )
+	SetClipboardText( returnCode )
+	LocalPlayer():ChatPrint( "[Photon] Configuration copied to your clipboard.\nPaste the code into a text editor and save as a .lua file in your garrysmod/lua/autorun folder.\nYou will likely need to restart the game for the vehicle to appear for the first time." )
+end
+
+concommand.Add( "photon_creator_copyconfig", PhotonCopyConfiguration )
+
+concommand.Add( "photon_creator_name", function( ply, cmd, args )
+	photon_creator_name = args[1]
+end )
+
+concommand.Add( "photon_creator_category", function( ply, cmd, args )
+	photon_creator_category = args[1]
+end )
+
+concommand.Add( "photon_creator_siren", function( ply, cmd, args )
+	photon_creator_siren = tostring( args[1] )
+end )
+
+concommand.Add( "photon_creator_lightbar", function( ply, cmd, args ) 
+	photon_creator_lightbar = args[1]
+end )

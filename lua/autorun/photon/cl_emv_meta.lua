@@ -302,7 +302,7 @@ function EMVU:MakeEMV( emv, name )
 	-- Render Emergency Lights --
 	function emv:Photon_RenderEL()
 		if not IsValid( self ) then return false end
-		if not self:Photon_Lights() and not self:Photon_TrafficAdvisor() then
+		if not self:Photon_Lights() and not self:Photon_TrafficAdvisor() and not self:Photon_Illumination() then
 			if self.Photon_ReconnectLights then 
 				self:Photon_ReconnectLights()
 			elseif not self.RenderELPrimaryError then

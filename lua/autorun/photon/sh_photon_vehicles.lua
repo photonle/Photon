@@ -82,13 +82,18 @@ hook.Add("InitPostEntity", "Photon.LoadVehicles", function()
 	timer.Simple(1, function() Photon:LoadVehicles() end)
 end)
 
+local PHOTON_BASIC_BLANK = { States = { Headlights = {}, Brakes = {}, Blink_Left = {}, Blink_Right = {}, Reverse = {}, Running = {} } }
+
 function Photon:PreloadVehicle( car )
 	if isstring( car.Photon ) and istable( Photon.VehicleLibrary[car.Photon] ) then
 		car.Photon = Photon.VehicleLibrary[car.Photon]
+	elseif car.Photon == "PHOTON_INHERIT" then
+		car.Photon = PHOTON_BASIC_BLANK
 	elseif car.Photon and isstring( car.Photon ) then
-		if not Photon.VehicleLibrary[car.Photon] then print( "[Photon] Failed to load " .. car.Photon .. " because the Photon parameter was not valid." ) return end
+		if not Photon.VehicleLibrary[car.Photon] then print( "[Photon] Failed to load " .. car.Photon .. " because the Photon parameter was not valid." ) end
+		car.Photon = PHOTON_BASIC_BLANK
 	else
-		--if SERVER then print( "[Photon]: " .. tostring(car) .. " has an invalid declaration for Photon. Car lighting will not render.") end
+		car.Photon = PHOTON_BASIC_BLANK
 	end
 
 	if car.Photon.Positions and istable( car.Photon.Positions ) then
