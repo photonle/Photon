@@ -288,6 +288,7 @@ end
 
 function EMVU.Helper:GetAutoModel( id )
 	local modelData = EMVU.Auto[ id ]
+	if not modelData then return {} end
 	return {
 		Model = modelData.Model,
 		Skin = modelData.Skin or 0,

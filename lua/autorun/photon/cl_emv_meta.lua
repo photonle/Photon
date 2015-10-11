@@ -422,7 +422,7 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:Photon_CalculateELFrames()
 		if not IsValid( self ) then return false end
-		if not self:Photon_Lights() and not self:Photon_TrafficAdvisor() then return end
+		if not self:Photon_Lights() and not self:Photon_TrafficAdvisor() and not self:Photon_Illumination() then return end
 		local increment = self:Photon_ELShiftFrames()
 		local sequence = self:Photon_GetELSequence()
 		local RenderTable = {}
@@ -496,6 +496,7 @@ function EMVU:MakeEMV( emv, name )
 		for _,p in pairs( emvProps ) do
 
 			if p == true then continue end
+			if not p.Model then continue end
 			local rendergroup = p.RenderGroup or RENDERGROUP_TRANSLUCENT
 			local rendermode = p.RenderMode or RENDERMODE_TRANSALPHA
 			util.PrecacheModel( p.Model )

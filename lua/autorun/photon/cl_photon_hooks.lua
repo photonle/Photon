@@ -14,7 +14,6 @@ local photon_ready = photon_ready or false
 
 local function DrawCarLights()
 	if not photon_ready then return end
-	if not should_render:GetBool() then return end
 	local photonDebug = PHOTON_DEBUG
 	for _,ent in pairs( Photon:AllVehicles() ) do
 		if IsValid( ent ) then
@@ -88,14 +87,7 @@ local function TurnScan()
 	end
 
 end
-
 hook.Add("Tick", "Photon.TurnScan", function() TurnScan() end)
-
-local function SettingsScan()
-	--if istable(VC_Settings_Data) and VC_Settings_Data.VC_Enabled then PHOTON_REG_ENABLED = false return end
-	PHOTON_REG_ENABLED = true
-end
-hook.Add("Tick", "Photon.SettingsScan", function() SettingsScan() end)
 
 local function RemoveCarProps( ent )
 	if IsValid( ent ) and ent:IsVehicle() and ent:HasELS() and ent.EMVProps then

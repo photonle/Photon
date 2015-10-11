@@ -60,7 +60,7 @@ function Photon:ClearLightQueue()
 end
 
 function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor )
-	if not incolors or not ilpos or not lang or not meta then return end
+	if not incolors or not ilpos or not lang or not meta or not gpos then return end
 
 	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,  }
 
@@ -255,7 +255,7 @@ local setRenderLighting = render.SetLightingMode
 local drawQuad = render.DrawQuad
 local endCam = cam.End3D2D
 
-function Photon:QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, debug_mode )
+function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, debug_mode )
 	if drawSrc then
 		startCam( camPos, camAng, 1 )
 			setRenderLighting( 2 )
@@ -388,16 +388,13 @@ function Photon:RenderQueue( effects )
 	if not effects then cam3d( eyePos, eyeAng ) else cam2d( eyePos, eyeAng ) end
 	if ( count > 0 ) then
 		local debug_mode = PHOTON_DEBUG
+		local renderFunction
+		if effects then renderFunction = photonScreenEffects else renderFunction = quickDrawNoTable end
 		for i=1, count do
 			if photonRenderTable[i] != nil then
 				local data = photonRenderTable[i]
-				if not effects then
-					quickDrawNoTable( self, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
-										data[17], data[18], data[19], data[20], data[21], data[22], data[23], debug_mode )
-				else
-					photonScreenEffects( data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
-										data[17], data[18], data[19], data[20], data[21], data[22], data[23], debug_mode )
-				end
+				renderFunction( data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
+								data[17], data[18], data[19], data[20], data[21], data[22], data[23], debug_mode )
 			end
 		end
 	end

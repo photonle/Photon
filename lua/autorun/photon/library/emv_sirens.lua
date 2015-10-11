@@ -420,6 +420,15 @@ EMVU.Sirens = {
 			{Name = "PHSR", Sound = "emv/sirens/soundoff nforce 400/emv_pier.wav", Icon="phaser"},
 		}
 	},
+	[46] = {
+		Name = "Gamma",
+		Category = "Whelen",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/whelen gamma/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/whelen gamma/emv_yelp.wav", Icon="yelp"},
+			{Name = "PIER", Sound = "emv/sirens/whelen gamma/emv_pier.wav", Icon="phaser"},
+		},
+	},
 }
 
 EMVU.Horns = {

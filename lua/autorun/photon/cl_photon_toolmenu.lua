@@ -88,15 +88,20 @@ local function buildCreatorMenu( panel )
 	panel:AddControl( "Button", { Text = "Copy Configuration", Command = "photon_creator_copyconfig" } )
 end
 
+local function buildEditorMenu( panel )
+	panel:ClearControls()
+	logoHeader( panel )
+
+end
+
 hook.Add( "PopulateToolMenu", "Photon.AddSettingsMenu", function() 
 	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_controls", "Controls", "", "", buildControlsMenu )
 	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_client", "Client", "", "", buildClientSettings )
 	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_server", "Settings", "", "", buildServerSettings )
 	if game.SinglePlayer() then
 		spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_creator", "Creator", "", "", buildCreatorMenu )
+		spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_editor", "Editor", "", "", buildEditorMenu )
 	end
 end )
 
 // PrintTable( list.Get( "PhotonSirenOptions" ) )
-
-

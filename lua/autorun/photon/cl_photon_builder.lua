@@ -16,23 +16,12 @@ local SLIDE_INDEX = 0
 function PhotonAdjustPosition( vector )
 	if not PHOTON_DEBUG_LIGHT then return end
 	PHOTON_DEBUG_LIGHT[1] = WorldToLocal( PHOTON_DEBUG_LIGHT[1], PHOTON_DEBUG_LIGHT[2], vector, Angle(0,0,0) )
-	-- PHOTON_DEBUG_LIGHT[1] = PHOTON_DEBUG_LIGHT[1] + vector
-	-- PHOTON_DEBUG_LIGHT[1].x = math.Round( PHOTON_DEBUG_LIGHT[1].x, 2 )
-	-- PHOTON_DEBUG_LIGHT[1].y = math.Round( PHOTON_DEBUG_LIGHT[1].y, 2 )
-	-- PHOTON_DEBUG_LIGHT[1].z = math.Round( PHOTON_DEBUG_LIGHT[1].z, 2 )
-	-- print( "Vector( " .. math.Round( PHOTON_DEBUG_LIGHT[1].x, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[1].y, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[1].z, 2 ) .. " )" )
 end
 
 function PhotonAdjustAngle( angle )
 	if not PHOTON_DEBUG_LIGHT then return end
 	local pos, ang = WorldToLocal( PHOTON_DEBUG_LIGHT[1], PHOTON_DEBUG_LIGHT[2], Vector(0,0,0), angle )
 	PHOTON_DEBUG_LIGHT[2] = ang
-	-- PHOTON_DEBUG_LIGHT[2] = PHOTON_DEBUG_LIGHT[2] + angle
-	-- local ang = PHOTON_DEBUG_LIGHT[2]
-	-- PHOTON_DEBUG_LIGHT[2].p = math.Round( PHOTON_DEBUG_LIGHT[2].p, 2 )
-	-- PHOTON_DEBUG_LIGHT[2].y = math.Round( PHOTON_DEBUG_LIGHT[2].y, 2 )
-	-- PHOTON_DEBUG_LIGHT[2].r = math.Round( PHOTON_DEBUG_LIGHT[2].r, 2 )
-	-- print( "Angle( " .. pos.p .. ", " .. pos.y .. ", " .. pos.r .. " )" )
 end
 
 function SetDebugTarget( index, cat )
@@ -49,8 +38,9 @@ function SetDebugTarget( index, cat )
 	elseif cat == "REG" then
 		PHOTON_DEBUG_MODE = "REG"
 		PHOTON_DEBUG_LIGHT = Photon.Vehicles.Positions[ PHOTON_DEBUG_NAME ][ index ]
+	elseif cat == "PROP" then
+		// PHOTON_DEBUG_LIGHT
 	end
-
 end
 
 
