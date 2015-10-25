@@ -449,8 +449,7 @@ local function FormatLightbarChoice( id )
 		ID = "%s",
 		Scale = 1,
 		Pos = Vector( 0, 0, 100 ),
-		Ang = Angle( 0, 90, 0 ),
-		AutoPatterns = true
+		Ang = Angle( 0, 90, 0 )
 	}
 }
 ]], id )
@@ -510,4 +509,15 @@ end )
 
 concommand.Add( "photon_creator_lightbar", function( ply, cmd, args ) 
 	photon_creator_lightbar = args[1]
+end )
+
+concommand.Add( "photon_emv_editor_target", function( ply, cmd, args ) 
+	photon_emv_editor_target = args[1]
+	if PHOTON_EDITOR_MENU_REF then Photon_EditorMenu( PHOTON_EDITOR_MENU_REF ) end
+end )
+
+concommand.Add( "photon_emv_editor_target_component", function( ply, cmd, args ) 
+	photon_emv_editor_target_component = tonumber(args[1])
+	print(tostring(photon_emv_editor_target_component))
+	if PHOTON_EDITOR_MENU_REF then Photon_EditorMenu( PHOTON_EDITOR_MENU_REF ) end
 end )

@@ -26,6 +26,28 @@ function EMVU:SpawnedVehicle( ent )
 	end
 end
 
+function EMVU:ProcessExpressVehicles()
+	local autoFiles = file.Find( "photon/express/*", "DATA" )
+	for _,_file in pairs( autoFiles ) do
+		local fileContents = file.Read( "photon/express/" .. _file )
+		local resultVehicle = Photon.XML.ParseVehicleFromXML( fileContents )
+		PrintTable( resultVehicle )
+		local v = resultVehicle.VehicleDefinition
+		list.Set( "Vehicles", v.Name, {
+			Name = v.Name,
+			Class = "prop_vehicle_jeep",
+			Category = v.Category,
+			Author = v.Author,
+			Model = v.Model,
+			KeyValues = { ["vehiclescript"] = v.KeyValues.vehiclescript },
+			IsEMV = true,
+			EMV = resultVehicle,
+			HasPhoton = true,
+			Photon = "PHOTON_INHERIT"
+		} )
+	end
+end
+
 function EMVU:LoadVehicles()
 	local cars = list.Get("Vehicles")
 	for k,v in pairs(cars) do
@@ -47,6 +69,8 @@ end
 function EMVU:PreloadVehicle( car )
 
 	if istable( car.EMV.Sequences ) then EMVU.LoadModeData( car.Name, car.EMV.Sequences ) end 
+
+	EMVU.Index[ #EMVU.Index + 1 ] = car.Name
 
 	if istable( car.EMV.Positions ) then
 		EMVU.Positions[ car.Name ] = car.EMV.Positions
@@ -385,5 +409,6 @@ function EMVU:CalculateAuto( name, data )
 end
 
 hook.Add("InitPostEntity", "EMVU.LoadVehicles", function()
+	EMVU:ProcessExpressVehicles()
 	EMVU:LoadVehicles()
 end)

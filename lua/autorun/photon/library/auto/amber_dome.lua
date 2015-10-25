@@ -22,7 +22,7 @@ COMPONENT.ForwardTranslation = true
 COMPONENT.UsePhases = true
 
 COMPONENT.Meta = {
-	auto_dome = {
+	auto_dome_a = {
 		NoLegacy = true,
 		AngleOffset = "R",
 		DirAxis = "Up",
@@ -34,23 +34,39 @@ COMPONENT.Meta = {
 		Scale = 2.75,
 		WMult = 1,
 	},
+	auto_dome_b = {
+		NoLegacy = true,
+		AngleOffset = "R",
+		DirAxis = "Up",
+		DirOffset = 90,
+		Speed = -10,
+		W = 6,
+		H = 8,
+		Sprite = "sprites/emv/visionslr",
+		Scale = 2.75,
+		WMult = 1,
+	},
 }
 
 COMPONENT.Positions = {
 
-	[1] = { Vector( 0, 0, 2.5 ), Angle( 0, -90, 0 ), "auto_dome" },
+	[1] = { Vector( 0, 0, 2.5 ), Angle( 0, -90, 0 ), "auto_dome_a" },
+	[2] = { Vector( 0, 0, 2.5 ), Angle( 0, -90, 0 ), "auto_dome_b" },
 
 }
 
 COMPONENT.Sections = {
 	["auto_light_dome"] = {
 		[1] = { { 1, A } },
+		[2] = { { 2, A } },
 	},
 }
 
 COMPONENT.Patterns = {
 	["auto_light_dome"] = {
 		["mode1"] = { 1 },
+		["mode1A"] = { 1 },
+		["mode1B"] = { 2 },
 	}
 }
 

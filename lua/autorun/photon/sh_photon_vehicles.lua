@@ -1,5 +1,9 @@
 AddCSLuaFile()
 
+local modelIgnore = {
+	["models/props_phx/carseat2.mdl"] = true,
+}
+
 function Photon:RecoverVehicleTable( ent )
 	if not IsValid( ent ) then return false end
 	local model = tostring(ent:GetModel())
@@ -39,7 +43,9 @@ function Photon:EntityCreated( ent )
 					ent.VehicleTable = default
 					Photon:SpawnedVehicle( ent )
 					EMVU:SpawnedVehicle( ent )
-					print("[Photon] No .VehicleTable present, assuming " .. tostring(ent:GetModel()) .. " is a(n) " .. tostring(default.Name) .. ".")
+					if not (modelIgnore[tostring(ent:GetModel())]) then
+						print("[Photon] No .VehicleTable present, assuming " .. tostring(ent:GetModel()) .. " is a(n) " .. tostring(default.Name) .. ".")
+					end
 				end
 			end
 		end)

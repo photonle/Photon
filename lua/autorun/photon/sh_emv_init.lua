@@ -3,6 +3,7 @@ AddCSLuaFile()
 if not EMVU then EMVU = {} end
 EMVU.Liveries = {}
 EMVU.SubMaterials = {}
+EMVU.Index = {}
 
 AddCSLuaFile( "sh_emv_init.lua" )
 AddCSLuaFile( "sh_emv_meta.lua" )
@@ -20,6 +21,7 @@ include( "sh_emv_config.lua" )
 include( "sh_emv_meta.lua" )
 include( "sh_emv_vehicles.lua" )
 include( "sh_emv_helper.lua" )
+include( "slaxml.lua")
 
 if CLIENT then
 	include( "cl_emv_init.lua" )

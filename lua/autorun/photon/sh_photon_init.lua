@@ -51,7 +51,7 @@ include( "sh_photon_vehicles.lua" )
 
 include( "cl_photon_context.lua" )
 include( "cl_photon_menubar.lua" )
-
+include( "sh_photon_xml.lua" )
 
 local photonVehicleTable = {}
 local photonLastScan = 0

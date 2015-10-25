@@ -396,7 +396,6 @@ function EMVU:MakeEMV( emv, name )
 					)
 			end
 		end
-
 	end
 
 	function emv:Photon_RenderIllum()
@@ -475,7 +474,6 @@ function EMVU:MakeEMV( emv, name )
 					end
 				end
 			end
-
 			self.EL.RenderCache = RenderTable
 		end
 

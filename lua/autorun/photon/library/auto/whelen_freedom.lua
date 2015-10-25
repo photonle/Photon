@@ -185,10 +185,41 @@ COMPONENT.Sections = {
 		[1] = { { 33, CW }, { 34, CW } },
 		[2] = { { 33, CW } },
 		[3] = { { 34, CW } },
+	},
+	["auto_whelen_ultra_freedom_traffic"] = {
+		[1] = { { 9, "_1" }, { 23, "_1" } },
+		[2] = { { 9, "_1" }, { 23, "_1" }, { 11, "_3" }, { 25, "_3" }, },
+		[3] = { { 9, "_1" }, { 23, "_1" }, { 11, "_3" }, { 25, "_3" }, { 13, "_3" }, { 27, "_3" }, },
+		[4] = { { 9, "_1" }, { 23, "_1" }, { 11, "_3" }, { 25, "_3" }, { 13, "_3" }, { 27, "_3" }, { 14, "_4" }, { 28, "_4" }, },
+		[5] = { { 9, "_1" }, { 23, "_1" }, { 11, "_3" }, { 25, "_3" }, { 13, "_3" }, { 27, "_3" }, { 14, "_4" }, { 28, "_4" }, { 12, "_4" }, { 26, "_4" }, },
+		[6] = { { 9, "_1" }, { 23, "_1" }, { 11, "_3" }, { 25, "_3" }, { 13, "_3" }, { 27, "_3" }, { 14, "_4" }, { 28, "_4" }, { 12, "_4" }, { 26, "_4" }, { 10, "_2" }, { 24, "_2" }, },
+		[7] = { { 10, "_2" }, { 24, "_2" } },
+		[8] = { { 12, "_4" }, { 26, "_4" }, { 10, "_2" }, { 24, "_2" }, },
+		[9] = { { 14, "_4" }, { 28, "_4" }, { 12, "_4" }, { 26, "_4" }, { 10, "_2" }, { 24, "_2" }, },
+		[10] = { { 13, "_3" }, { 27, "_3" }, { 14, "_4" }, { 28, "_4" }, { 12, "_4" }, { 26, "_4" }, { 10, "_2" }, { 24, "_2" }, },
+		[11] = { { 11, "_3" }, { 25, "_3" }, { 13, "_3" }, { 27, "_3" }, { 14, "_4" }, { 28, "_4" }, { 12, "_4" }, { 26, "_4" }, { 10, "_2" }, { 24, "_2" }, },
+		[12] = { { 13, "_3" }, { 27, "_3" }, { 14, "_4" }, { 28, "_4" } },
+		[13] = { { 11, "_3" }, { 25, "_3" }, { 13, "_3" }, { 27, "_3" }, { 14, "_4" }, { 28, "_4" }, { 12, "_4" }, { 26, "_4" } },
+	},
+	["auto_whelen_ultra_freedom_rear"] = {
+		[1] = { { 11, "_3" }, { 25, "_3" }, { 13, "_3" }, { 27, "_3" }, },
+		[2] = { { 14, "_4" }, { 28, "_4" }, { 12, "_4" }, { 26, "_4" }, },
+		[3] = { { 11, "_3" }, { 13, "_3" }, { 28, "_4" }, { 26, "_4" }, },
+		[4] = { { 25, "_3" }, { 27, "_3" }, { 14, "_4" }, { 12, "_4" }, },
 	}
 }
 
 COMPONENT.Patterns = {
+	["auto_whelen_ultra_freedom_rear"] = {
+		["code1"] = { 1, 1, 1, 0, 2, 2, 2, 0 },
+		["code2"] = { 3, 0, 3, 0, 3, 3, 3, 0, 4, 0, 4, 0, 4, 4, 4, 0 },
+		["code3"] = { 1, 0, 1, 0, 2, 0, 2, 0 }
+	},
+	["auto_whelen_ultra_freedom_traffic"] = {
+		["right"] = { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 6, 0, 0, 0, 0 },
+		["left"] = { 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 6, 6, 6, 6, 0, 0, 0, 0 },
+		["diverge"] = { 12, 12, 12, 13, 13, 13, 6, 6, 6, 6, 6, 6, 0, 0, 0, 0 }
+	},
 	["auto_whelen_ultra_freedom"] = {
 		["all"] = { 1 },
 		["code2"] = {
@@ -279,7 +310,9 @@ COMPONENT.Patterns = {
 }
 
 COMPONENT.TrafficDisconnect = { 
-
+	["auto_whelen_ultra_freedom_traffic"] = {
+		9, 11, 13, 14, 12, 10, 23, 25, 27, 28, 26, 24
+	}
 }
 
 COMPONENT.Modes = {
@@ -287,21 +320,24 @@ COMPONENT.Modes = {
 			M1 = {
 				["auto_whelen_ultra_freedom_outer"] = "code1",	
 				["auto_whelen_ultra_freedom_m_inner"] = "code1",
+				["auto_whelen_ultra_freedom_rear"] = "code1"
 			},
 			M2 = {
 				["auto_whelen_ultra_freedom_outer"] = "code2",
-				["auto_whelen_ultra_freedom_m_inner"] = "code2",	
+				["auto_whelen_ultra_freedom_m_inner"] = "code2",
+				["auto_whelen_ultra_freedom_rear"] = "code2"
 			},
 			M3 = {
 				["auto_whelen_ultra_freedom_outer"] = "code3",
 				["auto_whelen_ultra_freedom_m_inner"] = "code3",
-				["auto_whelen_ultra_freedom_illum"] = "code3"
+				["auto_whelen_ultra_freedom_illum"] = "code3",
+				["auto_whelen_ultra_freedom_rear"] = "code3"
 			}
 		},
 	Auxiliary = {
-			L = {},
-			R = {},
-			D = {}
+			L = { ["auto_whelen_ultra_freedom_traffic"] = "left" },
+			R = { ["auto_whelen_ultra_freedom_traffic"] = "right" },
+			D = { ["auto_whelen_ultra_freedom_traffic"] = "diverge" }
 		},
 	Illumination = {
 		T = {
