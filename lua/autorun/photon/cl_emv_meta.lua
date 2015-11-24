@@ -529,6 +529,7 @@ function EMVU:MakeEMV( emv, name )
 				end
 			end
 
+			table.insert(photonLightModels, prop)
 			table.insert( emv.EMVProps, prop )
 
 		end
@@ -561,7 +562,13 @@ function EMVU:MakeEMV( emv, name )
 			return
 		end
 
-		if ( self.LastEMVPropScan and self.LastEMVPropScan + .5 > CurTime() and not PHOTON_DEBUG ) then return end
+		if self.LastSelectionString != self:Photon_SelectionString() then
+			self:Photon_RemoveEMVProps( true )
+			self.LastSelectionString = self:Photon_SelectionString()
+			return
+		end
+
+		if ( self.LastEMVPropScan and self.LastEMVPropScan + .5 > CurTime() and not PHOTON_DEBUG and not PHOTON_EXPRESS ) then return end
 
 		if not self.EMVProps then return end
 		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
@@ -575,7 +582,7 @@ function EMVU:MakeEMV( emv, name )
 				prop:SetParent( self )
 				prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
 				prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
-				if PHOTON_DEBUG then 
+				if PHOTON_DEBUG or PHOTON_EXPRESS then 
 					if isvector( emvProps[index].Scale ) then
 						local mat = Matrix()
 						mat:Scale( emvProps[index].Scale )
@@ -590,7 +597,175 @@ function EMVU:MakeEMV( emv, name )
 
 	end
 
+	function emv:Photon_GetRadarCone( rear, force )
+		local normDirection = self:GetForward()
+		if rear then normDirection:Rotate( Angle( 0, -90, 0 ) ) else normDirection:Rotate( Angle( 0, 90, 0 ) ) end
+		local startPos = self:GetPos()
+		startPos.z = startPos.z + 60
+		if not self.PhotonRadarTargetCache or ( self.PhotonRadarTargetCacheTime and self.PhotonRadarTargetCacheTime + 1 < CurTime() ) or ( rear != self.PhotonRadarTargetLastRear ) or force then
+			local validEnts = {}
+			for _, ent in pairs( ents.FindInCone( startPos, normDirection, 2048, 0 ) ) do
+				if IsValid( ent ) and 
+					ent:IsVehicle() and 
+					ent != self and 
+					-- self:IsLineOfSightClear( ent:GetPos() ) and 
+					ent:Photon_GetSpeed() > .5 then
+					validEnts[ #validEnts + 1 ] = ent
+				end
+			end
+			self.PhotonRadarTargetLastRear = (rear or false)
+			self.PhotonRadarTargetCache = validEnts
+			self.PhotonRadarTargetCacheTime = CurTime()
+		end
+		return self.PhotonRadarTargetCache
+	end
+
+	function emv:Photon_UpdateRadarTargets( rear )
+		local entList = self:Photon_GetRadarCone( rear )
+		local fastest, nearest, fastSpeed, nearDist
+		for _, ent in pairs( entList ) do
+			if IsValid( ent ) then
+				local thisSpeed = ent:Photon_GetSpeed()
+				local thisDist = self:GetPos():Distance( ent:GetPos() )
+				if (fastest and fastSpeed) then
+					if (thisSpeed > fastSpeed) then fastest = ent; fastSpeed = thisSpeed end
+				else
+					fastest = ent; fastSpeed = thisSpeed
+				end
+				if (nearest and nearDist) then
+					if ( nearDist > thisDist ) then nearest = ent; nearDist = thisDist end
+				else
+					nearest = ent; nearDist = thisDist
+				end
+			end
+		end
+		self.PhotonRadarTargetFastest = fastest
+		self.PhotonRadarTargetNearest = nearest
+		return fastest, nearest
+	end
+
+	function emv:Photon_RadarTargetSpeeds( rear )
+		if not IsValid( self.PhotonRadarTargetFastest ) or not IsValid( self.PhotonRadarTargetNearest ) then self:Photon_UpdateRadarTargets() end
+		local fastest, nearest = self:Photon_UpdateRadarTargets( rear )
+		if not IsValid( nearest ) or not IsValid( fastest ) then return 0, 0 end
+		if fastest == nearest then return 0, math.Round( nearest:Photon_AdjustedSpeed() ) end
+		return math.Round( fastest:Photon_AdjustedSpeed() ), math.Round( nearest:Photon_AdjustedSpeed() )
+	end
+
+	function emv:Photon_RadarSoundInitialize()
+		if self.PhotonRadarSoundLoading then return end
+		self.PhotonRadarSoundLoading = true
+		sound.PlayFile( "sound/emv/radar_flat.wav", "3d", function( snd ) 
+			self:Photon_RadarSoundCallback( snd )
+		end)
+	end
+
+	function emv:Photon_RadarSoundCallback( snd )
+		if IsValid( snd ) then
+			snd:Pause()
+			self.PhotonRadarSoundHandle = snd
+			self.PhotonRadarSoundLoading = false
+		end
+	end
+
+	function emv:Photon_RadarTick()
+		if not IsValid( LocalPlayer():GetVehicle() ) or not self == LocalPlayer():GetVehicle() then return end
+		local rear = false
+		local fastest, nearest = self:Photon_RadarTargetSpeeds( rear )
+		PHOTON_RADAR_DISP_FAST = fastest or 0
+		PHOTON_RADAR_DISP_NEAR = nearest or 0
+		local soundSpeed = nearest
+		if fastest > nearest then soundSpeed = fastest end
+		local handle = self.PhotonRadarSoundHandle
+		if not handle then self:Photon_RadarSoundInitialize(); return end
+		handle:SetPos( self:GetPos() )
+		if soundSpeed > 1 then
+			local result = ( math.Round( soundSpeed / 10) / 10 ) + .5
+			handle:Play()
+			if result > 0 then handle:SetPlaybackRate( result ) else handle:Pause() end
+		else
+			handle:Pause()
+		end
+	end
+
+	function emv:Photon_RadarActive( arg )
+		local prev = self.PhotonRadarActive or false
+		if arg != nil then self.PhotonRadarActive = arg end
+		if arg == false and IsValid( self.PhotonRadarSoundHandle ) then self.PhotonRadarSoundHandle:Pause() end
+		return self.PhotonRadarActive
+	end
+
+	function emv:Photon_ManualWindUpdate()
+		if not self:Photon_HasManualWind() or self.PhotonManualSirenProcessing then return false end
+		local isWindingUp = self:Photon_ManualSiren()
+		local info = EMVU.Sirens[self:Photon_SirenSet()].Gain
+		if not self.Photon_ManualSirenTable then self.Photon_ManualSirenTable = {} end
+		local sirenState = self.Photon_ManualSirenTable
+
+		if not sirenState.SoundHandle then
+			self.PhotonManualSirenProcessing = true
+			local emv = self
+			sound.PlayFile( info.Sound, "3d", function( snd, errorNo, errorName )
+				if IsValid( emv ) and IsValid( snd ) then
+					emv:Photon_ManualWindCallback( snd )
+				end
+			end)
+			return
+		end
+
+		local currentRate = sirenState.SoundHandle:GetPlaybackRate()
+		local minRate = info.MinRate or decreaseRate
+		local maxRate = info.MaxRate or 1.25
+		if isWindingUp then
+			sirenState.ShouldPlay = true
+			local increaseRate = info.UpRate or .01
+			if currentRate < maxRate then
+				-- sirenState.SoundHandle:SetPlaybackRate( Lerp( currentRate/maxRate, minRate, maxRate ) )
+				sirenState.SoundHandle:SetPlaybackRate( currentRate + increaseRate )
+			end
+			sirenState.SoundHandle:EnableLooping( true )
+			sirenState.SoundHandle:Play()
+		else
+			local decreaseRate = info.DownRate or .006
+			
+			if currentRate > minRate and sirenState.ShouldPlay then
+				local newRate = currentRate - decreaseRate
+				if newRate < .005 then newRate = .005 end
+				sirenState.SoundHandle:SetPlaybackRate( newRate )
+				sirenState.SoundHandle:Play()
+			else
+				sirenState.SoundHandle:Pause()
+				sirenState.SoundHandle:SetPlaybackRate( minRate )
+				sirenState.ShouldPlay = false
+			end
+		end
+		local forwardDir = self:GetForward()
+		forwardDir:Rotate( Angle( 0, 90, 0 ) )
+		sirenState.SoundHandle:SetPos( self:GetPos(), forwardDir )
+	end
+
+	function emv:Photon_ManualWindCallback( snd )
+		if not IsValid( snd ) then return end
+		if not self.Photon_ManualSirenTable then self.Photon_ManualSirenTable = {} end
+		snd:EnableLooping( false )
+		snd:Pause()
+		snd:SetPlaybackRate( .005 )
+		snd:Set3DFadeDistance( 500, 2048 )
+		snd:Set3DCone( 90, 180, .5 )
+		snd:SetVolume( 1 )
+		self.Photon_ManualSirenTable.SoundHandle = snd
+		self.Photon_ManualSirenTable.ShouldPlay = false
+		self.PhotonManualSirenProcessing = false
+	end
+
+	function emv:Photon_HasManualWind()
+		local set = self:Photon_SirenSet()
+		return istable( EMVU.Sirens[set].Gain )
+	end
+
 	emv.LastPresetOption = 0
 	emv:Photon_SetupEMVProps()
 
 end
+
+photonLightModels = {}

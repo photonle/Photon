@@ -20,6 +20,7 @@ COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
 COMPONENT.ColorInput = 1
+COMPONENT.Category = "Interior"
 COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "BLUE",

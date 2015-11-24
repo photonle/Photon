@@ -17,6 +17,7 @@ COMPONENT.Model = "models/schmal/whelen_justice/justice_lightbar.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Lightbar = true
 COMPONENT.Bodygroups = {}
+COMPONENT.Category = "Lightbar"
 COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "BLUE"

@@ -18,6 +18,7 @@ COMPONENT.Model = "models/tdmcars/emergency/equipment/small_led.mdl"
 COMPONENT.Required = "489864412"
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
+COMPONENT.Category = "Exterior"
 COMPONENT.NotLegacy = true
 COMPONENT.DefaultColors = {
 	[1] = "WHITE"

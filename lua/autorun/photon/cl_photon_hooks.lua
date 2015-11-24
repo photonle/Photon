@@ -64,15 +64,17 @@ local function TurnScan()
 	local car = ply:GetVehicle()
 	if not IsValid( car ) then return end
 	if not car:Photon() then return end
+	if not car.Photon_TurningRight or not car.Lighting then return end
 	if ply:KeyDown( IN_MOVERIGHT ) and car:Photon_TurningRight() then 
 		car.Lighting.GoingForward = false
 		return
 	end
 	if not ply:KeyDown( IN_FORWARD ) then
+		if not car.Lighting then return end
 		car.Lighting.GoingForward = false
 		return
 	end
-	if car:Photon_TurningLeft() and ply:KeyDown( IN_MOVELEFT ) then
+	if car.Photon_TurningLeft and car:Photon_TurningLeft() and ply:KeyDown( IN_MOVELEFT ) then
 		car.Lighting.GoingForward = false
 		return
 	end
@@ -97,4 +99,3 @@ local function RemoveCarProps( ent )
 	end
 end
 hook.Add("EntityRemoved", "Photon.RemoveCarProps", RemoveCarProps)
-

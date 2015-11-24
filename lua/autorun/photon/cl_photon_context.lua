@@ -106,3 +106,56 @@ properties.Add( "photon_preset", {
 	end
 
 })
+
+properties.Add( "photon_selection", {
+	MenuLabel = "Equipment",
+	Order = 1,
+	MenuIcon = "photon/ui/menu-lights.png",
+
+	Filter = function( self, ent, ply )
+		if not IsValid( ent ) then return false end
+		if not ent:Photon() then return false end
+		if not ent:IsEMV() then return false end
+		if not ent:Photon_SelectionEnabled() then return false end
+		return true
+	end,
+
+	MenuOpen = function( self, option, ent )
+		local options = EMVU.Selections[ ent.VehicleName ]
+		local submenu = option:AddSubMenu()
+		for catIndex,cat in ipairs( options ) do
+			if #cat.Options == 2 and ( cat.Options[1].Name == "None" or cat.Options[2].Name == "None" ) then
+				local selected = ent:Photon_SelectionOption( catIndex )
+				local isActive = ( cat.Options[selected].Name != "None" )
+				local addedOption
+				if selected == 1 then
+					addedOption = submenu:AddOption( cat.Name, function() EMVU.Net.Selection( ent, catIndex, 2 ) end )
+				else
+					addedOption = submenu:AddOption( cat.Name, function() EMVU.Net.Selection( ent, catIndex, 1 ) end )
+				end
+				addedOption:SetChecked( isActive )
+			else
+				local category = submenu:AddSubMenu( cat.Name )
+				local subCategories = {}
+				for index,option in pairs( cat.Options ) do
+					local opt
+					if option.Category then
+						if not subCategories[ option.Category ] then subCategories[ option.Category ] = category:AddSubMenu( option.Category ) end
+						opt = subCategories[ option.Category ]:AddOption( option.Name, function () EMVU.Net.Selection( ent, catIndex, index ) end )
+					else
+						opt = category:AddOption( option.Name, function () EMVU.Net.Selection( ent, catIndex, index ) end )
+					end
+					if ent:Photon_SelectionOption( catIndex ) == index then
+						opt:SetChecked( true )
+					end
+				end
+			end
+			-- local isSelected = ( tostring( k ) == tostring( ent:Photon_ELPresetOption() ) )
+			-- local option = submenu:AddOption( v.Name, function() EMVU.Net:Preset( k ) end )
+			-- if isSelected then
+			-- 	option:SetChecked( true )
+			-- end
+		end
+	end
+
+})

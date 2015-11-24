@@ -212,11 +212,12 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	// Turn the siren off
-	function ent:ELS_SirenOff()
+	function ent:ELS_SirenOff( toneChange )
 		if not IsValid( self ) then return end
 		if not self.ELS.Siren then return end
 		self.ELS.SirenContinue = nil
 		self.ELS.Siren:Stop()
+		if not toneChange then self.ELS.Siren2:Stop() end
 		self:ELS_Siren(false)
 		self.ELS.SirenPaused = false
 	end
@@ -230,6 +231,12 @@ function EMVU:MakeEMV( ent, emv )
 		self:ELS_LightsOn()
 		self.ELS.Siren = CreateSound( self, EMVU.Sirens[self:ELS_SirenSet()].Set[self:ELS_SirenOption()].Sound )
 		self.ELS.Siren:SetSoundLevel( 75 )
+		
+		local secondIndex = 1
+		if self.ELS.LastSecondSiren != secondIndex and self.ELS.LastSecondSiren then self.ELS.Siren2:Stop(); self.ELS.LastSecondSiren = secondIndex end
+		if self:ELS_SirenOption() > 2 then secondIndex = 2 end
+		self.ELS.Siren2 = CreateSound( self, EMVU.Sirens[3].Set[secondIndex].Sound )
+		self.ELS.Siren2:SetSoundLevel( 75 )
 		self:ELS_Siren( true )
 	end
 
@@ -254,7 +261,9 @@ function EMVU:MakeEMV( ent, emv )
 		if self.ELS.SirenPaused and not force then return end
 		if ( self.ELS.SirenContinue and self.ELS.SirenContinue + 2 > CurTime() ) and not force then return end
 		self.ELS.Siren:PlayEx( 0, 100 )
+		self.ELS.Siren2:PlayEx( 0, 100 )
 		self.ELS.Siren:ChangeVolume( 2, 0 )
+		self.ELS.Siren2:ChangeVolume( 2, 0 )
 		self.ELS.SirenContinue = CurTime()
 	end
 
@@ -268,7 +277,7 @@ function EMVU:MakeEMV( ent, emv )
 		end
 
 		if self:ELS_Siren() then
-			self:ELS_SirenOff()
+			self:ELS_SirenOff( true )
 			self:ELS_SirenOn()
 		end
 
@@ -300,37 +309,47 @@ function EMVU:MakeEMV( ent, emv )
 
 	end
 
-	function ent:ELS_ManualSiren( state )
+	function ent:ELS_ManualSiren( state, gain )
 		if not IsValid( self ) then return end
 		if self:ELS_NoSiren() then return end
+
 		if state then
 			//if self:ELS_SirenOption() == 1 and self:ELS_Siren() then return end
 			self:SetDTBool( CAR_MANUAL, true )
-			local manSiren = EMVU.Sirens[self:ELS_SirenSet()].Set[1].Sound
-			if EMVU.Sirens[self:ELS_SirenSet()].Manual then manSiren = EMVU.Sirens[self:ELS_SirenSet()].Manual end
-			if self:ELS_Siren() then
-				local manualToneIndex = self:ELS_SirenOption() + 1
-				local manualTone = EMVU.Horns[1]
-				if manualToneIndex <= #EMVU.Sirens[ self:ELS_SirenSet() ].Set 
-					and EMVU.Sirens[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Name != "HILO"
-				 then
-					manualTone = EMVU.Sirens[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Sound
-				elseif EMVU.Sirens[self:ELS_SirenSet()].Horn then
-					manualTone = EMVU.Sirens[self:ELS_SirenSet()].Horn
+			if not self:Photon_HasManualWind() then
+				local manSiren = EMVU.Sirens[self:ELS_SirenSet()].Set[1].Sound
+				if EMVU.Sirens[self:ELS_SirenSet()].Manual then manSiren = EMVU.Sirens[self:ELS_SirenSet()].Manual end
+				if self:ELS_Siren() then
+					local manualToneIndex = self:ELS_SirenOption() + 1
+					local manualTone = EMVU.Horns[1]
+					if manualToneIndex <= #EMVU.Sirens[ self:ELS_SirenSet() ].Set 
+						and EMVU.Sirens[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Name != "HILO"
+					 then
+						manualTone = EMVU.Sirens[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Sound
+					elseif EMVU.Sirens[self:ELS_SirenSet()].Horn then
+						manualTone = EMVU.Sirens[self:ELS_SirenSet()].Horn
+					end
+					self:ELS_SirenPause()
+					manSiren = manualTone
 				end
-				self:ELS_SirenPause()
-				manSiren = manualTone
+				self.ELS.Manual = CreateSound( self, manSiren )
+				self.ELS.Manual:SetSoundLevel( 75 )
+				self.ELS.Manual:PlayEx( 0, 100 )
+				self.ELS.Manual:ChangeVolume( 1, 0 )
 			end
-			self.ELS.Manual = CreateSound( self, manSiren )
-			self.ELS.Manual:SetSoundLevel( 75 )
-			self.ELS.Manual:PlayEx( 0, 100 )
-			self.ELS.Manual:ChangeVolume( 1, 0 )
 		else
-			self:SetDTBool( CAR_MANUAL, false )
-			if self.ELS.Manual then self.ELS.Manual:Stop() end
-			if self:ELS_Siren() then
-				self:ELS_SirenResume()
+			if not self:Photon_HasManualWind() then
+				local windDown = EMVU.Sirens[self:ELS_SirenSet()].ManualWind
+				if windDown then
+					if self.ELS.Manual then self.ELS.Manual:FadeOut( 1 ) end
+				else
+					if self.ELS.Manual then self.ELS.Manual:Stop() end
+					if self:ELS_Siren() then
+						self:ELS_SirenResume()
+					end
+				end
 			end
+			self:SetDTBool( CAR_MANUAL, false )
  		end
 	end
 
@@ -452,8 +471,38 @@ function EMVU:MakeEMV( ent, emv )
 		end
 	end
 
+	function ent:Photon_SetSelection( index, value )
+			-- print(string.format( "index: %s value: %s", index, value ))
+		if istable( EMVU.Selections[ self.Name ][ index ] ) then
+			local selectionTable = self:Photon_SelectionTable()
+			selectionTable[index] = value
+			-- PrintTable( selectionTable )
+			local photonUtilString = self:Photon_GetUtilStringTable()
+			photonUtilString[5] = table.concat( selectionTable, "." )
+			//PrintTable( photonUtilString )
+			self:Photon_SetUtilString( table.concat( photonUtilString, "ö" ) )
+		end
+	end
+
+	function ent:Photon_ResetSelections()
+		if istable( EMVU.Selections[ self.Name ] ) then
+			for i=1,#EMVU.Selections[ self.Name ] do
+				self:Photon_SetSelection( i, 1 )
+			end
+		end
+	end
+
+	function ent:Photon_SetUtilString( str )
+		self:SetDTString( EMV_INDEX, str )
+	end
+
+	function ent:Photon_HasManualWind()
+		local set = self:ELS_SirenSet()
+		return istable( EMVU.Sirens[set].Gain )
+	end
+
 	ent.IsEMV = true
-	ent:SetDTString( EMV_INDEX, "ö" .. tostring( ent.Name ) .. "öö" ) // Al
+	ent:SetDTString( EMV_INDEX, "ö" .. tostring( ent.Name ) .. "ööö." ) // Al
 
 	//---- APPLY EMV PARAMETERS ----//
 
@@ -475,7 +524,7 @@ function EMVU:MakeEMV( ent, emv )
 		ent:ELS_SetSirenSet( 1 )
 	end
 
-	if istable( emv.Auto ) and emv.Auto[1] then
+	if istable( emv.Auto ) and emv.Auto[1] and istable( emv.Presets ) then
 		ent:ELS_PresetOption( 1 )
 	end
 
@@ -487,14 +536,15 @@ function EMVU:MakeEMV( ent, emv )
 	ent:ELS_LightsOff()
 	ent:ELS_Enabled( true )
 	ent:Photon_ApplySubMaterials()
+	ent:Photon_ResetSelections()
 end
 
-concommand.Add("makecaronme", function(ply)
-	local ent = ents.Create("prop_vehicle_jeep")
-	ent:SetModel( "models/LoneWolfie/chev_impala_09_police.mdl" )
-	ent:SetKeyValue( "vehiclescript", "scripts/vehicles/LWCars/chev_impala_09.txt" )
-	ent:SetPos( ply:GetPos() )
-	ent:SetAngles( ply:GetAngles() )
-	ent:Spawn()
-	ent:Activate()
-end)
+-- concommand.Add("makecaronme", function(ply)
+-- 	local ent = ents.Create("prop_vehicle_jeep")
+-- 	ent:SetModel( "models/LoneWolfie/chev_impala_09_police.mdl" )
+-- 	ent:SetKeyValue( "vehiclescript", "scripts/vehicles/LWCars/chev_impala_09.txt" )
+-- 	ent:SetPos( ply:GetPos() )
+-- 	ent:SetAngles( ply:GetAngles() )
+-- 	ent:Spawn()
+-- 	ent:Activate()
+-- end)

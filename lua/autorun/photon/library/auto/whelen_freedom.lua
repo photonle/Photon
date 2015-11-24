@@ -18,6 +18,7 @@ COMPONENT.Model = "models/schmal/whelen_freedom/freedom_lightbar.mdl"
 COMPONENT.Lightbar = true
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
+COMPONENT.Category = "Lightbar"
 COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "BLUE",

@@ -11,7 +11,8 @@ Photon.DefaultKeys = {
 	Blackout = KEY_H,
 	Horn = KEY_G,
 	Manual = KEY_T,
-	Illum = KEY_X
+	Illum = KEY_X,
+	Radar = KEY_O,
 }
 
 CreateClientConVar( "photon_key_primary_toggle", Photon.DefaultKeys.Primary_Toggle, true )
@@ -23,6 +24,7 @@ CreateClientConVar( "photon_key_blackout", Photon.DefaultKeys.Blackout, true )
 CreateClientConVar( "photon_key_horn", Photon.DefaultKeys.Horn, true )
 CreateClientConVar( "photon_key_manual", Photon.DefaultKeys.Manual, true )
 CreateClientConVar( "photon_key_illum", Photon.DefaultKeys.Illum, true )
+CreateClientConVar( "photon_key_radar", Photon.DefaultKeys.Radar, true )
 
 CreateClientConVar( "photon_emerg_unit", "", true )
 CreateClientConVar( "photon_emerg_enabled", "1", true )
@@ -30,5 +32,10 @@ CreateClientConVar( "photon_stand_enabled", "1", true )
 CreateClientConVar( "photon_hud_opacity", "1", true )
 CreateClientConVar( "photon_lens_effects", "1", true )
 
+CreateClientConVar( "photon_christmas_mode", "1", true )
+
 CreateClientConVar( "photon_comp_editor_scale", "1", true )
+CreateClientConVar( "photon_express_edit", 0, false)
 // CreateClientConVar( "photon_debug", "0", false )
+
+cvars.AddChangeCallback("photon_express_edit",function (name, old, val) PHOTON_EXPRESS = val end)

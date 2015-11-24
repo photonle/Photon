@@ -17,6 +17,7 @@ local COMPONENT = {}
 COMPONENT.Model = "models/schmal/whelen_liberty/liberty_lightbar.mdl"
 COMPONENT.Lightbar = true
 COMPONENT.Skin = 0
+COMPONENT.Category = "Lightbar"
 COMPONENT.Bodygroups = {}
 COMPONENT.DefaultColors = {
 	[1] = "RED",

@@ -21,6 +21,7 @@ COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
 COMPONENT.ColorInput = 3
 COMPONENT.UsePhases = false
+COMPONENT.Category = "Exterior"
 COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "WHITE",

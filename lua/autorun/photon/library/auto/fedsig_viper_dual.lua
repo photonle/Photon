@@ -17,6 +17,7 @@ local COMPONENT = {}
 COMPONENT.Model = "models/tdmcars/emergency/equipment/fedsig_viper_dual.mdl"
 COMPONENT.Required = "489864412"
 COMPONENT.Skin = 0
+COMPONENT.Category = "Interior"
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
 COMPONENT.ForwardTranslation = true

@@ -423,11 +423,27 @@ EMVU.Sirens = {
 	[46] = {
 		Name = "Gamma",
 		Category = "Whelen",
+		Gain = {
+			Sound = "sound/emv/sirens/whelen gamma/emv_wind3.wav",
+			-- Sound = "sound/emv/sirens/whelen gamma/emv_wail.wav",
+			-- Sound = "emv/sirens/whelen gamma/emv_wind.wav",
+			UpRate = .025,
+			DownRate = .0075,
+			MaxRate = 1,
+			MinRate = .15
+		},
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/whelen gamma/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/whelen gamma/emv_yelp.wav", Icon="yelp"},
 			{Name = "PIER", Sound = "emv/sirens/whelen gamma/emv_pier.wav", Icon="phaser"},
 		},
+	},
+	[47] = {
+		Name = "Holiday",
+		Category = "Hidden",
+		Set = {
+			{Name = "XMAS", Sound = "emv/sirens/holiday/wish.wav", Icon="wail"},
+		}
 	},
 }
 

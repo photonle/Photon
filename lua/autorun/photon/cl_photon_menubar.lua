@@ -8,6 +8,7 @@ hook.Add( "PopulateMenuBar", "PhotonOptions_MenuBar", function( menubar )
 
 	local m = menubar:AddOrGetMenu( "Photon" )
 
+	m:AddCVar( "Express Editing Mode", "photon_express_edit", "1", "0" )
 	m:AddCVar( "Toggle Debug Mode", "photon_debug" )
 
 	local dTarget = m:AddSubMenu( "Set Debug Target" )

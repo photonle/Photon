@@ -17,6 +17,7 @@ COMPONENT.Model = "models/tdmcars/emergency/equipment/tomar_200s.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
+COMPONENT.Category = "Auxiliary"
 COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "BLUE",

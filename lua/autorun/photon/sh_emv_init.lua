@@ -4,6 +4,7 @@ if not EMVU then EMVU = {} end
 EMVU.Liveries = {}
 EMVU.SubMaterials = {}
 EMVU.Index = {}
+EMVU.Selections = {}
 
 AddCSLuaFile( "sh_emv_init.lua" )
 AddCSLuaFile( "sh_emv_meta.lua" )
@@ -11,17 +12,17 @@ AddCSLuaFile( "sh_emv_vehicles.lua")
 AddCSLuaFile( "cl_emv_init.lua" )
 AddCSLuaFile( "cl_emv_meta.lua" )
 AddCSLuaFile( "cl_emv_net.lua" )
-AddCSLuaFile( "cl_frame_adjust.lua" )
 AddCSLuaFile( "cl_emv_listener.lua" )
 AddCSLuaFile( "cl_photon_builder.lua" )
 AddCSLuaFile( "cl_photon_menu.lua" )
+AddCSLuaFile( "cl_photon_editor.lua" )
+AddCSLuaFile( "cl_emv_radar.lua" )
 AddCSLuaFile( "library/emv_sirens.lua" )
 
 include( "sh_emv_config.lua" )
 include( "sh_emv_meta.lua" )
 include( "sh_emv_vehicles.lua" )
 include( "sh_emv_helper.lua" )
-include( "slaxml.lua")
 
 if CLIENT then
 	include( "cl_emv_init.lua" )

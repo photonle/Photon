@@ -20,6 +20,7 @@ COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
 COMPONENT.ForwardTranslation = true
 COMPONENT.UsePhases = true
+COMPONENT.Category = "Exterior"
 
 COMPONENT.Meta = {
 	auto_dome_a = {

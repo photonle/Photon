@@ -13,6 +13,7 @@ util.AddNetworkString( "photon_menu" )
 util.AddNetworkString( "emvu_preset" )
 util.AddNetworkString( "emvu_livery" )
 util.AddNetworkString( "photon_liveryupdate" )
+util.AddNetworkString( "emvu_selection" )
 
 local can_change_siren_model = GetConVar( "photon_emv_changesirens" )
 local can_change_light_presets = GetConVar( "photon_emv_changepresets" )
@@ -100,10 +101,23 @@ function EMVU.Net:Preset( ply, args )
 	local emv = ply:GetVehicle()
 	local recv = net.ReadInt(8)
 	if recv != 0 then emv:ELS_PresetOption( recv ) return end
-	print( "setting to " .. tostring( recv ) )
 end
 net.Receive( "emvu_preset", function( len, ply ) 
 	EMVU.Net:Preset( ply )
+end)
+
+function EMVU.Net.Selection( ply )
+	local ent = net.ReadEntity()
+	if not ent:IsEMV() then return end
+	local category = net.ReadInt(8)
+	local option = net.ReadInt(8)
+	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent )
+	if modifyBlocked != false then
+		ent:Photon_SetSelection( category, option )
+	end
+end
+net.Receive( "emvu_selection", function( len, ply ) 
+	EMVU.Net.Selection( ply )
 end)
 
 function EMVU.Net:Blackout( ply, arg )

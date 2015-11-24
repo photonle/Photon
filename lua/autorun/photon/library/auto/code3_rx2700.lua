@@ -1,0 +1,222 @@
+AddCSLuaFile()
+
+local A = "AMBER"
+local R = "RED"
+local DR = "D_RED"
+local B = "BLUE"
+local W = "WHITE"
+local CW = "C_WHITE"
+local SW = "S_WHITE"
+local G = "GREEN"
+local RB = "BLUE/RED"
+
+local name = "Code 3 RX2700"
+
+local COMPONENT = {}
+
+COMPONENT.Model = "models/schmal/code3_rx2700.mdl"
+COMPONENT.Lightbar = true
+COMPONENT.Skin = 0
+COMPONENT.Category = "Lightbar"
+COMPONENT.Bodygroups = {}
+COMPONENT.DefaultColors = {
+	[1] = "RED",
+	[2] = "BLUE"
+}
+
+COMPONENT.Meta = {
+	rx2700_front = {
+		AngleOffset = -90,
+		W = 8.2,
+		H = 7.5,
+		Sprite = "sprites/emv/2700_main",
+		WMult = 2,
+		Scale = 2
+	},
+	rx2700_takedown = {
+		AngleOffset = -90,
+		W = 4.7,
+		H = 4.7,
+		Sprite = "sprites/emv/2700_takedown",
+		WMult = 1.4,
+		Scale = 1.5
+	},
+	rx2700_rear = {
+		AngleOffset = 90,
+		W = 8.2,
+		H = 7.5,
+		Sprite = "sprites/emv/2700_main",
+		WMult = 2,
+		Scale = 2
+	},
+	rx2700_feet = {
+		AngleOffset = -90,
+		W = 4,
+		H = 4,
+		Sprite = "sprites/emv/emv_whelen_mini_3",
+		WMult = 1.5,
+		Scale = 1
+	},
+}
+
+COMPONENT.Positions = {
+
+	[1] = { Vector( -11.41, 8.21, 1.17 ), Angle( 0, 0, 0 ), "rx2700_front" },
+	[2] = { Vector( 11.41, 8.21, 1.17 ), Angle( 0, 0, 0 ), "rx2700_front" },
+
+	[3] = { Vector( -19.08, 8.21, 1.17 ), Angle( 0, 0, 0 ), "rx2700_front" },
+	[4] = { Vector( 19.08, 8.21, 1.17 ), Angle( 0, 0, 0 ), "rx2700_front" },
+
+	[5] = { Vector( -26.34, 5.99, 1.17 ), Angle( 0, 32.6, 0 ), "rx2700_front" },
+	[6] = { Vector( 26.34, 5.99, 1.17 ), Angle( 0, -32.6, 0 ), "rx2700_front" },
+
+	[7] = { Vector( -26.34, -5.85, 1.17 ), Angle( 0, -32.6, 0 ), "rx2700_rear" },
+	[8] = { Vector( 26.34, -5.85, 1.17 ), Angle( 0, 32.6, 0 ), "rx2700_rear" },
+
+	[9] = { Vector( -19.08, -8.01, 1.17 ), Angle( 0, 0, 0 ), "rx2700_rear" },
+	[10] = { Vector( 19.08, -8.01, 1.17 ), Angle( 0, 0, 0 ), "rx2700_rear" },
+
+	[11] = { Vector( -11.41, -8.01, 1.17 ), Angle( 0, 0, 0 ), "rx2700_rear" },
+	[12] = { Vector( 11.41, -8.01, 1.17 ), Angle( 0, 0, 0 ), "rx2700_rear" },
+
+	[13] = { Vector( 0, 8.21, 1.17 ), Angle( 0, 0, 0 ), "rx2700_front" },
+	[14] = { Vector( 0, -8.01, 1.17 ), Angle( 0, 0, 0 ), "rx2700_rear" },
+
+	[15] = { Vector( -5.4, 8.41, 1.2 ), Angle( 0, 0, 0 ), "rx2700_takedown" },
+	[16] = { Vector( 5.4, 8.41, 1.2 ), Angle( 0, 0, 0 ), "rx2700_takedown" },
+
+	[17] = { Vector( -29.7, 0.1, 1.2 ), Angle( 0, 90, 0 ), "rx2700_takedown" },
+	[18] = { Vector( 29.8, 0.1, 1.2 ), Angle( 0, -90, 0 ), "rx2700_takedown" },
+
+	[19] = { Vector( -27.57, 8.42, -1.44 ), Angle( 0, 0, 0 ), "rx2700_feet" },
+	[20] = { Vector( 27.57, 8.42, -1.44 ), Angle( 0, 0, 0 ), "rx2700_feet" },
+
+	[21] = { Vector( -29.4, -6.5, -1.44 ), Angle( 0, 90, 0 ), "rx2700_feet" },
+	[22] = { Vector( 29.44, -6.5, -1.44 ), Angle( 0, -90, 0 ), "rx2700_feet" },
+
+}
+
+COMPONENT.Sections = {
+	["auto_rx2700_main"] = {
+		{
+			{ 1, "_1" }, { 2, "_2" },
+			{ 3, "_1" }, { 4, "_2" },
+			{ 5, "_1" }, { 6, "_2" },
+			{ 7, "_1" }, { 8, "_2" },
+			{ 9, "_1" }, { 10, "_2" },
+			{ 11, "_1" }, { 12, "_2" },
+			{ 13, W }, { 14, A },
+			{ 15, W }, { 16, W },
+			{ 17, W }, { 18, W },
+			{ 19, W }, { 20, W },
+			{ 21, W }, { 22, W },
+		},
+		[2] = { { 1, "_1" }, { 11, "_1" }, { 5, "_1" }, { 7, "_1" }, { 4,"_2" }, { 10,"_2" } },
+		[3] = { { 2,"_2" }, { 12,"_2" }, { 6,"_2" }, { 8,"_2" }, { 3, "_1" }, { 9, "_1" } },
+	},
+	["auto_rx2700_feet"] = {
+		[1] = { { 19, "_1" }, { 20,"_2" } },
+	},
+	["auto_rx2700_traffic"] = {
+		[1] = { { 14, A } },
+	},
+	["auto_rx2700_center"] = {
+		[1] = { { 13, "_1" }, { 14, A } },
+		[2] = { { 13,"_2" }, { 14, A } },
+	},
+	["auto_rx2700_inner"] = {
+		[1] = { { 1, "_1" }, { 11, "_1" } },
+		[2] = { { 2,"_2" }, { 12,"_2" } },
+	},
+	["auto_rx2700_mid"] = {
+		[1] = { { 3, "_1" }, { 9, "_1" } },
+		[2] = { { 4,"_2" }, { 10,"_2" } },
+	},
+	["auto_rx2700_outter"] = {
+		[1] = { { 5, "_1" }, { 7, "_1" } },
+		[2] = { { 6,"_2" }, { 8,"_2" } },
+	},
+	["auto_rx2700_takedown"] = {
+		[1] = { { 15, W }, { 17, W } },
+		[2] = { { 16, W }, { 18, W } },
+	}
+}
+
+COMPONENT.Patterns = {
+	["auto_rx2700_main"] = {
+		["all"] = { 1 },
+		["stage_1"] = {
+			2, 2, 2, 2, 3, 3, 3, 3
+		}
+	},
+	["auto_rx2700_traffic"] = {
+		["stage_1"] = { 1, 1, 1, 0 }
+	},
+	["auto_rx2700_feet"] = {
+		["stage_1"] = { 1 },
+	},
+	["auto_rx2700_center"] = {
+		["stage_3"] = { 1, 1, 0, 2, 2, 0, 1, 0, 2, 0, 0 }
+	},
+	["auto_rx2700_inner"] = {
+		["stage_2"] = { 1, 1, 1, 1, 2, 2, 2, 2 },
+		["stage_3"] = { 1, 2, 0, 2, 1, 0 }
+	},
+	["auto_rx2700_mid"] = {
+		["stage_2"] = { 2, 2, 2, 0, 0, 1, 1, 1, 0, 1, 0, 2, 0 },
+		["stage_3"] = { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 2, 1, 1, 2, 2, 0 }
+	},
+	["auto_rx2700_outter"] = {
+		["stage_2"] = { 0, 1, 0, 1, 0, 0, 2, 0, 2, 0 },
+		["stage_3"] = { 1, 2 }
+	},
+	["auto_rx2700_takedown"] = {
+		["stage_3"] = { 2, 2, 1, 1 }
+	}
+}
+
+COMPONENT.TrafficDisconnect = { 
+	["auto_rx2700_traffic"] = {
+		
+	}
+}
+
+COMPONENT.Modes = {
+	Primary = {
+			M1 = {
+				["auto_rx2700_main"] = "stage_1",
+				["auto_rx2700_feet"] = "stage_1",
+				["auto_rx2700_traffic"] = "stage_1",
+			},
+			M2 = {
+				["auto_rx2700_inner"] = "stage_2",
+				["auto_rx2700_mid"] = "stage_2",
+				["auto_rx2700_outter"] = "stage_2",
+			},
+			M3 = {
+				["auto_rx2700_center"] = "stage_3",
+				["auto_rx2700_inner"] = "stage_3",
+				["auto_rx2700_mid"] = "stage_3",
+				["auto_rx2700_outter"] = "stage_3",
+				["auto_rx2700_takedown"] = "stage_3",
+			}
+		},
+	Auxiliary = {
+			L = {
+				["auto_rx2700_main_traffic"] = "left"
+			},
+			R = {
+				["auto_rx2700_main_traffic"] = "right"
+			},
+			D = {
+				["auto_rx2700_main_traffic"] = "diverge"
+			}
+		},
+	Illumination = {
+		T = {
+			{ 15, W }, { 16, W }
+		}
+	}
+}
+
+EMVU:AddAutoComponent( COMPONENT, name )

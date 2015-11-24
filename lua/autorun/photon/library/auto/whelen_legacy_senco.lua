@@ -16,6 +16,7 @@ local COMPONENT = {}
 COMPONENT.Model = "models/schmal/whelen_legacy/legacy_lightbar.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
+COMPONENT.Category = "Lightbar"
 COMPONENT.UsePhases = true
 
 COMPONENT.Meta = {

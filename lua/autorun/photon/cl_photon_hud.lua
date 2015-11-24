@@ -133,9 +133,10 @@ function PhotonHUD:GetCurrentState()
 	local data = {}
 	local ply = LocalPlayer()
 	local ent = ply:GetVehicle()
-	if not IsValid(ply) or not IsValid(ent) or not ent:Photon() or not ent:IsEMV() then return false end
+	if not IsValid(ply) or not IsValid(ent) or not ent:Photon() or not ent:IsEMV() or not ent.Photon_Lights then return false end
 	data.EMV = ent:IsEMV()
 	local name = ent.VehicleName
+	if not name then return end
 	if data.EMV then
 		local primaryLights = EMVU.Sequences[name]["Sequences"]
 		if istable(primaryLights) then
@@ -295,3 +296,150 @@ end)
 
 if PhotonHUD then PhotonHUD:Init() end
 
+
+
+
+local radarBase = Material( "photon/ui/radar_base.png" )
+
+local digitMaterials = {
+	["1"] = Material( "photon/ui/digit_1.png" ),
+	["2"] = Material( "photon/ui/digit_2.png" ),
+	["3"] = Material( "photon/ui/digit_3.png" ),
+	["4"] = Material( "photon/ui/digit_4.png" ),
+	["5"] = Material( "photon/ui/digit_5.png" ),
+	["6"] = Material( "photon/ui/digit_6.png" ),
+	["7"] = Material( "photon/ui/digit_7.png" ),
+	["8"] = Material( "photon/ui/digit_8.png" ),
+	["9"] = Material( "photon/ui/digit_9.png" ),
+	["0"] = Material( "photon/ui/digit_0.png" )
+}
+
+local digitPos = {
+	[1] = {
+			[1] = 62,
+			[2] = 47,
+			[3] = 33,
+		},
+	[2] = {
+			[1] = 62+64,
+			[2] = 47+64,
+			[3] = 33+64,
+		},
+	[3] = {
+		[1] = 62+128,
+		[2] = 47+128,
+		[3] = 33+128,
+	}
+}
+
+local nodeColors = {
+	[1] = Color( 255, 200, 0 ),
+	[2] = Color( 255, 150, 20 ),
+	[3] = Color( 0, 255, 64 )
+}
+
+local function drawDigits( node, num )
+	if not isnumber( num ) or not nodeColors[node] then return end
+	if num > 999 then num = 999 end
+	local digits = string.Split( string.reverse(tostring( num )), '' )
+	local x = ( scrW / 2 ) - 128
+	setDrawColor( nodeColors[node] )
+	for i=1,#digits do
+		local digit = tostring(digits[i])
+		if digitMaterials[digit] then
+			setMaterial( digitMaterials[digit] )
+			drawTexturedRect( x + digitPos[node][i], scrH - 256 + 104, 32, 32 )
+		end
+		
+	end
+end
+
+local function PhotonRadar()
+	setDrawColor( 255, 255, 255 )
+	setMaterial( radarBase )
+	local x = ( scrW / 2 ) - 128
+	local y = scrH - 256
+	drawTexturedRect( x, y, 256, 256 )
+	if PHOTON_RADAR_DISP_FAST and PHOTON_RADAR_DISP_FAST > 0 then drawDigits( 2, PHOTON_RADAR_DISP_FAST ) end
+	if PHOTON_RADAR_DISP_NEAR and PHOTON_RADAR_DISP_NEAR > 0 then drawDigits( 1, PHOTON_RADAR_DISP_NEAR ) end
+	local ent = LocalPlayer():GetVehicle()
+	if IsValid( ent ) then
+		local mySpeed = math.Round( ent:Photon_AdjustedSpeed() )
+		drawDigits( 3, mySpeed )
+	end
+	
+end
+hook.Add( "HUDPaint", "Photon.RadarOverlay", function()
+	local ent = LocalPlayer():GetVehicle()
+	if not IsValid( ent ) or not ent:IsEMV() or not ent:Photon_RadarActive() then return end
+	PhotonRadar()
+end)
+-- local TEXTURE_FLAGS_CLAMP_S = 0x0004
+-- local TEXTURE_FLAGS_CLAMP_T = 0x0008
+
+-- local rt = GetRenderTargetEx("testRT", 512, 512, RT_SIZE_NO_CHANGE, MATERIAL_RT_DEPTH_SEPARATE, TEXTURE_FLAGS_CLAMP_S or TEXTURE_FLAGS_CLAMP_T, CREATERENDERTARGETFLAGS_UNFILTERABLE_OK, CREATERENDERTARGETFLAGS_HDR, IMAGE_FORMAT_DEFAULT )
+
+-- local drawMaterial = CreateMaterial("TestRT","UnlitGeneric",{
+-- 	["$ignorez"] = 1,
+-- 	["$vertexcolor"] = 1,
+-- 	["$vertexalpha"] = 1,
+-- 	["$nolod"] = 1,
+-- 	["$basetexture"] = rt:GetName()
+-- })
+
+-- local view = {
+-- 	angles = Angle(),
+-- 	origin = Vector(),
+-- 	x = 0,
+-- 	y = 0,
+-- 	w = 512,
+-- 	h = 512,
+-- 	drawhud = false,
+-- 	drawviewmodel = false,
+-- }
+
+-- local inDraw = false
+
+-- function PhotonTestDraw()
+-- 	local self = LocalPlayer():GetVehicle()
+-- 	if not IsValid( self ) then return end
+-- 	//self:DrawModel()
+-- 	if(inDraw) then
+-- 		return
+-- 	end
+-- 	inDraw = true
+-- 	print("hi")
+-- 	local pos = self:GetPos()
+-- 	pos.z = pos.z + 200
+-- 	local ang = self:GetAngles()
+	
+-- 	ang:RotateAroundAxis(ang:Forward(), 90)
+-- 	ang:RotateAroundAxis(ang:Right(), 90)
+	
+-- 	local oldRT = render.GetRenderTarget()
+-- 	render.SetRenderTarget(rt)
+-- 		render.Clear(0, 0, 0, 255)
+-- 		render.ClearDepth()
+-- 		local w, h = ScrW(), ScrH()
+-- 		render.SetViewPort(0, 0, 512, 512)
+-- 			cam.Start2D()
+-- 				render.RenderView(view)
+-- 				-- surface.SetDrawColor((math.cos(math.rad(RealTime()*120))+1)*127.5)
+-- 				surface.SetDrawColor(255, 255, 255)
+-- 				surface.DrawRect(0, 0, 4, 4)
+-- 			cam.End2D()
+-- 		render.SetViewPort(0, 0, w, h)
+-- 	render.SetRenderTarget(oldRT)
+	
+-- 	cam.Start3D2D(pos, ang, 1)
+-- 		surface.SetMaterial(drawMaterial)
+-- 		surface.SetDrawColor(255, 255, 255, 255)
+-- 		surface.DrawTexturedRect(0, 0, 512, 512)
+-- 	cam.End3D2D()
+	
+-- 	inDraw = false
+-- end
+
+-- hook.Add( "PostDrawTranslucentRenderables", "photoasndflaskdf", function()
+	//PhotonTestDraw()
+-- end)

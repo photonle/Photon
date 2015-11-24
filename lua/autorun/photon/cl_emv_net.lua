@@ -78,3 +78,11 @@ end
 net.Receive( "photon_liveryupdate", function() 
 	EMVU.Net:ReceiveLiveryUpdate( net.ReadString(), net.ReadString(), net.ReadEntity() )
 end)
+
+function EMVU.Net.Selection( ent, category, option )
+	net.Start( "emvu_selection" )
+		net.WriteEntity( ent )
+		net.WriteInt( category, 8 )
+		net.WriteInt( option, 8)
+	net.SendToServer()
+end

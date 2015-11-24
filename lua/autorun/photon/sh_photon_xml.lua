@@ -258,7 +258,7 @@ end
 
 local testemv = Photon.XML.ParseVehicleFromXML( xmltest )
 local back = Photon.XML.ConvertToXML( testemv )
-print(tostring(back))
+-- print(tostring(back))
 -- print( tostring( testemv ) )
 -- PrintTable( testemv )
 

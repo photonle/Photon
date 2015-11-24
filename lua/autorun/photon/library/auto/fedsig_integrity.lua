@@ -14,6 +14,7 @@ local name = "Federal Signal Integrity"
 local COMPONENT = {}
 
 COMPONENT.Model = "models/schmal/fedsig_integrity/integrity_lightbar.mdl"
+COMPONENT.Category = "Lightbar"
 COMPONENT.Skin = 0
 COMPONENT.Lightbar = true
 COMPONENT.Bodygroups = {}

@@ -63,6 +63,10 @@ hook.Add( "Photon.EntityChangedSkin", "Photon.LiverySkinCheck", function( ent, s
 	end
 end )
 
+hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ent, ply ) 
+	if not IsValid( ent ) then return false end
+end )
+
 // local ply = player.GetBySteamID("STEAM_0:0:0")
 // local veh = ply:GetVehicle()
 // veh:SetSubMaterial( 0, "photon/override/tal_f150_running" )

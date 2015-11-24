@@ -22,12 +22,12 @@ function ent:HasELS()
 end
 
 function ent:EMVName()
-	if not IsValid( self ) then return false end
-	if not EMV_INDEX then return false end
+	if not IsValid( self ) then return "" end
+	if not EMV_INDEX then return "" end
 	if self:IsEMV() then
 		return string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )[2]
 	end
-	return false
+	return ""
 end
 
 function ent:Photon_GetSpeed()
@@ -63,4 +63,32 @@ ent.LegacySetSkin = ent.SetSkin
 function ent:SetSkin( index )
 	self:LegacySetSkin( index )
 	hook.Call( "Photon.EntityChangedSkin", GM, self, index )
+end
+
+function ent:Photon_SelectionString()
+	return string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )[5]
+end
+
+function ent:Photon_SelectionTable()
+	-- print(tostring(self:GetDTString( EMV_INDEX )))
+	local selectionString =  string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )[5]
+	-- print(tostring(selectionString))
+	return string.Explode( ".", selectionString, false )
+end
+
+function ent:Photon_SelectionOption( index )
+	local bgTable = self:Photon_SelectionTable()
+	if not istable( bgTable ) then return 1 end
+	if index > #bgTable then return 1 end
+	if index < 1 then return 1 end 
+	-- print("index is: " .. tostring( index ))
+	return tonumber( bgTable[ index ] )
+end
+
+function ent:Photon_GetUtilStringTable()
+	return string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )
+end
+
+function ent:Photon_SelectionEnabled()
+	return istable( EMVU.Selections[ self:EMVName() ] )
 end

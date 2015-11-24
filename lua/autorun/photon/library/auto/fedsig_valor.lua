@@ -16,6 +16,7 @@ local COMPONENT = {}
 COMPONENT.Model = "models/schmal/fedsig_valor/valor_lightbar.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
+COMPONENT.Category = "Lightbar"
 COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "BLUE"

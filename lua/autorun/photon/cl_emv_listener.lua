@@ -9,6 +9,7 @@ local key_blackout = key_blackout or false
 local key_horn = key_horn or false
 local key_manual = key_manual or false
 local key_illum = key_illum or false
+local key_radar = key_radar or false
 
 hook.Add( "InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	key_primary_toggle = GetConVar( "photon_key_primary_toggle" )
@@ -20,6 +21,7 @@ hook.Add( "InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	key_horn = GetConVar( "photon_key_horn" )
 	key_manual = GetConVar( "photon_key_manual" )
 	key_illum = GetConVar( "photon_key_illum" )
+	key_radar = GetConVar( "photon_key_radar" )
 end)
 
 function EMVU:Listener( ply, bind, press )
@@ -90,7 +92,7 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 		X_DOWN = false
 	end
 
-	if emv:Photon_HasTrafficAdvisor() then 
+	if emv.Photon_HasTrafficAdvisor and emv:Photon_HasTrafficAdvisor() then 
 		if not PHOTON_B_DOWN then
 			if keyDown( key_auxiliary:GetInt() ) then
 				if emv:Photon_TrafficAdvisor() then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
@@ -195,6 +197,24 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 	elseif MANUALTOG_DOWN and not keyDown( key_manual:GetInt() ) then
 		EMVU.Net:Manual( false )
 		MANUALTOG_DOWN = false
+	end
+
+	if not MANUALTOG_DOWN and keyDown( key_manual:GetInt() ) then
+		EMVU.Net:Manual( true )
+		MANUALTOG_DOWN = true
+	elseif MANUALTOG_DOWN and not keyDown( key_manual:GetInt() ) then
+		EMVU.Net:Manual( false )
+		MANUALTOG_DOWN = false
+	end
+
+	if not PHOTONRADARTOG_DOWN and keyDown( key_radar:GetInt() ) then
+		emv:Photon_RadarActive( true )
+		surface.PlaySound( EMVU.Sounds.Up )
+		PHOTONRADARTOG_DOWN = true
+	elseif PHOTONRADARTOG_DOWN and not keyDown( key_radar:GetInt() ) then
+		emv:Photon_RadarActive( false )
+		surface.PlaySound( EMVU.Sounds.Down )
+		PHOTONRADARTOG_DOWN = false
 	end
 
 end)

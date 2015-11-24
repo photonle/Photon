@@ -16,6 +16,7 @@ local COMPONENT = {}
 COMPONENT.Model = "models/schmal/fedsig_legend/legend_lightbar.mdl"
 COMPONENT.Skin = 1
 COMPONENT.Bodygroups = {}
+COMPONENT.Category = "Lightbar"
 
 COMPONENT.Meta = {
 	legend_forward = {
