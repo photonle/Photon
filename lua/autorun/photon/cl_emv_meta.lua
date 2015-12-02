@@ -515,7 +515,7 @@ function EMVU:MakeEMV( emv, name )
 			if p.Skin then prop:SetSkin(p.Skin) end
 			if p.Material then prop:SetMaterial( p.Material ) end
 			if p.Color then prop:SetColor( p.Color ) end
-
+			if p.AirEL then prop:SetSubMaterial( 2, "photon/emv/blank" ); prop.AirEL = true end
 			prop:SetSolid( SOLID_NONE )
 			prop:SetMoveType( MOVETYPE_NONE )
 			prop:SetCollisionGroup( COLLISION_GROUP_IN_VEHICLE )
@@ -591,6 +591,8 @@ function EMVU:MakeEMV( emv, name )
 						prop:SetModelScale( emvProps[index].Scale, 0 )
 					end
 				end
+				if prop.AirEL then self.AirELEntity = prop end
+				if not IsValid( self.AirELEntity ) then self.AirELEntity = nil end
 			end
 		end
 		self.LastEMVPropScan = CurTime()

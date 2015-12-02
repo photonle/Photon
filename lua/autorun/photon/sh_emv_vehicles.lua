@@ -451,7 +451,7 @@ function EMVU:CalculateAuto( name, data )
 
 		end
 
-		PrintTable( EMVU.Sequences[ name ].Traffic )
+		//PrintTable( EMVU.Sequences[ name ].Traffic )
 
 		local offset = #EMVU.Positions[ name ] -- count of current meta values
 

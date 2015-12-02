@@ -67,6 +67,21 @@ hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ent, 
 	if not IsValid( ent ) then return false end
 end )
 
+local function PhotonUnitNumberScan()
+	for _,ent in pairs( EMVU:AllVehicles() ) do
+		if not IsValid( ent ) then continue end
+		if not IsValid( ent:GetDriver() ) then continue end
+		local ply = ent:GetDriver()
+		if ( ent:Photon_GetLiveryID() == "" and ( (not ent.PhotonUnitIDRequestTime) or ( RealTime() < ent.PhotonUnitIDRequestTime + 10 ) ) ) then
+			Photon.Net:RequestUnitNumber( ply )
+			ent.PhotonUnitIDRequestTime = RealTime()
+		end
+	end
+end
+timer.Create( "Photon.UnitNumberScan", 2, 0, function() 
+	PhotonUnitNumberScan()
+end )
+
 // local ply = player.GetBySteamID("STEAM_0:0:0")
 // local veh = ply:GetVehicle()
 // veh:SetSubMaterial( 0, "photon/override/tal_f150_running" )

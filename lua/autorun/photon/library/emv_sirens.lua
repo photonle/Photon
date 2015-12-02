@@ -428,7 +428,7 @@ EMVU.Sirens = {
 			-- Sound = "sound/emv/sirens/whelen gamma/emv_wail.wav",
 			-- Sound = "emv/sirens/whelen gamma/emv_wind.wav",
 			UpRate = .025,
-			DownRate = .0075,
+			DownRate = .005,
 			MaxRate = 1,
 			MinRate = .15
 		},

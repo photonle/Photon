@@ -64,11 +64,15 @@ end
 
 local unitid_pref = GetConVar( "photon_emerg_unit" )
 
+local function GenerateDefaultUnitID()
+	return string.sub( tostring( LocalPlayer():SteamID64() ), 14 ) or "000" -- will use the last three digits of Steam64
+end
+
 function EMVU.Net:Livery( category, index )
 	net.Start( "emvu_livery" )
 		net.WriteString( category )
 		net.WriteString( index )
-		net.WriteString( unitid_pref:GetString() or "" )
+		net.WriteString( unitid_pref:GetString() or GenerateDefaultUnitID() )
 	net.SendToServer()
 end
 
@@ -78,6 +82,13 @@ end
 net.Receive( "photon_liveryupdate", function() 
 	EMVU.Net:ReceiveLiveryUpdate( net.ReadString(), net.ReadString(), net.ReadEntity() )
 end)
+
+function EMVU.Net:ReceiveUnitNumberRequest()
+	net.Start( "photon_myunitnumber" )
+		net.WriteString( unitid_pref:GetString() or GenerateDefaultUnitID() )
+	net.SendToServer()
+end
+net.Receive( "photon_myunitnumber", function() EMVU.Net:ReceiveUnitNumberRequest() end)
 
 function EMVU.Net.Selection( ent, category, option )
 	net.Start( "emvu_selection" )

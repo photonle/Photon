@@ -14,6 +14,7 @@ util.AddNetworkString( "emvu_preset" )
 util.AddNetworkString( "emvu_livery" )
 util.AddNetworkString( "photon_liveryupdate" )
 util.AddNetworkString( "emvu_selection" )
+util.AddNetworkString( "photon_myunitnumber" )
 
 local can_change_siren_model = GetConVar( "photon_emv_changesirens" )
 local can_change_light_presets = GetConVar( "photon_emv_changepresets" )
@@ -150,7 +151,6 @@ end)
 function EMVU.Net:Livery( ply, category, skin, unit )
 	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
 	if game.SinglePlayer() == false then
-		print("checking")
 		if not ply.LastLiveryChange then ply.LastLiveryChange = 0 end
 		if RealTime() < ply.LastLiveryChange + PHOTON_LIVERY_COOLDOWN then 
 			ply:ChatPrint( "[Photon] Please wait a few seconds before changing the vehicle livery again." ); 
@@ -202,4 +202,18 @@ function Photon.Net:NotifyLiveryUpdate( id, unit, ent )
 		net.WriteString( unit )
 		net.WriteEntity( ent )
 	net.Broadcast()
+end
+
+function Photon.Net:ReceiveUnitNumber( ply, unit )
+	if not IsValid( ply ) or not IsValid( ply:GetVehicle() ) or not ( ply:GetVehicle():IsEMV() ) then return end
+	local ent = ply:GetVehicle()
+	ent:Photon_SetUnitNumber( unit )
+end
+net.Receive( "photon_myunitnumber", function( len, ply ) 
+	Photon.Net:ReceiveUnitNumber( ply, net.ReadString() )
+end )
+
+function Photon.Net:RequestUnitNumber( ply )
+	net.Start( "photon_myunitnumber" )
+	net.Send( ply )
 end

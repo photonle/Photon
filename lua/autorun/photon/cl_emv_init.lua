@@ -9,6 +9,7 @@ include( "cl_photon_builder.lua" )
 include( "cl_photon_menu.lua" )
 include( "cl_photon_editor.lua" )
 include( "cl_emv_radar.lua" )
+include( "cl_emv_airel.lua" )
 
 local should_render = GetConVar( "photon_emerg_enabled" )
 
@@ -32,10 +33,12 @@ hook.Add("PreRender", "EMVU.Scan", DrawEMVLights)
 local function PhotonManualWindScan()
 	if not photon_ready then return end
 	for _, emv in pairs( EMVU:AllVehicles() ) do
-		if IsValid( emv ) then emv:Photon_ManualWindUpdate() end
+		if IsValid( emv ) and emv.Photon_ManualWindUpdate then emv:Photon_ManualWindUpdate() end
 	end
 end
-hook.Add( "Tick", "Photon.ManualSirenWindScan", function() PhotonManualWindScan() end)
+timer.Create( "Photon.ManualWindScan", .01, 0, function()
+	PhotonManualWindScan()
+end )
 
 local function PhotonRadarScan()
 	if not photon_ready then return end
