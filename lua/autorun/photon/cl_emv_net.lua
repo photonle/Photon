@@ -97,3 +97,22 @@ function EMVU.Net.Selection( ent, category, option )
 		net.WriteInt( option, 8)
 	net.SendToServer()
 end
+
+function EMVU.Net.RequestAllSkins()
+	net.Start( "photon_availableskins" )
+	net.SendToServer()
+end
+
+function EMVU.Net.ReceiveAvailableSkins()
+	local received = net.ReadTable()
+	Photon.AutoSkins.Available = received
+	PrintTable( received )
+end
+net.Receive( "photon_availableskins", function() EMVU.Net.ReceiveAvailableSkins() end)
+
+function EMVU.Net.ApplyAutoSkin( ent, skin )
+	net.Start( "photon_setautoskin" )
+		net.WriteEntity( ent )
+		net.WriteString( skin )
+	net.SendToServer()
+end

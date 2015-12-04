@@ -76,6 +76,47 @@ properties.Add( "photon_liveries", {
 	end
 })
 
+properties.Add( "photon_autoskin", {
+	MenuLabel = "Vehicle Liveries",
+	Order = 3,
+	MenuIcon = "photon/ui/menu-livery.png",
+
+	Filter = function( self, ent, ply )
+		if not IsValid( ent ) then return false end
+		if not ent:Photon() then return false end
+		if not ent:IsEMV() then return false end
+		if not ent.VehicleName then return false end
+		local mdl = ent:GetModel()
+		local mdlId = Photon.AutoSkins.TranslationTable[ mdl ]
+		if not mdlId then return false end
+		if not istable( Photon.AutoSkins.Available[ mdlId ] ) then return false end
+		return true
+	end,
+
+	MenuOpen = function( self, option, ent )
+		local mdl = ent:GetModel()
+		local mdlId = Photon.AutoSkins.TranslationTable[ mdl ]
+		local skinTable = Photon.AutoSkins.Available[ mdlId ]
+
+		local submenu = option:AddSubMenu()
+
+		for category,subSkins in pairs( skinTable ) do
+			if category != "/" then
+				local categoryMenu = submenu:AddSubMenu( category )
+				for _,skinInfo in pairs( subSkins ) do
+					categoryMenu:AddOption( skinInfo.Name, function() EMVU.Net.ApplyAutoSkin( ent, skinInfo.Texture ) end )
+				end
+			end
+		end
+
+		if istable( skinTable["/"] ) then
+			for _,skinInfo in pairs( skinTable["/"] ) do
+				submenu:AddOption( skinInfo.Name, function() EMVU.Net.ApplyAutoSkin( ent, skinInfo.Texture ) end )
+			end
+		end
+	end
+})
+
 properties.Add( "photon_preset", {
 	MenuLabel = "Emergency Lights",
 	Order = 1,

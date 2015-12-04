@@ -18,6 +18,26 @@ if not Photon then
 	Photon.Vehicles.States.Blink_Right = {}
 	Photon.Vehicles.States.Reverse = {}
 	Photon.Vehicles.States.Running = {}
+	Photon.AutoSkins = {}
+
+	Photon.AutoSkins.TranslationTable = {
+		["models/schmal/fpiu/ford_utility.mdl"] = "fpiu16"
+	}
+
+	Photon.AutoSkins.Available = {}
+
+	Photon.AutoSkins.IsSkinAvailable = function( id, skin )
+		if not istable( Photon.AutoSkins.Available[ id ] ) then return false end
+		local skinTable = Photon.AutoSkins.Available[ id ]
+		for key,subSkinTable in pairs( skinTable ) do
+			if istable( subSkinTable ) then
+				for _,skinInfo in pairs( subSkinTable ) do
+					if skinInfo.Texture == skin then return true end
+				end
+			end
+		end
+		return false
+	end
 end
 
 AddCSLuaFile( "cl_photon_eng.lua" )

@@ -40,6 +40,14 @@ timer.Create( "Photon.ManualWindScan", .01, 0, function()
 	PhotonManualWindScan()
 end )
 
+local function PhotonManualWindFocus()
+	if not photon_ready then return end
+	for _, emv in pairs( EMVU:AllVehicles() ) do
+		if IsValid( emv ) and emv.Photon_ManualWindFocus then emv:Photon_ManualWindFocus() end
+	end
+end
+hook.Add( "PreRender", "Photon.ManualFocusCheck", function() PhotonManualWindFocus() end )
+
 local function PhotonRadarScan()
 	if not photon_ready then return end
 	for _, emv in pairs( EMVU:AllVehicles() ) do

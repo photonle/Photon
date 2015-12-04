@@ -1458,7 +1458,9 @@ EMV.Sequences = {
 	Traffic = {
 		{
 			Name = "LEFT",
-			Components = {},
+			Components = {
+				["lightbar_freedom_rb_outer"] = "code3"
+			},
 			BG_Components = {
 				["rear interior traffic advisor"] = {
 					["0"] = {

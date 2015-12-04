@@ -17,6 +17,12 @@ end )
 
 local IsValid = IsValid
 
+local christmasMode = GetConVar( "photon_christmas_mode" ) or false
+
+hook.Add( "InitPostEntity", "Photon.CLEMVMETASettings", function()
+	christmasMode = GetConVar( "photon_christmas_mode" )
+end)
+
 function EMVU:MakeEMV( emv, name )
 
 	if not emv or not emv:IsValid() or not emv:IsVehicle() then return false end
@@ -369,6 +375,7 @@ function EMVU:MakeEMV( emv, name )
 
 			if positions[b[1]] then
 				local colString = b[2]
+				
 				local col = false
 				local multiColor = false
 
@@ -380,6 +387,10 @@ function EMVU:MakeEMV( emv, name )
 					
 				else
 					col = EMVColors[b[2]]
+				end
+				if christmasMode:GetBool() then
+					if colString == "BLUE" then col = EMVColors["GREEN"]
+					elseif colString == "AMBER" then col = EMVColors["WHITE"] end
 				end
 				// print(pixviscache[tostring(b[1])])
 				Photon:PrepareVehicleLight(
@@ -495,7 +506,7 @@ function EMVU:MakeEMV( emv, name )
 
 			if p == true then continue end
 			if not p.Model then continue end
-			local rendergroup = p.RenderGroup or RENDERGROUP_TRANSLUCENT
+			local rendergroup = p.RenderGroup or RENDERGROUP_OPAQUE
 			local rendermode = p.RenderMode or RENDERMODE_TRANSALPHA
 			util.PrecacheModel( p.Model )
 			if not util.IsModelLoaded( p.Model ) then self:AlertPhotonMissingRequirements() continue end
@@ -744,6 +755,13 @@ function EMVU:MakeEMV( emv, name )
 		local forwardDir = self:GetForward()
 		forwardDir:Rotate( Angle( 0, 90, 0 ) )
 		sirenState.SoundHandle:SetPos( self:GetPos(), forwardDir )
+		if system.HasFocus() then sirenState.SoundHandle:SetVolume( 1 ) else sirenState.SoundHandle:SetVolume( 0 ) end
+	end
+
+	function emv:Photon_ManualWindFocus()
+		if not self.Photon_ManualSirenTable then return end
+		if not IsValid( self.Photon_ManualSirenTable.SoundHandle ) then return end
+		if system.HasFocus() then self.Photon_ManualSirenTable.SoundHandle:SetVolume( 1 ) else self.Photon_ManualSirenTable.SoundHandle:SetVolume( 0 ) end
 	end
 
 	function emv:Photon_ManualWindCallback( snd )

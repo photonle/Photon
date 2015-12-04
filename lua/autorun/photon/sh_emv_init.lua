@@ -69,3 +69,5 @@ function EMVU:UpdateVehicles()
 	end
 	emvLastScan = CurTime()
 end
+
+

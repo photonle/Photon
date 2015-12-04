@@ -45,6 +45,7 @@ end)
 
 hook.Add( "PlayerInitialSpawn", "Photon.InitialNotify", function( ply )
 	ply:ChatPrint( string.format( "Photon Lighting Engine (%s #%s) is active. Type !photon or press C and click Photon for help and information.", tostring( PHOTON_SERIES), tostring(PHOTON_UPDATE) ) )
+	Photon.Net.SendAvailableLiveries( ply )
 end)
 
 -- dev functions --
@@ -90,3 +91,53 @@ end )
 // // veh:SetSubMaterial(4, "photon/override/lw_glhs_running" )
 // // veh:SetSubMaterial(6, "photon/override/lw_glhs_trans_running" )
 // veh:SetSubMaterial( 26, "models/tdmcars/emergency/lightbar/plastic" )
+
+Photon.AutoSkins.FetchSkins = function( id )
+	local result = {}
+	local baseDir = "materials/" .. tostring(id) .. "_liveries/"
+	local files = file.Find( baseDir .. "*.vmt", "GAME" )
+	result["/"] = {}
+	for _,foundFile in pairs( files ) do
+		print(tostring(foundFile))
+		result["/"][ #result["/"] + 1 ] = foundFile
+	end
+	local _,dirs = file.Find( baseDir .. "*", "GAME" )
+	for _,foundDir in pairs( dirs ) do
+		if not result[foundDir] then result[foundDir] = {} end
+		local subFiles = file.Find( baseDir .. foundDir .. "/*.vmt", "GAME" )
+		for __,foundFile in pairs( subFiles ) do
+			result[foundDir][ #result[foundDir] + 1 ] = foundFile
+		end
+	end
+	return result, baseDir
+end
+
+Photon.AutoSkins.ParseSkins = function( id )
+	local fileTable, baseDir = Photon.AutoSkins.FetchSkins( id )
+	local result = {}
+	for key,subFiles in pairs( fileTable ) do
+		if key == "/" then
+			result["/"] = {}
+		else
+			local newKey = string.Replace( key, "_", " ")
+			result[ newKey ] = {}
+			for _,mat in pairs( subFiles ) do
+				result[ newKey ][ #result[ newKey ] + 1 ] = {}
+				local matInfo = result[ newKey ][ #result[ newKey ] ]
+				matInfo.Name = string.Replace( string.Replace( mat, "_", " " ), ".vmt", "" )
+				matInfo.Texture = string.format( "%s%s/%s", string.Replace( baseDir, "materials/", "" ), key, string.StripExtension( mat ) )
+			end
+		end
+	end
+	return result
+end
+
+Photon.AutoSkins.LoadAvailable = function()
+	if not istable( Photon.AutoSkins.TranslationTable ) then return end
+	for _,id in pairs( Photon.AutoSkins.TranslationTable ) do
+		local skinTable = Photon.AutoSkins.ParseSkins( id )
+		Photon.AutoSkins.Available[id] = skinTable
+	end
+end
+
+hook.Add( "InitPostEntity", "Photon.LoadAvailableMaterials", function() Photon.AutoSkins.LoadAvailable() end )

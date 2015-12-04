@@ -6,6 +6,8 @@ Photon.AirEL.TranslationTable = {
 	["models/schmal/fpiu_airel.mdl"] = "fpius"
 }
 
+Photon.AirEL.MaterialIndex = {}
+
 Photon.AirEL.DownloadMaterial = function( id, unitString, ent, cback, failed )
 	if not file.Exists( "photon", "DATA" ) then file.CreateDir( "photon" ) end
 	if not file.Exists( "photon/airel", "DATA" ) then file.CreateDir( "photon/airel" ) end
@@ -50,6 +52,7 @@ end
 
 Photon.AirEL.ApplyTexture = function( mat, ent, id, unitString )
 	if not IsValid( ent ) then return end
+
 	local matParams = {
 		["$basetexture"] = mat:GetString( "$basetexture" ) .. ".png",
 		["$model"] = 1,
@@ -63,9 +66,29 @@ Photon.AirEL.ApplyTexture = function( mat, ent, id, unitString )
 			}
 		}
 	}
-	local newMaterial = CreateMaterial( string.format( "photon_airel_%s_%s", id, unitString ), "UnlitGeneric", matParams )
-	local applyIndex = 1
-	ent:SetSubMaterial( applyIndex, "!" .. tostring( newMaterial:GetName() ) )
+	
+	local matName = string.format( "photon_airel_%s_%s", id, unitString )
+	Photon.AirEL.MaterialIndex[matName .. "_lit"] = CreateMaterial( string.format( "photon_airel_%s_%s_lit", id, unitString ), "UnlitGeneric", matParams )
+
+	matParams = {
+		["$basetexture"] = mat:GetString( "$basetexture" ) .. ".png",
+		["$model"] = 1,
+		["$nocull"] = 1,
+		["$additive"] = 1,
+		["$colorfix"] = "{205 205 205}",
+		["Proxies"] = {
+			["Equals"] = {
+				["srcVar1"] = "$colorfix",
+				["resultVar"] = "$color"
+			}
+		}
+	}
+
+	Photon.AirEL.MaterialIndex[matName .. "_unlit"] = CreateMaterial( string.format( "photon_airel_%s_%s_unlit", id, unitString ), "VertexlitGeneric", matParams )
+
+	ent:SetSubMaterial( 1, "!" .. tostring( Photon.AirEL.MaterialIndex[matName .. "_unlit"]:GetName() ) )
+	ent.Photon_LitAirelTexture = Photon.AirEL.MaterialIndex[matName .. "_lit"]
+	ent.Photon_UnlitAirelTexture = Photon.AirEL.MaterialIndex[matName .. "_unlit"]
 	ent.Photon_UnitID = unitString
 end
 
@@ -93,7 +116,25 @@ Photon.AirEL.Scan = function()
 	end
 end
 
-
 timer.Create("Photon.AirELUnitScan", 5, 0, function()
 	Photon.AirEL.Scan()
+end)
+
+Photon.AirEL.IllumScan = function()
+	for _,car in pairs( EMVU:AllVehicles() ) do
+		if not IsValid( car ) then continue end
+		if not car.AirELEntity or not IsValid( car.AirELEntity ) then continue end
+		local airEL = car.AirELEntity
+		if not airEL.Photon_UnitID or not airEL.Photon_UnitID == car:Photon_GetUnitNumber() then continue end
+		if not airEL.Photon_LitAirelTexture or not airEL.Photon_UnlitAirelTexture then continue end
+		if car:Photon_Lights() or car:Photon_TrafficAdvisor() or car:Photon_Illumination() then
+			airEL:SetSubMaterial( 1, "!" .. tostring( airEL.Photon_LitAirelTexture:GetName() ) )
+		else
+			airEL:SetSubMaterial( 1, "!" .. tostring( airEL.Photon_UnlitAirelTexture:GetName() ) )
+		end
+	end
+end
+
+timer.Create("Photon.AirELIllumScan", .25, 0, function()
+	Photon.AirEL.IllumScan()
 end)

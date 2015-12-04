@@ -15,6 +15,8 @@ util.AddNetworkString( "emvu_livery" )
 util.AddNetworkString( "photon_liveryupdate" )
 util.AddNetworkString( "emvu_selection" )
 util.AddNetworkString( "photon_myunitnumber" )
+util.AddNetworkString( "photon_availableskins" )
+util.AddNetworkString( "photon_setautoskin" )
 
 local can_change_siren_model = GetConVar( "photon_emv_changesirens" )
 local can_change_light_presets = GetConVar( "photon_emv_changepresets" )
@@ -217,3 +219,20 @@ function Photon.Net:RequestUnitNumber( ply )
 	net.Start( "photon_myunitnumber" )
 	net.Send( ply )
 end
+
+function Photon.Net.SendAvailableLiveries( ply )
+	net.Start( "photon_availableskins" )
+		net.WriteTable( Photon.AutoSkins.Available )
+	net.Send( ply )
+end
+net.Receive( "photon_availableskins", function( len, ply ) Photon.Net.SendAvailableLiveries( ply ) end )
+
+function Photon.Net.ReceiveSkinChangeRequest( len, ply )
+	local ent = net.ReadEntity()
+	local skinName = net.ReadString()
+	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent )
+	if modifyBlocked != false then
+		ent:Photon_SetAutoSkin( skinName )
+	end
+end
+net.Receive( "photon_setautoskin", function( len, ply ) Photon.Net.ReceiveSkinChangeRequest( len, ply ) end )

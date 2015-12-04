@@ -3,7 +3,7 @@ function EMVU:MakeEMV( ent, emv )
 
 	// Avoid any uncaught errors if a bad entity is passed in
 	if not ent or not IsValid( ent ) or not ent:IsVehicle() then
-		error("[EMV Upgrade] Error while creating ent from " .. tostring(ent) .. ". Aborting...")
+		error("[Photon] Error while creating ent from " .. tostring(ent) .. ". Aborting...")
 		return
 	end
 
@@ -61,6 +61,18 @@ function EMVU:MakeEMV( ent, emv )
 			self:SetDTInt(EMV_SIREN_SET, val) 
 		end
 		return self:GetDTInt(EMV_SIREN_SET)
+	end
+
+	function ent:ELS_AuxSirenSet( val )
+		if not IsValid( self ) then return end
+		if (val!=nil) then 
+			self:SetDTInt(EMV_SIREN_SECONDARY, val) 
+		end
+		return self:GetDTInt(EMV_SIREN_SECONDARY)
+	end
+
+	function ent:ELS_HasAuxSiren()
+		return self:ELS_AuxSirenSet() != 0
 	end
 
 	// Traffic on/off
@@ -217,7 +229,7 @@ function EMVU:MakeEMV( ent, emv )
 		if not self.ELS.Siren then return end
 		self.ELS.SirenContinue = nil
 		self.ELS.Siren:Stop()
-		if not toneChange then self.ELS.Siren2:Stop() end
+		if self:ELS_HasAuxSiren() and not toneChange then self.ELS.Siren2:Stop() end
 		self:ELS_Siren(false)
 		self.ELS.SirenPaused = false
 	end
@@ -232,11 +244,14 @@ function EMVU:MakeEMV( ent, emv )
 		self.ELS.Siren = CreateSound( self, EMVU.Sirens[self:ELS_SirenSet()].Set[self:ELS_SirenOption()].Sound )
 		self.ELS.Siren:SetSoundLevel( 75 )
 		
-		local secondIndex = 1
-		if self.ELS.LastSecondSiren != secondIndex and self.ELS.LastSecondSiren then self.ELS.Siren2:Stop(); self.ELS.LastSecondSiren = secondIndex end
-		if self:ELS_SirenOption() > 2 then secondIndex = 2 end
-		self.ELS.Siren2 = CreateSound( self, EMVU.Sirens[3].Set[secondIndex].Sound )
-		self.ELS.Siren2:SetSoundLevel( 75 )
+		if self:ELS_HasAuxSiren() then
+			local secondIndex = self:ELS_AuxSirenSet()
+			if self.ELS.LastSecondSiren != secondIndex and self.ELS.LastSecondSiren then self.ELS.Siren2:Stop(); self.ELS.LastSecondSiren = secondIndex end
+			if self:ELS_SirenOption() > 2 then secondIndex = 2 end
+			self.ELS.Siren2 = CreateSound( self, EMVU.Sirens[3].Set[secondIndex].Sound )
+			self.ELS.Siren2:SetSoundLevel( 75 )
+		end
+		
 		self:ELS_Siren( true )
 	end
 
@@ -261,9 +276,9 @@ function EMVU:MakeEMV( ent, emv )
 		if self.ELS.SirenPaused and not force then return end
 		if ( self.ELS.SirenContinue and self.ELS.SirenContinue + 2 > CurTime() ) and not force then return end
 		self.ELS.Siren:PlayEx( 0, 100 )
-		self.ELS.Siren2:PlayEx( 0, 100 )
+		if self:ELS_HasAuxSiren() then self.ELS.Siren2:PlayEx( 0, 100 ) end
 		self.ELS.Siren:ChangeVolume( 2, 0 )
-		self.ELS.Siren2:ChangeVolume( 2, 0 )
+		if self:ELS_HasAuxSiren() then self.ELS.Siren2:ChangeVolume( 2, 0 ) end
 		self.ELS.SirenContinue = CurTime()
 	end
 
@@ -309,14 +324,14 @@ function EMVU:MakeEMV( ent, emv )
 
 	end
 
-	function ent:ELS_ManualSiren( state, gain )
+	function ent:ELS_ManualSiren( state )
 		if not IsValid( self ) then return end
 		if self:ELS_NoSiren() then return end
 
 		if state then
 			//if self:ELS_SirenOption() == 1 and self:ELS_Siren() then return end
 			self:SetDTBool( CAR_MANUAL, true )
-			if not self:Photon_HasManualWind() then
+			if ( not self:Photon_HasManualWind() ) or self:ELS_Siren() then
 				local manSiren = EMVU.Sirens[self:ELS_SirenSet()].Set[1].Sound
 				if EMVU.Sirens[self:ELS_SirenSet()].Manual then manSiren = EMVU.Sirens[self:ELS_SirenSet()].Manual end
 				if self:ELS_Siren() then
@@ -338,7 +353,7 @@ function EMVU:MakeEMV( ent, emv )
 				self.ELS.Manual:ChangeVolume( 1, 0 )
 			end
 		else
-			if not self:Photon_HasManualWind() then
+			if ( not self:Photon_HasManualWind() ) or self:ELS_Siren() then
 				local windDown = EMVU.Sirens[self:ELS_SirenSet()].ManualWind
 				if windDown then
 					if self.ELS.Manual then self.ELS.Manual:FadeOut( 1 ) end
@@ -402,7 +417,7 @@ function EMVU:MakeEMV( ent, emv )
 			local materials = self:GetMaterials()
 			for i=1,#materials do
 				local thisMat = tostring( materials[i] )
-				if string.EndsWith( thisMat, "/skin" ) or string.EndsWith( thisMat, "/skin0" ) then
+				if string.EndsWith( thisMat, "/skin" ) or string.EndsWith( thisMat, "/skin0" ) or string.EndsWith( thisMat, "/carpaint" ) then
 					submaterialIndex = i - 1
 					break
 				end
@@ -501,6 +516,16 @@ function EMVU:MakeEMV( ent, emv )
 		return istable( EMVU.Sirens[set].Gain )
 	end
 
+	function ent:Photon_SetAutoSkin( skin )
+		local mdl = self:GetModel()
+		local mdlId = Photon.AutoSkins.TranslationTable[ mdl ]
+		print(tostring(mdlId))
+		if not mdlId then return false end
+		if not Photon.AutoSkins.IsSkinAvailable( mdlId, skin ) then return false end
+		print("instructed to apply" .. tostring( skin ))
+		self:ApplySmartSkin( skin )
+	end
+
 	ent.IsEMV = true
 	ent:SetDTString( EMV_INDEX, "ö" .. tostring( ent.Name ) .. "ööö." ) // Al
 
@@ -522,6 +547,12 @@ function EMVU:MakeEMV( ent, emv )
 		ent:ELS_SetSirenSet( emv.Siren )
 	else
 		ent:ELS_SetSirenSet( 1 )
+	end
+
+	if emv.AuxiliarySiren and isnumber( emv.AuxiliarySiren ) then
+		ent:ELS_AuxSirenSet( emv.AuxiliarySiren )
+	else
+		ent:ELS_AuxSirenSet( 0 )
 	end
 
 	if istable( emv.Auto ) and emv.Auto[1] and istable( emv.Presets ) then
