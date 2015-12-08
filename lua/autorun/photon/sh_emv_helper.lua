@@ -142,8 +142,10 @@ function EMVU.Helper:GetTASequence( name, option, vehicle )
 		local selComp = EMVU.Sequences[name]["Traffic"][option]["Selection_Components"]
 		for i,options in pairs( selComp ) do
 			local currentOption = vehicle:Photon_SelectionOption( i )
-			for id,data in pairs( options[currentOption] ) do
-				resultTable[ id ] = data
+			if istable( options[currentOption] ) then 
+				for id,data in pairs( options[currentOption] ) do
+					resultTable[ id ] = data
+				end
 			end
 		end
 		-- for i=1,#selComp do
@@ -192,11 +194,13 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 	end
 
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Illumination"][option]["Selection_Components"]) then
-		local selComp = EMVU.Sequences[name]["Illumination"][option]
-		for i=1,#selComp do
+		local selComp = EMVU.Sequences[name]["Illumination"][option]["Selection_Components"]
+		for i,options in pairs( selComp ) do
 			local currentOption = vehicle:Photon_SelectionOption( i )
-			for id,data in pairs( selComp[i][currentOption] ) do
-				resultTable[ id ] = data
+			if istable( options[currentOption] ) then 
+				for id,data in pairs( options[currentOption] ) do
+					resultTable[ #resultTable + 1 ] = data
+				end
 			end
 		end
 	end
@@ -227,15 +231,22 @@ function EMVU.Helper.FetchUsedLights( vehicle )
 	local primaryOption = vehicle:Photon_LightOption()
 	local auxOption = vehicle:Photon_TrafficAdvisorOption()
 	local illumOption = vehicle:Photon_IllumOption()
+	-- print("illum option: ".. tostring(illumOption))
 	local resultTable = {}
 	local primaryLights = EMVU.Helper:GetSequence( name, primaryOption, vehicle )
 	local auxiliaryLights = EMVU.Helper:GetTASequence( name, auxOption, vehicle )
 	local illumLights = EMVU.Helper:GetIllumSequence( name, illumOption, vehicle )
-	for component,_ in pairs( primaryLights, auxiliaryLights, illumLights ) do
+	-- print("ILLUM LIGHTS RECEIVED: ")
+	-- PrintTable( illumLights )
+	for component,_ in pairs( primaryLights, auxiliaryLights ) do
 		for key,_ in pairs( EMVU.Helper.GetUsedLightsFromComponent( name, component ) ) do
 			resultTable[tostring(key)] = true
 		end
 	end
+	for _,lightInfo in pairs( illumLights ) do
+		resultTable[tostring(lightInfo[1])] = true
+	end
+	--PrintTable( resultTable )
 	return resultTable
 end
 
@@ -350,6 +361,7 @@ function EMVU.Helper:GetProps( name, ent )
 					for _,id in pairs( category.Options[selected].Auto ) do
 						local component = EMVU.AutoIndex[ name ][ id ]
 						local propData = EMVU.Helper:GetAutoModel( component[ "ID" ] )
+						if not propData.Model then continue end
 						propData.Pos = component.Pos
 						propData.Ang = component.Ang
 						propData.Scale = component.Scale

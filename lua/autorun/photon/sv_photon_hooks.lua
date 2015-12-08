@@ -98,7 +98,6 @@ Photon.AutoSkins.FetchSkins = function( id )
 	local files = file.Find( baseDir .. "*.vmt", "GAME" )
 	result["/"] = {}
 	for _,foundFile in pairs( files ) do
-		print(tostring(foundFile))
 		result["/"][ #result["/"] + 1 ] = foundFile
 	end
 	local _,dirs = file.Find( baseDir .. "*", "GAME" )

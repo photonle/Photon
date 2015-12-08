@@ -21,7 +21,6 @@ end)
 
 local function DrawEMVLights()
 	if not photon_ready then return end
-	Photon:ClearLightQueue()
 	if not should_render:GetBool() then return end
 	for k,v in pairs( EMVU:AllVehicles() ) do
 		if IsValid( v ) and v.IsEMV and v:IsEMV() and v.Photon_RenderEL then v:Photon_RenderEL() elseif v:IsEMV() then EMVU:MakeEMV(v, v:EMVName()) end

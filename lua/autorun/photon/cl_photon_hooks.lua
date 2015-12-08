@@ -14,6 +14,7 @@ local photon_ready = photon_ready or false
 
 local function DrawCarLights()
 	if not photon_ready then return end
+	Photon:ClearLightQueue()
 	local photonDebug = PHOTON_DEBUG
 	for _,ent in pairs( Photon:AllVehicles() ) do
 		if IsValid( ent ) then

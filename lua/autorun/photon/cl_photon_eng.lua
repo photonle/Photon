@@ -8,6 +8,9 @@ local round = math.Round
 local useEyePos = Vector( 0, 0, 0 )
 local useEyeAng = Angle( 0, 0, 0 )
 
+local bloom_multi = GetConVar( "photon_bloom_modifier" )
+local dynlights_enabled = GetConVar( "photon_dynamic_lights" )
+
 local getLightColor = render.GetLightColor
 local utilPixVis = util.PixelVisible
 local rotatingLight, pulsingLight, emvHelp
@@ -50,24 +53,36 @@ local mat6 = Material("sprites/emv/effect_artifact2")
 local up1 = Vector()
 
 local photonRenderTable = {}
+local photonDynamicLights = {}
 
 function Photon:AddLightToQueue( lightInfo )
 	photonRenderTable[ #photonRenderTable + 1 ] = lightInfo
 end
 
-function Photon:ClearLightQueue()
-	table.Empty( photonRenderTable )
+function Photon.AddDynamicLightToQueue( lightInfo )
+	photonDynamicLights[ #photonDynamicLights + 1 ] = lightInfo
 end
 
-function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor )
-	if not incolors or not ilpos or not lang or not meta or not gpos then return end
+function Photon:ClearLightQueue()
+	table.Empty( photonRenderTable )
+	table.Empty( photonDynamicLights )
+end
 
-	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,  }
-
+function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic )
+	-- print("received light to render")
+	-- print( string.format( "Type:%s\nParent:%s\nColors:%s\nLocal Position:%s\nGlobal Position:%s\nLocal Angle:%s\nMeta:%s\nPixVis:%s\nLocal Number:%s\n", 
+		-- tostring(type), tostring(parent), tostring(incolors), tostring(ilpos), tostring(gpos), tostring(lang), tostring(meta), tostring(pixvis), tostring(lnum) ))
+	if not incolors or not ilpos or not lang or not meta or not gpos then print("invalid call") return end
+	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
+	-- PrintTable( meta )
+	-- PrintTable( incolors )
 	local legacy = true
 	if meta.NoLegacy == true then legacy = false end
 	local colors = incolors
 	local offset = meta.AngleOffset
+
+	local manualBloom = 1
+	if bloom_multi and bloom_multi:GetFloat() then manualBloom = bloom_multi:GetFloat() end
 
 	lpos:Set( ilpos )
 	
@@ -95,6 +110,7 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	if meta.VisRadius then visRadius = meta.VisRadius end
 
 	local viewDot = 0
+	-- local visible = 1
 	local visible = 0
 	local viewPercent = 0
 
@@ -110,14 +126,29 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	// visible = 1
 	//visible = utilPixVis( worldPos, visRadius, pixvis )
 	visible = pixvis
-	
+	-- visible = 1
 	if( visible and visible > 0) then
 
 
 	if EMV_DEBUG then visible = 1 end
 	if EMV_DEBUG then viewDot = 1 end
-	if not visible or visible <= 0 then return end
 
+	if emitDynamic then
+			local addDynamic = { true, true, true, true }
+			local normalDir = parent:GetForward()
+			if emitDynamic == 1 then normalDir:Rotate( Angle( 0, 135, 0 ) )
+			elseif emitDynamic == 2 then normalDir:Rotate( Angle( 0, 45, 0 ) )
+			elseif emitDynamic == 3 then normalDir:Rotate( Angle( 0, -135, 0 ) )
+			elseif emitDynamic == 4 then normalDir:Rotate( Angle( 0, -45, 0 ) ) end
+			addDynamic[1] = worldPos
+			addDynamic[2] = normalDir
+			addDynamic[3] = { colors.raw.r, colors.raw.g, colors.raw.b }
+			addDynamic[4] = ( parent:EntIndex() * 400 ) + emitDynamic
+			-- addDynamic[4] = (parent:EntIndex()*100) + ( lnum * 4 )
+			Photon.AddDynamicLightToQueue( addDynamic )
+		end
+
+	if not visible or visible <= 0 then return end
 	
 	if not meta.Scale then meta.Scale = 1 end
 	if not meta.WMult then meta.WMult = 1 end
@@ -147,7 +178,7 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 
 		viewPercent = viewDot
 		local viewMod = viewDot * 10
-		viewDot = pow( viewMod, 1.25 ) * .1
+		viewDot = ( pow( viewMod, 1.25 ) * .1 ) * manualBloom
 
 		local curLight = getLightColor( worldPos )
 		local lightMod = clamp(1 - round(((( curLight[1] * curLight[2] * curLight[3] ) * .3) * 10) * 2, 5), .66, 1)
@@ -177,7 +208,6 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		local viewFlare = getViewFlare( viewPercent, brightness )
 		local dist = worldPos:Distance( EyePos() )
 		local distModifier = ( 1 - clamp( ( dist / 512 ), 0, 1) )
-		// print(distModifier)
 		viewFlare = viewFlare * distModifier
 
 		if meta.SourceOnly == true then 
@@ -199,8 +229,9 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		local srcColor = Color(255,255,255,255)
 
 		if not srcSkip then
-			local srcMod = viewDot * .5
-			srcColor = ColorAlpha( UC.src, UC.src.a * rawBrightness )
+			local srcMod = ( viewDot * .5 ) * manualBloom
+			//srcColor = ColorAlpha( UC.src, UC.src.a * rawBrightness )
+			srcColor = ColorAlpha( UC.src, 255 )
 			if pulseOverride then srcColor.a = ( srcColor.a * brightness ) end
 			if istable(UC["dim"]) then
 				srcColor.r = Lerp( srcMod, UC.dim.r, UC.src.r )
@@ -227,9 +258,9 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		if not meta.SprL then meta.SprL = Vector( meta.W * .5, -meta.H * .5, 0 ) end
 		resultTable[9] = meta.SprL
 		resultTable[10] = worldPos
-		resultTable[11] = meta.Scale * viewDot
-		resultTable[12] = meta.Scale * viewFlare
-		resultTable[13] = meta.Scale * meta.WMult*viewDot
+		resultTable[11] = (meta.Scale * viewDot) * manualBloom
+		resultTable[12] = (meta.Scale * viewFlare) * ( manualBloom * manualBloom )
+		resultTable[13] = (meta.Scale * meta.WMult*viewDot) * manualBloom
 		resultTable[14] = srcColor
 
 		resultTable[15] = UC.med
@@ -243,8 +274,8 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		resultTable[22] = cheapLight
 		resultTable[23] = viewFlare
 
-
 		self:AddLightToQueue( resultTable )
+
 	end
 	end
 end
@@ -371,6 +402,23 @@ function Photon.DrawScreenEffects( srcOnly, drawSrc, camPos, camAng, srcSprite, 
 	end
 end
 
+function Photon.RenderDynamicLight( pos, dir, incol, index )
+	local dlight = DynamicLight( index )
+	if dlight then
+		dlight.pos = pos
+		dlight.r = incol[1]
+		dlight.g = incol[2]
+		dlight.b = incol[3]
+		dlight.dir = dir
+		dlight.innerangle = 5
+		dlight.outerangle = 90
+		dlight.brightness = 7
+		dlight.Decay = 1000
+		dlight.Size = 64
+		dlight.DieTime = CurTime() + 1
+	end
+end
+
 local quickDrawNoTable = Photon.QuickDrawNoTable
 local photonScreenEffects = Photon.DrawScreenEffects
 local cam3d = cam.Start3D
@@ -380,6 +428,8 @@ local endCam3d = cam.End3D
 local draw_effects = GetConVar( "photon_lens_effects" )
 hook.Add( "InitPostEntity", "Photon.DrawEffectsConvar", function()
 	draw_effects = GetConVar( "photon_lens_effects" )
+	bloom_multi = GetConVar( "photon_bloom_modifier" )
+	dynlights_enabled = GetConVar( "photon_dynamic_lights" )
 end)
 function Photon:RenderQueue( effects )
 	local eyePos = EyePos()
@@ -399,6 +449,7 @@ function Photon:RenderQueue( effects )
 		end
 	end
 	if not effects then endCam3d() else endCam2d() end
+	-- Photon:ClearLightQueue()
 end
 hook.Add( "PreDrawEffects", "Photon.RenderQueue", function() 
 	Photon:RenderQueue( false )
@@ -408,6 +459,21 @@ hook.Add( "PreDrawEffects", "Photon.RenderQueue", function()
 end )
 hook.Add( "HUDPaintBackground", "Photon.ScreenEffects", function() 
 	
+end)
+
+function Photon.RenderDynamicLightQueue()
+	local count = #photonDynamicLights
+	if ( count > 0 ) then
+		for i=1, count do
+			if photonDynamicLights[i] != nil then
+				local data = photonDynamicLights[i]
+				Photon.RenderDynamicLight( data[1], data[2], data[3], data[4] )
+			end
+		end
+	end
+end
+hook.Add( "Think", "Photon.RenderDynamicLightQueue", function() 
+	if ( dynlights_enabled and dynlights_enabled.GetBool and dynlights_enabled:GetBool() ) then Photon.RenderDynamicLightQueue() end
 end)
 
 local IsValid = IsValid

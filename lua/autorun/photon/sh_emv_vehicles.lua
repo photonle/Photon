@@ -511,7 +511,7 @@ function EMVU:CalculateAuto( name, data )
 				end
 			end
 			EMVU.Positions[ name ][ offset + id ] = {
-				newPos, newAng, tostring( posData[3] .. "_" .. i )
+				newPos, newAng, tostring( posData[3] .. "_" .. i ), posData[4] or false
 			}
 
 		end
@@ -590,9 +590,12 @@ function EMVU:CalculateAuto( name, data )
 								for __i, option in pairs( selection ) do
 									sequence.Selection_Components[_i][__i] = sequence.Selection_Components[_i][__i] or {}
 									for _, lightInfo in pairs( modeData ) do
-										sequence.Selection_Components[_i][__i][ #sequence.Selection_Components[_i][__i] + 1 ] = {
-											lightInfo[1] + offset, lightInfo[2]
-										}
+										-- if istable( lightInfo ) then PrintTable( lightInfo ) end
+										if lightInfo[1] and isnumber( tonumber( lightInfo[1] ) ) then
+											sequence.Selection_Components[_i][__i][ #sequence.Selection_Components[_i][__i] + 1 ] = {
+												tonumber( lightInfo[1] ) + offset, lightInfo[2]
+											}
+										end
 									end
 								end
 							end

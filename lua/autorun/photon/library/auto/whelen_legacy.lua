@@ -76,11 +76,11 @@ COMPONENT.Positions = {
 	[15] = { Vector( -26.67, 5.09, 0.48 ), Angle( 0, 45, 0 ), "legacy_forward" },
 	[16] = { Vector( 26.67, 5.09, 0.48 ), Angle( 0, -45, 0 ), "legacy_forward" },
 
-	[17] = { Vector( -28.8, 2.88, 0.48 ), Angle( 0, 45, 0 ), "legacy_forward" },
-	[18] = { Vector( 28.8, 2.88, 0.48 ), Angle( 0, -45, 0 ), "legacy_forward" },
+	[17] = { Vector( -28.8, 2.88, 0.48 ), Angle( 0, 45, 0 ), "legacy_forward", 1 },
+	[18] = { Vector( 28.8, 2.88, 0.48 ), Angle( 0, -45, 0 ), "legacy_forward", 2 },
 
-	[19] = { Vector( -28.86, -2.79, 0.48 ), Angle( 0, -45, 0 ), "legacy_rear" },
-	[20] = { Vector( 28.86, -2.79, 0.48 ), Angle( 0, 45, 0 ), "legacy_rear" },
+	[19] = { Vector( -28.86, -2.79, 0.48 ), Angle( 0, -45, 0 ), "legacy_rear", 3 },
+	[20] = { Vector( 28.86, -2.79, 0.48 ), Angle( 0, 45, 0 ), "legacy_rear", 4 },
 
 	[21] = { Vector( -26.69, -4.97, 0.48 ), Angle( 0, -45, 0 ), "legacy_rear" },
 	[22] = { Vector( 26.69, -4.97, 0.48 ), Angle( 0, 45, 0 ), "legacy_rear" },
@@ -225,6 +225,11 @@ COMPONENT.Sections = {
 		[11] = { { 31, A }, { 33, A }, { 35, A }, { 37, A }, { 38, A }, { 36, A }, { 34, A }, { 32, A }, { 30, A }, { 28, A }, { 26, A } },
 		[12] = { { 35, A }, { 37, A }, { 38, A }, { 36, A } },
 		[13] = { { 31, A }, { 33, A }, { 35, A }, { 37, A }, { 38, A }, { 36, A }, { 34, A }, { 32, A } },
+	},
+	["auto_whelen_legacy_td"] = {
+		[1] = { { 39, W }, { 41, W } },
+		[2] = { { 40, W }, { 42, W } },
+		[3] = { { 40, W }, { 42, W }, { 39, W }, { 41, W } },
 	}
 }
 
@@ -235,7 +240,7 @@ COMPONENT.Patterns = {
 		["diverge"] = { 12, 12, 12, 13, 13, 13, 6, 6, 6, 6, 0, 0 },
 	},
 	["auto_whelen_legacy"] = {
-		["all"] = { 1, 0, 1, 0, 1, 0 },
+		["all"] = { 1 },
 		["code1"] = { 2, 2, 2, 2, 0, 3, 3, 3, 3, 0 },
 		["code2"] = { 4, 5, 6, 5 },
 		["code3"] = { 
@@ -263,6 +268,9 @@ COMPONENT.Patterns = {
 	["auto_whelen_legacy_corner"] = {
 		["code2"] = { 1, 1, 0, 2, 2, 0 },
 		["code3"] = { 1, 2, 1, 2, 1, 2, 3, 4, 3, 4, 3, 4 },
+	},
+	["auto_whelen_legacy_td"] = {
+		["code3"] = { 1, 1, 1, 2, 2, 2 }
 	}
 }
 
@@ -283,7 +291,8 @@ COMPONENT.Modes = {
 			},
 			M3 = {
 				["auto_whelen_legacy"] = "code3",
-				["auto_whelen_legacy_corner"] = "code3"	
+				["auto_whelen_legacy_corner"] = "code3",
+				["auto_whelen_legacy_td"] = "code3"	
 			}
 		},
 	Auxiliary = {

@@ -32,11 +32,13 @@ end
 local function buildClientSettings( panel )
 	panel:ClearControls()
 	logoHeader( panel )
-	panel:AddControl( "Header", { Description = "Adjust your local Photon settings" } )
-
+	panel:AddControl( "Header", { Description = "General Settings" } )
 	panel:AddControl( "CheckBox", { Label = "Enable Emergency Lighting", Command = "photon_emerg_enabled" } )
 	panel:AddControl( "CheckBox", { Label = "Enable Standard Lighting", Command = "photon_stand_enabled" } )
+	panel:AddControl( "Header", { Description = "Performance & Appearance" } )
 	panel:AddControl( "CheckBox", { Label = "Enable Lens Flare Effects", Command = "photon_lens_effects" } )
+	panel:AddControl( "CheckBox", { Label = "Enable Dynamic Lighting", Command = "photon_dynamic_lights", Description = "Experimental feature. This WILL significantly decrease FPS." } )
+	panel:AddControl( "Slider", { Label = "Light Bloom Modifier", Command = "photon_bloom_modifier", Type = "Float", Min = "0", Max = "2" } )
 	panel:AddControl( "Header", { Description = "Change HUD settings" } )
 	panel:AddControl( "Slider", { Label = "Opacity", Command = "photon_hud_opacity", Type = "Float", Min = "0", Max = "1" } )
 

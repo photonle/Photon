@@ -94,7 +94,8 @@ function EMVU:MakeEMV( emv, name )
 		// 		local subTable = EMVU.Patterns[ self.VehicleName ]
 		// 	end
 		// end
-		return EMVHelper:GetIllumSequence( self.VehicleName, self:Photon_IllumOption(), self )
+		local result = EMVHelper:GetIllumSequence( self.VehicleName, self:Photon_IllumOption(), self )
+		return result
 	end
 
 	function emv:Photon_HasIllum()
@@ -354,10 +355,9 @@ function EMVU:MakeEMV( emv, name )
 		self:Photon_RenderLightTable( RenderTable )
 	end
 
-	function emv:Photon_RenderLightTable( RenderTable )
+	function emv:Photon_RenderLightTable( RenderTable, type )
 		if not IsValid( self ) then return false end
 		if not self.PhotonELFramePositions then return false end
-
 		local positions = self:Photon_GetELPositions()
 		local meta = self:Photon_GetELMeta()
 		local gpos = self.PhotonELFramePositions
@@ -365,14 +365,18 @@ function EMVU:MakeEMV( emv, name )
 
 		local b = true
 		local pos = true
-		// PrintTable( RenderTable )
-		local colorRecycle = { true, true }
 
+		local illumBlock = ( type == "ILLUM" )
+		if illumBlock and istable( self.PhotonIllumBlockedLights ) then table.Empty( self.PhotonIllumBlockedLights ) elseif illumBlock then self.PhotonIllumBlockedLights = {} end
+		local blockTable = self.PhotonIllumBlockedLights
+		local colorRecycle = { true, true }
 		for a=1,#RenderTable do
 			b = RenderTable[a]
 			if (b==true) then continue end
 			pos = positions[b[1]]
-
+			if istable(blockTable) then
+				if illumBlock then blockTable[tostring(b[1])] = true elseif blockTable[tostring(b[1])] then continue end
+			end
 			if positions[b[1]] then
 				local colString = b[2]
 				
@@ -393,30 +397,36 @@ function EMVU:MakeEMV( emv, name )
 					elseif colString == "AMBER" then col = EMVColors["WHITE"] end
 				end
 				// print(pixviscache[tostring(b[1])])
+				local showDynamic = pos[4] or false
 				Photon:PrepareVehicleLight(
 						self, -- parent
 						col, -- color of the light (colors)
 						pos[1], -- local pos if needed
-						gpos[tostring(b[1])], -- position (GLOBAL POS)
+						gpos[b[1]] or gpos[tostring(b[1])], -- position (GLOBAL POS)
 						pos[2], -- angle (lang)
 						meta[pos[3]], -- meta data (meta)
 						pixviscache[tostring(b[1])], -- pixvis handle (pixvis)
 						a, -- int for dynamic light (lnum)
 						b[3], -- brightness
-						multiColor
+						multiColor,
+						0,
+						showDynamic
 					)
+			else
+				print("No position found for: " .. tostring(b[1]))
 			end
 		end
 	end
 
 	function emv:Photon_RenderIllum()
 		if not IsValid( self ) then return false end
-		if not self:Photon_Illumination() then return end
+		if not self:Photon_Illumination() and istable( self.PhotonIllumBlockedLights ) then table.Empty( self.PhotonIllumBlockedLights ) return end
 		local handles = self.EL.VisHandles
 		local positions = self:Photon_GetELPositions()
 		local meta = self:Photon_GetELMeta()
 		local RenderTable = self:Photon_IllumLights()
-		if RenderTable then self:Photon_RenderLightTable( RenderTable ) end
+		--PrintTable( RenderTable )
+		if RenderTable then self:Photon_RenderLightTable( RenderTable, "ILLUM" ) end
 	end
 
 	function emv:Photon_RefreshELPixVis()
@@ -526,7 +536,7 @@ function EMVU:MakeEMV( emv, name )
 			if p.Skin then prop:SetSkin(p.Skin) end
 			if p.Material then prop:SetMaterial( p.Material ) end
 			if p.Color then prop:SetColor( p.Color ) end
-			if p.AirEL then prop:SetSubMaterial( 2, "photon/emv/blank" ); prop.AirEL = true end
+			if p.AirEL then prop.AirEL = true end
 			prop:SetSolid( SOLID_NONE )
 			prop:SetMoveType( MOVETYPE_NONE )
 			prop:SetCollisionGroup( COLLISION_GROUP_IN_VEHICLE )
@@ -729,7 +739,7 @@ function EMVU:MakeEMV( emv, name )
 		local currentRate = sirenState.SoundHandle:GetPlaybackRate()
 		local minRate = info.MinRate or decreaseRate
 		local maxRate = info.MaxRate or 1.25
-		if isWindingUp then
+		if isWindingUp and not self:Photon_Siren() then
 			sirenState.ShouldPlay = true
 			local increaseRate = info.UpRate or .01
 			if currentRate < maxRate then
@@ -741,7 +751,7 @@ function EMVU:MakeEMV( emv, name )
 		else
 			local decreaseRate = info.DownRate or .006
 			
-			if currentRate > minRate and sirenState.ShouldPlay then
+			if currentRate > minRate and sirenState.ShouldPlay and not self:Photon_Siren() then
 				local newRate = currentRate - decreaseRate
 				if newRate < .005 then newRate = .005 end
 				sirenState.SoundHandle:SetPlaybackRate( newRate )
