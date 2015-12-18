@@ -15,6 +15,19 @@ Photon.DefaultKeys = {
 	Radar = KEY_O,
 }
 
+concommand.Add( "photon_keys_reset", function() 
+	RunConsoleCommand( "photon_key_primary_toggle", Photon.DefaultKeys.Primary_Toggle )
+	RunConsoleCommand( "photon_key_primary_alt", Photon.DefaultKeys.Primary_Alt )
+	RunConsoleCommand( "photon_key_siren_toggle", Photon.DefaultKeys.Siren_Toggle )
+	RunConsoleCommand( "photon_key_siren_alt", Photon.DefaultKeys.Siren_Alt )
+	RunConsoleCommand( "photon_key_auxiliary", Photon.DefaultKeys.Aux )
+	RunConsoleCommand( "photon_key_blackout", Photon.DefaultKeys.Blackout )
+	RunConsoleCommand( "photon_key_horn", Photon.DefaultKeys.Horn )
+	RunConsoleCommand( "photon_key_manual", Photon.DefaultKeys.Manual )
+	RunConsoleCommand( "photon_key_illum", Photon.DefaultKeys.Illum )
+	RunConsoleCommand( "photon_key_radar", Photon.DefaultKeys.Radar )
+end )
+
 CreateClientConVar( "photon_key_primary_toggle", Photon.DefaultKeys.Primary_Toggle, true )
 CreateClientConVar( "photon_key_primary_alt", Photon.DefaultKeys.Primary_Alt, true )
 CreateClientConVar( "photon_key_siren_toggle", Photon.DefaultKeys.Siren_Toggle, true )

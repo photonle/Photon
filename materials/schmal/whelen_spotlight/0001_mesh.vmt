@@ -1,0 +1,14 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "schmal/whelen_spotlight/def_mesh"
+	"$bumpmap"	"schmal/shared/flat"
+	"$phong" 1
+	"$phongtint" "[1 1 1]"
+	"$phongexponent" 1
+	"$phongboost" .25
+	"$phongfresnelranges" "[1 1 1]"
+	"$normalmapalphaenvmapmask" 1
+	"$nodecal" "1"
+	"$alphatest" 1
+	"$translucent" 1
+}

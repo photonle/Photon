@@ -5,6 +5,7 @@ EMVU.Liveries = {}
 EMVU.SubMaterials = {}
 EMVU.Index = {}
 EMVU.Selections = {}
+EMVU.Configurations = {}
 
 AddCSLuaFile( "sh_emv_init.lua" )
 AddCSLuaFile( "sh_emv_meta.lua" )
@@ -70,4 +71,6 @@ function EMVU:UpdateVehicles()
 	emvLastScan = CurTime()
 end
 
-
+EMVU.Configurations.Supported = {
+	["2016 Ford Police Interceptor Utility"] = "fpiu16"
+}

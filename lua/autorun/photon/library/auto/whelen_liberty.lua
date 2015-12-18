@@ -84,11 +84,11 @@ COMPONENT.Positions = {
 	[3] = { Vector( -10.61, 7.51, 1.47 ), Angle( 0, 0, 0 ), "liberty_f_main" },
 	[4] = { Vector( 10.61, 7.51, 1.47 ), Angle( 0, 0, 0 ), "liberty_f_main" },
 
-	[5] = { Vector( -27.26, 4.88, 1.48 ), Angle( 0, 32.6, 0 ), "liberty_f_ang" },
-	[6] = { Vector( 27.16, 4.88, 1.48 ), Angle( 0, -32.6, 0 ), "liberty_f_ang" },
+	[5] = { Vector( -27.26, 4.88, 1.48 ), Angle( 0, 32.6, 0 ), "liberty_f_ang", 1 },
+	[6] = { Vector( 27.16, 4.88, 1.48 ), Angle( 0, -32.6, 0 ), "liberty_f_ang", 2 },
 
-	[7] = { Vector( -27.16, -5.4, 1.48 ), Angle( 0, -32.6, 0 ), "liberty_r_ang" },
-	[8] = { Vector( 27.16, -5.4, 1.48 ), Angle( 0, 32.6, 0 ), "liberty_r_ang" },
+	[7] = { Vector( -27.16, -5.4, 1.48 ), Angle( 0, -32.6, 0 ), "liberty_r_ang", 3 },
+	[8] = { Vector( 27.16, -5.4, 1.48 ), Angle( 0, 32.6, 0 ), "liberty_r_ang", 4 },
 
 	[9] = { Vector( -17.41, -8.01, 1.47 ), Angle( 0, 0, 0 ), "liberty_r_main" },
 	[10] = { Vector( 17.41, -8.01, 1.47 ), Angle( 0, 0, 0 ), "liberty_r_main" },
@@ -140,7 +140,9 @@ COMPONENT.Sections = {
 		},
 		[2] = {
 			{ 6, "_2" }, { 8, "_2" }
-		}
+		},
+		[3] = { { 5, "_1", .55 }, { 7, "_1", .55 }, { 6, "_2", .55 }, { 8, "_2", .55 } },
+		[4] = { { 5, "_1", .66 }, { 7, "_1", .66 }, { 6, "_2", .66 }, { 8, "_2", .66 } },
 	},
 	["auto_whelen_liberty_sx_traffic"] = {
 		[1] = {
@@ -207,6 +209,7 @@ COMPONENT.Patterns = {
 		["code1"] = { 1, 1, 1, 0, 2, 2, 2, 0 },
 		["code2"] = { 1, 1, 0, 2, 2, 0 },
 		["code3"] = { 1, 2 },
+		["cruise"] = { 3, 3, 4, 4 }
 	},
 	["auto_whelen_liberty_sx_corner_illum"] = {
 		["code3"] = {
@@ -241,6 +244,9 @@ COMPONENT.Modes = {
 			}
 		},
 	Auxiliary = {
+			C = {
+				["auto_whelen_liberty_sx_corner"] = "cruise"
+			},
 			L = {
 				["auto_whelen_liberty_sx_traffic"] = "left"
 			},
@@ -252,6 +258,15 @@ COMPONENT.Modes = {
 			}
 		},
 	Illumination = {
+		L = {
+			{ 17, W }
+		},
+		R = {
+			{ 18, W }
+		},
+		F = {
+			{ 15, W }, { 16, W }
+		},
 		T = {
 			{ 15, W }, { 16, W }
 		}

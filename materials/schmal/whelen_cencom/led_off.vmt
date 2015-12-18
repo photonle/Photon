@@ -1,0 +1,12 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"schmal/whelen_cencom/led_off"
+	"$bumpmap"		"schmal/shared/flat"
+    	$phong "0"
+   	 $phongexponent "8"
+   	 $phongboost "10"
+    	$phongfresnelranges "[ 1 1 1]"
+	$nocull "1"
+	"$nodecal" "1"
+}
+

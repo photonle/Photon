@@ -64,8 +64,8 @@ COMPONENT.Positions = {
 	[5] = { Vector( -15.59, 8.7, 0.72 ), Angle( 0, 0, 0 ), "legend_forward" },
 	[6] = { Vector( 15.59, 8.7, 0.72 ), Angle( 0, 0, 0 ), "legend_forward" },
 
-	[7] = { Vector( -20.86, 8.16, 0.72 ), Angle( 0, 20.48, 0 ), "legend_forward_nar" },
-	[8] = { Vector( 20.86, 8.16, 0.72 ), Angle( 0, -20.48, 0 ), "legend_forward_nar" },
+	[7] = { Vector( -20.86, 8.16, 0.72 ), Angle( 0, 20.48, 0 ), "legend_forward_nar", 1  },
+	[8] = { Vector( 20.86, 8.16, 0.72 ), Angle( 0, -20.48, 0 ), "legend_forward_nar", 2 },
 
 	[9] = { Vector( -24.52, 6.97, 0.72 ), Angle( 0, 44.48, 0 ), "legend_forward_nar" },
 	[10] = { Vector( 24.52, 6.97, 0.72 ), Angle( 0, -44.48, 0 ), "legend_forward_nar" },
@@ -82,8 +82,8 @@ COMPONENT.Positions = {
 	[17] = { Vector( -24.52, -6.82, 0.72 ), Angle( 0, -44.48, 0 ), "legend_rear_nar" },
 	[18] = { Vector( 24.52, -6.82, 0.72 ), Angle( 0, 44.48, 0 ), "legend_rear_nar" },
 
-	[19] = { Vector( -20.86, -8.02, 0.72 ), Angle( 0, -20.48, 0 ), "legend_rear_nar" },
-	[20] = { Vector( 20.86, -8.02, 0.72 ), Angle( 0, 20.48, 0 ), "legend_rear_nar" },
+	[19] = { Vector( -20.86, -8.02, 0.72 ), Angle( 0, -20.48, 0 ), "legend_rear_nar", 3 },
+	[20] = { Vector( 20.86, -8.02, 0.72 ), Angle( 0, 20.48, 0 ), "legend_rear_nar", 4 },
 
 	[21] = { Vector( -15.59, -8.57, 0.72 ), Angle( 0, 0, 0 ), "legend_rear" },
 	[22] = { Vector( 15.59, -8.57, 0.72 ), Angle( 0, 0, 0 ), "legend_rear" },

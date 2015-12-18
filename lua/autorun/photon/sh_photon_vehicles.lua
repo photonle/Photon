@@ -28,28 +28,35 @@ function Photon:SpawnedVehicle( ent )
 end
 
 function Photon:EntityCreated( ent )
-	if IsValid( ent ) and ent:IsVehicle() then
-		local timerId = ent:EntIndex() .. "-PHOTON-" .. CurTime()
-		timer.Create( timerId, .01, 200, function()
-			if ent.VehicleTable and istable(ent.VehicleTable) then
-				Photon:SpawnedVehicle( ent )
-				EMVU:SpawnedVehicle( ent )
-				timer.Stop( timerId )
-				timer.Destroy( timerId )
-			end
-			if timer.RepsLeft( timerId ) == 0 and SERVER then
-				local default = Photon:RecoverVehicleTable( ent )
-				if default then 
-					ent.VehicleTable = default
+	-- print( tostring( ent ) )
+	-- print( "Valid spawned ent: " .. tostring( IsValid( ent ) ) )
+	-- timer.Simple(.5,function()
+	-- 	print("After .5 seconds: " .. tostring( ent ) )
+	-- end)
+	timer.Simple(.05,function()
+		if  ent:IsVehicle() then
+			local timerId = ent:EntIndex() .. "-PHOTON-" .. CurTime()
+			timer.Create( timerId, .01, 200, function()
+				if ent.VehicleTable and istable(ent.VehicleTable) then
 					Photon:SpawnedVehicle( ent )
 					EMVU:SpawnedVehicle( ent )
-					if not (modelIgnore[tostring(ent:GetModel())]) then
-						print("[Photon] No .VehicleTable present, assuming " .. tostring(ent:GetModel()) .. " is a(n) " .. tostring(default.Name) .. ".")
+					timer.Stop( timerId )
+					timer.Destroy( timerId )
+				end
+				if timer.RepsLeft( timerId ) == 0 and SERVER then
+					local default = Photon:RecoverVehicleTable( ent )
+					if default then 
+						ent.VehicleTable = default
+						Photon:SpawnedVehicle( ent )
+						EMVU:SpawnedVehicle( ent )
+						if not (modelIgnore[tostring(ent:GetModel())]) then
+							print("[Photon] No .VehicleTable present, assuming " .. tostring(ent:GetModel()) .. " is a(n) " .. tostring(default.Name) .. ".")
+						end
 					end
 				end
-			end
-		end)
-	end
+			end)
+		end
+	end)
 end
 
 hook.Add("OnEntityCreated", "Photon.EntityCreated", function(e)

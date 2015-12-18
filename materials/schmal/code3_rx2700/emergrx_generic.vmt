@@ -1,0 +1,12 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "schmal/code3_rx2700/emergrx_generic"
+	"$bumpmap" "schmal/code3_rx2700/emergrx_generic_normal"
+	"$phong" 1
+	"$phongtint" "[1 1 1]"
+	"$phongexponent" 75
+	"$phongboost" "10"
+	"$phongfresnelranges" "[1 1 1]"
+	"$normalmapalphaenvmapmask" 1
+	"$nodecal" "1"
+}

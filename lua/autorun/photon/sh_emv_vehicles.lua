@@ -59,6 +59,52 @@ function EMVU:ProcessExpressVehicles()
 	end
 end
 
+EMVU.Configurations.Library = {}
+
+EMVU.Configurations.LoadConfigurations = function()
+	local files = file.Find( "photon/equip_configs/*", "DATA" )
+	for _,_file in pairs( files ) do
+		local fileContents = file.Read( "photon/equip_configs/" .. _file )
+		local resultVehicle = util.JSONToTable( fileContents )
+		local fileNameData = string.Split( _file, "_" )
+		local vehicleId = fileNameData[1]
+		resultVehicle.VehicleTypeID = vehicleId
+		resultVehicle.StoreType = "LOCAL FILE"
+		resultVehicle.FileName = "photon/equip_configs/" .. _file
+		resultVehicle.Date = os.date( "%Y-%m-%d", file.Time( "photon/equip_configs/" .. _file, "DATA" ) )
+		EMVU.Configurations.AddConfiguration( resultVehicle )
+	end
+	local luaTables = list.Get( "PhotonConfigurationLibrary" )
+	for key,_data in pairs( luaTables ) do
+		local resultVehicle = util.JSONToTable( _data )
+		local fileNameData = string.Split( key, "_" )
+		local vehicleId = fileNameData[1]
+		resultVehicle.VehicleTypeID = vehicleId
+		resultVehicle.StoreType = "LUA"
+		EMVU.Configurations.AddConfiguration( resultVehicle )
+	end
+end
+
+EMVU.Configurations.AddConfiguration = function( data )
+	local vehicleId = data.VehicleTypeID
+	if not vehicleId then return false end
+	if not istable(EMVU.Configurations.Library[ vehicleId ]) then EMVU.Configurations.Library[ vehicleId ] = {} end
+	local parentTable = EMVU.Configurations.Library[ vehicleId ]
+	parentTable[ #parentTable + 1 ] = data
+	return true
+end
+
+EMVU.Configurations.ResetConfigurations = function()
+	table.Empty( EMVU.Configurations.Library )
+	EMVU.Configurations.LoadConfigurations()
+end
+
+EMVU.Configurations.DeleteConfiguration = function( cfgFile )
+	print( "deleting: " .. tostring(cfgFile))
+	file.Delete( cfgFile )
+	EMVU.Configurations.ResetConfigurations()
+end
+
 function EMVU:LoadVehicles()
 	local cars = list.Get("Vehicles")
 	for k,v in pairs(cars) do
@@ -78,7 +124,7 @@ function EMVU:CheckForELS( model )
 end
 
 function EMVU:PreloadVehicle( car )
-
+	if car.Name then EMVU:OverwriteIndex( car.Name, car.EMV or {} ) return end
 	if istable( car.EMV.Sequences ) then EMVU.LoadModeData( car.Name, car.EMV.Sequences ) end 
 
 	EMVU.Index[ #EMVU.Index + 1 ] = car.Name
@@ -217,7 +263,12 @@ function EMVU:OverwriteIndex( name, data )
 		if istable( data.Sequences ) then EMVU.LoadModeData( name, data.Sequences ) end 
 		EMVU.Sections[name] = data.Sections or {}
 		if istable( data.Lamps ) then EMVU.Lamps[ name ] = data.Lamps end
-		if istable( data.Props ) then EMVU.Props[ name ] = data.Props end
+		if istable( data.Props ) then 
+			EMVU.Props[ name ] = data.Props 
+			for _,prop in pairs( data.Props ) do
+				util.PrecacheModel( prop.Model )
+			end
+		end
 		if istable( data.Presets ) then EMVU.PresetIndex[ name ] = data.Presets else EMVU.LoadPresetDefault( name, data ) end
 		if istable( data.Selections ) then EMVU.Selections [ name ] = data.Selections end
 		if istable( data.Liveries ) then EMVU.Liveries[ name ] = data.Liveries end
@@ -614,4 +665,6 @@ end
 hook.Add("InitPostEntity", "EMVU.LoadVehicles", function()
 	EMVU:ProcessExpressVehicles()
 	EMVU:LoadVehicles()
+	EMVU.Configurations.LoadConfigurations()
+	//PrintTable( EMVU.Configurations.Library )
 end) 

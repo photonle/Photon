@@ -117,6 +117,13 @@ Photon.AutoSkins.ParseSkins = function( id )
 	for key,subFiles in pairs( fileTable ) do
 		if key == "/" then
 			result["/"] = {}
+			local newKey = key
+			for _,mat in pairs( subFiles ) do
+				result[ newKey ][ #result[ newKey ] + 1 ] = {}
+				local matInfo = result[ newKey ][ #result[ newKey ] ]
+				matInfo.Name = string.Replace( string.Replace( mat, "_", " " ), ".vmt", "" )
+				matInfo.Texture = string.format( "%s%s/%s", string.Replace( baseDir, "materials/", "" ), key, string.StripExtension( mat ) )
+			end
 		else
 			local newKey = string.Replace( key, "_", " ")
 			result[ newKey ] = {}

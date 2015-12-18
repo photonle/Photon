@@ -77,6 +77,34 @@ local function buildComponentPreview( panel )
 	panel:AddItem( panel.Preview )
 end
 
+local function buildConfigDeletion( panel )
+	panel:AddControl( "Header", { Description = "Select row to DELETE local configuration: " } )
+	local savedConfigs = EMVU.Configurations.Library
+	PrintTable( savedConfigs )
+	local configList = vgui.Create( "DListView" )
+	configList:SetMultiSelect( false )
+	configList:SetSize( 30, 120 )
+	local carIdColumn = configList:AddColumn( "Car" )
+	carIdColumn:SetFixedWidth( 50 )
+	local dateColumn = configList:AddColumn( "Date" )
+	dateColumn:SetFixedWidth( 70 )
+	local nameColumn = configList:AddColumn( "Name" )
+	for _,parentCar in pairs( savedConfigs ) do
+		for key,data in pairs( parentCar ) do
+			if data.StoreType != "LOCAL FILE" then continue end
+			local newLine = configList:AddLine( data.VehicleTypeID, data.Date, data.Name )
+			newLine.File = data.FileName
+		end
+	end
+	function configList:OnRowSelected( id, row )
+		-- panel:AddControl( "Button", { Text = "Delete Selected", Command = "photon_cfgbld_deleteselected" } )
+		if row.File then EMVU.Configurations.DeleteConfiguration( row.File ) end
+		panel:MetaReset()
+	end
+	configList:SortByColumn( 3 )
+	panel:AddItem( configList )
+end
+
 local function buildComponentList( panel )
 	panel:AddControl( "Header", { Description = "Modify existing component: " } )
 	local autoComponents = EMVU.AutoIndex[ tostring( photon_emv_editor_target ) ]
@@ -324,3 +352,71 @@ Photon.Editor.CreateMenu = function( panel )
 		RunConsoleCommand( "photon_express_edit", 0 )
 	end
 end
+
+local photon_cfgbld_name = "" 
+local photon_cfgbld_cat = false
+local photon_cfgbld_bge = true 
+local photon_cfgbld_liv = true 
+local photon_cfgbld_srn = true
+
+Photon.Editor.CreateConfiguration = function( panel )
+	function panel:MetaReset()
+		Photon.Editor.CreateConfiguration( panel )
+	end
+	panel:ClearControls()
+	panel:AddControl( "Header", { Description = "This is the Photon Configurations menu. Configurations are an easy way to save equipment, siren and livery configurations. Local configurations will only appear to you, while copying the Lua snippet allows server administrators and addon authors to include their own." } )
+	panel:AddControl( "TextBox", { Label = "Name", Command = "photon_cfgbld_name", WaitForEnter = "0" } )
+	panel:AddControl( "TextBox", { Label = "Category", Command = "photon_cfgbld_cat", WaitForEnter = "0" } )
+	panel:AddControl( "CheckBox", { Label = "Bodygroups and Equipment", Command = "photon_cfgbld_bge" } )
+	panel:AddControl( "CheckBox", { Label = "Livery and Color", Command = "photon_cfgbld_liv" } )
+	panel:AddControl( "CheckBox", { Label = "Siren Models", Command = "photon_cfgbld_srn" } )
+	panel:AddControl( "Button", { Text = "Save as Local Configuration", Command = "photon_cfgbld_savelocal" } )
+	panel:AddControl( "Button", { Text = "Copy Lua Code for Export", Command = "photon_cfgbld_getlua" } )
+	buildConfigDeletion( panel )
+end
+
+concommand.Add( "photon_cfgbld_name", function(_,_,args) photon_cfgbld_name = tostring( args[1] ) end)
+concommand.Add( "photon_cfgbld_cat", function(_,_,args) photon_cfgbld_cat = tostring( args[1] ) end)
+concommand.Add( "photon_cfgbld_bge", function(_,_,args) photon_cfgbld_bge = tobool( args[1] ) end)
+concommand.Add( "photon_cfgbld_liv", function(_,_,args) photon_cfgbld_liv = tobool( args[1] ) end)
+concommand.Add( "photon_cfgbld_srn", function(_,_,args) photon_cfgbld_srn = tobool( args[1] ) end)
+
+concommand.Add( "photon_cfgbld_savelocal", function() 
+	local ply = LocalPlayer()
+	local ent = ply:GetVehicle()
+	if not IsValid( ent ) then chat.AddText( Color(255, 128, 64), "[Photon] You must be driving the vehicle you wish to save the configuration from." ) return end
+	local resultData = ent:Photon_ExportConfiguration( photon_cfgbld_bge, photon_cfgbld_liv, photon_cfgbld_liv, photon_cfgbld_srn, photon_cfgbld_bge )
+	if not resultData then chat.AddText( Color(255, 128, 64), "[Photon] This vehicle is not compatible with Photon Configurations." ) return end
+	local result = EMVU.Configurations.SaveConfiguration( photon_cfgbld_name, photon_cfgbld_cat, LocalPlayer():Name(), resultData )
+	if result then
+		chat.AddText( Color(128, 255, 64), string.format( "[Photon] %s has been saved, this configuration can now be selected from the Photon context menu.", tostring( photon_cfgbld_name ) )  ) 
+		return
+	else
+		chat.AddText( Color(255, 128, 64), "[Photon] An error occurred while saving vehicle configuration." ) 
+		return
+	end
+end)
+
+local luaConfigInstructions = [[
+1. Paste copied text into a text editor (Notepad++ or better recommended).
+2. Save file under lua/autorun of your addon or server, name is irrelevant.
+3. Config data will automatically load onto server players or addon users. Game restart may be initially required.
+]]
+
+concommand.Add( "photon_cfgbld_getlua", function()
+	local ply = LocalPlayer()
+	local ent = ply:GetVehicle()
+	if not IsValid( ent ) then chat.AddText( Color(255, 128, 64), "[Photon] You must be driving the vehicle you wish to save the configuration from." ) return end
+	local resultData = ent:Photon_ExportConfiguration( photon_cfgbld_bge, photon_cfgbld_liv, photon_cfgbld_liv, photon_cfgbld_srn, photon_cfgbld_bge )
+	if not resultData then chat.AddText( Color(255, 128, 64), "[Photon] This vehicle is not compatible with Photon Configurations." ) return end
+	local result = EMVU.Configurations.ConfigurationLua( photon_cfgbld_name, photon_cfgbld_cat, LocalPlayer():Name(), resultData )
+	if result then
+		SetClipboardText( result )
+		chat.AddText( Color(128, 255, 64), string.format( "[Photon] %s has been exported to your clipboard.", tostring( photon_cfgbld_name )  ) )
+		chat.AddText( Color(255, 255, 255), luaConfigInstructions ) 
+		return
+	else
+		chat.AddText( Color(255, 128, 64), "[Photon] An error occurred while saving vehicle configuration." ) 
+		return
+	end
+end )

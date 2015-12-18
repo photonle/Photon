@@ -65,11 +65,11 @@ COMPONENT.Positions = {
 	[5] = { Vector( -23.85, 7.61, 2.17 ), Angle( 0, 20, 0 ), "arjent_forward" },
 	[6] = { Vector( 23.85, 7.61, 2.17 ), Angle( 0, -20, 0 ), "arjent_forward" },
 
-	[7] = { Vector( -30.17, 3.9, 2.17 ), Angle( 0, 45, 0 ), "arjent_forward" },
-	[8] = { Vector( 30.17, 3.9, 2.17 ), Angle( 0, -45, 0 ), "arjent_forward" },
+	[7] = { Vector( -30.17, 3.9, 2.17 ), Angle( 0, 45, 0 ), "arjent_forward", 1 },
+	[8] = { Vector( 30.17, 3.9, 2.17 ), Angle( 0, -45, 0 ), "arjent_forward", 2 },
 
-	[9] = { Vector( -30.17, -4.19, 2.17 ), Angle( 0, -45, 0 ), "arjent_rear" },
-	[10] = { Vector( 30.17, -4.19, 2.17 ), Angle( 0, 45, 0 ), "arjent_rear" },
+	[9] = { Vector( -30.17, -4.19, 2.17 ), Angle( 0, -45, 0 ), "arjent_rear", 3 },
+	[10] = { Vector( 30.17, -4.19, 2.17 ), Angle( 0, 45, 0 ), "arjent_rear", 4 },
 
 	[11] = { Vector( -23.85, -7.92, 2.17 ), Angle( 0, -20, 0 ), "arjent_rear" },
 	[12] = { Vector( 23.85, -7.92, 2.17 ), Angle( 0, 20, 0 ), "arjent_rear" },

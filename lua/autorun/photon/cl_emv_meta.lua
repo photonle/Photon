@@ -51,6 +51,11 @@ function EMVU:MakeEMV( emv, name )
 		return self:GetDTInt( EMV_SIREN_OPTION )
 	end
 
+	function emv:Photon_AuxSirenSet()
+		if not IsValid( self ) then return end
+		return self:GetDTInt(EMV_SIREN_SECONDARY)
+	end
+
 	function emv:Photon_SirenSet()
 		if not IsValid( self ) then return 1 end
 		return self:GetDTInt( EMV_SIREN_SET )
@@ -277,6 +282,7 @@ function EMVU:MakeEMV( emv, name )
 		local posData = EMVU.Positions[ self.VehicleName ]
 		local resultTable = {}
 		for key,_ in pairs( lights ) do
+			if PHOTON_DEBUG and not istable( posData[tonumber(key)] ) then continue end
 			resultTable[key] = self:LocalToWorld( posData[tonumber(key)][1] )
 		end
 		self.PhotonELFramePositions = resultTable
@@ -594,7 +600,7 @@ function EMVU:MakeEMV( emv, name )
 		if not self.EMVProps then return end
 		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
 
-		if emvProps then 
+		if emvProps and istable( emvProps) then 
 			for index,prop in ipairs( self.EMVProps ) do
 				if not IsValid( prop ) then
 					self:Photon_RemoveEMVProps( true )
@@ -603,6 +609,7 @@ function EMVU:MakeEMV( emv, name )
 				prop:SetParent( self )
 				prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
 				prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
+				prop:DrawShadow( false )
 				if PHOTON_DEBUG or PHOTON_EXPRESS then 
 					if isvector( emvProps[index].Scale ) then
 						local mat = Matrix()
@@ -730,7 +737,9 @@ function EMVU:MakeEMV( emv, name )
 			local emv = self
 			sound.PlayFile( info.Sound, "3d", function( snd, errorNo, errorName )
 				if IsValid( emv ) and IsValid( snd ) then
+					snd:Pause()
 					emv:Photon_ManualWindCallback( snd )
+					EMVU.ManualSirenTable[tostring(snd)] = { snd, self }
 				end
 			end)
 			return
@@ -791,6 +800,39 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_HasManualWind()
 		local set = self:Photon_SirenSet()
 		return istable( EMVU.Sirens[set].Gain )
+	end
+
+	function emv:Photon_ApplyEquipmentPreset( presetData )
+		for index, value in pairs( presetData ) do
+			EMVU.Net.Selection( self, index, value )
+		end
+	end
+
+	function emv:Photon_ApplyEquipmentConfiguration( index )
+		local data
+		if isnumber( index ) then
+			local shortId = EMVU.Configurations.Supported[ self:EMVName() ]
+			if EMVU.Configurations.Library[ shortId ] and EMVU.Configurations.Library[shortId][ index ]then data = EMVU.Configurations.Library[ shortId ][ index ] end
+		end
+		if data.Skin then EMVU.Net.ApplyAutoSkin( self, data.Skin ) end
+		if data.Siren then 
+			local convertedSiren = tonumber( data.Siren )
+			if isnumber( convertedSiren ) then EMVU.Net:SirenSet( convertedSiren, self, false ) end
+		end
+		if data.AuxSiren then
+			local convertedSiren = tonumber( data.AuxSiren )
+			if isnumber( convertedSiren ) then EMVU.Net:SirenSet( convertedSiren, self, true ) end
+		end
+		if istable( data.Selections ) then
+			local convertedTable = self:Photon_ImportSelectionData( data.Selections )
+			self:Photon_ApplyEquipmentPreset( convertedTable )
+		end
+	end
+
+	function emv:Photon_GetAvailableConfigurations()
+		if not self:Photon_SupportsConfigurations() then return {} end
+		local shortId = EMVU.Configurations.Supported[ self:EMVName() ]
+		return EMVU.Configurations.Library[ shortId ]
 	end
 
 	emv.LastPresetOption = 0

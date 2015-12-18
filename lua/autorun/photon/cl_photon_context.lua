@@ -1,5 +1,7 @@
 AddCSLuaFile()
 
+local function null() end
+
 properties.Add( "photon_siren", {
 	MenuLabel = "Siren Model",
 	Order = 2,
@@ -19,6 +21,12 @@ properties.Add( "photon_siren", {
 		local options = EMVU.Sirens
 		local submenu = option:AddSubMenu()
 
+		local showSecondary = true
+
+		local primarySubmenu = submenu:AddSubMenu( "Primary", null )
+		local secondarySubmenu
+		if showSecondary then secondarySubmenu = submenu:AddSubMenu( "Secondary", null ) end
+
 		local categories = {}
 		categories["Other"] = true
 		for k,v in pairs( options ) do
@@ -28,15 +36,26 @@ properties.Add( "photon_siren", {
 		end
 
 		for k,v in SortedPairs( categories ) do
-			categories[k] = submenu:AddSubMenu( k )
+			if showSecondary then
+				categories[k] = { primarySubmenu:AddSubMenu( k, null ), secondarySubmenu:AddSubMenu( k, null ) }
+			else
+				categories[k] = { primarySubmenu:AddSubMenu( k, null ) }
+			end
 		end
 
 		for k,v in ipairs( options ) do
 			local isSelected = ( tostring( k ) == tostring( ent:Photon_SirenSet() ) )
 			local category = v.Category or "Other"
-			local option = categories[ category ]:AddOption( v.Name, function() EMVU.Net:SirenSet( k ) end )
+			local option = categories[ category ][1]:AddOption( v.Name, function() EMVU.Net:SirenSet( k, ent, false ) end )
 			if isSelected then
 				option:SetChecked( true )
+			end
+			if showSecondary and not isSelected then
+				local secondarySelected = ( tostring( k ) == tostring( ent:Photon_AuxSirenSet() ) )
+				option = categories[ category ][2]:AddOption( v.Name, function() EMVU.Net:SirenSet( k, ent, true ) end )
+				if secondarySelected then
+					option:SetChecked( true )
+				end
 			end
 		end
 
@@ -67,7 +86,7 @@ properties.Add( "photon_liveries", {
 
 		for key,data in SortedPairs( liveries ) do
 			local category = submenu
-			if (#liveries > 1) then category = submenu:AddSubMenu( key ) end
+			if (#liveries > 1) then category = submenu:AddSubMenu( key, null ) end
 			for name,mat in SortedPairs( data ) do
 				category:AddOption( name, function() EMVU.Net:Livery( key, name ) end )
 			end
@@ -102,7 +121,7 @@ properties.Add( "photon_autoskin", {
 
 		for category,subSkins in pairs( skinTable ) do
 			if category != "/" then
-				local categoryMenu = submenu:AddSubMenu( category )
+				local categoryMenu = submenu:AddSubMenu( category, null )
 				for _,skinInfo in pairs( subSkins ) do
 					categoryMenu:AddOption( skinInfo.Name, function() EMVU.Net.ApplyAutoSkin( ent, skinInfo.Texture ) end )
 				end
@@ -148,6 +167,8 @@ properties.Add( "photon_preset", {
 
 })
 
+
+
 properties.Add( "photon_selection", {
 	MenuLabel = "Equipment",
 	Order = 1,
@@ -176,7 +197,7 @@ properties.Add( "photon_selection", {
 				end
 				addedOption:SetChecked( isActive )
 			else
-				local category = submenu:AddSubMenu( cat.Name )
+				local category = submenu:AddSubMenu( cat.Name, null )
 				local subCategories = {}
 				for index,option in pairs( cat.Options ) do
 					local opt
@@ -196,6 +217,38 @@ properties.Add( "photon_selection", {
 			-- if isSelected then
 			-- 	option:SetChecked( true )
 			-- end
+		end
+	end
+
+})
+
+properties.Add( "photon_configuration", {
+	MenuLabel = "Configurations",
+	Order = 4,
+	MenuIcon = "photon/ui/menu-presets.png",
+
+	Filter = function( self, ent, ply )
+		if not IsValid( ent ) then return false end
+		if not ent:Photon() then return false end
+		if not ent:IsEMV() then return false end
+		if not ent:Photon_SelectionEnabled() then return false end
+		if not ent:Photon_SupportsConfigurations() then return false end
+		if not ent:Photon_GetAvailableConfigurations() then return false end
+		return true
+	end,
+
+	MenuOpen = function( self, option, ent )
+		local options = ent:Photon_GetAvailableConfigurations() or {}
+		local submenu  = option:AddSubMenu()
+		local categories = {}
+		for index, data in pairs( options ) do
+			local sub = submenu
+			if data.Category then
+				local newCat = categories[ tostring( data.Category ) ]
+				if not newCat then newCat = submenu:AddSubMenu( tostring( data.Category ), null ) end
+				sub = newCat
+			end
+			sub:AddOption( data.Name, function() ent:Photon_ApplyEquipmentConfiguration( index ) end )
 		end
 	end
 

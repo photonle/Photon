@@ -1,0 +1,12 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "schmal/watchguard/watch_guard_mesh"
+	"$phong" 1
+	"$selfillum" 1
+	"$phongtint" "[1 1 1]"
+	"$phongexponent" 75
+	"$phongboost" "10"
+	"$phongfresnelranges" "[1 1 1]"
+	"$normalmapalphaenvmapmask" 1
+	"$nodecal" "1"
+}

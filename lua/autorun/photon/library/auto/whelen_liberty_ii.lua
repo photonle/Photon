@@ -104,11 +104,11 @@ COMPONENT.Positions = {
 	[3] = { Vector( -16.96, 6.51, 0.67 ), Angle( 0, 0, 0 ), "liberty2_f_main" },
 	[4] = { Vector( 16.96, 6.51, 0.67 ), Angle( 0, 0, 0 ), "liberty2_f_main" },
 
-	[5] = { Vector( -23.85, 3.87, 0.64 ), Angle( 0, 38.4, 0 ), "liberty2_f_ang" },
-	[6] = { Vector( 24.25, 3.67, 0.64 ), Angle( 0, -38.4, 0 ), "liberty2_f2_ang" },
+	[5] = { Vector( -23.85, 3.87, 0.64 ), Angle( 0, 38.4, 0 ), "liberty2_f_ang", 1 },
+	[6] = { Vector( 24.25, 3.67, 0.64 ), Angle( 0, -38.4, 0 ), "liberty2_f2_ang", 2 },
 
-	[7] = { Vector( -23.85, -4.22, 0.64 ), Angle( 0, -38.4, 0 ), "liberty2_r_ang" },
-	[8] = { Vector( 23.85, -4.02, 0.64 ), Angle( 0, 38.4, 0 ), "liberty2_r2_ang" },
+	[7] = { Vector( -23.85, -4.22, 0.64 ), Angle( 0, -38.4, 0 ), "liberty2_r_ang", 3 },
+	[8] = { Vector( 23.85, -4.02, 0.64 ), Angle( 0, 38.4, 0 ), "liberty2_r2_ang", 4 },
 
 	[9] = { Vector( -16.94, -7.06, 0.59 ), Angle( 0, 0, 0 ), "liberty2_r_main" },
 	[10] = { Vector( 16.94, -7.06, 0.59 ), Angle( 0, 0, 0 ), "liberty2_r_main" },
@@ -176,6 +176,8 @@ COMPONENT.Sections = {
 		[6] = { { 6, "_1" }, { 8, "_1" } },
 		[7] = { { 5, "_5" }, { 7, "_5" } },
 		[8] = { { 6, "_5" }, { 8, "_5" } },
+		[9] = { { 6, "_2", .55 }, { 8, "_2", .55 }, { 5, "_1", .55 }, { 7, "_1", .55 } },
+		[10] = { { 6, "_2", .66 }, { 8, "_2", .66 }, { 5, "_1", .66 }, { 7, "_1", .66 } },
 	},
 	["auto_whelen_liberty_ii_rear_outer"] = {
 		[1] = { { 9, "_3", .5 }, { 10, "_4", .5 } },
@@ -184,10 +186,34 @@ COMPONENT.Sections = {
 	["auto_whelen_liberty_ii_takedown"] = {
 		[1] = { { 15, W }, { 17, W } },
 		[2] = { { 16, W }, { 18, W } },
+	},
+	["auto_whelen_liberty_ii_traffic"] = {
+		[1] = { { 9, "_3" }, { 11, "_3" }, { 13, "_3" }, { 14, "_4" }, { 12, "_4" }, { 10, "_4" } },
+		[2] = { { 9, "_3" } },
+		[3] = { { 9, "_3" }, { 11, "_3" } },
+		[4] = { { 9, "_3" }, { 11, "_3" }, { 13, "_3" } },
+		[5] = { { 9, "_3" }, { 11, "_3" }, { 13, "_3" }, { 14, "_4" } },
+		[6] = { { 9, "_3" }, { 11, "_3" }, { 13, "_3" }, { 14, "_4" }, { 12, "_4" } },
+
+		[7] = { { 11, "_3" }, { 13, "_3" }, { 14, "_4" }, { 12, "_4" }, { 10, "_4" } },
+		[8] = { { 13, "_3" }, { 14, "_4" }, { 12, "_4" }, { 10, "_4" } },
+		[9] = { { 14, "_4" }, { 12, "_4" }, { 10, "_4" } },
+		[10] = { { 12, "_4" }, { 10, "_4" } },
+		[11] = { { 10, "_4" } },
+		
+		[12] = { { 13, "_3" }, { 14, "_4" } },
+		[13] = { { 11, "_3" }, { 13, "_3" }, { 14, "_4" }, { 12, "_4" } },
+		[14] = { { 9, "_3" }, { 11, "_3" },  { 12, "_4" }, { 10, "_4" } },
+		[15] = { { 9, "_3" }, { 10, "_4" } },
 	}
 }
 
 COMPONENT.Patterns = {
+	["auto_whelen_liberty_ii_traffic"] = {
+		["right"] = { 2, 3, 4, 5, 6, 1, 1, 1, 1, 7, 8, 9, 10, 11, 0, 0, 0, 0 },
+		["left"] = { 11, 10, 9, 8, 7, 1, 1, 1, 6, 5, 4, 3, 2, 0, 0, 0, 0 },
+		["diverge"] = { 12, 12, 13, 13, 1, 1, 1, 1, 14, 14, 15, 15, 0, 0, 0, 0 },
+	},
 	["auto_whelen_liberty_ii"] = {
 		["all"] = { 1 },
 	},
@@ -204,21 +230,24 @@ COMPONENT.Patterns = {
 		["stage_1"] = { 1, 0, 1, 0, 2, 0, 2, 0, 1, 0, 1, 0, 2, 0, 2, 0, 1, 0, 1, 0, 2, 0, 2, 0, 1, 1, 1, 0, 2, 2, 2, 0, 1, 1, 1, 0, 2, 2, 2, 0, 1, 1, 1, 0, 2, 2, 2, },
 		["stage_2"] = { 3, 0, 3, 0, 6, 0, 6, 0, 5, 0, 5, 0, 4, 0, 4, 0 },
 		["stage_3"] = { 3, 0, 6, 0, 4, 0, 5, 0, 7, 0, 8, 0 },
+		["cruise"] = { 9, 9, 10, 10 },
 	},
 	["auto_whelen_liberty_ii_rear_outer"] = {
 		["stage_1"] = { 1, 2 }
 	},
 	["auto_whelen_liberty_ii_r_inner"] = {
+		["off"] = { 0 },
 		["stage_2"] = { 1, 1, 0, 2, 2, 0 }
 	},
 	["auto_whelen_liberty_ii_takedown"] = {
-		["stage_3"] = { 1, 1, 2, 2 }
+		["stage_3"] = { 1, 1, 2, 2 },
+		["off"] = { 0 }
 	}
 }
 
 COMPONENT.TrafficDisconnect = { 
-	["auto_whelen_liberty_traffic"] = {
-		
+	["auto_whelen_liberty_ii_traffic"] = {
+		9, 11, 13, 14, 12, 10
 	}
 }
 
@@ -228,6 +257,8 @@ COMPONENT.Modes = {
 				["auto_whelen_liberty_ii_f_inner"] = "stage_1",
 				["auto_whelen_liberty_ii_corner"] = "stage_1",
 				["auto_whelen_liberty_ii_rear_outer"] = "stage_1",
+				["auto_whelen_liberty_ii_r_inner"] = "off",
+				["auto_whelen_liberty_ii_takedown"] = "off"
 			},
 			M2 = {
 				["auto_whelen_liberty_ii_corner"] = "stage_2",
@@ -244,6 +275,9 @@ COMPONENT.Modes = {
 			}
 		},
 	Auxiliary = {
+			C = {
+				["auto_whelen_liberty_ii_corner"] = "cruise"
+			},
 			L = {
 				["auto_whelen_liberty_ii_traffic"] = "left"
 			},
@@ -257,6 +291,15 @@ COMPONENT.Modes = {
 	Illumination = {
 		T = {
 			{ 15, W }, { 16, W }
+		},
+		F = {
+			{ 15, W }, { 16, W }, { 1, W }, { 2, W }, { 3, W }, { 4, W }
+		},
+		L = {
+			{ 17, W }
+		},
+		R = {
+			{ 18, W }
 		}
 	}
 }

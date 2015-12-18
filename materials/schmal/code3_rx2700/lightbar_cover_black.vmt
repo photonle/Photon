@@ -1,0 +1,24 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "schmal/code3_rx2700/cover_k"
+	"$halflambert" 1
+	"$phong" "1" 
+	"$phongboost" "80" 
+	"$phongfresnelranges" "[1 1 1]"
+	"$surfaceprop" "Glass"
+	"$nocull" 1
+   	 "$rimlight" "1"
+	"$rimlightexponent" "8"
+	"$rimlightboost" "16"
+
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[.1 .1 .1]"	
+	
+	"$normalmapalphaenvmapmask" 1
+	"$envmapFresnel" "1"
+
+	
+	hdr?$envmaptint "[ 2 2 2 ]"
+	hdr?$envmaptint "[ 1 1 1 ]"
+
+}

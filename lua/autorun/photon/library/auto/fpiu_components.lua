@@ -55,6 +55,9 @@ COMPONENT.Patterns = {
 	["auto_fpiu16_foglamp"] = {
 		["code1"] = { 1 },
 		["code2"] = { 2, 0, 2, 0, 2, 2, 2, 2, 0, 3, 0, 3, 0, 3, 3, 3, 3, 0 },
+		["code1CHP"] = { 1 },
+		["code2CHP"] = { 2, 2, 2, 2, 2, 3, 3, 3, 3, 3 },
+		["code3CHP"] = { 2, 2, 2, 2, 2, 3, 3, 3, 3, 3 },
 		["code3"] = { 
 			2, 0, 2, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 3, 0, 3, 0,
@@ -76,6 +79,7 @@ COMPONENT.Patterns = {
 			2, 3, 2, 3,
 			2, 3, 2, 3, 0
 		},
+		["alert"] = { 2, 3 }
 	}
 }
 
@@ -83,10 +87,15 @@ COMPONENT.Modes = {
 	Primary = {
 		M1 = { ["auto_fpiu16_foglamp"] = "code1", },
 		M2 = { ["auto_fpiu16_foglamp"] = "code2", },
-		M3 = { ["auto_fpiu16_foglamp"] = "code3", }
+		M3 = { ["auto_fpiu16_foglamp"] = "code3", },
+		ALERT = { ["auto_fpiu16_foglamp"] = "alert", }
 	},
 	Auxiliary = {},
-	Illumination = {}
+	Illumination = {
+		F = {
+			{ 1, W }, { 2, W }
+		}
+	}
 }
 
 EMVU:AddAutoComponent( COMPONENT, name )
@@ -319,6 +328,63 @@ COMPONENT.Modes = {
 	},
 	Auxiliary = {},
 	Illumination = {}
+}
+
+EMVU:AddAutoComponent( COMPONENT, name )
+
+name = "FPIU16 PAR-46"
+COMPONENT = {}
+
+COMPONENT.Skin = 0
+COMPONENT.Bodygroups = {}
+COMPONENT.NotLegacy = true
+COMPONENT.UsePhases = true
+COMPONENT.Category = "Hidden"
+
+COMPONENT.Meta = {
+	auto_whelen_spotlight = {
+		AngleOffset = -90,
+		W = 11,
+		H = 11,
+		WMult = .9,
+		Sprite = "sprites/emv/whelen_spotlight",
+		Scale = 2,
+		-- NoLegacy = true,
+		-- DirAxis = "Up",
+		-- DirOffset = 90
+	}
+}
+
+COMPONENT.Positions = {
+
+	[1] = { Vector( -42.01, 51.16, 63.88 ), Angle( 7.96, -6, 0 ), "auto_whelen_spotlight" },
+
+}
+
+COMPONENT.Sections = {
+	["auto_whelen_spotlight"] = {
+		[1] = { { 1, "_1" } }
+	},
+}
+
+COMPONENT.Patterns = {
+	["auto_whelen_spotlight"] = {
+		["c1"] = { 1 }
+	}
+}
+
+COMPONENT.Modes = {
+	Primary = {
+		M1 = {},
+		M2 = {},
+		M3 = {}
+	},
+	Auxiliary = {},
+	Illumination = {
+		T, F = {
+			{ 1, W }
+		},
+	}
 }
 
 EMVU:AddAutoComponent( COMPONENT, name )

@@ -233,8 +233,8 @@ function EMVU.Helper.FetchUsedLights( vehicle )
 	local illumOption = vehicle:Photon_IllumOption()
 	-- print("illum option: ".. tostring(illumOption))
 	local resultTable = {}
-	local primaryLights = EMVU.Helper:GetSequence( name, primaryOption, vehicle )
-	local auxiliaryLights = EMVU.Helper:GetTASequence( name, auxOption, vehicle )
+	local primaryLights = EMVU.Helper:GetSequence( name, primaryOption, vehicle ) or {}
+	local auxiliaryLights = EMVU.Helper:GetTASequence( name, auxOption, vehicle ) or {}
 	local illumLights = EMVU.Helper:GetIllumSequence( name, illumOption, vehicle )
 	-- print("ILLUM LIGHTS RECEIVED: ")
 	-- PrintTable( illumLights )
@@ -243,9 +243,12 @@ function EMVU.Helper.FetchUsedLights( vehicle )
 			resultTable[tostring(key)] = true
 		end
 	end
-	for _,lightInfo in pairs( illumLights ) do
-		resultTable[tostring(lightInfo[1])] = true
+	if istable( illumLights ) then
+		for _,lightInfo in pairs( illumLights ) do
+			resultTable[tostring(lightInfo[1])] = true
+		end
 	end
+	
 	--PrintTable( resultTable )
 	return resultTable
 end
@@ -344,6 +347,8 @@ function EMVU.Helper:GetProps( name, ent )
 				propData.Pos = preset.Pos
 				propData.Ang = preset.Ang
 				propData.Scale = preset.Scale
+				propData.RenderGroup = preset.RenderGroup
+				propData.RenderMode = preset.RenderMode
 				results[ #results + 1 ] = propData
 			end
 		end

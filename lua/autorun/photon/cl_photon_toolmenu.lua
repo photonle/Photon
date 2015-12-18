@@ -26,7 +26,8 @@ local function buildControlsMenu( panel )
 	panel:AddControl( "Numpad", { Label = "Siren On/Off", Command="photon_key_siren_toggle", Label2 = "Siren Tone", Command2="photon_key_siren_alt" } )
 	panel:AddControl( "Numpad", { Label = "Auxiliary Lights", Command="photon_key_auxiliary", Label2 = "Illumination", Command2="photon_key_illum" } )
 	panel:AddControl( "Numpad", { Label = "Horn", Command="photon_key_horn", Label2 = "Siren Manual", Command2="photon_key_manual" } )
-	panel:AddControl( "Numpad", { Label = "Blackout Mode", Command="photon_key_blackout" } )
+	panel:AddControl( "Numpad", { Label = "Blackout Mode", Command="photon_key_blackout", Label2 = "Radar", Command2="photon_key_radar" } )
+	panel:AddControl( "Button", { Label = "Reset to Default", Command="photon_keys_reset" } )
 end
 
 local function buildClientSettings( panel )
@@ -156,9 +157,10 @@ hook.Add( "PopulateToolMenu", "Photon.AddSettingsMenu", function()
 	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_controls", "Controls", "", "", buildControlsMenu )
 	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_client", "Client", "", "", buildClientSettings )
 	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_server", "Settings", "", "", buildServerSettings )
+	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_config_creator", "Configurations", "", "", Photon.Editor.CreateConfiguration )
 	if game.SinglePlayer() then
 		spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_creator", "Express Creator", "", "", buildCreatorMenu )
-		spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_express", "Express Vehicles", "", "", buildExpressManager )
+		--spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_express", "Express Vehicles", "", "", buildExpressManager )
 		spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_editor", "Express Editor", "", "", Photon.Editor.CreateMenu )
 	end
 end )

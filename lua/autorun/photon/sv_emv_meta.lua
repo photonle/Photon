@@ -229,7 +229,7 @@ function EMVU:MakeEMV( ent, emv )
 		if not self.ELS.Siren then return end
 		self.ELS.SirenContinue = nil
 		self.ELS.Siren:Stop()
-		if self:ELS_HasAuxSiren() and not toneChange then self.ELS.Siren2:Stop() end
+		if self:ELS_HasAuxSiren() and self.ELS.Siren2 and not toneChange then self.ELS.Siren2:Stop() end
 		self:ELS_Siren(false)
 		self.ELS.SirenPaused = false
 	end
@@ -243,13 +243,31 @@ function EMVU:MakeEMV( ent, emv )
 		self:ELS_LightsOn()
 		self.ELS.Siren = CreateSound( self, EMVU.Sirens[self:ELS_SirenSet()].Set[self:ELS_SirenOption()].Sound )
 		self.ELS.Siren:SetSoundLevel( 75 )
-		
+		-- self.ELS.Siren:SetDSP( 119 )
 		if self:ELS_HasAuxSiren() then
-			local secondIndex = self:ELS_AuxSirenSet()
-			if self.ELS.LastSecondSiren != secondIndex and self.ELS.LastSecondSiren then self.ELS.Siren2:Stop(); self.ELS.LastSecondSiren = secondIndex end
+			local secondIndex = 1
+			local secondarySiren = self:ELS_AuxSirenSet()
+			if self.ELS.LastSecondSiren != secondIndex then 
+				if self.ELS.Siren2 then self.ELS.Siren2:Stop(); end 
+					if not self.ELS.LastSecondSiren then
+						self.ELS.LastSecondSiren = secondIndex 
+					end
+				end
 			if self:ELS_SirenOption() > 2 then secondIndex = 2 end
-			self.ELS.Siren2 = CreateSound( self, EMVU.Sirens[3].Set[secondIndex].Sound )
-			self.ELS.Siren2:SetSoundLevel( 75 )
+			local newSound = EMVU.Sirens[secondarySiren].Set[secondIndex].Sound
+			if ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and self.ELS.CurrentSecondarySiren != newSound then 
+				self.ELS.Siren2:Stop()
+				self.ELS.Siren2 = CreateSound( self, newSound )
+				self.ELS.Siren2:SetSoundLevel( 70 )
+				self.ELS.CurrentSecondarySiren = newSound
+			elseif not self.ELS.Siren2 or ( ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and not self.ELS.CurrentSecondarySiren == newSound ) then
+				print(secondIndex)
+				self.ELS.Siren2 = CreateSound( self, newSound )
+				self.ELS.Siren2:SetSoundLevel( 70 )
+				self.ELS.CurrentSecondarySiren = newSound
+			end
+			-- if self.ELS.Siren2 then self.ELS.Siren2:Stop() end
+			
 		end
 		
 		self:ELS_Siren( true )
@@ -276,9 +294,9 @@ function EMVU:MakeEMV( ent, emv )
 		if self.ELS.SirenPaused and not force then return end
 		if ( self.ELS.SirenContinue and self.ELS.SirenContinue + 2 > CurTime() ) and not force then return end
 		self.ELS.Siren:PlayEx( 0, 100 )
-		if self:ELS_HasAuxSiren() then self.ELS.Siren2:PlayEx( 0, 100 ) end
+		if self:ELS_HasAuxSiren() and self.ELS.Siren2 then self.ELS.Siren2:PlayEx( 0, 100 ) end
 		self.ELS.Siren:ChangeVolume( 2, 0 )
-		if self:ELS_HasAuxSiren() then self.ELS.Siren2:ChangeVolume( 2, 0 ) end
+		if self:ELS_HasAuxSiren() and self.ELS.Siren2 then self.ELS.Siren2:ChangeVolume( 2, 0 ) end
 		self.ELS.SirenContinue = CurTime()
 	end
 
@@ -313,6 +331,14 @@ function EMVU:MakeEMV( ent, emv )
 
 		if wasOn then self:ELS_SirenOn() end
 
+	end
+
+	function ent:ELS_SetAuxSirenSet( num )
+		if not IsValid( self ) then return end
+		if num <= 0 or num > #EMVU.Sirens then return false end
+
+		self:ELS_SirenOff()
+		self:ELS_AuxSirenSet( num )
 	end
 
 	function ent:ELS_SetSirenSet( num )
@@ -496,6 +522,12 @@ function EMVU:MakeEMV( ent, emv )
 			photonUtilString[5] = table.concat( selectionTable, "." )
 			//PrintTable( photonUtilString )
 			self:Photon_SetUtilString( table.concat( photonUtilString, "ö" ) )
+			local selectionData = EMVU.Selections[ self.Name ][ index ].Options[value]
+			if istable( selectionData.Bodygroups ) then
+				for _,bgData in pairs( selectionData.Bodygroups ) do
+					self:SetBodygroup( bgData[1], bgData[2] )
+				end
+			end
 		end
 	end
 
@@ -519,10 +551,10 @@ function EMVU:MakeEMV( ent, emv )
 	function ent:Photon_SetAutoSkin( skin )
 		local mdl = self:GetModel()
 		local mdlId = Photon.AutoSkins.TranslationTable[ mdl ]
-		print(tostring(mdlId))
+		//print(tostring(mdlId))
 		if not mdlId then return false end
 		if not Photon.AutoSkins.IsSkinAvailable( mdlId, skin ) then return false end
-		print("instructed to apply" .. tostring( skin ))
+		//print("instructed to apply" .. tostring( skin ))
 		self:ApplySmartSkin( skin )
 	end
 

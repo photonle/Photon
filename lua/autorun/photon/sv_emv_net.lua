@@ -89,11 +89,18 @@ net.Receive( "emvu_traffic", function (len, ply )
 end)
 
 function EMVU.Net:SirenSet( ply )
-	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() or not can_change_siren_model:GetBool() then return end
-	local emv = ply:GetVehicle()
+	local emv = net.ReadEntity()
 	local recv = net.ReadInt(8)
-	if recv != 0 then emv:ELS_SetSirenSet(recv) return end
-	emv:ELS_SirenSetToggle()
+	local isAux = net.ReadBool()
+	if not emv:IsEMV() or not can_change_siren_model:GetBool() then return end
+	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, emv )
+	if modifyBlocked != false then
+		if not isAux then
+			if recv != 0 then emv:ELS_SetSirenSet(recv) end
+		else
+			emv:ELS_SetAuxSirenSet( recv )
+		end
+	end
 end
 net.Receive("emvu_sirenset", function( len, ply )
 	EMVU.Net:SirenSet( ply )

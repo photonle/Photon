@@ -371,7 +371,7 @@ local function PhotonRadar()
 end
 hook.Add( "HUDPaint", "Photon.RadarOverlay", function()
 	local ent = LocalPlayer():GetVehicle()
-	if not IsValid( ent ) or not ent:IsEMV() or not ent:Photon_RadarActive() then return end
+	if not IsValid( ent ) or not ent:IsEMV() or not ( ent.Photon_RadarActive and ent:Photon_RadarActive() ) then return end
 	PhotonRadar()
 end)
 -- local TEXTURE_FLAGS_CLAMP_S = 0x0004

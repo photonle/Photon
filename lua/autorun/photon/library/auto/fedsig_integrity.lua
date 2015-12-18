@@ -90,14 +90,14 @@ COMPONENT.Positions = {
 	[7] = { Vector( 20.87, 7.97, 0.87 ), Angle( 0, 0, 0 ), "integrity_forward_outer" },
 	[8] = { Vector( -20.87, 7.97, 0.87 ), Angle( 0, 0, 0 ), "integrity_forward_outer" },
 
-	[9] = { Vector( 25.87, 5.97, 0.87 ), Angle( 0, -44, 0 ), "integrity_forward_corner" },
-	[10] = { Vector( -25.87, 5.97, 0.87 ), Angle( 0, 44, 0 ), "integrity_forward_corner" },
+	[9] = { Vector( 25.87, 5.97, 0.87 ), Angle( 0, -44, 0 ), "integrity_forward_corner", 1 },
+	[10] = { Vector( -25.87, 5.97, 0.87 ), Angle( 0, 44, 0 ), "integrity_forward_corner", 2 },
 
 	[11] = { Vector( 28.55, 0.6, 0.87 ), Angle( 0, -79.8, 0 ), "integrity_side" },
 	[12] = { Vector( -28.55, 0.6, 0.87 ), Angle( 0, 79.8, 0 ), "integrity_side" },
 
-	[13] = { Vector( 25.61, -4.93, 0.87 ), Angle( 0, 0, 0 ), "integrity_rear" },
-	[14] = { Vector( -25.61, -4.93, 0.87 ), Angle( 0, 0, 0 ), "integrity_rear" },
+	[13] = { Vector( 25.61, -4.93, 0.87 ), Angle( 0, 0, 0 ), "integrity_rear", 3 },
+	[14] = { Vector( -25.61, -4.93, 0.87 ), Angle( 0, 0, 0 ), "integrity_rear", 4 },
 
 	[15] = { Vector( 20.13, -4.93, 0.87 ), Angle( 0, 0, 0 ), "integrity_rear" },
 	[16] = { Vector( -20.13, -4.93, 0.87 ), Angle( 0, 0, 0 ), "integrity_rear" },
@@ -190,6 +190,15 @@ COMPONENT.Sections = {
 		{
 			{ 7, "_2" }, { 9, "_2" }, { 11, "_2" }, { 13, "_2" },
 			{ 8, "_1"}, { 10, "_1"}, { 12, "_1"}, { 14, "_1"}
+		},
+		{
+			{ 7, "_2", .55 }, { 9, "_2", .55 }, { 11, "_2", .55 }, { 13, "_2", .55 },
+			{ 8, "_1", .66}, { 10, "_1", .66, .66, .66}, { 12, "_1", .66, .66}, { 14, "_1", .66}
+		}
+		,
+		{
+			{ 7, "_2", .66 }, { 9, "_2", .66 }, { 11, "_2", .66 }, { 13, "_2", .66 },
+			{ 8, "_1", .55}, { 10, "_1", .55, .55, .55}, { 12, "_1", .55, .55}, { 14, "_1", .55}
 		}
 	},
 	["auto_fedsig_integrity_signalmaster"] = {
@@ -271,6 +280,9 @@ COMPONENT.Patterns = {
 		["alert"] = { 3, 15, 14, 2 }
 	},
 	["auto_fedsig_integrity_corner"] = {
+		["cruise"] = {
+			4, 4, 4, 5, 5, 5
+		},
 		["alt_slow"] = { 1, 1, 1, 1, 2, 2, 2, },
 		["code3"] = { 
 			1, 0, 1, 0, 1,
@@ -303,6 +315,9 @@ COMPONENT.Modes = {
 		}
 	},
 	Auxiliary = {
+		C = {
+			["auto_fedsig_integrity_corner"] = "cruise"
+		},
 		L = {
 			["auto_fedsig_integrity_signalmaster"] = "left"
 		},
@@ -314,9 +329,18 @@ COMPONENT.Modes = {
 		}
 	},
 	Illumination = {
-		 T = {
-		 	{ 1, W }, { 2, W }
-		 }
+		F = {
+			{ 8, W }, { 6, W }, { 4, W }, { 2, W }, { 1, W }, { 3, W }, { 5, W }, { 7, W }, 
+			},
+		R = {
+			{ 11, W }
+		},
+		L = {
+			{ 12, W }
+		},
+		T = {
+			{ 1, W }, { 2, W }
+		}
 	}
 }
 

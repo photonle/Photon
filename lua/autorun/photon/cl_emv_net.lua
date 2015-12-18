@@ -14,9 +14,14 @@ function EMVU.Net:Lights( arg )
 	net.SendToServer()
 end
 
-function EMVU.Net:SirenSet( arg )
+function EMVU.Net:SirenSet( arg, ent, aux )
+	if aux == nil then aux = false end
+	if not ent then ent = LocalPlayer():GetVehicle() end
+	if not IsValid( ent ) then return end
 	net.Start( "emvu_sirenset" )
+		net.WriteEntity( ent )
 		net.WriteInt( arg, 8 )
+		net.WriteBool( aux )
 	net.SendToServer()
 end
 
@@ -106,11 +111,18 @@ end
 function EMVU.Net.ReceiveAvailableSkins()
 	local received = net.ReadTable()
 	Photon.AutoSkins.Available = received
-	PrintTable( received )
+	--PrintTable( received )
 end
 net.Receive( "photon_availableskins", function() EMVU.Net.ReceiveAvailableSkins() end)
 
 function EMVU.Net.ApplyAutoSkin( ent, skin )
+	local cnt = 0
+	for i in string.gfind( skin, "/" ) do
+		cnt = cnt + 1
+	end
+	if cnt < 2 then
+		skin = string.Replace( skin, "/", "///" )
+	end
 	net.Start( "photon_setautoskin" )
 		net.WriteEntity( ent )
 		net.WriteString( skin )
