@@ -34,6 +34,7 @@ end)
 
 function Photon:VehicleRemoved( ent )
 	if IsValid( ent ) and ent:IsVehicle() and ent:HasELS() then
+		if ent.ELS.Manual then ent.ELS.Manual:Stop() end
 		ent:ELS_SirenOff()
 		ent:ELS_Horn( false )
 		ent:ELS_ManualSiren( false )
@@ -52,9 +53,6 @@ end)
 
 concommand.Add( "photon_mat", function( ply, cmd, args )
 	local veh = ply:GetVehicle()
-	//veh:GetSubMaterial()
-	//veh:SetSubMaterial(0)
-	// veh:SetSubMaterial( 1, "photon/override/lw_dc15_headlights" )
 	PrintTable( veh:GetMaterials() )
 end)
 

@@ -17,7 +17,6 @@ AddCSLuaFile( "cl_emv_listener.lua" )
 AddCSLuaFile( "cl_photon_builder.lua" )
 AddCSLuaFile( "cl_photon_menu.lua" )
 AddCSLuaFile( "cl_photon_editor.lua" )
-AddCSLuaFile( "cl_emv_radar.lua" )
 AddCSLuaFile( "cl_emv_airel.lua" )
 AddCSLuaFile( "library/emv_sirens.lua" )
 

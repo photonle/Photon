@@ -1,6 +1,7 @@
 "VertexLitGeneric"
 {
 	"$basetexture"		"schmal/fedsig_legend/legend_cover_b"
+		"$bumpmap"		"schmal/shared/flat"
 	"$translucent" 1
 	"$halflambert" 1
 	"$phong" "1" 

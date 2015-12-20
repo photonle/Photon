@@ -381,7 +381,10 @@ COMPONENT.Modes = {
 	},
 	Auxiliary = {},
 	Illumination = {
-		T, F = {
+		F = {
+			{ 1, W }
+		},
+		T = {
 			{ 1, W }
 		},
 	}

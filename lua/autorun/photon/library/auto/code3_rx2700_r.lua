@@ -10,18 +10,18 @@ local SW = "S_WHITE"
 local G = "GREEN"
 local RB = "BLUE/RED"
 
-local name = "Code 3 RX2700"
+local name = "Code 3 RX2700 Red"
 
 local COMPONENT = {}
 
 COMPONENT.Model = "models/schmal/code3_rx2700.mdl"
 COMPONENT.Lightbar = true
-COMPONENT.Skin = 0
+COMPONENT.Skin = 3
 COMPONENT.Category = "Lightbar"
 COMPONENT.Bodygroups = {}
 COMPONENT.DefaultColors = {
 	[1] = "RED",
-	[2] = "BLUE"
+	[2] = "RED"
 }
 
 COMPONENT.Meta = {

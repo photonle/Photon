@@ -1,6 +1,7 @@
 "VertexLitGeneric"
 {
 	"$basetexture"		"schmal/liberty_ii/lb_glass"
+	"$bumpmap"		"schmal/shared/flat"
 	"$translucent" 1
 	"$halflambert" 1
 	"$phong" "1" 

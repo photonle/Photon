@@ -176,7 +176,16 @@ COMPONENT.Modes = {
 			}
 		},
 	Illumination = {
+		L = {
+			{ 14, W }
+		},
+		R = {
+			{ 15, W }
+		},
 		T = {
+			{ 16, W }, { 17, W }
+		},
+		F = {
 			{ 16, W }, { 17, W }
 		}
 	}

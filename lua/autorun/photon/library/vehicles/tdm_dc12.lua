@@ -146,7 +146,7 @@ PI.States.Reverse = {
 PI.States.Running = {
 	{ 1, SW }, { 2, SW },
 	{ 3, A }, { 4, A },
-	{ "_main", "running" }
+	--{ "_main", "running" }
 }
 
 Photon.VehicleLibrary[ "tdm_dc12" ] = PI

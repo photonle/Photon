@@ -112,7 +112,6 @@ function EMVU.Helper:GetTASequence( name, option, vehicle )
 	local resultTable = {}
 	
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["BG_Components"] ) then
-		print("checking bodygroups")
 		local bodygroups = vehicle:GetBodyGroups() -- BodyGroups of vehicle
 		local bgtable = EMVU.Sequences[name]["Traffic"][option]["BG_Components"] -- BodyGroups defined in vehicle specification file
 		for id,data in pairs( bodygroups ) do -- for index,value in each vehicle bodygroup

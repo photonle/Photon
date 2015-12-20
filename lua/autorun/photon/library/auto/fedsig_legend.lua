@@ -242,6 +242,10 @@ COMPONENT.Sections = {
 			{ 8, B, .55 }, { 10, B, .55 }, { 12, B, .55 }, { 14, B, .55 }, { 16, B, .55 }, { 18, B, .55 }, { 20, B, .55 }
 		}
 	},
+	["auto_fedsig_legend_takedown"] = {
+		[1] = { { 1, W } },
+		[2] = { { 2, W } },
+	},
 	["auto_fedsig_legend_signalmaster"] = {
 		[1] = { { 23, A } },
 		[2] = { { 23, A }, { 25, A } },
@@ -299,6 +303,10 @@ COMPONENT.Patterns = {
 		["alert"] = {
 			2, 1
 		}
+	},
+	["auto_fedsig_legend_takedown"] = {
+		["stage3"] = { 1, 1, 1, 2, 2, 2 },
+		["alert"] = { 1, 2 },
 	}
 }
 
@@ -319,11 +327,13 @@ COMPONENT.Modes = {
 			},
 			M3 = {
 				["auto_fedsig_legend"] = "code3",
-				["auto_fedsig_legend_corner"] = "code3"
+				["auto_fedsig_legend_corner"] = "code3",
+				["auto_fedsig_legend_takedown"] = "stage3"
 			},
 			ALERT = {
 				["auto_fedsig_legend"] = "alert",
-				["auto_fedsig_legend_corner"] = "alert"
+				["auto_fedsig_legend_corner"] = "alert",
+				["auto_fedsig_legend_takedown"] = "alert"
 			}
 		},
 	Auxiliary = {

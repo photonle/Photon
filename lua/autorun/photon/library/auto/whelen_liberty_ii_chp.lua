@@ -139,9 +139,40 @@ COMPONENT.Sections = {
 		{ { 7, B }, { 9, B } },
 		{ { 7, B }, { 9, B }, { 10, R }, { 8, R } },
 	},
+	["auto_whelen_liberty_traffic_blue"] = {
+		{ { 9, B } }
+	},
+	["auto_whelen_liberty_ii_traffic"] = {
+		[1] = {  { 11, A }, { 13, A }, { 14, A }, { 12, A },},
+		[2] = { },
+		[3] = {  { 11, A } },
+		[4] = {  { 11, A }, { 13, A } },
+		[5] = {  { 11, A }, { 13, A }, { 14, A } },
+		[6] = {  { 11, A }, { 13, A }, { 14, A }, { 12, A } },
+
+		[7] = { { 11, A }, { 13, A }, { 14, A }, { 12, A },},
+		[8] = { { 13, A }, { 14, A }, { 12, A },},
+		[9] = { { 14, A }, { 12, A },},
+		[10] = { { 12, A },},
+		[11] = {},
+		
+		[12] = { { 13, A }, { 14, A } },
+		[13] = { { 11, A }, { 13, A }, { 14, A }, { 12, A } },
+		[14] = {  { 11, A },  { 12, A },},
+		[15] = { },
+	},
+	["auto_whelen_liberty_ii_corner"] = {
+		[1] = { { 5, R, .55 }, { 7, B, .55 }, { 6, B, .55 }, { 8, R, .55 } }
+	}
 }
 
 COMPONENT.Patterns = {
+	["auto_whelen_liberty_ii_traffic"] = {
+		["right"] = { 2, 3, 4, 5, 6, 1, 1, 1, 1, 7, 8, 9, 10, 11, 0, 0, 0, 0 },
+		["left"] = { 11, 10, 9, 8, 7, 1, 1, 1, 6, 5, 4, 3, 2, 0, 0, 0, 0 },
+		["diverge"] = { 12, 12, 13, 13, 1, 1, 1, 1, 14, 14, 15, 15, 0, 0, 0, 0 },
+		["off"] = { 0 }
+	},
 	["auto_whelen_liberty_ii_front"] = {
 		["code1"] = { 1 },
 		["code2"] = { 4 },
@@ -154,12 +185,21 @@ COMPONENT.Patterns = {
 	["auto_whelen_liberty_ii"] = {
 		["code2"] = { 3, 3, 3, 3, 3, 4, 4, 4, 4, 4 },
 		["code3"] = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 2 }
+	},
+	["auto_whelen_liberty_traffic_blue"] = {
+		["trf"] = { 1, 0 }
+	},
+	["auto_whelen_liberty_ii_corner"] = {
+		["cruise"] = { 1 }
 	}
 }
 
 COMPONENT.TrafficDisconnect = { 
-	["auto_whelen_liberty_traffic"] = {
-		
+	["auto_whelen_liberty_traffic_blue"] = {
+		9
+	},
+	["auto_whelen_liberty_ii_traffic"] = {
+		9, 11, 13, 14, 12
 	}
 }
 
@@ -167,28 +207,46 @@ COMPONENT.Modes = {
 	Primary = {
 			M1 = {
 				["auto_whelen_liberty_ii_front"] = "code1",
-				["auto_whelen_liberty_ii_rear"] = "code1"
+				["auto_whelen_liberty_ii_rear"] = "code1",
+				["auto_whelen_liberty_ii_traffic"] = "off"
 			},
 			M2 = {
 				["auto_whelen_liberty_ii"] = "code2",
+				["auto_whelen_liberty_ii_traffic"] = "off"
 			},
 			M3 = {
-				["auto_whelen_liberty_ii"] = "code3"
+				["auto_whelen_liberty_ii"] = "code3",
+				["auto_whelen_liberty_ii_traffic"] = "off"
 			}
 		},
 	Auxiliary = {
-			-- L = {
-			-- 	["auto_whelen_liberty_ii_traffic"] = "left"
-			-- },
-			-- R = {
-			-- 	["auto_whelen_liberty_ii_traffic"] = "right"
-			-- },
-			-- D = {
-			-- 	["auto_whelen_liberty_ii_traffic"] = "diverge"
-			-- }
+			C = {
+				["auto_whelen_liberty_ii_corner"] = "cruise"
+			},
+			L = {
+				["auto_whelen_liberty_traffic_blue"] = "trf",
+				["auto_whelen_liberty_ii_traffic"] = "left"
+			},
+			R = {
+				["auto_whelen_liberty_traffic_blue"] = "trf",
+				["auto_whelen_liberty_ii_traffic"] = "right"
+			},
+			D = {
+				["auto_whelen_liberty_traffic_blue"] = "trf",
+				["auto_whelen_liberty_ii_traffic"] = "diverge"
+			}
 		},
 	Illumination = {
+		L = {
+			{ 17, W }
+		},
+		R = {
+			{ 18, W }
+		},
 		T = {
+			{ 15, W }, { 16, W }
+		},
+		F = {
 			{ 15, W }, { 16, W }
 		}
 	}

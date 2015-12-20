@@ -100,7 +100,6 @@ EMVU.Configurations.ResetConfigurations = function()
 end
 
 EMVU.Configurations.DeleteConfiguration = function( cfgFile )
-	print( "deleting: " .. tostring(cfgFile))
 	file.Delete( cfgFile )
 	EMVU.Configurations.ResetConfigurations()
 end
@@ -124,6 +123,7 @@ function EMVU:CheckForELS( model )
 end
 
 function EMVU:PreloadVehicle( car )
+	if EMVU.Positions[ car.Name ] then return end
 	if car.Name then EMVU:OverwriteIndex( car.Name, car.EMV or {} ) return end
 	if istable( car.EMV.Sequences ) then EMVU.LoadModeData( car.Name, car.EMV.Sequences ) end 
 

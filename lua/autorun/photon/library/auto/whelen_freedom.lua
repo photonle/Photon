@@ -182,6 +182,9 @@ COMPONENT.Sections = {
 		[3] = { { 5, "_1" }, { 21, "_1" }, { 20, "_2" }, { 8, "_2" } },
 		[4] = { { 19, "_1" }, { 7, "_1" }, { 6, "_2" }, { 22, "_2 " } }
 	},
+	["auto_whelen_ultra_freedom_corner"] = {
+		[1] = { { 19, "_1", .55 }, { 21, "_1", .55 }, { 20, "_2", .55 }, { 22, "_2", .55 }, { 5, "_1", .55 }, { 6, "_2", .55 }, { 7, "_1", .55 }, { 8, "_2", .55 } }
+	},
 	["auto_whelen_ultra_freedom_illum"] = {
 		[1] = { { 33, CW }, { 34, CW } },
 		[2] = { { 33, CW } },
@@ -307,12 +310,18 @@ COMPONENT.Patterns = {
 	},
 	["auto_whelen_ultra_freedom_illum"] = {
 		["code3"] = { 2, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0 }
+	},
+	["auto_whelen_ultra_freedom_corner"] = {
+		["cruise"] = { 1 }
 	}
 }
 
 COMPONENT.TrafficDisconnect = { 
 	["auto_whelen_ultra_freedom_traffic"] = {
 		9, 11, 13, 14, 12, 10, 23, 25, 27, 28, 26, 24
+	},
+	["auto_whelen_ultra_freedom_corner"] = {
+		5, 6, 7, 8, 19, 20, 21, 22
 	}
 }
 
@@ -336,13 +345,24 @@ COMPONENT.Modes = {
 			}
 		},
 	Auxiliary = {
+			C = { ["auto_whelen_ultra_freedom_corner"] = "cruise" },
 			L = { ["auto_whelen_ultra_freedom_traffic"] = "left" },
 			R = { ["auto_whelen_ultra_freedom_traffic"] = "right" },
 			D = { ["auto_whelen_ultra_freedom_traffic"] = "diverge" }
 		},
 	Illumination = {
 		T = {
-		}
+			{ 33, W }, { 34, W }
+		},
+		F = {
+			{ 33, W }, { 34, W }
+		},
+		L = {
+			{ 31, W }, { 29, W }
+		},
+		R = {
+			{ 32, W }, { 30, W }
+		}	
 	}
 }
 

@@ -10,7 +10,7 @@ local SW = "S_WHITE"
 local G = "GREEN"
 local RB = "BLUE/RED"
 
-local name = "Whelen Ion"
+local name = "Federal Signal Hotfoot"
 
 local COMPONENT = {}
 
@@ -65,9 +65,6 @@ COMPONENT.Sections = {
 
 COMPONENT.Patterns = {
 	["auto_ion"] = {
-		["code1CA"] = { 1 },
-		["code2CA"] = { 1 },
-		["code3CA"] = { 1 },
 		["code1"] = { 1, 1, 1, 0, },
 		["code1A"] = { 1, 1, 1, 0, 0, 0, 0, 0, },
 		["code1B"] = { 0, 0, 0, 0, 1, 1, 1, 0 },
@@ -82,6 +79,9 @@ COMPONENT.Patterns = {
 		["code2"] = { 1, 0, 1, 1, 1, 0, 0, 0 },
 		["code2A"] = { 1, 0, 1, 1, 1, 0, 0, 0, 0, 0 },
 		["code2B"] = { 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, },
+		["code1CA"] = { 1 },
+		["code2CA"] = { 1 },
+		["code3CA"] = { 1 },
 		["code2CHPA"] = { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
 		["code3CHPA"] = { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
 		["code2CHPB"] = { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1 },
@@ -92,11 +92,6 @@ COMPONENT.Patterns = {
 		["alert"] = { 1, 0 },
 		["alertA"] = { 0, 1 },
 		["alertB"] = { 1, 0 },
-		["alertCHPA"] = { 0, 1 },
-		["alertCHPB"] = { 1, 0 },
-		["alertNYPDA"] = { 1, 0 },
-		["alertNYPDB"] = { 0, 1 },
-		["alertCA"] = { 1 },
 		["all"] = { 1 },
 		["allA"] = { 1 },
 		["allB"] = { 1 },
@@ -107,11 +102,17 @@ COMPONENT.Modes = {
 	Primary = {
 		M1 = { ["auto_ion"] = "code1", },
 		M2 = { ["auto_ion"] = "code2", },
-		M3 = { ["auto_ion"] = "code3", },
-		ALERT = { ["auto_ion"] = "alert", },
+		M3 = { ["auto_ion"] = "code3", }
 	},
 	Auxiliary = {},
-	Illumination = {}
+	Illumination = {
+		T = {
+			{ 1, W }, { 2, W }
+		},	
+		F = {
+			{ 1, W }, { 2, W }
+		}
+	}
 }
 
 EMVU:AddAutoComponent( COMPONENT, name )

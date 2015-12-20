@@ -80,7 +80,7 @@ end
 local function buildConfigDeletion( panel )
 	panel:AddControl( "Header", { Description = "Select row to DELETE local configuration: " } )
 	local savedConfigs = EMVU.Configurations.Library
-	PrintTable( savedConfigs )
+	-- PrintTable( savedConfigs )
 	local configList = vgui.Create( "DListView" )
 	configList:SetMultiSelect( false )
 	configList:SetSize( 30, 120 )
