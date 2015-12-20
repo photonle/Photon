@@ -17,11 +17,13 @@ end )
 
 local IsValid = IsValid
 
-local christmasMode = GetConVar( "photon_christmas_mode" ) or false
+local christmasMode = GetConVar( "photon_christmas_mode" )
 
 hook.Add( "InitPostEntity", "Photon.CLEMVMETASettings", function()
 	christmasMode = GetConVar( "photon_christmas_mode" )
 end)
+
+local printedErrors = {}
 
 function EMVU:MakeEMV( emv, name )
 
@@ -246,7 +248,14 @@ function EMVU:MakeEMV( emv, name )
 		local a = index
 
 		if not self.EL.Frames[k] then print("[Photon] Unregistered component name: " .. tostring( component ) .. " defined in vehicle: " .. tostring( self.VehicleName ) ) return end
-		if not self.EL.Frames[k][a] then print("[Photon] Unregistered pattern: " .. tostring( index ) .. " under component: " ..tostring( component ) .. " defined in vehicle: " .. tostring( self.VehicleName ) ) return end
+		if not self.EL.Frames[k][a] then
+			local comp = tostring( component )
+			if not printedErrors[comp] then
+				local errorOutput = print("[Photon] Unregistered pattern: " .. tostring( index ) .. " under component: " .. component .. " defined in vehicle: " .. tostring( self.VehicleName ) )
+				printedErrors[comp] = true
+			end
+			return 
+		end
 
 		if inc then
 			if self.EL.Frames[k][a][1] >= self.EL.Frames[k][a][2] then

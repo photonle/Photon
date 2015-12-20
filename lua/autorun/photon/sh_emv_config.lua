@@ -71,3 +71,30 @@ PHOTON_TRF_WARN							= 4
 
 // SECONDS A PLAYER MUST WAIT FOR UNTIL THEY CAN CHANGE LIVERY AGAIN //
 PHOTON_LIVERY_COOLDOWN = 3 
+
+PHOTON_CHRISTMAS_PERMIT = false
+
+if CLIENT then
+	hook.Add( "InitPostEntity", "Photon.ChristmasCheck", function()
+		local curDate = os.date("*t")
+		local modeEnabled = GetConVar( "photon_christmas_mode" )
+		local autoEnabled = GetConVar( "photon_christmas_mode_auto" )
+		if curDate.month == 12 and ( curDate.day == 25 or curDate.day == 24 ) then
+			PHOTON_CHRISTMAS_PERMIT = true
+			if autoEnabled:GetBool() then
+				RunConsoleCommand( "photon_christmas_mode", 1 )
+				chat.AddText( Color( 205, 31, 31 ), "Merry Christmas ", Color( 255, 255, 255 ), "and ", Color( 65, 136, 13 ), "Happy Holidays ", Color( 255, 255, 255 ), " from Photon! \n", Color( 200, 200, 200 ), "(You can disable this in the Photon settings menu or by typing \"stop\" into chat)."  )
+			end
+		end
+	end)
+	hook.Add( "OnPlayerChat", "Photon.ChatXmasHook", function( ply, txt )
+		print(tostring(ply))
+		print(tostring(txt))
+		if string.lower( txt ) == "stop" and ply == LocalPlayer() then
+			local modeEnabled = GetConVar( "photon_christmas_mode" )
+			if modeEnabled:GetBool() then
+				RunConsoleCommand( "photon_christmas_mode_auto", 0 )
+			end
+		end
+	end)
+end

@@ -62,8 +62,15 @@ hook.Add( "Photon.EntityChangedSkin", "Photon.LiverySkinCheck", function( ent, s
 	end
 end )
 
-hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ent, ply ) 
+hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, ent ) 
 	if not IsValid( ent ) then return false end
+	local isDriver = ( ply:GetVehicle() == ent )
+	local isOwner = ( ent:GetOwner() == ply )
+	if isDriver or ply == owner then
+		return true
+	else
+		return false
+	end
 end )
 
 local function PhotonUnitNumberScan()

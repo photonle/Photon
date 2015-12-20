@@ -33,6 +33,10 @@ end
 local function buildClientSettings( panel )
 	panel:ClearControls()
 	logoHeader( panel )
+	if PHOTON_CHRISTMAS_PERMIT then
+		panel:AddControl( "Header", { Description = "Special" } )
+		panel:AddControl( "CheckBox", { Label = "Holiday Mode", Command = "photon_christmas_mode_auto" } )
+	end
 	panel:AddControl( "Header", { Description = "General Settings" } )
 	panel:AddControl( "CheckBox", { Label = "Enable Emergency Lighting", Command = "photon_emerg_enabled" } )
 	panel:AddControl( "CheckBox", { Label = "Enable Standard Lighting", Command = "photon_stand_enabled" } )
@@ -166,3 +170,16 @@ hook.Add( "PopulateToolMenu", "Photon.AddSettingsMenu", function()
 end )
 
 -- PrintTable( list.Get( "ThrusterSounds" ) )
+
+cvars.RemoveChangeCallback("photon_christmas_mode_auto","photon.christmas.hook")
+cvars.AddChangeCallback("photon_christmas_mode_auto",function(name, old, new)
+	if tonumber( new ) == 1 then
+		if PHOTON_CHRISTMAS_PERMIT then
+			RunConsoleCommand( "photon_christmas_mode", "1" )
+		end
+	else
+		RunConsoleCommand( "photon_christmas_mode", "0" )
+		chat.AddText( Color( 255, 255, 128), "Photon Holiday Mode has been disabled." )
+	end
+
+end,"photon.christmas.hook")

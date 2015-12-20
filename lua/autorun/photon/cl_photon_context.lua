@@ -9,10 +9,9 @@ properties.Add( "photon_siren", {
 
 	Filter = function( self, ent, ply )
 		if not IsValid( ent ) then return false end
+		if not ent:IsVehicle() then return false end
 		if not ent:Photon() then return false end
 		if not ent:IsEMV() then return false end
-		if not ply:InVehicle() then return false end
-		if not ply:GetVehicle() == ent then return false end
 		return true
 	end,
 
@@ -58,6 +57,8 @@ properties.Add( "photon_siren", {
 				end
 			end
 		end
+
+		secondarySubmenu:AddOption( "None", function() EMVU.Net:SirenSet( 0, ent, true ) end )
 
 	end
 

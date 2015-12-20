@@ -36,6 +36,7 @@ local function PhotonManualWindScan()
 		if IsValid( emv ) and emv.Photon_ManualWindUpdate then emv:Photon_ManualWindUpdate() end
 	end
 end
+-- hook.Add("PreRender", "EMVU.ScanSound", PhotonManualWindScan)
 timer.Create( "Photon.ManualWindScan", .01, 0, function()
 	PhotonManualWindScan()
 end )

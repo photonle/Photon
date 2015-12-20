@@ -58,6 +58,7 @@ COMPONENT.Patterns = {
 		["code1CHP"] = { 1 },
 		["code2CHP"] = { 2, 2, 2, 2, 2, 3, 3, 3, 3, 3 },
 		["code3CHP"] = { 2, 2, 2, 2, 2, 3, 3, 3, 3, 3 },
+		["alertCHP"] = { 2, 2, 2, 2, 2, 3, 3, 3, 3, 3 },
 		["code3"] = { 
 			2, 0, 2, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 3, 0, 3, 0,
@@ -358,7 +359,7 @@ COMPONENT.Meta = {
 COMPONENT.Positions = {
 
 	[1] = { Vector( -42.01, 51.16, 63.88 ), Angle( 7.96, -6, 0 ), "auto_whelen_spotlight" },
-
+r
 }
 
 COMPONENT.Sections = {

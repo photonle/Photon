@@ -254,14 +254,15 @@ function EMVU:MakeEMV( ent, emv )
 					end
 				end
 			if self:ELS_SirenOption() > 2 then secondIndex = 2 end
-			local newSound = EMVU.Sirens[secondarySiren].Set[secondIndex].Sound
+			local newSound = EMVU.Sirens[secondarySiren].Set[1].Sound
+			if EMVU.Sirens[secondarySiren].Set[secondIndex] then newSound = EMVU.Sirens[secondarySiren].Set[secondIndex].Sound end
 			if ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and self.ELS.CurrentSecondarySiren != newSound then 
 				self.ELS.Siren2:Stop()
 				self.ELS.Siren2 = CreateSound( self, newSound )
 				self.ELS.Siren2:SetSoundLevel( 70 )
 				self.ELS.CurrentSecondarySiren = newSound
 			elseif not self.ELS.Siren2 or ( ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and not self.ELS.CurrentSecondarySiren == newSound ) then
-				print(secondIndex)
+				-- print(secondIndex)
 				self.ELS.Siren2 = CreateSound( self, newSound )
 				self.ELS.Siren2:SetSoundLevel( 70 )
 				self.ELS.CurrentSecondarySiren = newSound
