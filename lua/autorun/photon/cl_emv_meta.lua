@@ -836,6 +836,10 @@ function EMVU:MakeEMV( emv, name )
 			local convertedTable = self:Photon_ImportSelectionData( data.Selections )
 			self:Photon_ApplyEquipmentPreset( convertedTable )
 		end
+		if istable( data.Color ) then
+			local c = data.Color
+			EMVU.Net:Color( self, Color( c.r or 255, c.g or 255, c.b or 255 ) )
+		end
 	end
 
 	function emv:Photon_GetAvailableConfigurations()

@@ -10,6 +10,7 @@ local key_horn = key_horn or false
 local key_manual = key_manual or false
 local key_illum = key_illum or false
 local key_radar = key_radar or false
+local should_render =  GetConVar( "photon_emerg_enabled" )
 
 hook.Add( "InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	key_primary_toggle = GetConVar( "photon_key_primary_toggle" )
@@ -22,9 +23,11 @@ hook.Add( "InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	key_manual = GetConVar( "photon_key_manual" )
 	key_illum = GetConVar( "photon_key_illum" )
 	key_radar = GetConVar( "photon_key_radar" )
+	should_render = GetConVar( "photon_emerg_enabled" )
 end)
 
 function EMVU:Listener( ply, bind, press )
+	if not should_render:GetBool() then return end
 	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
 	local emv = ply:GetVehicle()
 	if not IsValid( emv ) then return false end
@@ -69,6 +72,7 @@ local function keyDown( key )
 end
 
 hook.Add( "Think", "Photon.ButtonPress", function()
+	if not should_render:GetBool() then return end
 	if not LocalPlayer():InVehicle() or not IsValid( LocalPlayer():GetVehicle() ) or not LocalPlayer():GetVehicle():IsEMV() then return end
 	local emv = LocalPlayer():GetVehicle()
 	if input.IsKeyTrapping() then return end

@@ -17,6 +17,7 @@ util.AddNetworkString( "emvu_selection" )
 util.AddNetworkString( "photon_myunitnumber" )
 util.AddNetworkString( "photon_availableskins" )
 util.AddNetworkString( "photon_setautoskin" )
+util.AddNetworkString( "emvu_color" )
 
 local can_change_siren_model = GetConVar( "photon_emv_changesirens" )
 local can_change_light_presets = GetConVar( "photon_emv_changepresets" )
@@ -106,6 +107,19 @@ net.Receive("emvu_sirenset", function( len, ply )
 	EMVU.Net:SirenSet( ply )
 end)
 
+function EMVU.Net:Color( ply )
+	local ent = net.ReadEntity()
+	local newCol = net.ReadColor()
+	if not ent:IsEMV() then return false end
+	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent )
+	if modifyBlocked != false then
+		ent:SetColor( newCol )
+	end
+end
+net.Receive( "emvu_color", function( len, ply ) 
+	EMVU.Net:Color( ply )
+end)
+
 function EMVU.Net:Preset( ply, args )
 	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() or not can_change_light_presets:GetBool() then return end
 	local emv = ply:GetVehicle()
@@ -118,9 +132,9 @@ end)
 
 function EMVU.Net.Selection( ply )
 	local ent = net.ReadEntity()
-	if not ent:IsEMV() then return end
 	local category = net.ReadInt(8)
 	local option = net.ReadInt(8)
+	if not ent:IsEMV() then return end
 	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent )
 	if modifyBlocked != false then
 		ent:Photon_SetSelection( category, option )

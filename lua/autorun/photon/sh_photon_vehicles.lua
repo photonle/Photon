@@ -36,7 +36,7 @@ function Photon:EntityCreated( ent )
 	timer.Simple(.05,function()
 		if  ent:IsVehicle() then
 			local timerId = ent:EntIndex() .. "-PHOTON-" .. CurTime()
-			timer.Create( timerId, .01, 200, function()
+			timer.Create( timerId, .01, 10, function()
 				if ent.VehicleTable and istable(ent.VehicleTable) then
 					Photon:SpawnedVehicle( ent )
 					EMVU:SpawnedVehicle( ent )

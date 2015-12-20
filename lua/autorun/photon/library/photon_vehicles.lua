@@ -23,7 +23,7 @@ Photon.VehicleIndex = {
 	["models/sentry/15hellcat.mdl"] = "st_charger",
 	["models/tdmcars/emergency/for_crownvic.mdl"] = "tdm_cvpi",
 	["models/tdmcars/emergency/dod_charger12.mdl"] = "tdm_dc12",
-	["models/schmal/fpiu/ford_utility.mdl"] = "fpiu16"
+	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility"
 }
 
 Photon.EMVIndex = {
@@ -33,7 +33,7 @@ Photon.EMVIndex = {
 	["models/tdmcars/hsvw427_pol.mdl"] = "Holden HSV W427 Police",
 	["models/tdmcars/emergency/for_crownvic.mdl"] = "Ford Crown Victoria",
 	["models/tdmcars/emergency/dod_charger12.mdl"] = "Dodge Charger SRT8 2012 Police",
-	--["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility"
+	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility"
 }
 
 Photon.DefaultMapping = {
@@ -56,7 +56,7 @@ Photon.DefaultMapping = {
 	["models/sentry/15hellcat.mdl"] = "15hellcat_sgm",
 	["models/tdmcars/emergency/for_crownvic.mdl"] = "forcrownvicpoltdm",
 	["models/tdmcars/emergency/dod_charger12.mdl"] = "charger12poltdm",
-	["models/schmal/fpiu/ford_utility.mdl"] = "fpiu16"
+	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility"
 }
 
 local indexed_vehicles = {
@@ -80,7 +80,8 @@ local indexed_emvs = {
 	"default_lw_suburban_und",
 	"default_tdm_hsv",
 	"default_tdm_cvpi",
-	"default_tdm_dc12"
+	"default_tdm_dc12",
+	"default_schmal_fpiu16"
 }
 
 for _,car in pairs( indexed_vehicles ) do

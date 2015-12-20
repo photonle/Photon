@@ -17,6 +17,7 @@ local should_render = GetConVar( "photon_emerg_enabled" )
 local photon_ready = photon_ready or false
 
 hook.Add( "InitPostEntity", "Photon.ReadyEL", function()
+	should_render = GetConVar( "photon_emerg_enabled" )
 	photon_ready = true
 end)
 
@@ -42,7 +43,7 @@ timer.Create( "Photon.ManualWindScan", .01, 0, function()
 end )
 
 local function PhotonManualWindFocus()
-	if not photon_ready then return end
+	if not photon_ready or not should_render:GetBool() then return end
 	for _, emv in pairs( EMVU:AllVehicles() ) do
 		if IsValid( emv ) and emv.Photon_ManualWindFocus then emv:Photon_ManualWindFocus() end
 	end
@@ -53,7 +54,7 @@ end
 hook.Add( "PreRender", "Photon.ManualFocusCheck", function() PhotonManualWindFocus() end )
 
 local function PhotonRadarScan()
-	if not photon_ready then return end
+	if not photon_ready or not should_render:GetBool() then return end
 	for _, emv in pairs( EMVU:AllVehicles() ) do
 		if IsValid( emv ) and emv:Photon_RadarActive() then emv:Photon_RadarTick() end
 	end
@@ -78,20 +79,20 @@ concommand.Add( "photon_pause", function()
 	photon_pause = !photon_pause
 end)
 
-concommand.Add( "photon_selectiondata", function( ply ) 
-	local veh = ply:GetVehicle()
-	if not IsValid( veh ) then return end
-	-- print("BEFORE:::::::::::::::::::::::")
-	-- PrintTable( veh:Photon_SelectionTable() )
-	-- print( "AFTER:::::::::::::::::::::::")
-	-- PrintTable( veh:Photon_ImportSelectionData( veh:Photon_GetSelectionJSON() ) )
-	//veh:Photon_ImportSelectionData( CHP_CONFIGDATA )
-	EMVU.Configurations.SaveConfiguration( "NYPD", "Default", "Schmal", veh:Photon_ExportConfiguration( true, true, true, true, true ) )
-end )
+-- concommand.Add( "photon_selectiondata", function( ply ) 
+-- 	local veh = ply:GetVehicle()
+-- 	if not IsValid( veh ) then return end
+-- 	-- print("BEFORE:::::::::::::::::::::::")
+-- 	-- PrintTable( veh:Photon_SelectionTable() )
+-- 	-- print( "AFTER:::::::::::::::::::::::")
+-- 	-- PrintTable( veh:Photon_ImportSelectionData( veh:Photon_GetSelectionJSON() ) )
+-- 	//veh:Photon_ImportSelectionData( CHP_CONFIGDATA )
+-- 	EMVU.Configurations.SaveConfiguration( "NYPD", "Default", "Schmal", veh:Photon_ExportConfiguration( true, true, true, true, true ) )
+-- end )
 
-CHP_CONFIGDATA = [[
-{"Pushbars":"Setina Pushbar=CHP - Red","Front Upper Deck":"None","Lightbar":"Whelen Liberty II=CHP","Rear Upper Deck":"None","Grille":"None","Reverse Light Hideaways":"None","Rear Lower Deck":"None","Turn Signal Hideaways":"None","Bumper Layout":"Fog Lights=CHP - White","Spotlight":"Full","Forward Hideaways":"None","Roof":"AirEL=All","Forward ALPR":"None","Headlight Wig-Wag":"On","Mid-Level Side":"None","Mirror Lights":"Whelen Ion=CHP - Red","Interior Equipment":"Full"}
-]]
+-- CHP_CONFIGDATA = [[
+-- {"Pushbars":"Setina Pushbar=CHP - Red","Front Upper Deck":"None","Lightbar":"Whelen Liberty II=CHP","Rear Upper Deck":"None","Grille":"None","Reverse Light Hideaways":"None","Rear Lower Deck":"None","Turn Signal Hideaways":"None","Bumper Layout":"Fog Lights=CHP - White","Spotlight":"Full","Forward Hideaways":"None","Roof":"AirEL=All","Forward ALPR":"None","Headlight Wig-Wag":"On","Mid-Level Side":"None","Mirror Lights":"Whelen Ion=CHP - Red","Interior Equipment":"Full"}
+-- ]]
 
 
 EMVU.ManualSirenTable = {}

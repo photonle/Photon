@@ -246,7 +246,10 @@ properties.Add( "photon_configuration", {
 			local sub = submenu
 			if data.Category then
 				local newCat = categories[ tostring( data.Category ) ]
-				if not newCat then newCat = submenu:AddSubMenu( tostring( data.Category ), null ) end
+				if not newCat then 
+					categories[ tostring( data.Category ) ] = submenu:AddSubMenu( tostring( data.Category ), null )
+					newCat = categories[ tostring( data.Category ) ]
+				end
 				sub = newCat
 			end
 			sub:AddOption( data.Name, function() ent:Photon_ApplyEquipmentConfiguration( index ) end )

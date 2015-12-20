@@ -31,13 +31,13 @@ function ent:EMVName()
 end
 
 function ent:Photon_GetSpeed()
-	if not IsValid( self ) then return false end
+	if not IsValid( self ) then return 0 end
 	return self:GetVelocity():Length()
 end
 
 function ent:Photon_AdjustedSpeed()
-	if not IsValid( self ) then return false end
-	return self:GetVelocity():Length() / 10
+	if not IsValid( self ) then return 0 end
+	return ( self:GetVelocity():Length() * ( 3600 / 63360 ) )
 end
 
 function ent:Photon_GetUnitNumber()

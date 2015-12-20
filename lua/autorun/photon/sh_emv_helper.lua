@@ -108,7 +108,7 @@ end
 
 function EMVU.Helper:GetTASequence( name, option, vehicle )
 
-	if not istable( EMVU.Sequences[ name ].Traffic ) then print("notraffic") return end
+	if not istable( EMVU.Sequences[ name ].Traffic ) then return end
 	local resultTable = {}
 	
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["BG_Components"] ) then
