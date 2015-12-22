@@ -14,7 +14,7 @@ PHOTON_BANNED_UNIT_IDS = {
 
 local BOOL_CONST_OFFSET = 20
 
-PHOTON_UPDATE = 52
+PHOTON_UPDATE = 58
 PHOTON_SERIES = "Boulder"
 
 // booleans //
@@ -88,8 +88,6 @@ if CLIENT then
 		end
 	end)
 	hook.Add( "OnPlayerChat", "Photon.ChatXmasHook", function( ply, txt )
-		print(tostring(ply))
-		print(tostring(txt))
 		if string.lower( txt ) == "stop" and ply == LocalPlayer() then
 			local modeEnabled = GetConVar( "photon_christmas_mode" )
 			if modeEnabled:GetBool() then

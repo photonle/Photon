@@ -554,7 +554,7 @@ function EMVU:MakeEMV( ent, emv )
 		local mdlId = Photon.AutoSkins.TranslationTable[ mdl ]
 		//print(tostring(mdlId))
 		if not mdlId then return false end
-		if not Photon.AutoSkins.IsSkinAvailable( mdlId, skin ) then return false end
+		-- if not Photon.AutoSkins.IsSkinAvailable( mdlId, skin ) then return false end
 		//print("instructed to apply" .. tostring( skin ))
 		self:ApplySmartSkin( skin )
 	end

@@ -808,6 +808,7 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:Photon_HasManualWind()
 		local set = self:Photon_SirenSet()
+		if set == 0 then return false end
 		return istable( EMVU.Sirens[set].Gain )
 	end
 
@@ -850,7 +851,8 @@ function EMVU:MakeEMV( emv, name )
 
 	emv.LastPresetOption = 0
 	emv:Photon_SetupEMVProps()
-
+	emv.PhotonFinishedInit = true
+	print("FINISHED INIT")
 end
 
 photonLightModels = {}

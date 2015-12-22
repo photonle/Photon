@@ -118,7 +118,6 @@ end
 function EMVU.Net.ReceiveAvailableSkins()
 	local received = net.ReadTable()
 	Photon.AutoSkins.Available = received
-	--PrintTable( received )
 end
 net.Receive( "photon_availableskins", function() EMVU.Net.ReceiveAvailableSkins() end)
 

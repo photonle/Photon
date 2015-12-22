@@ -359,7 +359,7 @@ COMPONENT.Meta = {
 COMPONENT.Positions = {
 
 	[1] = { Vector( -42.01, 51.16, 63.88 ), Angle( 7.96, -6, 0 ), "auto_whelen_spotlight" },
-r
+
 }
 
 COMPONENT.Sections = {
@@ -370,15 +370,16 @@ COMPONENT.Sections = {
 
 COMPONENT.Patterns = {
 	["auto_whelen_spotlight"] = {
-		["c1"] = { 1 }
+		["c1"] = { 1 },
+		["off"] = { 0 },
 	}
 }
 
 COMPONENT.Modes = {
 	Primary = {
-		M1 = {},
-		M2 = {},
-		M3 = {}
+		M1 = { ["auto_whelen_spotlight"] = "off" },
+		M2 = { ["auto_whelen_spotlight"] = "off" },
+		M3 = { ["auto_whelen_spotlight"] = "off" }
 	},
 	Auxiliary = {},
 	Illumination = {

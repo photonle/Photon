@@ -244,7 +244,7 @@ properties.Add( "photon_configuration", {
 		local categories = {}
 		for index, data in pairs( options ) do
 			local sub = submenu
-			if data.Category then
+			if data.Category and ( not tobool( data.Category ) ==  false ) then
 				local newCat = categories[ tostring( data.Category ) ]
 				if not newCat then 
 					categories[ tostring( data.Category ) ] = submenu:AddSubMenu( tostring( data.Category ), null )

@@ -1642,7 +1642,7 @@ EMV.Auto = {
 		Ang = Angle( 1, 90, 0),
 		Color1 = "RED",
 		Color2 = "RED"
-	},
+	}
 }
 
 EMV.Selections = { -- structured and flexible version of presets designed to mimic bodygroups
@@ -1873,7 +1873,6 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 		Name = "Spotlight",
 		Options = {
 			{ Name = "Full", Auto = { 61 }, Props = { 9 } },
-			-- { Name = "Full", Props = { 9 } },
 			{ Name = "None" },
 		}
 	},
@@ -1890,6 +1889,5 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 }
 
 Photon.EMVLibrary[name] = EMV
-
---if EMVU then EMVU:OverwriteIndex( name, EMV ) end
+-- if EMVU then EMVU:OverwriteIndex( name, EMV ) end
 -- if PI then Photon:OverwriteIndex( name, PI ) end

@@ -56,7 +56,7 @@ hook.Add( "PreRender", "Photon.ManualFocusCheck", function() PhotonManualWindFoc
 local function PhotonRadarScan()
 	if not photon_ready or not should_render:GetBool() then return end
 	for _, emv in pairs( EMVU:AllVehicles() ) do
-		if IsValid( emv ) and emv:Photon_RadarActive() then emv:Photon_RadarTick() end
+		if IsValid( emv ) and emv.Photon_RadarActive and emv:Photon_RadarActive() then emv:Photon_RadarTick() end
 	end
 end
 hook.Add( "Tick", "Photon.RadarScan", function() PhotonRadarScan() end)
@@ -119,6 +119,7 @@ EMVU.Configurations.SaveConfiguration = function( name, category, author, data )
 	if not file.Exists( "photon", "DATA" ) then file.CreateDir( "photon" ) end
 	if not file.Exists( "photon/equip_configs", "DATA" ) then file.CreateDir( "photon/equip_configs" ) end
 	file.Write( "photon/equip_configs/" .. fileName .. ".txt", output )
+	EMVU.Configurations.ResetConfigurations()
 	return true
 end
 
@@ -133,3 +134,119 @@ EMVU.Configurations.ConfigurationLua = function( name, category, author, data )
 	local listName = EMVU.Configurations.GenerateName( data )
 	return string.format( luaConfigCopyTemplate, listName, "[[" .. output .. "]]" )
 end
+
+Photon.AutoSkins.FetchSkins = function( id )
+	local result = {}
+	local baseDir = "materials/" .. tostring(id) .. "_liveries/"
+	local files = file.Find( baseDir .. "*.vmt", "GAME" )
+	result["/"] = {}
+	for _,foundFile in pairs( files ) do
+		result["/"][ #result["/"] + 1 ] = foundFile
+	end
+	local _,dirs = file.Find( baseDir .. "*", "GAME" )
+	for _,foundDir in pairs( dirs ) do
+		if not result[foundDir] then result[foundDir] = {} end
+		local subFiles = file.Find( baseDir .. foundDir .. "/*.vmt", "GAME" )
+		for __,foundFile in pairs( subFiles ) do
+			result[foundDir][ #result[foundDir] + 1 ] = foundFile
+		end
+	end
+	return result, baseDir
+end
+
+Photon.AutoSkins.ParseSkins = function( id )
+	local fileTable, baseDir = Photon.AutoSkins.FetchSkins( id )
+	local result = {}
+	for key,subFiles in pairs( fileTable ) do
+		if key == "/" then
+			result["/"] = {}
+			local newKey = key
+			for _,mat in pairs( subFiles ) do
+				result[ newKey ][ #result[ newKey ] + 1 ] = {}
+				local matInfo = result[ newKey ][ #result[ newKey ] ]
+				matInfo.Name = string.Replace( string.Replace( mat, "_", " " ), ".vmt", "" )
+				matInfo.Texture = string.format( "%s%s/%s", string.Replace( baseDir, "materials/", "" ), key, string.StripExtension( mat ) )
+			end
+		else
+			local newKey = string.Replace( key, "_", " ")
+			result[ newKey ] = {}
+			for _,mat in pairs( subFiles ) do
+				result[ newKey ][ #result[ newKey ] + 1 ] = {}
+				local matInfo = result[ newKey ][ #result[ newKey ] ]
+				matInfo.Name = string.Replace( string.Replace( mat, "_", " " ), ".vmt", "" )
+				matInfo.Texture = string.format( "%s%s/%s", string.Replace( baseDir, "materials/", "" ), key, string.StripExtension( mat ) )
+			end
+		end
+	end
+	return result
+end
+
+Photon.AutoSkins.LoadAvailable = function()
+	if not istable( Photon.AutoSkins.TranslationTable ) then return end
+	for _,id in pairs( Photon.AutoSkins.TranslationTable ) do
+		local skinTable = Photon.AutoSkins.ParseSkins( id )
+		Photon.AutoSkins.Available[id] = skinTable
+	end
+end
+
+hook.Add( "InitPostEntity", "Photon.LoadAvailableMaterials", function() timer.Simple( 3, Photon.AutoSkins.LoadAvailable ) end )
+
+function PrintPhotonDebugInformation()
+	if CLIENT then
+		local emergEnabled = GetConVar( "photon_emerg_enabled" )
+		local standEnabled = GetConVar( "photon_stand_enabled" )
+		local expEdit = GetConVar("photon_express_edit")
+		local car = LocalPlayer():GetVehicle()
+		print( [[---------- PHOTON LIGHTING ENGINE DEBUG INFORMATION (CLIENT) ----------]] )
+		print( [[VERSION: ]] .. tostring( PHOTON_UPDATE ) )
+		print( [[EMERGENCY LIGHTS ENABLED: ]] .. tostring( emergEnabled:GetBool() ) )
+		print( [[STANDARD LIGHTS ENABLED: ]] .. tostring( standEnabled:GetBool() ) )
+		print( [[EXPRESS EDIT ENGAGED: ]] .. tostring( expEdit:GetBool() ) )
+		print( [[PHOTON LOADED VEHICLES-------------------------------------------------]])
+		local total = 0
+		for carName,_ in pairs( EMVU.Positions ) do
+			print( tostring( carName ) )
+			total = total + 1 --# was not working??????
+		end
+		print( [[END ALL LOADED VEHICLES, TOTAL: ]] .. tostring( total ) .. "-------------------------" )
+		if IsValid( car ) then
+			if car.EMVName then
+				print( [[CURRENT VEHICLE: ]] .. tostring( car:EMVName() ) )
+			else
+				print( [[CURRENT VEHICLE NAME NOT VALID, METATABLE FAILURE (E1)]]) -- E1
+			end
+			if car.Photon then
+				print( [[CURRENT VEHICLE HAS PHOTON: ]] .. tostring( car:Photon() ) )
+			else
+				print( [[CURRENT VEHICLE PHOTON STATUS NOT VALID, METATABLE FAILURE (E4)]]) -- E4
+			end
+			if car.HasELS then
+				print( [[CURRENT VEHICLE HAS ELS: ]] .. tostring( car:HasELS() ) )
+			else
+				print( [[CURRENT VEHICLE ELS STATUS NOT VALID, METATABLE FAILURE (E2)]]) -- E2
+			end
+			if car.IsEMV then
+				print( [[CURRENT VEHICLE IS EMV: ]] .. tostring( car:IsEMV() ) )
+				if car:IsEMV() then
+					print( [[CURRENT VEHICLE SELECTION_ENABLED: ]] .. tostring( car:Photon_SelectionEnabled() ) )
+					print( [[CURRENT VEHICLE SUPPPORTS CONFIGS: ]] .. tostring( car:Photon_SupportsConfigurations() ) )
+					print( [[CURRENT VEHICLE SIREN MODEL: ]] .. tostring( car:Photon_SirenSet() ) )
+					print( [[CURRENT VEHICLE SIREN ON: ]] .. tostring( car:Photon_Siren() ) )
+					print( [[CURRENT VEHICLE WARNING LIGHTS: ]] .. tostring( car:Photon_Lights() ) )
+					print( [[CURRENT VEHICLE LIGHT STAGE: ]] .. tostring( car:Photon_LightOption() ) )
+					print( [[CURRENT VEHICLE FINISHED INIT: ]] .. tostring( car.PhotonFinishedInit ) ) 
+
+				end
+			else
+				print( [[CURRENT VEHICLE EMV STATUS NOT VALID, METATABLE FAILURE (E3)]]) -- E3
+			end
+		else
+			print( [[PLAYER NOT IN VEHICLE OR VEHICLE IS INVALID]] )
+		end
+		print( [[---------- PHOTON END DEBUG READOUT ----------------------------------]] )
+	end
+end
+
+concommand.Add( "photon_debugprint", function()
+	PrintPhotonDebugInformation()
+end)

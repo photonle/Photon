@@ -7,6 +7,14 @@ local pow = math.pow
 local round = math.Round
 local useEyePos = Vector( 0, 0, 0 )
 local useEyeAng = Angle( 0, 0, 0 )
+local istable = istable
+local isnumber = isnumber
+local pairs = pairs
+local ColorAlpha = ColorAlpha
+local Lerp = Lerp
+local tostring = tostring
+local Material = Material
+local Vector = Vector
 
 local bloom_multi = GetConVar( "photon_bloom_modifier" )
 local dynlights_enabled = GetConVar( "photon_dynamic_lights" )
@@ -27,11 +35,7 @@ hook.Add( "InitPostEntity", "Photon.AddHelperLocalVars", function()
 	emvHelp = EMVU.Helper
 end)
 
-local isnumber = isnumber
-local istable = istable
-local pairs = pairs
-local ColorAlpha = ColorAlpha
-local Lerp = Lerp
+
 
 local function getViewFlare( dot, brght )
 	local dif = dot - .85
