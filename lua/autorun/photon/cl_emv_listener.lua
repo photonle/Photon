@@ -1,14 +1,16 @@
 AddCSLuaFile()
 
-local key_primary_toggle = key_primary_toggle or false
-local key_primary_alt = key_primary_alt or false
-local key_siren_toggle = key_siren_toggle or false
-local key_siren_alt = key_siren_alt or false
-local key_auxiliary = key_auxiliary or false
-local key_blackout = key_blackout or false
-local key_horn = key_horn or false
-local key_manual = key_manual or false
-local key_illum = key_illum or false
+local key_primary_toggle = GetConVar( "photon_key_primary_toggle" )
+local key_primary_alt = GetConVar( "photon_key_primary_alt" )
+local key_siren_toggle = GetConVar( "photon_key_siren_toggle" )
+local key_siren_alt = GetConVar( "photon_key_siren_alt" )
+local key_auxiliary = GetConVar( "photon_key_auxiliary" )
+local key_blackout = GetConVar( "photon_key_blackout" )
+local key_horn = GetConVar( "photon_key_horn" )
+local key_manual = GetConVar( "photon_key_manual" )
+local key_illum = GetConVar( "photon_key_radar" )
+local key_radar = GetConVar( "photon_key_radar" )
+local should_render =  GetConVar( "photon_emerg_enabled" )
 
 hook.Add( "InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	key_primary_toggle = GetConVar( "photon_key_primary_toggle" )
@@ -20,9 +22,12 @@ hook.Add( "InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	key_horn = GetConVar( "photon_key_horn" )
 	key_manual = GetConVar( "photon_key_manual" )
 	key_illum = GetConVar( "photon_key_illum" )
+	key_radar = GetConVar( "photon_key_radar" )
+	should_render = GetConVar( "photon_emerg_enabled" )
 end)
 
 function EMVU:Listener( ply, bind, press )
+	if not should_render:GetBool() then return end
 	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
 	local emv = ply:GetVehicle()
 	if not IsValid( emv ) then return false end
@@ -67,6 +72,7 @@ local function keyDown( key )
 end
 
 hook.Add( "Think", "Photon.ButtonPress", function()
+	if not should_render:GetBool() then return end
 	if not LocalPlayer():InVehicle() or not IsValid( LocalPlayer():GetVehicle() ) or not LocalPlayer():GetVehicle():IsEMV() then return end
 	local emv = LocalPlayer():GetVehicle()
 	if input.IsKeyTrapping() then return end
@@ -90,7 +96,7 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 		X_DOWN = false
 	end
 
-	if emv:Photon_HasTrafficAdvisor() then 
+	if emv.Photon_HasTrafficAdvisor and emv:Photon_HasTrafficAdvisor() then 
 		if not PHOTON_B_DOWN then
 			if keyDown( key_auxiliary:GetInt() ) then
 				if emv:Photon_TrafficAdvisor() then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
@@ -195,6 +201,24 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 	elseif MANUALTOG_DOWN and not keyDown( key_manual:GetInt() ) then
 		EMVU.Net:Manual( false )
 		MANUALTOG_DOWN = false
+	end
+
+	if not MANUALTOG_DOWN and keyDown( key_manual:GetInt() ) then
+		EMVU.Net:Manual( true )
+		MANUALTOG_DOWN = true
+	elseif MANUALTOG_DOWN and not keyDown( key_manual:GetInt() ) then
+		EMVU.Net:Manual( false )
+		MANUALTOG_DOWN = false
+	end
+
+	if not PHOTONRADARTOG_DOWN and keyDown( key_radar:GetInt() ) then
+		emv:Photon_RadarActive( true )
+		surface.PlaySound( EMVU.Sounds.Up )
+		PHOTONRADARTOG_DOWN = true
+	elseif PHOTONRADARTOG_DOWN and not keyDown( key_radar:GetInt() ) then
+		emv:Photon_RadarActive( false )
+		surface.PlaySound( EMVU.Sounds.Down )
+		PHOTONRADARTOG_DOWN = false
 	end
 
 end)

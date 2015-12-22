@@ -14,9 +14,14 @@ function EMVU.Net:Lights( arg )
 	net.SendToServer()
 end
 
-function EMVU.Net:SirenSet( arg )
+function EMVU.Net:SirenSet( arg, ent, aux )
+	if aux == nil then aux = false end
+	if not ent then ent = LocalPlayer():GetVehicle() end
+	if not IsValid( ent ) then return end
 	net.Start( "emvu_sirenset" )
+		net.WriteEntity( ent )
 		net.WriteInt( arg, 8 )
+		net.WriteBool( aux )
 	net.SendToServer()
 end
 
@@ -64,11 +69,15 @@ end
 
 local unitid_pref = GetConVar( "photon_emerg_unit" )
 
+local function GenerateDefaultUnitID()
+	return string.sub( tostring( LocalPlayer():SteamID64() ), 14 ) or "000" -- will use the last three digits of Steam64
+end
+
 function EMVU.Net:Livery( category, index )
 	net.Start( "emvu_livery" )
 		net.WriteString( category )
 		net.WriteString( index )
-		net.WriteString( unitid_pref:GetString() or "" )
+		net.WriteString( unitid_pref:GetString() or GenerateDefaultUnitID() )
 	net.SendToServer()
 end
 
@@ -78,3 +87,50 @@ end
 net.Receive( "photon_liveryupdate", function() 
 	EMVU.Net:ReceiveLiveryUpdate( net.ReadString(), net.ReadString(), net.ReadEntity() )
 end)
+
+function EMVU.Net:Color( ent, col )
+	net.Start( "emvu_color" )
+		net.WriteEntity( ent )
+		net.WriteColor( col )
+	net.SendToServer()
+end
+
+function EMVU.Net:ReceiveUnitNumberRequest()
+	net.Start( "photon_myunitnumber" )
+		net.WriteString( unitid_pref:GetString() or GenerateDefaultUnitID() )
+	net.SendToServer()
+end
+net.Receive( "photon_myunitnumber", function() EMVU.Net:ReceiveUnitNumberRequest() end)
+
+function EMVU.Net.Selection( ent, category, option )
+	net.Start( "emvu_selection" )
+		net.WriteEntity( ent )
+		net.WriteInt( category, 8 )
+		net.WriteInt( option, 8)
+	net.SendToServer()
+end
+
+function EMVU.Net.RequestAllSkins()
+	net.Start( "photon_availableskins" )
+	net.SendToServer()
+end
+
+function EMVU.Net.ReceiveAvailableSkins()
+	local received = net.ReadTable()
+	Photon.AutoSkins.Available = received
+end
+net.Receive( "photon_availableskins", function() EMVU.Net.ReceiveAvailableSkins() end)
+
+function EMVU.Net.ApplyAutoSkin( ent, skin )
+	local cnt = 0
+	for i in string.gfind( skin, "/" ) do
+		cnt = cnt + 1
+	end
+	if cnt < 2 then
+		skin = string.Replace( skin, "/", "///" )
+	end
+	net.Start( "photon_setautoskin" )
+		net.WriteEntity( ent )
+		net.WriteString( skin )
+	net.SendToServer()
+end

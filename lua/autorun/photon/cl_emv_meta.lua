@@ -17,6 +17,14 @@ end )
 
 local IsValid = IsValid
 
+local christmasMode = GetConVar( "photon_christmas_mode" )
+
+hook.Add( "InitPostEntity", "Photon.CLEMVMETASettings", function()
+	christmasMode = GetConVar( "photon_christmas_mode" )
+end)
+
+local printedErrors = {}
+
 function EMVU:MakeEMV( emv, name )
 
 	if not emv or not emv:IsValid() or not emv:IsVehicle() then return false end
@@ -43,6 +51,11 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_SirenOption()
 		if not IsValid( self ) then return 1 end
 		return self:GetDTInt( EMV_SIREN_OPTION )
+	end
+
+	function emv:Photon_AuxSirenSet()
+		if not IsValid( self ) then return end
+		return self:GetDTInt(EMV_SIREN_SECONDARY)
 	end
 
 	function emv:Photon_SirenSet()
@@ -88,7 +101,8 @@ function EMVU:MakeEMV( emv, name )
 		// 		local subTable = EMVU.Patterns[ self.VehicleName ]
 		// 	end
 		// end
-		return EMVHelper:GetIllumSequence( self.VehicleName, self:Photon_IllumOption(), self )
+		local result = EMVHelper:GetIllumSequence( self.VehicleName, self:Photon_IllumOption(), self )
+		return result
 	end
 
 	function emv:Photon_HasIllum()
@@ -234,7 +248,14 @@ function EMVU:MakeEMV( emv, name )
 		local a = index
 
 		if not self.EL.Frames[k] then print("[Photon] Unregistered component name: " .. tostring( component ) .. " defined in vehicle: " .. tostring( self.VehicleName ) ) return end
-		if not self.EL.Frames[k][a] then print("[Photon] Unregistered pattern: " .. tostring( index ) .. " under component: " ..tostring( component ) .. " defined in vehicle: " .. tostring( self.VehicleName ) ) return end
+		if not self.EL.Frames[k][a] then
+			local comp = tostring( component )
+			if not printedErrors[comp] then
+				local errorOutput = print("[Photon] Unregistered pattern: " .. tostring( index ) .. " under component: " .. component .. " defined in vehicle: " .. tostring( self.VehicleName ) )
+				printedErrors[comp] = true
+			end
+			return 
+		end
 
 		if inc then
 			if self.EL.Frames[k][a][1] >= self.EL.Frames[k][a][2] then
@@ -270,6 +291,7 @@ function EMVU:MakeEMV( emv, name )
 		local posData = EMVU.Positions[ self.VehicleName ]
 		local resultTable = {}
 		for key,_ in pairs( lights ) do
+			if PHOTON_DEBUG and not istable( posData[tonumber(key)] ) then continue end
 			resultTable[key] = self:LocalToWorld( posData[tonumber(key)][1] )
 		end
 		self.PhotonELFramePositions = resultTable
@@ -348,10 +370,9 @@ function EMVU:MakeEMV( emv, name )
 		self:Photon_RenderLightTable( RenderTable )
 	end
 
-	function emv:Photon_RenderLightTable( RenderTable )
+	function emv:Photon_RenderLightTable( RenderTable, type )
 		if not IsValid( self ) then return false end
 		if not self.PhotonELFramePositions then return false end
-
 		local positions = self:Photon_GetELPositions()
 		local meta = self:Photon_GetELMeta()
 		local gpos = self.PhotonELFramePositions
@@ -359,16 +380,21 @@ function EMVU:MakeEMV( emv, name )
 
 		local b = true
 		local pos = true
-		// PrintTable( RenderTable )
-		local colorRecycle = { true, true }
 
+		local illumBlock = ( type == "ILLUM" )
+		if illumBlock and istable( self.PhotonIllumBlockedLights ) then table.Empty( self.PhotonIllumBlockedLights ) elseif illumBlock then self.PhotonIllumBlockedLights = {} end
+		local blockTable = self.PhotonIllumBlockedLights
+		local colorRecycle = { true, true }
 		for a=1,#RenderTable do
 			b = RenderTable[a]
 			if (b==true) then continue end
 			pos = positions[b[1]]
-
+			if istable(blockTable) then
+				if illumBlock then blockTable[tostring(b[1])] = true elseif blockTable[tostring(b[1])] then continue end
+			end
 			if positions[b[1]] then
 				local colString = b[2]
+				
 				local col = false
 				local multiColor = false
 
@@ -381,31 +407,41 @@ function EMVU:MakeEMV( emv, name )
 				else
 					col = EMVColors[b[2]]
 				end
+				if christmasMode:GetBool() then
+					if colString == "BLUE" then col = EMVColors["GREEN"]
+					elseif colString == "AMBER" then col = EMVColors["WHITE"] end
+				end
 				// print(pixviscache[tostring(b[1])])
+				local showDynamic = pos[4] or false
 				Photon:PrepareVehicleLight(
 						self, -- parent
 						col, -- color of the light (colors)
 						pos[1], -- local pos if needed
-						gpos[tostring(b[1])], -- position (GLOBAL POS)
+						gpos[b[1]] or gpos[tostring(b[1])], -- position (GLOBAL POS)
 						pos[2], -- angle (lang)
 						meta[pos[3]], -- meta data (meta)
 						pixviscache[tostring(b[1])], -- pixvis handle (pixvis)
 						a, -- int for dynamic light (lnum)
 						b[3], -- brightness
-						multiColor
+						multiColor,
+						0,
+						showDynamic
 					)
+			else
+				print("No position found for: " .. tostring(b[1]))
 			end
 		end
 	end
 
 	function emv:Photon_RenderIllum()
 		if not IsValid( self ) then return false end
-		if not self:Photon_Illumination() then return end
+		if not self:Photon_Illumination() and istable( self.PhotonIllumBlockedLights ) then table.Empty( self.PhotonIllumBlockedLights ) return end
 		local handles = self.EL.VisHandles
 		local positions = self:Photon_GetELPositions()
 		local meta = self:Photon_GetELMeta()
 		local RenderTable = self:Photon_IllumLights()
-		if RenderTable then self:Photon_RenderLightTable( RenderTable ) end
+		--PrintTable( RenderTable )
+		if RenderTable then self:Photon_RenderLightTable( RenderTable, "ILLUM" ) end
 	end
 
 	function emv:Photon_RefreshELPixVis()
@@ -495,7 +531,7 @@ function EMVU:MakeEMV( emv, name )
 
 			if p == true then continue end
 			if not p.Model then continue end
-			local rendergroup = p.RenderGroup or RENDERGROUP_TRANSLUCENT
+			local rendergroup = p.RenderGroup or RENDERGROUP_OPAQUE
 			local rendermode = p.RenderMode or RENDERMODE_TRANSALPHA
 			util.PrecacheModel( p.Model )
 			if not util.IsModelLoaded( p.Model ) then self:AlertPhotonMissingRequirements() continue end
@@ -515,7 +551,7 @@ function EMVU:MakeEMV( emv, name )
 			if p.Skin then prop:SetSkin(p.Skin) end
 			if p.Material then prop:SetMaterial( p.Material ) end
 			if p.Color then prop:SetColor( p.Color ) end
-
+			if p.AirEL then prop.AirEL = true end
 			prop:SetSolid( SOLID_NONE )
 			prop:SetMoveType( MOVETYPE_NONE )
 			prop:SetCollisionGroup( COLLISION_GROUP_IN_VEHICLE )
@@ -529,6 +565,7 @@ function EMVU:MakeEMV( emv, name )
 				end
 			end
 
+			table.insert(photonLightModels, prop)
 			table.insert( emv.EMVProps, prop )
 
 		end
@@ -561,12 +598,18 @@ function EMVU:MakeEMV( emv, name )
 			return
 		end
 
-		if ( self.LastEMVPropScan and self.LastEMVPropScan + .5 > CurTime() and not PHOTON_DEBUG ) then return end
+		if self.LastSelectionString != self:Photon_SelectionString() then
+			self:Photon_RemoveEMVProps( true )
+			self.LastSelectionString = self:Photon_SelectionString()
+			return
+		end
+
+		if ( self.LastEMVPropScan and self.LastEMVPropScan + .5 > CurTime() and not PHOTON_DEBUG and not PHOTON_EXPRESS ) then return end
 
 		if not self.EMVProps then return end
 		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
 
-		if emvProps then 
+		if emvProps and istable( emvProps) then 
 			for index,prop in ipairs( self.EMVProps ) do
 				if not IsValid( prop ) then
 					self:Photon_RemoveEMVProps( true )
@@ -575,7 +618,8 @@ function EMVU:MakeEMV( emv, name )
 				prop:SetParent( self )
 				prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
 				prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
-				if PHOTON_DEBUG then 
+				prop:DrawShadow( false )
+				if PHOTON_DEBUG or PHOTON_EXPRESS then 
 					if isvector( emvProps[index].Scale ) then
 						local mat = Matrix()
 						mat:Scale( emvProps[index].Scale )
@@ -584,13 +628,231 @@ function EMVU:MakeEMV( emv, name )
 						prop:SetModelScale( emvProps[index].Scale, 0 )
 					end
 				end
+				if prop.AirEL then self.AirELEntity = prop end
+				if not IsValid( self.AirELEntity ) then self.AirELEntity = nil end
 			end
 		end
 		self.LastEMVPropScan = CurTime()
 
 	end
 
+	function emv:Photon_GetRadarCone( rear, force )
+		local normDirection = self:GetForward()
+		if rear then normDirection:Rotate( Angle( 0, -90, 0 ) ) else normDirection:Rotate( Angle( 0, 90, 0 ) ) end
+		local startPos = self:GetPos()
+		startPos.z = startPos.z + 60
+		if not self.PhotonRadarTargetCache or ( self.PhotonRadarTargetCacheTime and self.PhotonRadarTargetCacheTime + 1 < CurTime() ) or ( rear != self.PhotonRadarTargetLastRear ) or force then
+			local validEnts = {}
+			for _, ent in pairs( ents.FindInCone( startPos, normDirection, 2048, 0 ) ) do
+				if IsValid( ent ) and 
+					ent:IsVehicle() and 
+					ent != self and 
+					-- self:IsLineOfSightClear( ent:GetPos() ) and 
+					ent:Photon_GetSpeed() > .5 then
+					validEnts[ #validEnts + 1 ] = ent
+				end
+			end
+			self.PhotonRadarTargetLastRear = (rear or false)
+			self.PhotonRadarTargetCache = validEnts
+			self.PhotonRadarTargetCacheTime = CurTime()
+		end
+		return self.PhotonRadarTargetCache
+	end
+
+	function emv:Photon_UpdateRadarTargets( rear )
+		local entList = self:Photon_GetRadarCone( rear )
+		local fastest, nearest, fastSpeed, nearDist
+		for _, ent in pairs( entList ) do
+			if IsValid( ent ) then
+				local thisSpeed = ent:Photon_GetSpeed()
+				local thisDist = self:GetPos():Distance( ent:GetPos() )
+				if (fastest and fastSpeed) then
+					if (thisSpeed > fastSpeed) then fastest = ent; fastSpeed = thisSpeed end
+				else
+					fastest = ent; fastSpeed = thisSpeed
+				end
+				if (nearest and nearDist) then
+					if ( nearDist > thisDist ) then nearest = ent; nearDist = thisDist end
+				else
+					nearest = ent; nearDist = thisDist
+				end
+			end
+		end
+		self.PhotonRadarTargetFastest = fastest
+		self.PhotonRadarTargetNearest = nearest
+		return fastest, nearest
+	end
+
+	function emv:Photon_RadarTargetSpeeds( rear )
+		if not IsValid( self.PhotonRadarTargetFastest ) or not IsValid( self.PhotonRadarTargetNearest ) then self:Photon_UpdateRadarTargets() end
+		local fastest, nearest = self:Photon_UpdateRadarTargets( rear )
+		if not IsValid( nearest ) or not IsValid( fastest ) then return 0, 0 end
+		if fastest == nearest then return 0, math.Round( nearest:Photon_AdjustedSpeed() ) end
+		return math.Round( fastest:Photon_AdjustedSpeed() ), math.Round( nearest:Photon_AdjustedSpeed() )
+	end
+
+	function emv:Photon_RadarSoundInitialize()
+		if self.PhotonRadarSoundLoading then return end
+		self.PhotonRadarSoundLoading = true
+		sound.PlayFile( "sound/emv/radar_flat.wav", "3d", function( snd ) 
+			self:Photon_RadarSoundCallback( snd )
+		end)
+	end
+
+	function emv:Photon_RadarSoundCallback( snd )
+		if IsValid( snd ) then
+			snd:Pause()
+			self.PhotonRadarSoundHandle = snd
+			self.PhotonRadarSoundLoading = false
+		end
+	end
+
+	function emv:Photon_RadarTick()
+		if not IsValid( LocalPlayer():GetVehicle() ) or not self == LocalPlayer():GetVehicle() then return end
+		local rear = false
+		local fastest, nearest = self:Photon_RadarTargetSpeeds( rear )
+		PHOTON_RADAR_DISP_FAST = fastest or 0
+		PHOTON_RADAR_DISP_NEAR = nearest or 0
+		local soundSpeed = nearest
+		if fastest > nearest then soundSpeed = fastest end
+		local handle = self.PhotonRadarSoundHandle
+		if not handle then self:Photon_RadarSoundInitialize(); return end
+		handle:SetPos( self:GetPos() )
+		if soundSpeed > 1 then
+			local result = ( math.Round( soundSpeed / 10) / 10 ) + .5
+			handle:Play()
+			if result > 0 then handle:SetPlaybackRate( result ) else handle:Pause() end
+		else
+			handle:Pause()
+		end
+	end
+
+	function emv:Photon_RadarActive( arg )
+		local prev = self.PhotonRadarActive or false
+		if arg != nil then self.PhotonRadarActive = arg end
+		if arg == false and IsValid( self.PhotonRadarSoundHandle ) then self.PhotonRadarSoundHandle:Pause() end
+		return self.PhotonRadarActive
+	end
+
+	function emv:Photon_ManualWindUpdate()
+		if not self:Photon_HasManualWind() or self.PhotonManualSirenProcessing then return false end
+		local isWindingUp = self:Photon_ManualSiren()
+		local info = EMVU.Sirens[self:Photon_SirenSet()].Gain
+		if not self.Photon_ManualSirenTable then self.Photon_ManualSirenTable = {} end
+		local sirenState = self.Photon_ManualSirenTable
+
+		if not sirenState.SoundHandle then
+			self.PhotonManualSirenProcessing = true
+			local emv = self
+			sound.PlayFile( info.Sound, "3d", function( snd, errorNo, errorName )
+				if IsValid( emv ) and IsValid( snd ) then
+					snd:Pause()
+					emv:Photon_ManualWindCallback( snd )
+					EMVU.ManualSirenTable[tostring(snd)] = { snd, self }
+				end
+			end)
+			return
+		end
+
+		local currentRate = sirenState.SoundHandle:GetPlaybackRate()
+		local minRate = info.MinRate or decreaseRate
+		local maxRate = info.MaxRate or 1.25
+		if isWindingUp and not self:Photon_Siren() then
+			sirenState.ShouldPlay = true
+			local increaseRate = info.UpRate or .01
+			if currentRate < maxRate then
+				-- sirenState.SoundHandle:SetPlaybackRate( Lerp( currentRate/maxRate, minRate, maxRate ) )
+				sirenState.SoundHandle:SetPlaybackRate( currentRate + increaseRate )
+			end
+			sirenState.SoundHandle:EnableLooping( true )
+			sirenState.SoundHandle:Play()
+		else
+			local decreaseRate = info.DownRate or .006
+			
+			if currentRate > minRate and sirenState.ShouldPlay and not self:Photon_Siren() then
+				local newRate = currentRate - decreaseRate
+				if newRate < .005 then newRate = .005 end
+				sirenState.SoundHandle:SetPlaybackRate( newRate )
+				sirenState.SoundHandle:Play()
+			else
+				sirenState.SoundHandle:Pause()
+				sirenState.SoundHandle:SetPlaybackRate( minRate )
+				sirenState.ShouldPlay = false
+			end
+		end
+		local forwardDir = self:GetForward()
+		forwardDir:Rotate( Angle( 0, 90, 0 ) )
+		sirenState.SoundHandle:SetPos( self:GetPos(), forwardDir )
+		if system.HasFocus() then sirenState.SoundHandle:SetVolume( 1 ) else sirenState.SoundHandle:SetVolume( 0 ) end
+	end
+
+	function emv:Photon_ManualWindFocus()
+		if not self.Photon_ManualSirenTable then return end
+		if not IsValid( self.Photon_ManualSirenTable.SoundHandle ) then return end
+		if system.HasFocus() then self.Photon_ManualSirenTable.SoundHandle:SetVolume( 1 ) else self.Photon_ManualSirenTable.SoundHandle:SetVolume( 0 ) end
+	end
+
+	function emv:Photon_ManualWindCallback( snd )
+		if not IsValid( snd ) then return end
+		if not self.Photon_ManualSirenTable then self.Photon_ManualSirenTable = {} end
+		snd:EnableLooping( false )
+		snd:Pause()
+		snd:SetPlaybackRate( .005 )
+		snd:Set3DFadeDistance( 500, 2048 )
+		snd:Set3DCone( 90, 180, .5 )
+		snd:SetVolume( 1 )
+		self.Photon_ManualSirenTable.SoundHandle = snd
+		self.Photon_ManualSirenTable.ShouldPlay = false
+		self.PhotonManualSirenProcessing = false
+	end
+
+	function emv:Photon_HasManualWind()
+		local set = self:Photon_SirenSet()
+		if set == 0 then return false end
+		return istable( EMVU.Sirens[set].Gain )
+	end
+
+	function emv:Photon_ApplyEquipmentPreset( presetData )
+		for index, value in pairs( presetData ) do
+			EMVU.Net.Selection( self, index, value )
+		end
+	end
+
+	function emv:Photon_ApplyEquipmentConfiguration( index )
+		local data
+		if isnumber( index ) then
+			local shortId = EMVU.Configurations.Supported[ self:EMVName() ]
+			if EMVU.Configurations.Library[ shortId ] and EMVU.Configurations.Library[shortId][ index ]then data = EMVU.Configurations.Library[ shortId ][ index ] end
+		end
+		if data.Skin then EMVU.Net.ApplyAutoSkin( self, data.Skin ) end
+		if data.Siren then 
+			local convertedSiren = tonumber( data.Siren )
+			if isnumber( convertedSiren ) then EMVU.Net:SirenSet( convertedSiren, self, false ) end
+		end
+		if data.AuxSiren then
+			local convertedSiren = tonumber( data.AuxSiren )
+			if isnumber( convertedSiren ) then EMVU.Net:SirenSet( convertedSiren, self, true ) end
+		end
+		if istable( data.Selections ) then
+			local convertedTable = self:Photon_ImportSelectionData( data.Selections )
+			self:Photon_ApplyEquipmentPreset( convertedTable )
+		end
+		if istable( data.Color ) then
+			local c = data.Color
+			EMVU.Net:Color( self, Color( c.r or 255, c.g or 255, c.b or 255 ) )
+		end
+	end
+
+	function emv:Photon_GetAvailableConfigurations()
+		if not self:Photon_SupportsConfigurations() then return {} end
+		local shortId = EMVU.Configurations.Supported[ self:EMVName() ]
+		return EMVU.Configurations.Library[ shortId ]
+	end
+
 	emv.LastPresetOption = 0
 	emv:Photon_SetupEMVProps()
-
+	emv.PhotonFinishedInit = true
+	print("FINISHED INIT")
 end
+
+photonLightModels = {}

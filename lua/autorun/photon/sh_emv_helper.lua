@@ -34,6 +34,22 @@ function EMVU.Helper.GetAlertSequence( name, vehicle )
 		end
 	end
 
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Alert"]["Selection_Components"]) then
+		local selComp = EMVU.Sequences[name]["Alert"]["Selection_Components"]
+		for i=1,#selComp do
+			-- PrintTable(selComp)
+			local currentOption = vehicle:Photon_SelectionOption( i )
+			if istable( selComp[i] ) then
+				local ptable = selComp[i][currentOption]
+				if istable( ptable ) then
+				for id,data in pairs( ptable ) do
+					resultTable[ id ] = data
+				end
+			end
+		end
+		end
+	end
+
 	for component, option in pairs( EMVU.Sequences[name]["Alert"]["Components"] ) do
 		resultTable[ component ] = option
 	end
@@ -71,6 +87,18 @@ function EMVU.Helper:GetSequence( name, option, vehicle )
 		end
 	end
 
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Sequences"][option]["Selection_Components"]) then
+		local selComp = EMVU.Sequences[name]["Sequences"][option]["Selection_Components"]
+		for i,options in pairs( selComp ) do
+			local currentOption = vehicle:Photon_SelectionOption( i )
+			if istable( options ) and istable( options[currentOption] ) then
+				for id,data in pairs( options[currentOption] ) do
+					resultTable[ id ] = data
+				end
+			end
+		end
+	end
+
 	for component, option in pairs( EMVU.Sequences[name]["Sequences"][option]["Components"] ) do
 		resultTable[ component ] = option
 	end
@@ -79,6 +107,7 @@ function EMVU.Helper:GetSequence( name, option, vehicle )
 end
 
 function EMVU.Helper:GetTASequence( name, option, vehicle )
+
 	if not istable( EMVU.Sequences[ name ].Traffic ) then return end
 	local resultTable = {}
 	
@@ -106,6 +135,24 @@ function EMVU.Helper:GetTASequence( name, option, vehicle )
 				resultTable[ id ] = data
 			end
 		end
+	end
+
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["Selection_Components"]) then
+		local selComp = EMVU.Sequences[name]["Traffic"][option]["Selection_Components"]
+		for i,options in pairs( selComp ) do
+			local currentOption = vehicle:Photon_SelectionOption( i )
+			if istable( options[currentOption] ) then 
+				for id,data in pairs( options[currentOption] ) do
+					resultTable[ id ] = data
+				end
+			end
+		end
+		-- for i=1,#selComp do
+		-- 	local currentOption = vehicle:Photon_SelectionOption( i )
+		-- 	for id,data in pairs( selComp[i][currentOption] ) do
+		-- 		resultTable[ id ] = data
+		-- 	end
+		-- end
 	end
 
 	for component, option in pairs( EMVU.Sequences[name]["Traffic"][option]["Components"] ) do
@@ -145,6 +192,18 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 		end
 	end
 
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Illumination"][option]["Selection_Components"]) then
+		local selComp = EMVU.Sequences[name]["Illumination"][option]["Selection_Components"]
+		for i,options in pairs( selComp ) do
+			local currentOption = vehicle:Photon_SelectionOption( i )
+			if istable( options[currentOption] ) then 
+				for id,data in pairs( options[currentOption] ) do
+					resultTable[ #resultTable + 1 ] = data
+				end
+			end
+		end
+	end
+
 	for component, option in pairs( EMVU.Sequences[name]["Illumination"][option]["Components"] ) do
 		resultTable[ component ] = option
 	end
@@ -171,15 +230,25 @@ function EMVU.Helper.FetchUsedLights( vehicle )
 	local primaryOption = vehicle:Photon_LightOption()
 	local auxOption = vehicle:Photon_TrafficAdvisorOption()
 	local illumOption = vehicle:Photon_IllumOption()
+	-- print("illum option: ".. tostring(illumOption))
 	local resultTable = {}
-	local primaryLights = EMVU.Helper:GetSequence( name, primaryOption, vehicle )
-	local auxiliaryLights = EMVU.Helper:GetTASequence( name, auxOption, vehicle )
+	local primaryLights = EMVU.Helper:GetSequence( name, primaryOption, vehicle ) or {}
+	local auxiliaryLights = EMVU.Helper:GetTASequence( name, auxOption, vehicle ) or {}
 	local illumLights = EMVU.Helper:GetIllumSequence( name, illumOption, vehicle )
-	for component,_ in pairs( primaryLights, auxiliaryLights, illumLights ) do
+	-- print("ILLUM LIGHTS RECEIVED: ")
+	-- PrintTable( illumLights )
+	for component,_ in pairs( primaryLights, auxiliaryLights ) do
 		for key,_ in pairs( EMVU.Helper.GetUsedLightsFromComponent( name, component ) ) do
 			resultTable[tostring(key)] = true
 		end
 	end
+	if istable( illumLights ) then
+		for _,lightInfo in pairs( illumLights ) do
+			resultTable[tostring(lightInfo[1])] = true
+		end
+	end
+	
+	--PrintTable( resultTable )
 	return resultTable
 end
 
@@ -219,7 +288,11 @@ function EMVU.Helper:GetMeta( name )
 end
 
 function EMVU.Helper:Photon_GetFrame( name, component, index, frame )
-	return EMVU.Patterns[name][component][index][frame]
+	if EMVU.Patterns[name][component][index][frame] then
+		return EMVU.Patterns[name][component][index][frame]
+	else
+		return {}
+	end
 end
 
 function EMVU.Helper:Photon_GetLightSection( name, component, frame, skip )
@@ -259,7 +332,7 @@ end
 
 function EMVU.Helper:GetProps( name, ent )
 	local results = {} -- ALL ABOUT THAT PRECACHIN
-	if istable( EMVU.Props[name] ) then
+	if istable( EMVU.Props[name] ) and not ent:Photon_SelectionEnabled() then
 		for i=1,#EMVU.Props[name] do
 			results[i] = EMVU.Props[name][i]
 		end
@@ -273,12 +346,37 @@ function EMVU.Helper:GetProps( name, ent )
 				propData.Pos = preset.Pos
 				propData.Ang = preset.Ang
 				propData.Scale = preset.Scale
+				propData.RenderGroup = preset.RenderGroup
+				propData.RenderMode = preset.RenderMode
 				results[ #results + 1 ] = propData
 			end
 		end
 		if istable( presetData.Props ) then
 			for _,prop in pairs( presetData.Props ) do
 				results[ #results + 1 ] = prop
+			end
+		end
+	end
+	if ent:Photon_SelectionEnabled() then
+		for index,category in pairs( EMVU.Selections[ name ] ) do
+			local selected = ent:Photon_SelectionOption( index )
+			if istable( category.Options[selected] ) then
+				if category.Options[selected].Auto then
+					for _,id in pairs( category.Options[selected].Auto ) do
+						local component = EMVU.AutoIndex[ name ][ id ]
+						local propData = EMVU.Helper:GetAutoModel( component[ "ID" ] )
+						if not propData.Model then continue end
+						propData.Pos = component.Pos
+						propData.Ang = component.Ang
+						propData.Scale = component.Scale
+						results[ #results + 1 ] = propData
+					end
+				end
+				if category.Options[selected].Props then
+					for _,id in pairs( category.Options[selected].Props ) do
+						results[ #results + 1 ] = EMVU.Props[ name ][ id ]
+					end
+				end
 			end
 		end
 	end

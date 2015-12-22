@@ -1,0 +1,12 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "schmal/code3_rx2700/solarrx"
+	"$bumpmap" "schmal/code3_rx2700/solarrx_normal"
+	"$phong" 1
+	"$phongtint" "[1 1 1]"
+	"$phongexponent" 75
+	"$phongboost" "10"
+	"$phongfresnelranges" "[1 1 1]"
+	"$normalmapalphaenvmapmask" 1
+	"$nodecal" "1"
+}

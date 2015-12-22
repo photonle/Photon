@@ -226,8 +226,7 @@ function Photon:SetupCar( ent, index )
 					local pos = positions[light[1]]
 					if pos and handles[i] and not lightDisconnect( self, light[1] ) then
 					local gpos = self:LocalToWorld(pos[1])
-						drawLight(
-							Photon,
+					Photon:PrepareVehicleLight(
 							self,
 							PhotonColors[light[2]], -- color
 							pos[1], -- local pos
@@ -237,7 +236,9 @@ function Photon:SetupCar( ent, index )
 							// handles[light[1]], -- handle
 							util.PixelVisible( gpos, 1, handles[light[1]]), -- handle
 							i, -- dynamic light number
-							light[3] -- brightness
+							light[3], -- brightness
+							false,
+							1
 						)
 					end
 				end

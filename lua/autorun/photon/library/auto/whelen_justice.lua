@@ -17,6 +17,7 @@ COMPONENT.Model = "models/schmal/whelen_justice/justice_lightbar.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Lightbar = true
 COMPONENT.Bodygroups = {}
+COMPONENT.Category = "Lightbar"
 COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "BLUE"
@@ -78,11 +79,11 @@ COMPONENT.Positions = {
 	[6] = { Vector( -16.77, 5.68, -0.69 ), Angle( 0, 0, 0 ), "justice_forward" },
 	[7] = { Vector( 16.77, 5.68, -0.69 ), Angle( 0, 0, 0 ), "justice_forward" },
 
-	[8] = { Vector( -24.74, 3.17, -0.57 ), Angle( 0, 36, 0 ), "justice_corner_forward" },
-	[9] = { Vector( 24.74, 3.17, -0.57 ), Angle( 0, -36, 0 ), "justice_corner_forward" },
+	[8] = { Vector( -24.74, 3.17, -0.57 ), Angle( 0, 36, 0 ), "justice_corner_forward", 1 },
+	[9] = { Vector( 24.74, 3.17, -0.57 ), Angle( 0, -36, 0 ), "justice_corner_forward", 2 },
 
-	[10] = { Vector( -24.74, -3.91, -0.49 ), Angle( 0, -36, 0 ), "justice_corner_rear" },
-	[11] = { Vector( 24.74, -3.91, -0.49 ), Angle( 0, 36, 0 ), "justice_corner_rear" },
+	[10] = { Vector( -24.74, -3.91, -0.49 ), Angle( 0, -36, 0 ), "justice_corner_rear", 3 },
+	[11] = { Vector( 24.74, -3.91, -0.49 ), Angle( 0, 36, 0 ), "justice_corner_rear", 4 },
 
 	[12] = { Vector( -18.82, -6.38, -0.56 ), Angle( 0, 0, 0 ), "justice_rear" },
 	[13] = { Vector( 18.82, -6.38, -0.56 ), Angle( 0, 0, 0 ), "justice_rear" },
@@ -164,6 +165,9 @@ COMPONENT.Sections = {
 		},
 		[2] = {
 			{ 8, "_1" }, { 10, "_1" }
+		},
+		[3] = {
+			{ 8, "_1" }, { 10, "_1" }, { 9, "_2" }, { 11, "_2" }
 		}
 	},
 	["auto_whelen_justice_middle"] = {
@@ -224,6 +228,7 @@ COMPONENT.Patterns = {
 	["auto_whelen_justice_corner"] = {
 		["code2"] = { 1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0 },
 		["code3"] = { 1, 2 },
+		["cruise"] = { 3 }
 	},
 	["auto_whelen_justice_middle"] = {
 		["code2"] = { 1, 0, 2, 0 },
@@ -261,6 +266,9 @@ COMPONENT.Modes = {
 			}
 		},
 	Auxiliary = {
+			C = {
+				["auto_whelen_justice_corner"] = "cruise",
+			},
 			L = {
 				["auto_whelen_justice_traffic"] = "left"
 			},
@@ -272,6 +280,15 @@ COMPONENT.Modes = {
 			}
 		},
 	Illumination = {
+		L = {
+			{ 21, W }
+		},
+		R = {
+			{ 22, W }
+		},
+		F = {
+			{ 19, W }, { 20, W }
+		},
 		T = {
 			{ 19, W }, { 20, W }
 		}

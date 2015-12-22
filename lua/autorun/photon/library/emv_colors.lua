@@ -2,13 +2,13 @@ AddCSLuaFile()
 
 EMVU.Colors = {
 	BLUE = {
-		src = Color( 255, 255, 255, 255 ),
+		src = Color( 240, 255, 255, 255 ),
 		med = Color( 0, 225, 255, 245 ),
 		glw = Color( 0, 0, 255, 255 ),
 		blm = Color( 0, 0, 255, 50 ),
 		amb = Color( 0, 0, 255, 5 ),
 		flr = Color( 0, 64, 225, 255 ),
-		dim = Color( 128, 225, 255, 255 ),
+		dim = Color( 0, 175, 255, 255 ),
 		raw = Color( 0, 0, 255, 255 ),
 	},
 	-- BLUE = {
@@ -25,7 +25,7 @@ EMVU.Colors = {
 		blm = Color( 255, 10, 0, 70 ),
 		amb = Color( 255, 0, 0, 5 ),
 		flr = Color( 128, 8, 0, 255 ),
-		dim = Color( 255, 128, 64, 255 ),
+		dim = Color( 255, 100, 0, 255 ),
 		raw = Color( 255, 0, 0, 255 )
 	},
 	D_RED = { -- dark red, designed to not appear as bright as its red brother, used primarily for brake and tail lights
@@ -51,7 +51,7 @@ EMVU.Colors = {
 		blm = Color( 255, 255, 0, 10 ),
 		amb = Color( 255, 225, 0, 2 ),
 		flr = Color( 24, 24, 0, 255 ),
-		dim = Color( 255, 245, 100, 255 ),
+		dim = Color( 255, 245, 50, 255 ),
 		raw = Color( 128, 64, 0, 255 )
 	},
 	D_AMBER = { -- dark amber, does not look good
@@ -63,13 +63,13 @@ EMVU.Colors = {
 	},
 	GREEN = {
 		src = Color( 255, 255, 255, 255 ),
-		med = Color( 128, 255, 0, 200 ),
+		med = Color( 64, 255, 0, 200 ),
 		glw = Color( 24, 255, 0, 120 ),
 		blm = Color( 10, 255, 0, 70 ),
 		amb = Color( 0, 255, 0, 5 ),
 		raw = Color( 0, 255, 0, 255 ),
 		flr = Color( 8, 64, 0, 255),
-		dim = Color( 100, 255, 0, 255 )
+		dim = Color( 50, 255, 50, 255 )
 	},
 	WHITE = { -- led
 		src = Color( 200, 200, 255, 255 ),

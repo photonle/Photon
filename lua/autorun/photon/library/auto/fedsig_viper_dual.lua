@@ -17,6 +17,7 @@ local COMPONENT = {}
 COMPONENT.Model = "models/tdmcars/emergency/equipment/fedsig_viper_dual.mdl"
 COMPONENT.Required = "489864412"
 COMPONENT.Skin = 0
+COMPONENT.Category = "Interior"
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
 COMPONENT.ForwardTranslation = true
@@ -59,11 +60,22 @@ COMPONENT.Patterns = {
 		["code1"] = { 2, 0, 2, 2, 2, 0, 0, 0, 3, 0, 3, 3, 3, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0 },
 		["code1A"] = { 2, 0, 2, 2, 2, 0, 0, 0, 3, 0, 3, 3, 3, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0 },
 		["code1B"] = { 3, 0, 3, 3, 3, 0, 0, 0, 2, 0, 2, 2, 2, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0 },
+		["code1C"] = { 2, 2, 2, 2, 3, 3, 3, 3 },
+		["code1D"] = { 3, 3, 3, 3, 2, 2, 2, 2 },
+		["code1NYA"] = { 2, 2, 2, 2, 3, 3, 3, 3 },
+		["code2NYA"] = { 2, 2, 2, 2, 3, 3, 3, 3 },
+		["code3NYA"] = { 2, 2, 2, 2, 3, 3, 3, 3 },
+		["code1NYB"] = { 3, 3, 3, 3, 2, 2, 2, 2 },
+		["code2NYB"] = { 3, 3, 3, 3, 2, 2, 2, 2 },
+		["code3NYB"] = { 3, 3, 3, 3, 2, 2, 2, 2 },
 		["code2"] = { 2, 2, 0, 3, 3, 0 },
 		["code2A"] = { 2, 2, 0, 3, 3, 0 },
 		["code2B"] = { 3, 3, 0, 2, 2, 0 },
+		["code2C"] = { 3, 3, 0, 3, 3, 0, 2, 2, 0, 2, 2, 0, 3, 3, 0, 2, 2, 0 },
 		["code3A"] = { 3, 0, 3, 0, 2, 0, 2, 0 },
+		["code3C"] = { 3, 0, 3, 0, 2, 0, 2, 0 },
 		["code3B"] = { 0, 2, 0, 2, 0, 3, 0, 3 },
+		["code3D"] = { 0, 2, 0, 2, 0, 3, 0, 3 },
 		["code3"] = { 
 			2, 0, 2, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 3, 0, 3, 0,
@@ -75,6 +87,10 @@ COMPONENT.Patterns = {
 		["alert"] = { 2, 3 },
 		["alertA"] = { 2, 3 },
 		["alertB"] = { 3, 2 },
+		["alertC"] = { 2, 3 },
+		["alertD"] = { 2, 3 },
+		["alertNYA"] = { 2, 3 },
+		["alertNYB"] = { 3, 2 },
 	}
 }
 

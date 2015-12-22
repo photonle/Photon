@@ -18,6 +18,7 @@ COMPONENT.Model = "models/schmal/fedsig_visionslr/vision_lightbar.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Lightbar = true
 COMPONENT.Bodygroups = {}
+COMPONENT.Category = "Lightbar"
 
 COMPONENT.Meta = {
 	visionslr_a = {
@@ -62,6 +63,14 @@ COMPONENT.Meta = {
 		Scale = 2,
 		WMult = 1.5,
 	},
+	visionslr_illumr = {
+		AngleOffset = 90,
+		W = 8,
+		H = 4,
+		Sprite = "sprites/emv/visionslr",
+		Scale = 2,
+		WMult = 1.5,
+	},
 }
 
 COMPONENT.Positions = {
@@ -92,6 +101,12 @@ COMPONENT.Positions = {
 	[16] = { Vector( -8.02, 10.28, 2.05 ), Angle( 0, 0, 0 ), "visionslr_illum" },
 	[17] = { Vector( 8.02, 10.28, 2.05 ), Angle( 0, 0, 0 ), "visionslr_illum" },
 
+	[18] = { Vector( -16.03, 2.6, 2.05 ), Angle( 0, 0, 0 ), "visionslr_illum" },
+	[19] = { Vector( 16.03, 2.6, 2.05 ), Angle( 0, 0, 0 ), "visionslr_illum" },
+
+	[20] = { Vector( -24.13, -5.03, 2.05 ), Angle( 0, 0, 0 ), "visionslr_illumr" },
+	[21] = { Vector( 24.13, -5.03, 2.05 ), Angle( 0, 0, 0 ), "visionslr_illumr" },
+
 }
 
 COMPONENT.Sections = {
@@ -121,7 +136,10 @@ COMPONENT.Sections = {
 			{ 1, R },
 			{ 4, R }, { 5, R },
 			{ 6, RB }, { 7, RB },
-		}
+		},
+		[5] = { { 19, R }, { 20, B } },
+		[6] = { { 18, R }, { 21, B } },
+		[7] = { { 18, R, .33 }, { 21, B, .33 }, { 19, R, .33 }, { 20, B, .33 } },
 	},
 	["auto_fedsig_visionslr_traffic"] = {
 		{ { 8, A }, { 9, A }, { 10, A }, { 11, A } },
@@ -147,9 +165,10 @@ COMPONENT.Sections = {
 COMPONENT.Patterns = {
 	["auto_fedsig_visionslr"] = {
 		["all"] = { 1 },
-		["code1"] = { 3 },
+		["code1"] = { 5, 5, 5, 5, 0, 6, 6, 6, 6, 0 },
 		["code2"] = { 4 },
-		["code3"] = { 2 }
+		["code3"] = { 2 },
+		["cruise"] = { 7 },
 	},
 	["auto_fedsig_visionslr_traffic"] = {
 		["warn"] = { 1, 1, 1, 1, 0, 2, 2, 2, 2, 0 },
@@ -157,6 +176,12 @@ COMPONENT.Patterns = {
 		["right"] = { 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 10, 10, 0, 0 },
 		["left"] = { 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 10, 10, 10, 10, 0, 0 },
 		["diverge"] = { 16, 16, 16, 17, 17, 17, 10, 10, 10, 10, 0, 0 }
+	}
+}
+
+COMPONENT.TrafficDisconnect = { 
+	["auto_fedsig_visionslr"] = {
+		4, 5, 6, 7, 18, 19, 20, 21
 	}
 }
 
@@ -176,6 +201,9 @@ COMPONENT.Modes = {
 			}
 		},
 	Auxiliary = {
+			C = {
+				["auto_fedsig_visionslr"] = "cruise"
+			},
 			L = {
 				["auto_fedsig_visionslr_traffic"] = "left"
 			},
@@ -187,7 +215,16 @@ COMPONENT.Modes = {
 			}
 		},
 	Illumination = {
+		L = {
+			{ 14, W }
+		},
+		R = {
+			{ 15, W }
+		},
 		T = {
+			{ 16, W }, { 17, W }
+		},
+		F = {
 			{ 16, W }, { 17, W }
 		}
 	}

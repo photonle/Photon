@@ -34,6 +34,7 @@ end)
 
 function Photon:VehicleRemoved( ent )
 	if IsValid( ent ) and ent:IsVehicle() and ent:HasELS() then
+		if ent.ELS.Manual then ent.ELS.Manual:Stop() end
 		ent:ELS_SirenOff()
 		ent:ELS_Horn( false )
 		ent:ELS_ManualSiren( false )
@@ -45,15 +46,13 @@ end)
 
 hook.Add( "PlayerInitialSpawn", "Photon.InitialNotify", function( ply )
 	ply:ChatPrint( string.format( "Photon Lighting Engine (%s #%s) is active. Type !photon or press C and click Photon for help and information.", tostring( PHOTON_SERIES), tostring(PHOTON_UPDATE) ) )
+	-- Photon.Net.SendAvailableLiveries( ply )
 end)
 
 -- dev functions --
 
 concommand.Add( "photon_mat", function( ply, cmd, args )
 	local veh = ply:GetVehicle()
-	//veh:GetSubMaterial()
-	//veh:SetSubMaterial(0)
-	// veh:SetSubMaterial( 1, "photon/override/lw_dc15_headlights" )
 	PrintTable( veh:GetMaterials() )
 end)
 
@@ -63,6 +62,38 @@ hook.Add( "Photon.EntityChangedSkin", "Photon.LiverySkinCheck", function( ent, s
 	end
 end )
 
+hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, ent ) 
+	if not IsValid( ent ) then return false end
+	local isDriver = ( ply:GetVehicle() == ent )
+	local isOwner = ( ent:GetOwner() == ply )
+	local spawner = ent.PhotonVehicleSpawner
+	local isSpawner = ( IsValid( spawner ) and ( spawner == ply ) )
+	if isDriver or ply == owner or game.SinglePlayer() or isSpawner then
+		return true
+	else
+		return false
+	end
+end )
+
+local function PhotonUnitNumberScan()
+	for _,ent in pairs( EMVU:AllVehicles() ) do
+		if not IsValid( ent ) then continue end
+		if not IsValid( ent:GetDriver() ) then continue end
+		local ply = ent:GetDriver()
+		if ( ent:Photon_GetLiveryID() == "" and ( (not ent.PhotonUnitIDRequestTime) or ( RealTime() < ent.PhotonUnitIDRequestTime + 10 ) ) ) then
+			Photon.Net:RequestUnitNumber( ply )
+			ent.PhotonUnitIDRequestTime = RealTime()
+		end
+	end
+end
+timer.Create( "Photon.UnitNumberScan", 2, 0, function() 
+	PhotonUnitNumberScan()
+end )
+
+hook.Add( "PlayerSpawnedVehicle", "Photon.PlayerVehicleSpawn", function( ply, ent ) 
+	ent.PhotonVehicleSpawner = ply
+end)
+
 // local ply = player.GetBySteamID("STEAM_0:0:0")
 // local veh = ply:GetVehicle()
 // veh:SetSubMaterial( 0, "photon/override/tal_f150_running" )
@@ -71,3 +102,59 @@ end )
 // // veh:SetSubMaterial(4, "photon/override/lw_glhs_running" )
 // // veh:SetSubMaterial(6, "photon/override/lw_glhs_trans_running" )
 // veh:SetSubMaterial( 26, "models/tdmcars/emergency/lightbar/plastic" )
+
+-- Photon.AutoSkins.FetchSkins = function( id )
+-- 	local result = {}
+-- 	local baseDir = "materials/" .. tostring(id) .. "_liveries/"
+-- 	local files = file.Find( baseDir .. "*.vmt", "GAME" )
+-- 	result["/"] = {}
+-- 	for _,foundFile in pairs( files ) do
+-- 		result["/"][ #result["/"] + 1 ] = foundFile
+-- 	end
+-- 	local _,dirs = file.Find( baseDir .. "*", "GAME" )
+-- 	for _,foundDir in pairs( dirs ) do
+-- 		if not result[foundDir] then result[foundDir] = {} end
+-- 		local subFiles = file.Find( baseDir .. foundDir .. "/*.vmt", "GAME" )
+-- 		for __,foundFile in pairs( subFiles ) do
+-- 			result[foundDir][ #result[foundDir] + 1 ] = foundFile
+-- 		end
+-- 	end
+-- 	return result, baseDir
+-- end
+
+-- Photon.AutoSkins.ParseSkins = function( id )
+-- 	local fileTable, baseDir = Photon.AutoSkins.FetchSkins( id )
+-- 	local result = {}
+-- 	for key,subFiles in pairs( fileTable ) do
+-- 		if key == "/" then
+-- 			result["/"] = {}
+-- 			local newKey = key
+-- 			for _,mat in pairs( subFiles ) do
+-- 				result[ newKey ][ #result[ newKey ] + 1 ] = {}
+-- 				local matInfo = result[ newKey ][ #result[ newKey ] ]
+-- 				matInfo.Name = string.Replace( string.Replace( mat, "_", " " ), ".vmt", "" )
+-- 				matInfo.Texture = string.format( "%s%s/%s", string.Replace( baseDir, "materials/", "" ), key, string.StripExtension( mat ) )
+-- 			end
+-- 		else
+-- 			local newKey = string.Replace( key, "_", " ")
+-- 			result[ newKey ] = {}
+-- 			for _,mat in pairs( subFiles ) do
+-- 				result[ newKey ][ #result[ newKey ] + 1 ] = {}
+-- 				local matInfo = result[ newKey ][ #result[ newKey ] ]
+-- 				matInfo.Name = string.Replace( string.Replace( mat, "_", " " ), ".vmt", "" )
+-- 				matInfo.Texture = string.format( "%s%s/%s", string.Replace( baseDir, "materials/", "" ), key, string.StripExtension( mat ) )
+-- 			end
+-- 		end
+-- 	end
+-- 	return result
+-- end
+
+-- Photon.AutoSkins.LoadAvailable = function()
+-- 	if not istable( Photon.AutoSkins.TranslationTable ) then return end
+-- 	for _,id in pairs( Photon.AutoSkins.TranslationTable ) do
+-- 		local skinTable = Photon.AutoSkins.ParseSkins( id )
+-- 		Photon.AutoSkins.Available[id] = skinTable
+-- 	end
+-- end
+
+-- hook.Add( "InitPostEntity", "Photon.LoadAvailableMaterials", function() Photon.AutoSkins.LoadAvailable() end )

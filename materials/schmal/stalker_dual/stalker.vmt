@@ -1,0 +1,20 @@
+"VertexlitGeneric"
+{
+	"$basetexture"		"schmal/stalker_dual/stalker"
+	
+	$envmapcontrast "1"
+    	$envmapsaturation "1"
+    	$envmapfresnel "1"
+    	$phong "1"
+   	 $phongexponent "8"
+   	 $phongboost "10"
+    	$phongfresnelranges "[ 1 1 1]"
+	$nocull "1"
+	"$nodecal" "1"
+	"$normalmapalphaenvmapmask" 1
+	"$selfillum"	1
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+	"$colorfix" "{255 255 255}"
+}
+

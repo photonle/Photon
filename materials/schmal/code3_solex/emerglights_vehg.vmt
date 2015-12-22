@@ -1,0 +1,14 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "schmal/code3_solex/solex_cover"
+	"$translucent" 1
+	"$alpha" 1
+	"$phong" 1
+	"$phongtint" "[1 1 1]"
+	"$phongexponent" 75
+	"$phongboost" "10"
+	"$phongfresnelranges" "[1 1 1]"
+	"$normalmapalphaenvmapmask" 0
+	"$nodecal" "1"
+	"$nocull" 0
+}

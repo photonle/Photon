@@ -1226,7 +1226,8 @@ EMV.Patterns = { -- 0 = blank
 			19, 0, 19, 0,
 			18, 0, 18, 0,
 			19, 0, 19, 0,
-		}
+		},
+		["off"] = { 0 }
 	},
 	["headlights"] = {
 		["code3"] = { 1 }
@@ -1292,6 +1293,11 @@ EMV.Sequences = {
 					["5"] = {
 						["lightbar_vector_rb"] = "code1",
 						["lightbar_vector_ta"] = "code2",
+					}
+				},
+				["rear interior traffic advisor"] = {
+					["0"] = {
+						["traffic"] = "off"
 					}
 				}
 			},
@@ -1367,6 +1373,11 @@ EMV.Sequences = {
 					["5"] = {
 						["lightbar_vector_rb"] = "code2",
 						["lightbar_vector_ta"] = "code2",
+					}
+				},
+				["rear interior traffic advisor"] = {
+					["0"] = {
+						["traffic"] = "off"
 					}
 				}	
 			},
@@ -1450,7 +1461,12 @@ EMV.Sequences = {
 						["lightbar_vector_rb"] = "code3",
 						["lightbar_vector_ta"] = "code3",
 					}
-				}		
+				},
+				["rear interior traffic advisor"] = {
+					["0"] = {
+						["traffic"] = "off"
+					}
+				}	
 			},
 			Disconnect = { 6, 7, 1, 2, 3, 4, 10, 11, 12, 13 }
 		},
@@ -1458,7 +1474,9 @@ EMV.Sequences = {
 	Traffic = {
 		{
 			Name = "LEFT",
-			Components = {},
+			Components = {
+				["lightbar_freedom_rb_outer"] = "code3"
+			},
 			BG_Components = {
 				["rear interior traffic advisor"] = {
 					["0"] = {

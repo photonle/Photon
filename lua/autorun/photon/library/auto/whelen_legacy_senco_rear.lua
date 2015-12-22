@@ -17,6 +17,7 @@ COMPONENT.Model = "models/schmal/whelen_legacy/legacy_lightbar.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
 COMPONENT.UsePhases = true
+COMPONENT.Category = "Auxiliary"
 
 COMPONENT.Meta = {
 	legacy_forward = {

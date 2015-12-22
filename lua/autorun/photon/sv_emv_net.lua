@@ -13,6 +13,11 @@ util.AddNetworkString( "photon_menu" )
 util.AddNetworkString( "emvu_preset" )
 util.AddNetworkString( "emvu_livery" )
 util.AddNetworkString( "photon_liveryupdate" )
+util.AddNetworkString( "emvu_selection" )
+util.AddNetworkString( "photon_myunitnumber" )
+util.AddNetworkString( "photon_availableskins" )
+util.AddNetworkString( "photon_setautoskin" )
+util.AddNetworkString( "emvu_color" )
 
 local can_change_siren_model = GetConVar( "photon_emv_changesirens" )
 local can_change_light_presets = GetConVar( "photon_emv_changepresets" )
@@ -85,14 +90,34 @@ net.Receive( "emvu_traffic", function (len, ply )
 end)
 
 function EMVU.Net:SirenSet( ply )
-	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() or not can_change_siren_model:GetBool() then return end
-	local emv = ply:GetVehicle()
+	local emv = net.ReadEntity()
 	local recv = net.ReadInt(8)
-	if recv != 0 then emv:ELS_SetSirenSet(recv) return end
-	emv:ELS_SirenSetToggle()
+	local isAux = net.ReadBool()
+	if not emv:IsEMV() or not can_change_siren_model:GetBool() then return end
+	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, emv )
+	if modifyBlocked != false then
+		if not isAux then
+			if recv != 0 then emv:ELS_SetSirenSet(recv) end
+		else
+			emv:ELS_SetAuxSirenSet( recv )
+		end
+	end
 end
 net.Receive("emvu_sirenset", function( len, ply )
 	EMVU.Net:SirenSet( ply )
+end)
+
+function EMVU.Net:Color( ply )
+	local ent = net.ReadEntity()
+	local newCol = net.ReadColor()
+	if not ent:IsEMV() then return false end
+	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent )
+	if modifyBlocked != false then
+		ent:SetColor( newCol )
+	end
+end
+net.Receive( "emvu_color", function( len, ply ) 
+	EMVU.Net:Color( ply )
 end)
 
 function EMVU.Net:Preset( ply, args )
@@ -100,10 +125,23 @@ function EMVU.Net:Preset( ply, args )
 	local emv = ply:GetVehicle()
 	local recv = net.ReadInt(8)
 	if recv != 0 then emv:ELS_PresetOption( recv ) return end
-	print( "setting to " .. tostring( recv ) )
 end
 net.Receive( "emvu_preset", function( len, ply ) 
 	EMVU.Net:Preset( ply )
+end)
+
+function EMVU.Net.Selection( ply )
+	local ent = net.ReadEntity()
+	local category = net.ReadInt(8)
+	local option = net.ReadInt(8)
+	if not ent:IsEMV() then return end
+	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent )
+	if modifyBlocked != false then
+		ent:Photon_SetSelection( category, option )
+	end
+end
+net.Receive( "emvu_selection", function( len, ply ) 
+	EMVU.Net.Selection( ply )
 end)
 
 function EMVU.Net:Blackout( ply, arg )
@@ -136,7 +174,6 @@ end)
 function EMVU.Net:Livery( ply, category, skin, unit )
 	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
 	if game.SinglePlayer() == false then
-		print("checking")
 		if not ply.LastLiveryChange then ply.LastLiveryChange = 0 end
 		if RealTime() < ply.LastLiveryChange + PHOTON_LIVERY_COOLDOWN then 
 			ply:ChatPrint( "[Photon] Please wait a few seconds before changing the vehicle livery again." ); 
@@ -189,3 +226,34 @@ function Photon.Net:NotifyLiveryUpdate( id, unit, ent )
 		net.WriteEntity( ent )
 	net.Broadcast()
 end
+
+function Photon.Net:ReceiveUnitNumber( ply, unit )
+	if not IsValid( ply ) or not IsValid( ply:GetVehicle() ) or not ( ply:GetVehicle():IsEMV() ) then return end
+	local ent = ply:GetVehicle()
+	ent:Photon_SetUnitNumber( unit )
+end
+net.Receive( "photon_myunitnumber", function( len, ply ) 
+	Photon.Net:ReceiveUnitNumber( ply, net.ReadString() )
+end )
+
+function Photon.Net:RequestUnitNumber( ply )
+	net.Start( "photon_myunitnumber" )
+	net.Send( ply )
+end
+
+function Photon.Net.SendAvailableLiveries( ply )
+	net.Start( "photon_availableskins" )
+		net.WriteTable( Photon.AutoSkins.Available )
+	net.Send( ply )
+end
+net.Receive( "photon_availableskins", function( len, ply ) Photon.Net.SendAvailableLiveries( ply ) end )
+
+function Photon.Net.ReceiveSkinChangeRequest( len, ply )
+	local ent = net.ReadEntity()
+	local skinName = net.ReadString()
+	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent )
+	if modifyBlocked != false then
+		ent:Photon_SetAutoSkin( skinName )
+	end
+end
+net.Receive( "photon_setautoskin", function( len, ply ) Photon.Net.ReceiveSkinChangeRequest( len, ply ) end )

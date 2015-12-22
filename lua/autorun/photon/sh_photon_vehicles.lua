@@ -28,28 +28,35 @@ function Photon:SpawnedVehicle( ent )
 end
 
 function Photon:EntityCreated( ent )
-	if IsValid( ent ) and ent:IsVehicle() then
-		local timerId = ent:EntIndex() .. "-PHOTON-" .. CurTime()
-		timer.Create( timerId, .01, 200, function()
-			if ent.VehicleTable and istable(ent.VehicleTable) then
-				Photon:SpawnedVehicle( ent )
-				EMVU:SpawnedVehicle( ent )
-				timer.Stop( timerId )
-				timer.Destroy( timerId )
-			end
-			if timer.RepsLeft( timerId ) == 0 and SERVER then
-				local default = Photon:RecoverVehicleTable( ent )
-				if default then 
-					ent.VehicleTable = default
+	-- print( tostring( ent ) )
+	-- print( "Valid spawned ent: " .. tostring( IsValid( ent ) ) )
+	-- timer.Simple(.5,function()
+	-- 	print("After .5 seconds: " .. tostring( ent ) )
+	-- end)
+	timer.Simple(.05,function()
+		if  ent:IsVehicle() then
+			local timerId = ent:EntIndex() .. "-PHOTON-" .. CurTime()
+			timer.Create( timerId, .01, 10, function()
+				if ent.VehicleTable and istable(ent.VehicleTable) then
 					Photon:SpawnedVehicle( ent )
 					EMVU:SpawnedVehicle( ent )
-					if not (modelIgnore[tostring(ent:GetModel())]) then
-						print("[Photon] No .VehicleTable present, assuming " .. tostring(ent:GetModel()) .. " is a(n) " .. tostring(default.Name) .. ".")
+					timer.Stop( timerId )
+					timer.Destroy( timerId )
+				end
+				if timer.RepsLeft( timerId ) == 0 and SERVER then
+					local default = Photon:RecoverVehicleTable( ent )
+					if default then 
+						ent.VehicleTable = default
+						Photon:SpawnedVehicle( ent )
+						EMVU:SpawnedVehicle( ent )
+						if not (modelIgnore[tostring(ent:GetModel())]) then
+							print("[Photon] No .VehicleTable present, assuming " .. tostring(ent:GetModel()) .. " is a(n) " .. tostring(default.Name) .. ".")
+						end
 					end
 				end
-			end
-		end)
-	end
+			end)
+		end
+	end)
 end
 
 hook.Add("OnEntityCreated", "Photon.EntityCreated", function(e)
@@ -91,14 +98,13 @@ end)
 local PHOTON_BASIC_BLANK = { States = { Headlights = {}, Brakes = {}, Blink_Left = {}, Blink_Right = {}, Reverse = {}, Running = {} } }
 
 function Photon:PreloadVehicle( car )
+	if istable( car.Photon ) and isstring( car.Name ) then Photon:OverwriteIndex( car.Name, car.Photon ) return end
 	if isstring( car.Photon ) and istable( Photon.VehicleLibrary[car.Photon] ) then
 		car.Photon = Photon.VehicleLibrary[car.Photon]
 	elseif car.Photon == "PHOTON_INHERIT" then
 		car.Photon = PHOTON_BASIC_BLANK
 	elseif car.Photon and isstring( car.Photon ) then
 		if not Photon.VehicleLibrary[car.Photon] then print( "[Photon] Failed to load " .. car.Photon .. " because the Photon parameter was not valid." ) end
-		car.Photon = PHOTON_BASIC_BLANK
-	else
 		car.Photon = PHOTON_BASIC_BLANK
 	end
 
@@ -185,15 +191,18 @@ function Photon:PreloadVehicle( car )
 end
 
 function Photon:OverwriteIndex( name, data )
+	-- print("[Photon] Overwriting: " .. tostring( name ) )
 	if not data then return end
 	if data.Positions != nil then Photon.Vehicles.Positions[name] = data.Positions end
 	if data.Meta != nil then Photon.Vehicles.Meta[name] = data.Meta end
-	if data.States.Headlights != nil then Photon.Vehicles.States.Headlights[name] = data.States.Headlights end
-	if data.States.Brakes != nil then Photon.Vehicles.States.Brakes[name] = data.States.Brakes end
-	if data.States.Blink_Left != nil then Photon.Vehicles.States.Blink_Left[name] = data.States.Blink_Left end
-	if data.States.Blink_Right != nil then Photon.Vehicles.States.Blink_Right[name] = data.States.Blink_Right end
-	if data.States.Reverse != nil then Photon.Vehicles.States.Reverse[name] = data.States.Reverse end
-	if data.States.Running != nil then Photon.Vehicles.States.Running[name] = data.States.Running end
+	if istable( data.States.Headlights ) then 
+		if data.States.Headlights != nil then Photon.Vehicles.States.Headlights[name] = data.States.Headlights end
+		if data.States.Brakes != nil then Photon.Vehicles.States.Brakes[name] = data.States.Brakes end
+		if data.States.Blink_Left != nil then Photon.Vehicles.States.Blink_Left[name] = data.States.Blink_Left end
+		if data.States.Blink_Right != nil then Photon.Vehicles.States.Blink_Right[name] = data.States.Blink_Right end
+		if data.States.Reverse != nil then Photon.Vehicles.States.Reverse[name] = data.States.Reverse end
+		if data.States.Running != nil then Photon.Vehicles.States.Running[name] = data.States.Running end
+	end
 	if data.Config != nil then Photon.Vehicles.Config[name] = data.Config end
 	if data.StateMaterials then Photon.Vehicles.StateMaterials[name] = data.StateMaterials end
 end

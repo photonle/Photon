@@ -19,6 +19,7 @@ COMPONENT.Required = "489864412"
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
+COMPONENT.Category = "Exterior"
 COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "BLUE"

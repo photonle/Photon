@@ -17,6 +17,7 @@ COMPONENT.Model = "models/schmal/whelen_legacy/legacy_lightbar.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Lightbar = true
 COMPONENT.Bodygroups = {}
+COMPONENT.Category = "Lightbar"
 COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "BLUE"
@@ -75,11 +76,11 @@ COMPONENT.Positions = {
 	[15] = { Vector( -26.67, 5.09, 0.48 ), Angle( 0, 45, 0 ), "legacy_forward" },
 	[16] = { Vector( 26.67, 5.09, 0.48 ), Angle( 0, -45, 0 ), "legacy_forward" },
 
-	[17] = { Vector( -28.8, 2.88, 0.48 ), Angle( 0, 45, 0 ), "legacy_forward" },
-	[18] = { Vector( 28.8, 2.88, 0.48 ), Angle( 0, -45, 0 ), "legacy_forward" },
+	[17] = { Vector( -28.8, 2.88, 0.48 ), Angle( 0, 45, 0 ), "legacy_forward", 1 },
+	[18] = { Vector( 28.8, 2.88, 0.48 ), Angle( 0, -45, 0 ), "legacy_forward", 2 },
 
-	[19] = { Vector( -28.86, -2.79, 0.48 ), Angle( 0, -45, 0 ), "legacy_rear" },
-	[20] = { Vector( 28.86, -2.79, 0.48 ), Angle( 0, 45, 0 ), "legacy_rear" },
+	[19] = { Vector( -28.86, -2.79, 0.48 ), Angle( 0, -45, 0 ), "legacy_rear", 3 },
+	[20] = { Vector( 28.86, -2.79, 0.48 ), Angle( 0, 45, 0 ), "legacy_rear", 4 },
 
 	[21] = { Vector( -26.69, -4.97, 0.48 ), Angle( 0, -45, 0 ), "legacy_rear" },
 	[22] = { Vector( 26.69, -4.97, 0.48 ), Angle( 0, 45, 0 ), "legacy_rear" },
@@ -209,6 +210,7 @@ COMPONENT.Sections = {
 		[2] = { { 14, "_2" }, { 16, "_2" }, { 18, "_2" }, { 20, "_2" }, { 22, "_2" }, { 24, "_2" } },
 		[3] = { { 13, "_1" }, { 15, "_1" }, { 17, "_1" }, { 19, "_1" }, { 21, "_1" }, { 23, "_1" }, { 14, W }, { 16, W }, { 18, W }, { 20, W }, { 22, W }, { 24, W } },
 		[4] = { { 14, "_2" }, { 16, "_2" }, { 18, "_2" }, { 20, "_2" }, { 22, "_2" }, { 24, "_2" }, { 13, W }, { 15, W }, { 17, W }, { 19, W }, { 21, W }, { 23, W } },
+		[5] = { { 14, "_2", .5 }, { 16, "_2", .5 }, { 18, "_2", .5 }, { 20, "_2", .5 }, { 22, "_2", .5 }, { 24, "_2", .5 }, { 13, "_1", .5 }, { 15, "_1", .5 }, { 17, "_1", .5 }, { 19, "_1", .5 }, { 21, "_1", .5 }, { 23, "_1", .5 } },
 	},
 	["auto_whelen_legacy_traffic"] = {
 		[1] = { { 25, A }, { 27, A }, { 29, A } },
@@ -224,6 +226,11 @@ COMPONENT.Sections = {
 		[11] = { { 31, A }, { 33, A }, { 35, A }, { 37, A }, { 38, A }, { 36, A }, { 34, A }, { 32, A }, { 30, A }, { 28, A }, { 26, A } },
 		[12] = { { 35, A }, { 37, A }, { 38, A }, { 36, A } },
 		[13] = { { 31, A }, { 33, A }, { 35, A }, { 37, A }, { 38, A }, { 36, A }, { 34, A }, { 32, A } },
+	},
+	["auto_whelen_legacy_td"] = {
+		[1] = { { 39, W }, { 41, W } },
+		[2] = { { 40, W }, { 42, W } },
+		[3] = { { 40, W }, { 42, W }, { 39, W }, { 41, W } },
 	}
 }
 
@@ -234,7 +241,7 @@ COMPONENT.Patterns = {
 		["diverge"] = { 12, 12, 12, 13, 13, 13, 6, 6, 6, 6, 0, 0 },
 	},
 	["auto_whelen_legacy"] = {
-		["all"] = { 1, 0, 1, 0, 1, 0 },
+		["all"] = { 1 },
 		["code1"] = { 2, 2, 2, 2, 0, 3, 3, 3, 3, 0 },
 		["code2"] = { 4, 5, 6, 5 },
 		["code3"] = { 
@@ -260,14 +267,21 @@ COMPONENT.Patterns = {
 		["alert"] = { 2, 3 }
 	},
 	["auto_whelen_legacy_corner"] = {
+		["cruise"] = { 5 },
 		["code2"] = { 1, 1, 0, 2, 2, 0 },
 		["code3"] = { 1, 2, 1, 2, 1, 2, 3, 4, 3, 4, 3, 4 },
+	},
+	["auto_whelen_legacy_td"] = {
+		["code3"] = { 1, 1, 1, 2, 2, 2 }
 	}
 }
 
 COMPONENT.TrafficDisconnect = { 
 	["auto_whelen_legacy_traffic"] = {
 		25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38
+	},
+	["auto_whelen_legacy_corner"] = {
+		13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24
 	}
 }
 
@@ -282,10 +296,14 @@ COMPONENT.Modes = {
 			},
 			M3 = {
 				["auto_whelen_legacy"] = "code3",
-				["auto_whelen_legacy_corner"] = "code3"	
+				["auto_whelen_legacy_corner"] = "code3",
+				["auto_whelen_legacy_td"] = "code3"	
 			}
 		},
 	Auxiliary = {
+			C = {
+				["auto_whelen_legacy_corner"] = "cruise"
+			},
 			L = {
 				["auto_whelen_legacy_traffic"] = "left"
 			},
@@ -299,7 +317,16 @@ COMPONENT.Modes = {
 	Illumination = {
 		T = {
 			{ 39, W }, { 40, W }
-		}
+		},
+		F = {
+			{ 1, W }, { 2, W }, { 3, W }, { 4, W }, { 5, W }, { 6, W }, { 7, W }, { 8, W }, { 9, W }, { 10, W }, { 11, W }, { 12, W }, { 13, W }, { 14, W }, { 39, W }, { 40, W }
+		},
+		R = {
+			{ 42, W }
+		},
+		L = {
+			{ 41, W }
+		}	
 	}
 }
 

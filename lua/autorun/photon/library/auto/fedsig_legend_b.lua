@@ -15,7 +15,9 @@ local COMPONENT = {}
 
 COMPONENT.Model = "models/schmal/fedsig_legend/legend_lightbar.mdl"
 COMPONENT.Skin = 1
+COMPONENT.Lightbar = true
 COMPONENT.Bodygroups = {}
+COMPONENT.Category = "Lightbar"
 
 COMPONENT.Meta = {
 	legend_forward = {
@@ -63,8 +65,8 @@ COMPONENT.Positions = {
 	[5] = { Vector( -15.59, 8.7, 0.72 ), Angle( 0, 0, 0 ), "legend_forward" },
 	[6] = { Vector( 15.59, 8.7, 0.72 ), Angle( 0, 0, 0 ), "legend_forward" },
 
-	[7] = { Vector( -20.86, 8.16, 0.72 ), Angle( 0, 20.48, 0 ), "legend_forward_nar" },
-	[8] = { Vector( 20.86, 8.16, 0.72 ), Angle( 0, -20.48, 0 ), "legend_forward_nar" },
+	[7] = { Vector( -20.86, 8.16, 0.72 ), Angle( 0, 20.48, 0 ), "legend_forward_nar", 1 },
+	[8] = { Vector( 20.86, 8.16, 0.72 ), Angle( 0, -20.48, 0 ), "legend_forward_nar", 2 },
 
 	[9] = { Vector( -24.52, 6.97, 0.72 ), Angle( 0, 44.48, 0 ), "legend_forward_nar" },
 	[10] = { Vector( 24.52, 6.97, 0.72 ), Angle( 0, -44.48, 0 ), "legend_forward_nar" },
@@ -81,8 +83,8 @@ COMPONENT.Positions = {
 	[17] = { Vector( -24.52, -6.82, 0.72 ), Angle( 0, -44.48, 0 ), "legend_rear_nar" },
 	[18] = { Vector( 24.52, -6.82, 0.72 ), Angle( 0, 44.48, 0 ), "legend_rear_nar" },
 
-	[19] = { Vector( -20.86, -8.02, 0.72 ), Angle( 0, -20.48, 0 ), "legend_rear_nar" },
-	[20] = { Vector( 20.86, -8.02, 0.72 ), Angle( 0, 20.48, 0 ), "legend_rear_nar" },
+	[19] = { Vector( -20.86, -8.02, 0.72 ), Angle( 0, -20.48, 0 ), "legend_rear_nar", 3 },
+	[20] = { Vector( 20.86, -8.02, 0.72 ), Angle( 0, 20.48, 0 ), "legend_rear_nar", 4 },
 
 	[21] = { Vector( -15.59, -8.57, 0.72 ), Angle( 0, 0, 0 ), "legend_rear" },
 	[22] = { Vector( 15.59, -8.57, 0.72 ), Angle( 0, 0, 0 ), "legend_rear" },
@@ -113,7 +115,7 @@ COMPONENT.Sections = {
 			{ 25, B }, { 26, B },
 
 		},
-		[2] = { -- RED SIDE
+		[2] = { -- BED SIDE
 			{ 3, B }, { 5, B }, { 7, B }, { 9, B }, { 11, B },
 			{ 13, B }, { 15, B }, { 17, B }, { 19, B }, { 21, B }, { 23, B }, { 25, B }
 		},
@@ -146,7 +148,7 @@ COMPONENT.Sections = {
 			{ 5, B }, { 7, B }, { 9, B }, { 11, B }, { 13, B }, { 15, B }, { 17, B }, { 19, B }, { 21, B },
 			{ 6, B }, { 8, B }, { 10, B }, { 12, B }, { 14, B }, { 16, B }, { 18, B }, { 20, B }, { 22, B }
 		},
-		-- Pattern 6 RED
+		-- Pattern 6 BED
 		[12] = {
 			{ 13, B }
 		},
@@ -165,7 +167,7 @@ COMPONENT.Sections = {
 		[17] = {
 			{ 3, B }, { 5, B }, { 7, B }, { 9, B }, { 11, B }, { 13, B }, { 15, B }, { 17, B }, { 19, B }, { 21, B }, { 23, A }
 		},
-		-- FULL RED
+		-- FULL BED
 		[18] = {
 			{ 3, B }, { 5, B }, { 7, B }, { 9, B }, { 11, B }, { 13, B }, { 15, B }, { 17, B }, { 19, B }, { 21, B }, { 23, A }, { 25, A }
 		},
@@ -230,7 +232,19 @@ COMPONENT.Sections = {
 		},
 		[2] = {
 			{ 8, B }, { 10, B }, { 12, B }, { 14, B }, { 16, B }, { 18, B }, { 20, B }
+		},
+		[3] = {
+			{ 7, B, .55 }, { 9, B, .55 }, { 11, B, .55 }, { 13, B, .55 }, { 15, B, .55 }, { 17, B, .55 }, { 19, B, .55 },
+			{ 8, B, .66 }, { 10, B, .66 }, { 12, B, .66 }, { 14, B, .66 }, { 16, B, .66 }, { 18, B, .66 }, { 20, B, .66 }
+		},
+		[4] = {
+			{ 7, B, .66 }, { 9, B, .66 }, { 11, B, .66 }, { 13, B, .66 }, { 15, B, .66 }, { 17, B, .66 }, { 19, B, .66 },
+			{ 8, B, .55 }, { 10, B, .55 }, { 12, B, .55 }, { 14, B, .55 }, { 16, B, .55 }, { 18, B, .55 }, { 20, B, .55 }
 		}
+	},
+	["auto_fedsig_legend_takedown"] = {
+		[1] = { { 1, W } },
+		[2] = { { 2, W } },
 	},
 	["auto_fedsig_legend_signalmaster"] = {
 		[1] = { { 23, A } },
@@ -271,15 +285,28 @@ COMPONENT.Patterns = {
 		},
 		["code3"] = {
 			{ 28, 29 }, 0, { 29, 30 }, 0, { 30, 31 }, 0, { 30, 29 }, 0
+		},
+		["alert"] = {
+			{ 28, 29 }, { 30, 31 },
 		}
 	},
 	["auto_fedsig_legend_corner"] = {
+		["cruise"] = {
+			3, 3, 3, 4, 4, 4
+		},
 		["code2"] = {
 			{ 1, 2 }, { 1, 2 }, 0, 0
 		},
 		["code3"] = {
 			1, 0, 1, 0, 2, 0, 2, 0
+		},
+		["alert"] = {
+			2, 1
 		}
+	},
+	["auto_fedsig_legend_takedown"] = {
+		["stage3"] = { 1, 1, 1, 2, 2, 2 },
+		["alert"] = { 1, 2 },
 	}
 }
 
@@ -300,10 +327,19 @@ COMPONENT.Modes = {
 			},
 			M3 = {
 				["auto_fedsig_legend"] = "code3",
-				["auto_fedsig_legend_corner"] = "code3"
+				["auto_fedsig_legend_corner"] = "code3",
+				["auto_fedsig_legend_takedown"] = "stage3"
+			},
+			ALERT = {
+				["auto_fedsig_legend"] = "alert",
+				["auto_fedsig_legend_corner"] = "alert",
+				["auto_fedsig_legend_takedown"] = "alert"
 			}
 		},
 	Auxiliary = {
+			C = {
+				["auto_fedsig_legend_corner"] = "cruise"
+			},
 			L = {
 				["auto_fedsig_legend_signalmaster"] = "left"
 			},
@@ -317,6 +353,15 @@ COMPONENT.Modes = {
 	Illumination = {
 		T = {
 			{ 1, W }, { 2, W }
+		},
+		F = {
+			{ 1, W }, { 2, W }
+		},
+		L = {
+			{ 13, W }
+		},
+		R = {
+			{ 14, W }
 		}
 	}
 }

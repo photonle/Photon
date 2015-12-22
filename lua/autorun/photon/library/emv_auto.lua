@@ -15,6 +15,7 @@ end
 
 function EMVU:PrecacheAutoModels()
 	for id,prop in pairs( EMVU.Auto ) do
+		if not prop.Model then continue end
 		util.PrecacheModel( prop.Model )
 	end
 end
