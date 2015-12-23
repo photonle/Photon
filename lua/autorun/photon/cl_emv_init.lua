@@ -11,6 +11,10 @@ include( "cl_photon_editor.lua" )
 include( "cl_emv_airel.lua" )
 
 local IsValid = IsValid
+local pairs = pairs
+local string = string
+local tostring = tostring
+local istable = istable
 
 local should_render = GetConVar( "photon_emerg_enabled" )
 
@@ -68,7 +72,7 @@ function EMVU:CalculateFrames()
 	if photon_pause then return end
 	if not should_render:GetBool() then return end
 	for _,ent in pairs( EMVU:AllVehicles() ) do
-		if IsValid( ent ) and ent.HasELS and ent:HasELS() and (ent.Photon_Lights and ent:Photon_Lights() or ent.Photon_TrafficAdvisor and ent:Photon_TrafficAdvisor() or ent.Photon_Illumination and ent:Photon_Illumination()) then ent:Photon_CalculateELFrames() end
+		if IsValid( ent ) and ent.HasPhotonELS and ent:HasPhotonELS() and (ent.Photon_Lights and ent:Photon_Lights() or ent.Photon_TrafficAdvisor and ent:Photon_TrafficAdvisor() or ent.Photon_Illumination and ent:Photon_Illumination()) then ent:Photon_CalculateELFrames() end
 	end
 end
 timer.Create("EMVU.CalculateFrames", .03, 0, function()
@@ -220,8 +224,8 @@ function PrintPhotonDebugInformation()
 			else
 				print( [[CURRENT VEHICLE PHOTON STATUS NOT VALID, METATABLE FAILURE (E4)]]) -- E4
 			end
-			if car.HasELS then
-				print( [[CURRENT VEHICLE HAS ELS: ]] .. tostring( car:HasELS() ) )
+			if car.HasPhotonELS then
+				print( [[CURRENT VEHICLE HAS ELS: ]] .. tostring( car:HasPhotonELS() ) )
 			else
 				print( [[CURRENT VEHICLE ELS STATUS NOT VALID, METATABLE FAILURE (E2)]]) -- E2
 			end

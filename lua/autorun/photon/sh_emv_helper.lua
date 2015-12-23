@@ -5,6 +5,12 @@ function EMVU.Helper:GetVectors( name )
 	return EMVU.Positions[name]
 end
 
+local IsValid = IsValid
+local istable = istable
+local pairs = pairs
+local tostring = tostring
+local math = math
+
 function EMVU.Helper.GetAlertSequence( name, vehicle )
 	local resultTable = {}
 
@@ -358,23 +364,25 @@ function EMVU.Helper:GetProps( name, ent )
 		end
 	end
 	if ent:Photon_SelectionEnabled() then
-		for index,category in pairs( EMVU.Selections[ name ] ) do
-			local selected = ent:Photon_SelectionOption( index )
-			if istable( category.Options[selected] ) then
-				if category.Options[selected].Auto then
-					for _,id in pairs( category.Options[selected].Auto ) do
-						local component = EMVU.AutoIndex[ name ][ id ]
-						local propData = EMVU.Helper:GetAutoModel( component[ "ID" ] )
-						if not propData.Model then continue end
-						propData.Pos = component.Pos
-						propData.Ang = component.Ang
-						propData.Scale = component.Scale
-						results[ #results + 1 ] = propData
+		if istable( EMVU.Selections[ name ] ) then
+			for index,category in pairs( EMVU.Selections[ name ] ) do
+				local selected = ent:Photon_SelectionOption( index )
+				if istable( category.Options[selected] ) then
+					if category.Options[selected].Auto then
+						for _,id in pairs( category.Options[selected].Auto ) do
+							local component = EMVU.AutoIndex[ name ][ id ]
+							local propData = EMVU.Helper:GetAutoModel( component[ "ID" ] )
+							if not propData.Model then continue end
+							propData.Pos = component.Pos
+							propData.Ang = component.Ang
+							propData.Scale = component.Scale
+							results[ #results + 1 ] = propData
+						end
 					end
-				end
-				if category.Options[selected].Props then
-					for _,id in pairs( category.Options[selected].Props ) do
-						results[ #results + 1 ] = EMVU.Props[ name ][ id ]
+					if category.Options[selected].Props then
+						for _,id in pairs( category.Options[selected].Props ) do
+							results[ #results + 1 ] = EMVU.Props[ name ][ id ]
+						end
 					end
 				end
 			end

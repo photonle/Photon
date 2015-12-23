@@ -16,6 +16,12 @@ hook.Add( "InitPostEntity", "PhotonEMV.LocalColorSet", function()
 end )
 
 local IsValid = IsValid
+local tostring = tostring
+local istable = istable
+local math = math
+local isstring = isstring
+local system = system
+local pairs = pairs
 
 local christmasMode = GetConVar( "photon_christmas_mode" )
 
