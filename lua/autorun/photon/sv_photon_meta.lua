@@ -103,6 +103,7 @@ function Photon:SetupCar( ent, index )
 	ent:CAR_Reversing( false )
 	ent:CAR_StopSignals()
 
-	ent:SetNWString( "PhotonVehicle", index )
+	-- ent:SetNWString( "PhotonVehicle", index )
+	ent:SetDTBool( CAR_HAS_PHOTON, true )
 
 end

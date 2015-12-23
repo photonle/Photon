@@ -108,14 +108,16 @@ function Photon:PreloadVehicle( car )
 		car.Photon = PHOTON_BASIC_BLANK
 	end
 
-	if car.Photon.Positions and istable( car.Photon.Positions ) then
-		Photon.Vehicles.Positions[ car.Name ] = car.Photon.Positions
-	elseif car.Photon.Positions and isstring( car.Photon.Positions ) then
-		Photon.Vehicles.Positions[ car.Name ] = Photon.Vehicles.Positions[ car.Photon.Positions ]
-	else
-		Photon.Vehicles.Positions[ car.Name ] = {}
+	if CLIENT then
+		if car.Photon.Positions and istable( car.Photon.Positions ) then
+			Photon.Vehicles.Positions[ car.Name ] = car.Photon.Positions
+		elseif car.Photon.Positions and isstring( car.Photon.Positions ) then
+			Photon.Vehicles.Positions[ car.Name ] = Photon.Vehicles.Positions[ car.Photon.Positions ]
+		else
+			Photon.Vehicles.Positions[ car.Name ] = {}
+		end
 	end
-
+	
 	if car.Photon.Meta and istable( car.Photon.Meta ) then
 		Photon.Vehicles.Meta[ car.Name ] = car.Photon.Meta
 	elseif car.Photon.Meta and isstring( car.Photon.Meta ) then

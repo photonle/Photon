@@ -93,7 +93,7 @@ end
 hook.Add("Tick", "Photon.TurnScan", function() TurnScan() end)
 
 local function RemoveCarProps( ent )
-	if IsValid( ent ) and ent:IsVehicle() and ent:HasELS() and ent.EMVProps then
+	if IsValid( ent ) and ent:IsVehicle() and ent:HasPhotonELS() and ent.EMVProps then
 		for _,prop in pairs( ent.EMVProps ) do
 			prop:Remove()
 		end

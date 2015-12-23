@@ -1,5 +1,10 @@
 AddCSLuaFile()
 local ent = FindMetaTable( "Entity" )
+local IsValid = IsValid
+local string = string
+local isstring = isstring
+local tostring = tostring
+local istable = istable
 
 function ent:IsEMV()
 	if not IsValid( self ) then return false end
@@ -11,9 +16,10 @@ end
 
 function ent:Photon()
 	return self:GetNWString( "PhotonVehicle", false )
+	-- return ( IsValid( self ) and self:IsVehicle() and self:GetDTBool( CAR_HAS_PHOTON ) ) or false
 end
 
-function ent:HasELS()
+function ent:HasPhotonELS()
 	if not IsValid( self ) then return false end
 	if not EMV_INDEX then return false end
 	if not self:IsEMV() then return false end
