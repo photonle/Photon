@@ -129,20 +129,24 @@ function EMVU:PreloadVehicle( car )
 
 	EMVU.Index[ #EMVU.Index + 1 ] = car.Name
 
-	if istable( car.EMV.Positions ) then
-		EMVU.Positions[ car.Name ] = car.EMV.Positions
-	elseif isstring(car.EMV.Positions) then
-		EMVU.Positions[ car.Name ] = EMVU.Positions[car.EMV.Positions]
-	else
-		EMVU.Positions[ car.Name ] = {}
+	if CLIENT then
+		if istable( car.EMV.Positions ) then
+			EMVU.Positions[ car.Name ] = car.EMV.Positions
+		elseif isstring(car.EMV.Positions) then
+			EMVU.Positions[ car.Name ] = EMVU.Positions[car.EMV.Positions]
+		else
+			EMVU.Positions[ car.Name ] = {}
+		end
 	end
 
-	if istable( car.EMV.Meta ) then
-		EMVU.LightMeta[ car.Name ] = car.EMV.Meta
-	elseif isstring(car.EMV.Meta) then
-		EMVU.LightMeta[ car.Name ] = EMVU.LightMeta[car.EMV.Meta]
-	else
-		EMVU.LightMeta[ car.Name ] = {}
+	if CLIENT then
+		if istable( car.EMV.Meta ) then
+			EMVU.LightMeta[ car.Name ] = car.EMV.Meta
+		elseif isstring(car.EMV.Meta) then
+			EMVU.LightMeta[ car.Name ] = EMVU.LightMeta[car.EMV.Meta]
+		else
+			EMVU.LightMeta[ car.Name ] = {}
+		end
 	end
 
 	if istable( car.EMV.Patterns ) then
@@ -258,7 +262,7 @@ function EMVU:OverwriteIndex( name, data )
 	-- print("overwriting: " .. tostring( name ) )
 	if data then
 		EMVU.LightMeta[name] = data.Meta or {}
-		safeTableEmpty( EMVU.Positions[ name ] ); EMVU.Positions[name] = data.Positions or {}
+		if CLIENT then safeTableEmpty( EMVU.Positions[ name ] ); EMVU.Positions[name] = data.Positions or {} end
 		EMVU.Patterns[name] = data.Patterns or {}
 		if istable( data.Sequences ) then EMVU.LoadModeData( name, data.Sequences ) end 
 		EMVU.Sections[name] = data.Sections or {}
@@ -319,6 +323,7 @@ function EMVU.LoadModeData( name, data )
 end
 
 function EMVU:CalculateAuto( name, data )
+	if SERVER then return end
 	if not istable( data ) then return end
 
 		//PrintTable( EMVU.PresetIndex[ name ]  )
@@ -668,3 +673,13 @@ hook.Add("InitPostEntity", "EMVU.LoadVehicles", function()
 	EMVU.Configurations.LoadConfigurations()
 	//PrintTable( EMVU.Configurations.Library )
 end) 
+
+-- if SERVER then
+-- 	hook.Add("InitPostEntity", "EMVU.EmptyServerPositions", function()
+-- 		timer.Simple( 15, function()
+-- 			table.Empty( EMVU.Positions )
+-- 			table.Empty( EMVU.Meta )
+-- 			table.Empty( EMVU.Patterns )
+-- 		end )
+-- 	end)
+-- end
