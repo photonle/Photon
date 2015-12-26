@@ -15,6 +15,7 @@ local pairs = pairs
 local string = string
 local tostring = tostring
 local istable = istable
+local EMVU = EMVU
 
 local should_render = GetConVar( "photon_emerg_enabled" )
 

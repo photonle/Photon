@@ -7,7 +7,7 @@ local modelIgnore = {
 function Photon:RecoverVehicleTable( ent )
 	if not IsValid( ent ) then return false end
 	local model = tostring(ent:GetModel())
-	local PhotonIndex = Photon.DefaultMapping[model]
+	local PhotonIndex = Photon.GetDefaultMapping( model )
 	if PhotonIndex then return list.Get("Vehicles")[PhotonIndex] end
 	for key,car in pairs( list.Get("Vehicles") ) do
 		if string.lower(car.Model) == string.lower(model) then
@@ -64,7 +64,7 @@ hook.Add("OnEntityCreated", "Photon.EntityCreated", function(e)
 end)
 
 function Photon:CheckForPhoton( model )
-	if Photon.VehicleIndex[model] then return Photon.VehicleIndex[model] else return false end
+	if Photon.GetVehicleIndex( model ) then return Photon.GetVehicleIndex( model ) else return false end
 end
 
 function Photon:LoadVehicles()
