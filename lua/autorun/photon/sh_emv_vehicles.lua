@@ -2,6 +2,13 @@ AddCSLuaFile()
 
 PHOTON_HASHCOMPONENTS = true
 
+local tostring = tostring
+local IsValid = IsValid
+local istable = istable
+local pairs = pairs
+local isnumber = isnumber
+local tonumber = tonumber
+
 function EMVU:PlayerSpawnedVehicle( ply, ent ) -- deprecated function, only gives legacy support
 	if IsValid( ent ) and ent:IsVehicle() then EMVU:SpawnedVehicle( ent ) end
 end
@@ -107,10 +114,12 @@ EMVU.Configurations.DeleteConfiguration = function( cfgFile )
 end
 
 function EMVU:LoadVehicles()
-	local cars = list.Get("Vehicles")
+	local cars = list.GetForEdit("Vehicles")
 	for k,v in pairs(cars) do
 		if v.IsEMV then
-			EMVU:PreloadVehicle( v )
+			if istable( v.EMV ) then
+				EMVU:OverwriteIndex( v.Name, v.EMV )
+			end
 		elseif EMVU:CheckForELS( v.Model ) then
 			v.IsEMV = true
 			v.EMV = EMVU:CheckForELS( v.Model )
@@ -126,7 +135,7 @@ end
 
 function EMVU:PreloadVehicle( car )
 	if EMVU.Positions[ car.Name ] then return end
-	if car.Name then EMVU:OverwriteIndex( car.Name, car.EMV or {} ) return end
+	if car.Name then EMVU:OverwriteIndex( tostring( car.Name ), car.EMV or {} ) return end
 	if istable( car.EMV.Sequences ) then EMVU.LoadModeData( car.Name, car.EMV.Sequences ) end 
 
 	EMVU.Index[ #EMVU.Index + 1 ] = car.Name
@@ -217,51 +226,7 @@ local function safeTableEmpty( tab )
 	end
 end
 
--- function EMVU:OverwriteIndex( name, data )
--- 	if data then
--- 		safeTableEmpty( EMVU.LightMeta[name] ); EMVU.LightMeta[name] = data.Meta or {}
--- 		safeTableEmpty( EMVU.Positions[name]); EMVU.Positions[name] = data.Positions or {}
--- 		safeTableEmpty( EMVU.Patterns[name] ); EMVU.Patterns[name] = data.Patterns or {}
--- 		if istable( data.Sequences ) then EMVU.LoadModeData( name, data.Sequences ) end 
--- 		safeTableEmpty( EMVU.Sections[name] ); EMVU.Sections[name] = data.Sections or {}
--- 		if istable( data.Lamps ) then safeTableEmpty( EMVU.Lamps[ name ] ); EMVU.Lamps[ name ] = data.Lamps end
--- 		if istable( data.Props ) then safeTableEmpty( EMVU.Props[ name ] ); EMVU.Props[ name ] = data.Props end
--- 		if istable( data.Presets ) then safeTableEmpty( EMVU.PresetIndex[ name ] ); EMVU.PresetIndex[ name ] = data.Presets else EMVU.LoadPresetDefault( name, data ) end
--- 		if istable( data.Liveries ) then safeTableEmpty( EMVU.Liveries[ name ] ); EMVU.Liveries[ name ] = data.Liveries end
--- 		if istable( data.SubMaterials ) then safeTableEmpty( EMVU.SubMaterials[ name ] ); EMVU.SubMaterials[ name ] = data.SubMaterials end
--- 		if istable( data.Auto ) then
--- 			if istable( EMVU.AutoIndex ) then safeTableEmpty( EMVU.AutoIndex[ name ] ) end
--- 			EMVU.AutoIndex[ name ] = data.Auto
--- 			EMVU:CalculateAuto( name, data.Auto ) 
--- 		end
--- 	else
--- 		print("[Photon] Data must be table with valid Meta, Positions, Patterns and Sequences. Overwrite failed.")
--- 	end
--- end
-
--- function EMVU:OverwriteIndex( name, data )
--- 	if data then
--- 		EMVU.LightMeta[name] = data.Meta or {}
--- 		EMVU.Positions[name] = data.Positions or {}
--- 		EMVU.Patterns[name] = data.Patterns or {}
--- 		if istable( data.Sequences ) then EMVU.LoadModeData( name, data.Sequences ) end 
--- 		EMVU.Sections[name] = data.Sections or {}
--- 		if istable( data.Lamps ) then EMVU.Lamps[ name ] = data.Lamps end
--- 		if istable( data.Props ) then EMVU.Props[ name ] = data.Props end
--- 		if istable( data.Presets ) then EMVU.PresetIndex[ name ] = data.Presets else EMVU.LoadPresetDefault( name, data ) end
--- 		if istable( data.Liveries ) then EMVU.Liveries[ name ] = data.Liveries end
--- 		if istable( data.SubMaterials ) then EMVU.SubMaterials[ name ] = data.SubMaterials end
--- 		if istable( data.Auto ) then 
--- 			EMVU.AutoIndex[ name ] = data.Auto
--- 			EMVU:CalculateAuto( name, data.Auto ) 
--- 		end
--- 	else
--- 		print("[Photon] Data must be table with valid Meta, Positions, Patterns and Sequences. Overwrite failed.")
--- 	end
--- end
-
 function EMVU:OverwriteIndex( name, data )
-	-- print("overwriting: " .. tostring( name ) )
 	if data then
 		EMVU.LightMeta[name] = data.Meta or {}
 		if CLIENT then safeTableEmpty( EMVU.Positions[ name ] ); EMVU.Positions[name] = data.Positions or {} end

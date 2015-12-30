@@ -240,7 +240,7 @@ function PrintPhotonDebugInformation()
 					print( [[CURRENT VEHICLE WARNING LIGHTS: ]] .. tostring( car:Photon_Lights() ) )
 					print( [[CURRENT VEHICLE LIGHT STAGE: ]] .. tostring( car:Photon_LightOption() ) )
 					print( [[CURRENT VEHICLE FINISHED INIT: ]] .. tostring( car.PhotonFinishedInit ) ) 
-
+					print( [[CURRENT VEHICLE POSITIONS: ]] .. tostring( #EMVU.Positions[car:EMVName()] ))
 				end
 			else
 				print( [[CURRENT VEHICLE EMV STATUS NOT VALID, METATABLE FAILURE (E3)]]) -- E3
