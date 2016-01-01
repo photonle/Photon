@@ -114,12 +114,11 @@ EMVU.Configurations.DeleteConfiguration = function( cfgFile )
 end
 
 function EMVU:LoadVehicles()
+	-- local cars = list.Get( "Vehicles" )
 	local cars = list.GetForEdit("Vehicles")
 	for k,v in pairs(cars) do
 		if v.IsEMV then
-			if istable( v.EMV ) then
-				EMVU:OverwriteIndex( v.Name, v.EMV )
-			end
+			if istable( v.EMV ) then EMVU:PreloadVehicle( v ) end
 		elseif EMVU:CheckForELS( v.Model ) then
 			v.IsEMV = true
 			v.EMV = EMVU:CheckForELS( v.Model )
