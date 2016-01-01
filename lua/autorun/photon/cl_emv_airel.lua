@@ -3,7 +3,13 @@ AddCSLuaFile()
 Photon.AirEL = {}
 
 Photon.AirEL.TranslationTable = {
-	["models/schmal/fpiu_airel.mdl"] = "fpius"
+	["models/schmal/fpiu_airel.mdl"] = "fpius",
+	["models/schmal/tahoe_airel.mdl"] = "fpius"
+}
+
+Photon.AirEL.TranslationTableIndex = {
+	["models/schmal/fpiu_airel.mdl"] = 1,
+	["models/schmal/tahoe_airel.mdl"] = 0
 }
 
 Photon.AirEL.MaterialIndex = {}
@@ -85,8 +91,8 @@ Photon.AirEL.ApplyTexture = function( mat, ent, id, unitString )
 	}
 
 	Photon.AirEL.MaterialIndex[matName .. "_unlit"] = CreateMaterial( string.format( "photon_airel_%s_%s_unlit", id, unitString ), "VertexlitGeneric", matParams )
-
-	ent:SetSubMaterial( 1, "!" .. tostring( Photon.AirEL.MaterialIndex[matName .. "_unlit"]:GetName() ) )
+	local subIndex = Photon.AirEL.TranslationTableIndex[ ent:GetModel() ] or 0
+	ent:SetSubMaterial( subIndex, "!" .. tostring( Photon.AirEL.MaterialIndex[matName .. "_unlit"]:GetName() ) )
 	ent.Photon_LitAirelTexture = Photon.AirEL.MaterialIndex[matName .. "_lit"]
 	ent.Photon_UnlitAirelTexture = Photon.AirEL.MaterialIndex[matName .. "_unlit"]
 	ent.Photon_UnitID = unitString
@@ -127,10 +133,11 @@ Photon.AirEL.IllumScan = function()
 		local airEL = car.AirELEntity
 		if not airEL.Photon_UnitID or not airEL.Photon_UnitID == car:Photon_GetUnitNumber() then continue end
 		if not airEL.Photon_LitAirelTexture or not airEL.Photon_UnlitAirelTexture then continue end
+		local subIndex = Photon.AirEL.TranslationTableIndex[ airEL:GetModel() ] or 0
 		if car:Photon_Lights() or car:Photon_TrafficAdvisor() or car:Photon_Illumination() then
-			airEL:SetSubMaterial( 1, "!" .. tostring( airEL.Photon_LitAirelTexture:GetName() ) )
+			airEL:SetSubMaterial( subIndex, "!" .. tostring( airEL.Photon_LitAirelTexture:GetName() ) )
 		else
-			airEL:SetSubMaterial( 1, "!" .. tostring( airEL.Photon_UnlitAirelTexture:GetName() ) )
+			airEL:SetSubMaterial( subIndex, "!" .. tostring( airEL.Photon_UnlitAirelTexture:GetName() ) )
 		end
 	end
 end

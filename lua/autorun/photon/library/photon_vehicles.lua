@@ -3,7 +3,9 @@ AddCSLuaFile()
 Photon.VehicleLibrary = {}
 Photon.EMVLibrary = {}
 
-Photon.VehicleIndex = {
+-- These were converted to be read-only after addons were breaking compatibility with the Ford Police Interceptor Utility
+
+local PhotonVehicleIndex = {
 	["models/LoneWolfie/chev_impala_09_police.mdl"] = "lw_impala",
 	["models/LoneWolfie/chev_impala_09_taxi.mdl"] = "lw_impala",
 	["models/LoneWolfie/chev_impala_09.mdl"] = "lw_impala",
@@ -23,20 +25,37 @@ Photon.VehicleIndex = {
 	["models/sentry/15hellcat.mdl"] = "st_charger",
 	["models/tdmcars/emergency/for_crownvic.mdl"] = "tdm_cvpi",
 	["models/tdmcars/emergency/dod_charger12.mdl"] = "tdm_dc12",
-	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility"
+	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility",
+	["models/schmal/chev_tahoe16.mdl"] = "2016 Chevrolet Tahoe PPV",
+	-- ["models/talonvehicles/tal_chev_suburban_2015.mdl"] = "talon_suburban"
 }
 
-Photon.EMVIndex = {
+local function tableFunc( tabl, key )
+	if not key then return tabl end
+	if key then return tabl[key] end
+end
+
+function Photon.GetVehicleIndex( key )
+	return tableFunc( PhotonVehicleIndex, key )
+end
+
+local PhotonEMVIndex = {
 	["models/LoneWolfie/chev_impala_09_police.mdl"] = "Chevrolet Impala LS Police Cruiser",
 	["models/LoneWolfie/chev_tahoe_police.mdl"] = "Chevrolet Tahoe Secret Service",
 	["models/LoneWolfie/chev_suburban_pol_und.mdl"] = "Chevrolet Suburban Police Cruiser Undercover",
 	["models/tdmcars/hsvw427_pol.mdl"] = "Holden HSV W427 Police",
 	["models/tdmcars/emergency/for_crownvic.mdl"] = "Ford Crown Victoria",
 	["models/tdmcars/emergency/dod_charger12.mdl"] = "Dodge Charger SRT8 2012 Police",
-	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility"
+	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility",
+	["models/schmal/chev_tahoe16.mdl"] = "2016 Chevrolet Tahoe PPV",
+	-- ["models/talonvehicles/tal_chev_suburban_2015.mdl"] = "2015 Chevrolet Suburban"
 }
 
-Photon.DefaultMapping = {
+function Photon.GetEMVIndex( key )
+	return tableFunc( PhotonEMVIndex, key )
+end
+
+local PhotonDefaultMapping = {
 	["models/LoneWolfie/chev_impala_09_police.mdl"] = "chev_impala_09_police",
 	["models/LoneWolfie/chev_impala_09_taxi.mdl"] = "chev_impala_09_taxi",
 	["models/LoneWolfie/chev_impala_09.mdl"] = "chev_impala_09",
@@ -56,8 +75,14 @@ Photon.DefaultMapping = {
 	["models/sentry/15hellcat.mdl"] = "15hellcat_sgm",
 	["models/tdmcars/emergency/for_crownvic.mdl"] = "forcrownvicpoltdm",
 	["models/tdmcars/emergency/dod_charger12.mdl"] = "charger12poltdm",
-	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility"
+	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility",
+	["models/schmal/chev_tahoe16.mdl"] = "2016 Chevrolet Tahoe PPV",
+	-- ["models/talonvehicles/tal_chev_suburban_2015.mdl"] = "talsuburban2015"
 }
+
+function Photon.GetDefaultMapping( key )
+	return tableFunc( PhotonDefaultMapping, key )
+end
 
 local indexed_vehicles = {
 	"lw_impala",
@@ -71,7 +96,9 @@ local indexed_vehicles = {
 	"st_charger",
 	"tdm_cvpi",
 	"tdm_dc12",
-	"schmal_fpiu16"
+	"schmal_fpiu16",
+	"schmal_tahoe",
+	-- "talon_suburban",
 }
 
 local indexed_emvs = {
@@ -81,7 +108,9 @@ local indexed_emvs = {
 	"default_tdm_hsv",
 	"default_tdm_cvpi",
 	"default_tdm_dc12",
-	"default_schmal_fpiu16"
+	"default_schmal_fpiu16",
+	"default_schmal_tahoe16",
+	-- "default_talon_suburban"
 }
 
 for _,car in pairs( indexed_vehicles ) do

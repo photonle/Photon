@@ -1,5 +1,14 @@
 AddCSLuaFile()
 
+PHOTON_HASHCOMPONENTS = true
+
+local tostring = tostring
+local IsValid = IsValid
+local istable = istable
+local pairs = pairs
+local isnumber = isnumber
+local tonumber = tonumber
+
 function EMVU:PlayerSpawnedVehicle( ply, ent ) -- deprecated function, only gives legacy support
 	if IsValid( ent ) and ent:IsVehicle() then EMVU:SpawnedVehicle( ent ) end
 end
@@ -105,10 +114,11 @@ EMVU.Configurations.DeleteConfiguration = function( cfgFile )
 end
 
 function EMVU:LoadVehicles()
-	local cars = list.Get("Vehicles")
+	-- local cars = list.Get( "Vehicles" )
+	local cars = list.GetForEdit("Vehicles")
 	for k,v in pairs(cars) do
 		if v.IsEMV then
-			EMVU:PreloadVehicle( v )
+			if istable( v.EMV ) then EMVU:PreloadVehicle( v ) end
 		elseif EMVU:CheckForELS( v.Model ) then
 			v.IsEMV = true
 			v.EMV = EMVU:CheckForELS( v.Model )
@@ -119,30 +129,34 @@ function EMVU:LoadVehicles()
 end
 
 function EMVU:CheckForELS( model )
-	if Photon.EMVIndex[model] then return Photon.EMVLibrary[Photon.EMVIndex[model]] else return false end
+	if Photon.GetEMVIndex( model ) then return Photon.EMVLibrary[ Photon.GetEMVIndex(model) ] else return false end
 end
 
 function EMVU:PreloadVehicle( car )
 	if EMVU.Positions[ car.Name ] then return end
-	if car.Name then EMVU:OverwriteIndex( car.Name, car.EMV or {} ) return end
+	if car.Name then EMVU:OverwriteIndex( tostring( car.Name ), car.EMV or {} ) return end
 	if istable( car.EMV.Sequences ) then EMVU.LoadModeData( car.Name, car.EMV.Sequences ) end 
 
 	EMVU.Index[ #EMVU.Index + 1 ] = car.Name
 
-	if istable( car.EMV.Positions ) then
-		EMVU.Positions[ car.Name ] = car.EMV.Positions
-	elseif isstring(car.EMV.Positions) then
-		EMVU.Positions[ car.Name ] = EMVU.Positions[car.EMV.Positions]
-	else
-		EMVU.Positions[ car.Name ] = {}
+	if CLIENT then
+		if istable( car.EMV.Positions ) then
+			EMVU.Positions[ car.Name ] = car.EMV.Positions
+		elseif isstring(car.EMV.Positions) then
+			EMVU.Positions[ car.Name ] = EMVU.Positions[car.EMV.Positions]
+		else
+			EMVU.Positions[ car.Name ] = {}
+		end
 	end
 
-	if istable( car.EMV.Meta ) then
-		EMVU.LightMeta[ car.Name ] = car.EMV.Meta
-	elseif isstring(car.EMV.Meta) then
-		EMVU.LightMeta[ car.Name ] = EMVU.LightMeta[car.EMV.Meta]
-	else
-		EMVU.LightMeta[ car.Name ] = {}
+	if CLIENT then
+		if istable( car.EMV.Meta ) then
+			EMVU.LightMeta[ car.Name ] = car.EMV.Meta
+		elseif isstring(car.EMV.Meta) then
+			EMVU.LightMeta[ car.Name ] = EMVU.LightMeta[car.EMV.Meta]
+		else
+			EMVU.LightMeta[ car.Name ] = {}
+		end
 	end
 
 	if istable( car.EMV.Patterns ) then
@@ -211,54 +225,10 @@ local function safeTableEmpty( tab )
 	end
 end
 
--- function EMVU:OverwriteIndex( name, data )
--- 	if data then
--- 		safeTableEmpty( EMVU.LightMeta[name] ); EMVU.LightMeta[name] = data.Meta or {}
--- 		safeTableEmpty( EMVU.Positions[name]); EMVU.Positions[name] = data.Positions or {}
--- 		safeTableEmpty( EMVU.Patterns[name] ); EMVU.Patterns[name] = data.Patterns or {}
--- 		if istable( data.Sequences ) then EMVU.LoadModeData( name, data.Sequences ) end 
--- 		safeTableEmpty( EMVU.Sections[name] ); EMVU.Sections[name] = data.Sections or {}
--- 		if istable( data.Lamps ) then safeTableEmpty( EMVU.Lamps[ name ] ); EMVU.Lamps[ name ] = data.Lamps end
--- 		if istable( data.Props ) then safeTableEmpty( EMVU.Props[ name ] ); EMVU.Props[ name ] = data.Props end
--- 		if istable( data.Presets ) then safeTableEmpty( EMVU.PresetIndex[ name ] ); EMVU.PresetIndex[ name ] = data.Presets else EMVU.LoadPresetDefault( name, data ) end
--- 		if istable( data.Liveries ) then safeTableEmpty( EMVU.Liveries[ name ] ); EMVU.Liveries[ name ] = data.Liveries end
--- 		if istable( data.SubMaterials ) then safeTableEmpty( EMVU.SubMaterials[ name ] ); EMVU.SubMaterials[ name ] = data.SubMaterials end
--- 		if istable( data.Auto ) then
--- 			if istable( EMVU.AutoIndex ) then safeTableEmpty( EMVU.AutoIndex[ name ] ) end
--- 			EMVU.AutoIndex[ name ] = data.Auto
--- 			EMVU:CalculateAuto( name, data.Auto ) 
--- 		end
--- 	else
--- 		print("[Photon] Data must be table with valid Meta, Positions, Patterns and Sequences. Overwrite failed.")
--- 	end
--- end
-
--- function EMVU:OverwriteIndex( name, data )
--- 	if data then
--- 		EMVU.LightMeta[name] = data.Meta or {}
--- 		EMVU.Positions[name] = data.Positions or {}
--- 		EMVU.Patterns[name] = data.Patterns or {}
--- 		if istable( data.Sequences ) then EMVU.LoadModeData( name, data.Sequences ) end 
--- 		EMVU.Sections[name] = data.Sections or {}
--- 		if istable( data.Lamps ) then EMVU.Lamps[ name ] = data.Lamps end
--- 		if istable( data.Props ) then EMVU.Props[ name ] = data.Props end
--- 		if istable( data.Presets ) then EMVU.PresetIndex[ name ] = data.Presets else EMVU.LoadPresetDefault( name, data ) end
--- 		if istable( data.Liveries ) then EMVU.Liveries[ name ] = data.Liveries end
--- 		if istable( data.SubMaterials ) then EMVU.SubMaterials[ name ] = data.SubMaterials end
--- 		if istable( data.Auto ) then 
--- 			EMVU.AutoIndex[ name ] = data.Auto
--- 			EMVU:CalculateAuto( name, data.Auto ) 
--- 		end
--- 	else
--- 		print("[Photon] Data must be table with valid Meta, Positions, Patterns and Sequences. Overwrite failed.")
--- 	end
--- end
-
 function EMVU:OverwriteIndex( name, data )
-	-- print("overwriting: " .. tostring( name ) )
 	if data then
 		EMVU.LightMeta[name] = data.Meta or {}
-		safeTableEmpty( EMVU.Positions[ name ] ); EMVU.Positions[name] = data.Positions or {}
+		if CLIENT then safeTableEmpty( EMVU.Positions[ name ] ); EMVU.Positions[name] = data.Positions or {} end
 		EMVU.Patterns[name] = data.Patterns or {}
 		if istable( data.Sequences ) then EMVU.LoadModeData( name, data.Sequences ) end 
 		EMVU.Sections[name] = data.Sections or {}
@@ -280,6 +250,9 @@ function EMVU:OverwriteIndex( name, data )
 	else
 		print("[Photon] Data must be table with valid Meta, Positions, Patterns and Sequences. Overwrite failed.")
 	end
+	-- if istable( EMVU.Positions[name] ) then
+	-- 	print( tostring( name ) .. " total light positions: " .. tostring( #EMVU.Positions[name] ) )
+	-- end
 end
 
 function EMVU.LoadPresetDefault( name, data )
@@ -318,10 +291,22 @@ function EMVU.LoadModeData( name, data )
 
 end
 
+local function hashPosition( firstPos, lastPos, autoPos, autoAng )
+	if not istable( firstPos ) and istable( lastPos ) then return "" end
+	local result = ""
+	for _,dat in pairs( firstPos, lastPos ) do
+		result = result .. tostring( dat )
+	end
+	result = result .. tostring( autoPos ) .. tostring( autoAng )
+	return result
+end
+
 function EMVU:CalculateAuto( name, data )
+	if SERVER then return end
 	if not istable( data ) then return end
 
 		//PrintTable( EMVU.PresetIndex[ name ]  )
+	local positionTable = {}
 	for i=1,#data do -- for each component in the vehicle's auto
 		// print( "Auto ID: " .. tostring( data[ i ].ID ) )
 		local component = EMVU.Auto[ data[ i ].ID ]
@@ -504,36 +489,28 @@ function EMVU:CalculateAuto( name, data )
 
 		//PrintTable( EMVU.Sequences[ name ].Traffic )
 
-		local offset = #EMVU.Positions[ name ] -- count of current meta values
+		-- COMPONENT POSITION REUSE
+		-- added to recyle position data and avoid excessive RAM usage
+		local offset
 
-		for id,section in pairs( component.Sections ) do -- for each section ["lightbar"] = { { 1, B } } *SECTION
-			id = tostring( id .. "_" .. i )
-			EMVU.Sections[ name ][ id ] = {}
-			for index=1,#section do -- { { 1, B } } *FRAME
-				EMVU.Sections[ name ][ id ][ index ] = {}
-				local values = section[ index ]
-				for light, lightData in pairs( values ) do -- { 1, B } *LIGHT
-					if not istable( lightData ) then print( "[Photon] Auto-component failed to initialize because of an invalid variable type: " .. tostring( lightData ) .. ". Make sure the Sections table has correctly nested tables." ) return end
-					local lightColor = lightData[2]
-					if istable(component.DefaultColors) and (#component.DefaultColors > 0) then 
-						if string.StartWith( lightColor, "_" ) then
-							local colorIndex = string.sub( lightColor, 2 )
-							if autoData["Color" .. tostring( colorIndex )] then
-								lightColor = autoData["Color" .. tostring( colorIndex )]
-							else
-								lightColor = component.DefaultColors[tonumber(colorIndex)] or "WHITE"
-							end
-						end
-					end
-					local additionalParams = lightData[3]
-					EMVU.Sections[ name ][ id ][ index ][ light ] = { lightData[1] + offset, lightColor, additionalParams }
-				end
+		if PHOTON_HASHCOMPONENTS then
+			local firstPosData = component.Positions[ 1 ]
+			local lastPosData = component.Positions[ #component.Positions ]
+			local componentHash = hashPosition( firstPosData, lastPosData, autoPos, autoAng ) -- hash first and last values to determine if the offset can be recycled
+			--print( componentHash )
+			-- local offset
+			if not positionTable[ componentHash ] or not isnumber( positionTable[ componentHash ] ) then 
+				offset = #EMVU.Positions[ name ]
+				positionTable[ componentHash ] = offset
+			else
+				offset = positionTable[ componentHash ]
 			end
+		else
+			offset = #EMVU.Positions[ name ]
 		end
+		
 
-		for id,pattern in pairs( component.Patterns ) do -- add pattern data
-			EMVU.Patterns[ name ][ tostring( id .. "_" .. i )] = pattern
-		end
+		-- local offset = #EMVU.Positions[ name ] -- count of current meta values
 
 		for id=1,#component.Positions do
 			local posData = component.Positions[ id ]
@@ -565,6 +542,35 @@ function EMVU:CalculateAuto( name, data )
 				newPos, newAng, tostring( posData[3] .. "_" .. i ), posData[4] or false
 			}
 
+		end
+
+		for id,section in pairs( component.Sections ) do -- for each section ["lightbar"] = { { 1, B } } *SECTION
+			id = tostring( id .. "_" .. i )
+			EMVU.Sections[ name ][ id ] = {}
+			for index=1,#section do -- { { 1, B } } *FRAME
+				EMVU.Sections[ name ][ id ][ index ] = {}
+				local values = section[ index ]
+				for light, lightData in pairs( values ) do -- { 1, B } *LIGHT
+					if not istable( lightData ) then print( "[Photon] Auto-component failed to initialize because of an invalid variable type: " .. tostring( lightData ) .. ". Make sure the Sections table has correctly nested tables." ) return end
+					local lightColor = lightData[2]
+					if istable(component.DefaultColors) and (#component.DefaultColors > 0) then 
+						if string.StartWith( lightColor, "_" ) then
+							local colorIndex = string.sub( lightColor, 2 )
+							if autoData["Color" .. tostring( colorIndex )] then
+								lightColor = autoData["Color" .. tostring( colorIndex )]
+							else
+								lightColor = component.DefaultColors[tonumber(colorIndex)] or "WHITE"
+							end
+						end
+					end
+					local additionalParams = lightData[3]
+					EMVU.Sections[ name ][ id ][ index ][ light ] = { lightData[1] + offset, lightColor, additionalParams }
+				end
+			end
+		end
+
+		for id,pattern in pairs( component.Patterns ) do -- add pattern data
+			EMVU.Patterns[ name ][ tostring( id .. "_" .. i )] = pattern
 		end
 
 		if istable( EMVU.Sequences[ name ]["Traffic"] ) and istable( component.TrafficDisconnect ) then
@@ -659,7 +665,7 @@ function EMVU:CalculateAuto( name, data )
 
 	end
 
-
+	table.Empty( positionTable )
 end
 
 hook.Add("InitPostEntity", "EMVU.LoadVehicles", function()
@@ -668,3 +674,13 @@ hook.Add("InitPostEntity", "EMVU.LoadVehicles", function()
 	EMVU.Configurations.LoadConfigurations()
 	//PrintTable( EMVU.Configurations.Library )
 end) 
+
+-- if SERVER then
+-- 	hook.Add("InitPostEntity", "EMVU.EmptyServerPositions", function()
+-- 		timer.Simple( 15, function()
+-- 			table.Empty( EMVU.Positions )
+-- 			table.Empty( EMVU.Meta )
+-- 			table.Empty( EMVU.Patterns )
+-- 		end )
+-- 	end)
+-- end

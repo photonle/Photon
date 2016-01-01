@@ -12,9 +12,9 @@ PHOTON_BANNED_UNIT_IDS = {
 
 -- If you're a developer or server owner, change these as needed to avoid datatable conflicts
 
-local BOOL_CONST_OFFSET = 20
+local BOOL_CONST_OFFSET = 19
 
-PHOTON_UPDATE = 58
+PHOTON_UPDATE = 64
 PHOTON_SERIES = "Boulder"
 
 // booleans //

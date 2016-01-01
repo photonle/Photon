@@ -11,6 +11,8 @@ local pairs = pairs
 local tostring = tostring
 local math = math
 
+local printedErrors = {}
+
 function EMVU.Helper.GetAlertSequence( name, vehicle )
 	local resultTable = {}
 
@@ -169,6 +171,11 @@ function EMVU.Helper:GetTASequence( name, option, vehicle )
 end
 
 function EMVU.Helper:GetIllumSequence( name, option, vehicle )
+	-- if not istable( EMVU.Sequences[ name ] ) then
+	-- 	local errorString = "[Photon] CRITICAL ERROR: " .. tostring( name ) .. " is not index in EMVU.Sequences. "
+	-- 	if not printedErrors[ errorString ] then printedErrors[ errorString ] = true; print( errorString ) end
+	-- 	return
+	-- end
 	if not istable( EMVU.Sequences[ name ].Illumination ) then return end
 	local resultTable = {}
 	

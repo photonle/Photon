@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-local name = "2016 Ford Police Interceptor Utility"
+local name = "2016 Chevrolet Tahoe PPV"
 
 local A = "AMBER"
 local R = "RED"
@@ -22,49 +22,49 @@ EMV.Color = Color(255, 255, 255)
 EMV.BodyGroups = {}
 
 EMV.Props = {
-	[1] = {
-		Model = "models/schmal/whelen_cencom_panel.mdl",
-		Scale = 1,
-		Pos = Vector(.35, 30.7, 37.5),
-		Ang = Angle( 0, 180, 85),
-		RenderGroup = RENDERGROUP_OPAQUE,
-		RenderMode = RENDERMODE_NORMAL
-	},
-	[2] = {
-		Model = "models/schmal/motorola_car_radio.mdl",
-		Scale = 1,
-		Pos = Vector(.35, 21.5, 36.4),
-		Ang = Angle( 0, 180, 0),
-		RenderGroup = RENDERGROUP_OPAQUE,
-		RenderMode = RENDERMODE_NORMAL
-	},
+	-- [1] = {
+	-- 	Model = "models/schmal/whelen_cencom_panel.mdl",
+	-- 	Scale = 1,
+	-- 	Pos = Vector(.35, 30.7, 37.5),
+	-- 	Ang = Angle( 0, 180, 85),
+	-- 	RenderGroup = RENDERGROUP_OPAQUE,
+	-- 	RenderMode = RENDERMODE_NORMAL
+	-- },
+	-- [2] = {
+	-- 	Model = "models/schmal/motorola_car_radio.mdl",
+	-- 	Scale = 1,
+	-- 	Pos = Vector(.35, 21.5, 36.4),
+	-- 	Ang = Angle( 0, 180, 0),
+	-- 	RenderGroup = RENDERGROUP_OPAQUE,
+	-- 	RenderMode = RENDERMODE_NORMAL
+	-- },
 	[3] = {
 		Model = "models/schmal/motorola_car_radio.mdl",
 		Scale = 1,
 		Skin = 1,
-		Pos = Vector(.35, 26, 36.8),
-		Ang = Angle( 0, 180, -5),
+		Pos = Vector(0, 21, 43),
+		Ang = Angle( 0, 180, -2),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
 	},
 	[4] = {
 		Model = "models/schmal/laptop_stand.mdl",
-		Scale = .5,
-		Pos = Vector(10, 33, 32),
-		Ang = Angle( 0, 150, 0),
+		Scale = .7,
+		Pos = Vector(13, 31, 29),
+		Ang = Angle( 0, 140, 0),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
 	},
 	[5] = {
 		Model = "models/tdmcars/emergency/equipment/laptop.mdl",
 		Scale = 1,
-		Pos = Vector(5, 24, 43),
-		Ang = Angle( 0, 130, 0)
+		Pos = Vector(8, 23, 45),
+		Ang = Angle( 0, 110, 0)
 	},
 	[6] = {
 		Model = "models/schmal/stalker_dual_main.mdl",
-		Scale = .25,
-		Pos = Vector(.9, 51, 54.4),
+		Scale = .26,
+		Pos = Vector(-2, 51, 60),
 		Ang = Angle( 0, 0, 0),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
@@ -80,7 +80,7 @@ EMV.Props = {
 	[8] = {
 		Model = "models/schmal/watchguard_camera.mdl",
 		Scale = .75,
-		Pos = Vector(.35, 40, 65),
+		Pos = Vector(0, 40, 68.7),
 		Ang = Angle( 0, -90, 0),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
@@ -88,7 +88,7 @@ EMV.Props = {
 	[9] = {
 		Model = "models/schmal/whelen_spotlight.mdl",
 		Scale = .9,
-		Pos = Vector(-39, 43, 62),
+		Pos = Vector(-36, 43, 65),
 		Ang = Angle( 15, 120, -10),
 		RenderGroup = RENDERGROUP_BOTH,
 		RenderMode = RENDERGROUP_TRANSLUCENT
@@ -120,7 +120,8 @@ EMV.Props = {
 	[13] = {
 		Model = "models/tdmcars/emergency/equipment/pushbar.mdl",
 		Scale = Vector( 1.4, 1.4, 1.6 ),
-		Pos = Vector( 0, 119.5, 16 ),
+		Pos = Vector( 0, 123, 16 ),
+		-- Pos = Vector( 0, 119.5, 16 ),
 		Ang = Angle( 0, -90, 0),
 		RenderGroup = RENDERGROUP_TRANSLUCENT,
 		RenderMode = RENDERMODE_TRANSALPHA
@@ -174,9 +175,9 @@ EMV.Props = {
 		RenderMode = RENDERMODE_NORMAL
 	},
 	[20] = {
-		Model = "models/schmal/fpiu_airel.mdl",
-		Scale = 1,
-		Pos = Vector(0, -64, 80.8),
+		Model = "models/schmal/tahoe_airel.mdl",
+		Scale = 1.05,
+		Pos = Vector(-.3, -64 - 7, 81), -- not centered :((((
 		Ang = Angle( 0, 90, 0),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL,
@@ -185,7 +186,7 @@ EMV.Props = {
 	[21] = {
 		Model = "models/schmal/antennas/antenna_6.mdl",
 		Scale = 2,
-		Pos = Vector(0, -50, 92),
+		Pos = Vector(0, -59, 94.2),
 		Ang = Angle( 0, 0, 1),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
@@ -193,7 +194,7 @@ EMV.Props = {
 	[22] = {
 		Model = "models/schmal/antennas/antenna_4.mdl",
 		Scale = 2,
-		Pos = Vector(6, -77, 90.6),
+		Pos = Vector(6, -83, 93.5),
 		Ang = Angle( 0, 0, 1),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
@@ -201,7 +202,7 @@ EMV.Props = {
 	[23] = {
 		Model = "models/schmal/antennas/antenna_2.mdl",
 		Scale = 2,
-		Pos = Vector(-6, -77, 81),
+		Pos = Vector(-6, -83, 83.5),
 		Ang = Angle( 0, 0, 1),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
@@ -209,7 +210,7 @@ EMV.Props = {
 	[24] = {
 		Model = "models/schmal/alpr_camera_minimal.mdl",
 		Scale = .66,
-		Pos = Vector( 24, -50, 83.5 ),
+		Pos = Vector( 24, -58, 85 ),
 		Ang = Angle( 10, 50, 0),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
@@ -217,7 +218,7 @@ EMV.Props = {
 	[25] = {
 		Model = "models/schmal/alpr_camera_minimal.mdl",
 		Scale = .66,
-		Pos = Vector( -24, -50, 83.5 ),
+		Pos = Vector( -24, -58, 85 ),
 		Ang = Angle( 10, 130, 0),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
@@ -225,7 +226,7 @@ EMV.Props = {
 	[26] = {
 		Model = "models/schmal/alpr_camera_minimal.mdl",
 		Scale = .66,
-		Pos = Vector( 24, -76, 82.9 ),
+		Pos = Vector( 25, -82, 84.5 ),
 		Ang = Angle( 10, 0, 3),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
@@ -233,7 +234,7 @@ EMV.Props = {
 	[27] = {
 		Model = "models/schmal/alpr_camera_minimal.mdl",
 		Scale = .66,
-		Pos = Vector( -24, -76, 82.9 ),
+		Pos = Vector( -25, -82, 84.5 ),
 		Ang = Angle( 10, 180, -3),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
@@ -384,6 +385,74 @@ EMV.Lamps = {
 	},
 }
 
+-- local DRIVER = 1
+-- local PASS = 2
+
+-- local function getPos( val, side )
+-- 	if not istable( val ) then return end
+-- 	local returnPos, returnAng, returnScale
+-- 	if side == DRIVER then
+-- 		returnPos = Vector( val.Pos.x*-1, val.Pos.y, val.Pos.z )
+-- 		returnAng = Angle()
+-- 	else
+
+-- 	end
+-- end
+
+local lib = {
+	Mirror = {
+		Pass = {
+			Pos = Vector( 46.5, 38.6, 64.6 ),
+			Ang = Angle( 0, -25, 2 ),
+			Scale = 1
+		},
+		Driver = {
+			Pos = Vector( -46.5, 38.6, 64.6 ),
+			Ang = Angle( 0, 25, 2 ),
+			Scale = 1
+		}
+	},
+	Skirt = {
+		Pass1 = {
+			Pos = Vector( 39, 37, 16 ),
+			Ang = Angle( 0, -90, 0 ),
+			Scale = .9
+		},
+		Pass2 = {
+			Pos = Vector( 39, -20.9, 17 ),
+			Ang = Angle( 0, -90, 0 ),
+			Scale = .9
+		},
+		Driver1 = {
+			Pos = Vector( -39, 37, 16 ),
+			Ang = Angle( 0, 90, 0 ),
+			Scale = .9
+		},
+		Driver2 = {
+			Pos = Vector( -39, -20.9, 17 ),
+			Ang = Angle( 0, 90, 0 ),
+			Scale = .9
+		}
+	},
+	Fog = {
+		Pass = {
+			Scale = .9,
+			Pos = Vector( 33.5, 108, 21.75 ),
+			Ang = Angle( 0, 0, 0 ),
+		},
+		Driver = {
+			Scale = .9,
+			Pos = Vector( -33.5, 108, 21.75 ),
+			Ang = Angle( 0, 0, 0 ),
+		}
+	},
+	Legacy = {
+		Scale = 1,
+		Pos = Vector( 0, -3.5, 84 ),
+		Ang = Angle( 1, 90, 0)
+	}
+}
+
 EMV.Auto = {
 	[1] = {
 		ID = "Federal Signal Integrity",
@@ -417,9 +486,9 @@ EMV.Auto = {
 	},
 	[6] = {
 		ID = "Whelen Legacy",
-		Scale = 1.04,
-		Pos = Vector( 0, -8.6, 82.4 ),
-		Ang = Angle( 1.7, 90, 0),
+		Scale = lib.Legacy.Scale,
+		Pos = lib.Legacy.Pos,
+		Ang = lib.Legacy.Ang
 	},
 	[7] = {
 		ID = "Whelen Liberty SX",
@@ -543,8 +612,8 @@ EMV.Auto = {
 	},
 	[24] = {
 		ID = "TDM Rear Interior Lightbar",
-		Scale = .9,
-		Pos = Vector( 0, -94, 72.9),
+		Scale = .95,
+		Pos = Vector( 0, -95, 72.9),
 		Ang = Angle( 0, -90, 0 ),
 	},
 	[25] = {
@@ -605,14 +674,14 @@ EMV.Auto = {
 	[32] = {
 		ID = "Whelen Liberty II",
 		Scale = 1.1,
-		Pos = Vector( 0, -8.6, 83 ),
+		Pos = Vector( 0, -2.97, 84.69 ),
 		Ang = Angle( 1.7, 90, 0),
 	},
 	[33] = {
 		ID = "Code 3 RX2700",
 		Scale = .96,
 		Pos = Vector( 0, -8.6, 83 ),
-		Ang = Angle( 1.7, 90, 0),
+		Ang = Angle( 1.14, 90, 0),
 	},
 	[34] = {
 		ID = "Whelen Ion Split",
@@ -644,17 +713,20 @@ EMV.Auto = {
 	},
 	[38] = {
 		ID = "Whelen Ion",
-		Scale = .8,
-		Pos = Vector( 49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, -25, 2 ),
+		-- Scale = 1,
+		-- Pos = Vector( 46.5, 38.6, 64.6 ),
+		-- Ang = Angle( 0, -25, 2 ),
+		Scale = lib.Mirror.Pass.Scale,
+		Pos = lib.Mirror.Pass.Pos,
+		Ang = lib.Mirror.Pass.Ang,
 		Color1 = "BLUE",
 		Phase = "A"
 	},
 	[39] = {
 		ID = "Whelen Ion",
-		Scale = .8,
-		Pos = Vector( -49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, 25, 2 ),
+		Scale = lib.Mirror.Driver.Scale,
+		Pos = lib.Mirror.Driver.Pos,
+		Ang = lib.Mirror.Driver.Ang,
 		Color1 = "RED",
 		Phase = "B"
 	},
@@ -685,14 +757,14 @@ EMV.Auto = {
 	[44] = {
 		ID = "Whelen Ion Trio",
 		Scale = .75,
-		Pos = Vector( -10.5, 116.6, 48.2 ),
+		Pos = Vector( -10.5, 120.1, 48.2 ),
 		Ang = Angle( 0, 0, 0 ),
 		Phase = "A"
 	},
 	[45] = {
 		ID = "Whelen Ion Trio",
 		Scale = .75,
-		Pos = Vector( 10.5, 116.6, 48.2 ),
+		Pos = Vector( 10.5, 120.1, 48.2 ),
 		Ang = Angle( 0, 0, 0 ),
 		Phase = "B"
 	},
@@ -705,14 +777,14 @@ EMV.Auto = {
 	[47] = {
 		ID = "Whelen 700 Trio",
 		Scale = 1,
-		Pos = Vector( -38.6, -45, 60 ),
-		Ang = Angle( 2, 90, -90 )
+		Pos = Vector( -38, -38.6, 60 ),
+		Ang = Angle( 0, 90, -90 )
 	},
 	[48] = {
 		ID = "Whelen 700 Trio",
 		Scale = 1,
-		Pos = Vector( 38.6, -45, 60 ),
-		Ang = Angle( 2, 90, 90 )
+		Pos = Vector( 38, -38.6, 60 ),
+		Ang = Angle( 0, 90, 90 )
 	},
 	[49] = {
 		ID = "Tomar 200S Rear",
@@ -758,24 +830,24 @@ EMV.Auto = {
 	},
 	[55] = {
 		ID = "Whelen Ion",
-		Scale = .8,
-		Pos = Vector( 49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, -25, 2 ),
+		Scale = lib.Mirror.Pass.Scale,
+		Pos = lib.Mirror.Pass.Pos,
+		Ang = lib.Mirror.Pass.Ang,
 		Color1 = "RED",
 		Phase = "CHPB"
 	},
 	[56] = {
 		ID = "Whelen Ion",
-		Scale = .8,
-		Pos = Vector( -49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, 25, 2 ),
+		Scale = lib.Mirror.Driver.Scale,
+		Pos = lib.Mirror.Driver.Pos,
+		Ang = lib.Mirror.Driver.Ang,
 		Color1 = "RED",
 		Phase = "CHPA"
 	},
 	[57] = {
 		ID = "Whelen Ion",
 		Scale = .75,
-		Pos = Vector( -10.5, 116.6, 48.2 ),
+		Pos = Vector( -10.5, 120.1, 48.2 ),
 		Ang = Angle( 0, 0, 0 ),
 		Color1 = "RED",
 		Phase = "CHPA"
@@ -783,7 +855,7 @@ EMV.Auto = {
 	[58] = {
 		ID = "Whelen Ion",
 		Scale = .66,
-		Pos = Vector( 10.5, 116.6, 48.2 ),
+		Pos = Vector( 10.5, 120.1, 48.2 ),
 		Ang = Angle( 0, 0, 0 ),
 		Color1 = "RED",
 		Phase = "CHPB"
@@ -812,8 +884,8 @@ EMV.Auto = {
 	[62] = {
 		ID = "Whelen CenCom Panel",
 		Scale = 1,
-		Pos = Vector(.35, 30.98, 37.5),
-		Ang = Angle(0, 0, 5),
+		Pos = Vector(0, 25.6, 43.8),
+		Ang = Angle(0, 0, 7),
 	},
 	[63] = {
 		ID = "Code 3 RX2700 Blue",
@@ -866,13 +938,13 @@ EMV.Auto = {
 	[70] = {
 		ID = "Whelen Vertex",
 		Scale = 1,
-		Pos = Vector(20.13, 118.46, 41.38),
+		Pos = Vector(20.13, 121.96, 41.38),
 		Ang = Angle(0, -90, -90)
 	},
 	[71] = {
 		ID = "Whelen Vertex",
 		Scale = 1,
-		Pos = Vector(-20.13, 118.46, 41.38),
+		Pos = Vector(-20.13, 121.96, 41.38),
 		Ang = Angle(0, 90, -90)
 	},
 	[72] = {
@@ -905,7 +977,7 @@ EMV.Auto = {
 	[75] = {
 		ID = "Whelen Ion Split",
 		Scale = .75,
-		Pos = Vector( -10.5, 116.6, 48.2 ),
+		Pos = Vector( -10.5, 120.1, 48.2 ),
 		Ang = Angle( 0, 0, 0 ),
 		Color1 = "RED",
 		Color2 = "BLUE"
@@ -913,7 +985,7 @@ EMV.Auto = {
 	[76] = {
 		ID = "Whelen Ion Split",
 		Scale = .75,
-		Pos = Vector( 10.5, 116.6, 48.2 ),
+		Pos = Vector( 10.5, 120.1, 48.2 ),
 		Ang = Angle( 0, 0, 0 ),
 		Color1 = "BLUE",
 		Color2 = "RED"
@@ -921,7 +993,7 @@ EMV.Auto = {
 	[77] = {
 		ID = "Whelen Ion Split",
 		Scale = .75,
-		Pos = Vector( -10.5, 116.6, 48.2 ),
+		Pos = Vector( -10.5, 120.1, 48.2 ),
 		Ang = Angle( 0, 0, 0 ),
 		Color1 = "RED",
 		Color2 = "WHITE"
@@ -929,7 +1001,7 @@ EMV.Auto = {
 	[78] = {
 		ID = "Whelen Ion Split",
 		Scale = .75,
-		Pos = Vector( 10.5, 116.6, 48.2 ),
+		Pos = Vector( 10.5, 120.1, 48.2 ),
 		Ang = Angle( 0, 0, 0 ),
 		Color1 = "WHITE",
 		Color2 = "RED"
@@ -937,7 +1009,7 @@ EMV.Auto = {
 	[79] = {
 		ID = "Whelen Ion Split",
 		Scale = .75,
-		Pos = Vector( -10.5, 116.6, 48.2 ),
+		Pos = Vector( -10.5, 120.1, 48.2 ),
 		Ang = Angle( 0, 0, 0 ),
 		Color1 = "BLUE",
 		Color2 = "WHITE"
@@ -945,7 +1017,7 @@ EMV.Auto = {
 	[80] = {
 		ID = "Whelen Ion Split",
 		Scale = .75,
-		Pos = Vector( 10.5, 116.6, 48.2 ),
+		Pos = Vector( 10.5, 120.1, 48.2 ),
 		Ang = Angle( 0, 0, 0 ),
 		Color1 = "WHITE",
 		Color2 = "BLUE"
@@ -1275,8 +1347,8 @@ EMV.Auto = {
 	[119] = {
 		ID = "Whelen 700 Trio",
 		Scale = 1,
-		Pos = Vector( -38.6, -45, 60 ),
-		Ang = Angle( 2, 90, -90 ),
+		Pos = Vector( -38, -38.6, 60 ),
+		Ang = Angle( 0, 90, -90 ),
 		Color1 = "BLUE",
 		Color2 = "AMBER",
 		Color3 = "WHITE"
@@ -1284,8 +1356,8 @@ EMV.Auto = {
 	[120] = {
 		ID = "Whelen 700 Trio",
 		Scale = 1,
-		Pos = Vector( 38.6, -45, 60 ),
-		Ang = Angle( 2, 90, 90 ),
+		Pos = Vector( 38, -38.6, 60 ),
+		Ang = Angle( 0, 90, 90 ),
 		Color1 = "BLUE",
 		Color2 = "AMBER",
 		Color3 = "WHITE"
@@ -1293,8 +1365,8 @@ EMV.Auto = {
 	[121] = {
 		ID = "Whelen 700 Trio",
 		Scale = 1,
-		Pos = Vector( -38.6, -45, 60 ),
-		Ang = Angle( 2, 90, -90 ),
+		Pos = Vector( -38, -38.6, 60 ),
+		Ang = Angle( 0, 90, -90 ),
 		Color1 = "RED",
 		Color2 = "AMBER",
 		Color3 = "WHITE"
@@ -1302,8 +1374,8 @@ EMV.Auto = {
 	[122] = {
 		ID = "Whelen 700 Trio",
 		Scale = 1,
-		Pos = Vector( 38.6, -45, 60 ),
-		Ang = Angle( 2, 90, 90 ),
+		Pos = Vector( 38, -38.6, 60 ),
+		Ang = Angle( 0, 90, 90 ),
 		Color1 = "RED",
 		Color2 = "AMBER",
 		Color3 = "WHITE"
@@ -1346,95 +1418,99 @@ EMV.Auto = {
 	},
 	[127] = {
 		ID = "Whelen Ion Trio",
-		Scale = .8,
-		Pos = Vector( 49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, -25, 2 ),
+		Scale = lib.Mirror.Pass.Scale,
+		Pos = lib.Mirror.Pass.Pos,
+		Ang = lib.Mirror.Pass.Ang,
 		Phase = "A"
 	},
 	[128] = {
 		ID = "Whelen Ion Trio",
-		Scale = .8,
-		Pos = Vector( -49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, 25, 2 ),
+		Scale = lib.Mirror.Driver.Scale,
+		Pos = lib.Mirror.Driver.Pos,
+		Ang = lib.Mirror.Driver.Ang,
 		Phase = "B"
 	},
 	[129] = {
 		ID = "Whelen Ion Split",
-		Scale = .8,
-		Pos = Vector( 49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, -25, 2 ),
+		Scale = lib.Mirror.Pass.Scale,
+		Pos = lib.Mirror.Pass.Pos,
+		Ang = lib.Mirror.Pass.Ang,
 		Color1 = "BLUE",
 		Color2 = "WHITE"
 	},
 	[130] = {
 		ID = "Whelen Ion Split",
-		Scale = .8,
-		Pos = Vector( -49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, 25, 2 ),
+		Scale = lib.Mirror.Driver.Scale,
+		Pos = lib.Mirror.Driver.Pos,
+		Ang = lib.Mirror.Driver.Ang,
 		Color1 = "WHITE",
 		Color2 = "BLUE"
 	},
 	[131] = {
 		ID = "Whelen Ion Split",
-		Scale = .8,
-		Pos = Vector( 49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, -25, 2 ),
+		Scale = lib.Mirror.Pass.Scale,
+		Pos = lib.Mirror.Pass.Pos,
+		Ang = lib.Mirror.Pass.Ang,
 		Color1 = "RED",
 		Color2 = "WHITE"
 	},
 	[132] = {
 		ID = "Whelen Ion Split",
 		Scale = .8,
-		Pos = Vector( -49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, 25, 2 ),
+		Scale = lib.Mirror.Driver.Scale,
+		Pos = lib.Mirror.Driver.Pos,
+		Ang = lib.Mirror.Driver.Ang,
 		Color1 = "WHITE",
 		Color2 = "RED"
 	},
 	[133] = {
 		ID = "Whelen Ion Split",
-		Scale = .8,
-		Pos = Vector( 49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, -25, 2 ),
+		Scale = lib.Mirror.Pass.Scale,
+		Pos = lib.Mirror.Pass.Pos,
+		Ang = lib.Mirror.Pass.Ang,
 		Color1 = "RED",
 		Color2 = "BLUE"
 	},
 	[134] = {
 		ID = "Whelen Ion Split",
 		Scale = .8,
-		Pos = Vector( -49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, 25, 2 ),
+		Scale = lib.Mirror.Driver.Scale,
+		Pos = lib.Mirror.Driver.Pos,
+		Ang = lib.Mirror.Driver.Ang,
 		Color1 = "BLUE",
 		Color2 = "RED"
 	},
 	[135] = {
 		ID = "Whelen Ion",
-		Scale = .8,
-		Pos = Vector( 49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, -25, 2 ),
+		Scale = lib.Mirror.Pass.Scale,
+		Pos = lib.Mirror.Pass.Pos,
+		Ang = lib.Mirror.Pass.Ang,
 		Phase = "A",
 		Color1 = "RED"
 	},
 	[136] = {
 		ID = "Whelen Ion",
 		Scale = .8,
-		Pos = Vector( -49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, 25, 2 ),
+		Scale = lib.Mirror.Driver.Scale,
+		Pos = lib.Mirror.Driver.Pos,
+		Ang = lib.Mirror.Driver.Ang,
 		Phase = "B",
 		Color1 = "RED"
 	},
 	[137] = {
 		ID = "Whelen Ion",
-		Scale = .8,
-		Pos = Vector( 49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, -25, 2 ),
+		Scale = lib.Mirror.Pass.Scale,
+		Pos = lib.Mirror.Pass.Pos,
+		Ang = lib.Mirror.Pass.Ang,
 		Phase = "A",
 		Color1 = "BLUE"
 	},
 	[138] = {
 		ID = "Whelen Ion",
 		Scale = .8,
-		Pos = Vector( -49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, 25, 2 ),
+		Scale = lib.Mirror.Driver.Scale,
+		Pos = lib.Mirror.Driver.Pos,
+		Ang = lib.Mirror.Driver.Ang,
 		Phase = "B",
 		Color1 = "BLUE"
 	},
@@ -1552,16 +1628,16 @@ EMV.Auto = {
 	},
 	[152] = {
 		ID = "Whelen Ion",
-		Scale = .8,
-		Pos = Vector( 49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, -25, 2 ),
+		Scale = lib.Mirror.Pass.Scale,
+		Pos = lib.Mirror.Pass.Pos,
+		Ang = lib.Mirror.Pass.Ang,
 		Color1 = "BLUE"
 	},
 	[153] = {
 		ID = "Whelen Ion",
-		Scale = .8,
-		Pos = Vector( -49.6, 37.8, 59.4 ),
-		Ang = Angle( 0, 25, 2 ),
+		Scale = lib.Mirror.Driver.Scale,
+		Pos = lib.Mirror.Driver.Pos,
+		Ang = lib.Mirror.Driver.Ang,
 		Color1 = "RED",
 		Phase = "CA"
 	},
@@ -1642,7 +1718,53 @@ EMV.Auto = {
 		Ang = Angle( 1, 90, 0),
 		Color1 = "RED",
 		Color2 = "RED"
-	}
+	},
+	[164] = {
+		ID = "Whelen Ion",
+		Scale = lib.Skirt.Pass1.Scale,
+		Pos = lib.Skirt.Pass1.Pos,
+		Ang = lib.Skirt.Pass1.Ang,
+		Color1 = "BLUE",
+		Phase = "A"
+	},
+	[165] = {
+		ID = "Whelen Ion",
+		Scale = lib.Skirt.Driver1.Scale,
+		Pos = lib.Skirt.Driver1.Pos,
+		Ang = lib.Skirt.Driver1.Ang,
+		Color1 = "BLUE",
+		Phase = "A"
+	},
+	[166] = {
+		ID = "Whelen Ion",
+		Scale = lib.Skirt.Pass2.Scale,
+		Pos = lib.Skirt.Pass2.Pos,
+		Ang = lib.Skirt.Pass2.Ang,
+		Color1 = "RED",
+		Phase = "B"
+	},
+	[167] = {
+		ID = "Whelen Ion",
+		Scale = lib.Skirt.Driver2.Scale,
+		Pos = lib.Skirt.Driver2.Pos,
+		Ang = lib.Skirt.Driver2.Ang,
+		Color1 = "RED",
+		Phase = "B"
+	},
+	[168] = {
+		ID = "Whelen Ion Trio",
+		Scale = lib.Fog.Driver.Scale,
+		Pos = lib.Fog.Driver.Pos,
+		Ang = lib.Fog.Driver.Ang,
+		Phase = "A"
+	},
+	[169] = {
+		ID = "Whelen Ion Trio",
+		Scale = lib.Fog.Pass.Scale,
+		Pos = lib.Fog.Pass.Pos,
+		Ang = lib.Fog.Pass.Ang,
+		Phase = "B"
+	},
 }
 
 EMV.Selections = { -- structured and flexible version of presets designed to mimic bodygroups
@@ -1683,6 +1805,20 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 			{ Category = "Federal Signal Valor", Name = "Blue", Auto = { 146 } },
 			{ Category = "Federal Signal Valor", Name = "Red/Amber", Auto = { 147 } },
 			{ Category = "Federal Signal Valor", Name = "Red", Auto = { 148 } },
+			{ Name = "None" },
+		}
+	},
+	{
+		Name = "Skirt Lighting",
+		Options = {
+			{ Name = "Red/Blue/White", Auto = { 164, 165, 166, 167 } },
+			{ Name = "None" },
+		}
+	},
+	{
+		Name = "Fog Lights",
+		Options = {
+			{ Name = "Red/Blue/White", Auto = { 168, 169 } },
 			{ Name = "None" },
 		}
 	},
@@ -1865,7 +2001,7 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 	{
 		Name = "Interior Equipment",
 		Options = {
-			{ Name = "Full", Props = { 2, 3, 4, 5, 6, 7, 8 }, Auto = { 62 } },
+			{ Name = "Full", Props = { 3, 4, 5, 6, 7, 8 }, Auto = { 62 } },
 			{ Name = "None" },
 		}
 	},

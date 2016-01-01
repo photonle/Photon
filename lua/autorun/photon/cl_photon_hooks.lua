@@ -33,7 +33,7 @@ local function DrawCarLights()
 				end
 				if ent:IsEMV() and ent.Photon_ScanEMVProps then ent:Photon_ScanEMVProps() end
 			elseif ent:Photon() and not ent.Photon_RenderLights then
-				Photon:SetupCar( ent, ent:Photon() )
+				Photon:SetupCar( ent, ent:EMVName() )
 			end
 		end
 	end

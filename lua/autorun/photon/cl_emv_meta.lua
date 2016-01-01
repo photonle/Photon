@@ -858,7 +858,7 @@ function EMVU:MakeEMV( emv, name )
 	emv.LastPresetOption = 0
 	emv:Photon_SetupEMVProps()
 	emv.PhotonFinishedInit = true
-	print("FINISHED INIT")
+	-- print("FINISHED INIT")
 end
 
 photonLightModels = {}
