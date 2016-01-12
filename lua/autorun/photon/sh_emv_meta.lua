@@ -195,3 +195,13 @@ end
 function ent:Photon_SelectionEnabled()
 	return istable( EMVU.Selections[ self:EMVName() ] )
 end
+
+function ent:Photon_LicensePlate()
+	local materials = self:GetMaterials()
+	for index, mat in pairs( materials ) do
+		if string.EndsWith( mat, "license_plate" ) then
+			return index - 1
+		end
+	end
+	return false
+end

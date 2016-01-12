@@ -336,7 +336,7 @@ function EMVU:MakeEMV( ent, emv )
 
 	function ent:ELS_SetAuxSirenSet( num )
 		if not IsValid( self ) then return end
-		if num <= 0 or num > #EMVU.Sirens then return false end
+		if num < 0 or num > #EMVU.Sirens then return false end
 
 		self:ELS_SirenOff()
 		self:ELS_AuxSirenSet( num )
@@ -553,10 +553,18 @@ function EMVU:MakeEMV( ent, emv )
 		local mdl = self:GetModel()
 		local mdlId = Photon.AutoSkins.TranslationTable[ mdl ]
 		//print(tostring(mdlId))
-		if not mdlId then return false end
+		if not mdlId then
+			local toNum = tonumber( skin )
+			if isnumber( toNum ) then self:SetSkin( toNum); return true else return false end
+		end
 		-- if not Photon.AutoSkins.IsSkinAvailable( mdlId, skin ) then return false end
 		//print("instructed to apply" .. tostring( skin ))
 		self:ApplySmartSkin( skin )
+	end
+
+	function ent:Photon_SetLicenseMaterial( mat )
+		if self:Photon_LicensePlate() == false then return end
+		self:SetSubMaterial( self:Photon_LicensePlate(), mat )
 	end
 
 	ent.IsEMV = true

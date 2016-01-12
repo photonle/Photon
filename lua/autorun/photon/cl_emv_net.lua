@@ -123,6 +123,7 @@ net.Receive( "photon_availableskins", function() EMVU.Net.ReceiveAvailableSkins(
 
 function EMVU.Net.ApplyAutoSkin( ent, skin )
 	local cnt = 0
+	skin = tostring( skin )
 	for i in string.gfind( skin, "/" ) do
 		cnt = cnt + 1
 	end
@@ -132,5 +133,19 @@ function EMVU.Net.ApplyAutoSkin( ent, skin )
 	net.Start( "photon_setautoskin" )
 		net.WriteEntity( ent )
 		net.WriteString( skin )
+	net.SendToServer()
+end
+
+function EMVU.Net.ApplyLicenseMaterial( ent, mat )
+	local cnt = 0
+	for i in string.gfind( mat, "/" ) do
+		cnt = cnt + 1
+	end
+	if cnt < 2 then
+		mat = string.Replace( mat, "/", "///" )
+	end
+	net.Start( "photon_license_mat" )
+		net.WriteEntity( ent )
+		net.WriteString( mat )
 	net.SendToServer()
 end

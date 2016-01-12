@@ -137,6 +137,46 @@ properties.Add( "photon_autoskin", {
 	end
 })
 
+properties.Add( "photon_licenseplates", {
+	MenuLabel = "License Plate",
+	Order = 4,
+	MenuIcon = "photon/ui/menu-license.png",
+
+	Filter = function( self, ent, ply )
+		if not IsValid( ent ) then return false end
+		if not ent:Photon() then return false end
+		if not ent:IsEMV() then return false end
+		if not ent:EMVName() then return false end
+		if ent:Photon_LicensePlate() == false then return false end
+		-- local mdl = ent:GetModel()
+		-- local mdlId = Photon.AutoSkins.TranslationTable[ mdl ]
+		-- if not mdlId then return false end
+		-- if not istable( Photon.AutoSkins.Available[ mdlId ] ) then return false end
+		return true
+	end,
+
+	MenuOpen = function( self, option, ent )
+		local skinTable = Photon.LicensePlates.Available
+
+		local submenu = option:AddSubMenu()
+
+		for category,subSkins in pairs( skinTable ) do
+			if category != "/" then
+				local categoryMenu = submenu:AddSubMenu( category, null )
+				for _,skinInfo in pairs( subSkins ) do
+					categoryMenu:AddOption( skinInfo.Name, function() EMVU.Net.ApplyLicenseMaterial( ent, skinInfo.Texture ) end )
+				end
+			end
+		end
+
+		if istable( skinTable["/"] ) then
+			for _,skinInfo in pairs( skinTable["/"] ) do
+				submenu:AddOption( skinInfo.Name, function() EMVU.Net.ApplyLicenseMaterial( ent, skinInfo.Texture ) end )
+			end
+		end
+	end
+})
+
 properties.Add( "photon_preset", {
 	MenuLabel = "Emergency Lights",
 	Order = 1,
@@ -225,7 +265,7 @@ properties.Add( "photon_selection", {
 
 properties.Add( "photon_configuration", {
 	MenuLabel = "Configurations",
-	Order = 4,
+	Order = 5,
 	MenuIcon = "photon/ui/menu-presets.png",
 
 	Filter = function( self, ent, ply )

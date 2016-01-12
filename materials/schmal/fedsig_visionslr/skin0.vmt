@@ -4,11 +4,11 @@
 	"$bumpmap"		"schmal/shared/flat"
 	"$phong"			"1"
 	"$nodecal"		"1"
-	"$phongboost"		"1"
+	"$phongboost"		16
 	"$model" 			"1"
-	"$phongexponent" 		"1"
+	"$phongexponent" 		.1
 	"$halflambert" 		"1"
-	"$rimlight" 		"100"
+	"$rimlight" 		"1"
 	"$translucent" 		"1"
 	"$surfaceprop" "Glass"
 	"$envmap" "env_cubemap"

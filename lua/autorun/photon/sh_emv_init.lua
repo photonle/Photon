@@ -6,6 +6,7 @@ EMVU.SubMaterials = {}
 EMVU.Index = {}
 EMVU.Selections = {}
 EMVU.Configurations = {}
+EMVU.LicensePlates = {}
 
 AddCSLuaFile( "sh_emv_init.lua" )
 AddCSLuaFile( "sh_emv_meta.lua" )
@@ -71,6 +72,7 @@ function EMVU:UpdateVehicles()
 end
 
 EMVU.Configurations.Supported = {
-	["2016 Ford Police Interceptor Utility"] = "fpiu16"
+	["2016 Ford Police Interceptor Utility"] = "fpiu16",
+	["Ford Taurus 2013"] = "fpis13",
 }
 

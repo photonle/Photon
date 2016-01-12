@@ -1,0 +1,15 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"schmal/fedsig_legend/legend"
+	"$bumpmap"		"schmal/fedsig_legend/legend_normal"
+		"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+

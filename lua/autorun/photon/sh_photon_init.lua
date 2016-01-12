@@ -19,6 +19,7 @@ if not Photon then
 	Photon.Vehicles.States.Reverse = {}
 	Photon.Vehicles.States.Running = {}
 	Photon.AutoSkins = {}
+	Photon.LicensePlates = {}
 
 	Photon.AutoSkins.TranslationTable = {
 		["models/schmal/fpiu/ford_utility.mdl"] = "fpiu16"

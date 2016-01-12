@@ -49,6 +49,11 @@ function EMVU:MakeEMV( emv, name )
 		return self:GetDTInt( EMV_LIGHT_OPTION )
 	end
 
+	function emv:Photon_LightOptionID()
+		local currentIndex = self:Photon_LightOption()
+		return EMVU.Sequences[ self:EMVName() ].Sequences[ currentIndex ].Stage or ""
+	end
+
 	function emv:Photon_Siren()
 		if not IsValid( self ) then return false end
 		return self:GetDTBool( EMV_SIREN_ON )
@@ -298,7 +303,17 @@ function EMVU:MakeEMV( emv, name )
 		local resultTable = {}
 		for key,_ in pairs( lights ) do
 			if PHOTON_DEBUG and not istable( posData[tonumber(key)] ) then continue end
-			resultTable[key] = self:LocalToWorld( posData[tonumber(key)][1] )
+			local pData = posData[tonumber(key)]
+			if not istable( pData ) then print( tostring(pData) ) end
+			if pData[1][1] == "RE" then
+				-- PrintTable( pData[1] )
+				local npos, nang = EMVU.Helper.GetPositionFromRE( self, self:Photon_GetPropByAutoIndex( pData[1][5] ), pData[1] )
+				-- print(tostring(npos))
+				resultTable[key] = self:LocalToWorld( npos )
+				-- print(resultTable[key])
+			elseif isvector( pData[1] ) then
+				resultTable[key] = self:LocalToWorld( posData[tonumber(key)][1] )
+			end
 		end
 		self.PhotonELFramePositions = resultTable
 		return self.PhotonELFramePositions
@@ -419,12 +434,16 @@ function EMVU:MakeEMV( emv, name )
 				end
 				// print(pixviscache[tostring(b[1])])
 				local showDynamic = pos[4] or false
+				local calcPos, calcAng
+				if pos[1][1] == "RE" then
+					calcPos, calcAng = EMVU.Helper.GetPositionFromRE( self, self:Photon_GetPropByAutoIndex( pos[1][5] ), pos[1] )
+				end
 				Photon:PrepareVehicleLight(
 						self, -- parent
 						col, -- color of the light (colors)
-						pos[1], -- local pos if needed
+						calcPos or pos[1], -- local pos if needed
 						gpos[b[1]] or gpos[tostring(b[1])], -- position (GLOBAL POS)
-						pos[2], -- angle (lang)
+						calcAng or pos[2], -- angle (lang)
 						meta[pos[3]], -- meta data (meta)
 						pixviscache[tostring(b[1])], -- pixvis handle (pixvis)
 						a, -- int for dynamic light (lnum)
@@ -558,6 +577,10 @@ function EMVU:MakeEMV( emv, name )
 			if p.Material then prop:SetMaterial( p.Material ) end
 			if p.Color then prop:SetColor( p.Color ) end
 			if p.AirEL then prop.AirEL = true end
+			prop.AutoIndex = p.AutoIndex or false
+			prop.ComponentName = p.ComponentName or false
+			prop.PhotonRotationEnabled = p.PhotonRotationEnabled or false
+			prop.PhotonBoneAnimationData = p.PhotonBoneAnimationData or false
 			prop:SetSolid( SOLID_NONE )
 			prop:SetMoveType( MOVETYPE_NONE )
 			prop:SetCollisionGroup( COLLISION_GROUP_IN_VEHICLE )
@@ -578,6 +601,15 @@ function EMVU:MakeEMV( emv, name )
 
 	end
 
+	end
+
+	function emv:Photon_GetPropByAutoIndex( id )
+		if istable( self.EMVProps ) then
+			for _,prop in pairs( self.EMVProps ) do
+				if tostring( prop.AutoIndex ) == tostring( id ) then return prop end
+			end
+		end
+		return false
 	end
 
 	function emv:Photon_RemoveEMVProps( readd )
@@ -637,6 +669,8 @@ function EMVU:MakeEMV( emv, name )
 				if prop.AirEL then self.AirELEntity = prop end
 				if not IsValid( self.AirELEntity ) then self.AirELEntity = nil end
 			end
+		else
+			self:Photon_RemoveEMVProps( true )
 		end
 		self.LastEMVPropScan = CurTime()
 
@@ -747,7 +781,7 @@ function EMVU:MakeEMV( emv, name )
 		if not self.Photon_ManualSirenTable then self.Photon_ManualSirenTable = {} end
 		local sirenState = self.Photon_ManualSirenTable
 
-		if not sirenState.SoundHandle then
+		if not sirenState.SoundHandle or not IsValid( sirenState.SoundHandle ) then
 			self.PhotonManualSirenProcessing = true
 			local emv = self
 			sound.PlayFile( info.Sound, "3d", function( snd, errorNo, errorName )
