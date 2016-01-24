@@ -15,7 +15,7 @@ local name = "Dome Light Green"
 local COMPONENT = {}
 
 COMPONENT.Model = "models/schmal/dome_light.mdl"
-COMPONENT.Skin = 4
+COMPONENT.Skin = 3
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
 COMPONENT.ForwardTranslation = true
