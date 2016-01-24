@@ -412,10 +412,10 @@ EMV.Auto = {
 		Ang = Angle( 2, 90, 0)
 	},
 	[4] = {
-		ID = "Federal Signal Vision SLR II",
+		ID = "Federal Signal Vision SLR",
 		Scale = .88,
-		Pos = Vector( 0, -9, 80 ),
-		Ang = Angle( 1, 90, 0),
+		Pos = Vector( 0, -9, 79.8 ),
+		Ang = Angle( 0, 90, 0),
 	},
 	[5] = {
 		ID = "Whelen Justice",

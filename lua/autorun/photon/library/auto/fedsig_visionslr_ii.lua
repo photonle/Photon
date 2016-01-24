@@ -132,51 +132,51 @@ COMPONENT.Bones = {
 COMPONENT.BoneOperations = {
 	[2] = { -- L2A
 		Primary = {
-			M1 = { "S", 0 }, -- static at 0 degrees
-			M2 = { "R", 0, 5 }, -- static at 0 degrees
-			M3 = { "R", 0 }, -- static at 0 degrees
+			M1 = { "S", 0, 25 }, -- static at 0 degrees
+			M2 = { "R", 0, 50 }, -- static at 0 degrees
+			M3 = { "RN", 0, 70 }, -- static at 0 degrees
 		}
 	},
 	[4] = { -- L3B
 		Primary = {
-			M1 = { "S", 0 }, -- static at 0 degrees
-			M2 = { "R", 0, 5 }, -- static at 0 degrees
-			M3 = { "R", 0 }, -- static at 0 degrees
+			M1 = { "S", 0, 25 }, -- static at 0 degrees
+			M2 = { "RN", 0, 75 }, -- static at 0 degrees
+			M3 = { "R", 0, 74 }, -- static at 0 degrees
 		}
 	},
 	[6] = { -- FRONT
 		Primary = {
-			M1 = { "S", 0 }, -- static at 0 degrees
-			M2 = { "R", 0, 10 },
-			M3 = { "R", 0, 20 }
+			M1 = { "S", 0, 25 }, -- static at 0 degrees
+			M2 = { "RN", 0, 70 },
+			M3 = { "A", { 90, 270 }, 40 },
 		}
 	},
 	[8] = { -- L3A
 		Primary = {
-			M1 = { "S", 0 }, -- static at 0 degrees
-			M2 = { "R", 0, 5 }, -- static at 0 degrees
-			M3 = { "R", 0 }, -- static at 0 degrees
+			M1 = { "S", 0, 25 }, -- static at 0 degrees
+			M2 = { "RN", 0, 75 }, -- static at 0 degrees
+			M3 = { "R", 0, 76 }, -- static at 0 degrees
 		}
 	},
 	[10] = { -- L4B
 		Primary = {
-			M1 = { "S", 180 }, -- static at 0 degrees
-			M2 = { "R", 180, 10 }, -- static at 0 degrees
-			M3 = { "R", 180, 15 }, -- static at 0 degrees
+			M1 = { "S", 180, 25 }, -- static at 0 degrees
+			M2 = { "RN", 0, 75 }, -- static at 0 degrees
+			M3 = { "RN", 0, 84 }, -- static at 0 degrees
 		}
 	},
 	[12] = { -- L4A
 		Primary = {
-			M1 = { "S", -180, 5 }, -- static at 0 degrees
-			M2 = { "S", -180, 5 }, -- static at 0 degrees
-			M3 = { "S", -180, 5 } -- static at 0 degrees
+			M1 = { "S", 180, 25 }, -- static at 0 degrees
+			M2 = { "RN", 0, 75 }, -- static at 0 degrees
+			M3 = { "RN", 0, 86 }, -- static at 0 degrees
 		}
 	},
 	[14] = { -- L2B
 		Primary = {
-			M1 = { "S", 0, 5 }, -- static at 0 degrees
-			M2 = { "R", 0, 5 }, -- static at 0 degrees
-			M3 = { "S", 0, 5 } -- static at 0 degrees
+			M1 = { "S", 0, 25 }, -- static at 0 degrees
+			M2 = { "R", 0, 50 }, -- static at 0 degrees
+			M3 = { "RN", 0, 70 }, -- static at 0 degrees
 		}
 	},
 
@@ -210,7 +210,7 @@ COMPONENT.Positions = {
 	[14] = { { "RE", "L4B", Vector( 1.3, -1.6, 0 ), Angle( 0, 0, 0 ) }, nil, "visionslr_lower" },
 
 	[15] = { Vector( -15.48, -13.16, 0.03 ), Angle( 0, 0, 0 ), "visionslr_rear" },
-	[16] = { Vector( 15.48, -13.16, 0.03 ), Angle( 0, 0, 0 ), "visionslr_rear" },
+	[16] = { Vector( -6.53, -1.57, 0 ), Angle( 0, -90, 0 ), "visionslr_rear" },
 
 	[17] = { Vector( -9.35, -13.16, 0.03 ), Angle( 0, 0, 0 ), "visionslr_rear" },
 	[18] = { Vector( 9.35, -13.16, 0.03 ), Angle( 0, 0, 0 ), "visionslr_rear" },
@@ -225,71 +225,49 @@ COMPONENT.Positions = {
 
 COMPONENT.Sections = {
 	["auto_fedsig_visionslr"] = {
-		{
-			{ 1, R },
-			{ 2, W }, { 3, W },
-			{ 4, R }, { 5, R },
-			{ 6, RB }, { 7, RB },
-
-			{ 8, A }, { 9, A },
-			{ 10, A }, { 11, A },
-			{ 12, A }, { 13, A },
-
-			{ 14, W }, { 15, W },
+		[1] = { { 1, R }, { 2, W }, { 3, W }, { 4, R }, { 5, R }, { 6, RB }, { 7, RB }, 
+			{ 8, R }, { 9, W }, { 10, W }, { 11, R }, { 12, R }, { 13, RB }, { 14, RB },  
 		},
-		{
-			{ 1, R },
-			{ 2, W }, { 3, W },
-			{ 4, R }, { 5, R },
-			{ 6, RB }, { 7, RB },
+		[2] = {
+			{ 4, R }, { 11, R }, { 7, RB }, { 14, RB }
 		},
-		{
-			{ 6, RB }, { 7, RB },
-		},
-		{
-			{ 1, R },
-			{ 4, R }, { 5, R },
-			{ 6, RB }, { 7, RB },
-		},
-		[5] = { { 19, R }, { 20, B } },
-		[6] = { { 18, R }, { 21, B } },
-		[7] = { { 18, R, .33 }, { 21, B, .33 }, { 19, R, .33 }, { 20, B, .33 } },
-		[8] = { { 1, R }, { 2, W }, { 3, W }, { 4, R }, { 5, R }, { 6, R }, { 7, R }, 
-			{ 8, R }, { 9, W }, { 10, W }, { 11, R }, { 12, R }, { 13, R }, { 14, R },  
+		[3] = {
+			{ 5, R }, { 12, R }, { 6, RB }, { 13, RB }
 		}
 	},
 	["auto_fedsig_visionslr_traffic"] = {
-		{ { 8, A }, { 9, A }, { 10, A }, { 11, A } },
-		{ { 12, A }, { 13, A } },
-		{ { 9, A }, { 11, A }, { 13, A } },
-		{ { 8, A }, { 10, A }, { 12, A } },
-		{ { 8, A } },
-		{ { 8, A }, { 10, A } },
-		{ { 8, A }, { 10, A }, { 12, A } },
-		{ { 8, A }, { 10, A }, { 12, A }, { 13, A } },
-		{ { 8, A }, { 10, A }, { 12, A }, { 13, A }, { 11, A } },
-		{ { 8, A }, { 10, A }, { 12, A }, { 13, A }, { 11, A }, { 9, A } },
-		{ { 9, A } },
-		{ { 11, A }, { 9, A } },
-		{ { 13, A }, { 11, A }, { 9, A } },
-		{ { 12, A }, { 13, A }, { 11, A }, { 9, A } },
-		{ { 10, A }, { 12, A }, { 13, A }, { 11, A }, { 9, A } },
-		[16] = { { 12, A }, { 13, A }, },
-		[17] = { { 10, A }, { 12, A }, { 13, A }, { 11, A }, },
+		{ { 15, A }, { 16, A }, { 17, A }, { 18, A } },
+		{ { 19, A }, { 20, A } },
+		{ { 16, A }, { 18, A }, { 20, A } },
+		{ { 15, A }, { 17, A }, { 19, A } },
+		{ { 15, A } },
+		{ { 15, A }, { 17, A } },
+		{ { 15, A }, { 17, A }, { 19, A } },
+		{ { 15, A }, { 17, A }, { 19, A }, { 20, A } },
+		{ { 15, A }, { 17, A }, { 19, A }, { 20, A }, { 18, A } },
+		{ { 15, A }, { 17, A }, { 19, A }, { 20, A }, { 18, A }, { 16, A } },
+		{ { 16, A } },
+		{ { 18, A }, { 16, A } },
+		{ { 20, A }, { 18, A }, { 16, A } },
+		{ { 19, A }, { 20, A }, { 18, A }, { 16, A } },
+		{ { 17, A }, { 19, A }, { 20, A }, { 18, A }, { 16, A } },
+		[16] = { { 19, A }, { 20, A }, },
+		[17] = { { 17, A }, { 19, A }, { 20, A }, { 18, A }, },
 	},
 }
 
 COMPONENT.Patterns = {
 	["auto_fedsig_visionslr"] = {
 		["all"] = { 1 },
-		["debug"] = { 8 },
-		["code1"] = { 5, 5, 5, 5, 0, 6, 6, 6, 6, 0 },
+		["debug"] = { 1 },
+		["code1"] = { 2, 2, 2, 2, 2, 3, 3, 3, 3, 3 },
 		["code2"] = { 4 },
 		["code3"] = { 2 },
 		["cruise"] = { 7 },
 	},
 	["auto_fedsig_visionslr_traffic"] = {
 		["warn"] = { 1, 1, 1, 1, 0, 2, 2, 2, 2, 0 },
+		["debug"] = { 10 },
 		["code1"] = { 3, 3, 3, 3, 3, 4, 4, 4, 4, 4 },
 		["right"] = { 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 10, 10, 0, 0 },
 		["left"] = { 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 10, 10, 10, 10, 0, 0 },
@@ -298,22 +276,20 @@ COMPONENT.Patterns = {
 }
 
 COMPONENT.TrafficDisconnect = { 
-	["auto_fedsig_visionslr"] = {
-		4, 5, 6, 7, 18, 19, 20, 21
-	}
+
 }
 
 COMPONENT.Modes = {
 	Primary = {
 			M1 = {
-				["auto_fedsig_visionslr"] = "debug",
-				-- ["auto_fedsig_visionslr_traffic"] = "code1",
+				["auto_fedsig_visionslr"] = "code1",
+				["auto_fedsig_visionslr_traffic"] = "code1",
 			},
 			M2 = {
-				["auto_fedsig_visionslr"] = "debug",
+				["auto_fedsig_visionslr"] = "all",
 			},
 			M3 = {
-				["auto_fedsig_visionslr"] = "debug",
+				["auto_fedsig_visionslr"] = "all",
 			}
 		},
 	Auxiliary = {
@@ -332,10 +308,10 @@ COMPONENT.Modes = {
 		},
 	Illumination = {
 		L = {
-			{ 14, W }
+			{ 21, W }
 		},
 		R = {
-			{ 15, W }
+			{ 22, W }
 		},
 		T = {
 			{ 16, W }, { 17, W }

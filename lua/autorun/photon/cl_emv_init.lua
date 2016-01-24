@@ -347,68 +347,7 @@ concommand.Add( "photon_debugprint", function()
 	PrintPhotonDebugInformation()
 end)
 
-Photon.BoneRotation = function()
-	for _,ent in pairs( ents.GetAll() ) do
-		if ent.PhotonRotationEnabled then
-			local emv = ent:GetParent()
-			if emv:Photon_Lights() then
-				local stageId = emv:Photon_LightOptionID()
-				local componentBoneData = ent.PhotonBoneAnimationData
-				for boneIndex, boneData in pairs( componentBoneData ) do
-					local currentAnimation = boneData.Primary[ stageId ]
-					local animAction = currentAnimation[1] or "RP"
-					local animAngle = currentAnimation[2] or 0
-					local animSpeed = currentAnimation[3] or 10
-					local currentAngles = ent:GetManipulateBoneAngles( boneIndex )
-					local currentAngle = currentAngles[3]
-					local lt = animAngle > currentAngle
-					local eq = animAngle == currentAngle
-					local difAng = ( FrameTime() * animSpeed ) * 10
-					local addAng = (currentAngles.r + difAng) % 360
-					local subAng = (currentAngles.r - difAng) % -360
-					-- print(difAng)
-					if animAction == "S" then
-						if not eq then
-							if lt then
-								if difAng + currentAngle > animAngle then addAng = difAng end
-								ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, addAng ) )
-							else
-								if currentAngle - difAng < animAngle then subAng = difAng end
-								ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, subAng ) )
-							end
-						end
-					elseif animAction == "A" then
-
-					elseif animAction == "RP" or animAction == "R" then
-						ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, addAng ) )
-					elseif animAction == "RN" then
-						ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, subAng ) )
-					end
-				end
-			end
-		end
-		-- if ent:GetModel() == "models/schmal/vision_lightbar_ii.mdl" then
-		-- 	if ent:GetParent():Photon_Lights() then
-		-- 	local ang = ent:GetManipulateBoneAngles(14)
-		-- 	ent:ManipulateBoneAngles( 14, Angle( ang.p, ang.y, ang.r + 24 ) )
-		-- 	ang = ent:GetManipulateBoneAngles(12)
-		-- 	ent:ManipulateBoneAngles( 12, Angle( ang.p, ang.y, ang.r - 16 ) )
-		-- 	ang = ent:GetManipulateBoneAngles(10)
-		-- 	ent:ManipulateBoneAngles( 10, Angle( ang.p, ang.y, ang.r - 16 ) )
-		-- 	ang = ent:GetManipulateBoneAngles(8)
-		-- 	ent:ManipulateBoneAngles( 8, Angle( ang.p, ang.y, ang.r + 24 ) )
-		-- 	ang = ent:GetManipulateBoneAngles(6)
-		-- 	ent:ManipulateBoneAngles( 6, Angle( ang.p, ang.y, ang.r + 24 ) )
-		-- 	ang = ent:GetManipulateBoneAngles(4)
-		-- 	ent:ManipulateBoneAngles( 4, Angle( ang.p, ang.y, ang.r - 16 ) )
-		-- 	ang = ent:GetManipulateBoneAngles(2)
-		-- 	ent:ManipulateBoneAngles( 2, Angle( ang.p, ang.y, ang.r - 16 ) )
-		-- 	end
-		-- end
-	end
-end
-
-timer.Create("photon_spinnnnnn", .01, 0, function()
-	-- if true then return end
-	Photon.BoneRotation()
-end )
+-- timer.Create("photon_spinnnnnn", .01, 0, function()
+-- 	-- if true then return end
+-- 	Photon.BoneRotation()
+-- end )

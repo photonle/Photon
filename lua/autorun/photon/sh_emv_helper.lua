@@ -471,7 +471,7 @@ end
 -- posIndex: the position index of the vehicle to return pos and ang data for
 -- [1] = "RE", [2] = "BONE_NAME", [3] = Vector relative pos to bone, [4] = Angle relative to bone
 
-function EMVU.Helper.GetPositionFromRE( car, lbEntity, posInput )
+function EMVU.Helper.GetPositionFromRE( car, lbEntity, posInput, returnWorld )
 	local name = car:EMVName()
 	local posData
 	if not istable( posInput ) then posData = EMVU.Positions[ name ][ posIndex ] else posData = posInput end
@@ -482,8 +482,17 @@ function EMVU.Helper.GetPositionFromRE( car, lbEntity, posInput )
 	local boneData = EMVU.Auto[ tostring(lbEntity.ComponentName) ].Bones[ posData[2] ]
 	local boneIndex = boneData.Bone
 	local boneWorldPos, boneWorldAng = lbEntity:GetBonePosition( boneIndex )
-	local bonePos = car:WorldToLocal( boneWorldPos )
-	local boneAng = car:WorldToLocalAngles( boneWorldAng )
+	-- local bonePos = car:WorldToLocal( boneWorldPos )
+	-- local boneAng = car:WorldToLocalAngles( boneWorldAng )
+	local bonePos, boneAng 
+	if returnWorld then
+		bonePos = boneWorldPos
+		boneAng = boneWorldAng
+	else
+		bonePos = car:WorldToLocal( boneWorldPos )
+		boneAng = car:WorldToLocalAngles( boneWorldAng )
+	end
+	
 	local newPos = Vector()
 	local newAng = Angle()
 	newPos:Set( posVector )
@@ -493,5 +502,22 @@ function EMVU.Helper.GetPositionFromRE( car, lbEntity, posInput )
 	newAng.r = newAng.r + posAngle.r
 	newPos:Rotate( newAng )
 	newPos:Add( bonePos )
-	return newPos, newAng
+	-- print( "Car: " .. tostring( car:GetAngles() ) )
+	-- print( "World to local: " .. tostring(newAng))
+	-- print( "Raw manipupated: " .. tostring(lbEntity:GetManipulateBoneAngles( boneIndex )))
+	return newPos, newAng, lbEntity:GetManipulateBoneAngles( boneIndex ).r
+end
+
+function EMVU.Helper.GetBonePositionFromRE( car, lbEntity, posInput )
+	local name = car:EMVName()
+	local posData
+	if not istable( posInput ) then posData = EMVU.Positions[ name ][ posIndex ] else posData = posInput end
+	local posVector = posData[3]
+	local posAngle = posData[4]
+	-- print(tostring(lbEntity.ComponentName))
+	-- print(tostring(posData[2]))
+	local boneData = EMVU.Auto[ tostring(lbEntity.ComponentName) ].Bones[ posData[2] ]
+	local boneIndex = boneData.Bone
+	local boneWorldPos, boneWorldAng = lbEntity:GetBonePosition( boneIndex )
+	return boneWorldPos
 end

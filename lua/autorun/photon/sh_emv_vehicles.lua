@@ -545,6 +545,7 @@ function EMVU:CalculateAuto( name, data )
 			else
 				local insertPos = table.Copy( posData[1] )
 				insertPos[5] = tostring( i )
+				insertPos[3]:Mul( autoScale )
 				EMVU.Positions[ name ][ offset + id ] = {
 					insertPos, posData[2], tostring( posData[3] .. "_" .. i ), posData[4] or false
 				}

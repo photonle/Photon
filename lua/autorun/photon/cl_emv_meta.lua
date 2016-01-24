@@ -307,9 +307,14 @@ function EMVU:MakeEMV( emv, name )
 			if not istable( pData ) then print( tostring(pData) ) end
 			if pData[1][1] == "RE" then
 				-- PrintTable( pData[1] )
-				local npos, nang = EMVU.Helper.GetPositionFromRE( self, self:Photon_GetPropByAutoIndex( pData[1][5] ), pData[1] )
+				local npos, nang = EMVU.Helper.GetPositionFromRE( self, self:Photon_GetPropByAutoIndex( pData[1][5] ), pData[1], true )
 				-- print(tostring(npos))
-				resultTable[key] = self:LocalToWorld( npos )
+				-- local newPos = self:LocalToWorld( npos )
+				-- newPos.x = math.Round( newPos.x )
+				-- newPos.y = math.Round( newPos.y )
+				-- newPos.z = math.Round( newPos.z )
+				-- print( string.format( "[%s] %s", key, tostring( newPos ) ) )
+				resultTable[key] = npos
 				-- print(resultTable[key])
 			elseif isvector( pData[1] ) then
 				resultTable[key] = self:LocalToWorld( posData[tonumber(key)][1] )
@@ -434,9 +439,19 @@ function EMVU:MakeEMV( emv, name )
 				end
 				// print(pixviscache[tostring(b[1])])
 				local showDynamic = pos[4] or false
-				local calcPos, calcAng
+				local calcPos, calcAng, lrang
 				if pos[1][1] == "RE" then
-					calcPos, calcAng = EMVU.Helper.GetPositionFromRE( self, self:Photon_GetPropByAutoIndex( pos[1][5] ), pos[1] )
+					calcPos, calcAng, lrang = EMVU.Helper.GetPositionFromRE( self, self:Photon_GetPropByAutoIndex( pos[1][5] ), pos[1] )
+					-- print(lrang)
+					if multiColor then
+						if lrang > 90 and lrang < 270 then
+							col = colorRecycle[1]
+						else
+							col = colorRecycle[2]
+						end
+						multiColor = false
+					end
+					
 				end
 				Photon:PrepareVehicleLight(
 						self, -- parent
