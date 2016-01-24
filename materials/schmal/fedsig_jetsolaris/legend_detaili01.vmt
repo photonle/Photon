@@ -1,0 +1,30 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"schmal/fedsig_legend/legend"
+	"$bumpmap"		"schmal/fedsig_legend/legend_normal"
+	$surfaceprop "metal"
+    	$envmap "env_cubemap"
+   	 $envmaptint "[.01 .01 .01]"
+    	$envmapcontrast "0"
+    	$envmapsaturation "1"
+   	 $envmapfresnel "1"
+   	 $phong "1"
+    	$phongexponent 96
+   	 $phongboost .25
+   	 $phongfresnelranges "[ 1 1 1]"
+	$nocull "1"
+	"$nodecal" "1"
+	"$normalmapalphaenvmapmask" 1
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+
+	
+}
+

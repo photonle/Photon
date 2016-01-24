@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	"$basetexture"		"sprites/emv/tdm_fpis_forward_1"
+	"$nocull" 1
+	"$additive" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}

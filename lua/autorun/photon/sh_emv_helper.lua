@@ -355,12 +355,19 @@ function EMVU.Helper:GetProps( name, ent )
 		if istable( presetData.Auto ) then
 			for _,id in pairs( presetData.Auto ) do
 				local preset = EMVU.AutoIndex[ name ][ id ]
+				local autoData = EMVU.Auto[ preset[ "ID" ] ]
 				local propData = EMVU.Helper:GetAutoModel( preset[ "ID" ] )
 				propData.Pos = preset.Pos
 				propData.Ang = preset.Ang
 				propData.Scale = preset.Scale
 				propData.RenderGroup = preset.RenderGroup
 				propData.RenderMode = preset.RenderMode
+				propData.AutoIndex = id
+				propData.ComponentName = preset[ "ID" ]
+				if autoData.RotationEnabled then
+					propData.PhotonRotationEnabled = true
+					propData.PhotonBoneAnimationData = autoData.BoneOperations
+				end
 				results[ #results + 1 ] = propData
 			end
 		end
@@ -378,11 +385,18 @@ function EMVU.Helper:GetProps( name, ent )
 					if category.Options[selected].Auto then
 						for _,id in pairs( category.Options[selected].Auto ) do
 							local component = EMVU.AutoIndex[ name ][ id ]
+							local autoData = EMVU.Auto[ component[ "ID" ] ]
 							local propData = EMVU.Helper:GetAutoModel( component[ "ID" ] )
 							if not propData.Model then continue end
 							propData.Pos = component.Pos
 							propData.Ang = component.Ang
 							propData.Scale = component.Scale
+							propData.AutoIndex = id
+							propData.ComponentName = component[ "ID" ]
+							if autoData.RotationEnabled then
+								propData.PhotonRotationEnabled = true
+								propData.PhotonBoneAnimationData = autoData.BoneOperations
+							end
 							results[ #results + 1 ] = propData
 						end
 					end
@@ -441,4 +455,69 @@ end
 
 function EMVU.Helper:GetTrafficAdvisorName( name, option )
 	return EMVU.Sequences[name]["Traffic"][option].Name
+end
+
+function EMVU.Helper.GetLocalToWorld( posData )
+	if posData[1] == "RE" then
+		return 
+	else
+
+	end
+end
+
+-- name: Vehicle Name
+-- car: vehicle entity
+-- lbEntity: the lightbar entity with bones
+-- posIndex: the position index of the vehicle to return pos and ang data for
+-- [1] = "RE", [2] = "BONE_NAME", [3] = Vector relative pos to bone, [4] = Angle relative to bone
+
+function EMVU.Helper.GetPositionFromRE( car, lbEntity, posInput, returnWorld )
+	local name = car:EMVName()
+	local posData
+	if not istable( posInput ) then posData = EMVU.Positions[ name ][ posIndex ] else posData = posInput end
+	local posVector = posData[3]
+	local posAngle = posData[4]
+	-- print(tostring(lbEntity.ComponentName))
+	-- print(tostring(posData[2]))
+	local boneData = EMVU.Auto[ tostring(lbEntity.ComponentName) ].Bones[ posData[2] ]
+	local boneIndex = boneData.Bone
+	local boneWorldPos, boneWorldAng = lbEntity:GetBonePosition( boneIndex )
+	-- local bonePos = car:WorldToLocal( boneWorldPos )
+	-- local boneAng = car:WorldToLocalAngles( boneWorldAng )
+	local bonePos, boneAng 
+	if returnWorld then
+		bonePos = boneWorldPos
+		boneAng = boneWorldAng
+	else
+		bonePos = car:WorldToLocal( boneWorldPos )
+		boneAng = car:WorldToLocalAngles( boneWorldAng )
+	end
+	
+	local newPos = Vector()
+	local newAng = Angle()
+	newPos:Set( posVector )
+	newAng:Set( boneAng )
+	newAng.p = newAng.p + posAngle.p
+	newAng.y = newAng.y + posAngle.y
+	newAng.r = newAng.r + posAngle.r
+	newPos:Rotate( newAng )
+	newPos:Add( bonePos )
+	-- print( "Car: " .. tostring( car:GetAngles() ) )
+	-- print( "World to local: " .. tostring(newAng))
+	-- print( "Raw manipupated: " .. tostring(lbEntity:GetManipulateBoneAngles( boneIndex )))
+	return newPos, newAng, lbEntity:GetManipulateBoneAngles( boneIndex ).r
+end
+
+function EMVU.Helper.GetBonePositionFromRE( car, lbEntity, posInput )
+	local name = car:EMVName()
+	local posData
+	if not istable( posInput ) then posData = EMVU.Positions[ name ][ posIndex ] else posData = posInput end
+	local posVector = posData[3]
+	local posAngle = posData[4]
+	-- print(tostring(lbEntity.ComponentName))
+	-- print(tostring(posData[2]))
+	local boneData = EMVU.Auto[ tostring(lbEntity.ComponentName) ].Bones[ posData[2] ]
+	local boneIndex = boneData.Bone
+	local boneWorldPos, boneWorldAng = lbEntity:GetBonePosition( boneIndex )
+	return boneWorldPos
 end

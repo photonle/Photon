@@ -171,15 +171,15 @@ end )
 
 -- PrintTable( list.Get( "ThrusterSounds" ) )
 
-cvars.RemoveChangeCallback("photon_christmas_mode_auto","photon.christmas.hook")
-cvars.AddChangeCallback("photon_christmas_mode_auto",function(name, old, new)
-	if tonumber( new ) == 1 then
-		if PHOTON_CHRISTMAS_PERMIT then
-			RunConsoleCommand( "photon_christmas_mode", "1" )
-		end
-	else
-		RunConsoleCommand( "photon_christmas_mode", "0" )
-		chat.AddText( Color( 255, 255, 128), "Photon Holiday Mode has been disabled." )
-	end
+-- cvars.RemoveChangeCallback("photon_christmas_mode_auto","photon.christmas.hook")
+-- cvars.AddChangeCallback("photon_christmas_mode_auto",function(name, old, new)
+-- 	if tonumber( new ) == 1 then
+-- 		if PHOTON_CHRISTMAS_PERMIT then
+-- 			RunConsoleCommand( "photon_christmas_mode", "1" )
+-- 		end
+-- 	else
+-- 		RunConsoleCommand( "photon_christmas_mode", "0" )
+-- 		chat.AddText( Color( 255, 255, 128), "Photon Holiday Mode has been disabled." )
+-- 	end
 
-end,"photon.christmas.hook")
+-- end,"photon.christmas.hook")

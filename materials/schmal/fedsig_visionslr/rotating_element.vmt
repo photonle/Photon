@@ -1,0 +1,24 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"schmal/fedsig_visionslr/emerglights_fedsig"
+	//"$bumpmap"		"schmal/fedsig_visionslr/emerglights_fedsig_normal"
+   	$surfaceprop "metal"
+    	$envmap "env_cubemap"
+    	$envmaptint "[.75 .75 .75]"
+    	$phong "1"
+    	$phongexponent 16
+    	$phongboost 1
+    	$phongfresnelranges "[ 1 1 1]"
+	$nocull "1"
+	"$nodecal" "1"
+	"$colorfix" "{225 225 225}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+

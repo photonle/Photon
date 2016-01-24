@@ -514,34 +514,42 @@ function EMVU:CalculateAuto( name, data )
 
 		for id=1,#component.Positions do
 			local posData = component.Positions[ id ]
-			local newPos = Vector()
-			newPos:Set( posData[1] )
-			newPos:Rotate( adjustAng )
-			// print(tostring(adjustAng))
-			newPos:Mul( autoScale )
-			newPos:Add( autoPos )
-			local newAng = Angle()
-			if not component.NotLegacy then
-				newAng.y = newAng.y + 90
-				newAng:Set( posData[2] )
-				newAng:RotateAroundAxis( autoAng:Right(), -1*autoAng.p )
-				newAng:RotateAroundAxis( autoAng:Up(), -1*autoAng.r )
-			else
-				newAng:Set( posData[2] )
-				if component.ForwardTranslation then
-					newAng.p = newAng.p + (autoAng.r *-1)
-					newAng.y = newAng.y + autoAng.y
-					newAng.r = newAng.r + autoAng.p
+			if isvector( posData[1] ) then
+				local newPos = Vector()
+				newPos:Set( posData[1] )
+				newPos:Rotate( adjustAng )
+				// print(tostring(adjustAng))
+				newPos:Mul( autoScale )
+				newPos:Add( autoPos )
+				local newAng = Angle()
+				if not component.NotLegacy then
+					newAng.y = newAng.y + 90
+					newAng:Set( posData[2] )
+					newAng:RotateAroundAxis( autoAng:Right(), -1*autoAng.p )
+					newAng:RotateAroundAxis( autoAng:Up(), -1*autoAng.r )
 				else
-					newAng.p = newAng.p + autoAng.p
-					newAng.y = newAng.y + autoAng.y
-					newAng.r = newAng.r + autoAng.r
+					newAng:Set( posData[2] )
+					if component.ForwardTranslation then
+						newAng.p = newAng.p + (autoAng.r *-1)
+						newAng.y = newAng.y + autoAng.y
+						newAng.r = newAng.r + autoAng.p
+					else
+						newAng.p = newAng.p + autoAng.p
+						newAng.y = newAng.y + autoAng.y
+						newAng.r = newAng.r + autoAng.r
+					end
 				end
+				EMVU.Positions[ name ][ offset + id ] = {
+					newPos, newAng, tostring( posData[3] .. "_" .. i ), posData[4] or false
+				}
+			else
+				local insertPos = table.Copy( posData[1] )
+				insertPos[5] = tostring( i )
+				insertPos[3]:Mul( autoScale )
+				EMVU.Positions[ name ][ offset + id ] = {
+					insertPos, posData[2], tostring( posData[3] .. "_" .. i ), posData[4] or false
+				}
 			end
-			EMVU.Positions[ name ][ offset + id ] = {
-				newPos, newAng, tostring( posData[3] .. "_" .. i ), posData[4] or false
-			}
-
 		end
 
 		for id,section in pairs( component.Sections ) do -- for each section ["lightbar"] = { { 1, B } } *SECTION

@@ -1,0 +1,23 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "schmal/chev_tahoe14/tire_texture"
+	"$bumpmap" "schmal/chev_tahoe14/tire_texture_nm"
+	"$detail" "schmal/chev_tahoe14/tire_texture_detail"
+	"$phong" 1
+	"$phongtint" "[1 1 1]"
+	"$phongexponent" 256
+	"$phongboost" .05
+	"$phongfresnelranges" "[1 1 1]"
+	"$nocull" 1
+	"$normalmapalphaenvmapmask" 1
+	"$nodecal" "1"
+	"$colorfix" "{255 255 255}"
+   	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+ }

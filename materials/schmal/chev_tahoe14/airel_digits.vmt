@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	$basetexture "schmal/shared/airel_blank"
+	$translucent 1
+	$additive 1
+	"$nodecal" "1"
+}
+

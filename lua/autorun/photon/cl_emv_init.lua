@@ -18,11 +18,12 @@ local istable = istable
 local EMVU = EMVU
 
 local should_render = GetConVar( "photon_emerg_enabled" )
-
+local should_render_reg = GetConVar( "photon_stand_enabled" )
 local photon_ready = photon_ready or false
 
 hook.Add( "InitPostEntity", "Photon.ReadyEL", function()
 	should_render = GetConVar( "photon_emerg_enabled" )
+	should_render_reg = GetConVar( "photon_stand_enabled" )
 	photon_ready = true
 end)
 
@@ -34,7 +35,43 @@ local function DrawEMVLights()
 		if IsValid( v ) and v.IsEMV and v:IsEMV() and v.Photon_RenderIllum then v:Photon_RenderIllum() end
 	end	
 end
-hook.Add("PreRender", "EMVU.Scan", DrawEMVLights)
+-- hook.Add("PreRender", "EMVU.Scan", DrawEMVLights)
+
+local function DrawCarLights()
+	if not photon_ready then return end
+	Photon:ClearLightQueue()
+	local photonDebug = PHOTON_DEBUG
+	for _,ent in pairs( Photon:AllVehicles() ) do
+		if IsValid( ent ) then
+			if ent:Photon() and ent.Photon_RenderLights then
+				if( should_render_reg:GetBool() ) then
+					ent:Photon_RenderLights( 
+						ent:Photon_HeadlightsOn(), 
+						ent:Photon_IsRunning(), 
+						ent:Photon_IsReversing(), 
+						ent:Photon_IsBraking(), 
+						ent:Photon_TurningLeft(), 
+						ent:Photon_TurningRight(), 
+						ent:Photon_Hazards(), 
+						photonDebug
+					)
+				end
+				if ent:IsEMV() and ent.Photon_ScanEMVProps then ent:Photon_ScanEMVProps() end
+			elseif ent:Photon() and not ent.Photon_RenderLights then
+				Photon:SetupCar( ent, ent:EMVName() )
+			end
+		end
+	end
+end
+-- hook.Add( "PreRender", "Photon.Scan", function()
+-- 	DrawCarLights()
+-- end)
+
+hook.Add( "PreRender", "Photon.RenderScan", function()
+	DrawCarLights()
+	DrawEMVLights()
+end)
+
 
 local function PhotonManualWindScan()
 	if not photon_ready then return end
@@ -196,6 +233,60 @@ end
 
 hook.Add( "InitPostEntity", "Photon.LoadAvailableMaterials", function() timer.Simple( 3, Photon.AutoSkins.LoadAvailable ) end )
 
+Photon.LicensePlates.Available = {}
+
+Photon.LicensePlates.FetchMaterials = function()
+	local result = {}
+	local baseDir = "materials/photon_plates/"
+	local files = file.Find( baseDir .. "*.vmt", "GAME" )
+	result["/"] = {}
+	for _,foundFile in pairs( files ) do
+		result["/"][ #result["/"] + 1 ] = foundFile
+	end
+	local _,dirs = file.Find( baseDir .. "*", "GAME" )
+	for _,foundDir in pairs( dirs ) do
+		if not result[foundDir] then result[foundDir] = {} end
+		local subFiles = file.Find( baseDir .. foundDir .. "/*.vmt", "GAME" )
+		for __,foundFile in pairs( subFiles ) do
+			result[foundDir][ #result[foundDir] + 1 ] = foundFile
+		end
+	end
+	return result, baseDir
+end
+
+Photon.LicensePlates.ParseMaterials = function()
+	local fileTable, baseDir = Photon.LicensePlates.FetchMaterials()
+	local result = {}
+	for key,subFiles in pairs( fileTable ) do
+		if key == "/" then
+			result["/"] = {}
+			local newKey = key
+			for _,mat in pairs( subFiles ) do
+				result[ newKey ][ #result[ newKey ] + 1 ] = {}
+				local matInfo = result[ newKey ][ #result[ newKey ] ]
+				matInfo.Name = string.Replace( string.Replace( mat, "_", " " ), ".vmt", "" )
+				matInfo.Texture = string.format( "%s%s/%s", string.Replace( baseDir, "materials/", "" ), key, string.StripExtension( mat ) )
+			end
+		else
+			local newKey = string.Replace( key, "_", " ")
+			result[ newKey ] = {}
+			for _,mat in pairs( subFiles ) do
+				result[ newKey ][ #result[ newKey ] + 1 ] = {}
+				local matInfo = result[ newKey ][ #result[ newKey ] ]
+				matInfo.Name = string.Replace( string.Replace( mat, "_", " " ), ".vmt", "" )
+				matInfo.Texture = string.format( "%s%s/%s", string.Replace( baseDir, "materials/", "" ), key, string.StripExtension( mat ) )
+			end
+		end
+	end
+	return result
+end
+
+Photon.LicensePlates.LoadAvailable = function()
+	Photon.LicensePlates.Available = Photon.LicensePlates.ParseMaterials()
+end
+
+hook.Add( "InitPostEntity", "Photon.LoadAvailablePlateMaterials", function() timer.Simple( 3, Photon.LicensePlates.LoadAvailable ) end )
+
 function PrintPhotonDebugInformation()
 	if CLIENT then
 		local emergEnabled = GetConVar( "photon_emerg_enabled" )
@@ -255,3 +346,8 @@ end
 concommand.Add( "photon_debugprint", function()
 	PrintPhotonDebugInformation()
 end)
+
+-- timer.Create("photon_spinnnnnn", .01, 0, function()
+-- 	-- if true then return end
+-- 	Photon.BoneRotation()
+-- end )

@@ -209,6 +209,15 @@ COMPONENT.Modes = {
 	Illumination = {
 		 T = {
 		 	{ 19, SW }, { 20, SW }
+		 },
+		 L = {
+		 	{ 21, SW }
+		 },
+		 R = {
+		 	{ 22, SW }
+		 },
+		 F = {
+		 	{ 19, SW }, { 20, SW }
 		 }
 	}
 }

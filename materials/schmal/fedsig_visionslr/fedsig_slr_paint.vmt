@@ -1,5 +1,18 @@
 "VertexLitGeneric"
 {
 	"$basetexture"		"schmal/fedsig_visionslr/fedsig_slr"
+	
+	$surfaceprop "metal"
+    	$envmap "env_cubemap"
+    	$envmaptint "[.1 .1 .1]"
+	 $envmapcontrast "1"
+    	$envmapsaturation 0
+    	$envmapfresnel "1"
+    	$phong "1"
+    	$phongexponent 16
+    	$phongboost 1
+    	$phongfresnelranges "[ 1 1 1]"
+	$nocull "0"
+	"$nodecal" "1"
 }
 

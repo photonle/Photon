@@ -12,36 +12,6 @@ local PHOTON_REG_ENABLED = PHOTON_REG_ENABLED
 
 local photon_ready = photon_ready or false
 
-local function DrawCarLights()
-	if not photon_ready then return end
-	Photon:ClearLightQueue()
-	local photonDebug = PHOTON_DEBUG
-	for _,ent in pairs( Photon:AllVehicles() ) do
-		if IsValid( ent ) then
-			if ent:Photon() and ent.Photon_RenderLights then
-				if( should_render:GetBool() ) then
-					ent:Photon_RenderLights( 
-						ent:Photon_HeadlightsOn(), 
-						ent:Photon_IsRunning(), 
-						ent:Photon_IsReversing(), 
-						ent:Photon_IsBraking(), 
-						ent:Photon_TurningLeft(), 
-						ent:Photon_TurningRight(), 
-						ent:Photon_Hazards(), 
-						photonDebug
-					)
-				end
-				if ent:IsEMV() and ent.Photon_ScanEMVProps then ent:Photon_ScanEMVProps() end
-			elseif ent:Photon() and not ent.Photon_RenderLights then
-				Photon:SetupCar( ent, ent:EMVName() )
-			end
-		end
-	end
-end
-hook.Add( "PreRender", "Photon.Scan", function()
-	DrawCarLights()
-end)
-
 hook.Add( "InitPostEntity", "Photon.ReadyReg", function()
 	photon_ready = true
 end)

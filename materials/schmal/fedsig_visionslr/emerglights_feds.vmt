@@ -1,18 +1,28 @@
 "VertexLitGeneric"
 {
 	"$basetexture"		"schmal/fedsig_visionslr/skin0"
+	"$nocull" 1
 	"$additive" 0
 	"$bumpmap" 		"schmal/shared/flat"
-	"$phong"			"1"
+	"$phong"			1
 	"$nodecal"		"1"
-	"$phongboost"		"256"
+	"$phongboost"		1
 	"$model" 			"1"
-	"$phongexponent" 		"1"
+	"$phongexponent" 		64
 	"$halflambert" 		"1"
-	"$rimlight" 		"2"
+	"$rimlight" 		"1"
 	"$translucent" 		"1"
 	"$surfaceprop" "Glass"
 	"$envmap" "env_cubemap"
 	"$envmaptint" "[.1 .1 .1]"
 	"$rimmask" "0"
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
 }

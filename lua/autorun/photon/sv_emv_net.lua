@@ -18,6 +18,7 @@ util.AddNetworkString( "photon_myunitnumber" )
 util.AddNetworkString( "photon_availableskins" )
 util.AddNetworkString( "photon_setautoskin" )
 util.AddNetworkString( "emvu_color" )
+util.AddNetworkString( "photon_license_mat" )
 
 local can_change_siren_model = GetConVar( "photon_emv_changesirens" )
 local can_change_light_presets = GetConVar( "photon_emv_changepresets" )
@@ -257,3 +258,13 @@ function Photon.Net.ReceiveSkinChangeRequest( len, ply )
 	end
 end
 net.Receive( "photon_setautoskin", function( len, ply ) Photon.Net.ReceiveSkinChangeRequest( len, ply ) end )
+
+function Photon.Net.SetLicenseMaterial( len, ply )
+	local ent = net.ReadEntity()
+	local mat = net.ReadString()
+	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent )
+	if modifyBlocked != false then
+		ent:Photon_SetLicenseMaterial( mat )
+	end
+end
+net.Receive( "photon_license_mat", function( len, ply ) Photon.Net.SetLicenseMaterial( len, ply ) end )
