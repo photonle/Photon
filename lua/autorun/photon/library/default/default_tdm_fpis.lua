@@ -415,7 +415,7 @@ EMV.Auto = {
 		ID = "Federal Signal Vision SLR",
 		Scale = .88,
 		Pos = Vector( 0, -9, 79.8 ),
-		Ang = Angle( 0, 90, 0),
+		Ang = Angle( 1, 90, 0),
 	},
 	[5] = {
 		ID = "Whelen Justice",
@@ -2093,7 +2093,7 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 		Options = {
 			{ Name = "Default", Bodygroups = { { 19, 0 } } },
 			{ Name = "Whelen PAR-46", Auto = { 61 }, Props = { 9 }, Bodygroups = { { 19, 1 } } },
-			{ Name = "None", Auto = { 61 }, Bodygroups = { { 19, 1 } } },
+			{ Name = "None", Bodygroups = { { 19, 1 } } },
 		}
 	},
 	{

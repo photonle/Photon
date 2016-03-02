@@ -44,6 +44,7 @@ end)
 function EMVU.Net:Siren( ply, args )
 	local emv = ply:GetVehicle()
 	if not emv:IsEMV() then return end
+	local argNum = tonumber( args )
 	if args == "on" then
 		emv:ELS_SirenOn()
 	elseif args == "off" then
@@ -54,6 +55,8 @@ function EMVU.Net:Siren( ply, args )
 		emv:ELS_HornOn()
 	elseif args == "hoff" then
 		emv:ELS_HornOff()
+	elseif isnumber( argNum ) then
+		emv:ELS_SirenToggle( argNum )
 	end
 end
 net.Receive("emvu_siren", function( len, ply )

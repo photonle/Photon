@@ -9,18 +9,29 @@ local CW = "C_WHITE"
 local SW = "S_WHITE"
 local G = "GREEN"
 local RB = "BLUE/RED"
+local WA = "AMBER/WHITE"
 
-local name = "Federal Signal Vision SLR"
+local name = "Federal Signal Vision SLR Clear"
 
 local COMPONENT = {}
 
 COMPONENT.Model = "models/schmal/vision_lightbar_ii.mdl"
-COMPONENT.Skin = 0
+COMPONENT.Skin = 3
 COMPONENT.Lightbar = true
 COMPONENT.NotLegacy = true
 COMPONENT.Bodygroups = {}
 COMPONENT.Category = "Lightbar"
 COMPONENT.RotationEnabled = true
+COMPONENT.DefaultColors = {
+	[1] = "AMBER/WHITE",
+	[2] = "RED/BLUE",
+	[3] = "BLUE/RED",
+	[4] = "AMBER/RED",
+	[5] = "AMBER/BLUE",
+	[6] = "RED/BLUE",
+	[7] = "BLUE/RED",
+}
+
 
 COMPONENT.Meta = {
 	visionslr_a = {
@@ -89,109 +100,114 @@ COMPONENT.Bones = {
 		Bone = 6,
 		AxisP = "p", -- pitch of bone affects pitch of rendered light
 		AxisY = "r", -- yaw of bone affects roll of rendered light
-		AxisR = "y" -- roll of bone affects ya of rendered light
+		AxisR = "y" -- roll of bone affects yaw of rendered light
 	},
 	["L2A"] = {
 		Bone = 2,
 		AxisP = "p", -- pitch of bone affects pitch of rendered light
 		AxisY = "r", -- yaw of bone affects roll of rendered light
-		AxisR = "y" -- roll of bone affects ya of rendered light
+		AxisR = "y" -- roll of bone affects yaw of rendered light
 	},
 	["L2B"] = {
 		Bone = 14,
 		AxisP = "p", -- pitch of bone affects pitch of rendered light
 		AxisY = "r", -- yaw of bone affects roll of rendered light
-		AxisR = "y" -- roll of bone affects ya of rendered light
+		AxisR = "y" -- roll of bone affects yaw of rendered light
 	},
 	["L3A"] = {
 		Bone = 8,
 		AxisP = "p", -- pitch of bone affects pitch of rendered light
 		AxisY = "r", -- yaw of bone affects roll of rendered light
-		AxisR = "y" -- roll of bone affects ya of rendered light
+		AxisR = "y" -- roll of bone affects yaw of rendered light
 	},
 	["L3B"] = {
 		Bone = 4,
 		AxisP = "p", -- pitch of bone affects pitch of rendered light
 		AxisY = "r", -- yaw of bone affects roll of rendered light
-		AxisR = "y" -- roll of bone affects ya of rendered light
+		AxisR = "y" -- roll of bone affects yaw of rendered light
 	},
 	["L4A"] = {
 		Bone = 12,
 		AxisP = "p", -- pitch of bone affects pitch of rendered light
 		AxisY = "r", -- yaw of bone affects roll of rendered light
-		AxisR = "y" -- roll of bone affects ya of rendered light
+		AxisR = "y" -- roll of bone affects yaw of rendered light
 	},
 	["L4B"] = {
 		Bone = 10,
 		AxisP = "p", -- pitch of bone affects pitch of rendered light
 		AxisY = "r", -- yaw of bone affects roll of rendered light
-		AxisR = "y" -- roll of bone affects ya of rendered light
+		AxisR = "y" -- roll of bone affects yaw of rendered light
 	}
 }
 
 COMPONENT.BoneOperations = {
 	[2] = { -- L2A
-		Default = { "S", 0, 25 },
-		Illumination = {
-			T = { "S", 0, 25 },
-			F = { "S", 0, 25 }
-		},
+		Default = { "S", 180, 25 },
+		Illumination = { F = { "S", 0, 50 }, },
 		Primary = {
 			M1 = { "S", 0, 25 }, -- static at 0 degrees
-			M2 = { "R", 0, 50 }, -- static at 0 degrees
-			M3 = { "RN", 0, 70 }, -- static at 0 degrees
+			M2 = { "A", { 90, 270 }, 50 }, -- static at 0 degrees
+			M3 = { "RN", 0, 90 }, -- static at 0 degrees
 		},
 	},
 	[4] = { -- L3B
-		Default = { "S", 0, 25 },
+		Default = { "S", 240, 25 },
+		Illumination = {
+			T = { "S", 0, 50 },
+			F = { "S", 0, 50 },
+		},
 		Primary = {
-			M1 = { "S", 0, 25 }, -- static at 0 degrees
-			M2 = { "RN", 0, 75 }, -- static at 0 degrees
-			M3 = { "R", 0, 74 }, -- static at 0 degrees
+			M1 = { "S", 180, 25 }, -- static at 0 degrees
+			M2 = { "R", 0, 85 }, -- static at 0 degrees
+			M3 = { "R", 0, 90 }, -- static at 0 degrees
 		}
 	},
 	[6] = { -- FRONT
 		Default = { "S", 0, 25 },
+		Illumination = { F = { "S", 0, 50 }, },
 		Primary = {
 			M1 = { "S", 0, 25 }, -- static at 0 degrees
 			M2 = { "RN", 0, 70 },
-			M3 = { "A", { 90, 270 }, 40 },
+			M3 = { "A", { 90, 270 }, 85 },
 		}
 	},
 	[8] = { -- L3A
-		Default = { "S", 0, 25 },
+		Default = { "S", 60, 25 },
+		Illumination = {
+			T = { "S", 0, 50 },
+			F = { "S", 0, 50 },
+		},
 		Primary = {
-			M1 = { "S", 0, 25 }, -- static at 0 degrees
-			M2 = { "RN", 0, 75 }, -- static at 0 degrees
-			M3 = { "R", 0, 76 }, -- static at 0 degrees
+			M1 = { "S", 180, 25 }, -- static at 0 degrees
+			M2 = { "R", 0, 85 }, -- static at 0 degrees
+			M3 = { "R", 0, 90 }, -- static at 0 degrees
 		}
 	},
 	[10] = { -- L4B
-		Default = { "S", 0, 25 },
+		Default = { "S", 120, 25 },
+		Illumination = { F = { "S", 0, 50 }, L = { "S", 90, 50 },  },
 		Primary = {
-			M1 = { "S", 180, 25 }, -- static at 0 degrees
+			M1 = { "R", 0, 75 }, -- static at 0 degrees
 			M2 = { "RN", 0, 75 }, -- static at 0 degrees
-			M3 = { "RN", 0, 84 }, -- static at 0 degrees
+			M3 = { "R", 0, 90 }, -- static at 0 degrees
 		}
 	},
 	[12] = { -- L4A
-		Default = { "S", 0, 25 },
+		Default = { "S", 300, 25 },
+		Illumination = { F = { "S", 0, 50 }, R = { "S", 270, 50 }, },
 		Primary = {
-			M1 = { "S", 180, 25 }, -- static at 0 degrees
+			M1 = { "R", 0, 75 }, -- static at 0 degrees
 			M2 = { "RN", 0, 75 }, -- static at 0 degrees
-			M3 = { "RN", 0, 86 }, -- static at 0 degrees
+			M3 = { "R", 0, 90 }, -- static at 0 degrees
 		}
 	},
 	[14] = { -- L2B
 		Default = { "S", 0, 25 },
-		Illumination = {
-			T = { "S", 0, 25 },
-			F = { "S", 0, 25 },
-		},
+		Illumination = { F = { "S", 0, 50 }, },
 		Primary = {
 			M1 = { "S", 0, 25 }, -- static at 0 degrees
-			M2 = { "R", 0, 50 }, -- static at 0 degrees
-			M3 = { "RN", 0, 70 }, -- static at 0 degrees
+			M2 = { "A", { 90, 270 }, 50 }, -- static at 0 degrees
+			M3 = { "RN", 0, 90 }, -- static at 0 degrees
 		}
 	},
 
@@ -240,14 +256,14 @@ COMPONENT.Positions = {
 
 COMPONENT.Sections = {
 	["auto_fedsig_visionslr"] = {
-		[1] = { { 1, R }, { 2, W }, { 3, W }, { 4, R }, { 5, R }, { 6, RB }, { 7, RB }, 
-			{ 8, R }, { 9, W }, { 10, W }, { 11, R }, { 12, R }, { 13, RB }, { 14, RB },  
+		[1] = { { 1, "_1" }, { 2, "_2" }, { 3, "_3" }, { 4, "_4" }, { 5, "_5" }, { 6, "_6" }, { 7, "_7" }, 
+			{ 8, "_1" }, { 9, "_2" }, { 10, "_3" }, { 11, "_4" }, { 12, "_5" }, { 13, "_6" }, { 14, "_7" },  
 		},
 		[2] = {
-			{ 4, R }, { 11, R }, { 7, RB }, { 14, RB }
+			{ 5, "_5" }, { 12, "_5" }, { 6, "_6" }, { 13, "_6" }, { 7, "_7" }, { 14, "_7" }
 		},
 		[3] = {
-			{ 5, R }, { 12, R }, { 6, RB }, { 13, RB }
+			{ 4, "_4" }, { 11, "_4" }, { 7, "_7" }, { 14, "_7" }, { 6, "_6" }, { 13, "_6" }
 		}
 	},
 	["auto_fedsig_visionslr_traffic"] = {
@@ -327,16 +343,17 @@ COMPONENT.Modes = {
 		},
 	Illumination = {
 		L = {
-			{ 21, W }
+			{ 21, W }, { 7, W }, { 14, W }
 		},
 		R = {
-			{ 22, W }
+			{ 22, W }, { 6, W }, { 13, W }
 		},
 		T = {
-			{ 2, W }, { 3, W }, { 9, W }, { 10, W }
+			{ 4, W }, { 5, W }, { 11, W }, { 12, W }
 		},
 		F = {
-			{ 2, W }, { 3, W }, { 9, W }, { 10, W }
+			{ 1, W }, { 2, W }, { 3, W }, { 4, W }, { 5, W }, { 6, W }, { 7, W },
+			{ 8, W }, { 9, W }, { 10, W }, { 11, W }, { 12, W }, { 13, W }, { 14, W },
 		}
 	}
 }

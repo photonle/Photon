@@ -9,13 +9,14 @@ local CW = "C_WHITE"
 local SW = "S_WHITE"
 local G = "GREEN"
 local RB = "BLUE/RED"
+local WA = "AMBER/WHITE"
 
-local name = "Federal Signal Vision SLR"
+local name = "Federal Signal Vision SLR R/B"
 
 local COMPONENT = {}
 
 COMPONENT.Model = "models/schmal/vision_lightbar_ii.mdl"
-COMPONENT.Skin = 0
+COMPONENT.Skin = 2
 COMPONENT.Lightbar = true
 COMPONENT.NotLegacy = true
 COMPONENT.Bodygroups = {}
@@ -132,26 +133,29 @@ COMPONENT.Bones = {
 COMPONENT.BoneOperations = {
 	[2] = { -- L2A
 		Default = { "S", 0, 25 },
-		Illumination = {
-			T = { "S", 0, 25 },
-			F = { "S", 0, 25 }
-		},
 		Primary = {
 			M1 = { "S", 0, 25 }, -- static at 0 degrees
-			M2 = { "R", 0, 50 }, -- static at 0 degrees
-			M3 = { "RN", 0, 70 }, -- static at 0 degrees
+			M2 = { "A", { 90, 270 }, 50 }, -- static at 0 degrees
+			M3 = { "RN", 0, 90 }, -- static at 0 degrees
 		},
 	},
 	[4] = { -- L3B
 		Default = { "S", 0, 25 },
+		Illumination = {
+			T = { "S", 0, 25 },
+			F = { "S", 0, 25 },
+		},
 		Primary = {
-			M1 = { "S", 0, 25 }, -- static at 0 degrees
-			M2 = { "RN", 0, 75 }, -- static at 0 degrees
+			M1 = { "S", 180, 25 }, -- static at 0 degrees
+			M2 = { "R", 0, 85 }, -- static at 0 degrees
 			M3 = { "R", 0, 74 }, -- static at 0 degrees
 		}
 	},
 	[6] = { -- FRONT
 		Default = { "S", 0, 25 },
+		Illumination = {
+			F = { "S", 0, 25 },
+		},
 		Primary = {
 			M1 = { "S", 0, 25 }, -- static at 0 degrees
 			M2 = { "RN", 0, 70 },
@@ -160,16 +164,20 @@ COMPONENT.BoneOperations = {
 	},
 	[8] = { -- L3A
 		Default = { "S", 0, 25 },
+		Illumination = {
+			T = { "S", 0, 25 },
+			F = { "S", 0, 25 },
+		},
 		Primary = {
-			M1 = { "S", 0, 25 }, -- static at 0 degrees
-			M2 = { "RN", 0, 75 }, -- static at 0 degrees
+			M1 = { "S", 180, 25 }, -- static at 0 degrees
+			M2 = { "R", 0, 85 }, -- static at 0 degrees
 			M3 = { "R", 0, 76 }, -- static at 0 degrees
 		}
 	},
 	[10] = { -- L4B
 		Default = { "S", 0, 25 },
 		Primary = {
-			M1 = { "S", 180, 25 }, -- static at 0 degrees
+			M1 = { "S", 0, 25 }, -- static at 0 degrees
 			M2 = { "RN", 0, 75 }, -- static at 0 degrees
 			M3 = { "RN", 0, 84 }, -- static at 0 degrees
 		}
@@ -177,21 +185,17 @@ COMPONENT.BoneOperations = {
 	[12] = { -- L4A
 		Default = { "S", 0, 25 },
 		Primary = {
-			M1 = { "S", 180, 25 }, -- static at 0 degrees
+			M1 = { "S", 0, 25 }, -- static at 0 degrees
 			M2 = { "RN", 0, 75 }, -- static at 0 degrees
 			M3 = { "RN", 0, 86 }, -- static at 0 degrees
 		}
 	},
 	[14] = { -- L2B
 		Default = { "S", 0, 25 },
-		Illumination = {
-			T = { "S", 0, 25 },
-			F = { "S", 0, 25 },
-		},
 		Primary = {
 			M1 = { "S", 0, 25 }, -- static at 0 degrees
-			M2 = { "R", 0, 50 }, -- static at 0 degrees
-			M3 = { "RN", 0, 70 }, -- static at 0 degrees
+			M2 = { "A", { 90, 270 }, 50 }, -- static at 0 degrees
+			M3 = { "RN", 0, 90 }, -- static at 0 degrees
 		}
 	},
 
@@ -240,14 +244,14 @@ COMPONENT.Positions = {
 
 COMPONENT.Sections = {
 	["auto_fedsig_visionslr"] = {
-		[1] = { { 1, R }, { 2, W }, { 3, W }, { 4, R }, { 5, R }, { 6, RB }, { 7, RB }, 
-			{ 8, R }, { 9, W }, { 10, W }, { 11, R }, { 12, R }, { 13, RB }, { 14, RB },  
+		[1] = { { 1, WA }, { 2, R }, { 3, B }, { 4, WA }, { 5, WA }, { 6, B }, { 7, R }, 
+			{ 8, WA }, { 9, R }, { 10, B }, { 11, WA }, { 12, WA }, { 13, B }, { 14, R },  
 		},
 		[2] = {
-			{ 4, R }, { 11, R }, { 7, RB }, { 14, RB }
+			{ 5, WA }, { 12, WA }, { 6, B }, { 13, B }
 		},
 		[3] = {
-			{ 5, R }, { 12, R }, { 6, RB }, { 13, RB }
+			{ 4, WA }, { 11, WA }, { 7, R }, { 14, R }
 		}
 	},
 	["auto_fedsig_visionslr_traffic"] = {
@@ -333,10 +337,10 @@ COMPONENT.Modes = {
 			{ 22, W }
 		},
 		T = {
-			{ 2, W }, { 3, W }, { 9, W }, { 10, W }
+			{ 4, W }, { 5, W }, { 11, W }, { 12, W }
 		},
 		F = {
-			{ 2, W }, { 3, W }, { 9, W }, { 10, W }
+			{ 4, W }, { 5, W }, { 11, W }, { 12, W }, { 1, W }, { 8, W }
 		}
 	}
 }

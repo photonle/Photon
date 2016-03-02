@@ -301,15 +301,24 @@ function EMVU:MakeEMV( ent, emv )
 		self.ELS.SirenContinue = CurTime()
 	end
 
-	function ent:ELS_SirenToggle()
+	function ent:ELS_SirenToggle( requestIndex )
 		if not IsValid( self ) then return end
 		if self:ELS_NoSiren() then return end
-		if self:ELS_SirenOption() >= #EMVU.Sirens[self:ELS_SirenSet()].Set then
-			self:ELS_SirenOption( 1 )
+		if requestIndex and not isnumber( requestIndex ) then requestIndex = 1 end
+		if requestIndex and requestIndex < 1 then requestIndex = 1 end
+		if not requestIndex then 
+			if self:ELS_SirenOption() >= #EMVU.Sirens[self:ELS_SirenSet()].Set then
+				self:ELS_SirenOption( 1 )
+			else
+				self:ELS_SirenOption( self:ELS_SirenOption() + 1 )
+			end
 		else
-			self:ELS_SirenOption( self:ELS_SirenOption() + 1 )
+			if requestIndex > #EMVU.Sirens[self:ELS_SirenSet()].Set then
+				self:ELS_SirenOption( 1 )
+			else
+				self:ELS_SirenOption( requestIndex )
+			end
 		end
-
 		if self:ELS_Siren() then
 			self:ELS_SirenOff( true )
 			self:ELS_SirenOn()

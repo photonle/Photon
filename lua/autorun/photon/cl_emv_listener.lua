@@ -10,6 +10,10 @@ local key_horn = GetConVar( "photon_key_horn" )
 local key_manual = GetConVar( "photon_key_manual" )
 local key_illum = GetConVar( "photon_key_radar" )
 local key_radar = GetConVar( "photon_key_radar" )
+local key_siren1 = GetConVar( "photon_key_siren1" )
+local key_siren2 = GetConVar( "photon_key_siren2" )
+local key_siren3 = GetConVar( "photon_key_siren3" )
+local key_siren4 = GetConVar( "photon_key_siren4" )
 local should_render =  GetConVar( "photon_emerg_enabled" )
 
 hook.Add( "InitPostEntity", "Photon.SetupLocalKeyBinds", function()
@@ -167,6 +171,54 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 		SIRENTOGGLE_DOWN = true
 	elseif SIRENTOGGLE_DOWN and not keyDown( key_siren_alt:GetInt() ) then
 		SIRENTOGGLE_DOWN = false
+	end
+
+	if not SIRENTOGGLE1_DOWN and keyDown( key_siren1:GetInt() ) then
+		if emv:Photon_Lights() then
+			surface.PlaySound( EMVU.Sounds.Up )
+		else
+			surface.PlaySound( EMVU.Sounds.Down )
+		end
+		EMVU.Net:Siren("1")
+		SIRENTOGGLE1_DOWN = true
+	elseif SIRENTOGGLE1_DOWN and not keyDown( key_siren1:GetInt() ) then
+		SIRENTOGGLE1_DOWN = false
+	end
+
+	if not SIRENTOGGLE2_DOWN and keyDown( key_siren2:GetInt() ) then
+		if emv:Photon_Lights() then
+			surface.PlaySound( EMVU.Sounds.Up )
+		else
+			surface.PlaySound( EMVU.Sounds.Down )
+		end
+		EMVU.Net:Siren("2")
+		SIRENTOGGLE2_DOWN = true
+	elseif SIRENTOGGLE2_DOWN and not keyDown( key_siren2:GetInt() ) then
+		SIRENTOGGLE2_DOWN = false
+	end
+
+	if not SIRENTOGGLE3_DOWN and keyDown( key_siren3:GetInt() ) then
+		if emv:Photon_Lights() then
+			surface.PlaySound( EMVU.Sounds.Up )
+		else
+			surface.PlaySound( EMVU.Sounds.Down )
+		end
+		EMVU.Net:Siren("3")
+		SIRENTOGGLE3_DOWN = true
+	elseif SIRENTOGGLE3_DOWN and not keyDown( key_siren3:GetInt() ) then
+		SIRENTOGGLE3_DOWN = false
+	end
+
+	if not SIRENTOGGLE4_DOWN and keyDown( key_siren4:GetInt() ) then
+		if emv:Photon_Lights() then
+			surface.PlaySound( EMVU.Sounds.Up )
+		else
+			surface.PlaySound( EMVU.Sounds.Down )
+		end
+		EMVU.Net:Siren("4")
+		SIRENTOGGLE4_DOWN = true
+	elseif SIRENTOGGLE4_DOWN and not keyDown( key_siren4:GetInt() ) then
+		SIRENTOGGLE4_DOWN = false
 	end
 
 	if not BLKOUTON_DOWN and keyDown( key_blackout:GetInt() ) then

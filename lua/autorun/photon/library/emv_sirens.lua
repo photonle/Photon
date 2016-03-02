@@ -3,7 +3,8 @@ AddCSLuaFile()
 -- This file contains all the sirens used.
 -- Tables are numbered to avoid vehicles using the wrong siren set from being rearranged.
 
-timer.Simple( 30, function()  -- to restore any modifications done to the siren table
+timer.Simple( 30, function()  -- to restore any modifications done to the siren table	
+	
 	EMVU.Sirens = {
 	
 	[1] = {
@@ -446,7 +447,73 @@ timer.Simple( 30, function()  -- to restore any modifications done to the siren 
 			{Name = "XMAS", Sound = "emv/sirens/holiday/wish.wav", Icon="wail"},
 		}
 	},
+	-- [48] = {
+	-- 	Name = "295 (Alternate)",
+	-- 	Category = "Whelen",
+	-- 	Set = {
+	-- 		{Name = "WAIL", Sound = "emv/sirens/whelen 295/wail_alternate.wav", Icon="wail"},
+	-- 		{Name = "WARB", Sound = "emv/sirens/whelen 295/warble.wav", Icon="wail"},
+	-- 		-- {Name = "YELP", Sound = "emv/sirens/whelen gamma/emv_yelp.wav", Icon="yelp"},
+	-- 		-- {Name = "PIER", Sound = "emv/sirens/whelen gamma/emv_pier.wav", Icon="phaser"},
+	-- 	},
+	-- },
+	[48] = {
+		Name = "Street Thunder 800",
+		Category = "Galls",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/galls street thunder 800/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/galls street thunder 800/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/galls street thunder 800/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/galls street thunder 800/emv_hilo.wav", Icon = "hilo"},
+		},
+		Horn = "emv/sirens/galls street thunder 800/emv_horn.wav",
+	},
+	[49] = {
+		Name = "Whelen Cencom Sapphire", -- The unmodified with the high pitch version that's used by various forces in the UK.
+		Category = "Woodway Eng.",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/whelen cencom sapphire/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/whelen cencom sapphire/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/whelen cencom sapphire/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/whelen cencom sapphire/emv_hilo.wav", Icon = "hilo"},
+		},
+		Horn = "emv/sirens/whelen cencom sapphire/emv_horn.wav",
+	},
+	[50] = {
+		Name = "295HFSA6",
+		Category = "Whelen",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/whelen 295hsfa6/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/whelen 295hsfa6/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/whelen 295hsfa6/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/whelen 295hsfa6/emv_hilo.wav", Icon = "hilo"},
+		},
+		Horn = "emv/sirens/whelen 295hsfa6/emv_horn.wav",
+	},
+	[51] = {
+		Name = "CO19 STIRLING", -- Old styled siren typically used by the Met's armed responce team in the late 2000's
+		Category = "Woodway Eng.",
+		Set = { -- 
+			{Name = "WAIL", Sound = "emv/sirens/co19/emv_wail.wav"},
+			{Name = "YELP", Sound = "emv/sirens/co19/emv_yelp.wav"},
+			{Name = "HYPER-YELP", Sound = "emv/sirens/co19/emv_phaser.wav"},
+			{Name = "HI-LO", Sound = "emv/sirens/co19/emv_hilo.wav"},
+		},
+		Horn = "emv/sirens/co19/emv_horn.wav",
+	},
+	[52] = {
+		Name = "West Midlands", -- The siren typically found within  the West Midlands in the UK.
+		Category = "Woodway Eng.",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/west mids/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/west mids/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/west mids/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/west mids/emv_hilo.wav", Icon = "hilo"},
+		},
+		Horn = "emv/sirens/whelen cencom sapphire/emv_horn.wav",
+	},
 }
+
 end )
 
 EMVU.Sirens = {
@@ -890,6 +957,71 @@ EMVU.Sirens = {
 		Set = {
 			{Name = "XMAS", Sound = "emv/sirens/holiday/wish.wav", Icon="wail"},
 		}
+	},
+	-- [48] = {
+	-- 	Name = "295 (Alternate)",
+	-- 	Category = "Whelen",
+	-- 	Set = {
+	-- 		{Name = "WAIL", Sound = "emv/sirens/whelen 295/wail_alternate.wav", Icon="wail"},
+	-- 		{Name = "WARB", Sound = "emv/sirens/whelen 295/warble.wav", Icon="wail"},
+	-- 		-- {Name = "YELP", Sound = "emv/sirens/whelen gamma/emv_yelp.wav", Icon="yelp"},
+	-- 		-- {Name = "PIER", Sound = "emv/sirens/whelen gamma/emv_pier.wav", Icon="phaser"},
+	-- 	},
+	-- },
+	[48] = {
+		Name = "Street Thunder 800",
+		Category = "Galls",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/galls street thunder 800/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/galls street thunder 800/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/galls street thunder 800/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/galls street thunder 800/emv_hilo.wav", Icon = "hilo"},
+		},
+		Horn = "emv/sirens/galls street thunder 800/emv_horn.wav",
+	},
+	[49] = {
+		Name = "Whelen Cencom Sapphire", -- The unmodified with the high pitch version that's used by various forces in the UK.
+		Category = "Woodway Eng.",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/whelen cencom sapphire/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/whelen cencom sapphire/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/whelen cencom sapphire/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/whelen cencom sapphire/emv_hilo.wav", Icon = "hilo"},
+		},
+		Horn = "emv/sirens/whelen cencom sapphire/emv_horn.wav",
+	},
+	[50] = {
+		Name = "295HFSA6",
+		Category = "Whelen",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/whelen 295hsfa6/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/whelen 295hsfa6/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/whelen 295hsfa6/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/whelen 295hsfa6/emv_hilo.wav", Icon = "hilo"},
+		},
+		Horn = "emv/sirens/whelen 295hsfa6/emv_horn.wav",
+	},
+	[51] = {
+		Name = "CO19 STIRLING", -- Old styled siren typically used by the Met's armed responce team in the late 2000's
+		Category = "Woodway Eng.",
+		Set = { -- 
+			{Name = "WAIL", Sound = "emv/sirens/co19/emv_wail.wav"},
+			{Name = "YELP", Sound = "emv/sirens/co19/emv_yelp.wav"},
+			{Name = "HYPER-YELP", Sound = "emv/sirens/co19/emv_phaser.wav"},
+			{Name = "HI-LO", Sound = "emv/sirens/co19/emv_hilo.wav"},
+		},
+		Horn = "emv/sirens/co19/emv_horn.wav",
+	},
+	[52] = {
+		Name = "West Midlands", -- The siren typically found within  the West Midlands in the UK.
+		Category = "Woodway Eng.",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/west mids/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/west mids/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/west mids/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/west mids/emv_hilo.wav", Icon = "hilo"},
+		},
+		Horn = "emv/sirens/whelen cencom sapphire/emv_horn.wav",
 	},
 }
 

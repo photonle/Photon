@@ -493,7 +493,7 @@ EMV.Auto = {
 	[7] = {
 		ID = "Whelen Liberty SX",
 		Scale = .98,
-		Pos = Vector( 0, -8, 83 ),
+		Pos = Vector( 0, -3.4, 84.6 ),
 		Ang = Angle( 1, 90, 0),
 	},
 	[8] = {
@@ -2025,5 +2025,5 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 }
 
 Photon.EMVLibrary[name] = EMV
-if EMVU then EMVU:OverwriteIndex( name, EMV ) end
+-- if EMVU then EMVU:OverwriteIndex( name, EMV ) end
 -- if PI then Photon:OverwriteIndex( name, PI ) end

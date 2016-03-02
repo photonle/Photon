@@ -1889,5 +1889,5 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 }
 
 Photon.EMVLibrary[name] = EMV
-if EMVU then EMVU:OverwriteIndex( name, EMV ) end
+-- if EMVU then EMVU:OverwriteIndex( name, EMV ) end
 -- if PI then Photon:OverwriteIndex( name, PI ) end

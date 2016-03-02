@@ -472,6 +472,8 @@ end
 -- [1] = "RE", [2] = "BONE_NAME", [3] = Vector relative pos to bone, [4] = Angle relative to bone
 
 function EMVU.Helper.GetPositionFromRE( car, lbEntity, posInput, returnWorld )
+	if not IsValid( lbEntity ) then return Vector(), Angle(), 0 end
+	if not lbEntity.PhotonLocalAngs then lbEntity.PhotonLocalAngs = Vector() end
 	local name = car:EMVName()
 	local posData
 	if not istable( posInput ) then posData = EMVU.Positions[ name ][ posIndex ] else posData = posInput end
@@ -482,6 +484,7 @@ function EMVU.Helper.GetPositionFromRE( car, lbEntity, posInput, returnWorld )
 	local boneData = EMVU.Auto[ tostring(lbEntity.ComponentName) ].Bones[ posData[2] ]
 	local boneIndex = boneData.Bone
 	local boneWorldPos, boneWorldAng = lbEntity:GetBonePosition( boneIndex )
+	-- local boneMatrix = lbEntity:GetBoneMatrix( )
 	-- local bonePos = car:WorldToLocal( boneWorldPos )
 	-- local boneAng = car:WorldToLocalAngles( boneWorldAng )
 	local bonePos, boneAng 
@@ -495,17 +498,30 @@ function EMVU.Helper.GetPositionFromRE( car, lbEntity, posInput, returnWorld )
 	
 	local newPos = Vector()
 	local newAng = Angle()
+	-- print(tostring(lbEntity:GetAngles().p))
+	local contingentTransform = ( math.abs(lbEntity.PhotonLocalAngs.p) > 0 )
 	newPos:Set( posVector )
 	newAng:Set( boneAng )
+	-- if contingentTransform then
+	-- 	local tempVector = Angle()
+	-- 	tempVector:Set( newAng )
+	-- 	newAng.p = tempVector.p + posAngle.p
+	-- 	newAng.r = tempVector.y + posAngle.y
+	-- 	newAng.y = (tempVector.r + posAngle.r) - 90
+	-- else
+	-- 	newAng.p = newAng.p + posAngle.p
+	-- 	newAng.y = newAng.y + posAngle.y
+	-- 	newAng.r = newAng.r + posAngle.r
+	-- end
 	newAng.p = newAng.p + posAngle.p
-	newAng.y = newAng.y + posAngle.y
-	newAng.r = newAng.r + posAngle.r
+		newAng.y = newAng.y + posAngle.y
+		newAng.r = newAng.r + posAngle.r
 	newPos:Rotate( newAng )
 	newPos:Add( bonePos )
 	-- print( "Car: " .. tostring( car:GetAngles() ) )
 	-- print( "World to local: " .. tostring(newAng))
 	-- print( "Raw manipupated: " .. tostring(lbEntity:GetManipulateBoneAngles( boneIndex )))
-	return newPos, newAng, lbEntity:GetManipulateBoneAngles( boneIndex ).r
+	return newPos, newAng, lbEntity:GetManipulateBoneAngles( boneIndex ).r, contingentTransform
 end
 
 function EMVU.Helper.GetBonePositionFromRE( car, lbEntity, posInput )

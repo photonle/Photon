@@ -72,7 +72,7 @@ function Photon:ClearLightQueue()
 	table.Empty( photonDynamicLights )
 end
 
-function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic )
+function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent )
 	if lnum == 14 then
 		-- print( string.format( "Type:%s\nParent:%s\nColors:%s\nLocal Position:%s\nGlobal Position:%s\nLocal Angle:%s\nMeta:%s\nPixVis:%s\nLocal Number:%s\n", 
 		-- tostring(type), tostring(parent), tostring(incolors), tostring(ilpos), tostring(gpos), tostring(lang), tostring(meta), tostring(pixvis), tostring(lnum) ))
@@ -83,6 +83,7 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
 	-- PrintTable( meta )
 	-- PrintTable( incolors )
+	-- print(tostring(lang))
 	local legacy = true
 	if meta.NoLegacy == true then legacy = false end
 	local colors = incolors
@@ -161,8 +162,10 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	if not meta.WMult then meta.WMult = 1 end
 	local ca = parent:GetAngles()
 	local lightNormal = Angle()
-	if legacy then
+	if legacy and not contingent then
 		ca:RotateAroundAxis( parent:GetUp(), ( lang.y + offset ) )
+	elseif contingent then
+		ca:RotateAroundAxis( parent:GetUp(), ( lang.r + 180 ) )
 	else
 		if meta.DirAxis and not rotating then
 			ca:RotateAroundAxis( parent["Get"..meta.DirAxis](parent), lang.r - meta.DirOffset )

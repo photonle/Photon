@@ -54,6 +54,17 @@ function EMVU:MakeEMV( emv, name )
 		return EMVU.Sequences[ self:EMVName() ].Sequences[ currentIndex ].Stage or ""
 	end
 
+	function emv:Photon_AuxOptionID()
+		local currentIndex = self:Photon_TrafficAdvisorOption()
+		return EMVU.Sequences[ self:EMVName() ].Traffic[ currentIndex ].Stage or ""
+	end
+
+	function emv:Photon_IllumOptionID()
+		local currentIndex = self:Photon_IllumOption()
+		if not EMVU.Sequences[ self:EMVName() ] or not EMVU.Sequences[ self:EMVName() ].Illumination then return "" end
+		return EMVU.Sequences[ self:EMVName() ].Illumination[ currentIndex ].Stage or ""
+	end
+
 	function emv:Photon_Siren()
 		if not IsValid( self ) then return false end
 		return self:GetDTBool( EMV_SIREN_ON )
@@ -125,6 +136,10 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_TrafficAdvisor()
 		if not IsValid( self ) then return false end
 		return self:GetDTBool( EMV_TRF_ON )
+	end
+
+	function emv:Photon_AuxLights()
+		return self:Photon_TrafficAdvisor()
 	end
 
 	function emv:Photon_TrafficAdvisorOption()
@@ -439,12 +454,17 @@ function EMVU:MakeEMV( emv, name )
 				end
 				// print(pixviscache[tostring(b[1])])
 				local showDynamic = pos[4] or false
-				local calcPos, calcAng, lrang
+				local calcPos, calcAng, lrang, contingentTransform
 				if pos[1][1] == "RE" then
-					calcPos, calcAng, lrang = EMVU.Helper.GetPositionFromRE( self, self:Photon_GetPropByAutoIndex( pos[1][5] ), pos[1] )
+					calcPos, calcAng, lrang, contingentTransform = EMVU.Helper.GetPositionFromRE( self, self:Photon_GetPropByAutoIndex( pos[1][5] ), pos[1] )
+					-- calcAng.p = -90 -- hacky ass fix because I didn't want to actually figure out why it's so fucked up (TODO)
+					-- calcAng.r = 0
 					-- print(lrang)
+					local minAng = 90
+					local maxAng = 270
+					if meta.reColorAngles then minAng = meta.reColorAngles[1]; maxAng = meta.reColorAngles[2]; end
 					if multiColor then
-						if lrang > 90 and lrang < 270 then
+						if lrang > minAng and lrang < maxAng then
 							col = colorRecycle[1]
 						else
 							col = colorRecycle[2]
@@ -465,7 +485,8 @@ function EMVU:MakeEMV( emv, name )
 						b[3], -- brightness
 						multiColor,
 						0,
-						showDynamic
+						showDynamic,
+						contingentTransform
 					)
 			else
 				print("No position found for: " .. tostring(b[1]))
@@ -596,13 +617,13 @@ function EMVU:MakeEMV( emv, name )
 			prop.ComponentName = p.ComponentName or false
 			prop.PhotonRotationEnabled = p.PhotonRotationEnabled or false
 			prop.PhotonBoneAnimationData = p.PhotonBoneAnimationData or false
+			prop.PhotonLocalAngs = p.Ang
 			prop:SetSolid( SOLID_NONE )
 			prop:SetMoveType( MOVETYPE_NONE )
 			prop:SetCollisionGroup( COLLISION_GROUP_IN_VEHICLE )
 			prop:Activate()
 			prop:Spawn()
 			prop:DrawShadow( false )
-
 			if p.BodyGroups then 
 				for _,group in pairs( p.BodyGroups ) do
 					prop:SetBodygroup( group[1], group[2] )
@@ -853,8 +874,8 @@ function EMVU:MakeEMV( emv, name )
 		snd:EnableLooping( false )
 		snd:Pause()
 		snd:SetPlaybackRate( .005 )
-		snd:Set3DFadeDistance( 500, 2048 )
-		snd:Set3DCone( 90, 180, .5 )
+		snd:Set3DFadeDistance( 500, 1000 )
+		snd:Set3DCone( 90, 180, .88 )
 		snd:SetVolume( 1 )
 		self.Photon_ManualSirenTable.SoundHandle = snd
 		self.Photon_ManualSirenTable.ShouldPlay = false
