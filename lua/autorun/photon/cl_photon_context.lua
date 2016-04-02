@@ -17,7 +17,7 @@ properties.Add( "photon_siren", {
 
 	MenuOpen = function( self, option, ent )
 		
-		local options = EMVU.Sirens
+		local options = EMVU.GetSirenTable()
 		local submenu = option:AddSubMenu()
 
 		local showSecondary = true

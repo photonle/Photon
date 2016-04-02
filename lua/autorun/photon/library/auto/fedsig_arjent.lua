@@ -25,8 +25,13 @@ COMPONENT.Meta = {
 		W = 6.75,
 		H = 6.75,
 		Sprite = "sprites/emv/arjent_main",
-		Scale = 1.25,
-		WMult = 1.5,
+		Scale = .88,
+		WMult = 1,
+		EmitArray = {
+			Vector( 1.4, 0, 0 ),
+			Vector( 0, 0, 0 ),
+			Vector( -1.4, 0, 0 )
+		}
 	},
 	arjent_takedown = {
 		AngleOffset = -90,
@@ -49,8 +54,13 @@ COMPONENT.Meta = {
 		W = 6.75,
 		H = 6.75,
 		Sprite = "sprites/emv/arjent_main",
-		Scale = 1.25,
-		WMult = 1.5,
+		Scale = .88,
+		WMult = 1,
+		EmitArray = {
+			Vector( 1.4, 0, 0 ),
+			Vector( 0, 0, 0 ),
+			Vector( -1.4, 0, 0 )
+		}
 	},
 }
 
@@ -137,8 +147,8 @@ COMPONENT.Sections = {
 		[13] = { { 15, A }, { 17, A }, { 18, A }, { 16, A }, { 14, A } },
 		[14] = { { 17, A }, { 18, A } },
 		[15] = { { 15, A }, { 17, A }, { 18, A }, { 16, A } },
-		[16] = { { 15, A } },
-		[17] = { { 16, A } },
+		[16] = { { 15, A }, {13, A } },
+		[17] = { { 16, A }, {14, A } },
 	}
 }
 
@@ -150,25 +160,25 @@ COMPONENT.Patterns = {
 		["on"] = { 1 },
 	},
 	["auto_fedsig_arjent_inboard"] = {
-		["code2"] = { 1, 1, 1, 0, 2, 2, 2, 0, 1, 1, 1, 0, 2, 2, 2, 0, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 0 },
-		["code3"] = { 2, 2, 0, 1, 1, 0 }
+		["code2"] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
+		["code3"] = { 2, 2, 2, 2, 1, 1, 1, 1 }
 	},
 	["auto_fedsig_arjent_out_mid"] = {
 		["code2"] = { 1, 1, 1, 1, 2, 2, 2 },
-		["code3"] = { 1, 1, 0, 2, 2, 0 }
+		["code3"] = { 1, 1, 1, 2, 2, 2 }
 	},
 	["auto_fedsig_arjent_outter"] = {
-		["code2"] = { 1, 1, 1, 1, 0, 2, 2, 2, 2, 0 },
+		["code2"] = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 1 },
 	},
 	["auto_fedsig_arjent_takedown"] = {
 		["wigwag"] = { 1 }	
 	},
 	["auto_fedsig_arjent_signalmaster"] = {
-		["warn"] = { 1, 1, 1, 1, 0, 2, 2, 2, 2, 0 },
+		["warn"] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },
 		["right"] = { 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 3, 3, 3, 3, 0, 0, 0, 0 },
 		["left"] = { 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 3, 3, 3, 3, 0, 0, 0, 0 },
 		["diverge"] = { 14, 14, 14, 15, 15, 15, 3, 3, 3, 3, 3, 0, 0, 0, 0 },
-		["code1"] = { 16, 16, 16, 16, 0, 17, 17, 17, 17, 0 },
+		["code1"] = { 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17 },
 	},
 
 }
@@ -221,5 +231,4 @@ COMPONENT.Modes = {
 		 }
 	}
 }
-
 EMVU:AddAutoComponent( COMPONENT, name )

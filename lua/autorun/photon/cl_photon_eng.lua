@@ -53,6 +53,8 @@ local mat3 = Material("sprites/emv/light_initial")
 local mat4 = Material("sprites/emv/flare_primary")
 local mat5 = Material("sprites/emv/effect_artifact1")
 local mat6 = Material("sprites/emv/effect_artifact2")
+local mat7 = Material("sprites/emv/dirty_lens_1")
+local mat8 = Material("sprites/emv/dirty_lens_2")
 
 local up1 = Vector()
 
@@ -268,8 +270,9 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		if not meta.SprL then meta.SprL = Vector( meta.W * .5, -meta.H * .5, 0 ) end
 		resultTable[9] = meta.SprL
 		resultTable[10] = worldPos
+		local fovModifier = math.Clamp( ( ( 1 - ( LocalPlayer():GetFOV() / 90 ) ) * 5 ) + 1, 1, 1000 )
 		resultTable[11] = (meta.Scale * viewDot) * manualBloom
-		resultTable[12] = (meta.Scale * viewFlare) * ( manualBloom * manualBloom )
+		resultTable[12] = ((meta.Scale * viewFlare) * fovModifier) * manualBloom
 		resultTable[13] = (meta.Scale * meta.WMult*viewDot) * manualBloom
 		resultTable[14] = srcColor
 
@@ -284,6 +287,21 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		resultTable[22] = cheapLight
 		resultTable[23] = viewFlare
 
+		resultTable[24] = false
+
+		if istable( meta.EmitArray ) then
+			local emitResults = {}
+			for _key,_val in pairs( meta.EmitArray ) do
+				if not isvector( _val ) then continue end
+				emitResults[ #emitResults + 1 ] = Vector()
+				local insertRef = emitResults[ #emitResults ]
+				insertRef:Set( _val )
+				insertRef:Rotate( ua )
+				insertRef:Add( worldPos )
+			end
+			resultTable[24] = emitResults
+		end
+
 		self:AddLightToQueue( resultTable )
 
 	end
@@ -296,7 +314,10 @@ local setRenderLighting = render.SetLightingMode
 local drawQuad = render.DrawQuad
 local endCam = cam.End3D2D
 
-function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, debug_mode )
+local bloomRef = 0
+local bloomColor = nil
+
+function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, debug_mode )
 	if drawSrc then
 		startCam( camPos, camAng, 1 )
 			setRenderLighting( 2 )
@@ -305,32 +326,50 @@ function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 			setRenderLighting( 0 )
 		endCam()
 	end
-
 	if debug_mode == true then return end
 	if not srcOnly then
-		setMaterial( mat1 )
-		drawSprite( worldPos, (48 * bloomScale), (32 * bloomScale), colGlw )
+		if istable( multiEmit ) then
+			for _,wPos in pairs( multiEmit ) do
+				setMaterial( mat1 )
+				drawSprite( wPos, (48 * bloomScale), (32 * bloomScale), colGlw )
 
-		setMaterial( mat2 )
-		drawSprite( worldPos, (256 * bloomScale), (256 * bloomScale), colAmb )
+				setMaterial( mat2 )
+				drawSprite( wPos, (256 * bloomScale), (256 * bloomScale), colAmb )
 
-		setMaterial( mat2 )
-		drawSprite( worldPos, (64 * bloomScale), 48 * bloomScale, colBlm )
+				setMaterial( mat2 )
+				drawSprite( wPos, (64 * bloomScale), 48 * bloomScale, colBlm )
 
-		setMaterial( mat3 )
-		drawSprite( worldPos, 12 * widthScale, 12 * bloomScale, colMed )
+				setMaterial( mat3 )
+				drawSprite( wPos, 12 * widthScale, 12 * bloomScale, colMed )
+			end
+		elseif isvector( worldPos ) then
+				setMaterial( mat1 )
+				drawSprite( worldPos, (48 * bloomScale), (32 * bloomScale), colGlw )
+
+				setMaterial( mat2 )
+				drawSprite( worldPos, (256 * bloomScale), (256 * bloomScale), colAmb )
+
+				setMaterial( mat2 )
+				drawSprite( worldPos, (64 * bloomScale), 48 * bloomScale, colBlm )
+
+				setMaterial( mat3 )
+				drawSprite( worldPos, 12 * widthScale, 12 * bloomScale, colMed )
+		end
 	end
+	
 
 end
 
 local drawW = ScrW() * .5
 local drawH = ScrH() * .5
+local refW = ScrW()
+local refH = ScrH()
 
 local setSurfaceMaterial = surface.SetMaterial
 local setSurfaceColor = surface.SetDrawColor
 local drawTexturedRect = surface.DrawTexturedRect
 
-function Photon.DrawScreenEffects( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, debug_mode )
+function Photon.DrawScreenEffects( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, debug_mode )
 	if false then return end
 	if viewFlare and colFlr and viewFlare > 0 and not cheap then
 		local width = drawW
@@ -340,27 +379,31 @@ function Photon.DrawScreenEffects( srcOnly, drawSrc, camPos, camAng, srcSprite, 
 		local percentHorizontal = 1 - math.abs((drawH - screenPos.y) / drawH)
 		local averageCenterPercent = (percentVertical + percentHorizontal) * .5
 
-		artifact1x = screenPos.x + ( ( width - screenPos.x ) * .15 )
-		artifact1y = screenPos.y + ( ( height - screenPos.y ) * .15 )
-		artifact2x = screenPos.x + ( ( width - screenPos.x ) * .6 )
-		artifact2y = screenPos.y + ( ( height - screenPos.y ) * .6 )
-		artifact3x = screenPos.x
-		artifact3y = screenPos.y
-		artifact4x = screenPos.x + ( ( width - screenPos.x ) * .3 )
-		artifact4y = screenPos.y + ( ( height - screenPos.y ) * .3 )
+		local artifact1x = screenPos.x + ( ( width - screenPos.x ) * .15 )
+		local artifact1y = screenPos.y + ( ( height - screenPos.y ) * .15 )
+		local artifact2x = screenPos.x + ( ( width - screenPos.x ) * .6 )
+		local artifact2y = screenPos.y + ( ( height - screenPos.y ) * .6 )
+		local artifact3x = screenPos.x
+		local artifact3y = screenPos.y
+		local artifact4x = screenPos.x + ( ( width - screenPos.x ) * .3 )
+		local artifact4y = screenPos.y + ( ( height - screenPos.y ) * .3 )
+		local artifact5x = screenPos.x + ( ( height - screenPos.y ) )
+		local artifact5y = screenPos.y + ( ( height - screenPos.y ) )
 
 		flareScale = flareScale * averageCenterPercent
 
 		local alphaMod = ( ( flareScale ) * colAmb.a)
 
+		local artificactColor1 = ColorAlpha( colAmb, alphaMod )
 		setSurfaceMaterial( mat2 )
-		setSurfaceColor( ColorAlpha( colAmb, alphaMod ) )
+		setSurfaceColor( artificactColor1 )
 		local size = 2048 * flareScale
 		local halfSize = size * .5
 		drawTexturedRect( screenPos.x - halfSize, screenPos.y - halfSize, size, size )
 
+		-- setSurfaceColor( artificactColor1 )
 		setSurfaceMaterial( mat5 )
-		size = 32 * flareScale
+		size = 16 * flareScale
 		halfSize = size * .5
 		drawTexturedRect( artifact2x - halfSize, artifact2y - halfSize, size, size )
 
@@ -380,9 +423,10 @@ function Photon.DrawScreenEffects( srcOnly, drawSrc, camPos, camAng, srcSprite, 
 		local flareMultiplier = 1
 		local flareW = 256 * ( flareScale * flareMultiplier )
 		local flareH = 4 * ( flareScale * flareMultiplier )
+		if viewFlare > bloomRef then bloomRef = viewFlare; bloomColor = colAmb end
 		drawTexturedRect( ( artifact3x - ( flareW * .5 ) ), ( artifact3y - ( flareH * .5 ) ), flareW, flareH )
 
-		if false then
+		if true then
 		local sizeX, sizeY
 
 		setSurfaceMaterial( mat1 )
@@ -441,6 +485,7 @@ hook.Add( "InitPostEntity", "Photon.DrawEffectsConvar", function()
 	bloom_multi = GetConVar( "photon_bloom_modifier" )
 	dynlights_enabled = GetConVar( "photon_dynamic_lights" )
 end)
+
 function Photon:RenderQueue( effects )
 	local eyePos = EyePos()
 	local eyeAng = EyeAngles()
@@ -454,7 +499,7 @@ function Photon:RenderQueue( effects )
 			if photonRenderTable[i] != nil then
 				local data = photonRenderTable[i]
 				renderFunction( data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
-								data[17], data[18], data[19], data[20], data[21], data[22], data[23], debug_mode )
+								data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], debug_mode )
 			end
 		end
 	end
@@ -467,8 +512,33 @@ hook.Add( "PreDrawEffects", "Photon.RenderQueue", function()
 		Photon:RenderQueue( true )
 	end
 end )
-hook.Add( "HUDPaintBackground", "Photon.ScreenEffects", function() 
-	
+local overlayX = math.Round(( ScrW() - ScrH() ) / 2)
+
+local isFuckingBloomMap = false
+local fuckingBloomMaps = {
+	["gm_driversheaven_tdm"] = true,
+}
+hook.Add( "InitPostEntity", "Photon.CheckForFuckingBloomMap", function() 
+	isFuckingBloomMap = fuckingBloomMaps[ tostring( game.GetMap() ) ]  
+end )
+local mapBloomAdjust = 1
+function Photon.DrawDirtyLensEffect()
+	if isFuckingBloomMap then mapBloomAdjust = .15 end
+	if not ( ( bloomRef > 0 ) and ( bloomColor != nil ) ) then return end
+	-- setSurfaceColor( ColorAlpha( colAmb, alphaMod * 1.66 ) )
+	local drawColor = Color( bloomColor.r, bloomColor.g, bloomColor.b, ( bloomColor.a ) * ( ( bloomRef * bloomRef * bloomRef ) * mapBloomAdjust ) )
+	setSurfaceColor( drawColor )
+	setSurfaceMaterial( mat7 )
+	-- size = 512
+	-- halfSize = size * .5
+	drawTexturedRect( overlayX, 0, refH, refH )
+	setSurfaceMaterial( mat8 )
+	drawTexturedRect( 0, 0, refW, refH )
+	bloomRef = 0; bloomColor = nil;
+
+end
+hook.Add( "RenderScreenspaceEffects", "Photon.ScreenEffects", function() 
+	Photon.DrawDirtyLensEffect()
 end)
 
 function Photon.RenderDynamicLightQueue()
@@ -498,4 +568,104 @@ local EyeAngles = EyeAngles
 hook.Add( "PostDrawTranslucentRenderables", "Photon.UpdateLocalEyeInfo", function()
 	useEyePos:Set( EyePos() )
 	useEyeAng:Set( EyeAngles() )
+end)
+
+concommand.Add( "photon_maxoverride", function( ply ) 
+	local ent = ply:GetEyeTrace().Entity
+	if not IsValid( ent ) then return end
+	ent.Photon_OldDrawModel = ent.Draw
+	print("affirm")
+	ent.Draw = false
+	-- ent.Draw = function( self )
+	-- 	print( "called" )
+	-- 	render.MaterialOverrideByIndex( 36, "sprites/emv/fs_valor" )
+	-- 	self.Photon_OldDrawModel( self )
+	-- end
+end )
+
+-- hook.Add( "PreR", "Photon.PleaseFuckingWOrk", function() 
+-- 	render.MaterialOverrideByIndex( 0, "sprites/emv/fs_valor" )
+-- 	-- for k,v in pairs( ents.GetAll() ) do
+-- 	-- 	if not IsValid( v ) then continue end
+-- 	-- 	if v:GetModel() == "models/Lonewolfie/dodge_charger_2015.mdl" then
+-- 	-- 		render.MaterialOverrideByIndex( 0, "sprites/emv/fs_valor" )
+-- 	-- 		v:Draw()
+-- 	-- 		-- render.MaterialOverrideByIndex( 36, "" )
+-- 	-- 	end
+-- 	-- end
+-- end )
+
+hook.Add( "PreDrawHalos", "Photon.HaloTest", function() 
+	local targs = {}
+	for k,ent in pairs( ents.GetAll() ) do
+		if not IsValid( ent ) then continue end
+		if ent:GetModel() == "models/schmal/lwdodch_tail.mdl" then 
+			targs[#targs+1] = ent
+		end
+	end
+	halo.Add( targs, Color( 255, 0, 0 ), 5, 5, 2, true, false )
+	local targs = {}
+	for k,ent in pairs( ents.GetAll() ) do
+		if not IsValid( ent ) then continue end
+		if ent:GetModel() == "models/schmal/tdm_cvpi_tail.mdl" then 
+			targs[#targs+1] = ent
+		end
+	end
+	halo.Add( targs, Color( 255, 128, 0 ), 5, 5, 1, true, false )
+	halo.Add( targs, Color( 255, 0, 0 ), 15, 15, 7, true, false )
+	local targs = {}
+	for k,ent in pairs( ents.GetAll() ) do
+		if not IsValid( ent ) then continue end
+		if ent:GetModel() == "models/schmal/lwdodch_head_driver_glw.mdl" then 
+			targs[#targs+1] = ent
+		end
+	end
+	halo.Add( targs, Color( 0, 0, 255 ), 8, 8, 1, true, false )
+	halo.Add( targs, Color( 200, 220, 255 ), 4, 4, 2, true, false )
+	-- halo.Add( targs, Color( 200, 220, 255 ), 4, 4, 5, true, false )
+end )
+
+hook.Add("HudPaint","photonmodelglowtest",function()
+	for k,ent in pairs( ents.GetAll() ) do
+		if not IsValid( ent ) then continue end
+		if ent:GetModel() == "models/schmal/lwdodch_head_driver_glw.mdl" then
+			ent:SetColor( Color( 255, 0, 0 ) )
+			ent:SetColor( Color( 255, 0, 0 ) )
+			ent:SetColor( Color( 255, 0, 0 ) )
+			ent:SetColor( Color( 255, 0, 0 ) )
+			ent:SetColor( Color( 255, 0, 0 ) )
+			ent:SetColor( Color( 255, 0, 0 ) )
+			print("hey")
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			ent:DrawModel()
+			-- ent:SetColor( Color( 255, 255, 255 ) )
+		end
+	end
 end)

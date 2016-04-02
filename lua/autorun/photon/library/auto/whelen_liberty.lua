@@ -30,8 +30,13 @@ COMPONENT.Meta = {
 		W = 8.2,
 		H = 7.5,
 		Sprite = "sprites/emv/emv_whelen_src",
-		WMult = 2,
-		Scale = 1.4
+		WMult = 1.4,
+		Scale = 1,
+		EmitArray = {
+			Vector( 1.6, 0, 0 ),
+			Vector( 0, 0, 0 ),
+			Vector( -1.6, 0, 0 )
+		}
 	},
 	liberty_takedown = {
 		AngleOffset = -90,
@@ -39,7 +44,12 @@ COMPONENT.Meta = {
 		H = 4.2,
 		Sprite = "sprites/emv/emv_whelen_tri",
 		WMult = 1,
-		Scale = 1.2
+		Scale = 1,
+		EmitArray = {
+			Vector( -.6, -.45, 0 ),
+			Vector( 0, .6, 0 ),
+			Vector( .6, -.45, 0 )
+		}
 	},
 	liberty_alley = {
 		AngleOffset = -90,
@@ -54,25 +64,43 @@ COMPONENT.Meta = {
 		W = 16,
 		H = 15,
 		Sprite = "sprites/emv/emv_whelen_corner",
-		WMult = 3,
-		Scale = 1.6,
-		VisRadius = 0
+		WMult = 1.4,
+		Scale = 1,
+		EmitArray = {
+			Vector( 3.2, 0, 0 ),
+			Vector( 1.6, 0, 0 ),
+			Vector( 0, 0, 0 ),
+			Vector( -1.6, 0, 0 ),
+			Vector( -3.2, 0, 0 )
+		}
 	},
 	liberty_r_ang = {
 		AngleOffset = 90,
 		W = 16,
 		H = 15,
 		Sprite = "sprites/emv/emv_whelen_corner",
-		WMult = 3,
-		Scale = 1.6
+		WMult = 1.4,
+		Scale = 1,
+		EmitArray = {
+			Vector( 3.2, 0, 0 ),
+			Vector( 1.6, 0, 0 ),
+			Vector( 0, 0, 0 ),
+			Vector( -1.6, 0, 0 ),
+			Vector( -3.2, 0, 0 )
+		}
 	},
 	liberty_r_main = {
 		AngleOffset = 90,
 		W = 8.2,
 		H = 7.5,
 		Sprite = "sprites/emv/emv_whelen_src",
-		WMult = 2,
-		Scale = 1.4
+		WMult = 1.4,
+		Scale = 1,
+		EmitArray = {
+			Vector( 1.6, 0, 0 ),
+			Vector( 0, 0, 0 ),
+			Vector( -1.6, 0, 0 )
+		}
 	},
 }
 

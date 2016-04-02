@@ -159,12 +159,12 @@ function PhotonHUD:GetCurrentState()
 			local sirenOption = ent:Photon_SirenSet()
 			local sirenOn = ent:Photon_Siren()
 			data.Siren = {}
-			data.Siren.Name = EMVU.Sirens[sirenOption]["Name"] or "Unknown"
-			data.Siren.Model = EMVU.Sirens[sirenOption]["Category"] or "Unknown"
+			data.Siren.Name = EMVU.GetSirenTable()[sirenOption]["Name"] or "Unknown"
+			data.Siren.Model = EMVU.GetSirenTable()[sirenOption]["Category"] or "Unknown"
 			data.Siren.Active = activeSiren
 			data.Siren.Enabled = sirenOn
 			data.Siren.SirenTable = {}
-			for i=1,#EMVU.Sirens[sirenOption]["Set"] do
+			for i=1,#EMVU.GetSirenTable()[sirenOption]["Set"] do
 				local useState = 0
 				if activeSiren == i then
 					useState = 1
@@ -172,7 +172,7 @@ function PhotonHUD:GetCurrentState()
 						useState = 2
 					end
 				end
-				local siren = EMVU.Sirens[sirenOption]["Set"][i]
+				local siren = EMVU.GetSirenTable()[sirenOption]["Set"][i]
 				data.Siren.SirenTable[i] = {
 					Name = siren.Name,
 					Icon = siren.Icon or "wail",

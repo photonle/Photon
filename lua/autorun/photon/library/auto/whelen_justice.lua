@@ -29,8 +29,13 @@ COMPONENT.Meta = {
 		W = 4.2,
 		H = 4.2,
 		Sprite = "sprites/emv/justice_1x3",
-		Scale = 1.25,
-		WMult = 1.5,
+		Scale = .8,
+		WMult = 1,
+		EmitArray = {
+			Vector( 1.35, 0, 0 ),
+			Vector( 0, 0, 0 ),
+			Vector( -1.35, 0, 0 )
+		}
 	},
 	justice_rear = {
 		AngleOffset = 90,

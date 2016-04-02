@@ -1,0 +1,14 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"schmal/soundoff_intersector/intersector_mesh"
+	"$bumpmap"		"schmal/soundoff_intersector/intersector_nm"
+	$envmapcontrast "1"
+    	$envmapsaturation "1"
+    	$envmapfresnel "1"
+    	$phong "1"
+    	$phongfresnelranges "[ 1 1 1]"
+	$nocull "1"
+	"$nodecal" "1"
+	"$normalmapalphaenvmapmask" 1
+}
+

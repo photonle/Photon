@@ -1,0 +1,16 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"schmal/whelen_v_series/vs_mesh"
+	"$bumpmap"		"schmal/whelen_v_series/vs_nm"
+	$envmapcontrast "1"
+    	$envmapsaturation "1"
+    	$envmapfresnel "1"
+    	$phong "1"
+   	 $phongexponent "5"
+   	 $phongboost "10"
+    	$phongfresnelranges "[ .1 .1 .1]"
+	$nocull "1"
+	"$nodecal" "1"
+	"$normalmapalphaenvmapmask" 1
+}
+

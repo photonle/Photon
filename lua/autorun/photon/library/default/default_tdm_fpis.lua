@@ -743,17 +743,23 @@ EMV.Auto = {
 	[52] = {
 		ID = "Federal Signal Viper Dual",
 		Scale = 1,
-		Pos = Vector( 12, -82, 63.3 ),
-		Ang = Angle( -5, -85, -180 ),
+		Pos = Vector( 12, -83, 61.6 ),
+		Ang = Angle( -5, -85, -0 ),
 		Phase = "NYA",
 		Color1 = "BLUE",
-		Color2 = "RED"
+		Color2 = "RED",
+		BodyGroups = {
+			{ 1, 2 },
+		}
 	},
 	[53] = {
 		ID = "Federal Signal Viper Dual",
 		Scale = 1,
-		Pos = Vector( -12, -82, 63.3 ),
-		Ang = Angle( -5, -95, -180 ),
+		Pos = Vector( -12, -83, 61.6 ),
+		Ang = Angle( -5, -95, -0 ),
+		BodyGroups = {
+			{ 1, 2 },
+		},
 		Phase = "NYB"
 	},
 	[54] = {
@@ -1633,9 +1639,9 @@ EMV.Auto = {
 	},
 	[162] = {
 		ID = "Whelen Liberty SX",
-		Scale = .75,
-		Pos = Vector(5, 22, 74),
-		Ang = Angle( 0, -100, 0),
+		Scale = .92,
+		Pos = Vector( 0, -8, 77.8 ),
+		Ang = Angle( 1, 90, 0),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL,
 		Color1 = "BLUE",
@@ -1643,9 +1649,9 @@ EMV.Auto = {
 	},
 	[163] = {
 		ID = "Whelen Liberty SX",
-		Scale = .75,
-		Pos = Vector(5, 22, 74),
-		Ang = Angle( 0, -100, 0),
+		Scale = .92,
+		Pos = Vector( 0, -8, 77.8 ),
+		Ang = Angle( 1, 90, 0),
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL,
 		Color1 = "RED",
@@ -1846,7 +1852,18 @@ EMV.Auto = {
 		Color1 = "WHITE",
 		Color2 = "BLUE"
 	},
-
+	[191] = {
+		ID = "Feniex Avatar",
+		Scale = .89,
+		Pos = Vector( 0, -7.8, 75.25 ),
+		Ang = Angle( 1.5, 90, 0)
+	},
+	[192] = {
+		ID = "Code 3 Solex",
+		Scale = 1,
+		Pos = Vector( 0, -7.6, 75.1 ),
+		Ang = Angle( 0, 0, -1.5)
+	},
 }
 
 EMV.Selections = { -- structured and flexible version of presets designed to mimic bodygroups
@@ -1871,6 +1888,7 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 			{ Category = "Code 3 RX2700", Name = "Blue", Auto = { 63 } },
 			{ Category = "Code 3 RX2700", Name = "Red", Auto = { 64 } },
 			{ Category = "Code 3 RX2700", Name = "Multi-Color", Auto = { 65 } },
+			{ Category = "Code 3 Solex", Name = "Multi-Color", Auto = { 192 } },
 			{ Name = "Federal Signal Arjent", Auto = { 172 } },
 			{ Category = "Federal Signal Vision SLR", Name = "Red/Blue", Auto = { 10 } },
 			{ Category = "Federal Signal Vision SLR", Name = "Red/Blue Clear", Auto = { 11 } },
@@ -1888,6 +1906,7 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 			{ Category = "Federal Signal Valor", Name = "Blue", Auto = { 146 } },
 			{ Category = "Federal Signal Valor", Name = "Red/Amber", Auto = { 147 } },
 			{ Category = "Federal Signal Valor", Name = "Red", Auto = { 148 } },
+			{ Category = "Feniex Avatar", Name = "Red/Blue", Auto = { 191 } },
 			{ Name = "None" },
 		}
 	},
@@ -2109,7 +2128,7 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 }
 
 Photon.EMVLibrary[name] = EMV
--- if EMVU then EMVU:OverwriteIndex( name, EMV ) end
+if EMVU then EMVU:OverwriteIndex( name, EMV ) end
 -- if PI then Photon:OverwriteIndex( name, PI ) end
 
 list.Set( "PhotonConfigurationLibrary", "fpis13_76561198033238057_default_red/blue", [[{"Author":"Schmal","Name":"Default Red/Blue","VehicleName":"Ford Taurus 2013","Siren":46,"Category":"Default","Selections":{"Pushbar Wraparound":"None","Rear Side":"R/B/W","Front Upper Deck":"None","Lightbar":"Whelen Legacy=Red/Blue","Rear Upper Deck":"None","Grille":"None","License Plate Vertexes":"Red/Blue","Reverse Light Hideaways":"Red/Blue","Rear Lower Deck":"Inner Bar=Red/Blue","Turn Signal Hideaways":"White","Skirt Lighting":"None","Spotlight":"Default","Forward Hideaways":"Red/Blue","Trunk Equipment":"None","Headlight Wig-Wag":"On","Interior Equipment":"Full","Roof":"AirEL=All","Mirror Lights":"Whelen Ion=Red/Blue","Pushbars":"Setina Pushbar=R/B Trio","Forward Side":"Red/Blue","Rear Vertexes":"White","Front Lower Deck":"None"},"Bodygroups":{"4":"0","10":"5","5":"0","11":"0","12":"0","7":"0","18":"0","13":"0","14":"3","8":"0","1":"0","9":"0","6":"0","16":"0","15":"0","3":"1","17":"0","2":"0","19":"0","0":"0","20":"0"},"AuxSiren":0}]] )

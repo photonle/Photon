@@ -5,4 +5,5 @@
 	"$additive" 1
 	"$vertexalpha" 1
 	"$vertexcolor" 1
+"$envmaptint" "[.05 .05 .05]"	
 }

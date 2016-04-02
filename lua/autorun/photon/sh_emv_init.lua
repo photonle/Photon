@@ -4,6 +4,7 @@ if not EMVU then EMVU = {} end
 EMVU.Liveries = {}
 EMVU.SubMaterials = {}
 EMVU.Index = {}
+EMVU.AutoInsert = {}
 EMVU.Selections = {}
 EMVU.Configurations = {}
 EMVU.LicensePlates = {}

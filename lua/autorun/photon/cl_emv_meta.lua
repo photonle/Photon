@@ -4,7 +4,7 @@ EMVU.DebugInfo = {}
 EMVU.DebugInfo.Last = CurTime()
 EMVU.Calculations = 0
 
-local EMVColors = nil
+EMVColors = nil
 if EMVU.Colors then EMVColors = EMVU.Colors end
 
 local EMVHelper = nil
@@ -194,6 +194,7 @@ function EMVU:MakeEMV( emv, name )
 			if not option then option = 1 end
 			result = EMVHelper:GetSequence( self.VehicleName, option, self )
 		end
+		if self:Photon_IsBraking() then result = EMVHelper.GetBrakeSequence( self.VehicleName, self, result ) end
 		return result
 	end
 
@@ -305,10 +306,10 @@ function EMVU:MakeEMV( emv, name )
 		return EMVHelper:GetModeDisconnect( self.VehicleName, self:Photon_LightOption() )
 	end
 
-	function emv:AlertPhotonMissingRequirements()
+	function emv:AlertPhotonMissingRequirements( modelName )
 		if self.PhotonAlertedMissingRequirements then return end
 		if not LocalPlayer():IsAdmin() then return end
-		chat.AddText( Color( 255, 128, 0 ), "[Photon] You may be missing one or more required addons for the \"" .. tostring(self.VehicleName) .. "\" and some models will not be loaded.\n", Color(255,255,255), "Please check the Workshop page for this vehicle to see the requirements." )
+		chat.AddText( Color( 255, 128, 0 ), "[Photon] You may be missing one or more required addons for the \"" .. tostring(self.VehicleName) .. "\" (" .. tostring( modelName ) .. ") and some models will not be loaded.\n", Color(255,255,255), "Please check the Workshop page for this vehicle to see the requirements." )
 		self.PhotonAlertedMissingRequirements = true
 	end
 
@@ -595,7 +596,7 @@ function EMVU:MakeEMV( emv, name )
 			local rendergroup = p.RenderGroup or RENDERGROUP_OPAQUE
 			local rendermode = p.RenderMode or RENDERMODE_TRANSALPHA
 			util.PrecacheModel( p.Model )
-			if not util.IsModelLoaded( p.Model ) then self:AlertPhotonMissingRequirements() continue end
+			if not util.IsModelLoaded( p.Model ) then self:AlertPhotonMissingRequirements( p.Model ) end
 			local prop = ClientsideModel( p.Model, rendergroup )
 			if isvector( p.Scale ) then
 				local mat = Matrix()
@@ -813,7 +814,7 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_ManualWindUpdate()
 		if not self:Photon_HasManualWind() or self.PhotonManualSirenProcessing then return false end
 		local isWindingUp = self:Photon_ManualSiren()
-		local info = EMVU.Sirens[self:Photon_SirenSet()].Gain
+		local info = EMVU.GetSirenTable()[self:Photon_SirenSet()].Gain
 		if not self.Photon_ManualSirenTable then self.Photon_ManualSirenTable = {} end
 		local sirenState = self.Photon_ManualSirenTable
 
@@ -885,7 +886,7 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_HasManualWind()
 		local set = self:Photon_SirenSet()
 		if set == 0 then return false end
-		return istable( EMVU.Sirens[set].Gain )
+		return istable( EMVU.GetSirenTable()[set].Gain )
 	end
 
 	function emv:Photon_ApplyEquipmentPreset( presetData )

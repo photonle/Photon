@@ -1,10 +1,10 @@
 "VertexLitGeneric"
 {
 	"$basetexture"		"schmal/fedsig_arjent/detail"
-
+	"$bumpmap" 		"schmal/shared/flat"
 	"$halflambert" 1
 	"$phong" "1" 
-	"$phongboost" "255" 
+	"$phongboost" ".5" 
 	"$phongfresnelranges" "[1 1 1]"
 	"$surfaceprop" "Glass"
 	"$nocull" 1

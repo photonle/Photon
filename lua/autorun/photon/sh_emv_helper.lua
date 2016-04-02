@@ -65,6 +65,26 @@ function EMVU.Helper.GetAlertSequence( name, vehicle )
 	return resultTable
 end
 
+function EMVU.Helper.GetBrakeSequence( name, vehicle, resultTable )
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Braking"]["Selection_Components"]) then
+		local selComp = EMVU.Sequences[name]["Braking"]["Selection_Components"]
+		for i,optionInfo in pairs( selComp ) do
+			local currentOption = vehicle:Photon_SelectionOption( i )
+			if istable( selComp[i] ) then
+				local ptable = selComp[i][currentOption]
+				if istable( ptable ) then
+					for id,data in pairs( ptable ) do
+						if vehicle.EL.Frames[id] and vehicle.EL.Frames[id][data] then
+							resultTable[ id ] = data
+						end
+					end
+				end
+			end
+		end
+	end
+	return resultTable
+end
+
 function EMVU.Helper:GetSequence( name, option, vehicle )
 	
 	local resultTable = {}
@@ -176,7 +196,8 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 	-- 	if not printedErrors[ errorString ] then printedErrors[ errorString ] = true; print( errorString ) end
 	-- 	return
 	-- end
-	if not istable( EMVU.Sequences[ name ].Illumination ) then return end
+	if not name or not option or not vehicle then return {} end
+	if not istable( EMVU.Sequences[ name ] ) or not istable( EMVU.Sequences[ name ].Illumination ) then return {} end
 	local resultTable = {}
 	
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Illumination"][option]["BG_Components"] ) then
@@ -301,7 +322,7 @@ function EMVU.Helper:GetMeta( name )
 end
 
 function EMVU.Helper:Photon_GetFrame( name, component, index, frame )
-	if EMVU.Patterns[name][component][index][frame] then
+	if EMVU.Patterns[name] and EMVU.Patterns[name][component] and EMVU.Patterns[name][component][index] and EMVU.Patterns[name][component][index][frame] then
 		return EMVU.Patterns[name][component][index][frame]
 	else
 		return {}
@@ -385,12 +406,14 @@ function EMVU.Helper:GetProps( name, ent )
 					if category.Options[selected].Auto then
 						for _,id in pairs( category.Options[selected].Auto ) do
 							local component = EMVU.AutoIndex[ name ][ id ]
+							if not component then Error( "[Photon] No component (" .. tostring( id ) .. ") found under vehicle (" .. tostring( name ) .. ")" ) end
 							local autoData = EMVU.Auto[ component[ "ID" ] ]
 							local propData = EMVU.Helper:GetAutoModel( component[ "ID" ] )
 							if not propData.Model then continue end
 							propData.Pos = component.Pos
 							propData.Ang = component.Ang
 							propData.Scale = component.Scale
+							propData.BodyGroups = component.BodyGroups or false
 							propData.AutoIndex = id
 							propData.ComponentName = component[ "ID" ]
 							if autoData.RotationEnabled then

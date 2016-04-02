@@ -28,6 +28,7 @@ local PhotonVehicleIndex = {
 	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility",
 	["models/schmal/chev_tahoe16.mdl"] = "2016 Chevrolet Tahoe PPV",
 	["models/tdmcars/emergency/for_taurus_13.mdl"] = "fortauruspoltdm",
+	["models/LoneWolfie/dodge_charger_2015_police.mdl"] = "dodge_charger_2015_police_lw",
 	-- ["models/talonvehicles/tal_chev_suburban_2015.mdl"] = "talon_suburban"
 }
 
@@ -50,6 +51,7 @@ local PhotonEMVIndex = {
 	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility",
 	["models/schmal/chev_tahoe16.mdl"] = "2016 Chevrolet Tahoe PPV",
 	["models/tdmcars/emergency/for_taurus_13.mdl"] = "Ford Taurus 2013",
+	["models/LoneWolfie/dodge_charger_2015_police.mdl"] = "Dodge Charger R/T 2015 Pursuit",
 	-- ["models/talonvehicles/tal_chev_suburban_2015.mdl"] = "2015 Chevrolet Suburban"
 }
 
@@ -80,6 +82,7 @@ local PhotonDefaultMapping = {
 	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility",
 	["models/schmal/chev_tahoe16.mdl"] = "2016 Chevrolet Tahoe PPV",
 	["models/tdmcars/emergency/for_taurus_13.mdl"] = "fortauruspoltdm",
+	["models/LoneWolfie/dodge_charger_2015_police.mdl"] = "dodge_charger_2015_police_lw",
 	-- ["models/talonvehicles/tal_chev_suburban_2015.mdl"] = "talsuburban2015"
 }
 
@@ -114,7 +117,8 @@ local indexed_emvs = {
 	"default_tdm_dc12",
 	"default_schmal_fpiu16",
 	"default_schmal_tahoe16",
-	"default_tdm_fpis"
+	"default_tdm_fpis",
+	"default_lw_charger"
 	-- "default_talon_suburban"
 }
 

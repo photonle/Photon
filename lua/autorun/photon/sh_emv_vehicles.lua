@@ -9,6 +9,33 @@ local pairs = pairs
 local isnumber = isnumber
 local tonumber = tonumber
 
+local function MirrorVector( vec, method )
+	local newVector = Vector()
+	if method == nil then
+		newVector:Set( vec )
+		newVector.x = vec.x * -1
+	end
+	return newVector
+end
+
+local function MirrorAngle( ang, method )
+	local newAng = Angle()
+	if method == nil then
+		newAng:Set( ang )
+		newAng.p = ang.p * -1
+		newAng.r = ang.r * -1
+		local yAngDif = -90 - ang.y
+		newAng.y = ang.y + ( yAngDif * 2 )
+	end
+	if method == "opp" then
+		newAng:Set( ang )
+		newAng.p = ang.p * -1
+		newAng.y = ang.y * -1
+		-- newAng.r = ang.r * -1
+	end
+	return newAng
+end
+
 function EMVU:PlayerSpawnedVehicle( ply, ent ) -- deprecated function, only gives legacy support
 	if IsValid( ent ) and ent:IsVehicle() then EMVU:SpawnedVehicle( ent ) end
 end
@@ -243,9 +270,10 @@ function EMVU:OverwriteIndex( name, data )
 		if istable( data.Selections ) then EMVU.Selections [ name ] = data.Selections end
 		if istable( data.Liveries ) then EMVU.Liveries[ name ] = data.Liveries end
 		if istable( data.SubMaterials ) then EMVU.SubMaterials[ name ] = data.SubMaterials end
+		if istable( data.AutoInsert ) then EMVU.AutoInsert[ name ] = data.AutoInsert end
 		if istable( data.Auto ) then 
 			EMVU.AutoIndex[ name ] = data.Auto
-			EMVU:CalculateAuto( name, data.Auto ) 
+			EMVU:CalculateAuto( name, data.Auto, data.AutoInsert ) 
 		end
 	else
 		print("[Photon] Data must be table with valid Meta, Positions, Patterns and Sequences. Overwrite failed.")
@@ -287,6 +315,12 @@ function EMVU.LoadModeData( name, data )
 
 	end
 
+	if not data["Braking"] then
+		data.Braking = {
+			Preset_Components = {}
+		}
+	end
+
 	EMVU.Sequences[ name ] = data
 
 end
@@ -301,10 +335,103 @@ local function hashPosition( firstPos, lastPos, autoPos, autoAng )
 	return result
 end
 
-function EMVU:CalculateAuto( name, data )
-	if SERVER then return end
+function EMVU:CalculateAuto( name, data, autoInsert )
+	
 	if not istable( data ) then return end
 
+	if istable( autoInsert ) then
+		for _, segment in pairs( autoInsert ) do
+			if istable( segment.Variants ) then
+				for __, variant in pairs( segment.Variants ) do
+					local thisIndex = #data + 1
+
+					local newComponent = {}
+					newComponent.ID = segment.Component
+					newComponent.BodyGroups = segment.BodyGroups
+					newComponent.ColorMap = segment.ColorMap
+					newComponent.RenderGroup = segment.RenderGroup or RENDERGROUP_OPAQUE
+					newComponent.RenderMode = segment.RenderMode or RENDERMODE_NORMAL
+					newComponent.Pos = segment.Position
+					newComponent.Ang = segment.Angle
+					newComponent.Scale = segment.Scale
+
+					if istable( variant.Phases ) then
+						newComponent.Phase = variant.Phases[1]
+					else
+						newComponent.Phase = variant.Phase
+					end
+
+					if istable( variant.Colors ) and istable( variant.Colors[1] ) then
+						for colorCount, col in pairs( variant.Colors[1] ) do
+							newComponent[ "Color" .. tostring( colorCount ) ] = col
+						end
+					elseif istable( variant.Colors ) then
+						for colorCount, col in pairs( variant.Colors ) do
+							newComponent[ "Color" .. tostring( colorCount ) ] = col
+						end
+					end
+
+					local selectionTable = EMVU.Selections[ name ]
+
+					local parentTable
+					for ___, selection in pairs( selectionTable ) do
+						if selection.Name == segment.Parent then parentTable = selection; break; end
+					end
+					if not parentTable then
+						selectionTable[ #selectionTable + 1 ]  = {
+							Name = segment.Parent,
+							Options = {}
+						}
+						parentTable = selectionTable[ #selectionTable ]
+					end
+
+					local optionsTable = parentTable.Options
+					local optionTable
+					for ___, option in pairs( optionsTable ) do
+						if option.Category == segment.Category and option.Name == variant.Name then optionTable = option; break; end
+					end
+					if not optionTable then
+						optionsTable[ #optionsTable + 1 ] = {
+							Category = segment.Category,
+							Name = variant.Name,
+							Props = segment.Props,
+							Auto = {}
+						}
+						optionTable = optionsTable[ #optionsTable ]
+					end
+
+					local optionAutoTable = optionTable.Auto
+					optionAutoTable[ #optionAutoTable + 1 ] = thisIndex
+
+					data[ thisIndex ] = newComponent
+
+					if segment.Mirror then
+						thisIndex = thisIndex + 1
+						local mirroredComponent = table.Copy( newComponent )
+						mirroredComponent.Pos = MirrorVector( mirroredComponent.Pos )
+						mirroredComponent.Ang = MirrorAngle( mirroredComponent.Ang, segment.TransformType )
+
+						if istable( variant.Phases ) then
+							mirroredComponent.Phase = variant.Phases[2]
+						else
+							mirroredComponent.Phase = variant.Phase
+						end
+
+						if istable( variant.Colors ) and istable( variant.Colors[2] ) then
+							for colorCount, col in pairs( variant.Colors[2] ) do
+								mirroredComponent[ "Color" .. tostring( colorCount ) ] = col
+							end
+						end
+
+						optionAutoTable[ #optionAutoTable + 1 ] = thisIndex
+						data[ thisIndex ] = mirroredComponent
+					end
+
+				end
+			end
+		end
+	end
+	if SERVER then return end
 		//PrintTable( EMVU.PresetIndex[ name ]  )
 	local positionTable = {}
 	for i=1,#data do -- for each component in the vehicle's auto
@@ -369,6 +496,14 @@ function EMVU:CalculateAuto( name, data )
 				local resultVal = val
 				if prop == "W" then resultVal = val * autoScale end
 				if prop == "H" then resultVal = val * autoScale end
+				if prop == "EmitArray" and istable( val ) then
+					local newArray = {}
+					for __i,__pos in pairs( val ) do
+						newArray[__i] = Vector()
+						newArray[__i]:Set( __pos )
+						newArray[__i]:Mul( autoScale )
+					end
+				end
 				EMVU.LightMeta[ name ][ useId ][ prop ] = resultVal
 			end
 		end
@@ -408,6 +543,24 @@ function EMVU:CalculateAuto( name, data )
 							//PrintTable( sequence )
 						end
 
+					end
+				end
+			end
+
+			if istable( component.Modes.Primary.BRAKE ) then
+				local targetCopy = component.Modes.Primary.BRAKE
+				local sequence = EMVU.Sequences[ name ].Braking
+				if usesSelections then
+					if not istable( sequence.Selection_Components ) then sequence.Selection_Components = {} end
+					for _i, selection in pairs( activeSelections ) do 
+						sequence.Selection_Components[_i] = sequence.Selection_Components[_i] or {}
+						for __i, option in pairs( selection ) do
+							sequence.Selection_Components[_i][__i] = sequence.Selection_Components[_i][__i] or {}
+							for componentIndex, patternIndex in pairs( targetCopy ) do
+								local patternPhase = autoData.Phase or ""
+								sequence.Selection_Components[_i][__i][ componentIndex .. "_" .. i ] = tostring( patternIndex .. patternPhase )
+							end
+						end
 					end
 				end
 			end

@@ -19,7 +19,16 @@ EMV.Skin = 0
 
 EMV.BodyGroups = {}
 
-EMV.Props = {}
+EMV.Props = {
+	[1] = {
+		Model = "models/schmal/tdm_cvpi_tail.mdl",
+		Scale = 1.005,
+		Pos = Vector(0, .3, 1.83),
+		Ang = Angle( 0, 0, 0),
+		RenderGroup = RENDERGROUP_OPAQUE,
+		RenderMode = RENDERMODE_NORMAL
+	},
+}
 
 local height = 76.4
 
@@ -1580,3 +1589,4 @@ EMV.Lamps = {
 }
 
 Photon.EMVLibrary[name] = EMV
+if EMVU then EMVU:OverwriteIndex( name, EMV ) end

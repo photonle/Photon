@@ -271,3 +271,37 @@ function Photon.Net.SetLicenseMaterial( len, ply )
 	end
 end
 net.Receive( "photon_license_mat", function( len, ply ) Photon.Net.SetLicenseMaterial( len, ply ) end )
+
+local cintargent = nil
+
+concommand.Add( "photon_settarg", function( ply ) 
+	local ent = ply:GetEyeTrace().Entity
+	if not IsValid( ent ) then return end
+	cintargent = ent
+	print("TARGET SET")
+end )
+
+concommand.Add( "photon_cin", function( ply ) 
+	for k,v in pairs( ents.GetAll() ) do
+		if v:IsEMV() then
+			-- v:ELS_TrafficOn()
+			-- v:ELS_LightsOn()
+			-- v:ELS_IllumOn()
+			-- v:CAR_Running( true )
+		end
+	end
+end )
+
+
+local targIndex = -30
+concommand.Add( "photon_materialt", function( ply ) 
+	local targ = ply:GetEyeTrace().Entity
+	if IsValid( targ ) then
+		print( tostring( targ ) )
+		print( tostring( "Index: " .. targIndex ) )
+		print( tostring( targ:GetSubMaterial( targIndex ) ) )
+		targ:SetSubMaterial( targIndex, "sprites/emv/fs_valor")
+		print( tostring( targ:GetSubMaterial( targIndex ) ) )
+		targIndex = targIndex + 1
+	end
+end )

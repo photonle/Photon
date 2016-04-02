@@ -4,11 +4,13 @@ Photon.AirEL = {}
 
 Photon.AirEL.TranslationTable = {
 	["models/schmal/fpiu_airel.mdl"] = "fpius",
-	["models/schmal/tahoe_airel.mdl"] = "fpius"
+	["models/schmal/tahoe_airel.mdl"] = "fpius",
+	["models/schmal/lwdodch_airel.mdl"] = "fpius",
 }
 
 Photon.AirEL.TranslationTableIndex = {
 	["models/schmal/fpiu_airel.mdl"] = 1,
+	["models/schmal/lwdodch_airel.mdl"] = 0,
 	["models/schmal/tahoe_airel.mdl"] = 0
 }
 
@@ -35,7 +37,7 @@ Photon.AirEL.DownloadMaterial = function( id, unitString, ent, cback, failed )
 end
 
 Photon.AirEL.FormatName = function( id, unitString )
-	return string.format( "photon_airel_%s_%s.txt", tostring( id ), tostring( unitString ) )
+	return string.format( "photon_airel_%s_%s.png", tostring( id ), tostring( unitString ) )
 end
 
 Photon.AirEL.LoadMaterial = function( id, unitString, ent )
@@ -99,7 +101,7 @@ Photon.AirEL.ApplyTexture = function( mat, ent, id, unitString )
 end
 
 Photon.AirEL.LoadMaterialFromFile = function( id, unitString )
-	return Material( string.format( "../data/photon/airel/photon_airel_%s_%s.txt\n.png", id, unitString ), "nocull smooth noclamp mips" )
+	return Material( string.format( "../data/photon/airel/photon_airel_%s_%s.png", id, unitString ), "nocull smooth noclamp mips" )
 end
 
 Photon.AirEL.Apply = function( unitString, ent )

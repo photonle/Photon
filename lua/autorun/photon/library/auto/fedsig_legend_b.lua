@@ -25,8 +25,13 @@ COMPONENT.Meta = {
 		W = 7.2,
 		H = 7.2,
 		Sprite = "sprites/emv/legend_wide",
-		Scale = 1.5,
-		WMult = 1.5,
+		Scale = 1,
+		WMult = 1.25,
+		EmitArray = {
+			Vector( 1.6, 0, 0 ),
+			Vector( 0, 0, 0 ),
+			Vector( -1.6, 0, 0 )
+		}
 	},
 	legend_forward_nar = {
 		AngleOffset = -90,
@@ -49,8 +54,13 @@ COMPONENT.Meta = {
 		W = 7.2,
 		H = 7.2,
 		Sprite = "sprites/emv/legend_wide",
-		Scale = 1.5,
-		WMult = 1.5,
+		Scale = 1,
+		WMult = 1.25,
+		EmitArray = {
+			Vector( 1.6, 0, 0 ),
+			Vector( 0, 0, 0 ),
+			Vector( -1.6, 0, 0 )
+		}
 	},
 }
 

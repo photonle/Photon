@@ -117,7 +117,7 @@ COMPONENT.Sections = {
 		{ {1, B, .66}, {2, R, .66}, {3, B}, {4, R}, {5, B}, {6, R} },
 	},
 	["auto_chp_liberty_cruise"] = {
-		{ {1, B, .66}, {2, R, .66}, {3, B}, {4, R}, {5, B}, {6, R} },
+		{ {1, R, .66}, {2, B, .66}, {3, R}, {4, B}, {5, R}, {6, B} },
 	},
 	["auto_whelen_liberty_ii_front"] = {
 	{ { 5, R }, { 3, R, .66 }, { 1, R, .66 } },

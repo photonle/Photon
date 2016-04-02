@@ -1,15 +1,15 @@
 "VertexLitGeneric"
 {
 	"$basetexture"		"schmal/fedsig_arjent/glass"
+	"$bumpmap" 		"schmal/shared/flat"
 	"$translucent" 1
 	"$halflambert" 1
 	"$phong" "1" 
 	"$phongboost" "255" 
 	"$phongfresnelranges" "[1 1 1]"
 	"$surfaceprop" "Glass"
-	"$nocull" 1
-   	 "$rimlight" "100"
-	"$rimlightexponent" "8"
+   	 "$rimlight" ".2"
+	"$rimlightexponent" "16"
 	"$rimlightboost" "0.01"
 	"$rimmask" "0"
 

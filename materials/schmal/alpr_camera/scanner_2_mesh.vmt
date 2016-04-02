@@ -6,7 +6,7 @@
     	$envmapsaturation "1"
     	$envmapfresnel "1"
     	$phong "1"
-   	 $phongexponent "8"
+   	 $phongexponent "64"
    	 $phongboost "10"
     	$phongfresnelranges "[ .1 .1 .1]"
 	$nocull "1"

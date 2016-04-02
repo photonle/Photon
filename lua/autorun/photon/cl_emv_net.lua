@@ -149,3 +149,9 @@ function EMVU.Net.ApplyLicenseMaterial( ent, mat )
 		net.WriteString( mat )
 	net.SendToServer()
 end
+
+concommand.Add( "photon_debug_getbones", function() 
+	local ent = ply:GetEyeTrace().Entity
+	if not IsValid( ent ) then return end
+	print(tostring(ent:GetBoneCount()))
+end)

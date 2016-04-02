@@ -10,6 +10,7 @@ local SW = "S_WHITE"
 local G = "GREEN"
 
 local name = "Federal Signal Valor"
+-- EDITED BY THESENDEST
 
 local COMPONENT = {}
 
@@ -362,6 +363,8 @@ COMPONENT.Sections = {
 		-- CALIFORNIA
 		[19] = { { 18, A }, { 20, A }, { 17, A }, { 19, A } },
 		[20] = { { 21, A }, { 22, A }, { 23, A }, { 24, A } },
+		[21] = { { 19, A }, { 21, A} },
+		[22] = { { 22, A }, { 20, A} },
 	},
 	["auto_fedsig_valor_corner"] = {
 		[1] = {
@@ -385,7 +388,8 @@ COMPONENT.Patterns = {
 		["diverge"] = { 16, 16, 16, 17, 17, 17, 18, 18, 18, 1, 1, 1, 1, 0, 0 },
 		["stage1"] = { 0 },
 		["stage1A"] = { 0 },
-		["stage1CA"] = { 19, 19, 19, 19, 0, 20, 20, 20, 20, 0 },
+		["stage1CA"] = { 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22 },
+		["stage2CA"] = { 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20, 20, 20, 20, 20, 20 },
 	},
 	["auto_fedsig_valor"] = {
 		["all"] = { 1 },
@@ -490,15 +494,15 @@ COMPONENT.Modes = {
 			},
 			M2 = {
 				["auto_fedsig_valor"] = "code2",
-				["auto_fedsig_valor_signalmaster"] = "stage1"
+				["auto_fedsig_valor_signalmaster"] = "stage2"
 			},
 			M3 = {
 				["auto_fedsig_valor"] = "code3",
-				["auto_fedsig_valor_signalmaster"] = "stage1"
+				["auto_fedsig_valor_signalmaster"] = "stage2"
 			},
 			ALERT = {
 				["auto_fedsig_valor"] = "alert",
-				["auto_fedsig_valor_signalmaster"] = "stage1"
+				["auto_fedsig_valor_signalmaster"] = "stage2"
 			}
 		},
 	Auxiliary = {

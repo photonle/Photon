@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "photon/override/blank"
+	"$bumpmap" "schmal/shared/flat"
+	"$translucent" 1
+}

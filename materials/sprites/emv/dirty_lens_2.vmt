@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	"$basetexture"		"sprites/emv/dirty_lens_2"
+	"$nocull" 1
+	"$additive" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}

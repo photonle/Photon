@@ -264,13 +264,39 @@ hook.Add( "Think", "Photon.ButtonPress", function()
 	end
 
 	if not PHOTONRADARTOG_DOWN and keyDown( key_radar:GetInt() ) then
-		emv:Photon_RadarActive( true )
-		surface.PlaySound( EMVU.Sounds.Up )
+		if not emv:Photon_RadarActive() then
+			surface.PlaySound( EMVU.Sounds.Down )
+		else
+			surface.PlaySound( EMVU.Sounds.Up )
+		end
 		PHOTONRADARTOG_DOWN = true
 	elseif PHOTONRADARTOG_DOWN and not keyDown( key_radar:GetInt() ) then
-		emv:Photon_RadarActive( false )
-		surface.PlaySound( EMVU.Sounds.Down )
+		if not emv:Photon_RadarActive() then
+			surface.PlaySound( EMVU.Sounds.Up )
+			emv:Photon_RadarActive( true )
+		else
+			surface.PlaySound( EMVU.Sounds.Down )
+			emv:Photon_RadarActive( false )
+		end
 		PHOTONRADARTOG_DOWN = false
+	end
+
+	if not BLKOUTON_DOWN and keyDown( key_blackout:GetInt() ) then
+		if emv:Photon_IsRunning() then 
+			surface.PlaySound( EMVU.Sounds.Down )
+		else
+			surface.PlaySound( EMVU.Sounds.Up )
+		end
+		BLKOUTON_DOWN = true
+	elseif BLKOUTON_DOWN and not keyDown( key_blackout:GetInt() ) then
+		if emv:Photon_IsRunning() then
+			surface.PlaySound( EMVU.Sounds.Up )
+			EMVU.Net:Blackout( true )
+		else
+			surface.PlaySound( EMVU.Sounds.Down )
+			EMVU.Net:Blackout( false )
+		end
+		BLKOUTON_DOWN = false
 	end
 
 end)
@@ -285,7 +311,7 @@ local function SirenSuggestions( cmd, args )
 	local result = {}
 
 	local i = 1
-	for k,v in pairs( EMVU.Sirens ) do
+	for k,v in pairs( EMVU.GetSirenTable() ) do
 
 		table.insert( result, "emv_siren " .. k .. " \"" .. v.Name .. "\"")
 
@@ -299,7 +325,7 @@ concommand.Add("emv_siren", function(ply, cmd, args)
 	if not args[1] then return end
 	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
 	local set = 0
-	local max = #EMVU.Sirens
+	local max = #EMVU.GetSirenTable()
 	local val = tonumber(args[1])
 	if val and isnumber(val) and val <= max then set = val end
 	EMVU.Net:SirenSet( set )

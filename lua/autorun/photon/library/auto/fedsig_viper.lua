@@ -32,12 +32,17 @@ COMPONENT.Meta = {
 		AngleOffset = 0,
 		W = 4.5,
 		H = 4,
-		WMult = 2,
+		WMult = 1,
 		Sprite = "sprites/emv/tdm_viper",
-		Scale = 1.5,
+		Scale = 1,
 		NoLegacy = true,
 		DirAxis = "Up",
-		DirOffset = -90
+		DirOffset = -90,
+		EmitArray = {
+			Vector( 1.4, 0, 0 ),
+			Vector( 0, 0, 0 ),
+			Vector( -1.4, 0, 0 )
+		}
 	},
 }
 

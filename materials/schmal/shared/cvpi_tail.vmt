@@ -1,0 +1,16 @@
+"UnlitGeneric"
+{
+	$basetexture "schmal/shared/cvpi_tail.vtf"
+	$model 1
+	$additive 1
+	"$nodecal" "1"
+	$nocull 1
+	$colorfix  "{230 90 0}"
+	Proxies  {
+		Equals {
+			"srcVar1" $colorfix
+			"resultVar"  $color
+		}
+	}
+}
+

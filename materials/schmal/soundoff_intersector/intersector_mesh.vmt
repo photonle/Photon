@@ -1,0 +1,17 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"schmal/shared/bl24"
+	"$bumpmap"		"schmal/shared/flat"
+	$envmapcontrast "1"
+    	$envmapsaturation "1"
+    	$envmapfresnel "1"
+    	$phong "1"
+   	 $phongexponent "1"
+   	 $phongboost "1"
+    	$phongfresnelranges "[ .1 .1 .1]"
+	$nocull "1"
+	"$nodecal" "1"
+	"$normalmapalphaenvmapmask" 1
+}
+
+

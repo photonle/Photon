@@ -1,0 +1,8 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"schmal/whelen_liberty/liberty"
+	"$bumpmap"		"schmal/whelen_liberty/liberty_normal"
+	"$halflambert" 1
+	"$phong" "1" 
+}
+

@@ -31,12 +31,17 @@ COMPONENT.Meta = {
 		AngleOffset = 0,
 		W = 4.5,
 		H = 4,
-		WMult = 2,
+		WMult = 1,
 		Sprite = "sprites/emv/tdm_viper",
-		Scale = 1.5,
+		Scale = .9,
 		NoLegacy = true,
 		DirAxis = "Up",
 		DirOffset = -90,
+		EmitArray = {
+			Vector( 1.4, 0, 0 ),
+			Vector( 0, 0, 0 ),
+			Vector( -1.4, 0, 0 )
+		}
 	},
 }
 
@@ -91,6 +96,8 @@ COMPONENT.Patterns = {
 		["alertD"] = { 2, 3 },
 		["alertNYA"] = { 2, 3 },
 		["alertNYB"] = { 3, 2 },
+		["brakeA"] = { 1 },
+		["brakeB"] = { 1 },
 	}
 }
 
@@ -100,6 +107,7 @@ COMPONENT.Modes = {
 		M2 = { ["auto_fedsig_viper_dual"] = "code2", },
 		M3 = { ["auto_fedsig_viper_dual"] = "code3", },
 		ALERT = { ["auto_fedsig_viper_dual"] = "alert", },
+		BRAKE = { ["auto_fedsig_viper_dual"] = "brake", },
 	},
 	Auxiliary = {},
 	Illumination = {}
