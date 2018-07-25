@@ -57,6 +57,8 @@ local function DrawCarLights()
 					)
 				end
 				if ent:IsEMV() and ent.Photon_ScanEMVProps then ent:Photon_ScanEMVProps() end
+				if ent:Photon_WheelEnabled() and ent.Photon_ScanWheels then ent:Photon_ScanWheels() end
+				-- if ent:Photon_WheelEnabled() and not ent.PhotonWheelProps then ent:Photon_SetupWheels() end
 			elseif ent:Photon() and not ent.Photon_RenderLights then
 				Photon:SetupCar( ent, ent:EMVName() )
 			end
@@ -80,9 +82,9 @@ local function PhotonManualWindScan()
 	end
 end
 -- hook.Add("PreRender", "EMVU.ScanSound", PhotonManualWindScan)
-timer.Create( "Photon.ManualWindScan", .01, 0, function()
-	PhotonManualWindScan()
-end )
+-- timer.Create( "Photon.ManualWindScan", .01, 0, function()
+-- 	PhotonManualWindScan()
+-- end )
 
 local function PhotonManualWindFocus()
 	if not photon_ready or not should_render:GetBool() then return end
@@ -93,7 +95,7 @@ local function PhotonManualWindFocus()
 		if not IsValid( sndData[2] ) then sndData[1]:Stop(); EMVU.ManualSirenTable[_] = nil end
 	end
 end
-hook.Add( "PreRender", "Photon.ManualFocusCheck", function() PhotonManualWindFocus() end )
+-- hook.Add( "PreRender", "Photon.ManualFocusCheck", function() PhotonManualWindFocus() end )
 
 local function PhotonRadarScan()
 	if not photon_ready or not should_render:GetBool() then return end
@@ -351,11 +353,26 @@ end)
 -- 	-- if true then return end
 -- 	Photon.BoneRotation()
 -- end )
+local _rotationEntCache = {}
+local _lastRotationCache = 0
+local function getPhotonRotationEnts()
+	if not _rotationEntCache or CurTime() > (_lastRotationCache + 2) then
+		table.Empty(_rotationEntCache)
+		for _,ent in pairs(ents.GetAll()) do
+			if IsValid(ent) and ent.PhotonRotationEnabled then
+				table.insert(_rotationEntCache, ent)
+			end
+		end
+		_lastRotationCache = CurTime()
+	end
+	return _rotationEntCache
+end
 
 Photon.BoneRotation = function()
 	if photon_pause then return end
 	-- if true then return end
-	for _,ent in pairs( ents.GetAll() ) do
+	for _,ent in pairs( getPhotonRotationEnts() ) do
+		if not IsValid(ent) then return end
 		if ent.PhotonRotationEnabled then
 			local emv = ent:GetParent()
 			if not IsValid( emv ) or not emv.Photon_LightOptionID then continue end

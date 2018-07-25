@@ -11,6 +11,16 @@ EMVU.Colors = {
 		dim = Color( 0, 175, 255, 255 ),
 		raw = Color( 0, 0, 255, 255 ),
 	},
+	BLUE_HALOGEN = {
+		src = Color( 255, 255, 245, 255 ),
+		med = Color( 84, 64, 255, 245 ),
+		glw = Color( 128, 100, 255, 255 ),
+		blm = Color( 64, 64, 255, 70 ),
+		amb = Color( 32, 32, 255, 5 ),
+		flr = Color( 0, 64, 225, 255 ),
+		dim = Color( 0, 175, 255, 255 ),
+		raw = Color( 0, 0, 255, 255 ),
+	},
 	-- BLUE = {
 	-- 	src = Color( 245, 255, 255, 255 ),
 	-- 	med = Color( 0, 100, 255, 255 ),
@@ -22,6 +32,16 @@ EMVU.Colors = {
 		src = Color( 255, 255, 240, 255 ),
 		med = Color( 255, 190, 0, 220 ),
 		glw = Color( 255, 24, 0, 120 ),
+		blm = Color( 255, 10, 0, 70 ),
+		amb = Color( 255, 0, 0, 5 ),
+		flr = Color( 128, 8, 0, 255 ),
+		dim = Color( 255, 100, 0, 255 ),
+		raw = Color( 255, 0, 0, 255 )
+	},
+	RED_HALOGEN = {
+		src = Color( 255, 255, 245, 255 ),
+		med = Color( 225, 190, 128, 220 ),
+		glw = Color( 205, 96, 64, 120 ),
 		blm = Color( 255, 10, 0, 70 ),
 		amb = Color( 255, 0, 0, 5 ),
 		flr = Color( 128, 8, 0, 255 ),

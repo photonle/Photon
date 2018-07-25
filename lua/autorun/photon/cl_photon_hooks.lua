@@ -68,5 +68,10 @@ local function RemoveCarProps( ent )
 			prop:Remove()
 		end
 	end
+	if IsValid( ent ) and ent:IsVehicle() and ent:Photon() and ent.PhotonWheelProps then
+		for _,prop in pairs( ent.PhotonWheelProps ) do
+			prop:Remove()
+		end
+	end
 end
 hook.Add("EntityRemoved", "Photon.RemoveCarProps", RemoveCarProps)

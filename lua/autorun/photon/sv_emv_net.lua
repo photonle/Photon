@@ -19,6 +19,7 @@ util.AddNetworkString( "photon_availableskins" )
 util.AddNetworkString( "photon_setautoskin" )
 util.AddNetworkString( "emvu_color" )
 util.AddNetworkString( "photon_license_mat" )
+util.AddNetworkString( "photon_wheel" )
 
 local can_change_siren_model = GetConVar( "photon_emv_changesirens" )
 local can_change_light_presets = GetConVar( "photon_emv_changepresets" )
@@ -265,43 +266,53 @@ net.Receive( "photon_setautoskin", function( len, ply ) Photon.Net.ReceiveSkinCh
 function Photon.Net.SetLicenseMaterial( len, ply )
 	local ent = net.ReadEntity()
 	local mat = net.ReadString()
-	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent )
+	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent, "LICENSE_PLATE" )
 	if modifyBlocked != false then
 		ent:Photon_SetLicenseMaterial( mat )
 	end
 end
 net.Receive( "photon_license_mat", function( len, ply ) Photon.Net.SetLicenseMaterial( len, ply ) end )
 
-local cintargent = nil
-
-concommand.Add( "photon_settarg", function( ply ) 
-	local ent = ply:GetEyeTrace().Entity
-	if not IsValid( ent ) then return end
-	cintargent = ent
-	print("TARGET SET")
-end )
-
-concommand.Add( "photon_cin", function( ply ) 
-	for k,v in pairs( ents.GetAll() ) do
-		if v:IsEMV() then
-			-- v:ELS_TrafficOn()
-			-- v:ELS_LightsOn()
-			-- v:ELS_IllumOn()
-			-- v:CAR_Running( true )
-		end
+function Photon.Net.SetWheel( len, ply )
+	local ent = net.ReadEntity()
+	local index = net.ReadInt( 8 )
+	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent, "WHEEL" )
+	if modifyBlocked != false then
+		ent:Photon_SetWheelIndex( index )
 	end
-end )
+end
+net.Receive( "photon_wheel", function( len, ply ) Photon.Net.SetWheel( len, ply ) end )
+
+-- local cintargent = nil
+
+-- concommand.Add( "photon_settarg", function( ply ) 
+-- 	local ent = ply:GetEyeTrace().Entity
+-- 	if not IsValid( ent ) then return end
+-- 	cintargent = ent
+-- 	print("TARGET SET")
+-- end )
+
+-- concommand.Add( "photon_cin", function( ply ) 
+-- 	for k,v in pairs( ents.GetAll() ) do
+-- 		if v:IsEMV() then
+-- 			-- v:ELS_TrafficOn()
+-- 			-- v:ELS_LightsOn()
+-- 			-- v:ELS_IllumOn()
+-- 			-- v:CAR_Running( true )
+-- 		end
+-- 	end
+-- end )
 
 
-local targIndex = -30
-concommand.Add( "photon_materialt", function( ply ) 
-	local targ = ply:GetEyeTrace().Entity
-	if IsValid( targ ) then
-		print( tostring( targ ) )
-		print( tostring( "Index: " .. targIndex ) )
-		print( tostring( targ:GetSubMaterial( targIndex ) ) )
-		targ:SetSubMaterial( targIndex, "sprites/emv/fs_valor")
-		print( tostring( targ:GetSubMaterial( targIndex ) ) )
-		targIndex = targIndex + 1
-	end
-end )
+-- local targIndex = -30
+-- concommand.Add( "photon_materialt", function( ply ) 
+-- 	local targ = ply:GetEyeTrace().Entity
+-- 	if IsValid( targ ) then
+-- 		print( tostring( targ ) )
+-- 		print( tostring( "Index: " .. targIndex ) )
+-- 		print( tostring( targ:GetSubMaterial( targIndex ) ) )
+-- 		targ:SetSubMaterial( targIndex, "sprites/emv/fs_valor")
+-- 		print( tostring( targ:GetSubMaterial( targIndex ) ) )
+-- 		targIndex = targIndex + 1
+-- 	end
+-- end )

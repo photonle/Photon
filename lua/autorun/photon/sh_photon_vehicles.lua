@@ -193,17 +193,29 @@ function Photon:PreloadVehicle( car )
 end
 
 function Photon:OverwriteIndex( name, data )
-	-- print("[Photon] Overwriting: " .. tostring( name ) )
 	if not data then return end
 	if data.Positions != nil then Photon.Vehicles.Positions[name] = data.Positions end
 	if data.Meta != nil then Photon.Vehicles.Meta[name] = data.Meta end
-	if istable( data.States.Headlights ) then 
+	if istable( data.States ) then 
 		if data.States.Headlights != nil then Photon.Vehicles.States.Headlights[name] = data.States.Headlights end
 		if data.States.Brakes != nil then Photon.Vehicles.States.Brakes[name] = data.States.Brakes end
 		if data.States.Blink_Left != nil then Photon.Vehicles.States.Blink_Left[name] = data.States.Blink_Left end
 		if data.States.Blink_Right != nil then Photon.Vehicles.States.Blink_Right[name] = data.States.Blink_Right end
 		if data.States.Reverse != nil then Photon.Vehicles.States.Reverse[name] = data.States.Reverse end
 		if data.States.Running != nil then Photon.Vehicles.States.Running[name] = data.States.Running end
+	end
+	if istable( data.WheelOptions ) then 
+		Photon.Vehicles.WheelOptions[name] = data.WheelOptions 
+		if istable( data.WheelPositions ) then 
+			Photon.Vehicles.WheelPositions[name] = data.WheelPositions
+		else
+			Photon.Vehicles.WheelPositions[name] = {
+				[1] = { Attachment = "wheel_fl" },
+				[2] = { Attachment = "wheel_fr" },
+				[3] = { Attachment = "wheel_rr" },
+				[4] = { Attachment = "wheel_rl" },
+			}
+		end
 	end
 	if data.Config != nil then Photon.Vehicles.Config[name] = data.Config end
 	if data.StateMaterials then Photon.Vehicles.StateMaterials[name] = data.StateMaterials end

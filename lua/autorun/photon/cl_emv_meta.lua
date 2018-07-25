@@ -194,7 +194,7 @@ function EMVU:MakeEMV( emv, name )
 			if not option then option = 1 end
 			result = EMVHelper:GetSequence( self.VehicleName, option, self )
 		end
-		if self:Photon_IsBraking() then result = EMVHelper.GetBrakeSequence( self.VehicleName, self, result ) end
+		if self.Photon_IsBraking and self:Photon_IsBraking() then result = EMVHelper.GetBrakeSequence( self.VehicleName, self, result ) end
 		return result
 	end
 
@@ -320,7 +320,7 @@ function EMVU:MakeEMV( emv, name )
 		for key,_ in pairs( lights ) do
 			if PHOTON_DEBUG and not istable( posData[tonumber(key)] ) then continue end
 			local pData = posData[tonumber(key)]
-			if not istable( pData ) then print( tostring(pData) ) end
+			if not istable( pData ) then error("[Photon] Unable to find light index (#" .. tostring( key ) .. "). Check EMV.Sections and ensure the the defined light number exists as [" .. tostring( key ) .. "] in the EMV.Positions table.") return end
 			if pData[1][1] == "RE" then
 				-- PrintTable( pData[1] )
 				local npos, nang = EMVU.Helper.GetPositionFromRE( self, self:Photon_GetPropByAutoIndex( pData[1][5] ), pData[1], true )
@@ -583,7 +583,7 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:Photon_SetupEMVProps()
 		if not IsValid( self ) then return false end
-
+		local emv = self
 		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
 		if emvProps then
 

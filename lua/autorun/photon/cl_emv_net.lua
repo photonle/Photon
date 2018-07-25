@@ -67,6 +67,13 @@ function EMVU.Net:Preset( arg )
 	net.SendToServer()
 end
 
+function EMVU.Net:WheelOption( arg, ent )
+	net.Start( "photon_wheel" )
+		net.WriteEntity( ent )
+		net.WriteInt( arg, 8 )
+	net.SendToServer()
+end
+
 local unitid_pref = GetConVar( "photon_emerg_unit" )
 
 local function GenerateDefaultUnitID()

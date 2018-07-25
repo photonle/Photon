@@ -8,6 +8,8 @@ if not Photon then
 	Photon.Vehicles = {}
 	Photon.Vehicles.Positions = {}
 	Photon.Vehicles.Meta = {}
+	Photon.Vehicles.WheelPositions = {}
+	Photon.Vehicles.WheelOptions = {}
 	Photon.Vehicles.Config = {}
 	Photon.Vehicles.StateMaterials = {}
 	Photon.Vehicles.States = {}

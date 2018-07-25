@@ -177,6 +177,27 @@ properties.Add( "photon_licenseplates", {
 	end
 })
 
+properties.Add( "photon_wheels", {
+	MenuLabel = "Wheel Style",
+	Order = 5,
+	MenuIcon = "photon/ui/menu-wheel.png",
+	Filter = function( self, ent, ply )
+		if not IsValid( ent ) then return false end
+		if not ent:Photon() then return false end
+		if not ent:Photon_WheelEnabled() then return false end
+		return true
+	end,
+	MenuOpen = function( self, option, ent )
+		local options = Photon.Vehicles.WheelOptions[ ent.VehicleName ]
+		local submenu = option:AddSubMenu()
+		for index,wheelOption in pairs( options ) do
+			local isSelected = ( tostring( index ) == tostring( ent:Photon_WheelOption() ) )
+			local option = submenu:AddOption( wheelOption.Name, function() EMVU.Net:WheelOption( index, ent ) end )
+			option:SetChecked( isSelected )
+		end
+	end
+} )
+
 properties.Add( "photon_preset", {
 	MenuLabel = "Emergency Lights",
 	Order = 1,

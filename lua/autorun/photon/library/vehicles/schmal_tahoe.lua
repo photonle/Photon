@@ -10,6 +10,37 @@ local SW = "S_WHITE"
 
 local PI = {}
 
+PI.WheelOptions = {
+	{
+		Name = "Black Police",
+		Model = "models/schmal/chev_tahoe14_wheel.mdl",
+		BodyGroups = "00",
+		Scale = 1.02,
+		OffsetPos = Vector( -11, 0, 0 )
+	},
+	{
+		Name = "Black/Silver Police",
+		Model = "models/schmal/chev_tahoe14_wheel.mdl",
+		BodyGroups = "01",
+		Scale = 1.02,
+		OffsetPos = Vector( -11, 0, 0 )
+	},
+	{
+		Name = "Stock",
+		Model = "models/schmal/chev_tahoe14_wheel.mdl",
+		BodyGroups = "02",
+		Scale = 1.02,
+		OffsetPos = Vector( -11, 0, 0 )
+	},
+	{
+		Name = "Stock Alternate",
+		Model = "models/schmal/chev_tahoe14_wheel.mdl",
+		BodyGroups = "03",
+		Scale = 1.02,
+		OffsetPos = Vector( -11, 0, 0 )
+	}
+}
+
 PI.Meta = {
 
 	tail_light = {
@@ -147,4 +178,11 @@ PI.States.Running = {
 	{ 20, DR, .25 }, { 21, DR, .25 }
 }
 
-Photon.VehicleLibrary["2016 Chevrolet Tahoe PPV"] = PI
+
+-- concommand.Add("bonenames",function(ply) 
+-- 	local car = ply:GetVehicle()
+-- 	local boneCount = car:GetBoneCount() - 1
+-- 	for i=0,boneCount do
+-- 		print( i ..". " .. tostring( car:GetBoneName( i ) ) )
+-- 	end
+-- end)

@@ -570,102 +570,115 @@ hook.Add( "PostDrawTranslucentRenderables", "Photon.UpdateLocalEyeInfo", functio
 	useEyeAng:Set( EyeAngles() )
 end)
 
-concommand.Add( "photon_maxoverride", function( ply ) 
-	local ent = ply:GetEyeTrace().Entity
-	if not IsValid( ent ) then return end
-	ent.Photon_OldDrawModel = ent.Draw
-	print("affirm")
-	ent.Draw = false
-	-- ent.Draw = function( self )
-	-- 	print( "called" )
-	-- 	render.MaterialOverrideByIndex( 36, "sprites/emv/fs_valor" )
-	-- 	self.Photon_OldDrawModel( self )
-	-- end
-end )
-
--- hook.Add( "PreR", "Photon.PleaseFuckingWOrk", function() 
--- 	render.MaterialOverrideByIndex( 0, "sprites/emv/fs_valor" )
--- 	-- for k,v in pairs( ents.GetAll() ) do
--- 	-- 	if not IsValid( v ) then continue end
--- 	-- 	if v:GetModel() == "models/Lonewolfie/dodge_charger_2015.mdl" then
--- 	-- 		render.MaterialOverrideByIndex( 0, "sprites/emv/fs_valor" )
--- 	-- 		v:Draw()
--- 	-- 		-- render.MaterialOverrideByIndex( 36, "" )
--- 	-- 	end
+-- concommand.Add( "photon_maxoverride", function( ply ) 
+-- 	local ent = ply:GetEyeTrace().Entity
+-- 	if not IsValid( ent ) then return end
+-- 	ent.Photon_OldDrawModel = ent.Draw
+-- 	print("affirm")
+-- 	ent.Draw = false
+-- 	-- ent.Draw = function( self )
+-- 	-- 	print( "called" )
+-- 	-- 	render.MaterialOverrideByIndex( 36, "sprites/emv/fs_valor" )
+-- 	-- 	self.Photon_OldDrawModel( self )
 -- 	-- end
 -- end )
 
-hook.Add( "PreDrawHalos", "Photon.HaloTest", function() 
-	local targs = {}
-	for k,ent in pairs( ents.GetAll() ) do
-		if not IsValid( ent ) then continue end
-		if ent:GetModel() == "models/schmal/lwdodch_tail.mdl" then 
-			targs[#targs+1] = ent
-		end
-	end
-	halo.Add( targs, Color( 255, 0, 0 ), 5, 5, 2, true, false )
-	local targs = {}
-	for k,ent in pairs( ents.GetAll() ) do
-		if not IsValid( ent ) then continue end
-		if ent:GetModel() == "models/schmal/tdm_cvpi_tail.mdl" then 
-			targs[#targs+1] = ent
-		end
-	end
-	halo.Add( targs, Color( 255, 128, 0 ), 5, 5, 1, true, false )
-	halo.Add( targs, Color( 255, 0, 0 ), 15, 15, 7, true, false )
-	local targs = {}
-	for k,ent in pairs( ents.GetAll() ) do
-		if not IsValid( ent ) then continue end
-		if ent:GetModel() == "models/schmal/lwdodch_head_driver_glw.mdl" then 
-			targs[#targs+1] = ent
-		end
-	end
-	halo.Add( targs, Color( 0, 0, 255 ), 8, 8, 1, true, false )
-	halo.Add( targs, Color( 200, 220, 255 ), 4, 4, 2, true, false )
-	-- halo.Add( targs, Color( 200, 220, 255 ), 4, 4, 5, true, false )
-end )
+-- print("test")
+-- hook.Add( "PreDrawHalos", "Photon.PleaseFuckingWOrk", function() 
+-- 	render.MaterialOverrideByIndex( 0, "sprites/emv/fs_valor" )
+-- 	for k,v in pairs( ents.GetAll() ) do
+-- 		if not IsValid( v ) then continue end
+-- 		if v:GetModel() == "models/lonewolfie/dodge_charger_2015_police.mdl" then
+-- 			-- render.MaterialOverrideByIndex( 0, "sprites/emv/fs_valor" )
+-- 			-- v:Draw()
+-- 			-- print("found")
+-- 			-- render.MaterialOverrideByIndex( 36, "" )
+-- 		end
+-- 	end
+-- end )
 
-hook.Add("HudPaint","photonmodelglowtest",function()
-	for k,ent in pairs( ents.GetAll() ) do
-		if not IsValid( ent ) then continue end
-		if ent:GetModel() == "models/schmal/lwdodch_head_driver_glw.mdl" then
-			ent:SetColor( Color( 255, 0, 0 ) )
-			ent:SetColor( Color( 255, 0, 0 ) )
-			ent:SetColor( Color( 255, 0, 0 ) )
-			ent:SetColor( Color( 255, 0, 0 ) )
-			ent:SetColor( Color( 255, 0, 0 ) )
-			ent:SetColor( Color( 255, 0, 0 ) )
-			print("hey")
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			ent:DrawModel()
-			-- ent:SetColor( Color( 255, 255, 255 ) )
-		end
-	end
-end)
+-- hook.Add( "PreDrawHalos", "Photon.HaloTest", function() 
+-- 	local targs = {}
+-- 	for k,ent in pairs( ents.GetAll() ) do
+-- 		if not IsValid( ent ) then continue end
+-- 		if ent:GetModel() == "models/schmal/lwdodch_tail.mdl" then 
+-- 			targs[#targs+1] = ent
+-- 		end
+-- 	end
+-- 	halo.Add( targs, Color( 255, 0, 0 ), 5, 5, 2, true, false )
+-- 	local targs = {}
+-- 	for k,ent in pairs( ents.GetAll() ) do
+-- 		if not IsValid( ent ) then continue end
+-- 		if ent:GetModel() == "models/schmal/tahoe_rear.mdl" then 
+-- 			targs[#targs+1] = ent
+-- 		end
+-- 	end
+-- 	halo.Add( targs, Color( 255, 0, 0 ), 8, 8, 4, true, false )
+-- 	local targs = {}
+-- 	for k,ent in pairs( ents.GetAll() ) do
+-- 		if not IsValid( ent ) then continue end
+-- 		if ent:GetModel() == "models/schmal/tdm_cvpi_tail.mdl" then 
+-- 			targs[#targs+1] = ent
+-- 		end
+-- 	end
+-- 	halo.Add( targs, Color( 255, 128, 0 ), 5, 5, 1, true, false )
+-- 	halo.Add( targs, Color( 255, 0, 0 ), 15, 15, 7, true, false )
+-- 	local targs = {}
+-- 	for k,ent in pairs( ents.GetAll() ) do
+-- 		if not IsValid( ent ) then continue end
+-- 		if ent:GetModel() == "models/schmal/lwdodch_head_driver_glw.mdl" then 
+-- 			targs[#targs+1] = ent
+-- 		end
+-- 	end
+-- 	halo.Add( targs, Color( 0, 0, 255 ), 8, 8, 1, true, false )
+-- 	halo.Add( targs, Color( 200, 220, 255 ), 4, 4, 2, true, false )
+-- 	-- halo.Add( targs, Color( 200, 220, 255 ), 4, 4, 5, true, false )
+-- end )
+
+-- lua_run BroadcastLua("hook.remove('HudPaint','photonmodelglowtest')")
+-- lua_run BroadcastLua("hook.remove('PreDrawHalos','Photon.HaloTest')")
+
+-- hook.Add("HudPaint","photonmodelglowtest",function()
+-- 	for k,ent in pairs( ents.GetAll() ) do
+-- 		if not IsValid( ent ) then continue end
+-- 		if ent:GetModel() == "models/schmal/lwdodch_head_driver_glw.mdl" then
+-- 			ent:SetColor( Color( 255, 0, 0 ) )
+-- 			ent:SetColor( Color( 255, 0, 0 ) )
+-- 			ent:SetColor( Color( 255, 0, 0 ) )
+-- 			ent:SetColor( Color( 255, 0, 0 ) )
+-- 			ent:SetColor( Color( 255, 0, 0 ) )
+-- 			ent:SetColor( Color( 255, 0, 0 ) )
+-- 			print("hey")
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			ent:DrawModel()
+-- 			-- ent:SetColor( Color( 255, 255, 255 ) )
+-- 		end
+-- 	end
+-- end)

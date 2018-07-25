@@ -1,0 +1,17 @@
+"UnlitGeneric"
+{
+	$basetexture "schmal/shared/full_white"
+	$model 1
+	$additive 1
+	"$nodecal" "1"
+	$nocull 1
+	$colorfix  "{200 60 0}"
+	Proxies  {
+		Equals {
+			"srcVar1" $colorfix
+			"resultVar"  $color
+		}
+	}
+}
+
+

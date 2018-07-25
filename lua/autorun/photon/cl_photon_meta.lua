@@ -48,6 +48,84 @@ function Photon:SetupCar( ent, index )
 		return self:Photon_BlinkState() == CAR_HAZARD
 	end
 
+	function ent:Photon_WheelOption()
+		if not IsValid( self ) then return 1 end
+		return self:GetDTInt( CAR_WHEEL_OPTION )
+	end
+
+	function ent:Photon_WheelEnabled()
+		return istable( Photon.Vehicles.WheelPositions[ self.VehicleName ] ) and istable( Photon.Vehicles.WheelOptions[ self.VehicleName ] )
+	end
+
+	function ent:Photon_GetWheelOptions()
+		return Photon.Vehicles.WheelOptions[self.VehicleName] or {}
+	end
+
+	function ent:Photon_GetWheelPositions()
+		return Photon.Vehicles.WheelPositions[self.VehicleName] or {}
+	end
+
+	function ent:Photon_SetupWheels()
+		if not IsValid( self ) then return end
+		self:Photon_ClearWheelProps()
+		local targetIndex = self:Photon_WheelOption()
+		self.Photon_LastWheelOption = targetIndex
+		local wheelPositions = self:Photon_GetWheelPositions()
+		local wheelOption = self:Photon_GetWheelOptions()[targetIndex]
+		local p = wheelOption
+		if wheelOption.Model then
+			for index, wheelPosData in pairs( wheelPositions ) do
+				local prop = ClientsideModel( wheelOption.Model, RENDERGROUP_OPAQUE )
+				if isvector( p.Scale ) then
+					local mat = Matrix()
+					mat:Scale( p.Scale )
+					prop:EnableMatrix( "RenderMultiply", mat )
+				elseif isnumber( p.Scale ) then
+					prop:SetModelScale( p.Scale, 0 )
+				end
+				local attachmentIndex = wheelPosData.Attachment
+				if isstring( wheelPosData.Attachment ) then
+					attachmentIndex = self:LookupAttachment( wheelPosData.Attachment )
+				end
+				local attachment = self:GetAttachment( attachmentIndex )
+				prop:SetMoveType( MOVETYPE_NONE )
+				local lpos = wheelOption.OffsetPos or Vector()
+				local lang = wheelOption.OffsetAng or Angle()
+				prop:SetParent( self, attachmentIndex )
+				prop:SetPos( self:LocalToWorld( lpos ) )
+				prop:SetAngles( self:LocalToWorldAngles( lang ) )
+				prop:SetBodyGroups( wheelOption.BodyGroups or "" )
+				prop.Photon_WheelParent = attachmentIndex
+				prop.Photon_VehicleParent = self
+				prop.Photon_LocalAng = lang
+				prop.Photon_LocalPos = lpos
+				prop:Activate()
+				prop:Spawn()
+				self.PhotonWheelProps[ index ] = prop
+			end
+		end
+	end
+
+	function ent:Photon_ScanWheels()
+		if not IsValid( self ) or not self:Photon_WheelEnabled() then return end
+		if ( self.LastWheelPropScan and self.LastWheelPropScan + .5 > CurTime() and not PHOTON_DEBUG and not PHOTON_EXPRESS ) then return end
+		if self.Photon_LastWheelOption != self:Photon_WheelOption() then self:Photon_SetupWheels() return end
+		for index, prop in pairs( self.PhotonWheelProps ) do
+			if not IsValid( prop ) or prop:GetParentAttachment() != prop.Photon_WheelParent then self:Photon_SetupWheels() return end
+		end
+		self.LastWheelPropScan = CurTime()
+	end
+
+	function ent:Photon_ClearWheelProps()
+		if not IsValid( self ) then return end
+		if istable( self.PhotonWheelProps ) then
+			for _,ent in pairs( self.PhotonWheelProps ) do
+				if IsValid( ent ) then ent:Remove() end
+			end
+		end
+		self.PhotonWheelProps = {}
+	end
+
 	function ent:Photon_SetupCarVisHandles()
 		if not IsValid( self ) or not self.Photon_GetLightingPositions then return false end
 		//if not self.GetLightingPositions() or not self:Photon_GetLightingPositions() then return end

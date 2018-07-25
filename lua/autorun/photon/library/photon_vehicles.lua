@@ -6,14 +6,14 @@ Photon.EMVLibrary = {}
 -- These were converted to be read-only after addons were breaking compatibility with the Ford Police Interceptor Utility
 
 local PhotonVehicleIndex = {
-	["models/LoneWolfie/chev_impala_09_police.mdl"] = "lw_impala",
-	["models/LoneWolfie/chev_impala_09_taxi.mdl"] = "lw_impala",
-	["models/LoneWolfie/chev_impala_09.mdl"] = "lw_impala",
-	["models/LoneWolfie/chev_tahoe.mdl"] = "lw_tahoe",
-	["models/LoneWolfie/chev_tahoe_police.mdl"] = "lw_tahoe",
-	["models/LoneWolfie/chev_suburban.mdl"] = "lw_suburban",
-	["models/LoneWolfie/chev_suburban_pol.mdl"] = "lw_suburban",
-	["models/LoneWolfie/chev_suburban_pol_und.mdl"] = "lw_suburban",
+	["models/lonewolfie/chev_impala_09_police.mdl"] = "lw_impala",
+	["models/lonewolfie/chev_impala_09_taxi.mdl"] = "lw_impala",
+	["models/lonewolfie/chev_impala_09.mdl"] = "lw_impala",
+	["models/lonewolfie/chev_tahoe.mdl"] = "lw_tahoe",
+	["models/lonewolfie/chev_tahoe_police.mdl"] = "lw_tahoe",
+	["models/lonewolfie/chev_suburban.mdl"] = "lw_suburban",
+	["models/lonewolfie/chev_suburban_pol.mdl"] = "lw_suburban",
+	["models/lonewolfie/chev_suburban_pol_und.mdl"] = "lw_suburban",
 	["models/sentry/explorer.mdl"] = "sgm_explorer",
 	["models/sentry/taurussho.mdl"] = "sgm_taurus",
 	["models/sentry/07crownvic_uc.mdl"] = "sgm_cvpi",
@@ -28,7 +28,7 @@ local PhotonVehicleIndex = {
 	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility",
 	["models/schmal/chev_tahoe16.mdl"] = "2016 Chevrolet Tahoe PPV",
 	["models/tdmcars/emergency/for_taurus_13.mdl"] = "fortauruspoltdm",
-	["models/LoneWolfie/dodge_charger_2015_police.mdl"] = "dodge_charger_2015_police_lw",
+	["models/lonewolfie/dodge_charger_2015_police.mdl"] = "dodge_charger_2015_police_lw",
 	-- ["models/talonvehicles/tal_chev_suburban_2015.mdl"] = "talon_suburban"
 }
 
@@ -42,16 +42,16 @@ function Photon.GetVehicleIndex( key )
 end
 
 local PhotonEMVIndex = {
-	["models/LoneWolfie/chev_impala_09_police.mdl"] = "Chevrolet Impala LS Police Cruiser",
-	["models/LoneWolfie/chev_tahoe_police.mdl"] = "Chevrolet Tahoe Secret Service",
-	["models/LoneWolfie/chev_suburban_pol_und.mdl"] = "Chevrolet Suburban Police Cruiser Undercover",
+	["models/lonewolfie/chev_impala_09_police.mdl"] = "Chevrolet Impala LS Police Cruiser",
+	["models/lonewolfie/chev_tahoe_police.mdl"] = "Chevrolet Tahoe Secret Service",
+	["models/lonewolfie/chev_suburban_pol_und.mdl"] = "Chevrolet Suburban Police Cruiser Undercover",
 	["models/tdmcars/hsvw427_pol.mdl"] = "Holden HSV W427 Police",
 	["models/tdmcars/emergency/for_crownvic.mdl"] = "Ford Crown Victoria",
 	["models/tdmcars/emergency/dod_charger12.mdl"] = "Dodge Charger SRT8 2012 Police",
 	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility",
 	["models/schmal/chev_tahoe16.mdl"] = "2016 Chevrolet Tahoe PPV",
 	["models/tdmcars/emergency/for_taurus_13.mdl"] = "Ford Taurus 2013",
-	["models/LoneWolfie/dodge_charger_2015_police.mdl"] = "Dodge Charger R/T 2015 Pursuit",
+	["models/lonewolfie/dodge_charger_2015_police.mdl"] = "Dodge Charger R/T 2015 Pursuit",
 	-- ["models/talonvehicles/tal_chev_suburban_2015.mdl"] = "2015 Chevrolet Suburban"
 }
 
@@ -60,14 +60,14 @@ function Photon.GetEMVIndex( key )
 end
 
 local PhotonDefaultMapping = {
-	["models/LoneWolfie/chev_impala_09_police.mdl"] = "chev_impala_09_police",
-	["models/LoneWolfie/chev_impala_09_taxi.mdl"] = "chev_impala_09_taxi",
-	["models/LoneWolfie/chev_impala_09.mdl"] = "chev_impala_09",
-	["models/LoneWolfie/chev_tahoe.mdl"] = "chev_tahoe_lw",
-	["models/LoneWolfie/chev_tahoe_police.mdl"] = "chev_tahoe_police_lw",
-	["models/LoneWolfie/chev_suburban.mdl"] = "chev_suburban",
-	["models/LoneWolfie/chev_suburban_pol.mdl"] = "chev_suburban_pol",
-	["models/LoneWolfie/chev_suburban_pol_und.mdl"] = "chev_suburban_pol_und",
+	["models/lonewolfie/chev_impala_09_police.mdl"] = "chev_impala_09_police",
+	["models/lonewolfie/chev_impala_09_taxi.mdl"] = "chev_impala_09_taxi",
+	["models/lonewolfie/chev_impala_09.mdl"] = "chev_impala_09",
+	["models/lonewolfie/chev_tahoe.mdl"] = "chev_tahoe_lw",
+	["models/lonewolfie/chev_tahoe_police.mdl"] = "chev_tahoe_police_lw",
+	["models/lonewolfie/chev_suburban.mdl"] = "chev_suburban",
+	["models/lonewolfie/chev_suburban_pol.mdl"] = "chev_suburban_pol",
+	["models/lonewolfie/chev_suburban_pol_und.mdl"] = "chev_suburban_pol_und",
 	["models/sentry/explorer.mdl"] = "explorer",
 	["models/sentry/taurussho.mdl"] = "taurussho",
 	["models/sentry/07crownvic_uc.mdl"] = "07sgmcrownvicuc",
@@ -82,7 +82,7 @@ local PhotonDefaultMapping = {
 	["models/schmal/fpiu/ford_utility.mdl"] = "2016 Ford Police Interceptor Utility",
 	["models/schmal/chev_tahoe16.mdl"] = "2016 Chevrolet Tahoe PPV",
 	["models/tdmcars/emergency/for_taurus_13.mdl"] = "fortauruspoltdm",
-	["models/LoneWolfie/dodge_charger_2015_police.mdl"] = "dodge_charger_2015_police_lw",
+	["models/lonewolfie/dodge_charger_2015_police.mdl"] = "dodge_charger_2015_police_lw",
 	-- ["models/talonvehicles/tal_chev_suburban_2015.mdl"] = "talsuburban2015"
 }
 

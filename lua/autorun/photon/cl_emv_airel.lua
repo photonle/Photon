@@ -27,10 +27,12 @@ Photon.AirEL.DownloadMaterial = function( id, unitString, ent, cback, failed )
 			if isfunction( cback ) then
 				cback( id, unitString, ent )
 			end
+			print("AIREL SUCCESS")
 		end,
 		function( error )
 			if isfunction( failed ) then
 				failed( id, unitString, ent )
+				print("AIREL FAILURE")
 			end
 		end
 	);
@@ -42,6 +44,7 @@ end
 
 Photon.AirEL.LoadMaterial = function( id, unitString, ent )
 	local checkFile = "photon/airel/" .. Photon.AirEL.FormatName( id, unitString )
+	-- Photon.AirEL.DownloadMaterial( id, unitString, ent, Photon.AirEL.LoadCallbackSuccess, Photon.AirEL.LoadCallbackFail )
 	if file.Exists( checkFile, "DATA" ) then
 		Photon.AirEL.ApplyTexture( Photon.AirEL.LoadMaterialFromFile( id, unitString ), ent, id, unitString )
 	else
@@ -146,4 +149,8 @@ end
 
 timer.Create("Photon.AirELIllumScan", .25, 0, function()
 	Photon.AirEL.IllumScan()
+end)
+
+concommand.Add("photon_clearmatcache", function()
+	table.Empty(Photon.AirEL.MaterialIndex)
 end)

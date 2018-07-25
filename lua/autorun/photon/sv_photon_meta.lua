@@ -97,11 +97,29 @@ function Photon:SetupCar( ent, index )
 		return self:GetNWBool( "PhotonStayOn", false )
 	end
 
+	function ent:Photon_WheelEnabled()
+		return istable( Photon.Vehicles.WheelPositions[ self.VehicleName ] ) and istable( Photon.Vehicles.WheelOptions[ self.VehicleName ] )
+	end
+
+	function ent:Photon_PlayerSetWheelIndex( val )
+		if not self:Photon_WheelEnabled() then return false end
+		local max = #Photon.Vehicles.WheelOptions[ self.VehicleName ]
+		if val > max then val = 1 end
+		self:Photon_SetWheelIndex( val )
+	end
+
+	function ent:Photon_SetWheelIndex( val )
+		if not IsValid( self ) then return 0 end
+		if (val!=nil) then self:SetDTInt( CAR_WHEEL_OPTION, val ) end
+		return self:GetDTInt( CAR_WHEEL_OPTION )
+	end
+
 	ent:CAR_Headlights( false )
 	ent:CAR_Braking( false )
 	ent:CAR_Running( false )
 	ent:CAR_Reversing( false )
 	ent:CAR_StopSignals()
+	if ent:Photon_WheelEnabled() then ent:Photon_SetWheelIndex( 1 ) end
 
 	-- ent:SetNWString( "PhotonVehicle", index )
 	ent:SetDTBool( CAR_HAS_PHOTON, true )

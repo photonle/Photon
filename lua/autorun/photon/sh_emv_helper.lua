@@ -196,6 +196,7 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 	-- 	if not printedErrors[ errorString ] then printedErrors[ errorString ] = true; print( errorString ) end
 	-- 	return
 	-- end
+	EMVU.Sequences = EMVU.Sequences or {}
 	if not name or not option or not vehicle then return {} end
 	if not istable( EMVU.Sequences[ name ] ) or not istable( EMVU.Sequences[ name ].Illumination ) then return {} end
 	local resultTable = {}
@@ -523,8 +524,8 @@ function EMVU.Helper.GetPositionFromRE( car, lbEntity, posInput, returnWorld )
 	local newAng = Angle()
 	-- print(tostring(lbEntity:GetAngles().p))
 	local contingentTransform = ( math.abs(lbEntity.PhotonLocalAngs.p) > 0 )
-	newPos:Set( posVector )
-	newAng:Set( boneAng )
+	newPos:Set( posVector or Vector() )
+	newAng:Set( boneAng or Angle() )
 	-- if contingentTransform then
 	-- 	local tempVector = Angle()
 	-- 	tempVector:Set( newAng )

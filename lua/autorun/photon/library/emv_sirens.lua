@@ -423,15 +423,15 @@ local sirenTable = {
 	[46] = {
 		Name = "Gamma",
 		Category = "Whelen",
-		Gain = {
-			Sound = "sound/emv/sirens/whelen gamma/emv_wind3.wav",
-			-- UpRate = .017,
-			-- DownRate = .005,
-			UpRate = .034,
-			DownRate = .01,
-			MaxRate = 1,
-			MinRate = .3
-		},
+		-- Gain = {
+		-- 	Sound = "sound/emv/sirens/whelen gamma/emv_wind3.wav",
+		-- 	-- UpRate = .017,
+		-- 	-- DownRate = .005,
+		-- 	UpRate = .034,
+		-- 	DownRate = .01,
+		-- 	MaxRate = 1,
+		-- 	MinRate = .3
+		-- },
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/whelen gamma/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/whelen gamma/emv_yelp.wav", Icon="yelp"},

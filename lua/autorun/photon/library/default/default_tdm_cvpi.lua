@@ -19,16 +19,7 @@ EMV.Skin = 0
 
 EMV.BodyGroups = {}
 
-EMV.Props = {
-	[1] = {
-		Model = "models/schmal/tdm_cvpi_tail.mdl",
-		Scale = 1.005,
-		Pos = Vector(0, .3, 1.83),
-		Ang = Angle( 0, 0, 0),
-		RenderGroup = RENDERGROUP_OPAQUE,
-		RenderMode = RENDERMODE_NORMAL
-	},
-}
+EMV.Props = {}
 
 local height = 76.4
 
@@ -679,10 +670,10 @@ EMV.Sections = {
 		{ { 44, R } }
 	},
 	["lightbar_halogen_front"] = {
-		{ { 47, B, { 16, 0, 0 } }, { 48, R, { 16, 0, 8 } } }
+		{ { 47, "BLUE_HALOGEN", { 16, 0, 0 } }, { 48, "RED_HALOGEN", { 16, 0, 8 } } }
 	},
 	["lightbar_halogen_rotators"] = {
-		{ { 49, B }, { 50, R }, { 51, B }, { 52, R }, { 53, B }, { 54, R }, { 55, B }, { 56, R }, { 65, SW }, { 66, SW }, { 67, SW }, { 68, SW } }
+		{ { 49, "BLUE_HALOGEN" }, { 50, "RED_HALOGEN" }, { 51, "BLUE_HALOGEN" }, { 52, "RED_HALOGEN" }, { 53, "BLUE_HALOGEN" }, { 54, "RED_HALOGEN" }, { 55, "BLUE_HALOGEN" }, { 56, "RED_HALOGEN" }, { 65, SW }, { 66, SW }, { 67, SW }, { 68, SW } }
 	},
 	["lightbar_halogen_takedowns"] ={
 		{ { 45, SW, { 10, 0, 0 } }, { 46, SW, { 10, 0, 0 } }, { 63, SW, { 10, 0, 0 } }, { 64, SW, { 10, 0, 0 } } }

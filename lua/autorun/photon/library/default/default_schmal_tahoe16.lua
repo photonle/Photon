@@ -248,6 +248,15 @@ EMV.Props = {
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
 	},
+	[29] = {
+		Model = "models/schmal/tahoe_rear.mdl",
+		Scale = 1.002,
+		Pos = Vector( 0, -.01, 0 ),
+		Ang = Angle( 0, 90, 0),
+		//Color = Color( 0, 0, 0 ),
+		-- RenderGroup = RENDERGROUP_TRANSLUCENT,
+		-- RenderMode = RENDERMODE_TRANSALPHA
+	},
 }
 
 EMV.Meta = {
@@ -1864,7 +1873,7 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 	{
 		Name = "Pushbars",
 		Options = {
-			{ Category = "Setina Pushbar", Name = "R/B Trio", Props = { 13 }, Auto = { 44, 45, 70, 71 } },
+			{ Category = "Setina Pushbar", Name = "R/B Trio", Props = { 13, 29 }, Auto = { 44, 45, 70, 71 } },
 			{ Category = "Setina Pushbar", Name = "R/B Split", Props = { 13 }, Auto = { 75, 76, 70, 71 } },
 			{ Category = "Setina Pushbar", Name = "B/W Split", Props = { 13 }, Auto = { 79, 80, 70, 71 } },
 			{ Category = "Setina Pushbar", Name = "R/W Split", Props = { 13 }, Auto = { 77, 78, 70, 71 } },
@@ -2025,5 +2034,5 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 }
 
 Photon.EMVLibrary[name] = EMV
--- if EMVU then EMVU:OverwriteIndex( name, EMV ) end
--- if PI then Photon:OverwriteIndex( name, PI ) end
+if EMVU then EMVU:OverwriteIndex( name, EMV ) end
+if PI then Photon:OverwriteIndex( name, PI ) end

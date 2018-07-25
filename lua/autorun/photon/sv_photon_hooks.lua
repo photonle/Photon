@@ -9,8 +9,6 @@ function Photon:RunningScan()
 				v:CAR_Running( true )
 			end
 
-			if v:HasPhotonELS() and v:ELS_Siren() then v:ELS_SirenContinue() end
-
 			if v:IsBraking() then v:CAR_Braking( true ) else v:CAR_Braking( false ) end
 			if v:IsReversing() then v:CAR_Reversing( true ) else v:CAR_Reversing( false ) end
 
@@ -28,8 +26,13 @@ function Photon:RunningScan()
 		end
 	end
 end
-timer.Create("Photon.RunScan", .1, 0, function()
+timer.Create("Photon.RunScan", 1, 0, function()
 	Photon:RunningScan()
+end)
+timer.Create("Photon.SirenRunScan", 0.2, 0, function()
+	for _,car in pairs( Photon:AllVehicles() ) do
+		if car:HasPhotonELS() and car:ELS_Siren() then car:ELS_SirenContinue() end
+	end
 end)
 
 function Photon:VehicleRemoved( ent )

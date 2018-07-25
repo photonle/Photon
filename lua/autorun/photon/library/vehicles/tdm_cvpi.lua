@@ -42,8 +42,8 @@ PI.Meta = {
 		AngleOffset = -90,
 		W = 13,
 		H = 14,
-		Sprite = "sprites/emv/blank",
-		//Sprite = "sprites/emv/crownvic_headlight",
+		-- Sprite = "sprites/emv/blank",
+		Sprite = "sprites/emv/crownvic_headlight",
 		Scale = 2,
 		WMult = 1
 	},
@@ -52,8 +52,8 @@ PI.Meta = {
 		AngleOffset = -90,
 		W = 14,
 		H = 14,
-		Sprite = "sprites/emv/blank",
-		//Sprite = "sprites/emv/crownvic_marker",
+		-- Sprite = "sprites/emv/blank",
+		Sprite = "sprites/emv/crownvic_marker",
 		Scale = 3,
 		WMult = .4
 	},
@@ -71,8 +71,8 @@ PI.Meta = {
 		AngleOffset = -90,
 		W = 9,
 		H = 9.8,
-		//Sprite = "sprites/emv/cvpi_corner_marker",
-		Sprite = "sprites/emv/blank",
+		Sprite = "sprites/emv/cvpi_corner_marker",
+		-- Sprite = "sprites/emv/blank",
 		Scale = 1.6,
 	}
 
