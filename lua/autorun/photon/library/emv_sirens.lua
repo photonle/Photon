@@ -206,7 +206,7 @@ local sirenTable = {
 	},
 	[21] = { -- provided by Super Mighty
 		Name = "GTA V",
-		Category = "Other", 
+		Category = "Other",
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/gta/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/gta/emv_yelp.wav", Icon="yelp"},
@@ -255,7 +255,7 @@ local sirenTable = {
 		},
 	},
 	[26] = {
-		Name = "SQ Zone", 
+		Name = "SQ Zone",
 		Category = "Other",
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/sq zone/emv_wail.wav", Icon="wail"},
@@ -280,7 +280,7 @@ local sirenTable = {
 			{Name = "WAIL", Sound = "emv/sirens/code 3 h2/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/code 3 h2/emv_yelp.wav", Icon="yelp"},
 			{Name = "HPYP", Sound = "emv/sirens/code 3 h2/emv_hyperyelp.wav", Icon="phaser"},
-			// {Name = "HPYP", Sound = "emv/sirens/code 3 h2/emv_whoop.wav", Icon="hilo"},
+			-- {Name = "HPYP", Sound = "emv/sirens/code 3 h2/emv_whoop.wav", Icon="hilo"},
 		},
 		Horn = "emv/sirens/code 3 h2/emv_horn.wav"
 	},
