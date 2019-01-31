@@ -530,11 +530,13 @@ EMVU.Horns = {
 	"emv/horns/emv_standard.wav" -- loud ass airhorn, slightly experimental
 }
 
-EMVU.GetSiren = function( index )
+EMVU.GetSiren = function(index)
 	if not index then Error("[Photon] EMVU.GetSiren( index ) requires a string or number index. Got nil or false.") return end
-	local sirenTable = EMVU.GetSirenTable()
-	if isnumber( index ) and sirenTable[ index ] then return table.Copy( sirenTable[ index ] ) end
-	for key,sirenInfo in pairs( sirenTable ) do
+	local st = EMVU.GetSirenTable()
+
+	if isnumber(index) and st[index] then return table.Copy(st[index]) end
+
+	for key, sirenInfo in pairs(st) do
 		if sirenInfo.ID == index then
 			return sirenInfo
 		end
@@ -543,21 +545,31 @@ EMVU.GetSiren = function( index )
 	return sirenTable[1]
 end
 
-EMVU.GetSirenTable = function() 
+EMVU.GetSirenTable = function()
 	return sirenTable
 end
 
-EMVU.AddCustomSiren = function( index, inputTable )
-	if isnumber( tonumber( tostring( index ) ) ) then Error("[Photon] Custom sirens need to use a non-number identifier. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens") return end
-	local newIndexNumber = #sirenTable + 1
+EMVU.AddCustomSiren = function(index, siren)
+	if tonumber(index) ~= nil then return Error("[Photon] Custom sirens need a non-number identifier. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens\n") end
+
 	inputTable.ID = index
-	sirenTable[ newIndexNumber ] = inputTable
+	table.insert(sirenTable, siren)
 end
 
-EMVU.Sirens = false
+EMVU.Sirens = {}
+timer.Simple(35, function()
+	if #EMVU.Sirens > 0 then
+		print("[Photon] One or more addons are using a deprecated method to add custom sirens. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens")
+	end
+end)
 
--- timer.Simple( 30, function()
--- 	if EMVU.Sirens != false then
--- 		print( "[Photon] One or more addons are using a deprecated method to add custom sirens. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens" )
--- 	end
--- end)
+--[[ New Siren Example
+EMVU.AddCustomSiren("internets special siren number UNO", {
+	Name = "Example Siren", -- The name that shows on the HUD.
+	Category = "Examples", -- The category the siren shows up under.
+	Set = {
+		{Name = "WAIL", Sound = "emv/sirens/example/example.wav", Icon = "wail"}
+	},
+	Horn = "emv/sirens/example/horn.wav"
+})
+]]--
