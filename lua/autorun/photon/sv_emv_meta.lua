@@ -594,13 +594,13 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	if emv.Siren then
-		ent:ELS_SetSirenSet( emv.Siren )
+		ent:ELS_SetSirenSet(EMVU.GetSirenIndex(emv.Siren))
 	else
 		ent:ELS_SetSirenSet( 1 )
 	end
 
-	if emv.AuxiliarySiren and isnumber( emv.AuxiliarySiren ) then
-		ent:ELS_AuxSirenSet( emv.AuxiliarySiren )
+	if emv.AuxiliarySiren then
+		ent:ELS_AuxSirenSet(EMVU.GetSirenIndex(emv.AuxiliarySiren))
 	else
 		ent:ELS_AuxSirenSet( 0 )
 	end
