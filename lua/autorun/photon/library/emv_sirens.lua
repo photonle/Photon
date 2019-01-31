@@ -3,8 +3,22 @@ AddCSLuaFile()
 -- This file contains all the sirens used.
 -- Tables are numbered to avoid vehicles using the wrong siren set from being rearranged.
 
+--[[ Siren Example Table
+{
+	Name = "Example Siren", -- The name that shows on the HUD.
+	Category = "Examples", -- The category the siren shows up under.
+	Set = { -- The actual sirens.
+		{
+			Name = "WAIL", -- Short name to display on HUD.
+			Sound = "emv/sirens/example/example.wav", -- Sound path.
+			Icon = "wail" -- Icon to show on the HUD. One of wail, yelp, phaser, hilo.
+		}
+	},
+	Horn = "emv/sirens/example/horn.wav" -- Path to the horn.
+}
+]]--
+
 local sirenTable = {
-	
 	[1] = {
 		Name = "Alpha", -- (Name that's displayed on HUD) this a typical Whelen siren, extremely common on vehicles within the last 20 years
 		Category = "Whelen",
