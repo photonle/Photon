@@ -552,7 +552,7 @@ end
 EMVU.AddCustomSiren = function(index, siren)
 	if tonumber(index) ~= nil then return Error("[Photon] Custom sirens need a non-number identifier. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens\n") end
 
-	inputTable.ID = index
+	siren.ID = index
 	table.insert(sirenTable, siren)
 end
 
