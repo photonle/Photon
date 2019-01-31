@@ -573,3 +573,13 @@ EMVU.AddCustomSiren("internets special siren number UNO", {
 	Horn = "emv/sirens/example/horn.wav"
 })
 ]]--
+
+EMVU.IncludeSiren = function(siren)
+	AddCSLuaFile("autorun/photon/library/sirens/" .. siren)
+	include("autorun/photon/library/sirens/" .. siren)
+end
+
+local sirens = file.Find("autorun/photon/library/sirens/*.lua", "LUA")
+for _, siren in pairs(sirens) do
+	EMVU.IncludeSiren(siren)
+end
