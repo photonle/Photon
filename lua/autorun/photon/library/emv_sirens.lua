@@ -553,7 +553,7 @@ EMVU.GetSirenIndex = function(index)
 
 	for key, sirenInfo in pairs(st) do
 		if sirenInfo.ID == index then
-			return index
+			return key
 		end
 	end
 
