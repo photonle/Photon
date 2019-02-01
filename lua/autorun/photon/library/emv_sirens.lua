@@ -545,6 +545,22 @@ EMVU.GetSiren = function(index)
 	return sirenTable[1]
 end
 
+EMVU.GetSirenIndex = function(index)
+	if not index then Error("[Photon] EMVU.GetSirenIndex( index ) requires a string or number index. Got nil or false.") return end
+	local st = EMVU.GetSirenTable()
+
+	if isnumber(index) and st[index] then return index end
+
+	for key, sirenInfo in pairs(st) do
+		if sirenInfo.ID == index then
+			return key
+		end
+	end
+
+	print( "[Photon] Failed to find siren with index (" .. tostring( index ) .. "), falling back.")
+	return 0
+end
+
 EMVU.GetSirenTable = function()
 	return sirenTable
 end
