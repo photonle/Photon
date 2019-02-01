@@ -33,9 +33,9 @@ for id, _ in pairs(PhotonHUD.Icons) do
 	PhotonHUD.DefaultIcons[id] = true
 end
 
-EMVU.AddCustomHUDIcon = function(name, data)
+Photon.AddCustomHUDIcon = function(name, data)
 	if PhotonHUD.DefaultIcons[name] then
-		return Error("[Photon] Attempted to overwrite default icon in EMVU.AddCustomHUDIcon.")
+		return Error("[Photon] Attempted to overwrite default icon in Photon.AddCustomHUDIcon.")
 	end
 
 	PhotonHUD.Icons[name] = data
