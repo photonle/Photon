@@ -272,13 +272,15 @@ PhotonHUD.Code = PhotonHUD.Code .. [[
 </html>]]
 
 function PhotonHUD:Init()
-	if PhotonHUD.Panel and PhotonHUD.Panel:IsValid() then PhotonHUD.Panel:Remove() end
-	PhotonHUD.Panel = vgui.Create( "DHTML" )
-	if not PhotonHUD.Panel then timer.Simple( 3, function() PhotonHUD:Init() end ) return end
-	PhotonHUD.Panel:SetPaintedManually( true )
-	PhotonHUD.Panel:SetSize( 512, 512 )
-	PhotonHUD.Panel:SetMouseInputEnabled( false )
-	PhotonHUD.Panel:SetHTML( PhotonHUD.Code )
+	if not self.Code then self:BuildCode() end
+	if IsValid(self.Panel) then self.Panel:Remove() end
+
+	self.Panel = vgui.Create( "DHTML" )
+	if not self.Panel then timer.Simple(3, function() self:Init() end) return end
+	self.Panel:SetPaintedManually(true)
+	self.Panel:SetSize(512, 512)
+	self.Panel:SetMouseInputEnabled(false)
+	self.Panel:SetHTML(self.Code)
 end
 
 local lastPhotonUpdate = 0
