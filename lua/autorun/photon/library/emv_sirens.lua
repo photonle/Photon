@@ -3,8 +3,22 @@ AddCSLuaFile()
 -- This file contains all the sirens used.
 -- Tables are numbered to avoid vehicles using the wrong siren set from being rearranged.
 
+--[[ Siren Example Table
+{
+	Name = "Example Siren", -- The name that shows on the HUD.
+	Category = "Examples", -- The category the siren shows up under.
+	Set = { -- The actual sirens.
+		{
+			Name = "WAIL", -- Short name to display on HUD.
+			Sound = "emv/sirens/example/example.wav", -- Sound path.
+			Icon = "wail" -- Icon to show on the HUD. One of wail, yelp, phaser, hilo.
+		}
+	},
+	Horn = "emv/sirens/example/horn.wav" -- Path to the horn.
+}
+]]--
+
 local sirenTable = {
-	
 	[1] = {
 		Name = "Alpha", -- (Name that's displayed on HUD) this a typical Whelen siren, extremely common on vehicles within the last 20 years
 		Category = "Whelen",
@@ -192,7 +206,7 @@ local sirenTable = {
 	},
 	[21] = { -- provided by Super Mighty
 		Name = "GTA V",
-		Category = "Other", 
+		Category = "Other",
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/gta/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/gta/emv_yelp.wav", Icon="yelp"},
@@ -241,7 +255,7 @@ local sirenTable = {
 		},
 	},
 	[26] = {
-		Name = "SQ Zone", 
+		Name = "SQ Zone",
 		Category = "Other",
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/sq zone/emv_wail.wav", Icon="wail"},
@@ -266,7 +280,7 @@ local sirenTable = {
 			{Name = "WAIL", Sound = "emv/sirens/code 3 h2/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/code 3 h2/emv_yelp.wav", Icon="yelp"},
 			{Name = "HPYP", Sound = "emv/sirens/code 3 h2/emv_hyperyelp.wav", Icon="phaser"},
-			// {Name = "HPYP", Sound = "emv/sirens/code 3 h2/emv_whoop.wav", Icon="hilo"},
+			-- {Name = "HPYP", Sound = "emv/sirens/code 3 h2/emv_whoop.wav", Icon="hilo"},
 		},
 		Horn = "emv/sirens/code 3 h2/emv_horn.wav"
 	},
@@ -516,11 +530,13 @@ EMVU.Horns = {
 	"emv/horns/emv_standard.wav" -- loud ass airhorn, slightly experimental
 }
 
-EMVU.GetSiren = function( index )
+EMVU.GetSiren = function(index)
 	if not index then Error("[Photon] EMVU.GetSiren( index ) requires a string or number index. Got nil or false.") return end
-	local sirenTable = EMVU.GetSirenTable()
-	if isnumber( index ) and sirenTable[ index ] then return table.Copy( sirenTable[ index ] ) end
-	for key,sirenInfo in pairs( sirenTable ) do
+	local st = EMVU.GetSirenTable()
+
+	if isnumber(index) and st[index] then return table.Copy(st[index]) end
+
+	for key, sirenInfo in pairs(st) do
 		if sirenInfo.ID == index then
 			return sirenInfo
 		end
@@ -529,21 +545,57 @@ EMVU.GetSiren = function( index )
 	return sirenTable[1]
 end
 
-EMVU.GetSirenTable = function() 
+EMVU.GetSirenIndex = function(index)
+	if not index then Error("[Photon] EMVU.GetSirenIndex( index ) requires a string or number index. Got nil or false.") return end
+	local st = EMVU.GetSirenTable()
+
+	if isnumber(index) and st[index] then return index end
+
+	for key, sirenInfo in pairs(st) do
+		if sirenInfo.ID == index then
+			return key
+		end
+	end
+
+	print( "[Photon] Failed to find siren with index (" .. tostring( index ) .. "), falling back.")
+	return 0
+end
+
+EMVU.GetSirenTable = function()
 	return sirenTable
 end
 
-EMVU.AddCustomSiren = function( index, inputTable )
-	if isnumber( tonumber( tostring( index ) ) ) then Error("[Photon] Custom sirens need to use a non-number identifier. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens") return end
-	local newIndexNumber = #sirenTable + 1
-	inputTable.ID = index
-	sirenTable[ newIndexNumber ] = inputTable
+EMVU.AddCustomSiren = function(index, siren)
+	if tonumber(index) ~= nil then return Error("[Photon] Custom sirens need a non-number identifier. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens\n") end
+
+	siren.ID = index
+	table.insert(sirenTable, siren)
 end
 
-EMVU.Sirens = false
+EMVU.Sirens = {}
+timer.Simple(35, function()
+	if #EMVU.Sirens > 0 then
+		print("[Photon] One or more addons are using a deprecated method to add custom sirens. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens")
+	end
+end)
 
--- timer.Simple( 30, function()
--- 	if EMVU.Sirens != false then
--- 		print( "[Photon] One or more addons are using a deprecated method to add custom sirens. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens" )
--- 	end
--- end)
+--[[ New Siren Example
+EMVU.AddCustomSiren("internets special siren number UNO", {
+	Name = "Example Siren", -- The name that shows on the HUD.
+	Category = "Examples", -- The category the siren shows up under.
+	Set = {
+		{Name = "WAIL", Sound = "emv/sirens/example/example.wav", Icon = "wail"}
+	},
+	Horn = "emv/sirens/example/horn.wav"
+})
+]]--
+
+EMVU.IncludeSiren = function(siren)
+	AddCSLuaFile("autorun/photon/library/sirens/" .. siren)
+	include("autorun/photon/library/sirens/" .. siren)
+end
+
+local sirens = file.Find("autorun/photon/library/sirens/*.lua", "LUA")
+for _, siren in pairs(sirens) do
+	EMVU.IncludeSiren(siren)
+end

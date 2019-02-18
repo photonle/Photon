@@ -1,13 +1,22 @@
+--[[-- AirEl Client Handler.
+@copyright Photon Team
+@release v71 Denver
+@author Photon Team
+@module Photon.AirEL
+--]]--
 AddCSLuaFile()
 
+--- Global table defined to hold stuff.
 Photon.AirEL = {}
 
+--- Translation between models and remote materials.
 Photon.AirEL.TranslationTable = {
 	["models/schmal/fpiu_airel.mdl"] = "fpius",
 	["models/schmal/tahoe_airel.mdl"] = "fpius",
 	["models/schmal/lwdodch_airel.mdl"] = "fpius",
 }
 
+--- Translation between models and material indexes.
 Photon.AirEL.TranslationTableIndex = {
 	["models/schmal/fpiu_airel.mdl"] = 1,
 	["models/schmal/lwdodch_airel.mdl"] = 0,
