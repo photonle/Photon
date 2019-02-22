@@ -242,7 +242,13 @@ function EMVU:MakeEMV( ent, emv )
 		if not self:ELS_Lights() then self:ELS_LightOption( #EMVU.Sequences[self.Name].Sequences ) end
 		self:ELS_LightsOn()
 		self.ELS.Siren = CreateSound( self, EMVU.GetSirenTable()[self:ELS_SirenSet()].Set[self:ELS_SirenOption()].Sound )
-		self.ELS.Siren:SetSoundLevel( 75 )
+
+		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+			self.ELS.Siren:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+		else
+			self.ELS.Siren:SetSoundLevel( 75 )
+		end
+
 		-- self.ELS.Siren:SetDSP( 119 )
 		if self:ELS_HasAuxSiren() then
 			local secondIndex = 1
@@ -259,12 +265,20 @@ function EMVU:MakeEMV( ent, emv )
 			if ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and self.ELS.CurrentSecondarySiren != newSound then 
 				self.ELS.Siren2:Stop()
 				self.ELS.Siren2 = CreateSound( self, newSound )
-				self.ELS.Siren2:SetSoundLevel( 70 )
+				if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+					self.ELS.Horn:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume - 5 )
+				else
+					self.ELS.Horn:SetSoundLevel( 70 )
+				end
 				self.ELS.CurrentSecondarySiren = newSound
 			elseif not self.ELS.Siren2 or ( ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and not self.ELS.CurrentSecondarySiren == newSound ) then
 				-- print(secondIndex)
 				self.ELS.Siren2 = CreateSound( self, newSound )
-				self.ELS.Siren2:SetSoundLevel( 70 )
+				if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+					self.ELS.Horn:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume - 5 )
+				else
+					self.ELS.Horn:SetSoundLevel( 70 )
+				end
 				self.ELS.CurrentSecondarySiren = newSound
 			end
 			-- if self.ELS.Siren2 then self.ELS.Siren2:Stop() end
@@ -384,7 +398,13 @@ function EMVU:MakeEMV( ent, emv )
 					manSiren = manualTone
 				end
 				self.ELS.Manual = CreateSound( self, manSiren )
-				self.ELS.Manual:SetSoundLevel( 75 )
+
+				if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+					self.ELS.Manual:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+				else
+					self.ELS.Manual:SetSoundLevel( 75 )
+				end
+
 				self.ELS.Manual:PlayEx( 0, 100 )
 				self.ELS.Manual:ChangeVolume( 1, 0 )
 			end
@@ -412,7 +432,13 @@ function EMVU:MakeEMV( ent, emv )
 			local horn = EMVU.Horns[1]
 			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Horn then horn = EMVU.GetSirenTable()[self:ELS_SirenSet()].Horn end
 			self.ELS.Horn = CreateSound( self, horn )
-			self.ELS.Horn:SetSoundLevel( 75 )
+
+			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+				self.ELS.Horn:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+			else
+				self.ELS.Horn:SetSoundLevel( 75 )
+			end
+
 			self.ELS.Horn:PlayEx( 0, 100 )
 			self.ELS.Horn:ChangeVolume( 1, 0 )
 		else
