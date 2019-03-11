@@ -4,14 +4,14 @@ EMVU.DebugInfo = {}
 EMVU.DebugInfo.Last = CurTime()
 EMVU.Calculations = 0
 
-EMVColors = nil
+local EMVColors = nil
 if EMVU.Colors then EMVColors = EMVU.Colors end
 
 local EMVHelper = nil
 if EMVU.Helper then EMVHelper = EMVU.Helper end
 
-hook.Add( "InitPostEntity", "PhotonEMV.LocalColorSet", function() 
-	EMVColors = EMVU.Colors; 
+hook.Add( "InitPostEntity", "PhotonEMV.LocalColorSet", function()
+	EMVColors = EMVU.Colors;
 	EMVHelper = EMVU.Helper;
 end )
 
@@ -238,7 +238,7 @@ function EMVU:MakeEMV( emv, name )
 			self.EL.Frames[k] = {}
 
 			for a,b in pairs(v) do
-				
+
 				self.EL.Frames[k][a] = { 1, #v[a] }
 
 			end
@@ -281,7 +281,7 @@ function EMVU:MakeEMV( emv, name )
 				local errorOutput = print("[Photon] Unregistered pattern: " .. tostring( index ) .. " under component: " .. component .. " defined in vehicle: " .. tostring( self.VehicleName ) )
 				printedErrors[comp] = true
 			end
-			return 
+			return
 		end
 
 		if inc then
@@ -367,13 +367,13 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_RenderEL()
 		if not IsValid( self ) then return false end
 		if not self:Photon_Lights() and not self:Photon_TrafficAdvisor() and not self:Photon_Illumination() then
-			if self.Photon_ReconnectLights then 
+			if self.Photon_ReconnectLights then
 				self:Photon_ReconnectLights()
 			elseif not self.RenderELPrimaryError then
 				--error("[Photon] Catastrophic error occurred on clientside vehicle setup (" .. tostring(self.VehicleName) .. ")." )
 				self.RenderELPrimaryError = true
 			end
-			return 
+			return
 		end
 
 
@@ -383,10 +383,10 @@ function EMVU:MakeEMV( emv, name )
 		self:Photon_UpdateFrameLightPositions()
 		self:Photon_RefreshELPixVis()
 
-		if self.Photon_ReconnectLights then 
+		if self.Photon_ReconnectLights then
 			self:Photon_ReconnectLights()
 		end
-		
+
 		if self.Photon_DisconnectLight then
 			local disconnect = self:Photon_GetELOverride()
 			if self:Photon_Lights() then
@@ -395,7 +395,7 @@ function EMVU:MakeEMV( emv, name )
 						if self.Photon_DisconnectLight then
 							self:Photon_DisconnectLight( v )
 						end
-						
+
 					end
 				end
 			end
@@ -436,7 +436,7 @@ function EMVU:MakeEMV( emv, name )
 			end
 			if positions[b[1]] then
 				local colString = b[2]
-				
+
 				local col = false
 				local multiColor = false
 
@@ -445,7 +445,7 @@ function EMVU:MakeEMV( emv, name )
 					colorRecycle = { EMVColors[cols[1]], EMVColors[cols[2]] }
 					col = colorRecycle
 					multiColor = true
-					
+
 				else
 					col = EMVColors[b[2]]
 				end
@@ -472,7 +472,7 @@ function EMVU:MakeEMV( emv, name )
 						end
 						multiColor = false
 					end
-					
+
 				end
 				Photon:PrepareVehicleLight(
 						self, -- parent
@@ -551,7 +551,7 @@ function EMVU:MakeEMV( emv, name )
 				end
 			end
 
-			if self:Photon_Lights() then 
+			if self:Photon_Lights() then
 				for k,v in pairs( sequence ) do
 					local frame = self:Photon_GetFrame( k, v, increment )
 					if frame and not skipComponents[k] then
@@ -562,7 +562,7 @@ function EMVU:MakeEMV( emv, name )
 						else
 							table.Add( RenderTable, self:Photon_GetLightSection( k, frame, skipELIndexes ) )
 						end
-						
+
 						// local addTable = self:Photon_GetLightSection( k, frame )
 						// if istable( addTable ) then
 						// 	for a,b in pairs( addTable ) do
@@ -625,7 +625,7 @@ function EMVU:MakeEMV( emv, name )
 			prop:Activate()
 			prop:Spawn()
 			prop:DrawShadow( false )
-			if p.BodyGroups then 
+			if p.BodyGroups then
 				for _,group in pairs( p.BodyGroups ) do
 					prop:SetBodygroup( group[1], group[2] )
 				end
@@ -667,9 +667,9 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_ScanEMVProps()
 		if not IsValid( self ) then return end
 
-		if self.LastPresetOption != self:Photon_ELPresetOption() then 
-			self:Photon_RemoveEMVProps( true ) 
-			self.LastPresetOption = self:Photon_ELPresetOption() 
+		if self.LastPresetOption != self:Photon_ELPresetOption() then
+			self:Photon_RemoveEMVProps( true )
+			self.LastPresetOption = self:Photon_ELPresetOption()
 			return
 		end
 
@@ -684,7 +684,7 @@ function EMVU:MakeEMV( emv, name )
 		if not self.EMVProps then return end
 		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
 
-		if emvProps and istable( emvProps) then 
+		if emvProps and istable( emvProps) then
 			for index,prop in ipairs( self.EMVProps ) do
 				if not IsValid( prop ) then
 					self:Photon_RemoveEMVProps( true )
@@ -694,7 +694,7 @@ function EMVU:MakeEMV( emv, name )
 				prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
 				prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
 				prop:DrawShadow( false )
-				if PHOTON_DEBUG or PHOTON_EXPRESS then 
+				if PHOTON_DEBUG or PHOTON_EXPRESS then
 					if isvector( emvProps[index].Scale ) then
 						local mat = Matrix()
 						mat:Scale( emvProps[index].Scale )
@@ -721,9 +721,9 @@ function EMVU:MakeEMV( emv, name )
 		if not self.PhotonRadarTargetCache or ( self.PhotonRadarTargetCacheTime and self.PhotonRadarTargetCacheTime + 1 < CurTime() ) or ( rear != self.PhotonRadarTargetLastRear ) or force then
 			local validEnts = {}
 			for _, ent in pairs( ents.FindInCone( startPos, normDirection, 2048, 0 ) ) do
-				if IsValid( ent ) and 
-					ent:IsVehicle() and 
-					ent != self and 
+				if IsValid( ent ) and
+					ent:IsVehicle() and
+					ent != self and
 					-- self:IsLineOfSightClear( ent:GetPos() ) and 
 					ent:Photon_GetSpeed() > .5 then
 					validEnts[ #validEnts + 1 ] = ent
@@ -771,7 +771,7 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_RadarSoundInitialize()
 		if self.PhotonRadarSoundLoading then return end
 		self.PhotonRadarSoundLoading = true
-		sound.PlayFile( "sound/emv/radar_flat.wav", "3d", function( snd ) 
+		sound.PlayFile( "sound/emv/radar_flat.wav", "3d", function( snd )
 			self:Photon_RadarSoundCallback( snd )
 		end)
 	end
@@ -845,7 +845,7 @@ function EMVU:MakeEMV( emv, name )
 			sirenState.SoundHandle:Play()
 		else
 			local decreaseRate = info.DownRate or .006
-			
+
 			if currentRate > minRate and sirenState.ShouldPlay and not self:Photon_Siren() then
 				local newRate = currentRate - decreaseRate
 				if newRate < .005 then newRate = .005 end
@@ -902,7 +902,7 @@ function EMVU:MakeEMV( emv, name )
 			if EMVU.Configurations.Library[ shortId ] and EMVU.Configurations.Library[shortId][ index ]then data = EMVU.Configurations.Library[ shortId ][ index ] end
 		end
 		if data.Skin then EMVU.Net.ApplyAutoSkin( self, data.Skin ) end
-		if data.Siren then 
+		if data.Siren then
 			local convertedSiren = tonumber( data.Siren )
 			if isnumber( convertedSiren ) then EMVU.Net:SirenSet( convertedSiren, self, false ) end
 		end
