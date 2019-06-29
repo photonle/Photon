@@ -218,7 +218,7 @@ properties.Add( "photon_preset", {
 		local submenu = option:AddSubMenu()
 		for k,v in ipairs( options ) do
 			local isSelected = ( tostring( k ) == tostring( ent:Photon_ELPresetOption() ) )
-			local option = submenu:AddOption( v.Name, function() EMVU.Net:Preset( k ) end )
+			local option = submenu:AddOption( v.Name, function() EMVU.Net:Preset( k, ent ) end )
 			if isSelected then
 				option:SetChecked( true )
 			end
