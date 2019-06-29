@@ -75,7 +75,7 @@ function EMVU.Net:Illumination( ply, args )
 		emv:ELS_IllumToggle()
 	end
 end
-net.Receive("emvu_illum", function( len, ply ) 
+net.Receive("emvu_illum", function( len, ply )
 	EMVU.Net:Illumination( ply, net.ReadString() )
 end)
 
@@ -121,17 +121,20 @@ function EMVU.Net:Color( ply )
 		ent:SetColor( newCol )
 	end
 end
-net.Receive( "emvu_color", function( len, ply ) 
+net.Receive( "emvu_color", function( len, ply )
 	EMVU.Net:Color( ply )
 end)
 
 function EMVU.Net:Preset( ply, args )
-	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() or not can_change_light_presets:GetBool() then return end
-	local emv = ply:GetVehicle()
+	local ent = net.ReadEntity()
+	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent )
+	if modifyBlocked == false then return end
+	if not can_change_light_presets:GetBool() then return end
+
 	local recv = net.ReadInt(8)
-	if recv != 0 then emv:ELS_PresetOption( recv ) return end
+	if recv != 0 then ent:ELS_PresetOption( recv ) return end
 end
-net.Receive( "emvu_preset", function( len, ply ) 
+net.Receive( "emvu_preset", function( len, ply )
 	EMVU.Net:Preset( ply )
 end)
 
@@ -145,7 +148,7 @@ function EMVU.Net.Selection( ply )
 		ent:Photon_SetSelection( category, option )
 	end
 end
-net.Receive( "emvu_selection", function( len, ply ) 
+net.Receive( "emvu_selection", function( len, ply )
 	EMVU.Net.Selection( ply )
 end)
 
@@ -154,7 +157,7 @@ function EMVU.Net:Blackout( ply, arg )
 	local emv = ply:GetVehicle()
 	emv:ELS_Blackout( arg )
 end
-net.Receive( "emvu_blackout", function( len, ply ) 
+net.Receive( "emvu_blackout", function( len, ply )
 	EMVU.Net:Blackout( ply, tobool( net.ReadBit() ) )
 end)
 
@@ -163,7 +166,7 @@ function EMVU.Net:Horn( ply, arg )
 	local emv = ply:GetVehicle()
 	emv:ELS_Horn( arg )
 end
-net.Receive( "emvu_horn", function( len, ply ) 
+net.Receive( "emvu_horn", function( len, ply )
 	EMVU.Net:Horn( ply, tobool( net.ReadBit() ))
 end)
 
@@ -172,7 +175,7 @@ function EMVU.Net:Manual( ply, arg )
 	local emv = ply:GetVehicle()
 	emv:ELS_ManualSiren( arg )
 end
-net.Receive( "emvu_manual", function( len, ply ) 
+net.Receive( "emvu_manual", function( len, ply )
 	EMVU.Net:Manual( ply, tobool( net.ReadBit() ))
 end)
 
@@ -180,17 +183,17 @@ function EMVU.Net:Livery( ply, category, skin, unit )
 	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
 	if game.SinglePlayer() == false then
 		if not ply.LastLiveryChange then ply.LastLiveryChange = 0 end
-		if RealTime() < ply.LastLiveryChange + PHOTON_LIVERY_COOLDOWN then 
-			ply:ChatPrint( "[Photon] Please wait a few seconds before changing the vehicle livery again." ); 
+		if RealTime() < ply.LastLiveryChange + PHOTON_LIVERY_COOLDOWN then
+			ply:ChatPrint( "[Photon] Please wait a few seconds before changing the vehicle livery again." );
 			ply.LastLiveryChange = RealTime();
-			return 
-		end 
+			return
+		end
 	end
 	ply.LastLiveryChange = RealTime();
 	local emv = ply:GetVehicle()
 	emv:Photon_ApplyLivery( category, skin, unit )
 end
-net.Receive( "emvu_livery", function( len, ply ) 
+net.Receive( "emvu_livery", function( len, ply )
 	EMVU.Net:Livery( ply, tostring( net.ReadString() ), tostring( net.ReadString() ), tostring( net.ReadString() ) )
 end)
 
@@ -237,7 +240,7 @@ function Photon.Net:ReceiveUnitNumber( ply, unit )
 	local ent = ply:GetVehicle()
 	ent:Photon_SetUnitNumber( unit )
 end
-net.Receive( "photon_myunitnumber", function( len, ply ) 
+net.Receive( "photon_myunitnumber", function( len, ply )
 	Photon.Net:ReceiveUnitNumber( ply, net.ReadString() )
 end )
 
@@ -285,14 +288,14 @@ net.Receive( "photon_wheel", function( len, ply ) Photon.Net.SetWheel( len, ply 
 
 -- local cintargent = nil
 
--- concommand.Add( "photon_settarg", function( ply ) 
+-- concommand.Add( "photon_settarg", function( ply )
 -- 	local ent = ply:GetEyeTrace().Entity
 -- 	if not IsValid( ent ) then return end
 -- 	cintargent = ent
 -- 	print("TARGET SET")
 -- end )
 
--- concommand.Add( "photon_cin", function( ply ) 
+-- concommand.Add( "photon_cin", function( ply )
 -- 	for k,v in pairs( ents.GetAll() ) do
 -- 		if v:IsEMV() then
 -- 			-- v:ELS_TrafficOn()
@@ -305,7 +308,7 @@ net.Receive( "photon_wheel", function( len, ply ) Photon.Net.SetWheel( len, ply 
 
 
 -- local targIndex = -30
--- concommand.Add( "photon_materialt", function( ply ) 
+-- concommand.Add( "photon_materialt", function( ply )
 -- 	local targ = ply:GetEyeTrace().Entity
 -- 	if IsValid( targ ) then
 -- 		print( tostring( targ ) )
