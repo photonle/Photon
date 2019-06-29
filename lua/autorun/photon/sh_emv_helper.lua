@@ -379,18 +379,21 @@ function EMVU.Helper:GetProps( name, ent )
 				local preset = EMVU.AutoIndex[ name ][ id ]
 				local autoData = EMVU.Auto[ preset[ "ID" ] ]
 				local propData = EMVU.Helper:GetAutoModel( preset[ "ID" ] )
-				propData.Pos = preset.Pos
-				propData.Ang = preset.Ang
-				propData.Scale = preset.Scale
-				propData.RenderGroup = preset.RenderGroup
-				propData.RenderMode = preset.RenderMode
-				propData.AutoIndex = id
-				propData.ComponentName = preset[ "ID" ]
-				if autoData.RotationEnabled then
-					propData.PhotonRotationEnabled = true
-					propData.PhotonBoneAnimationData = autoData.BoneOperations
+
+				if autoData and propData then
+					propData.Pos = preset.Pos
+					propData.Ang = preset.Ang
+					propData.Scale = preset.Scale
+					propData.RenderGroup = preset.RenderGroup
+					propData.RenderMode = preset.RenderMode
+					propData.AutoIndex = id
+					propData.ComponentName = preset[ "ID" ]
+					if autoData.RotationEnabled then
+						propData.PhotonRotationEnabled = true
+						propData.PhotonBoneAnimationData = autoData.BoneOperations
+					end
+					results[ #results + 1 ] = propData
 				end
-				results[ #results + 1 ] = propData
 			end
 		end
 		if istable( presetData.Props ) then
