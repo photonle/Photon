@@ -86,9 +86,9 @@ function EMVU.Helper.GetBrakeSequence( name, vehicle, resultTable )
 end
 
 function EMVU.Helper:GetSequence( name, option, vehicle )
-	
+
 	local resultTable = {}
-	
+
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Sequences"][option]["BG_Components"] ) then
 		local bodygroups = vehicle:GetBodyGroups() -- BodyGroups of vehicle
 		local bgtable = EMVU.Sequences[name]["Sequences"][option]["BG_Components"] -- BodyGroups defined in vehicle specification file
@@ -104,7 +104,7 @@ function EMVU.Helper:GetSequence( name, option, vehicle )
 			end
 		end
 	end
-	
+
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Sequences"][option]["Preset_Components"] ) then
 		local preset = vehicle:Photon_ELPresetOption()
 		local ptable = EMVU.Sequences[name]["Sequences"][option]["Preset_Components"][preset]
@@ -138,7 +138,7 @@ function EMVU.Helper:GetTASequence( name, option, vehicle )
 
 	if not istable( EMVU.Sequences[ name ].Traffic ) then return end
 	local resultTable = {}
-	
+
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["BG_Components"] ) then
 		local bodygroups = vehicle:GetBodyGroups() -- BodyGroups of vehicle
 		local bgtable = EMVU.Sequences[name]["Traffic"][option]["BG_Components"] -- BodyGroups defined in vehicle specification file
@@ -154,7 +154,7 @@ function EMVU.Helper:GetTASequence( name, option, vehicle )
 			end
 		end
 	end
-	
+
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["Preset_Components"] ) then
 		local preset = vehicle:Photon_ELPresetOption()
 		local ptable = EMVU.Sequences[name]["Traffic"][option]["Preset_Components"][preset]
@@ -169,7 +169,7 @@ function EMVU.Helper:GetTASequence( name, option, vehicle )
 		local selComp = EMVU.Sequences[name]["Traffic"][option]["Selection_Components"]
 		for i,options in pairs( selComp ) do
 			local currentOption = vehicle:Photon_SelectionOption( i )
-			if istable( options[currentOption] ) then 
+			if istable( options[currentOption] ) then
 				for id,data in pairs( options[currentOption] ) do
 					resultTable[ id ] = data
 				end
@@ -186,7 +186,7 @@ function EMVU.Helper:GetTASequence( name, option, vehicle )
 	for component, option in pairs( EMVU.Sequences[name]["Traffic"][option]["Components"] ) do
 		resultTable[ component ] = option
 	end
-	
+
 	return resultTable
 end
 
@@ -200,7 +200,7 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 	if not name or not option or not vehicle then return {} end
 	if not istable( EMVU.Sequences[ name ] ) or not istable( EMVU.Sequences[ name ].Illumination ) then return {} end
 	local resultTable = {}
-	
+
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Illumination"][option]["BG_Components"] ) then
 		local bodygroups = vehicle:GetBodyGroups() -- BodyGroups of vehicle
 		local bgtable = EMVU.Sequences[name]["Illumination"][option]["BG_Components"] -- BodyGroups defined in vehicle specification file
@@ -216,7 +216,7 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 			end
 		end
 	end
-	
+
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Illumination"][option]["Preset_Components"] ) then
 		local preset = vehicle:Photon_ELPresetOption()
 		local ptable = EMVU.Sequences[name]["Illumination"][option]["Preset_Components"][preset]
@@ -231,7 +231,7 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 		local selComp = EMVU.Sequences[name]["Illumination"][option]["Selection_Components"]
 		for i,options in pairs( selComp ) do
 			local currentOption = vehicle:Photon_SelectionOption( i )
-			if istable( options[currentOption] ) then 
+			if istable( options[currentOption] ) then
 				for id,data in pairs( options[currentOption] ) do
 					resultTable[ #resultTable + 1 ] = data
 				end
@@ -282,7 +282,7 @@ function EMVU.Helper.FetchUsedLights( vehicle )
 			resultTable[tostring(lightInfo[1])] = true
 		end
 	end
-	
+
 	--PrintTable( resultTable )
 	return resultTable
 end
@@ -483,7 +483,7 @@ end
 
 function EMVU.Helper.GetLocalToWorld( posData )
 	if posData[1] == "RE" then
-		return 
+		return
 	else
 
 	end
@@ -511,7 +511,7 @@ function EMVU.Helper.GetPositionFromRE( car, lbEntity, posInput, returnWorld )
 	-- local boneMatrix = lbEntity:GetBoneMatrix( )
 	-- local bonePos = car:WorldToLocal( boneWorldPos )
 	-- local boneAng = car:WorldToLocalAngles( boneWorldAng )
-	local bonePos, boneAng 
+	local bonePos, boneAng
 	if returnWorld then
 		bonePos = boneWorldPos
 		boneAng = boneWorldAng
@@ -519,7 +519,7 @@ function EMVU.Helper.GetPositionFromRE( car, lbEntity, posInput, returnWorld )
 		bonePos = car:WorldToLocal( boneWorldPos )
 		boneAng = car:WorldToLocalAngles( boneWorldAng )
 	end
-	
+
 	local newPos = Vector()
 	local newAng = Angle()
 	-- print(tostring(lbEntity:GetAngles().p))
