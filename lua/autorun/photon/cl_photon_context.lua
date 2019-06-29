@@ -16,7 +16,7 @@ properties.Add( "photon_siren", {
 	end,
 
 	MenuOpen = function( self, option, ent )
-		
+
 		local options = EMVU.GetSirenTable()
 		local submenu = option:AddSubMenu()
 
@@ -208,8 +208,6 @@ properties.Add( "photon_preset", {
 		if not ent:Photon() then return false end
 		if not ent:IsEMV() then return false end
 		if not ent:Photon_PresetEnabled() then return false end
-		if not ply:InVehicle() then return false end
-		if not ply:GetVehicle() == ent then return false end
 		local options = EMVU.PresetIndex[ ent.VehicleName ]
 		if not options or not istable( options ) or #options <= 1 then return false end
 		return true
@@ -307,7 +305,7 @@ properties.Add( "photon_configuration", {
 			local sub = submenu
 			if data.Category and ( not tobool( data.Category ) ==  false ) then
 				local newCat = categories[ tostring( data.Category ) ]
-				if not newCat then 
+				if not newCat then
 					categories[ tostring( data.Category ) ] = submenu:AddSubMenu( tostring( data.Category ), null )
 					newCat = categories[ tostring( data.Category ) ]
 				end
