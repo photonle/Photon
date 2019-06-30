@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "..\\photon-sm"
+		},
+		{
+			"path": "..\\vehicles_internet"
 		}
 	]
 }
