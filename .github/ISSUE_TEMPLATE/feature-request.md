@@ -2,7 +2,7 @@
 name: Feature Request
 about: Suggest ideas for Photon
 title: ''
-labels: enhancement
+labels: feature
 assignees: ''
 
 ---
