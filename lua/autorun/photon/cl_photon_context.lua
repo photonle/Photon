@@ -83,12 +83,16 @@ properties.Add( "photon_liveries", {
 
 	MenuOpen = function( self, option, ent )
 		local liveries = EMVU.Liveries[ ent.VehicleName ]
+		local lCount = table.Count(liveries)
 		local submenu = option:AddSubMenu()
 
+		print("Opening")
 		for key,data in SortedPairs( liveries ) do
+			print("Runinng " .. key .. " with " .. tostring(data))
 			local category = submenu
-			if (#liveries > 1) then category = submenu:AddSubMenu( key, null ) end
+			if (lCount > 1) then category = submenu:AddSubMenu( key, null ) print("made submenu") end
 			for name,mat in SortedPairs( data ) do
+				print("adding " .. name .. " for " .. mat)
 				category:AddOption( name, function() EMVU.Net:Livery( key, name ) end )
 			end
 		end
