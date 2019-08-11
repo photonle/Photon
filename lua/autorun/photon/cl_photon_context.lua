@@ -86,13 +86,10 @@ properties.Add( "photon_liveries", {
 		local lCount = table.Count(liveries)
 		local submenu = option:AddSubMenu()
 
-		print("Opening")
 		for key,data in SortedPairs( liveries ) do
-			print("Runinng " .. key .. " with " .. tostring(data))
-			local category = submenu
-			if (lCount > 1 and table.Count(data) > 1) then category = submenu:AddSubMenu( key, null ) print("made submenu") end
-			for name,mat in SortedPairs( data ) do
-				print("adding " .. name .. " for " .. mat)
+			local category = lCount > 1 and table.Count(data) > 1 and submenu:AddSubMenu(key) or submenu
+
+			for name, _ in SortedPairs( data ) do
 				category:AddOption( name, function() EMVU.Net:Livery( key, name ) end )
 			end
 		end
