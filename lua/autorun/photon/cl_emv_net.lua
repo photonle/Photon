@@ -61,8 +61,9 @@ function EMVU.Net:Manual( arg )
 	net.SendToServer()
 end
 
-function EMVU.Net:Preset( arg )
+function EMVU.Net:Preset( arg, ent )
 	net.Start( "emvu_preset" )
+		net.WriteEntity( ent )
 		net.WriteInt( arg, 8 )
 	net.SendToServer()
 end
@@ -91,7 +92,7 @@ end
 function EMVU.Net:ReceiveLiveryUpdate( id, unit, ent )
 	Photon.AutoLivery.Apply( id, unit, ent )
 end
-net.Receive( "photon_liveryupdate", function() 
+net.Receive( "photon_liveryupdate", function()
 	EMVU.Net:ReceiveLiveryUpdate( net.ReadString(), net.ReadString(), net.ReadEntity() )
 end)
 
@@ -157,7 +158,7 @@ function EMVU.Net.ApplyLicenseMaterial( ent, mat )
 	net.SendToServer()
 end
 
-concommand.Add( "photon_debug_getbones", function() 
+concommand.Add( "photon_debug_getbones", function()
 	local ent = ply:GetEyeTrace().Entity
 	if not IsValid( ent ) then return end
 	print(tostring(ent:GetBoneCount()))

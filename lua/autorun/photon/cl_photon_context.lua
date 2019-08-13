@@ -16,7 +16,7 @@ properties.Add( "photon_siren", {
 	end,
 
 	MenuOpen = function( self, option, ent )
-		
+
 		local options = EMVU.GetSirenTable()
 		local submenu = option:AddSubMenu()
 
@@ -83,12 +83,13 @@ properties.Add( "photon_liveries", {
 
 	MenuOpen = function( self, option, ent )
 		local liveries = EMVU.Liveries[ ent.VehicleName ]
+		local lCount = table.Count(liveries)
 		local submenu = option:AddSubMenu()
 
 		for key,data in SortedPairs( liveries ) do
-			local category = submenu
-			if (#liveries > 1) then category = submenu:AddSubMenu( key, null ) end
-			for name,mat in SortedPairs( data ) do
+			local category = lCount > 1 and table.Count(data) > 1 and submenu:AddSubMenu(key) or submenu
+
+			for name, _ in SortedPairs( data ) do
 				category:AddOption( name, function() EMVU.Net:Livery( key, name ) end )
 			end
 		end
@@ -208,8 +209,6 @@ properties.Add( "photon_preset", {
 		if not ent:Photon() then return false end
 		if not ent:IsEMV() then return false end
 		if not ent:Photon_PresetEnabled() then return false end
-		if not ply:InVehicle() then return false end
-		if not ply:GetVehicle() == ent then return false end
 		local options = EMVU.PresetIndex[ ent.VehicleName ]
 		if not options or not istable( options ) or #options <= 1 then return false end
 		return true
@@ -220,7 +219,7 @@ properties.Add( "photon_preset", {
 		local submenu = option:AddSubMenu()
 		for k,v in ipairs( options ) do
 			local isSelected = ( tostring( k ) == tostring( ent:Photon_ELPresetOption() ) )
-			local option = submenu:AddOption( v.Name, function() EMVU.Net:Preset( k ) end )
+			local option = submenu:AddOption( v.Name, function() EMVU.Net:Preset( k, ent ) end )
 			if isSelected then
 				option:SetChecked( true )
 			end
@@ -307,7 +306,7 @@ properties.Add( "photon_configuration", {
 			local sub = submenu
 			if data.Category and ( not tobool( data.Category ) ==  false ) then
 				local newCat = categories[ tostring( data.Category ) ]
-				if not newCat then 
+				if not newCat then
 					categories[ tostring( data.Category ) ] = submenu:AddSubMenu( tostring( data.Category ), null )
 					newCat = categories[ tostring( data.Category ) ]
 				end
