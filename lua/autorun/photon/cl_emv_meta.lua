@@ -630,6 +630,13 @@ function EMVU:MakeEMV( emv, name )
 					prop:SetBodygroup( group[1], group[2] )
 				end
 			end
+			if p.SubMaterials then
+				for index, value in pairs( p.SubMaterials ) do
+					if isnumber( tonumber( index ) ) then
+						prop:SetSubMaterial( tonumber( index ), value )
+					end
+				end
+			end
 
 			table.insert(photonLightModels, prop)
 			table.insert( emv.EMVProps, prop )
