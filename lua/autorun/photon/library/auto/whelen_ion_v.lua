@@ -22,6 +22,7 @@ COMPONENT.Category = "Exterior"
 COMPONENT.DefaultColors = {
 	[1] = "WHITE",
 	[2] = "WHITE",
+	[3] = "WHITE",
 }
 
 COMPONENT.Meta = {
@@ -41,7 +42,7 @@ COMPONENT.Meta = {
 		W = .7,
 		H = .7,
 		Sprite = "sprites/emv/circular_src",
-		WMult = 1,
+		WMult = .6,
 		Scale = .5,
 		NoLegacy = true,
 		DirAxis = "Up",
@@ -60,27 +61,56 @@ COMPONENT.Positions = {
 }
 
 COMPONENT.Sections = {
-	["auto_whelen_linz6"] = {
+	--[[["auto_whelen_linz6"] = {
 		[1] = { { 1, "_1" }, { 2, "_1" }, { 3, "_1" }, { 4, "_1" }, { 5, "_1" },  },
+	}, ]]--
+	["auto_whelen_linz6"] = {
+		[1] = { { 1, "_1", .88 }, { 2, "_1", .88 },  }
 	},
 }
 
 COMPONENT.Patterns = {
-	["auto_whelen_linz6"] = {
+	--[[["auto_whelen_linz6"] = {
 		["mode1"] = { 1 },
 		["mode1_split"] = { 1 },
 		["mode1_split"] = { 2 },
-	}
+	}, ]]--
+	["auto_whelen_linz6"] = {
+		["code1"] = { 1, 1, 1, 0, },
+		["code1A"] = { 1, 1, 1, 0, 0, 0, 0, 0, },
+		["code1B"] = { 0, 0, 0, 0, 1, 1, 1, 0 },
+		["code2"] = { 1, 0, 1, 1, 1, 0, 0, 0 },
+		["code2A"] = { 1, 0, 1, 1, 1, 0, 0, 0, 0, 0 },
+		["code2B"] = { 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, },
+		["code3"] = { 1, 0 },
+		["code3A"] = { 1, 0, 1, 0, 0, 0 },
+		["code3B"] = { 0, 0, 0, 1, 0, 1 },
+		["alert"] = { 1, 0 },
+		["alertA"] = { 0, 1 },
+		["alertB"] = { 1, 0 },
+		["alertCA"] = { 1 },
+		["all"] = { 1 },
+		["allA"] = { 1 },
+		["allB"] = { 1 },
+	},
 }
 
 COMPONENT.Modes = {
 	Primary = {
-		M1 = { ["auto_whelen_linz6"] = "mode1", },
-		M2 = { ["auto_whelen_linz6"] = "mode1", },
-		M3 = { ["auto_whelen_linz6"] = "mode1", }
+		M1 = { ["auto_ion_v"] = "code1", },
+		M2 = { ["auto_ion_v"] = "code2", },
+		M3 = { ["auto_ion_v"] = "code3", },
+		ALERT = { ["auto_ion"] = "alert", },
 	},
 	Auxiliary = {},
-	Illumination = {}
+	Illumination = {
+		T = { 
+			{ 3, W }, { 4, W }, { 5, W }, 
+		},
+		F = { 
+			{ 3, W }, { 4, W }, { 5, W }, 
+		}
+	}
 }
 
 EMVU:AddAutoComponent( COMPONENT, name )
