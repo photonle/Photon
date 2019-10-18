@@ -14,3 +14,7 @@ Master contains code which is either live, or being packed for live.
 Development contains code which should be ready for live, but hasn't been validated or merged.
 
 Other branches contain code under development.
+
+## Credits
+
+Christmas Cracker icon provided by Made, AU, from thenounproject.com.
