@@ -1,62 +1,62 @@
 
 function EMVU:MakeEMV( ent, emv )
 
-	// Avoid any uncaught errors if a bad entity is passed in
+	-- Avoid any uncaught errors if a bad entity is passed in
 	if not ent or not IsValid( ent ) or not ent:IsVehicle() then
 		error("[Photon] Error while creating ent from " .. tostring(ent) .. ". Aborting...")
 		return
 	end
 
-	ent.ELS = {} // Emergency Lights and Sirens
+	ent.ELS = {} -- Emergency Lights and Sirens
 
-	//-------- DATATABLE FUNCTIONS ---------//
-	//
-	// Optional parameters to set value, otherwise
-	// it will return the value.
-	//
+	---------- DATATABLE FUNCTIONS -----------
+	--
+	-- Optional parameters to set value, otherwise
+	-- it will return the value.
+	--
 
-	// whether or not the car truly uses emergency lights
+	-- whether or not the car truly uses emergency lights
 	function ent:ELS_Enabled( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then self:SetDTBool(CAR_USE_EL, val) end
+		if (val~=nil) then self:SetDTBool(CAR_USE_EL, val) end
 		return self:GetDTBool(CAR_USE_EL)
 
 	end
 
-	// Lights on/off
+	-- Lights on/off
 	function ent:ELS_Lights( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then self:SetDTBool(EMV_LIGHTS_ON, val) end
+		if (val~=nil) then self:SetDTBool(EMV_LIGHTS_ON, val) end
 		return self:GetDTBool(EMV_LIGHTS_ON)
 
 	end
 
-	// Light pattern/option
+	-- Light pattern/option
 	function ent:ELS_LightOption( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then self:SetDTInt(EMV_LIGHT_OPTION, val) end
+		if (val~=nil) then self:SetDTInt(EMV_LIGHT_OPTION, val) end
 		return self:GetDTInt(EMV_LIGHT_OPTION)
 
 	end
 
-	// Siren on/off
+	-- Siren on/off
 	function ent:ELS_Siren( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then self:SetDTBool(EMV_SIREN_ON, val) end
+		if (val~=nil) then self:SetDTBool(EMV_SIREN_ON, val) end
 		return self:GetDTBool(EMV_SIREN_ON)
 	end
 
-	// Siren tone
+	-- Siren tone
 	function ent:ELS_SirenOption( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then self:SetDTInt(EMV_SIREN_OPTION, val) end
+		if (val~=nil) then self:SetDTInt(EMV_SIREN_OPTION, val) end
 		return self:GetDTInt(EMV_SIREN_OPTION)
 	end
 
-	// Siren set
+	-- Siren set
 	function ent:ELS_SirenSet( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then
+		if (val~=nil) then
 			self:ELS_SirenOption( 1 )
 			self:SetDTInt(EMV_SIREN_SET, val)
 		end
@@ -65,48 +65,48 @@ function EMVU:MakeEMV( ent, emv )
 
 	function ent:ELS_AuxSirenSet( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then
+		if (val~=nil) then
 			self:SetDTInt(EMV_SIREN_SECONDARY, val)
 		end
 		return self:GetDTInt(EMV_SIREN_SECONDARY)
 	end
 
 	function ent:ELS_HasAuxSiren()
-		return self:ELS_AuxSirenSet() != 0
+		return self:ELS_AuxSirenSet() ~= 0
 	end
 
-	// Traffic on/off
+	-- Traffic on/off
 	function ent:ELS_Traffic( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then self:SetDTBool( EMV_TRF_ON, val ) end
+		if (val~=nil) then self:SetDTBool( EMV_TRF_ON, val ) end
 		return self:GetDTBool( EMV_TRF_ON )
 	end
 
-	// Traffic direction
+	-- Traffic direction
 	function ent:ELS_TrafficOption( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then self:SetDTInt (EMV_TRF_OPTION, val ) end
+		if (val~=nil) then self:SetDTInt (EMV_TRF_OPTION, val ) end
 		return self:GetDTInt( EMV_TRF_OPTION )
 	end
 
-	// Takedowns/alley lights on/off
+	-- Takedowns/alley lights on/off
 	function ent:ELS_Illuminate( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then self:SetDTBool( EMV_ILLUM_ON, val ) end
+		if (val~=nil) then self:SetDTBool( EMV_ILLUM_ON, val ) end
 		return self:GetDTBool( EMV_ILLUM_ON )
 	end
 
-	// Takedowns/alley lights option
+	-- Takedowns/alley lights option
 	function ent:ELS_IlluminateOption( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then self:SetDTInt( EMV_ILLUM_OPTION, val ) end
+		if (val~=nil) then self:SetDTInt( EMV_ILLUM_OPTION, val ) end
 		return self:GetDTInt( EMV_ILLUM_OPTION )
 	end
 
 	function ent:ELS_PresetOption( val )
 		if not IsValid( self ) then return 0 end
 		if not EMVU.PresetIndex[ self.Name ] then print( "[Photon] No presets found for " .. tostring( self.Name ) .. ". Please check for errors above." ) return end
-		if (val!=nil) then
+		if (val~=nil) then
 			val = math.Clamp( val, 0, #EMVU.PresetIndex[ self.Name ] )
 			self:SetDTInt( EMV_PRE_OPTION, val )
 			local bgData = EMVU.Helper:BodygroupPreset( self, val )
@@ -195,7 +195,7 @@ function EMVU:MakeEMV( ent, emv )
 		end
 	end
 
-	// Turn the lights on
+	-- Turn the lights on
 	function ent:ELS_LightsOn()
 		if not IsValid( self ) then return end
 		self:ELS_Lights( true )
@@ -204,12 +204,12 @@ function EMVU:MakeEMV( ent, emv )
 
 	end
 
-	// Turn the lights off
+	-- Turn the lights off
 	function ent:ELS_LightsOff()
 		if not IsValid( self ) then return end
 		self:ELS_SirenOff()
 		self:ELS_Lights( false )
-		//self:ELS_TakeDownCheck()
+		--self:ELS_TakeDownCheck()
 
 	end
 
@@ -223,7 +223,7 @@ function EMVU:MakeEMV( ent, emv )
 		end
 	end
 
-	// Turn the siren off
+	-- Turn the siren off
 	function ent:ELS_SirenOff( toneChange )
 		if not IsValid( self ) then return end
 		if not self.ELS.Siren then return end
@@ -234,7 +234,7 @@ function EMVU:MakeEMV( ent, emv )
 		self.ELS.SirenPaused = false
 	end
 
-	// Turn the siren on
+	-- Turn the siren on
 	function ent:ELS_SirenOn()
 		if not IsValid( self ) then return end
 		if self:ELS_NoSiren() then return end
@@ -253,7 +253,7 @@ function EMVU:MakeEMV( ent, emv )
 		if self:ELS_HasAuxSiren() then
 			local secondIndex = 1
 			local secondarySiren = self:ELS_AuxSirenSet()
-			if self.ELS.LastSecondSiren != secondIndex then
+			if self.ELS.LastSecondSiren ~= secondIndex then
 				if self.ELS.Siren2 then self.ELS.Siren2:Stop(); end
 					if not self.ELS.LastSecondSiren then
 						self.ELS.LastSecondSiren = secondIndex
@@ -262,7 +262,7 @@ function EMVU:MakeEMV( ent, emv )
 			if self:ELS_SirenOption() > 2 then secondIndex = 2 end
 			local newSound = EMVU.GetSirenTable()[secondarySiren].Set[1].Sound
 			if EMVU.GetSirenTable()[secondarySiren].Set[secondIndex] then newSound = EMVU.GetSirenTable()[secondarySiren].Set[secondIndex].Sound end
-			if ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and self.ELS.CurrentSecondarySiren != newSound then
+			if ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and self.ELS.CurrentSecondarySiren ~= newSound then
 				self.ELS.Siren2:Stop()
 				self.ELS.Siren2 = CreateSound( self, newSound )
 				if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
@@ -271,7 +271,7 @@ function EMVU:MakeEMV( ent, emv )
 					self.ELS.Siren2:SetSoundLevel( 70 )
 				end
 				self.ELS.CurrentSecondarySiren = newSound
-			elseif not self.ELS.Siren2 or ( ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and not self.ELS.CurrentSecondarySiren == newSound ) then
+			elseif not self.ELS.Siren2 or ( ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and self.ELS.CurrentSecondarySiren ~= newSound ) then
 				-- print(secondIndex)
 				self.ELS.Siren2 = CreateSound( self, newSound )
 				if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
@@ -379,7 +379,7 @@ function EMVU:MakeEMV( ent, emv )
 		if self:ELS_NoSiren() then return end
 
 		if state then
-			//if self:ELS_SirenOption() == 1 and self:ELS_Siren() then return end
+			--if self:ELS_SirenOption() == 1 and self:ELS_Siren() then return end
 			self:SetDTBool( CAR_MANUAL, true )
 			if ( not self:Photon_HasManualWind() ) or self:ELS_Siren() then
 				local manSiren = EMVU.GetSirenTable()[self:ELS_SirenSet()].Set[1].Sound
@@ -388,7 +388,7 @@ function EMVU:MakeEMV( ent, emv )
 					local manualToneIndex = self:ELS_SirenOption() + 1
 					local manualTone = EMVU.Horns[1]
 					if manualToneIndex <= #EMVU.GetSirenTable()[ self:ELS_SirenSet() ].Set
-						and EMVU.GetSirenTable()[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Name != "HILO"
+						and EMVU.GetSirenTable()[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Name ~= "HILO"
 					 then
 						manualTone = EMVU.GetSirenTable()[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Sound
 					elseif EMVU.GetSirenTable()[self:ELS_SirenSet()].Horn then
@@ -493,7 +493,7 @@ function EMVU:MakeEMV( ent, emv )
 	function ent:ApplyPhotonSkin( skin, index, mat )
 		if isnumber( skin ) then
 			self:SetSkin( skin )
-		elseif isstring( skin ) and index != nil and mat != nil then
+		elseif isstring( skin ) and index ~= nil and mat ~= nil then
 			self:ApplySmartSkin( skin, index, mat )
 		elseif isstring( skin ) then
 			self:ApplySmartSkin( skin )
@@ -502,7 +502,7 @@ function EMVU:MakeEMV( ent, emv )
 
 	function ent:Photon_ApplyLivery( category, index, unit )
 		if not IsValid( self ) then return end
-		// print( "instructed to apply: " .. index .. " from " .. category .. " with unit #" .. tostring( unit ) )
+		-- print( "instructed to apply: " .. index .. " from " .. category .. " with unit #" .. tostring( unit ) )
 		local available = EMVU.Liveries[ self.Name ]
 		if not available[category] or not available[category][index] then return end
 		local liveryData = available[category][index]
@@ -515,16 +515,16 @@ function EMVU:MakeEMV( ent, emv )
 			end
 		elseif isstring( liveryData ) then
 			self:ApplyPhotonSkin( liveryData )
-			// self:ApplyPhotonSkin( liveryData[1] )
-			// self:Photon_SetLiveryId( liveryData[2] )
+			-- self:ApplyPhotonSkin( liveryData[1] )
+			-- self:Photon_SetLiveryId( liveryData[2] )
 		end
 	end
 
 	function ent:Photon_SetLiveryId( val )
 		local curdata = string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )
 		curdata[4] = val
-		self:SetDTString( EMV_INDEX, ( table.concat( curdata, "ö" ) )
- )	end
+		self:SetDTString( EMV_INDEX, table.concat( curdata, "ö" ))
+	end
 
 	function ent:Photon_SetUnitNumber( val )
 		val = string.upper( tostring( val ) )
@@ -556,7 +556,7 @@ function EMVU:MakeEMV( ent, emv )
 			-- PrintTable( selectionTable )
 			local photonUtilString = self:Photon_GetUtilStringTable()
 			photonUtilString[5] = table.concat( selectionTable, "." )
-			//PrintTable( photonUtilString )
+			--PrintTable( photonUtilString )
 			self:Photon_SetUtilString( table.concat( photonUtilString, "ö" ) )
 			local selectionData = EMVU.Selections[ self.Name ][ index ].Options[value]
 			if istable( selectionData.Bodygroups ) then
@@ -587,13 +587,13 @@ function EMVU:MakeEMV( ent, emv )
 	function ent:Photon_SetAutoSkin( skin )
 		local mdl = self:GetModel()
 		local mdlId = Photon.AutoSkins.TranslationTable[ mdl ]
-		//print(tostring(mdlId))
+		--print(tostring(mdlId))
 		if not mdlId then
 			local toNum = tonumber( skin )
 			if isnumber( toNum ) then self:SetSkin( toNum); return true else return false end
 		end
 		-- if not Photon.AutoSkins.IsSkinAvailable( mdlId, skin ) then return false end
-		//print("instructed to apply" .. tostring( skin ))
+		--print("instructed to apply" .. tostring( skin ))
 		self:ApplySmartSkin( skin )
 	end
 
@@ -603,9 +603,9 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	ent.IsEMV = true
-	ent:SetDTString( EMV_INDEX, "ö" .. tostring( ent.Name ) .. "ööö." ) // Al
+	ent:SetDTString( EMV_INDEX, "ö" .. tostring( ent.Name ) .. "ööö." ) -- Al
 
-	//---- APPLY EMV PARAMETERS ----//
+	------ APPLY EMV PARAMETERS ------
 
 	if emv.Skin then ent:ApplyPhotonSkin( emv.Skin, emv.SkinIndex, emv.SkinMaterialIndex ) end
 
