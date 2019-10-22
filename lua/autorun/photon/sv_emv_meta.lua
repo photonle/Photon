@@ -56,17 +56,17 @@ function EMVU:MakeEMV( ent, emv )
 	// Siren set
 	function ent:ELS_SirenSet( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then 
+		if (val!=nil) then
 			self:ELS_SirenOption( 1 )
-			self:SetDTInt(EMV_SIREN_SET, val) 
+			self:SetDTInt(EMV_SIREN_SET, val)
 		end
 		return self:GetDTInt(EMV_SIREN_SET)
 	end
 
 	function ent:ELS_AuxSirenSet( val )
 		if not IsValid( self ) then return end
-		if (val!=nil) then 
-			self:SetDTInt(EMV_SIREN_SECONDARY, val) 
+		if (val!=nil) then
+			self:SetDTInt(EMV_SIREN_SECONDARY, val)
 		end
 		return self:GetDTInt(EMV_SIREN_SECONDARY)
 	end
@@ -106,7 +106,7 @@ function EMVU:MakeEMV( ent, emv )
 	function ent:ELS_PresetOption( val )
 		if not IsValid( self ) then return 0 end
 		if not EMVU.PresetIndex[ self.Name ] then print( "[Photon] No presets found for " .. tostring( self.Name ) .. ". Please check for errors above." ) return end
-		if (val!=nil) then 
+		if (val!=nil) then
 			val = math.Clamp( val, 0, #EMVU.PresetIndex[ self.Name ] )
 			self:SetDTInt( EMV_PRE_OPTION, val )
 			local bgData = EMVU.Helper:BodygroupPreset( self, val )
@@ -253,16 +253,16 @@ function EMVU:MakeEMV( ent, emv )
 		if self:ELS_HasAuxSiren() then
 			local secondIndex = 1
 			local secondarySiren = self:ELS_AuxSirenSet()
-			if self.ELS.LastSecondSiren != secondIndex then 
-				if self.ELS.Siren2 then self.ELS.Siren2:Stop(); end 
+			if self.ELS.LastSecondSiren != secondIndex then
+				if self.ELS.Siren2 then self.ELS.Siren2:Stop(); end
 					if not self.ELS.LastSecondSiren then
-						self.ELS.LastSecondSiren = secondIndex 
+						self.ELS.LastSecondSiren = secondIndex
 					end
 				end
 			if self:ELS_SirenOption() > 2 then secondIndex = 2 end
 			local newSound = EMVU.GetSirenTable()[secondarySiren].Set[1].Sound
 			if EMVU.GetSirenTable()[secondarySiren].Set[secondIndex] then newSound = EMVU.GetSirenTable()[secondarySiren].Set[secondIndex].Sound end
-			if ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and self.ELS.CurrentSecondarySiren != newSound then 
+			if ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and self.ELS.CurrentSecondarySiren != newSound then
 				self.ELS.Siren2:Stop()
 				self.ELS.Siren2 = CreateSound( self, newSound )
 				if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
@@ -282,9 +282,9 @@ function EMVU:MakeEMV( ent, emv )
 				self.ELS.CurrentSecondarySiren = newSound
 			end
 			-- if self.ELS.Siren2 then self.ELS.Siren2:Stop() end
-			
+
 		end
-		
+
 		self:ELS_Siren( true )
 	end
 
@@ -320,7 +320,7 @@ function EMVU:MakeEMV( ent, emv )
 		if self:ELS_NoSiren() then return end
 		if requestIndex and not isnumber( requestIndex ) then requestIndex = 1 end
 		if requestIndex and requestIndex < 1 then requestIndex = 1 end
-		if not requestIndex then 
+		if not requestIndex then
 			if self:ELS_SirenOption() >= #EMVU.GetSirenTable()[self:ELS_SirenSet()].Set then
 				self:ELS_SirenOption( 1 )
 			else
@@ -387,7 +387,7 @@ function EMVU:MakeEMV( ent, emv )
 				if self:ELS_Siren() then
 					local manualToneIndex = self:ELS_SirenOption() + 1
 					local manualTone = EMVU.Horns[1]
-					if manualToneIndex <= #EMVU.GetSirenTable()[ self:ELS_SirenSet() ].Set 
+					if manualToneIndex <= #EMVU.GetSirenTable()[ self:ELS_SirenSet() ].Set
 						and EMVU.GetSirenTable()[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Name != "HILO"
 					 then
 						manualTone = EMVU.GetSirenTable()[ self:ELS_SirenSet() ].Set[ manualToneIndex ].Sound
@@ -473,7 +473,7 @@ function EMVU:MakeEMV( ent, emv )
 	function ent:ApplySmartSkin( mat, index, skin )
 		if not IsValid( self ) then return end
 		local submaterialIndex = false
-		if skin then 
+		if skin then
 			submaterialIndex = skin
 		else
 			local materials = self:GetMaterials()
@@ -620,15 +620,27 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	if emv.Siren then
-		ent:ELS_SetSirenSet(EMVU.GetSirenIndex(emv.Siren))
+		local set = EMVU.GetSirenIndex(emv.Siren)
+		if not set then
+			ErrorNoHalt(Format("EMV.Siren = '%s' cannot be found during registration, defaulting to #1.\n", emv.Siren))
+			ent:ELS_SetSirenSet(1)
+		else
+			ent:ELS_SetSirenSet(set)
+		end
 	else
 		ent:ELS_SetSirenSet( 1 )
 	end
 
 	if emv.AuxiliarySiren then
-		ent:ELS_AuxSirenSet(EMVU.GetSirenIndex(emv.AuxiliarySiren))
+		local set = EMVU.GetSirenIndex(emv.AuxiliarySiren)
+		if not set then
+			ErrorNoHalt(Format("EMV.AuxiliarySiren = '%s' cannot be found during registration, defaulting to none.\n", emv.Siren))
+			ent:ELS_AuxSirenSet(0)
+		else
+			ent:ELS_AuxSirenSet(set)
+		end
 	else
-		ent:ELS_AuxSirenSet( 0 )
+		ent:ELS_AuxSirenSet(0)
 	end
 
 	if istable( emv.Auto ) and emv.Auto[1] and istable( emv.Presets ) then
