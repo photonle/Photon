@@ -33,7 +33,7 @@ local function DrawEMVLights()
 	for k,v in pairs( EMVU:AllVehicles() ) do
 		if IsValid( v ) and v.IsEMV and v:IsEMV() and v.Photon_RenderEL then v:Photon_RenderEL() elseif v:IsEMV() then EMVU:MakeEMV(v, v:EMVName()) end
 		if IsValid( v ) and v.IsEMV and v:IsEMV() and v.Photon_RenderIllum then v:Photon_RenderIllum() end
-	end	
+	end
 end
 -- hook.Add("PreRender", "EMVU.Scan", DrawEMVLights)
 
@@ -45,14 +45,14 @@ local function DrawCarLights()
 		if IsValid( ent ) then
 			if ent:Photon() and ent.Photon_RenderLights then
 				if( should_render_reg:GetBool() ) then
-					ent:Photon_RenderLights( 
-						ent:Photon_HeadlightsOn(), 
-						ent:Photon_IsRunning(), 
-						ent:Photon_IsReversing(), 
-						ent:Photon_IsBraking(), 
-						ent:Photon_TurningLeft(), 
-						ent:Photon_TurningRight(), 
-						ent:Photon_Hazards(), 
+					ent:Photon_RenderLights(
+						ent:Photon_HeadlightsOn(),
+						ent:Photon_IsRunning(),
+						ent:Photon_IsReversing(),
+						ent:Photon_IsBraking(),
+						ent:Photon_TurningLeft(),
+						ent:Photon_TurningRight(),
+						ent:Photon_Hazards(),
 						photonDebug
 					)
 				end
@@ -65,13 +65,39 @@ local function DrawCarLights()
 		end
 	end
 end
--- hook.Add( "PreRender", "Photon.Scan", function()
--- 	DrawCarLights()
--- end)
 
 hook.Add( "PreRender", "Photon.RenderScan", function()
 	DrawCarLights()
 	DrawEMVLights()
+end)
+
+hook.Add("PostDrawTranslucentRenderables", "Photon.DebugRender", function()
+	if not PHOTON_DEBUG then return end
+
+	for _, ent in ipairs(Photon:AllVehicles()) do
+		if IsValid(ent) and ent.IsEMV and ent:IsEMV() and ent.Photon_RenderIllum then
+			local lamps = EMVU.Helper:GetIlluminationLights(ent.VehicleName, ent:Photon_IllumOption())
+			if #lamps ~= 0 then
+				for _, lamp in ipairs(lamps) do
+					local meta = EMVU.Helper:GetLampMeta(ent.VehicleName, lamp[3])
+					local start = ent:LocalToWorld(lamp[1])
+					local endpos = ent:LocalToWorld(lamp[1] + (lamp[2]:Forward() * meta.Distance))
+					local res = util.TraceLine({
+						start = start,
+						endpos = endpos,
+						filter = {ent}
+					})
+					render.DrawWireframeSphere(start, 1, 5, 5, meta.Color)
+					if res.HitPos == endpos then
+						render.DrawLine(start, endpos, meta.Color)
+					else
+						render.DrawLine(start, res.HitPos, meta.Color)
+						render.DrawLine(res.HitPos, endpos, Color(200, 0, 0, 100))
+					end
+				end
+			end
+		end
+	end
 end)
 
 
@@ -123,7 +149,7 @@ concommand.Add( "photon_pause", function()
 	photon_pause = !photon_pause
 end)
 
--- concommand.Add( "photon_selectiondata", function( ply ) 
+-- concommand.Add( "photon_selectiondata", function( ply )
 -- 	local veh = ply:GetVehicle()
 -- 	if not IsValid( veh ) then return end
 -- 	-- print("BEFORE:::::::::::::::::::::::")
@@ -332,7 +358,7 @@ function PrintPhotonDebugInformation()
 					print( [[CURRENT VEHICLE SIREN ON: ]] .. tostring( car:Photon_Siren() ) )
 					print( [[CURRENT VEHICLE WARNING LIGHTS: ]] .. tostring( car:Photon_Lights() ) )
 					print( [[CURRENT VEHICLE LIGHT STAGE: ]] .. tostring( car:Photon_LightOption() ) )
-					print( [[CURRENT VEHICLE FINISHED INIT: ]] .. tostring( car.PhotonFinishedInit ) ) 
+					print( [[CURRENT VEHICLE FINISHED INIT: ]] .. tostring( car.PhotonFinishedInit ) )
 					print( [[CURRENT VEHICLE POSITIONS: ]] .. tostring( #EMVU.Positions[car:EMVName()] ))
 				end
 			else
@@ -392,7 +418,7 @@ Photon.BoneRotation = function()
 					if emv:Photon_Illumination() then
 						if boneData.Illumination and boneData.Illumination[ illumStage ] then currentAnimation = boneData.Illumination[ illumStage ] end
 					end
-					if not currentAnimation then 
+					if not currentAnimation then
 						if boneData.Default then currentAnimation = boneData.Default end
 					end
 					if not currentAnimation then continue end
@@ -447,7 +473,7 @@ Photon.BoneRotation = function()
 									ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, addAng ) )
 								end
 							end
-							
+
 						else
 							local max = #animAngle
 							if max > currentDir then ent.PhotonBonesAlt[ boneIndex ] = currentDir + 1
@@ -464,6 +490,6 @@ Photon.BoneRotation = function()
 	end
 end
 
-hook.Add( "PreRender", "Photon.RotationAnimation", function() 
+hook.Add( "PreRender", "Photon.RotationAnimation", function()
 	Photon.BoneRotation()
 end )
