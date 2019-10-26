@@ -44,8 +44,10 @@ function PANEL:SetComponent( componentId )
 		local component = EMVU.Auto[ componentId ]
 		if not component then print( "component not found" ); return end
 		self.ModelViewer:SetModel( component.Model or "" )
-		self.ModelViewer:GetEntity():SetSkin( 0 )
-		if component.Skin then self.ModelViewer:GetEntity():SetSkin( component.Skin ) end
+		if self.ModelViewer:GetEntity() then
+			self.ModelViewer:GetEntity():SetSkin( 0 )
+			if component.Skin then self.ModelViewer:GetEntity():SetSkin( component.Skin ) end
+		end
 		self.ComponentTitle:SetText( componentId )
 		self.ComponentCategory:SetText( component.Category or "Unknown Type" )
 
@@ -58,7 +60,7 @@ function PANEL:SetComponent( componentId )
 		self.ComponentInfo:SetText( infoText )
 
 	end
-	
+
 end
 
 vgui.Register( "PhotonComponentPreview", PANEL, "DPanel" )
