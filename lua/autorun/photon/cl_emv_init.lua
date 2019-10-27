@@ -1,3 +1,9 @@
+--[[-- Photon EMV Client Loader.
+@copyright Photon Team
+@release v72 Fair Oaks
+@author Photon Team
+@module EMVU
+--]]--
 AddCSLuaFile()
 
 if not CLIENT then return end
