@@ -6,7 +6,7 @@ if not EMVU.AutoIndex then EMVU.AutoIndex = {} end
 
 function EMVU:AddAutoComponent(component, name)
 	if not component.Modes then
-		ErrorNoHalt(Format("Component %s is missing its Modes field.\n", name))
+		ErrorNoHalt(Format("[PHOTON] Component %s is missing its Modes field.\n", name))
 		return
 	end
 
