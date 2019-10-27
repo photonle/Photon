@@ -22,7 +22,6 @@ jobs:
           luarocks install markdown
           luarocks install argparse
           luarocks install ldoc
-          which ldoc
       -
         name: Build
         run: ldoc -M -c ./config.ld -t 'Photon Lighting Documentation' -d ./docs ./lua
