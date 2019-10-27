@@ -48,12 +48,11 @@ Photon.AirEL.DownloadMaterial = function(id, unitString, ent, cback, failed)
         if isfunction(cback) then
             cback(id, unitString, ent)
         end
-
-        print("AIREL SUCCESS")
     end, function(error)
         if isfunction(failed) then
-            failed(id, unitString, ent)
-            print("AIREL FAILURE")
+			failed(id, unitString, ent)
+		else
+			ErrorNoHalt(Format("[PHOTON] Failed to download AirEL material for %s\n", Photon.AirEL.FormatName(id, unitString)))
         end
     end)
 end
