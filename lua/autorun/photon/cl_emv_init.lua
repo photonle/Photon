@@ -8,13 +8,13 @@ AddCSLuaFile()
 
 if not CLIENT then return end
 
-include( "cl_emv_meta.lua" )
-include( "cl_emv_listener.lua" )
-include( "cl_emv_net.lua" )
-include( "cl_photon_builder.lua" )
-include( "cl_photon_menu.lua" )
-include( "cl_photon_editor.lua" )
-include( "cl_emv_airel.lua" )
+include("cl_emv_meta.lua")
+include("cl_emv_listener.lua")
+include("cl_emv_net.lua")
+include("cl_photon_builder.lua")
+include("cl_photon_menu.lua")
+include("cl_photon_editor.lua")
+include("cl_emv_airel.lua")
 
 local IsValid = IsValid
 local pairs = pairs
