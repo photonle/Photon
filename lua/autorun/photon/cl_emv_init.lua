@@ -76,23 +76,25 @@ hook.Add("PostDrawTranslucentRenderables", "Photon.DebugRender", function()
 
 	for _, ent in ipairs(Photon:AllVehicles()) do
 		if IsValid(ent) and ent.IsEMV and ent:IsEMV() and ent.Photon_RenderIllum then
-			local lamps = EMVU.Helper:GetIlluminationLights(ent.VehicleName, ent:Photon_IllumOption())
-			if #lamps ~= 0 then
-				for _, lamp in ipairs(lamps) do
-					local meta = EMVU.Helper:GetLampMeta(ent.VehicleName, lamp[3])
-					local start = ent:LocalToWorld(lamp[1])
-					local endpos = ent:LocalToWorld(lamp[1] + (lamp[2]:Forward() * meta.Distance))
-					local res = util.TraceLine({
-						start = start,
-						endpos = endpos,
-						filter = {ent}
-					})
-					render.DrawWireframeSphere(start, 1, 5, 5, meta.Color)
-					if res.HitPos == endpos then
-						render.DrawLine(start, endpos, meta.Color)
-					else
-						render.DrawLine(start, res.HitPos, meta.Color)
-						render.DrawLine(res.HitPos, endpos, Color(200, 0, 0, 100))
+			local options = EMVU.Sequences[ent.VehicleName].Illumination
+			for _, lamps in ipairs(options) do
+				if #lamps ~= 0 then
+					for _, lamp in ipairs(lamps) do
+						local meta = EMVU.Helper:GetLampMeta(ent.VehicleName, lamp[3])
+						local start = ent:LocalToWorld(lamp[1])
+						local endpos = ent:LocalToWorld(lamp[1] + (lamp[2]:Forward() * meta.Distance))
+						local res = util.TraceLine({
+							start = start,
+							endpos = endpos,
+							filter = {ent}
+						})
+						render.DrawWireframeSphere(start, 1, 5, 5, meta.Color)
+						if res.HitPos == endpos then
+							render.DrawLine(start, endpos, meta.Color)
+						else
+							render.DrawLine(start, res.HitPos, meta.Color)
+							render.DrawLine(res.HitPos, endpos, Color(200, 0, 0, 100))
+						end
 					end
 				end
 			end
