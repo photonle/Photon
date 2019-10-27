@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
-          name: Checkout
-          uses: actions/checkout@v1
+        name: Checkout
+        uses: actions/checkout@v1
       -
         name: Install Lua
         uses: leafo/gh-actions-lua@v3
@@ -34,3 +34,13 @@ jobs:
         with:
           name: docs
           path: ./docs
+      -
+        name: Commit
+        uses: EndBug/add-and-commit@v2.1.0
+        with:
+          author_name: Documentation Generator
+          author_email: docs@photon.lighting
+          message: "Updated Documentation"
+          path: "./docs"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
