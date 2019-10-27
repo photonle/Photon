@@ -510,11 +510,7 @@ Photon.BoneRotation = function()
 						local gotoAngle = animAngle[ currentDir ]
 						local ang1 = animAngle[1]
 						local ang2 = animAngle[2]
-						local lt = gotoAngle > currentAngle
 						local eq = gotoAngle == currentAngle
-						local difAng = ( FrameTime() * animSpeed ) * 10
-						local addAng = (currentAngles.r + difAng) % 360
-						local subAng = (currentAngles.r - difAng) % 360
 						if not eq then
 							if animAction == "A" then
 								if currentDir == 2 then -- even
