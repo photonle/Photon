@@ -50,16 +50,19 @@ local function DrawEMVLights()
 		end
 	end
 end
--- hook.Add("PreRender", "EMVU.Scan", DrawEMVLights)
 
 local function DrawCarLights()
 	if not photon_ready then return end
+
 	Photon:ClearLightQueue()
 	local photonDebug = PHOTON_DEBUG
-	for _,ent in pairs( Photon:AllVehicles() ) do
-		if IsValid( ent ) then
-			if ent:Photon() and ent.Photon_RenderLights then
-				if( should_render_reg:GetBool() ) then
+
+	for _, ent in pairs(Photon:AllVehicles() ) do
+		if IsValid(ent) and ent:Photon() then
+			if not ent.Photon_renderLights then
+				Photon:SetupCar(ent, ent:EMVName())
+			else
+				if should_render_reg:GetBool() then
 					ent:Photon_RenderLights(
 						ent:Photon_HeadlightsOn(),
 						ent:Photon_IsRunning(),
@@ -71,11 +74,12 @@ local function DrawCarLights()
 						photonDebug
 					)
 				end
-				if ent:IsEMV() and ent.Photon_ScanEMVProps then ent:Photon_ScanEMVProps() end
-				if ent:Photon_WheelEnabled() and ent.Photon_ScanWheels then ent:Photon_ScanWheels() end
-				-- if ent:Photon_WheelEnabled() and not ent.PhotonWheelProps then ent:Photon_SetupWheels() end
-			elseif ent:Photon() and not ent.Photon_RenderLights then
-				Photon:SetupCar( ent, ent:EMVName() )
+				if ent:IsEMV() and ent.Photon_ScanEMVProps then
+					ent:Photon_ScanEMVProps()
+				end
+				if ent:Photon_WheelEnabled() and ent.Photon_ScanWheels then
+					ent:Photon_ScanWheels()
+				end
 			end
 		end
 	end
