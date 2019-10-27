@@ -75,11 +75,11 @@ hook.Add("PostDrawTranslucentRenderables", "Photon.DebugRender", function()
 	if not PHOTON_DEBUG then return end
 
 	for _, ent in ipairs(Photon:AllVehicles()) do
-		if IsValid(ent) and ent.VehicleName and EMVU.Sequences[ent.VehicleName] and EMVU.Sequences[ent.VehicleName].Illumination then
+		if IsValid(ent) and ent.VehicleName and EMVU.Sequences[ent.VehicleName] and EMVU.Sequences[ent.VehicleName].Illumination and ent.Photon_Illumination and ent:Photon_Illumination() then
 			local options = EMVU.Sequences[ent.VehicleName].Illumination
 			for _, lamps in ipairs(options) do
-				if #lamps ~= 0 then
-					for _, lamp in ipairs(lamps) do
+				if #lamps.Lights ~= 0 then
+					for _, lamp in ipairs(lamps.Lights) do
 						local meta = EMVU.Helper:GetLampMeta(ent.VehicleName, lamp[3])
 						local start = ent:LocalToWorld(lamp[1])
 						local endpos = ent:LocalToWorld(lamp[1] + (lamp[2]:Forward() * meta.Distance))
