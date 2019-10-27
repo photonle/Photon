@@ -4,13 +4,13 @@ if not EMVU.Auto then EMVU.Auto = {} end
 if not EMVU.AutoIndex then EMVU.AutoIndex = {} end
 
 
-function EMVU:AddAutoComponent( component, name )
+function EMVU:AddAutoComponent(component, name)
 	if not component.Modes then
 		ErrorNoHalt(Format("Component %s is missing its Modes field.\n", name))
 		return
 	end
 
-	EMVU.Auto[ name ] = component
+	EMVU.Auto[name] = component
 end
 
 local autoFiles = file.Find( "autorun/photon/library/auto/*", "LUA" )
