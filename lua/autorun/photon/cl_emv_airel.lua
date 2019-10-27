@@ -6,7 +6,6 @@
 --]]--
 AddCSLuaFile()
 
---- Global table defined to hold stuff.
 Photon.AirEL = {}
 
 --- Translation between models and remote materials.
@@ -23,8 +22,15 @@ Photon.AirEL.TranslationTableIndex = {
 	["models/schmal/tahoe_airel.mdl"] = 0
 }
 
+--- Table for storing materials, keyed by material name.
 Photon.AirEL.MaterialIndex = {}
 
+--- Download a given material and apply it to a given entity.
+-- @string id Vehicle ID to download for.
+-- @string unitString Unit ID to apply to the texture.
+-- @ent ent Entity to apply the downloaded texture to.
+-- @tparam[opt] function cback Callback function to call once the material's been downloaded.
+-- @tparam[opt] function failed Error callback if the HTTP query fails.
 Photon.AirEL.DownloadMaterial = function( id, unitString, ent, cback, failed )
 	if not file.Exists( "photon", "DATA" ) then file.CreateDir( "photon" ) end
 	if not file.Exists( "photon/airel", "DATA" ) then file.CreateDir( "photon/airel" ) end
@@ -47,10 +53,18 @@ Photon.AirEL.DownloadMaterial = function( id, unitString, ent, cback, failed )
 	);
 end
 
+--- Get an AirEL formatted material name.
+-- @string id Vehicle type.
+-- @string unitString User's unit ID.
+-- @treturn string Formatted name.
 Photon.AirEL.FormatName = function( id, unitString )
 	return string.format( "photon_airel_%s_%s.png", tostring( id ), tostring( unitString ) )
 end
 
+--- Load a material from the cache or download it if it doesn't exist.
+-- @string id Vehicle ID.
+-- @string unitString Unit ID.
+-- @ent ent Vehicle to load to.
 Photon.AirEL.LoadMaterial = function( id, unitString, ent )
 	local checkFile = "photon/airel/" .. Photon.AirEL.FormatName( id, unitString )
 	-- Photon.AirEL.DownloadMaterial( id, unitString, ent, Photon.AirEL.LoadCallbackSuccess, Photon.AirEL.LoadCallbackFail )
@@ -61,15 +75,26 @@ Photon.AirEL.LoadMaterial = function( id, unitString, ent )
 	end
 end
 
+--- Callback function called when a texture is done downloading.
+-- @string id Vehicle ID.
+-- @string unitString Unit ID.
+-- @ent ent Entity to apply to.
 Photon.AirEL.LoadCallbackSuccess = function( id, unitString, ent )
 	ent.PhotonMaterialDownloadInProgress = false
 	Photon.AirEL.ApplyTexture( Photon.AirEL.LoadMaterialFromFile( id, unitString ), ent, id, unitString )
 end
 
+--- Error callback function.
+-- @string error The error which occured.
 Photon.AirEL.LoadCallbackFail = function( error )
 	print( "[Photon] An error occurred: " .. tostring( error ) )
 end
 
+--- Apply a texture to an ariel system.
+-- @tparam Material mat Material being applied.
+-- @ent ent Entity to apply the texture to.
+-- @string id Vehicle ID
+-- @string unitString Unit ID.
 Photon.AirEL.ApplyTexture = function( mat, ent, id, unitString )
 	if not IsValid( ent ) then return end
 
@@ -86,7 +111,7 @@ Photon.AirEL.ApplyTexture = function( mat, ent, id, unitString )
 			}
 		}
 	}
-	
+
 	local matName = string.format( "photon_airel_%s_%s", id, unitString )
 	Photon.AirEL.MaterialIndex[matName .. "_lit"] = CreateMaterial( string.format( "photon_airel_%s_%s_lit", id, unitString ), "UnlitGeneric", matParams )
 
@@ -112,10 +137,17 @@ Photon.AirEL.ApplyTexture = function( mat, ent, id, unitString )
 	ent.Photon_UnitID = unitString
 end
 
+--- Load a material from a file.
+-- @string id Vehicle ID.
+-- @string unitString Unit ID.
+-- @treturn Material The loaded material.
 Photon.AirEL.LoadMaterialFromFile = function( id, unitString )
 	return Material( string.format( "../data/photon/airel/photon_airel_%s_%s.png", id, unitString ), "nocull smooth noclamp mips" )
 end
 
+--- Apply an AirEL skin to an entity.
+-- @string unitString Unit name to apply.
+-- @ent ent Entity to apply to.
 Photon.AirEL.Apply = function( unitString, ent )
 	if not IsValid( ent ) or not ent.AirEL then return end
 	local mdl = ent:GetModel()
@@ -124,6 +156,7 @@ Photon.AirEL.Apply = function( unitString, ent )
 	Photon.AirEL.LoadMaterial( mdlId, unitString, ent )
 end
 
+--- Scan function called to apply materials on AirEL entities.
 Photon.AirEL.Scan = function()
 	for _,car in pairs( EMVU:AllVehicles() ) do
 		if not IsValid( car ) then continue end
@@ -140,6 +173,7 @@ timer.Create("Photon.AirELUnitScan", 5, 0, function()
 	Photon.AirEL.Scan()
 end)
 
+--- Scan function called to set on vs off illumination for AirEL entities.
 Photon.AirEL.IllumScan = function()
 	for _,car in pairs( EMVU:AllVehicles() ) do
 		if not IsValid( car ) then continue end
