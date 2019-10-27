@@ -33,6 +33,7 @@ hook.Add("InitPostEntity", "Photon.ReadyEL", function()
 	photon_ready = true
 end)
 
+--- Render function to draw Emergency and Illumination lighting.
 local function DrawEMVLights()
 	if not photon_ready then return end
 	if not should_render:GetBool() then return end
@@ -51,6 +52,7 @@ local function DrawEMVLights()
 	end
 end
 
+--- Render function for vehicle running lights.
 local function DrawCarLights()
 	if not photon_ready then return end
 
@@ -119,7 +121,7 @@ hook.Add("PostDrawTranslucentRenderables", "Photon.DebugRender", function()
 	end
 end)
 
-
+--- Manual siren windup/winddown.
 local function PhotonManualWindScan()
 	if not photon_ready then return end
 	for _, emv in pairs( EMVU:AllVehicles() ) do
@@ -131,6 +133,7 @@ end
 -- 	PhotonManualWindScan()
 -- end )
 
+--- Manual siren windup/down.
 local function PhotonManualWindFocus()
 	if not photon_ready or not should_render:GetBool() then return end
 	for _, emv in pairs( EMVU:AllVehicles() ) do
@@ -142,6 +145,7 @@ local function PhotonManualWindFocus()
 end
 -- hook.Add( "PreRender", "Photon.ManualFocusCheck", function() PhotonManualWindFocus() end )
 
+--- Render function to tick the radar.
 local function PhotonRadarScan()
 	if not photon_ready or not should_render:GetBool() then return end
 	for _, emv in pairs( EMVU:AllVehicles() ) do
@@ -152,6 +156,7 @@ hook.Add( "Tick", "Photon.RadarScan", function() PhotonRadarScan() end)
 
 local photon_pause = false
 
+--- Timer to update frame calculations.
 function EMVU:CalculateFrames()
 	if not photon_ready then return end
 	if photon_pause then return end
@@ -183,9 +188,12 @@ end)
 -- {"Pushbars":"Setina Pushbar=CHP - Red","Front Upper Deck":"None","Lightbar":"Whelen Liberty II=CHP","Rear Upper Deck":"None","Grille":"None","Reverse Light Hideaways":"None","Rear Lower Deck":"None","Turn Signal Hideaways":"None","Bumper Layout":"Fog Lights=CHP - White","Spotlight":"Full","Forward Hideaways":"None","Roof":"AirEL=All","Forward ALPR":"None","Headlight Wig-Wag":"On","Mid-Level Side":"None","Mirror Lights":"Whelen Ion=CHP - Red","Interior Equipment":"Full"}
 -- ]]
 
-
+--- List of manual sirens.
 EMVU.ManualSirenTable = {}
 
+--- Generate a configuration name for a vehicle.
+-- @tab data Configuration data to generate a name for.
+-- @treturn string Name of the generated configuration.
 EMVU.Configurations.GenerateName = function( data )
 	local keyId = EMVU.Configurations.Supported[ data.VehicleName ]
 	local userId = LocalPlayer():SteamID64()
@@ -193,6 +201,12 @@ EMVU.Configurations.GenerateName = function( data )
 	return keyId .. "_" .. userId .. "_" .. name
 end
 
+--- Serialize a configuration.
+-- @string name The name of the config.
+-- @string category The configuration category.
+-- @string author Unused.
+-- @tab data Configuration data.
+-- @treturn string Serialized data.
 EMVU.Configurations.GetConfigText = function( name, category, author, data )
 	if not istable( data ) then return false end
 	data.Name = tostring( name )
@@ -201,6 +215,12 @@ EMVU.Configurations.GetConfigText = function( name, category, author, data )
 	return util.TableToJSON( data )
 end
 
+--- Save a configuration.
+-- @string name The name of the config.
+-- @string category The configuration category.
+-- @string author Unused.
+-- @tab data Configuration data.
+-- @treturn boolean If the configuration saved.
 EMVU.Configurations.SaveConfiguration = function( name, category, author, data )
 	if not istable( data ) then return false end
 	local output = EMVU.Configurations.GetConfigText( name, category, author, data )
@@ -217,6 +237,12 @@ AddCSLuaFile()
 list.Set( "PhotonConfigurationLibrary", "%s", %s )
 ]]
 
+--- Generate lua code for a given configuration.
+-- @string name The name of the config.
+-- @string category The configuration category.
+-- @string author Unused.
+-- @tab data Configuration data.
+-- @treturn string The generated lua string.
 EMVU.Configurations.ConfigurationLua = function( name, category, author, data )
 	if not istable( data ) then return false end
 	local output = EMVU.Configurations.GetConfigText( name, category, author, data )
@@ -224,6 +250,10 @@ EMVU.Configurations.ConfigurationLua = function( name, category, author, data )
 	return string.format( luaConfigCopyTemplate, listName, "[[" .. output .. "]]" )
 end
 
+--- Fetch autoskins for a given vehicle.
+-- @string id Auto Skin ID of the vehicle.
+-- @treturn table Found skins.
+-- @treturn string Base material directory.
 Photon.AutoSkins.FetchSkins = function( id )
 	local result = {}
 	local baseDir = "materials/" .. tostring(id) .. "_liveries/"
@@ -243,6 +273,10 @@ Photon.AutoSkins.FetchSkins = function( id )
 	return result, baseDir
 end
 
+--- Parse the skins of an id.
+-- Generates names and texture paths.
+-- @string id Vehicle ID.
+-- @treturn table Parsed results.
 Photon.AutoSkins.ParseSkins = function( id )
 	local fileTable, baseDir = Photon.AutoSkins.FetchSkins( id )
 	local result = {}
@@ -270,6 +304,7 @@ Photon.AutoSkins.ParseSkins = function( id )
 	return result
 end
 
+--- Load all available autoskins into the cache.
 Photon.AutoSkins.LoadAvailable = function()
 	if not istable( Photon.AutoSkins.TranslationTable ) then return end
 	for _,id in pairs( Photon.AutoSkins.TranslationTable ) do
@@ -280,8 +315,10 @@ end
 
 hook.Add( "InitPostEntity", "Photon.LoadAvailableMaterials", function() timer.Simple( 3, Photon.AutoSkins.LoadAvailable ) end )
 
+--- Available license plate materials.
 Photon.LicensePlates.Available = {}
 
+--- Fetch the license plate materials.
 Photon.LicensePlates.FetchMaterials = function()
 	local result = {}
 	local baseDir = "materials/photon_plates/"
@@ -301,6 +338,7 @@ Photon.LicensePlates.FetchMaterials = function()
 	return result, baseDir
 end
 
+--- Parse materials into key/pairs.
 Photon.LicensePlates.ParseMaterials = function()
 	local fileTable, baseDir = Photon.LicensePlates.FetchMaterials()
 	local result = {}
@@ -328,6 +366,7 @@ Photon.LicensePlates.ParseMaterials = function()
 	return result
 end
 
+--- Load all license plates.
 Photon.LicensePlates.LoadAvailable = function()
 	Photon.LicensePlates.Available = Photon.LicensePlates.ParseMaterials()
 end
@@ -413,6 +452,7 @@ local function getPhotonRotationEnts()
 	return _rotationEntCache
 end
 
+--- Run bone rotation.
 Photon.BoneRotation = function()
 	if photon_pause then return end
 	-- if true then return end
