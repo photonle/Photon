@@ -23,8 +23,8 @@ local tostring = tostring
 local istable = istable
 local EMVU = EMVU
 
-local should_render = GetConVar( "photon_emerg_enabled" )
-local should_render_reg = GetConVar( "photon_stand_enabled" )
+local should_render = GetConVar("photon_emerg_enabled")
+local should_render_reg = GetConVar("photon_stand_enabled")
 local photon_ready = photon_ready or false
 
 hook.Add( "InitPostEntity", "Photon.ReadyEL", function()
