@@ -17,12 +17,12 @@ jobs:
       -
         name: Install Dependencies
         run: |
-        luarocks install luafilesystem
-        luarocks install penlight
-        luarocks install markdown
-        luarocks install argparse
-        luarocks install ldoc
-        which ldoc
+          luarocks install luafilesystem
+          luarocks install penlight
+          luarocks install markdown
+          luarocks install argparse
+          luarocks install ldoc
+          which ldoc
       -
         name: Build
         run: ldoc -M -c ./config.ld -t 'Photon Lighting Documentation' -d ./docs ./lua
