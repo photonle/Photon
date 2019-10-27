@@ -28,8 +28,8 @@ local should_render_reg = GetConVar("photon_stand_enabled")
 local photon_ready = photon_ready or false
 
 hook.Add("InitPostEntity", "Photon.ReadyEL", function()
-	should_render = GetConVar("photon_emerg_enabled"):GetBool()
-	should_render_reg = GetConVar("photon_stand_enabled"):GetBool()
+	should_render = GetConVar("photon_emerg_enabled")
+	should_render_reg = GetConVar("photon_stand_enabled")
 	photon_ready = true
 end)
 
