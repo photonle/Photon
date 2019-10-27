@@ -1,6 +1,6 @@
 --[[-- Photon Init
 @copyright Photon Team
-@release v71 Denver
+@release v72 Fair Oaks
 @author Photon Team
 --]]--
 
