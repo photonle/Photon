@@ -170,7 +170,7 @@ timer.Create("EMVU.CalculateFrames", .03, 0, function()
 end)
 
 concommand.Add( "photon_pause", function()
-	photon_pause = !photon_pause
+	photon_pause = not photon_pause
 end)
 
 -- concommand.Add( "photon_selectiondata", function( ply )
