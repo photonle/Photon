@@ -1,0 +1,28 @@
+name: Documentation
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Install Lua
+        uses: leafo/gh-actions-lua@v3
+      -
+        name: Install Luarocks
+        uses: leafo/gh-actions-luarocks@v2
+      -
+        name: Install Dependencies
+        run: luarocks install luafilesystem && luarocks install penlight && luarocks install markdown && luarocks install argparse && luarocks install ldoc
+      -
+        name: Checkout
+        uses: actions/checkout@v1
+      -
+        name: Build
+        run: ldoc -M -c ./config.ld -t 'Photon Lighting Documentation' -d ./docs ./lua
+      -
+        name: Upload
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: docs
+          path: ./docs
