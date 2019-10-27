@@ -6,6 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
+          name: Checkout
+          uses: actions/checkout@v1
+      -
         name: Install Lua
         uses: leafo/gh-actions-lua@v3
       -
@@ -13,10 +16,13 @@ jobs:
         uses: leafo/gh-actions-luarocks@v2
       -
         name: Install Dependencies
-        run: luarocks install luafilesystem && luarocks install penlight && luarocks install markdown && luarocks install argparse && luarocks install ldoc
-      -
-        name: Checkout
-        uses: actions/checkout@v1
+        run: |
+        luarocks install luafilesystem
+        luarocks install penlight
+        luarocks install markdown
+        luarocks install argparse
+        luarocks install ldoc
+        which ldoc
       -
         name: Build
         run: ldoc -M -c ./config.ld -t 'Photon Lighting Documentation' -d ./docs ./lua
