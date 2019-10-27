@@ -9,18 +9,18 @@ local CW = "C_WHITE"
 local SW = "S_WHITE"
 local G = "GREEN"
  
-local name = "Whelen 600"
+local name = "Whelen 600 Red"
  
 local COMPONENT = {}
  
 COMPONENT.Model = "models/noble/whelen_600/whelen_600.mdl"
-COMPONENT.Skin = 0
+COMPONENT.Skin = 1
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
 COMPONENT.ColorInput = 1
 COMPONENT.UsePhases = true 
 COMPONENT.DefaultColors = {
-    [1] = "WHITE"
+    [1] = "RED"
 }
  
 COMPONENT.Meta = {

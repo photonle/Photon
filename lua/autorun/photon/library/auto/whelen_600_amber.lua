@@ -9,18 +9,18 @@ local CW = "C_WHITE"
 local SW = "S_WHITE"
 local G = "GREEN"
  
-local name = "Whelen 600"
+local name = "Whelen 600 Amber"
  
 local COMPONENT = {}
  
 COMPONENT.Model = "models/noble/whelen_600/whelen_600.mdl"
-COMPONENT.Skin = 0
+COMPONENT.Skin = 3
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
 COMPONENT.ColorInput = 1
 COMPONENT.UsePhases = true 
 COMPONENT.DefaultColors = {
-    [1] = "WHITE"
+    [1] = "AMBER"
 }
  
 COMPONENT.Meta = {
@@ -29,7 +29,7 @@ COMPONENT.Meta = {
         AngleOffset = 0,
         W = 9.1,
         H = 9.1,
-        Sprite = "sprites/emv/emv_whelen_600",
+        Sprite = "sprites/emv/env_whelen_600",
         Scale = 2,
         NoLegacy = true,
         DirAxis = "Up",

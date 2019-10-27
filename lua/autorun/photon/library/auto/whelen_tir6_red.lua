@@ -9,40 +9,38 @@ local CW = "C_WHITE"
 local SW = "S_WHITE"
 local G = "GREEN"
  
-local name = "Whelen 600"
+local name = "Whelen TIR6 Red"
  
 local COMPONENT = {}
  
-COMPONENT.Model = "models/noble/whelen_600/whelen_600.mdl"
-COMPONENT.Skin = 0
+COMPONENT.Model = "models/noble/whelen_tir6/whelen_tir6.mdl"
+COMPONENT.Skin = 1
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
 COMPONENT.ColorInput = 1
 COMPONENT.UsePhases = true 
 COMPONENT.DefaultColors = {
-    [1] = "WHITE"
+    [1] = "RED"
 }
  
 COMPONENT.Meta = {
 
-    whelen600_light = {
+    tir6_light = {
         AngleOffset = 0,
-        W = 9.1,
-        H = 9.1,
-        Sprite = "sprites/emv/emv_whelen_600",
+        W = 6.7,
+        H = 7.8,
+        Sprite = "sprites/emv/whelen_tir6",
         Scale = 2,
         NoLegacy = true,
         DirAxis = "Up",
         DirOffset = 90,
         WMult = 1.5
-    },
-
-    
+    }, 
 
 }
  
 COMPONENT.Positions = {
-    [1] = { Vector( 1.3, -.1, 3.15 ), Angle( 0, -90, 0 ), "whelen600_light" },
+    [1] = { Vector( 1.35, .03, 4.25 ), Angle( 90, -94.34, 0 ), "tir6_light" },
 
 }
  
