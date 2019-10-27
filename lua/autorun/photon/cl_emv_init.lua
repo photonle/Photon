@@ -75,7 +75,7 @@ hook.Add("PostDrawTranslucentRenderables", "Photon.DebugRender", function()
 	if not PHOTON_DEBUG then return end
 
 	for _, ent in ipairs(Photon:AllVehicles()) do
-		if IsValid(ent) and ent.IsEMV and ent:IsEMV() and ent.Photon_RenderIllum then
+		if IsValid(ent) and ent.VehicleName and EMVU.Sequences[ent.VehicleName] and EMVU.Sequences[ent.VehicleName].Illumination then
 			local options = EMVU.Sequences[ent.VehicleName].Illumination
 			for _, lamps in ipairs(options) do
 				if #lamps ~= 0 then
