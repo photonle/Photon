@@ -468,18 +468,19 @@ Photon.BoneRotation = function()
 				local componentBoneData = ent.PhotonBoneAnimationData
 				for boneIndex, boneData in pairs( componentBoneData ) do
 					local currentAnimation
-					if emv:Photon_Lights() then
-						if boneData.Primary and boneData.Primary[ stageId ] then currentAnimation = boneData.Primary[ stageId ] end
+					if boneData.Default then
+						currentAnimation = boneData.Default
 					end
-					if emv:Photon_AuxLights() then
-						if boneData.Auxiliary and boneData.Auxiliary[ auxState ] then currentAnimation = boneData.Auxiliary[ auxState ] end
+					if emv:Photon_Lights() and boneData.Primary and boneData.Primary[ stageId ] then
+						currentAnimation = boneData.Primary[ stageId ]
 					end
-					if emv:Photon_Illumination() then
-						if boneData.Illumination and boneData.Illumination[ illumStage ] then currentAnimation = boneData.Illumination[ illumStage ] end
+					if emv:Photon_AuxLights() and boneData.Auxiliary and boneData.Auxiliary[ auxState ] then
+						currentAnimation = boneData.Auxiliary[ auxState ]
 					end
-					if not currentAnimation then
-						if boneData.Default then currentAnimation = boneData.Default end
+					if emv:Photon_Illumination() and boneData.Illumination and boneData.Illumination[ illumStage ] then
+						currentAnimation = boneData.Illumination[ illumStage ]
 					end
+
 					if not currentAnimation then continue end
 					local animAction = currentAnimation[1] or "RP"
 					local animAngle = currentAnimation[2] or 0
