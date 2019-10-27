@@ -179,7 +179,7 @@ Photon.AirEL.IllumScan = function()
 		if not IsValid( car ) then continue end
 		if not car.AirELEntity or not IsValid( car.AirELEntity ) then continue end
 		local airEL = car.AirELEntity
-		if not airEL.Photon_UnitID or not airEL.Photon_UnitID == car:Photon_GetUnitNumber() then continue end
+		if not airEL.Photon_UnitID or airEL.Photon_UnitID ~= car:Photon_GetUnitNumber() then continue end
 		if not airEL.Photon_LitAirelTexture or not airEL.Photon_UnlitAirelTexture then continue end
 		local subIndex = Photon.AirEL.TranslationTableIndex[ airEL:GetModel() ] or 0
 		if car:Photon_Lights() or car:Photon_TrafficAdvisor() or car:Photon_Illumination() then
