@@ -12,6 +12,7 @@ local siren = {
 		{
 			Name = "WAIL",
 			Sound = "sound/emv/sirens/canada/D&R RDS 17 Wail.wav ",
+			Icon = "wail"
 		},
 		{
 			Name = "YELP",
