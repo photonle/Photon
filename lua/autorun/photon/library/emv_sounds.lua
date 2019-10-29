@@ -19,7 +19,7 @@ EMVU.Sounds.Up = "emv/ui/emv_chirp_up.wav"
 -- @bool state Current sound state.
 -- @string a On state sound.
 -- @string b Off state sound.
-function EMVU.Sounds.Sound(state, a, b)
+function EMVU.Sounds:Sound(state, a, b)
 	surface.PlaySound(state and a or b)
 end
 
