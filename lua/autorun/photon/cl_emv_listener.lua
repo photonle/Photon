@@ -148,14 +148,10 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		LIGHTON_DOWN = false
 	end
 
-	if not SIRENON_DOWN and keyDown( key_siren_toggle:GetInt() ) then
+	if not SIRENON_DOWN and keyDown(key_siren_toggle:GetInt()) then
 		SIRENON_DOWN = true
-		if emv:Photon_Siren() then
-			EMVU.Net:Siren( "off" )
-		else
-			EMVU.Net:Siren( "on" )
-		end
-	elseif SIRENON_DOWN and not keyDown( key_siren_toggle:GetInt() ) then
+		EMVU.Net:Siren(emv:Photon_Siren() and "off" or "on")
+	elseif SIRENON_DOWN and not keyDown(key_siren_toggle:GetInt()) then
 		SIRENON_DOWN = false
 	end
 
