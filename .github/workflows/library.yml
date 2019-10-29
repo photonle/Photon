@@ -22,4 +22,6 @@ jobs:
           tag: 'v1.0.0'
       -
         name: Lint
-        run: lua linter-library-1.0.0/sirenlint.lua lua/autorun/photon/library/sirens/*
+        run: |
+        cd linter-library-1.0.0
+        lua sirenlint.lua ../lua/autorun/photon/library/sirens/*
