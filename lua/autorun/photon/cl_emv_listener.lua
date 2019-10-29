@@ -43,8 +43,10 @@ end)
 function EMVU:Listener(ply, bind, press)
 	if not should_render:GetBool() then return end
 	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
+
 	local emv = ply:GetVehicle()
-	if not IsValid( emv ) then return false end
+	if not IsValid(emv) then return false end
+
 	if string.find(bind, "+attack") and not string.find(bind, "+attack2") then
 		if LocalPlayer():KeyDown( IN_MOVELEFT ) then
 			Photon:CarSignal( "left" )
