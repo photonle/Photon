@@ -212,11 +212,11 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		BLKOUTON_DOWN = false
 	end
 
-	if not HORNTOG_DOWN and keyDown( key_horn:GetInt() ) then
-		EMVU.Net:Horn( true )
+	if not HORNTOG_DOWN and keyDown(key_horn:GetInt()) then
+		EMVU.Net:Horn(true)
 		HORNTOG_DOWN = true
-	elseif HORNTOG_DOWN and not keyDown( key_horn:GetInt() ) then
-		EMVU.Net:Horn( false )
+	elseif HORNTOG_DOWN and not keyDown(key_horn:GetInt()) then
+		EMVU.Net:Horn(false)
 		HORNTOG_DOWN = false
 	end
 
