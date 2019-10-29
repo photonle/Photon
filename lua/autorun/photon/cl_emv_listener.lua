@@ -139,21 +139,12 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		end
 	end
 
-	if not LIGHTON_DOWN and keyDown( key_primary_toggle:GetInt() ) then
-		if emv:Photon_Lights() then 
-			surface.PlaySound( EMVU.Sounds.Up )
-		else
-			surface.PlaySound( EMVU.Sounds.Down )
-		end
+	if not LIGHTON_DOWN and keyDown(key_primary_toggle:GetInt()) then
+		EMVU.Sounds:Panel(emv:Photon_Lights())
 		LIGHTON_DOWN = true
-	elseif LIGHTON_DOWN and not keyDown( key_primary_toggle:GetInt() ) then
-		if emv:Photon_Lights() then
-			surface.PlaySound( EMVU.Sounds.Down )
-			EMVU.Net:Lights( "off" )
-		else
-			surface.PlaySound( EMVU.Sounds.Up )
-			EMVU.Net:Lights( "on" )
-		end
+	elseif LIGHTON_DOWN and not keyDown(key_primary_toggle:GetInt()) then
+		EMVU.Sounds:Panel(not emv:Photon_Lights())
+		EMVU.Net:Lights(emv:Photon_Lights() and "off" or "on")
 		LIGHTON_DOWN = false
 	end
 
