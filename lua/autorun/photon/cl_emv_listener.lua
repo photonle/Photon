@@ -77,7 +77,10 @@ end)
 local inputKeyDown = input.IsKeyDown
 local inputMouseDown = input.IsMouseDown
 
-local function keyDown( key )
+--- Check if a key / mouse button has been pressed.
+-- @number key KEY_ or MOUSE_ enums.
+-- @treturn bool Key press status.
+local function keyDown(key)
 	if (key > 0 and key < 107) then
 		return inputKeyDown( tonumber( key ) )
 	end
