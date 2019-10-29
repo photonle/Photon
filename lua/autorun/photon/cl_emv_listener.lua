@@ -155,27 +155,19 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		SIRENON_DOWN = false
 	end
 
-	if not LIGHTTOG_DOWN and keyDown( key_primary_alt:GetInt() ) then
-		if emv:Photon_Lights() then
-			surface.PlaySound( EMVU.Sounds.Up )
-		else
-			surface.PlaySound( EMVU.Sounds.Down )
-		end
+	if not LIGHTTOG_DOWN and keyDown(key_primary_alt:GetInt()) then
+		EMVU.Sounds:Panel(emv:Photon_Lights())
 		EMVU.Net:Lights("tog")
 		LIGHTTOG_DOWN = true
-	elseif LIGHTTOG_DOWN and not keyDown( key_primary_alt:GetInt() ) then
+	elseif LIGHTTOG_DOWN and not keyDown(key_primary_alt:GetInt()) then
 		LIGHTTOG_DOWN = false
 	end
 
-	if not SIRENTOGGLE_DOWN and keyDown( key_siren_alt:GetInt() ) then
-		if emv:Photon_Lights() then
-			surface.PlaySound( EMVU.Sounds.Up )
-		else
-			surface.PlaySound( EMVU.Sounds.Down )
-		end
+	if not SIRENTOGGLE_DOWN and keyDown(key_siren_alt:GetInt()) then
+		EMVU.Sounds:Panel(emv:Photon_Lights())
 		EMVU.Net:Siren("tog")
 		SIRENTOGGLE_DOWN = true
-	elseif SIRENTOGGLE_DOWN and not keyDown( key_siren_alt:GetInt() ) then
+	elseif SIRENTOGGLE_DOWN and not keyDown(key_siren_alt:GetInt()) then
 		SIRENTOGGLE_DOWN = false
 	end
 
