@@ -14,6 +14,8 @@ jobs:
       -
         name: Install Lua
         uses: leafo/gh-actions-lua@v3
+        with:
+          luaVersion: "5.1.5"
       -
         name: Install Dependencies
         uses: Legion2/download-release-action@v2.1.0
