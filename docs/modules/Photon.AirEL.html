@@ -32,6 +32,7 @@
 
 <h2>Contents</h2>
 <ul>
+<li><a href="#Functions">Functions</a></li>
 <li><a href="#Tables">Tables</a></li>
 </ul>
 
@@ -40,6 +41,7 @@
 <ul class="nowrap">
   <li><a href="../modules/autorun.emv_init.html">autorun.emv_init</a></li>
   <li><strong>Photon.AirEL</strong></li>
+  <li><a href="../modules/EMVU.html">EMVU</a></li>
 </ul>
 
 </div>
@@ -52,17 +54,56 @@
     <h3>Info:</h3>
     <ul>
         <li><strong>Copyright</strong>: Photon Team</li>
-        <li><strong>Release</strong>: v71 Denver</li>
+        <li><strong>Release</strong>: v72 Fair Oaks</li>
         <li><strong>Author</strong>: Photon Team</li>
     </ul>
 
 
-<h2><a href="#Tables">Tables</a></h2>
+<h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AirEL">Photon.AirEL</a></td>
-	<td class="summary">Global table defined to hold stuff.</td>
+	<td class="name" nowrap><a href="#Photon.AirEL.DownloadMaterial">Photon.AirEL.DownloadMaterial (id, unitString, ent[, cback[, failed]])</a></td>
+	<td class="summary">Download a given material and apply it to a given entity.</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AirEL.FormatName">Photon.AirEL.FormatName (id, unitString)</a></td>
+	<td class="summary">Get an AirEL formatted material name.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AirEL.LoadMaterial">Photon.AirEL.LoadMaterial (id, unitString, ent)</a></td>
+	<td class="summary">Load a material from the cache or download it if it doesn't exist.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AirEL.LoadCallbackSuccess">Photon.AirEL.LoadCallbackSuccess (id, unitString, ent)</a></td>
+	<td class="summary">Callback function called when a texture is done downloading.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AirEL.LoadCallbackFail">Photon.AirEL.LoadCallbackFail (error)</a></td>
+	<td class="summary">Error callback function.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AirEL.ApplyTexture">Photon.AirEL.ApplyTexture (mat, ent, id, unitString)</a></td>
+	<td class="summary">Apply a texture to an ariel system.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AirEL.LoadMaterialFromFile">Photon.AirEL.LoadMaterialFromFile (id, unitString)</a></td>
+	<td class="summary">Load a material from a file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AirEL.Apply">Photon.AirEL.Apply (unitString, ent)</a></td>
+	<td class="summary">Apply an AirEL skin to an entity.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AirEL.Scan">Photon.AirEL.Scan ()</a></td>
+	<td class="summary">Scan function called to apply materials on AirEL entities.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AirEL.IllumScan">Photon.AirEL.IllumScan ()</a></td>
+	<td class="summary">Scan function called to set on vs off illumination for AirEL entities.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#Photon.AirEL.TranslationTable">Photon.AirEL.TranslationTable</a></td>
 	<td class="summary">Translation between models and remote materials.</td>
@@ -71,21 +112,263 @@
 	<td class="name" nowrap><a href="#Photon.AirEL.TranslationTableIndex">Photon.AirEL.TranslationTableIndex</a></td>
 	<td class="summary">Translation between models and material indexes.</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AirEL.MaterialIndex">Photon.AirEL.MaterialIndex</a></td>
+	<td class="summary">Table for storing materials, keyed by material name.</td>
+	</tr>
 </table>
 
 <br/>
 <br/>
 
 
-    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
 
     <dl class="function">
     <dt>
-    <a name = "Photon.AirEL"></a>
-    <strong>Photon.AirEL</strong>
+    <a name = "Photon.AirEL.DownloadMaterial"></a>
+    <strong>Photon.AirEL.DownloadMaterial (id, unitString, ent[, cback[, failed]])</strong>
     </dt>
     <dd>
-    Global table defined to hold stuff.
+    Download a given material and apply it to a given entity.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Vehicle ID to download for.
+        </li>
+        <li><span class="parameter">unitString</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Unit ID to apply to the texture.
+        </li>
+        <li><span class="parameter">ent</span>
+            <span class="types"><span class="type">Entity</span></span>
+         Entity to apply the downloaded texture to.
+        </li>
+        <li><span class="parameter">cback</span>
+            <span class="types"><span class="type">function</span></span>
+         Callback function to call once the material's been downloaded.
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">failed</span>
+            <span class="types"><span class="type">function</span></span>
+         Error callback if the HTTP query fails.
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.AirEL.FormatName"></a>
+    <strong>Photon.AirEL.FormatName (id, unitString)</strong>
+    </dt>
+    <dd>
+    Get an AirEL formatted material name.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Vehicle type.
+        </li>
+        <li><span class="parameter">unitString</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         User's unit ID.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+        Formatted name.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.AirEL.LoadMaterial"></a>
+    <strong>Photon.AirEL.LoadMaterial (id, unitString, ent)</strong>
+    </dt>
+    <dd>
+    Load a material from the cache or download it if it doesn't exist.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Vehicle ID.
+        </li>
+        <li><span class="parameter">unitString</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Unit ID.
+        </li>
+        <li><span class="parameter">ent</span>
+            <span class="types"><span class="type">Entity</span></span>
+         Vehicle to load to.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.AirEL.LoadCallbackSuccess"></a>
+    <strong>Photon.AirEL.LoadCallbackSuccess (id, unitString, ent)</strong>
+    </dt>
+    <dd>
+    Callback function called when a texture is done downloading.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Vehicle ID.
+        </li>
+        <li><span class="parameter">unitString</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Unit ID.
+        </li>
+        <li><span class="parameter">ent</span>
+            <span class="types"><span class="type">Entity</span></span>
+         Entity to apply to.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.AirEL.LoadCallbackFail"></a>
+    <strong>Photon.AirEL.LoadCallbackFail (error)</strong>
+    </dt>
+    <dd>
+    Error callback function.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">error</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         The error which occured.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.AirEL.ApplyTexture"></a>
+    <strong>Photon.AirEL.ApplyTexture (mat, ent, id, unitString)</strong>
+    </dt>
+    <dd>
+    Apply a texture to an ariel system.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mat</span>
+            <span class="types"><span class="type">Material</span></span>
+         Material being applied.
+        </li>
+        <li><span class="parameter">ent</span>
+            <span class="types"><span class="type">Entity</span></span>
+         Entity to apply the texture to.
+        </li>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Vehicle ID
+        </li>
+        <li><span class="parameter">unitString</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Unit ID.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.AirEL.LoadMaterialFromFile"></a>
+    <strong>Photon.AirEL.LoadMaterialFromFile (id, unitString)</strong>
+    </dt>
+    <dd>
+    Load a material from a file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Vehicle ID.
+        </li>
+        <li><span class="parameter">unitString</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Unit ID.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Material</span></span>
+        The loaded material.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.AirEL.Apply"></a>
+    <strong>Photon.AirEL.Apply (unitString, ent)</strong>
+    </dt>
+    <dd>
+    Apply an AirEL skin to an entity.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">unitString</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Unit name to apply.
+        </li>
+        <li><span class="parameter">ent</span>
+            <span class="types"><span class="type">Entity</span></span>
+         Entity to apply to.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.AirEL.Scan"></a>
+    <strong>Photon.AirEL.Scan ()</strong>
+    </dt>
+    <dd>
+    Scan function called to apply materials on AirEL entities.
 
 
 
@@ -94,6 +377,24 @@
 
 
 </dd>
+    <dt>
+    <a name = "Photon.AirEL.IllumScan"></a>
+    <strong>Photon.AirEL.IllumScan ()</strong>
+    </dt>
+    <dd>
+    Scan function called to set on vs off illumination for AirEL entities.
+
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
     <dt>
     <a name = "Photon.AirEL.TranslationTable"></a>
     <strong>Photon.AirEL.TranslationTable</strong>
@@ -122,6 +423,20 @@
 
 
 </dd>
+    <dt>
+    <a name = "Photon.AirEL.MaterialIndex"></a>
+    <strong>Photon.AirEL.MaterialIndex</strong>
+    </dt>
+    <dd>
+    Table for storing materials, keyed by material name.
+
+
+
+
+
+
+
+</dd>
 </dl>
 
 
@@ -129,7 +444,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2019-10-29 14:05:48 </i>
+<i style="float:right;">Last updated 2019-10-29 14:22:40 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

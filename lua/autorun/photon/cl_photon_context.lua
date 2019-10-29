@@ -50,12 +50,12 @@ properties.Add("photon_siren", {
             local selected = tostring(ent:Photon_SirenSet()) == key
 
             categories[category][1]:AddOption(siren.Name, function()
-                EMVU.Net:SetSiren(idx, ent, false)
+                EMVU.Net:SirenSet(idx, ent, false)
             end):SetChecked(selected)
 
             if not selected then
                 categories[category][2]:AddOption(siren.Name, function()
-                    EMVU.Net:SetSiren(idx, ent, true)
+                    EMVU.Net:SirenSet(idx, ent, true)
                 end):SetChecked(tostring(ent:Photon_AuxSirenSet()) == key)
             end
         end
