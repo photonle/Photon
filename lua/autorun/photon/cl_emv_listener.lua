@@ -68,7 +68,6 @@ function EMVU:Listener(ply, bind, press)
 			Photon:CarSignal("none")
 		end
 	end
-
 end
 
 hook.Add("PlayerBindPress", "EMVU.Listener", function(pl, b, p)
