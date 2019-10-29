@@ -70,8 +70,9 @@ function EMVU:Listener(ply, bind, press)
 	end
 
 end
-hook.Add("PlayerBindPress", "EMVU.Listener", function( pl, b, p )
-	EMVU:Listener( pl, b, p )
+
+hook.Add("PlayerBindPress", "EMVU.Listener", function(pl, b, p)
+	EMVU:Listener(pl, b, p)
 end)
 
 local inputKeyDown = input.IsKeyDown
