@@ -228,50 +228,14 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		MANUALTOG_DOWN = false
 	end
 
-	if not MANUALTOG_DOWN and keyDown( key_manual:GetInt() ) then
-		EMVU.Net:Manual( true )
-		MANUALTOG_DOWN = true
-	elseif MANUALTOG_DOWN and not keyDown( key_manual:GetInt() ) then
-		EMVU.Net:Manual( false )
-		MANUALTOG_DOWN = false
-	end
-
-	if not PHOTONRADARTOG_DOWN and keyDown( key_radar:GetInt() ) then
-		if not emv:Photon_RadarActive() then
-			surface.PlaySound( EMVU.Sounds.Down )
-		else
-			surface.PlaySound( EMVU.Sounds.Up )
-		end
+	if not PHOTONRADARTOG_DOWN and keyDown(key_radar:GetInt()) then
+		EMVU.Sounds:Panel(emv:Photon_RadarActive())
 		PHOTONRADARTOG_DOWN = true
 	elseif PHOTONRADARTOG_DOWN and not keyDown( key_radar:GetInt() ) then
-		if not emv:Photon_RadarActive() then
-			surface.PlaySound( EMVU.Sounds.Up )
-			emv:Photon_RadarActive( true )
-		else
-			surface.PlaySound( EMVU.Sounds.Down )
-			emv:Photon_RadarActive( false )
-		end
+		EMVU.Sounds:Panel(not emv:Photon_RadarActive())
+		emv:Photon_RadarActive(not emv:Photon_RadarActive())
 		PHOTONRADARTOG_DOWN = false
 	end
-
-	if not BLKOUTON_DOWN and keyDown( key_blackout:GetInt() ) then
-		if emv:Photon_IsRunning() then 
-			surface.PlaySound( EMVU.Sounds.Down )
-		else
-			surface.PlaySound( EMVU.Sounds.Up )
-		end
-		BLKOUTON_DOWN = true
-	elseif BLKOUTON_DOWN and not keyDown( key_blackout:GetInt() ) then
-		if emv:Photon_IsRunning() then
-			surface.PlaySound( EMVU.Sounds.Up )
-			EMVU.Net:Blackout( true )
-		else
-			surface.PlaySound( EMVU.Sounds.Down )
-			EMVU.Net:Blackout( false )
-		end
-		BLKOUTON_DOWN = false
-	end
-
 end)
 
 
