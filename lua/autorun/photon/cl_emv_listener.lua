@@ -2,7 +2,7 @@
 @copyright Photon Team
 @release v72 Fair Oaks
 @author Photon Team
-@module Photon.AirEL
+@module EMVU
 --]]--
 AddCSLuaFile()
 
