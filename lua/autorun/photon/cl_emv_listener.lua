@@ -92,13 +92,14 @@ local function keyDown(key)
 	return false
 end
 
-hook.Add( "Think", "Photon.ButtonPress", function()
+hook.Add("Think", "Photon.ButtonPress", function()
 	if not should_render:GetBool() then return end
 	if not LocalPlayer():InVehicle() or not IsValid( LocalPlayer():GetVehicle() ) or not LocalPlayer():GetVehicle():IsEMV() then return end
+
 	local emv = LocalPlayer():GetVehicle()
 	if input.IsKeyTrapping() then return end
 	if vgui.CursorVisible() then return end
-	
+
 	if not X_DOWN then
 		if keyDown( key_illum:GetInt() ) then
 			if emv:Photon_Illumination() then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
