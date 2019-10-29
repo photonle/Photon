@@ -6,11 +6,11 @@ EMVU.AddCustomSiren("ancf_d&r_rds_17", {
 	Set = {
 		{
 			Name = "INTER-CLEAR",
-			Sound = "emv/sirens/d&r/rds-17/inter-clear.wav ",
+			Sound = "emv/sirens/d&r/rds-17/inter-clear.wav",
 			Icon = "phaser"
 		}, {
 			Name = "WAIL",
-			Sound = "emv/sirens/d&r/rds-17/wail.wav.wav ",
+			Sound = "emv/sirens/d&r/rds-17/wail.wav",
 			Icon = "wail"
 		}, {
 			Name = "YELP",
