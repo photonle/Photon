@@ -101,8 +101,8 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	if vgui.CursorVisible() then return end
 
 	if not X_DOWN then
-		if keyDown( key_illum:GetInt() ) then
-			if emv:Photon_Illumination() then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
+		if keyDown(key_illum:GetInt()) then
+			EMVU.Sounds:Panel(emv:Photon_Illumination())
 			X_DOWN = true
 			X_PRESS = CurTime()
 		end
