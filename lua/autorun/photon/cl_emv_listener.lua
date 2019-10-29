@@ -1,3 +1,9 @@
+--[[-- EMVU Key Listener.
+@copyright Photon Team
+@release v72 Fair Oaks
+@author Photon Team
+@module Photon.AirEL
+--]]--
 AddCSLuaFile()
 
 local key_primary_toggle = GetConVar( "photon_key_primary_toggle" )
