@@ -171,51 +171,35 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		SIRENTOGGLE_DOWN = false
 	end
 
-	if not SIRENTOGGLE1_DOWN and keyDown( key_siren1:GetInt() ) then
-		if emv:Photon_Lights() then
-			surface.PlaySound( EMVU.Sounds.Up )
-		else
-			surface.PlaySound( EMVU.Sounds.Down )
-		end
+	if not SIRENTOGGLE1_DOWN and keyDown(key_siren1:GetInt()) then
+		EMVU.Sounds:Panel(emv:Photon_Lights())
 		EMVU.Net:Siren("1")
 		SIRENTOGGLE1_DOWN = true
-	elseif SIRENTOGGLE1_DOWN and not keyDown( key_siren1:GetInt() ) then
+	elseif SIRENTOGGLE1_DOWN and not keyDown(key_siren1:GetInt()) then
 		SIRENTOGGLE1_DOWN = false
 	end
 
-	if not SIRENTOGGLE2_DOWN and keyDown( key_siren2:GetInt() ) then
-		if emv:Photon_Lights() then
-			surface.PlaySound( EMVU.Sounds.Up )
-		else
-			surface.PlaySound( EMVU.Sounds.Down )
-		end
+	if not SIRENTOGGLE2_DOWN and keyDown(key_siren2:GetInt()) then
+		EMVU.Sounds:Panel(emv:Photon_Lights())
 		EMVU.Net:Siren("2")
 		SIRENTOGGLE2_DOWN = true
-	elseif SIRENTOGGLE2_DOWN and not keyDown( key_siren2:GetInt() ) then
+	elseif SIRENTOGGLE2_DOWN and not keyDown(key_siren2:GetInt()) then
 		SIRENTOGGLE2_DOWN = false
 	end
 
-	if not SIRENTOGGLE3_DOWN and keyDown( key_siren3:GetInt() ) then
-		if emv:Photon_Lights() then
-			surface.PlaySound( EMVU.Sounds.Up )
-		else
-			surface.PlaySound( EMVU.Sounds.Down )
-		end
+	if not SIRENTOGGLE3_DOWN and keyDown(key_siren3:GetInt()) then
+		EMVU.Sounds:Panel(emv:Photon_Lights())
 		EMVU.Net:Siren("3")
 		SIRENTOGGLE3_DOWN = true
-	elseif SIRENTOGGLE3_DOWN and not keyDown( key_siren3:GetInt() ) then
+	elseif SIRENTOGGLE3_DOWN and not keyDown(key_siren3:GetInt()) then
 		SIRENTOGGLE3_DOWN = false
 	end
 
-	if not SIRENTOGGLE4_DOWN and keyDown( key_siren4:GetInt() ) then
-		if emv:Photon_Lights() then
-			surface.PlaySound( EMVU.Sounds.Up )
-		else
-			surface.PlaySound( EMVU.Sounds.Down )
-		end
+	if not SIRENTOGGLE4_DOWN and keyDown(key_siren4:GetInt()) then
+		EMVU.Sounds:Panel(emv:Photon_Lights())
 		EMVU.Net:Siren("4")
 		SIRENTOGGLE4_DOWN = true
-	elseif SIRENTOGGLE4_DOWN and not keyDown( key_siren4:GetInt() ) then
+	elseif SIRENTOGGLE4_DOWN and not keyDown(key_siren4:GetInt()) then
 		SIRENTOGGLE4_DOWN = false
 	end
 
