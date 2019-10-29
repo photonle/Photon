@@ -38,5 +38,5 @@ end
 --- Play panel button sound.
 -- @bool state Current sound state.
 function EMVU.Sounds:Panel(state)
-	self:Sound(state, self.Down, self.Up)
+	self:Sound(state, self.Up, self.Down)
 end
