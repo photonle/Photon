@@ -1,4 +1,4 @@
-f not EMVU then return end
+if not EMVU then return end
 
 local siren = {
 	Name = "RDS 17",
