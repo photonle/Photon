@@ -48,24 +48,24 @@ function EMVU:Listener(ply, bind, press)
 	if not IsValid(emv) then return false end
 
 	if string.find(bind, "+attack") and not string.find(bind, "+attack2") then
-		if LocalPlayer():KeyDown( IN_MOVELEFT ) then
-			Photon:CarSignal( "left" )
-		elseif LocalPlayer():KeyDown( IN_MOVERIGHT ) then
-			Photon:CarSignal( "right" )
-		elseif LocalPlayer():KeyDown( IN_BACK ) then
-			Photon:CarSignal( "hazard" )
+		if ply:KeyDown(IN_MOVELEFT) then
+			Photon:CarSignal("left")
+		elseif ply:KeyDown(IN_MOVERIGHT) then
+			Photon:CarSignal("right")
+		elseif ply:KeyDown(IN_BACK) then
+			Photon:CarSignal("hazard")
 		else
-			Photon:CarSignal( "none" )
+			Photon:CarSignal("none")
 		end
-	elseif LocalPlayer():KeyDown( IN_ATTACK ) then
-		if string.find(bind, "+moveleft" ) then
-			Photon:CarSignal( "left" )
+	elseif ply:KeyDown(IN_ATTACK) then
+		if string.find(bind, "+moveleft") then
+			Photon:CarSignal("left")
 		elseif string.find(bind, "+moveright") then
-			Photon:CarSignal( "right" )
+			Photon:CarSignal("right")
 		elseif string.find(bind, "+back") then
-			Photon:CarSignal( "hazard" )
+			Photon:CarSignal("hazard")
 		elseif string.find(bind, "+forward") then
-			Photon:CarSignal( "none" )
+			Photon:CarSignal("none")
 		end
 	end
 
