@@ -36,7 +36,11 @@ hook.Add("InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	should_render = GetConVar("photon_emerg_enabled")
 end)
 
-function EMVU:Listener( ply, bind, press )
+--- Hook function called on key press.
+-- @ply ply Player pushing the key.
+-- @string bind The bind being pressed.
+-- @bool press If the key is going up or down.
+function EMVU:Listener(ply, bind, press)
 	if not should_render:GetBool() then return end
 	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
 	local emv = ply:GetVehicle()
