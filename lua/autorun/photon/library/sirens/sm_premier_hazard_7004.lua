@@ -1,7 +1,7 @@
 if not EMVU then return end
 
 local siren = {
-	Name = "Premier Hazard 7004",
+	Name = "7004",
 	Category = "Premier Hazard",
 	Set = {
 		{
