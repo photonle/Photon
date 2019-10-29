@@ -23,5 +23,5 @@ jobs:
       -
         name: Lint
         run: |
-        cd linter-library-1.0.0
-        lua sirenlint.lua ../lua/autorun/photon/library/sirens/*
+          cd linter-library-1.0.0
+          lua sirenlint.lua ../lua/autorun/photon/library/sirens/*
