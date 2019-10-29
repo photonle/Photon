@@ -1,0 +1,494 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Photon Lighting Documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/autorun.emv_init.html">autorun.emv_init</a></li>
+  <li><a href="../modules/Photon.AirEL.html">Photon.AirEL</a></li>
+  <li><strong>EMVU</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>EMVU</code></h1>
+<p>Photon EMV Client Loader.</p>
+<p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: Photon Team</li>
+        <li><strong>Release</strong>: v72 Fair Oaks</li>
+        <li><strong>Author</strong>: Photon Team</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#CalculateFrames">CalculateFrames ()</a></td>
+	<td class="summary">Timer to update frame calculations.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EMVU.Configurations.GenerateName">EMVU.Configurations.GenerateName (data)</a></td>
+	<td class="summary">Generate a configuration name for a vehicle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EMVU.Configurations.GetConfigText">EMVU.Configurations.GetConfigText (name, category, author, data)</a></td>
+	<td class="summary">Serialize a configuration.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EMVU.Configurations.SaveConfiguration">EMVU.Configurations.SaveConfiguration (name, category, author, data)</a></td>
+	<td class="summary">Save a configuration.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EMVU.Configurations.ConfigurationLua">EMVU.Configurations.ConfigurationLua (name, category, author, data)</a></td>
+	<td class="summary">Generate lua code for a given configuration.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AutoSkins.FetchSkins">Photon.AutoSkins.FetchSkins (id)</a></td>
+	<td class="summary">Fetch autoskins for a given vehicle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AutoSkins.ParseSkins">Photon.AutoSkins.ParseSkins (id)</a></td>
+	<td class="summary">Parse the skins of an id.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.AutoSkins.LoadAvailable">Photon.AutoSkins.LoadAvailable ()</a></td>
+	<td class="summary">Load all available autoskins into the cache.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.LicensePlates.FetchMaterials">Photon.LicensePlates.FetchMaterials ()</a></td>
+	<td class="summary">Fetch the license plate materials.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.LicensePlates.ParseMaterials">Photon.LicensePlates.ParseMaterials ()</a></td>
+	<td class="summary">Parse materials into key/pairs.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.LicensePlates.LoadAvailable">Photon.LicensePlates.LoadAvailable ()</a></td>
+	<td class="summary">Load all license plates.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.BoneRotation">Photon.BoneRotation ()</a></td>
+	<td class="summary">Run bone rotation.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Listener">Listener (ply, bind, press)</a></td>
+	<td class="summary">Hook function called on key press.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#ManualSirenTable">ManualSirenTable</a></td>
+	<td class="summary">List of manual sirens.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.LicensePlates.Available">Photon.LicensePlates.Available</a></td>
+	<td class="summary">Available license plate materials.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "CalculateFrames"></a>
+    <strong>CalculateFrames ()</strong>
+    </dt>
+    <dd>
+    Timer to update frame calculations.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "EMVU.Configurations.GenerateName"></a>
+    <strong>EMVU.Configurations.GenerateName (data)</strong>
+    </dt>
+    <dd>
+    Generate a configuration name for a vehicle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">data</span>
+            <span class="types"><span class="type">tab</span></span>
+         Configuration data to generate a name for.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+        Name of the generated configuration.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "EMVU.Configurations.GetConfigText"></a>
+    <strong>EMVU.Configurations.GetConfigText (name, category, author, data)</strong>
+    </dt>
+    <dd>
+    Serialize a configuration.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         The name of the config.
+        </li>
+        <li><span class="parameter">category</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         The configuration category.
+        </li>
+        <li><span class="parameter">author</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Unused.
+        </li>
+        <li><span class="parameter">data</span>
+            <span class="types"><span class="type">tab</span></span>
+         Configuration data.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+        Serialized data.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "EMVU.Configurations.SaveConfiguration"></a>
+    <strong>EMVU.Configurations.SaveConfiguration (name, category, author, data)</strong>
+    </dt>
+    <dd>
+    Save a configuration.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         The name of the config.
+        </li>
+        <li><span class="parameter">category</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         The configuration category.
+        </li>
+        <li><span class="parameter">author</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Unused.
+        </li>
+        <li><span class="parameter">data</span>
+            <span class="types"><span class="type">tab</span></span>
+         Configuration data.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        If the configuration saved.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "EMVU.Configurations.ConfigurationLua"></a>
+    <strong>EMVU.Configurations.ConfigurationLua (name, category, author, data)</strong>
+    </dt>
+    <dd>
+    Generate lua code for a given configuration.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         The name of the config.
+        </li>
+        <li><span class="parameter">category</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         The configuration category.
+        </li>
+        <li><span class="parameter">author</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Unused.
+        </li>
+        <li><span class="parameter">data</span>
+            <span class="types"><span class="type">tab</span></span>
+         Configuration data.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+        The generated lua string.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.AutoSkins.FetchSkins"></a>
+    <strong>Photon.AutoSkins.FetchSkins (id)</strong>
+    </dt>
+    <dd>
+    Fetch autoskins for a given vehicle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Auto Skin ID of the vehicle.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.6">table</a></span>
+        Found skins.</li>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+        Base material directory.</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.AutoSkins.ParseSkins"></a>
+    <strong>Photon.AutoSkins.ParseSkins (id)</strong>
+    </dt>
+    <dd>
+    Parse the skins of an id.
+ Generates names and texture paths.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Vehicle ID.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.6">table</a></span>
+        Parsed results.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.AutoSkins.LoadAvailable"></a>
+    <strong>Photon.AutoSkins.LoadAvailable ()</strong>
+    </dt>
+    <dd>
+    Load all available autoskins into the cache.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.LicensePlates.FetchMaterials"></a>
+    <strong>Photon.LicensePlates.FetchMaterials ()</strong>
+    </dt>
+    <dd>
+    Fetch the license plate materials.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.LicensePlates.ParseMaterials"></a>
+    <strong>Photon.LicensePlates.ParseMaterials ()</strong>
+    </dt>
+    <dd>
+    Parse materials into key/pairs.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.LicensePlates.LoadAvailable"></a>
+    <strong>Photon.LicensePlates.LoadAvailable ()</strong>
+    </dt>
+    <dd>
+    Load all license plates.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.BoneRotation"></a>
+    <strong>Photon.BoneRotation ()</strong>
+    </dt>
+    <dd>
+    Run bone rotation.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Listener"></a>
+    <strong>Listener (ply, bind, press)</strong>
+    </dt>
+    <dd>
+    Hook function called on key press.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">ply</span>
+            <span class="types"><span class="type">Player</span></span>
+         Player pushing the key.
+        </li>
+        <li><span class="parameter">bind</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         The bind being pressed.
+        </li>
+        <li><span class="parameter">press</span>
+            <span class="types"><span class="type">bool</span></span>
+         If the key is going up or down.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "ManualSirenTable"></a>
+    <strong>ManualSirenTable</strong>
+    </dt>
+    <dd>
+    List of manual sirens.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.LicensePlates.Available"></a>
+    <strong>Photon.LicensePlates.Available</strong>
+    </dt>
+    <dd>
+    Available license plate materials.
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2019-10-29 21:25:34 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

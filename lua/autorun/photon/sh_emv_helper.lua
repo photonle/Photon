@@ -417,7 +417,8 @@ function EMVU.Helper:GetProps( name, ent )
 							propData.Pos = component.Pos
 							propData.Ang = component.Ang
 							propData.Scale = component.Scale
-							propData.BodyGroups = component.BodyGroups or false
+							--propData.BodyGroups = component.BodyGroups or false
+							--propData.SubMaterials = component.SubMaterials or false
 							propData.AutoIndex = id
 							propData.ComponentName = component[ "ID" ]
 							if autoData.RotationEnabled then
@@ -446,7 +447,8 @@ function EMVU.Helper:GetAutoModel( id )
 	return {
 		Model = modelData.Model,
 		Skin = modelData.Skin or 0,
-		BodyGroups = modelData.Bodygroups or {}
+		BodyGroups = modelData.Bodygroups or {},
+		SubMaterials = modelData.SubMaterials or {}
 	}
 end
 

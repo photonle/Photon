@@ -216,7 +216,7 @@ local sirenTable = {
 	[22] = { -- provided by Super Mighty
 		Name = "Intimidator",
 		Category = "D&R",
-		Set = { --
+		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/d&r/intimidator/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/d&r/intimidator/emv_yelp.wav", Icon="yelp"},
 			{Name = "HPYP", Sound = "emv/sirens/d&r/intimidator/emv_phaser.wav", Icon="phaser"},
@@ -545,10 +545,10 @@ EMVU.GetSiren = function(index)
 	return sirenTable[1]
 end
 
-EMVU.GetSirenIndex = function(index)
-	if not index then Error("[Photon] EMVU.GetSirenIndex( index ) requires a string or number index. Got nil or false.") return end
-	local st = EMVU.GetSirenTable()
+EMVU.GetSirenIndexSilent = function(index)
+	if not index then return false, "GetSirenIndex requires a string or number index. Got nil or false." end
 
+	local st = EMVU.GetSirenTable()
 	if isnumber(index) and st[index] then return index end
 
 	for key, sirenInfo in pairs(st) do
@@ -557,8 +557,16 @@ EMVU.GetSirenIndex = function(index)
 		end
 	end
 
-	print( "[Photon] Failed to find siren with index (" .. tostring( index ) .. "), falling back.")
-	return 0
+	return false, "Failed to find siren with index (" .. tostring( index ) .. "), falling back."
+end
+
+EMVU.GetSirenIndex = function(index)
+	local key, err = EMVU.GetSirenIndexSilent(index)
+	if not key then
+		Error("[Photon] " .. err)
+	else
+		return key
+	end
 end
 
 EMVU.GetSirenTable = function()

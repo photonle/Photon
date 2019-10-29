@@ -4,8 +4,13 @@ if not EMVU.Auto then EMVU.Auto = {} end
 if not EMVU.AutoIndex then EMVU.AutoIndex = {} end
 
 
-function EMVU:AddAutoComponent( component, name )
-	EMVU.Auto[ name ] = component
+function EMVU:AddAutoComponent(component, name)
+	if not component.Modes then
+		ErrorNoHalt(Format("[PHOTON] Component %s is missing its Modes field.\n", name))
+		return
+	end
+
+	EMVU.Auto[name] = component
 end
 
 local autoFiles = file.Find( "autorun/photon/library/auto/*", "LUA" )
@@ -19,6 +24,6 @@ function EMVU:PrecacheAutoModels()
 		util.PrecacheModel( prop.Model )
 	end
 end
-hook.Add( "Initialize", "Photon.PrecacheAutoModels", function() 
+hook.Add( "Initialize", "Photon.PrecacheAutoModels", function()
 	EMVU:PrecacheAutoModels()
 end)

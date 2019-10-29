@@ -1,0 +1,24 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "noble/prisoner_cage/glass2"
+	"$bumpmap"    "noble/prisoner_cage/glass_nm"
+	"$nodecal" "1"
+//	"$translucent" 1
+	"$alphatest" 1
+	"$phong" 1
+	"$phongboost" "1"
+	"$phongexponent" 2
+	"$envmap" "env_cubemap"
+	"$envmapfresnel" "1.0"
+	"$phongfresnelranges" "[0.01 0.35 3.0]"
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+

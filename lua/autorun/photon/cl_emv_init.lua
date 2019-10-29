@@ -1,14 +1,20 @@
+--[[-- Photon EMV Client Loader.
+@copyright Photon Team
+@release v72 Fair Oaks
+@author Photon Team
+@module EMVU
+--]]--
 AddCSLuaFile()
 
 if not CLIENT then return end
 
-include( "cl_emv_meta.lua" )
-include( "cl_emv_listener.lua" )
-include( "cl_emv_net.lua" )
-include( "cl_photon_builder.lua" )
-include( "cl_photon_menu.lua" )
-include( "cl_photon_editor.lua" )
-include( "cl_emv_airel.lua" )
+include("cl_emv_meta.lua")
+include("cl_emv_listener.lua")
+include("cl_emv_net.lua")
+include("cl_photon_builder.lua")
+include("cl_photon_menu.lua")
+include("cl_photon_editor.lua")
+include("cl_emv_airel.lua")
 
 local IsValid = IsValid
 local pairs = pairs
@@ -17,64 +23,107 @@ local tostring = tostring
 local istable = istable
 local EMVU = EMVU
 
-local should_render = GetConVar( "photon_emerg_enabled" )
-local should_render_reg = GetConVar( "photon_stand_enabled" )
+local should_render = GetConVar("photon_emerg_enabled")
+local should_render_reg = GetConVar("photon_stand_enabled")
 local photon_ready = photon_ready or false
 
-hook.Add( "InitPostEntity", "Photon.ReadyEL", function()
-	should_render = GetConVar( "photon_emerg_enabled" )
-	should_render_reg = GetConVar( "photon_stand_enabled" )
+hook.Add("InitPostEntity", "Photon.ReadyEL", function()
+	should_render = GetConVar("photon_emerg_enabled")
+	should_render_reg = GetConVar("photon_stand_enabled")
 	photon_ready = true
 end)
 
+--- Render function to draw Emergency and Illumination lighting.
 local function DrawEMVLights()
 	if not photon_ready then return end
 	if not should_render:GetBool() then return end
-	for k,v in pairs( EMVU:AllVehicles() ) do
-		if IsValid( v ) and v.IsEMV and v:IsEMV() and v.Photon_RenderEL then v:Photon_RenderEL() elseif v:IsEMV() then EMVU:MakeEMV(v, v:EMVName()) end
-		if IsValid( v ) and v.IsEMV and v:IsEMV() and v.Photon_RenderIllum then v:Photon_RenderIllum() end
-	end	
-end
--- hook.Add("PreRender", "EMVU.Scan", DrawEMVLights)
 
-local function DrawCarLights()
-	if not photon_ready then return end
-	Photon:ClearLightQueue()
-	local photonDebug = PHOTON_DEBUG
-	for _,ent in pairs( Photon:AllVehicles() ) do
-		if IsValid( ent ) then
-			if ent:Photon() and ent.Photon_RenderLights then
-				if( should_render_reg:GetBool() ) then
-					ent:Photon_RenderLights( 
-						ent:Photon_HeadlightsOn(), 
-						ent:Photon_IsRunning(), 
-						ent:Photon_IsReversing(), 
-						ent:Photon_IsBraking(), 
-						ent:Photon_TurningLeft(), 
-						ent:Photon_TurningRight(), 
-						ent:Photon_Hazards(), 
-						photonDebug
-					)
-				end
-				if ent:IsEMV() and ent.Photon_ScanEMVProps then ent:Photon_ScanEMVProps() end
-				if ent:Photon_WheelEnabled() and ent.Photon_ScanWheels then ent:Photon_ScanWheels() end
-				-- if ent:Photon_WheelEnabled() and not ent.PhotonWheelProps then ent:Photon_SetupWheels() end
-			elseif ent:Photon() and not ent.Photon_RenderLights then
-				Photon:SetupCar( ent, ent:EMVName() )
+	for k, v in pairs(EMVU:AllVehicles()) do
+		if IsValid(v) and v.IsEMV and v:IsEMV() then
+			if v.Photon_RenderEL then
+				v:Photon_RenderEL()
+			else
+				EMVU:MakeEMV(v, v:EMVName())
+			end
+			if v.Photon_RenderIllum then
+				v:Photon_RenderIllum()
 			end
 		end
 	end
 end
--- hook.Add( "PreRender", "Photon.Scan", function()
--- 	DrawCarLights()
--- end)
+
+--- Render function for vehicle running lights.
+local function DrawCarLights()
+	if not photon_ready then return end
+
+	Photon:ClearLightQueue()
+	local photonDebug = PHOTON_DEBUG
+
+	for _, ent in pairs(Photon:AllVehicles() ) do
+		if IsValid(ent) and ent:Photon() then
+			if not ent.Photon_renderLights then
+				Photon:SetupCar(ent, ent:EMVName())
+			else
+				if should_render_reg:GetBool() then
+					ent:Photon_RenderLights(
+						ent:Photon_HeadlightsOn(),
+						ent:Photon_IsRunning(),
+						ent:Photon_IsReversing(),
+						ent:Photon_IsBraking(),
+						ent:Photon_TurningLeft(),
+						ent:Photon_TurningRight(),
+						ent:Photon_Hazards(),
+						photonDebug
+					)
+				end
+				if ent:IsEMV() and ent.Photon_ScanEMVProps then
+					ent:Photon_ScanEMVProps()
+				end
+				if ent:Photon_WheelEnabled() and ent.Photon_ScanWheels then
+					ent:Photon_ScanWheels()
+				end
+			end
+		end
+	end
+end
 
 hook.Add( "PreRender", "Photon.RenderScan", function()
 	DrawCarLights()
 	DrawEMVLights()
 end)
 
+hook.Add("PostDrawTranslucentRenderables", "Photon.DebugRender", function()
+	if not PHOTON_DEBUG then return end
 
+	for _, ent in ipairs(Photon:AllVehicles()) do
+		if IsValid(ent) and ent.VehicleName and EMVU.Sequences[ent.VehicleName] and EMVU.Sequences[ent.VehicleName].Illumination and ent.Photon_Illumination and ent:Photon_Illumination() then
+			local options = EMVU.Sequences[ent.VehicleName].Illumination
+			for _, lamps in ipairs(options) do
+				if #lamps.Lights ~= 0 then
+					for _, lamp in ipairs(lamps.Lights) do
+						local meta = EMVU.Helper:GetLampMeta(ent.VehicleName, lamp[3])
+						local start = ent:LocalToWorld(lamp[1])
+						local endpos = ent:LocalToWorld(lamp[1] + (lamp[2]:Forward() * meta.Distance))
+						local res = util.TraceLine({
+							start = start,
+							endpos = endpos,
+							filter = {ent}
+						})
+						render.DrawWireframeSphere(start, 1, 5, 5, meta.Color)
+						if res.HitPos == endpos then
+							render.DrawLine(start, endpos, meta.Color)
+						else
+							render.DrawLine(start, res.HitPos, meta.Color)
+							render.DrawLine(res.HitPos, endpos, Color(200, 0, 0, 100))
+						end
+					end
+				end
+			end
+		end
+	end
+end)
+
+--- Manual siren windup/winddown.
 local function PhotonManualWindScan()
 	if not photon_ready then return end
 	for _, emv in pairs( EMVU:AllVehicles() ) do
@@ -86,6 +135,7 @@ end
 -- 	PhotonManualWindScan()
 -- end )
 
+--- Manual siren windup/down.
 local function PhotonManualWindFocus()
 	if not photon_ready or not should_render:GetBool() then return end
 	for _, emv in pairs( EMVU:AllVehicles() ) do
@@ -97,6 +147,7 @@ local function PhotonManualWindFocus()
 end
 -- hook.Add( "PreRender", "Photon.ManualFocusCheck", function() PhotonManualWindFocus() end )
 
+--- Render function to tick the radar.
 local function PhotonRadarScan()
 	if not photon_ready or not should_render:GetBool() then return end
 	for _, emv in pairs( EMVU:AllVehicles() ) do
@@ -107,6 +158,7 @@ hook.Add( "Tick", "Photon.RadarScan", function() PhotonRadarScan() end)
 
 local photon_pause = false
 
+--- Timer to update frame calculations.
 function EMVU:CalculateFrames()
 	if not photon_ready then return end
 	if photon_pause then return end
@@ -120,10 +172,10 @@ timer.Create("EMVU.CalculateFrames", .03, 0, function()
 end)
 
 concommand.Add( "photon_pause", function()
-	photon_pause = !photon_pause
+	photon_pause = not photon_pause
 end)
 
--- concommand.Add( "photon_selectiondata", function( ply ) 
+-- concommand.Add( "photon_selectiondata", function( ply )
 -- 	local veh = ply:GetVehicle()
 -- 	if not IsValid( veh ) then return end
 -- 	-- print("BEFORE:::::::::::::::::::::::")
@@ -138,9 +190,12 @@ end)
 -- {"Pushbars":"Setina Pushbar=CHP - Red","Front Upper Deck":"None","Lightbar":"Whelen Liberty II=CHP","Rear Upper Deck":"None","Grille":"None","Reverse Light Hideaways":"None","Rear Lower Deck":"None","Turn Signal Hideaways":"None","Bumper Layout":"Fog Lights=CHP - White","Spotlight":"Full","Forward Hideaways":"None","Roof":"AirEL=All","Forward ALPR":"None","Headlight Wig-Wag":"On","Mid-Level Side":"None","Mirror Lights":"Whelen Ion=CHP - Red","Interior Equipment":"Full"}
 -- ]]
 
-
+--- List of manual sirens.
 EMVU.ManualSirenTable = {}
 
+--- Generate a configuration name for a vehicle.
+-- @tab data Configuration data to generate a name for.
+-- @treturn string Name of the generated configuration.
 EMVU.Configurations.GenerateName = function( data )
 	local keyId = EMVU.Configurations.Supported[ data.VehicleName ]
 	local userId = LocalPlayer():SteamID64()
@@ -148,6 +203,12 @@ EMVU.Configurations.GenerateName = function( data )
 	return keyId .. "_" .. userId .. "_" .. name
 end
 
+--- Serialize a configuration.
+-- @string name The name of the config.
+-- @string category The configuration category.
+-- @string author Unused.
+-- @tab data Configuration data.
+-- @treturn string Serialized data.
 EMVU.Configurations.GetConfigText = function( name, category, author, data )
 	if not istable( data ) then return false end
 	data.Name = tostring( name )
@@ -156,6 +217,12 @@ EMVU.Configurations.GetConfigText = function( name, category, author, data )
 	return util.TableToJSON( data )
 end
 
+--- Save a configuration.
+-- @string name The name of the config.
+-- @string category The configuration category.
+-- @string author Unused.
+-- @tab data Configuration data.
+-- @treturn boolean If the configuration saved.
 EMVU.Configurations.SaveConfiguration = function( name, category, author, data )
 	if not istable( data ) then return false end
 	local output = EMVU.Configurations.GetConfigText( name, category, author, data )
@@ -172,6 +239,12 @@ AddCSLuaFile()
 list.Set( "PhotonConfigurationLibrary", "%s", %s )
 ]]
 
+--- Generate lua code for a given configuration.
+-- @string name The name of the config.
+-- @string category The configuration category.
+-- @string author Unused.
+-- @tab data Configuration data.
+-- @treturn string The generated lua string.
 EMVU.Configurations.ConfigurationLua = function( name, category, author, data )
 	if not istable( data ) then return false end
 	local output = EMVU.Configurations.GetConfigText( name, category, author, data )
@@ -179,6 +252,10 @@ EMVU.Configurations.ConfigurationLua = function( name, category, author, data )
 	return string.format( luaConfigCopyTemplate, listName, "[[" .. output .. "]]" )
 end
 
+--- Fetch autoskins for a given vehicle.
+-- @string id Auto Skin ID of the vehicle.
+-- @treturn table Found skins.
+-- @treturn string Base material directory.
 Photon.AutoSkins.FetchSkins = function( id )
 	local result = {}
 	local baseDir = "materials/" .. tostring(id) .. "_liveries/"
@@ -198,6 +275,10 @@ Photon.AutoSkins.FetchSkins = function( id )
 	return result, baseDir
 end
 
+--- Parse the skins of an id.
+-- Generates names and texture paths.
+-- @string id Vehicle ID.
+-- @treturn table Parsed results.
 Photon.AutoSkins.ParseSkins = function( id )
 	local fileTable, baseDir = Photon.AutoSkins.FetchSkins( id )
 	local result = {}
@@ -225,6 +306,7 @@ Photon.AutoSkins.ParseSkins = function( id )
 	return result
 end
 
+--- Load all available autoskins into the cache.
 Photon.AutoSkins.LoadAvailable = function()
 	if not istable( Photon.AutoSkins.TranslationTable ) then return end
 	for _,id in pairs( Photon.AutoSkins.TranslationTable ) do
@@ -235,8 +317,10 @@ end
 
 hook.Add( "InitPostEntity", "Photon.LoadAvailableMaterials", function() timer.Simple( 3, Photon.AutoSkins.LoadAvailable ) end )
 
+--- Available license plate materials.
 Photon.LicensePlates.Available = {}
 
+--- Fetch the license plate materials.
 Photon.LicensePlates.FetchMaterials = function()
 	local result = {}
 	local baseDir = "materials/photon_plates/"
@@ -256,6 +340,7 @@ Photon.LicensePlates.FetchMaterials = function()
 	return result, baseDir
 end
 
+--- Parse materials into key/pairs.
 Photon.LicensePlates.ParseMaterials = function()
 	local fileTable, baseDir = Photon.LicensePlates.FetchMaterials()
 	local result = {}
@@ -283,6 +368,7 @@ Photon.LicensePlates.ParseMaterials = function()
 	return result
 end
 
+--- Load all license plates.
 Photon.LicensePlates.LoadAvailable = function()
 	Photon.LicensePlates.Available = Photon.LicensePlates.ParseMaterials()
 end
@@ -332,7 +418,7 @@ function PrintPhotonDebugInformation()
 					print( [[CURRENT VEHICLE SIREN ON: ]] .. tostring( car:Photon_Siren() ) )
 					print( [[CURRENT VEHICLE WARNING LIGHTS: ]] .. tostring( car:Photon_Lights() ) )
 					print( [[CURRENT VEHICLE LIGHT STAGE: ]] .. tostring( car:Photon_LightOption() ) )
-					print( [[CURRENT VEHICLE FINISHED INIT: ]] .. tostring( car.PhotonFinishedInit ) ) 
+					print( [[CURRENT VEHICLE FINISHED INIT: ]] .. tostring( car.PhotonFinishedInit ) )
 					print( [[CURRENT VEHICLE POSITIONS: ]] .. tostring( #EMVU.Positions[car:EMVName()] ))
 				end
 			else
@@ -368,6 +454,7 @@ local function getPhotonRotationEnts()
 	return _rotationEntCache
 end
 
+--- Run bone rotation.
 Photon.BoneRotation = function()
 	if photon_pause then return end
 	-- if true then return end
@@ -383,18 +470,19 @@ Photon.BoneRotation = function()
 				local componentBoneData = ent.PhotonBoneAnimationData
 				for boneIndex, boneData in pairs( componentBoneData ) do
 					local currentAnimation
-					if emv:Photon_Lights() then
-						if boneData.Primary and boneData.Primary[ stageId ] then currentAnimation = boneData.Primary[ stageId ] end
+					if boneData.Default then
+						currentAnimation = boneData.Default
 					end
-					if emv:Photon_AuxLights() then
-						if boneData.Auxiliary and boneData.Auxiliary[ auxState ] then currentAnimation = boneData.Auxiliary[ auxState ] end
+					if emv:Photon_Lights() and boneData.Primary and boneData.Primary[ stageId ] then
+						currentAnimation = boneData.Primary[ stageId ]
 					end
-					if emv:Photon_Illumination() then
-						if boneData.Illumination and boneData.Illumination[ illumStage ] then currentAnimation = boneData.Illumination[ illumStage ] end
+					if emv:Photon_AuxLights() and boneData.Auxiliary and boneData.Auxiliary[ auxState ] then
+						currentAnimation = boneData.Auxiliary[ auxState ]
 					end
-					if not currentAnimation then 
-						if boneData.Default then currentAnimation = boneData.Default end
+					if emv:Photon_Illumination() and boneData.Illumination and boneData.Illumination[ illumStage ] then
+						currentAnimation = boneData.Illumination[ illumStage ]
 					end
+
 					if not currentAnimation then continue end
 					local animAction = currentAnimation[1] or "RP"
 					local animAngle = currentAnimation[2] or 0
@@ -424,11 +512,7 @@ Photon.BoneRotation = function()
 						local gotoAngle = animAngle[ currentDir ]
 						local ang1 = animAngle[1]
 						local ang2 = animAngle[2]
-						local lt = gotoAngle > currentAngle
 						local eq = gotoAngle == currentAngle
-						local difAng = ( FrameTime() * animSpeed ) * 10
-						local addAng = (currentAngles.r + difAng) % 360
-						local subAng = (currentAngles.r - difAng) % 360
 						if not eq then
 							if animAction == "A" then
 								if currentDir == 2 then -- even
@@ -447,7 +531,7 @@ Photon.BoneRotation = function()
 									ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, addAng ) )
 								end
 							end
-							
+
 						else
 							local max = #animAngle
 							if max > currentDir then ent.PhotonBonesAlt[ boneIndex ] = currentDir + 1
@@ -464,6 +548,6 @@ Photon.BoneRotation = function()
 	end
 end
 
-hook.Add( "PreRender", "Photon.RotationAnimation", function() 
+hook.Add( "PreRender", "Photon.RotationAnimation", function()
 	Photon.BoneRotation()
 end )

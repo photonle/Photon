@@ -525,7 +525,7 @@ function PhotonHUD:ResetLayout( primary, auxiliary, sirens, illum, funcs )
 		PhotonHUD.Panel:RunJavascript( "photonUI.addSection('illumination');" )
 		for i=1,#illumTable do
 			local light = illumTable[i]
-			if not light.Icon then 
+			if not light.Icon then
 				local tryName = PhotonHUD:TranslateLegacyIllum( tostring( light.Name ) )
 				local tryIcon = PhotonHUD:GetIllumIcon( tryName )
 				light.Name = tryName
@@ -549,7 +549,7 @@ local function PhotonHtml()
 	if not PhotonHUD.Panel then return end
 	PhotonHUD:AutoUpdate()
 	if not PhotonHUD.ShouldDraw then return end
-	if drawTexture != false then 
+	if drawTexture != false then
 		local opacity = 255 * HUD_OPACITY:GetFloat()
 		setDrawColor( 255, 255, 255, opacity )
 		setMaterial( drawTexture )
@@ -616,7 +616,7 @@ local function drawDigits( node, num )
 			setMaterial( digitMaterials[digit] )
 			drawTexturedRect( x + digitPos[node][i], scrH - 256 + 104, 32, 32 )
 		end
-		
+
 	end
 end
 
@@ -633,13 +633,18 @@ local function PhotonRadar()
 		local mySpeed = math.Round( ent:Photon_AdjustedSpeed() )
 		drawDigits( 3, mySpeed )
 	end
-	
+
 end
 hook.Add( "HUDPaint", "Photon.RadarOverlay", function()
 	local ent = LocalPlayer():GetVehicle()
 	if not IsValid( ent ) or not ent:IsEMV() or not ( ent.Photon_RadarActive and ent:Photon_RadarActive() ) then return end
 	PhotonRadar()
 end)
+
+Photon.AddCustomHUDIcon("xmas", "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTczbp9jAAAB2UlEQVRYR+2Wu0oDQRiFU6SwmMLSws7eKkUewKfwCXyMgGBlaRUEH8Qm4A0JiCC6mEZFxIQgIVc3ySbjObP/hMR4CTqz2+SDw+z+Ozln50J2Mkt8obVehVagdWhNysmB0N1ut6tbrRYu9TGUlUfJ0G63X5gM3qQtyCP/IGw7ztTP0NZwONQUr6WLHxCg6vX6ThiGo/F4zMADqRd4A14hP/sBxgy/wUjfcf3INHAJKSgLcR+YaQBulwOGqtFoXMfeOoA2pSUn0B60D5VZAO5eAGaqWq3exb4m1EwxW7mfwfzIFfD7PPKZ9eU9dD8YDPi8CLkdOdeczmAunKCmsCfKUIjrvJT/D42/mvZpUFNRFJ2ZHt/0+RMwUs1m88rYphFeq9VujW0a4Yusubfwn3Y7QU31+/0L08N1eKobbpGRp7rm3qb9t1Gh5m3k/HQWYR6hfYA25NEE1LyF54yl0Ol02PBrpqSLCcdf6zkfAKfheRyjaPoE2c9nILWc9FGj0eiUBeAunNCsUqnYA4MZNcSv2SELoIRD5lGv12Mft+EWmoo5sS9hj1OWPOQ+3ELzILDvMDnNkBKUzMkWQdMzwT1BkjtWEwSamcAfTRyf9AsQhHIm3J1klsyRyXwA14GMVRJzcyIAAAAASUVORK5CYII=")
+Photon.AddCustomHUDIcon("volume", "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTczbp9jAAAB1UlEQVRYR+2VoU4DQRCGKxAVQAipQKAJElFRgSgBgUBU8hAIJALRgCCBhD4ASBwCgUCWpA9QWUEIghAEAoEgBHF8/3bmKNfSu4SWQHJ/8mVn5ub2Zmf37gq5/q2iKCpB1dw+cW0ZHjVaaHSyye/hDaS6Xfoi4ktwAxUL/VxMtgPvID3YGApgnIAWrIVkhF2BOyhZKJu4oZ7gEK7A1YC9rvnZAewNUHd2LeRzXZibTdwwSM/GiuVoYinugI0zoFWHTigObdiUnyoSfeJr8A6IM5AWEnkai6CHztm1GnRkS9hbcGLucJEYT2yhIPndcDSb8L0D2pZ9s7VqybuiA9mWnSoS0wqYSvheQBWasiXsDiyaK/8FJs39XiSNqgDte9lsbZEKCB0ZKpLSCphO+F7AATRkS9ivUDS7DK1wIU0k+sTJQ3gKkq8qLgC0572HUHuePIRxcakieZCeQJ/XVcuJCzA/rFbCbsK22Wq/zkP2LyLJvmrnGPSVk/QlVGzQh0j/iHO4tJBiR5DtFRwmJlGbtc+uWxu9A7qulao4f/10MLU1M/JHIiZbB22H/xN6OxC/Zthj/SPOQ83cPo314WnioTp0+g3//sNdKsLMXLly5cr1l1UofABInSQRQNIMewAAAABJRU5ErkJggg==")
+Photon.AddCustomHUDIcon("volume-mute", "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTczbp9jAAACPklEQVRYR+2WPUscURSGt7DYIsoWKSz8ARYWW1hsYWEwxRYWlvkRFpYWFksipAhoG9AypApYpIgoRmErK7GykJAihCgGLAIJQXB93jPnTNyP2RnFkBTzwsO959yzd86c+zFbKfXfqtPpzMJjN/ukMcW42SfGZuCbWncVFz+agEufoOnuVJoUvsBvkFo+1CX8dTiFhruKiR8ogQ8QWoeqjy3DlZzoq7eWAO0ItOGpbIl+Az5DZjUHih+0YBviYeegyUNK6nnS/VMB+vOg6qy4K+bacrOY+MEgXcNPeOIxmlhKK+BtDfTWVgn54Qieyc4VgTHxAai/CodyuD6CNmGaAFRBDx33ORbgxCZE9Bdhw83hIrDrzULYbxO3SRv0TdJNK6BleeF9vbUUVdGGPFI/VwRmJRD+XW9Dqz6uo7tvwYj+CUy6KfsHPHIzWwTlJTAKSxAbVNWYgt4EtO7T3tcSKQGryFARlJfAmNuvE9P0C3Zg3YKR++L4TkPbBvJEYDwoNmGwCVK8VcTd3qBKQhtUa967CdPkckXwIF2Ayj3nMZGAWp3/72YlMcew5HEqv/ZD8RuR4HjrYA3iItLay9d1EdGOw555EtkNCq+g2BEcJibR0XoJoU/eRgIa15vqBtX6S/oW6Mqu2SQPISZrgpYjTkG6WenbMaPVHogE9dFatICHEhPqg7XgZp8Y0xfzDN5B6D3c7aN0H/EQrbtKb/8FaLVBVTEtS92C/rZ4kJ3/ELY2aGbFSpUqVarUP1KlcgOJGrg83bDOHgAAAABJRU5ErkJggg==")
+
 -- local TEXTURE_FLAGS_CLAMP_S = 0x0004
 -- local TEXTURE_FLAGS_CLAMP_T = 0x0008
 
@@ -678,10 +683,10 @@ end)
 -- 	local pos = self:GetPos()
 -- 	pos.z = pos.z + 200
 -- 	local ang = self:GetAngles()
-	
+
 -- 	ang:RotateAroundAxis(ang:Forward(), 90)
 -- 	ang:RotateAroundAxis(ang:Right(), 90)
-	
+
 -- 	local oldRT = render.GetRenderTarget()
 -- 	render.SetRenderTarget(rt)
 -- 		render.Clear(0, 0, 0, 255)
@@ -696,13 +701,13 @@ end)
 -- 			cam.End2D()
 -- 		render.SetViewPort(0, 0, w, h)
 -- 	render.SetRenderTarget(oldRT)
-	
+
 -- 	cam.Start3D2D(pos, ang, 1)
 -- 		surface.SetMaterial(drawMaterial)
 -- 		surface.SetDrawColor(255, 255, 255, 255)
 -- 		surface.DrawTexturedRect(0, 0, 512, 512)
 -- 	cam.End3D2D()
-	
+
 -- 	inDraw = false
 -- end
 
