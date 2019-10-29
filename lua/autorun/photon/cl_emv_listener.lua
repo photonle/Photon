@@ -119,22 +119,22 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		X_DOWN = false
 	end
 
-	if emv.Photon_HasTrafficAdvisor and emv:Photon_HasTrafficAdvisor() then 
+	if emv.Photon_HasTrafficAdvisor and emv:Photon_HasTrafficAdvisor() then
 		if not PHOTON_B_DOWN then
 			if keyDown( key_auxiliary:GetInt() ) then
-				if emv:Photon_TrafficAdvisor() then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
+				EMVU.Sounds:Panel(emv:Photon_TrafficAdvisor())
 				PHOTON_B_DOWN = true
 				PHOTON_B_PRESS = CurTime()
 			end
-		elseif PHOTON_B_DOWN and not keyDown ( key_auxiliary:GetInt() ) then
+		elseif PHOTON_B_DOWN and not keyDown(key_auxiliary:GetInt()) then
 			local cmd = "on"
-			if emv:Photon_TrafficAdvisor() and PHOTON_B_PRESS + .25 > CurTime() then 
+			if emv:Photon_TrafficAdvisor() and PHOTON_B_PRESS + .25 > CurTime() then
 				cmd = "off"
 			elseif emv:Photon_TrafficAdvisor() then
 				cmd = "tog"
 			end
-			if cmd == "on" or cmd == "tog" then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
-			EMVU.Net:Traffic( cmd )
+			EMVU.Sounds:Panel(cmd ~= "off")
+			EMVU.Net:Traffic(cmd)
 			PHOTON_B_DOWN = false
 		end
 	end
