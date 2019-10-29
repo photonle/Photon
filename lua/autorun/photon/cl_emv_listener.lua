@@ -106,15 +106,16 @@ hook.Add("Think", "Photon.ButtonPress", function()
 			X_DOWN = true
 			X_PRESS = CurTime()
 		end
-	elseif X_DOWN and not keyDown ( key_illum:GetInt() ) then
+	elseif X_DOWN and not keyDown(key_illum:GetInt()) then
 		local cmd = "on"
-		if emv:Photon_Illumination() and X_PRESS + .25 > CurTime() then 
+		if emv:Photon_Illumination() and X_PRESS + .25 > CurTime() then
 			cmd = "off"
 		elseif emv:Photon_Illumination() then
 			cmd = "tog"
 		end
-		if cmd == "on" or cmd == "tog" then surface.PlaySound( EMVU.Sounds.Up ) else surface.PlaySound( EMVU.Sounds.Down ) end
-		EMVU.Net:Illuminate( cmd )
+
+		EMVU.Sounds:Panel(cmd ~= "off")
+		EMVU.Net:Illuminate(cmd)
 		X_DOWN = false
 	end
 
