@@ -203,21 +203,12 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		SIRENTOGGLE4_DOWN = false
 	end
 
-	if not BLKOUTON_DOWN and keyDown( key_blackout:GetInt() ) then
-		if emv:Photon_IsRunning() then 
-			surface.PlaySound( EMVU.Sounds.Down )
-		else
-			surface.PlaySound( EMVU.Sounds.Up )
-		end
+	if not BLKOUTON_DOWN and keyDown(key_blackout:GetInt()) then
+		EMVU.Sounds:Panel(not emv:Photon_IsRunning())
 		BLKOUTON_DOWN = true
 	elseif BLKOUTON_DOWN and not keyDown( key_blackout:GetInt() ) then
-		if emv:Photon_IsRunning() then
-			surface.PlaySound( EMVU.Sounds.Up )
-			EMVU.Net:Blackout( true )
-		else
-			surface.PlaySound( EMVU.Sounds.Down )
-			EMVU.Net:Blackout( false )
-		end
+		EMVU.Sounds:Panel(emv:Photon_IsRunning())
+		EMVU.Net:Blackout(emv:Photon_IsRunning())
 		BLKOUTON_DOWN = false
 	end
 
