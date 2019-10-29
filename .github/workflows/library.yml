@@ -20,7 +20,7 @@ jobs:
         with:
           repository: photonle/linter-library
           tag: 'v1.0.0'
-          path: ../linters
+          path: ../
       -
         name: Lint
-        run: ls ../linters
+        run: ls ../
