@@ -1,7 +1,7 @@
 if not EMVU then return end
 
 -- German Siren
-EMVU.AddCustomSiren("creator_hella_rtk_7_de", {
+EMVU.AddCustomSiren("hella_rtk_7_de", {
 	Name = "Deutsche (DE)",
 	Category = "Hella RTK 7",
 	Set = {
@@ -22,12 +22,12 @@ EMVU.AddCustomSiren("creator_hella_rtk_7_de", {
 		}
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
-	Volume = 90
+	Volume = 85
 })
 
 -- US Siren
-EMVU.AddCustomSiren("creator_hella_rtk_7_us", {
-	Name = "USA",
+EMVU.AddCustomSiren("hella_rtk_7_us", {
+	Name = "USA (US)",
 	Category = "Hella RTK 7",
 	Set = {
 		{
@@ -47,11 +47,11 @@ EMVU.AddCustomSiren("creator_hella_rtk_7_us", {
 		}
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
-	Volume = 90
+	Volume = 85
 })
 
 -- French Siren
-EMVU.AddCustomSiren("creator_hella_rtk_7_fr_police", {
+EMVU.AddCustomSiren("hella_rtk_7_fr_police", {
 	Name = "Police Nationale (FR)",
 	Category = "Hella RTK 7",
 	Set = {
@@ -62,10 +62,10 @@ EMVU.AddCustomSiren("creator_hella_rtk_7_fr_police", {
 		},
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
-	Volume = 90
+	Volume = 85
 })
 
-EMVU.AddCustomSiren("creator_hella_rtk_7_fr_gendarmerie", {
+EMVU.AddCustomSiren("hella_rtk_7_fr_gendarmerie", {
 	Name = "Gendarmerie (FR)",
 	Category = "Hella RTK 7",
 	Set = {
@@ -76,10 +76,10 @@ EMVU.AddCustomSiren("creator_hella_rtk_7_fr_gendarmerie", {
 		},
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
-	Volume = 90
+	Volume = 85
 })
 
-EMVU.AddCustomSiren("creator_hella_rtk_7_fr_firefighter", {
+EMVU.AddCustomSiren("hella_rtk_7_fr_firefighter", {
 	Name = "Pompiers (FR)",
 	Category = "Hella RTK 7",
 	Set = {
@@ -90,10 +90,10 @@ EMVU.AddCustomSiren("creator_hella_rtk_7_fr_firefighter", {
 		},
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
-	Volume = 90
+	Volume = 85
 })
 
-EMVU.AddCustomSiren("creator_hella_rtk_7_fr_ambulance", {
+EMVU.AddCustomSiren("hella_rtk_7_fr_ambulance", {
 	Name = "Ambulance (FR)",
 	Category = "Hella RTK 7",
 	Set = {
@@ -104,11 +104,11 @@ EMVU.AddCustomSiren("creator_hella_rtk_7_fr_ambulance", {
 		},
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
-	Volume = 90
+	Volume = 85
 })
 
 -- Italian Siren
-EMVU.AddCustomSiren("creator_hella_rtk_7_it_police", {
+EMVU.AddCustomSiren("hella_rtk_7_it_police", {
 	Name = "Polizia (IT)",
 	Category = "Hella RTK 7",
 	Set = {
@@ -119,10 +119,10 @@ EMVU.AddCustomSiren("creator_hella_rtk_7_it_police", {
 		},
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
-	Volume = 90
+	Volume = 85
 })
 
-EMVU.AddCustomSiren("creator_hella_rtk_7_it_firefighter", {
+EMVU.AddCustomSiren("hella_rtk_7_it_firefighter", {
 	Name = "Firefighter (IT)",
 	Category = "Hella RTK 7",
 	Set = {
@@ -133,11 +133,11 @@ EMVU.AddCustomSiren("creator_hella_rtk_7_it_firefighter", {
 		},
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
-	Volume = 90
+	Volume = 85
 })
 
 -- Dutch Siren
-EMVU.AddCustomSiren("creator_hella_rtk_7_nl_twotone", {
+EMVU.AddCustomSiren("hella_rtk_7_nl_twotone", {
 	Name = "TwoTone (NL)",
 	Category = "Hella RTK 7",
 	Set = {
@@ -148,5 +148,5 @@ EMVU.AddCustomSiren("creator_hella_rtk_7_nl_twotone", {
 		},
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
-	Volume = 90
+	Volume = 85
 })
