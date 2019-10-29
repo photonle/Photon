@@ -1,0 +1,28 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "schmal/shared/white"
+	"$bumpmap" "schmal/shared/flat"
+   	$surfaceprop "metal"
+    	$envmap "env_cubemap"
+   	 $envmaptint "[1 1 1]"
+    	$envmapcontrast "1"
+    	$envmapsaturation "1"
+   	 $envmapfresnel "1"
+   	 $phong "1"
+    	$phongexponent 2
+   	 $phongboost "10"
+   	 $phongfresnelranges "[ 1 1 1]"
+	$nocull "1"
+	"$nodecal" "1"
+	"$normalmapalphaenvmapmask" 1
+	"$colorfix" "{100 100 100}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+
+}

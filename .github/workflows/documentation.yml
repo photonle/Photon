@@ -3,6 +3,12 @@ on:
   push:
     paths-ignore:
       - 'docs/**'
+    tags:
+      - '*'
+    branches:
+      - development
+      - dev
+      - '*-docs'
 
 jobs:
   build:
