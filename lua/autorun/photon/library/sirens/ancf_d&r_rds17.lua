@@ -6,25 +6,25 @@ local siren = {
 	Set = {
 		{
 			Name = "INTER-CLEAR",
-			Sound = "emv/sirens/canada/D&R_RDS_17_Inter-Clear.wav ",
-			Icon = "inter-clear"
+			Sound = "emv/sirens/d&r/rds-17/inter-clear.wav ",
+			Icon = "wail"
 		},
 		{
 			Name = "WAIL",
-			Sound = "emv/sirens/canada/D&R RDS 17 Wail.wav ",
+			Sound = "emv/sirens/d&r/rds-17/wail.wav.wav ",
 			Icon = "wail"
 		},
 		{
 			Name = "YELP",
-			Sound = "emv/sirens/canada/D&R RDS 17 Yelp.wav",
+			Sound = "emv/sirens/d&r/rds-17/yelp.wav",
 			Icon = "yelp"
 		},
                 {
 			Name = "STINGER",
-			Sound = "emv/sirens/canada/D&R RDS 17 Stinger.wav",
+			Sound = "emv/sirens/d&r/rds-17/stinger.wav",
 			Icon = "stinger"
 		},
 	},
-	Horn = "emv/sirens/canada/D&R RDS 17 Airhorn.wav" -- uses the same bullhorn
+	Horn = "emv/sirens/d&r/rds-17/airhorn.wav" -- uses the same bullhorn
 }
-EMVU.AddCustomSiren("ancf_d&r_rds_17", siren) 
+EMVU.AddCustomSiren("ancf_d&r_rds_17", siren)
