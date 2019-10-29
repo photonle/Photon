@@ -220,11 +220,11 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		HORNTOG_DOWN = false
 	end
 
-	if not MANUALTOG_DOWN and keyDown( key_manual:GetInt() ) then
-		EMVU.Net:Manual( true )
+	if not MANUALTOG_DOWN and keyDown(key_manual:GetInt()) then
+		EMVU.Net:Manual(true)
 		MANUALTOG_DOWN = true
-	elseif MANUALTOG_DOWN and not keyDown( key_manual:GetInt() ) then
-		EMVU.Net:Manual( false )
+	elseif MANUALTOG_DOWN and not keyDown(key_manual:GetInt()) then
+		EMVU.Net:Manual(false)
 		MANUALTOG_DOWN = false
 	end
 
