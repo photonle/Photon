@@ -1,0 +1,26 @@
+"VertexlitGeneric"
+{
+	"$basetexture"		"noble/police/rear_lightbar/glass"
+	//"$translucent" 1
+	$alphatest 1
+	"$halflambert" 1
+	"$phong" 1
+	"$phongboost" 1 
+	"$phongfresnelranges" "[1 1 1]"
+	"$surfaceprop" "Glass"
+	"$nocull" 0
+   	 "$rimlight" "100"
+	"$rimlightexponent" "2"
+	"$rimlightboost" "0.01"
+	"$rimmask" "0"
+	"$nodecal" "1"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[.5 .5 .5]"	
+	
+	"$normalmapalphaenvmapmask" 1
+	"$envmapFresnel" "1"
+
+	
+	hdr?$envmaptint "[ 2 2 2 ]"
+	hdr?$envmaptint "[ 1 1 1 ]"
+}
