@@ -238,63 +238,32 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	end
 end)
 
-local function SirenSuggestions(cmd, args)
-	args = args:Trim():lower()
+local function SirenSuggestions( cmd, args )
 
-	local filtered
-	if args == "" then
-		filtered = EMVU.GetSirenTable()
-	else
-		filtered = {}
-		for k, v in pairs(EMVU.GetSirenTable()) do
-			if v.Name:lower():StartWith(args) then
-				filtered[k] = v
-			end
-		end
-	end
+	args = string.Trim( args )
+	args = string.lower( args )
 
 	local result = {}
-	for k, v in SortedPairs(filtered) do
-		table.insert(result, Format("%s %s", cmd, v.Name))
+
+	local i = 1
+	for k,v in pairs( EMVU.GetSirenTable() ) do
+
+		table.insert( result, "emv_siren " .. k .. " \"" .. v.Name .. "\"")
+
 	end
 
 	return result
+
 end
 
 concommand.Add("emv_siren", function(ply, cmd, args)
 	if not args[1] then return end
 	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
-
-	local id = tonumber(args[1])
-	if id == nil then
-		-- We're dealing with a name or a named ID.
-		local siren = table.concat(args, " ")
-
-		local idx = EMVU.GetSirenIndexSilent(siren)
-		if idx then
-			id = idx -- We have an index, use that.
-		else
-			for sid, data in pairs(EMVU.GetSirenTable()) do
-				if data.Name == siren then
-					-- We've got a name, use the ID from that.
-					id = sid
-					break
-				end
-			end
-		end
-	end
-
-	if not id or not isnumber(id) then
-		Error("[Photon] emv_siren was sent a bad name, ID or named index.\n")
-		return
-	end
-
+	local set = 0
 	local max = #EMVU.GetSirenTable()
-	if id > max then
-		id = 0
-	end
-
-	EMVU.Net:SirenSet(id)
+	local val = tonumber(args[1])
+	if val and isnumber(val) and val <= max then set = val end
+	EMVU.Net:SirenSet( set )
 end, SirenSuggestions, "[Photon] Overrides the default siren on an Emergency Vehicle.")
 
 concommand.Add("car_signal", function(ply, cmd, args)
