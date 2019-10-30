@@ -216,11 +216,11 @@ local sirenTable = {
 	[22] = { -- provided by Super Mighty
 		Name = "Intimidator",
 		Category = "D&R",
-		Set = { --
-			{Name = "WAIL", Sound = "emv/sirens/canada/emv_wail.wav", Icon="wail"},
-			{Name = "YELP", Sound = "emv/sirens/canada/emv_yelp.wav", Icon="yelp"},
-			{Name = "HPYP", Sound = "emv/sirens/canada/emv_phaser.wav", Icon="phaser"},
-			{Name = "HILO", Sound = "emv/sirens/canada/emv_hilo.wav", Icon="hilo"},
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/d&r/intimidator/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/d&r/intimidator/emv_yelp.wav", Icon="yelp"},
+			{Name = "HPYP", Sound = "emv/sirens/d&r/intimidator/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/d&r/intimidator/emv_hilo.wav", Icon="hilo"},
 		},
 		Horn = "emv/sirens/canada/emv_bullhorn.wav",
 	},
