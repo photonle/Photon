@@ -4,6 +4,8 @@ on:
     paths-ignore:
       - 'docs/**'
       - '.github/**'
+    tags-ignore:
+      - '*'
     branches:
       - development
       - dev
