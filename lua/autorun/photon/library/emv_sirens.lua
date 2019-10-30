@@ -557,7 +557,7 @@ EMVU.GetSirenIndexSilent = function(index)
 		end
 	end
 
-	return false, "Failed to find siren with index (" .. tostring( index ) .. "), falling back."
+	return 0, "Failed to find siren with index (" .. tostring( index ) .. "), falling back."
 end
 
 EMVU.GetSirenIndex = function(index)
