@@ -1,0 +1,28 @@
+"VertexLitGeneric"
+{
+	"$basetexture"		"noble/prisoner_cage/progard_label"
+	"$bumpmap"	"schmal/shared/flat"
+	 $nocull "0"
+	"$nodecal" "1"
+	"$halflambert" 1
+	"$phong" "1" 
+    	$phongexponent "64"
+    	$phongboost "1"
+   	 $phongfresnelranges "[ 1 1 1]"
+	"$rimlight" "10"
+	"$rimlightexponent" "10"
+	"$rimlightboost" ".1"
+	"$rimmask" "1"
+	"$phongfix" "{1 1 1}"
+	"$colorfix" "{225 225 225}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+

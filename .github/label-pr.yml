@@ -1,0 +1,8 @@
+- regExp: "library\/sirens\/"
+  labels: ["libary"]
+- regExp: "library\/auto\/"
+  labels: ["libary"]
+- regExp: "library\/default\/"
+  labels: ["libary"]
+- regExp: "library\/vehicles\/"
+  labels: ["libary"]

@@ -537,10 +537,15 @@ function Photon.DrawDirtyLensEffect()
 	bloomRef = 0; bloomColor = nil;
 
 end
-hook.Add( "RenderScreenspaceEffects", "Photon.ScreenEffects", function() 
-	Photon.DrawDirtyLensEffect()
-end)
-
+if not mat7:IsError() then
+	hook.Add( "RenderScreenspaceEffects", "Photon.ScreenEffects", function() 
+		Photon.DrawDirtyLensEffect()
+	end)
+else
+	timer.Simple( 1, function()
+		LocalPlayer():ChatPrint("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
+	end)
+end
 function Photon.RenderDynamicLightQueue()
 	local count = #photonDynamicLights
 	if ( count > 0 ) then

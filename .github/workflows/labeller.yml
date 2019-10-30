@@ -1,0 +1,15 @@
+name: PR Labeller
+on: [pull_request]
+
+jobs:
+  label:
+    runs-on: ubuntu-18.04
+    steps:
+      # We need to checkout the repository to access the configured file (.github/label-pr.yml)
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Labeler
+        uses: docker://decathlon/pull-request-labeler-action:2.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
