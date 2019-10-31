@@ -268,18 +268,21 @@ concommand.Add("emv_siren", function(ply, cmd, args)
 	local id = tonumber(args[1])
 	if id == nil then
 		-- We're dealing with a name or a named ID.
-		local siren = table.concat(args, " ")
+		local name = table.concat(args, " "):Trim()
 
-		local idx = EMVU.GetSirenIndexSilent(siren)
-		if idx then
-			id = idx -- We have an index, use that.
-		else
-			for sid, data in pairs(EMVU.GetSirenTable()) do
-				if data.Name == siren then
-					-- We've got a name, use the ID from that.
-					id = sid
-					break
-				end
+		-- Check for IDs first.
+		for idx, data in ipairs(EMVU.GetSirenTable()) do
+			if data.ID == args[1] then
+				id = idx
+				break
+			end
+		end
+
+		-- We've already checked against IDs.
+		for idx, data in ipairs(EMVU.GetSirenTable()) do
+			if data.Name == name then
+				id = idx
+				break
 			end
 		end
 	end
