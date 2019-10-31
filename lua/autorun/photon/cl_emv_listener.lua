@@ -262,7 +262,7 @@ local function SirenSuggestions(cmd, args)
 end
 
 concommand.Add("emv_siren", function(ply, cmd, args)
-	if not args[1] then return end
+	if args[1] == nil then return end
 	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
 
 	local id = tonumber(args[1])
@@ -287,7 +287,7 @@ concommand.Add("emv_siren", function(ply, cmd, args)
 		end
 	end
 
-	if not id or not isnumber(id) then
+	if id == nil or not isnumber(id) then
 		Error("[Photon] emv_siren was sent a bad name, ID or named index.\n")
 		return
 	end
