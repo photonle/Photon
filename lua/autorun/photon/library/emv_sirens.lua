@@ -36,6 +36,7 @@ local sirenTable = {
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/federal sig tm/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/federal sig tm/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "sound/emv/sirens/p_fs_touchmaster_delta/pemv_tmjingle.wav", Icon = "phaser"} -- Edit by Pringle
 			{Name = "SCAN", Sound = "emv/sirens/federal sig tm/emv_scan.wav", Icon="phaser"},
 		},
 		Horn = "emv/sirens/federal sig tm/emv_horn.wav",
