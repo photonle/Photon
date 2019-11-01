@@ -8,8 +8,8 @@ PHOTON_BANNED_UNIT_IDS = {
 	["n1g"] = true
 }
 
-PHOTON_UPDATE = 72.2
-PHOTON_SERIES = "Fair Oaks | Siren Hotfix"
+PHOTON_UPDATE = 72.3
+PHOTON_SERIES = "Fair Oaks | November Garry's Mod Update Hotfix"
 
 --[[
 	DATATABLE CONFIGURATIONS
