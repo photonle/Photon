@@ -41,12 +41,12 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:Photon_Lights()
 		if not IsValid( self ) then return false end
-		return self:GetDTBool( EMV_LIGHTS_ON )
+		return self:GetNW2Bool("PhotonLE.EMV_LIGHTS_ON", false)
 	end
 
 	function emv:Photon_LightOption()
 		if not IsValid( self ) then return 1 end
-		return self:GetDTInt( EMV_LIGHT_OPTION )
+		return self:GetNW2Int( "PhotonLE.EMV_LIGHT_OPTION", 1 )
 	end
 
 	function emv:Photon_LightOptionID()
@@ -67,27 +67,27 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:Photon_Siren()
 		if not IsValid( self ) then return false end
-		return self:GetDTBool( EMV_SIREN_ON )
+		return self:GetNW2Bool( "PhotonLE.EMV_SIREN_ON" )
 	end
 
 	function emv:Photon_SirenOption()
 		if not IsValid( self ) then return 1 end
-		return self:GetDTInt( EMV_SIREN_OPTION )
+		return self:GetNW2Int( "PhotonLE.EMV_SIREN_OPTION" )
 	end
 
 	function emv:Photon_AuxSirenSet()
 		if not IsValid( self ) then return end
-		return self:GetDTInt(EMV_SIREN_SECONDARY)
+		return self:GetNW2Int("PhotonLE.EMV_SIREN_SECONDARY")
 	end
 
 	function emv:Photon_SirenSet()
 		if not IsValid( self ) then return 1 end
-		return self:GetDTInt( EMV_SIREN_SET )
+		return self:GetNW2Int("PhotonLE.EMV_SIREN_SET")
 	end
 
 	function emv:Photon_ManualSiren()
 		if not IsValid( self ) then return false end
-		return self:GetDTBool( CAR_MANUAL )
+		return self:GetNW2Bool( "PhotonLE.CAR_MANUAL" )
 	end
 
 	function emv:Photon_AlertMode()
@@ -96,7 +96,7 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:Photon_ManualHorn()
 		if not IsValid( self ) then return false end
-		return self:GetDTBool( EMV_HORN )
+		return self:GetNW2Bool( "PhotonLE.EMV_HORN" )
 	end
 
 	function emv:Photon_NoSiren()
@@ -106,12 +106,12 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:Photon_Illumination()
 		if not IsValid( self ) then return false end
-		return self:GetDTBool( EMV_ILLUM_ON )
+		return self:GetNW2Bool( "PhotonLE.EMV_ILLUM_ON" )
 	end
 
 	function emv:Photon_IllumOption()
 		if not IsValid( self ) then return 1 end
-		return self:GetDTInt( EMV_ILLUM_OPTION )
+		return self:GetNW2Int( "PhotonLE.EMV_ILLUM_OPTION" )
 	end
 
 	function emv:Photon_IllumLights()
@@ -135,7 +135,7 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:Photon_TrafficAdvisor()
 		if not IsValid( self ) then return false end
-		return self:GetDTBool( EMV_TRF_ON )
+		return self:GetNW2Bool( "PhotonLE.EMV_TRF_ON" )
 	end
 
 	function emv:Photon_AuxLights()
@@ -144,7 +144,7 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:Photon_TrafficAdvisorOption()
 		if not IsValid( self ) then return 1 end
-		return self:GetDTInt( EMV_TRF_OPTION )
+		return self:GetNW2Int( "PhotonLE.EMV_TRF_OPTION" )
 	end
 
 	function emv:Photon_HasTrafficAdvisor()
@@ -154,7 +154,7 @@ function EMVU:MakeEMV( emv, name )
 
 	function emv:Photon_ELPresetOption()
 		if not IsValid( self ) then return 0 end
-		return self:GetDTInt( EMV_PRE_OPTION )
+		return self:GetNW2Int( "PhotonLE.EMV_PRE_OPTION" )
 	end
 
 	function emv:Photon_PresetEnabled()
