@@ -17,7 +17,7 @@ PHOTON_SERIES = "Fair Oaks | Siren Hotfix"
 ]]--
 
 -- Booleans
-local BOOL_CONST_OFFSET = 19
+local BOOL_CONST_OFFSET = 10
 
 EMV_LIGHTS_ON        = BOOL_CONST_OFFSET + 0
 EMV_SIREN_ON         = BOOL_CONST_OFFSET + 1
