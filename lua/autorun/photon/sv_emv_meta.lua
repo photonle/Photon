@@ -377,6 +377,7 @@ function EMVU:MakeEMV( ent, emv )
 	function ent:ELS_ManualSiren( state )
 		if not IsValid( self ) then return end
 		if self:ELS_NoSiren() then return end
+		print("SETTING MANUAL SIREN STATE")
 		if state then
 			--if self:ELS_SirenOption() == 1 and self:ELS_Siren() then return end
 			self:SetNW2Bool( "PhotonLE.CAR_MANUAL", true )
