@@ -222,7 +222,7 @@ local sirenTable = {
 			{Name = "HPYP", Sound = "emv/sirens/d&r/intimidator/emv_phaser.wav", Icon="phaser"},
 			{Name = "HILO", Sound = "emv/sirens/d&r/intimidator/emv_hilo.wav", Icon="hilo"},
 		},
-		Horn = "emv/sirens/canada/emv_bullhorn.wav",
+		Horn = "emv/sirens/d&r/intimidator/emv_bullhorn.wav",
 	},
 	[23] = {
 		Name = "Mastercom B", -- Code 3
