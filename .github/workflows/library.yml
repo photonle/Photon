@@ -48,4 +48,4 @@ jobs:
         name: Lint
         run: |
           cd linter-library-2.0.0
-          lua sirenlint.lua ../lua/autorun/photon/library/auto/*
+          lua componentlint.lua ../lua/autorun/photon/library/auto/*
