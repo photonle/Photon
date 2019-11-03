@@ -21,9 +21,9 @@ jobs:
         uses: Legion2/download-release-action@v2.1.0
         with:
           repository: photonle/linter-library
-          tag: 'v1.2.0'
+          tag: 'v2.0.0'
       -
         name: Lint
         run: |
-          cd linter-library-1.2.0
+          cd linter-library-2.0.0
           lua sirenlint.lua ../lua/autorun/photon/library/sirens/*
