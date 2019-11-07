@@ -198,7 +198,9 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 	-- end
 	EMVU.Sequences = EMVU.Sequences or {}
 	if not name or not option or not vehicle then return {} end
-	if not istable( EMVU.Sequences[ name ] ) or not istable( EMVU.Sequences[ name ].Illumination ) then return {} end
+	if not istable(EMVU.Sequences[name]) then return {} end
+	if not istable(EMVU.Sequences[name].Illumination) then return {} end
+	if not istable(EMVU.Sequences[name].Illumination[option]) then return {} end
 	local resultTable = {}
 
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Illumination"][option]["BG_Components"] ) then
