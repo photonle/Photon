@@ -322,222 +322,222 @@ EMV.Meta = {
 		Sprite = "sprites/emv/light_circle",
 		Scale = 3,
 	}
-	
+
 }
 
 EMV.Positions = {
-	
+
 	[1] = { Vector( 10.16, 118.2, 35.17 ), Angle( 0, 0, 15.2 ), "grille_leds" }, -- 1
 	[2] = { Vector( -10.16, 118.2, 35.17 ), Angle( 0, 0, 15.2 ), "grille_leds" }, -- 2
-	
+
 	[3] = { Vector( 9.24, 128.7, 31.13 ), Angle( 0, 0, 0 ), "pushbar_leds" },
 	[4] = { Vector( -9.24, 128.7, 31.13 ), Angle( 0, 0, 0 ), "pushbar_leds" },
-	
+
 	[5] = { Vector( 2.97, 128.7, 31.13 ), Angle( 0, 0, 0 ), "pushbar_leds" },
 	[6] = { Vector( -2.97, 128.7, 31.13 ), Angle( 0, 0, 0 ), "pushbar_leds" },
-	
+
 	[7] = { Vector( 2.05, 16.68, 65.43 ), Angle( 0, 0, 0 ), "front_viper" },
 	[8] = { Vector( -2.05, 16.68, 65.43 ), Angle( 0, 0, 0 ), "front_viper" },
-	
+
 	[9] = { Vector( 11.32, 13.68, 65.57 ), Angle( 0, 0, 0 ), "font_interior_leds" },
 	[10] = { Vector( -11.32, 13.68, 65.57 ), Angle( 0, 0, 0 ), "font_interior_leds" },
-	
+
 	[11] = { Vector( 15.01, 13.68, 65.57 ), Angle( 0, 0, 0 ), "font_interior_leds" },
 	[12] = { Vector( -15.01, 13.68, 65.57 ), Angle( 0, 0, 0 ), "font_interior_leds" },
-	
+
 	[13] = { Vector( 18.69, 13.68, 65.57 ), Angle( 0, 0, 0 ), "font_interior_leds" },
 	[14] = { Vector( -18.69, 13.68, 65.57 ), Angle( 0, 0, 0 ), "font_interior_leds" },
-	
+
 	[15] = { Vector( 22.4, 13.68, 65.57 ), Angle( 0, 0, 0 ), "font_interior_leds" },
 	[16] = { Vector( -22.4, 13.68, 65.57 ), Angle( 0, 0, 0 ), "font_interior_leds" },
-	
+
 	[17] = { Vector( 26.07, 13.68, 65.57 ), Angle( 0, 0, 0 ), "font_interior_leds" },
 	[18] = { Vector( -26.07, 13.68, 65.57 ), Angle( 0, 0, 0 ), "font_interior_leds" },
-	
+
 	[19] = { Vector( 47.97, 30.5, 51.77 ), Angle( 1.18 - 180, -28.66, 180 - 6.3 ), "mirror_leds" },
 	[20] = { Vector( -47.97, 30.5, 51.77 ), Angle( 1.18, 28.66, 6.3 ), "mirror_leds" },
-	
+
 	[21] = { Vector( 19.87, -75.72, 56.07 ), Angle( 0, 0, 0 ), "rear_200" },
 	[22] = { Vector( -19.87, -75.72, 56.07 ), Angle( 0, 0, 0 ), "rear_200" },
-	
+
 	[23] = { Vector( 14.19, -75.72, 56.07 ), Angle( 0, 0, 0 ), "rear_200" },
 	[24] = { Vector( -14.19, -75.72, 56.07 ), Angle( 0, 0, 0 ), "rear_200" },
-	
+
 	[25] = { Vector( 8.54, -75.72, 56.07 ), Angle( 0, 0, 0 ), "rear_200" },
 	[26] = { Vector( -8.54, -75.72, 56.07 ), Angle( 0, 0, 0 ), "rear_200" },
-	
+
 	[27] = { Vector( 2.84, -75.72, 56.07 ), Angle( 0, 0, 0 ), "rear_200" },
 	[28] = { Vector( -2.84, -75.72, 56.07 ), Angle( 0, 0, 0 ), "rear_200" },
-	
+
 	[29] = { Vector( 26.53, -67.68, 61.47 ), Angle( 0, 15, 0 ), "rear_vipers" },
 	[30] = { Vector( -26.53, -67.68, 61.47 ), Angle( 0, -15, 0 ), "rear_vipers" },
-	
+
 	[31] = { Vector( 22.63, -68.78, 61.47 ), Angle( 0, 15, 0 ), "rear_vipers" },
 	[32] = { Vector( -22.63, -68.78, 61.47 ), Angle( 0, -15, 0 ), "rear_vipers" },
-	
+
 	[33] = { Vector( 11.13, -80.48, 53.97 ), Angle( 0, 0, -14 ), "rear_fluor" },
 	[34] = { Vector( -11.13, -80.48, 53.97 ), Angle( 0, 0, -14 ), "rear_fluor" },
-	
+
 	[35] = { Vector( 19.87, -62.42, 64.67 ), Angle( 0, 0, 0 ), "rear_200" },
 	[36] = { Vector( -19.87, -62.42, 64.67 ), Angle( 0, 0, 0 ), "rear_200" },
-	
+
 	[37] = { Vector( 14.19, -62.42, 64.67 ), Angle( 0, 0, 0 ), "rear_200" },
 	[38] = { Vector( -14.19, -62.42, 64.67 ), Angle( 0, 0, 0 ), "rear_200" },
-	
+
 	[39] = { Vector( 8.54, -62.42, 64.67 ), Angle( 0, 0, 0 ), "rear_200" },
 	[40] = { Vector( -8.54, -62.42, 64.67 ), Angle( 0, 0, 0 ), "rear_200" },
-	
+
 	[41] = { Vector( 2.84, -62.42, 64.67 ), Angle( 0, 0, 0 ), "rear_200" },
 	[42] = { Vector( -2.84, -62.42, 64.67 ), Angle( 0, 0, 0 ), "rear_200" },
-	
+
 	-- HALOGEN LIGHTBAR --
-	
+
 	[43] = { Vector( 12.34, -14.42, 77.58 ), Angle( 0, 0, 0 ), "halogen_front" },
 	[44] = { Vector( -12.34, -14.42, 77.58 ), Angle( 0, 0, 0 ), "halogen_front" },
-	
+
 	[45] = { Vector( 8.64, -13.92, 74.58 ), Angle( 0, 0, 0 ), "halogen_l_front" },
 	[46] = { Vector( -8.64, -13.92, 74.58 ), Angle( 0, 0, 0 ), "halogen_l_front" },
-	
+
 	[47] = { Vector( 14.39, -13.92, 74.58 ), Angle( 0, 0, 0 ), "halogen_l_front" },
 	[48] = { Vector( -14.39, -13.92, 74.58 ), Angle( 0, 0, 0 ), "halogen_l_front" },
-	
+
 	[49] = { Vector( 22.89, -17.22, 77.78 ), Angle( 0, 0, 0 ), "halogen_rotating_b" },
 	[50] = { Vector( -22.89, -17.22, 77.78 ), Angle( 0, 0, 0 ), "halogen_rotating_a" },
-	
+
 	[51] = { Vector( 22.89, -16.32, 77.78 ), Angle( 0, 0, 0 ), "halogen_rotating_b" },
 	[52] = { Vector( -22.89, -16.32, 77.78 ), Angle( 0, 0, 0 ), "halogen_rotating_a" },
-	
+
 	[53] = { Vector( 19.39, -14.72, 77.78 ), Angle( 0, 0, 0 ), "halogen_rotating_c" },
 	[54] = { Vector( -19.39, -14.72, 77.78 ), Angle( 0, 0, 0 ), "halogen_rotating_d" },
-	
+
 	[55] = { Vector( 19.39, -18.82, 77.78 ), Angle( 0, 0, 0 ), "halogen_rotating_c" },
 	[56] = { Vector( -19.39, -18.82, 77.78 ), Angle( 0, 0, 0 ), "halogen_rotating_d" },
-	
+
 	[57] = { Vector( 12.34, -19.22, 77.58 ), Angle( 0, 0, 0 ), "halogen_rear" },
 	[58] = { Vector( -12.34, -19.22, 77.58 ), Angle( 0, 0, 0 ), "halogen_rear" },
-	
+
 	[59] = { Vector( 8.64, -19.92, 74.58 ), Angle( 0, 0, 0 ), "halogen_l_rear" },
 	[60] = { Vector( -8.64, -19.92, 74.58 ), Angle( 0, 0, 0 ), "halogen_l_rear" },
-	
+
 	[61] = { Vector( 14.14, -19.92, 74.58 ), Angle( 0, 0, 0 ), "halogen_l_rear" },
 	[62] = { Vector( -14.14, -19.92, 74.58 ), Angle( 0, 0, 0 ), "halogen_l_rear" },
-	
+
 	[63] = { Vector( 27.14, -16.93, 74.98 ), Angle( 0, -90, 0 ), "halogen_alley" },
 	[64] = { Vector( -27.14, -16.93, 74.98 ), Angle( 0, 90, 0 ), "halogen_alley" },
-	
+
 	[65] = { Vector( 21.24, -18.42, 74.58 ), Angle( 0, 0, 0 ), "halogen_rotating_e" },
 	[66] = { Vector( -21.24, -18.42, 74.58 ), Angle( 0, 0, 0 ), "halogen_rotating_e" },
-	
+
 	[67] = { Vector( 21.24, -14.42, 74.58 ), Angle( 0, 0, 0 ), "halogen_rotating_e" },
 	[68] = { Vector( -21.24, -14.42, 74.58 ), Angle( 0, 0, 0 ), "halogen_rotating_e" },
-	
+
 	-- WHELEN FREEDOM --
-	
+
 	[69] = { Vector( 9.04, -11.62, 75.24 ), Angle( 0, 0, 0 ), "freedom_f_inner" },
 	[70] = { Vector( -9.04, -11.62, 75.24 ), Angle( 0, 0, 0 ), "freedom_f_inner" },
-	
+
 	[71] = { Vector( 23.55, -12.92, 75.24 ), Angle( 0, -16.3, 0 ), "freedom_f_corner" },
 	[72] = { Vector( -23.55, -12.92, 75.24 ), Angle( 0, 16.3, 0 ), "freedom_f_corner" },
-	
+
 	[73] = { Vector( 23.55, -20.61, 75.24 ), Angle( 0, 16.3, 0 ), "freedom_r_corner" },
 	[74] = { Vector( -23.55, -20.61, 75.24 ), Angle( 0, -16.3, 0 ), "freedom_r_corner" },
-	
+
 	[75] = { Vector( 9.04, -21.92, 75.24 ), Angle( 0, 0, 0 ), "freedom_r_inner" },
 	[76] = { Vector( -9.04, -21.92, 75.24 ), Angle( 0, 0, 0 ), "freedom_r_inner" },
-	
+
 	[77] = { Vector( 15.79, -11.92, 75.28 ), Angle( 0, 0, 0 ), "freedom_takedown" },
 	[78] = { Vector( -15.79, -11.92, 75.28 ), Angle( 0, 0, 0 ), "freedom_takedown" },
-	
+
 	[79] = { Vector( 15.79, -21.52, 75.28 ), Angle( 0, 0, 0 ), "freedom_r_halogen" },
 	[80] = { Vector( -15.79, -21.52, 75.28 ), Angle( 0, 0, 0 ), "freedom_r_halogen" },
-	
+
 	[81] = { Vector( 28.14, -16.72, 75.2 ), Angle( 0, -90, 0 ), "freedom_alley" },
 	[82] = { Vector( -28.14, -16.72, 75.2 ), Angle( 0, 90, 0 ), "freedom_alley" },
-	
+
 	-- WHELEN LIBERTY --
-	
+
 	[83] = { Vector( 9.48, -11.72, 74.74 ), Angle( 0, 0, 0 ), "liberty_front" },
 	[84] = { Vector( -9.44, -11.72, 74.74 ), Angle( 0, 0, 0 ), "liberty_front" },
-	
+
 	[85] = { Vector( 15.86, -11.72, 74.74 ), Angle( 0, 0, 0 ), "liberty_front" },
 	[86] = { Vector( -15.86, -11.72, 74.74 ), Angle( 0, 0, 0 ), "liberty_front" },
-	
+
 	[87] = { Vector( 23.6, -13.73, 74.74 ), Angle( 0, -23, 0 ), "liberty_f_corner" },
 	[88] = { Vector( -23.6, -13.73, 74.74 ), Angle( 0, 23, 0 ), "liberty_f_corner" },
-	
+
 	[89] = { Vector( 23.6, -20.33, 74.74 ), Angle( 0, 23, 0 ), "liberty_r_corner" },
 	[90] = { Vector( -23.6, -20.33, 74.74 ), Angle( 0, -23, 0 ), "liberty_r_corner" },
-	
+
 	[91] = { Vector( 15.86, -21.92, 74.74 ), Angle( 0, 0, 0 ), "liberty_rear" },
 	[92] = { Vector( -15.86, -21.92, 74.74 ), Angle( 0, 0, 0 ), "liberty_rear" },
-	
+
 	[93] = { Vector( 9.48, -21.92, 74.74 ), Angle( 0, 0, 0 ), "liberty_rear" },
 	[94] = { Vector( -9.48, -21.92, 74.74 ), Angle( 0, 0, 0 ), "liberty_rear" },
-	
+
 	[95] = { Vector( 3.21, -21.92, 74.74 ), Angle( 0, 0, 0 ), "liberty_rear" },
 	[96] = { Vector( -3.21, -21.92, 74.74 ), Angle( 0, 0, 0 ), "liberty_rear" },
-	
+
 	[97] = { Vector( 3.21, -11.52, 74.74 ), Angle( 0, 0, 0 ), "liberty_takedown" },
 	[98] = { Vector( -3.21, -11.52, 74.74 ), Angle( 0, 0, 0 ), "liberty_takedown" },
-	
+
 	[99] = { Vector( 28.01, -16.87, 74.81 ), Angle( 0, -90, 0 ), "liberty_alley" },
 	[100] = { Vector( -28.01, -16.87, 74.81 ), Angle( 0, 90, 0 ), "liberty_alley" },
-	
+
 	-- VECTOR LIGHTBAR --
-	
+
 	[101] = { Vector( 0, -2.17, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_a" },
 	[102] = { Vector( 0, -4.87, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_a" },
-	
+
 	[103] = { Vector( 7.11, -7.07, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_b" },
 	[104] = { Vector( -7.11, -7.07, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_b" },
-	
+
 	[105] = { Vector( 7.11, -9.87, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_b" },
 	[106] = { Vector( -7.11, -9.87, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_b" },
-	
+
 	[107] = { Vector( 14.21, -11.97, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_a" },
 	[108] = { Vector( -14.21, -11.97, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_a" },
-	
+
 	[109] = { Vector( 14.21, -14.97, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_a" },
 	[110] = { Vector( -14.21, -14.97, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_a" },
-	
+
 	[111] = { Vector( 21.41, -17.07, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_b" },
 	[112] = { Vector( -21.41, -17.07, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_b" },
-	
+
 	[113] = { Vector( 21.41, -19.97, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_a" },
 	[114] = { Vector( -21.41, -19.97, 78.41 ), Angle( 0, 0, 0 ), "halogen_rotating_a" },
-	
+
 	[115] = { Vector( 19.41, -31.82, 74.45 ), Angle( 0, 0, 0 ), "vector_trf" },
 	[116] = { Vector( -19.41, -31.82, 74.45 ), Angle( 0, 0, 0 ), "vector_trf" },
-	
+
 	[117] = { Vector( 13.91, -31.82, 74.45 ), Angle( 0, 0, 0 ), "vector_trf" },
 	[118] = { Vector( -13.91, -31.82, 74.45 ), Angle( 0, 0, 0 ), "vector_trf" },
-	
+
 	[119] = { Vector( 8.33, -31.82, 74.45 ), Angle( 0, 0, 0 ), "vector_trf" },
 	[120] = { Vector( -8.33, -31.82, 74.45 ), Angle( 0, 0, 0 ), "vector_trf" },
-	
+
 	[121] = { Vector( 2.8, -31.82, 74.45 ), Angle( 0, 0, 0 ), "vector_trf" },
 	[122] = { Vector( -2.8, -31.82, 74.45 ), Angle( 0, 0, 0 ), "vector_trf" },
-	
+
 	[123] = { Vector( -29.2, 114, 34.6 ), Angle( 0, 14, 20 ), "headlight" },
 	[124] = { Vector( 29.2, 114, 34.6 ), Angle( 180, -14, 160 ), "headlight" },
-	
+
 	[125] = { Vector( -32.3, -123.2, 39.6 ), Angle( 0, -11.2, -4 ), "tail_light" },
 	[126] = { Vector( 32.3, -123.2, 39.6 ), Angle( 0, 11.2, 176 ), "tail_light" },
 
 	-- BOTTOM --
 	[127] = { Vector( -33.6, -122.7, 42.2 ), Angle( 0, -16.2, -4 ), "tail_light" },
 	[128] = { Vector( 33.6, -122.7, 42.2 ), Angle( 0, 16.2, 176 ), "tail_light" },
-	
+
 	-- TAIL GLOWS --
 	[129] = { Vector(-32.3,-109.5,40), Angle(0,20,-30), "tail_glow" },
 	[130] = { Vector(32.3,-109.5,40), Angle(0,20,30), "tail_glow" },
-	
+
 	[131] = { Vector( -11.7, -125.4, 38.3 ), Angle( 180, -1, 183.1 ), "reverse" },
 	[132] = { Vector( 11.7, -125.4, 38.3 ), Angle( 0, 1, -3.1 ), "reverse" },
-	
+
 	[133] = { Vector( 40.96, 37.09, 56.85 ), Angle( -17.26, 0, 0 ), "spotlight" },
 	[134] = { Vector( -40.96, 37.09, 56.85 ), Angle( -17.26, 0, 0 ), "spotlight" },
-	
+
 }
 
 EMV.Sections = {
@@ -560,13 +560,13 @@ EMV.Sections = {
 	},
 	["front_interior"] = {
 		{ { 9, B }, { 10, R }, { 11, B }, { 12, R }, { 13, B }, { 14, R }, { 15, B }, { 16, R }, { 17, B }, { 18, R } },
-		
+
 		{ { 9, B }, { 11, B }, { 13, B }, { 15, B }, { 17, B } },
 		{ { 10, R }, { 12, R }, { 14, R }, { 16, R }, { 18, R } },
-		
+
 		{ { 9, B }, { 10, R }, { 17, B }, { 18, R } },
 		{ { 11, B }, { 12, R }, { 13, B }, { 14, R }, { 15, B }, { 16, R } },
-		
+
 		{ { 9, B }, { 13, B }, { 17, B }, { 12, R }, { 16, R } },
 		{ { 10, R }, { 14, R }, { 18, R }, { 11, B }, { 15, B } }
 	},
@@ -577,25 +577,25 @@ EMV.Sections = {
 	},
 	["rear_200"] = {
 		{ { 21, R }, { 22, B }, { 23, R }, { 24, B }, { 25, R }, { 26, B }, {27, R }, { 28, B} },
-		
+
 		{ { 21, R }, { 23, R }, { 25, R }, { 27, R } },
 		{ { 22, B }, { 24, B }, { 26, B }, { 28, B } },
-		
+
 		{ { 21, R }, { 23, R }, { 22, B }, { 24, B } },
 		{ { 25, R }, { 27, R }, { 26, B }, { 28, B } },
-		
+
 		{ { 21, R }, { 27, R }, { 24, B }, { 26, B } },
 		{ { 22, B }, { 28, B }, { 25, R }, { 23, R } },
-		
+
 		{ { 21, R }, { 23, R } },
 		{ { 22, B }, { 24, B } }
 	},
 	["rear_vipers"] = {
 		{ { 29, R }, { 30, B }, { 31, R }, { 32, B } },
-		
+
 		{ { 29, B }, { 31, B } },
 		{ { 30, R }, { 32, R } },
-		
+
 		{ { 29, B }, { 30, R } },
 		{ { 31, B }, { 32, R } },
 	},
@@ -603,7 +603,7 @@ EMV.Sections = {
 		{ { 33, R }, { 34, B } },
 		{ { 33, B, { 24, 0, 24 } }, { 34, R, { 24, 0, 0 } } }
 	},
-	
+
 	-- TRAFFIC --
 	-- 36 38 40 42 41 39 37 35 --
 	["traffic"] = {
@@ -619,13 +619,13 @@ EMV.Sections = {
 		{ { 39, A }, { 37, A } },
 		{ { 37, A }, { 35, A } },
 		{ { 35, A } },
-		
+
 		-- 10
 		{ { 42, A }, { 41, A } },
 		{ { 40, A }, { 39, A } },
 		{ { 38, A }, { 37, A } },
 		{ { 36, A }, { 35, A } },
-		
+
 		-- 14
 		{ { 36, A }, { 38, A }, { 35, A }, { 37, A } },
 		{ { 40, A }, { 42, A }, { 41, A }, { 39, A } },
@@ -636,28 +636,28 @@ EMV.Sections = {
 		{ { 35, A }, { 37, A }, { 39, A }, { 41, A } },
 		{ { 36, A }, { 38, A }, { 40, A }, { 42, A } }
 	},
-	
+
 	-- HALOGEN LIGHTBAR --
-	
+
 	["lightbar_halogen"] = {
-		{ 
-			{ 43, B }, { 44, R }, { 45, SW }, { 46, SW }, { 47, B }, { 48, R }, { 49, B }, { 50, R }, { 51, B }, { 52, R }, 
-			{ 53, B }, { 54, R }, { 55, B }, { 56, R }, { 57, B }, { 58, R }, { 59, A }, { 60, A }, { 61, A }, { 62, A }, 
-			{ 63, SW }, { 64, SW }, { 65, SW }, { 66, SW }, { 67, SW }, { 68, SW } 
+		{
+			{ 43, B }, { 44, R }, { 45, SW }, { 46, SW }, { 47, B }, { 48, R }, { 49, B }, { 50, R }, { 51, B }, { 52, R },
+			{ 53, B }, { 54, R }, { 55, B }, { 56, R }, { 57, B }, { 58, R }, { 59, A }, { 60, A }, { 61, A }, { 62, A },
+			{ 63, SW }, { 64, SW }, { 65, SW }, { 66, SW }, { 67, SW }, { 68, SW }
 		}
 	},
 	["lightbar_halogen_rear"] = {
-		[1] = { 
-			{ 59, A, { 16, 0, 0 } }, 
-			{ 60, A, { 16, 0, 0 } }, 
-			{ 61, A, { 16, 0, 8 } }, 
-			{ 62, A, { 16, 0, 8 } }, 
+		[1] = {
+			{ 59, A, { 16, 0, 0 } },
+			{ 60, A, { 16, 0, 0 } },
+			{ 61, A, { 16, 0, 8 } },
+			{ 62, A, { 16, 0, 8 } },
 		},
 		[2] = {
-			{ 59, A, { 16, 0, 8 } }, 
-			{ 60, A, { 16, 0, 0 } }, 
-			{ 61, A, { 16, 0, 8 } }, 
-			{ 62, A, { 16, 0, 0 } }, 
+			{ 59, A, { 16, 0, 8 } },
+			{ 60, A, { 16, 0, 0 } },
+			{ 61, A, { 16, 0, 8 } },
+			{ 62, A, { 16, 0, 0 } },
 		}
 	},
 	["lightbar_halogen_xenon_rear"] = {
@@ -678,78 +678,78 @@ EMV.Sections = {
 	["lightbar_halogen_takedowns"] ={
 		{ { 45, SW, { 10, 0, 0 } }, { 46, SW, { 10, 0, 0 } }, { 63, SW, { 10, 0, 0 } }, { 64, SW, { 10, 0, 0 } } }
 	},
-	
+
 	-- WHELEN FREEDOM LIGHTBAR --
-	
+
 	["lightbar_freedom_rb"] = {
 		{
-			{ 69, B }, { 70, R }, { 71, B }, { 72, R }, { 73, B }, { 74, R }, { 75, B }, { 76, R }, { 77, SW }, { 78, SW }, 
+			{ 69, B }, { 70, R }, { 71, B }, { 72, R }, { 73, B }, { 74, R }, { 75, B }, { 76, R }, { 77, SW }, { 78, SW },
 			{ 79, B }, { 80, R }, { 81, SW }, { 82, SW }
 		}
 	},
-	
+
 	["lightbar_freedom_rb_outer"] = {
 		{ { 71, B }, { 72, R }, { 73, B }, { 74, R } },
-		
+
 		{ { 71, B }, { 73, B } },
 		{ { 72, R }, { 74, R } },
 	},
-	
+
 	["lightbar_freedom_rb_inner"] = {
 		{ { 69, B }, { 70, R }, { 75, B }, { 76, R } },
 		{ { 69, B }, { 75, B } },
 		{ { 70, R }, { 76, R } }
 	},
-	
+
 	["lightbar_freedom_rb_halogen"] = {
-		{ 
-			{ 79, B, { 10, 0, 0 } }, 
-			{ 80, R, { 10, 0, 5 } } 
+		{
+			{ 79, B, { 10, 0, 0 } },
+			{ 80, R, { 10, 0, 5 } }
 		},
-		{ 
-			{ 79, B, { 24, 0, 0 } }, 
-			{ 80, R, { 24, 0, 24 } } 
+		{
+			{ 79, B, { 24, 0, 0 } },
+			{ 80, R, { 24, 0, 24 } }
 		},
 	},
-	
+
 	-- WHELEN FREEDOM LIGHTBAR BLUE --
-	
+
 	["lightbar_freedom_b_outer"] = {
 		{ { 71, B }, { 72, B }, { 73, B }, { 74, B } },
-		
+
 		{ { 71, B }, { 73, B } },
 		{ { 72, B }, { 74, B } },
 	},
-	
+
 	["lightbar_freedom_b_inner"] = {
 		{ { 69, B }, { 70, B }, { 75, B }, { 76, B } },
 		{ { 69, B }, { 75, B } },
 		{ { 70, B }, { 76, B } }
 	},
-	
+
 	["lightbar_freedom_b_halogen"] = {
-		{ 
-			{ 79, B, { 10, 0, 0 } }, 
-			{ 80, B, { 10, 0, 5 } } 
+		{
+			{ 79, B, { 10, 0, 0 } },
+			{ 80, B, { 10, 0, 5 } }
 		},
-		{ 
-			{ 79, B, { 24, 0, 0 } }, 
-			{ 80, B, { 24, 0, 24 } } 
+		{
+			{ 79, B, { 24, 0, 0 } },
+			{ 80, B, { 24, 0, 24 } }
 		},
 	},
-	
+
 	["lightbar_freedom_illum"] = {
 		{ { 77, SW }, { 78, SW } },
-		{ 
-			{ 77, SW, { 10, 0, 0 } }, 
+		{
+			{ 77, SW, { 10, 0, 0 } },
 			{ 78, SW, { 10, 0, 10 } },
 			{ 81, SW, { 10, 0, 10 } },
 			{ 82, SW, { 10, 0, 0 } }
 		}
 	},
-	
+
 	-- WHELEN LIBERTY LIGHTBAR --
-	
+
 	["lightbar_liberty"] = {
 		{
 			{ 83, B }, { 84, R }, { 85, B }, { 86, R }, { 87, B }, { 88, R }, { 89, B }, { 90, R }, { 91, B }, { 92, R },
@@ -764,7 +764,7 @@ EMV.Sections = {
 		{ { 91, B }, { 85, B } },
 		{ { 92, R }, { 86, R } },
 	},
-	
+
 	["lightbar_liberty_corner"] = {
 		{ { 87, B, .5 }, { 88, R, .5 }, { 89, B, .5 }, { 90, R, .5 } },
 		{ { 87, B, 1 }, { 88, R, .5 }, { 89, B, 1 }, { 90, R, .5 } },
@@ -783,21 +783,21 @@ EMV.Sections = {
 		{ { 97, W }, { 99, W } },
 		{ { 98, W }, { 100, W } }
 	},
-	
+
 	-- FEDERAL SIGNAL VECTOR --
 	["lightbar_vector_r"] = {
 		{
-			{ 101, W }, { 102, W }, 
-			
+			{ 101, W }, { 102, W },
+
 			{ 103, R }, { 104, R },
 			{ 105, R }, { 106, R },
-			
+
 			{ 107, W }, { 108, W },
 			{ 109, W }, { 110, W },
-			
+
 			{ 111, R }, { 112, R },
 			{ 113, R }, { 114, R },
-			
+
 			{ 115, A }, { 116, A },
 			{ 117, A }, { 118, A },
 			{ 119, A }, { 120, A },
@@ -810,23 +810,23 @@ EMV.Sections = {
 		{
 			{ 103, R }, { 104, R },
 			{ 105, R }, { 106, R },
-			
+
 			{ 111, R }, { 112, R },
 			{ 113, R }, { 114, R },
 		},
 		{
-			{ 101, W }, { 102, W }, 
-			
+			{ 101, W }, { 102, W },
+
 			{ 103, R }, { 104, R },
 			{ 105, R }, { 106, R },
-			
+
 			{ 107, W }, { 108, W },
 			{ 109, W }, { 110, W },
-			
+
 			{ 111, R }, { 112, R },
 			{ 113, R }, { 114, R },
 		}
-		
+
 	},
 	["lightbar_vector_rb"] = {
 		{
@@ -836,19 +836,19 @@ EMV.Sections = {
 		{
 			{ 107, B }, { 108, B },
 			{ 109, B }, { 110, B },
-			
+
 			{ 111, R }, { 112, R },
 			{ 113, R }, { 114, R },
 		},
 		{
-			{ 101, R }, { 102, R }, 
-			
+			{ 101, R }, { 102, R },
+
 			{ 103, W }, { 104, W },
 			{ 105, W }, { 106, W },
-			
+
 			{ 107, B }, { 108, B },
 			{ 109, B }, { 110, B },
-			
+
 			{ 111, R }, { 112, R },
 			{ 113, R }, { 114, R },
 		}
@@ -877,12 +877,12 @@ EMV.Sections = {
 			{ 128, DR, { 16, 0, 0} },
 			--{ 129, DR, { 16, 0, 0} },
 			--{ 130, DR, { 16, 0, 0} },
-			
+
 			{ 131, SW, { 16, 0, 10} },
 			{ 132, SW, { 16, 0, 10} },
 		}
 	}
-	
+
 }
 
 EMV.Patterns = { -- 0 = blank
@@ -894,7 +894,7 @@ EMV.Patterns = { -- 0 = blank
 	["pushbar_leds"] = {
 		["flash"] = { 1, 0, 1, 0, 0, 0, 0, 0 },
 		["code2"] = { 4, 4, 4, 0, 5, 5, 5, 0, 1, 1, 1, 0 },
-		["code3"] = { 
+		["code3"] = {
 			2, 0, 2, 0, 2, 0, 3, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 2, 0, 3, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 2, 0, 3, 0, 3, 0, 3, 0,
@@ -905,7 +905,7 @@ EMV.Patterns = { -- 0 = blank
 	},
 	["front_viper"] = {
 		["flash"] = { 1, 1, 0, 0 },
-		["code2"] = { 
+		["code2"] = {
 			2, 0, 2, 0, 2, 0,
 			3, 0, 3, 0, 3, 0
 		},
@@ -926,21 +926,21 @@ EMV.Patterns = { -- 0 = blank
 			3, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 2, 0,
 			3, 0, 3, 0, 3, 0,
-			
+
 			4, 0, 4, 0, 4, 0,
 			5, 0, 5, 0, 5, 0,
 			4, 0, 4, 0, 4, 0,
 			5, 0, 5, 0, 5, 0,
 			4, 0, 4, 0, 4, 0,
 			5, 0, 5, 0, 5, 0,
-			
+
 			6, 0, 6, 0, 6, 0,
 			7, 0, 7, 0, 7, 0,
 			6, 0, 6, 0, 6, 0,
 			7, 0, 7, 0, 7, 0,
 			6, 0, 6, 0, 6, 0,
 			7, 0, 7, 0, 7, 0,
-			
+
 			1, 0, 1, 0, 1, 0,
 			0, 0, 0, 0, 0, 0,
 			1, 0, 1, 0, 1, 0,
@@ -965,14 +965,14 @@ EMV.Patterns = { -- 0 = blank
 			3, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 2, 0,
 			3, 0, 3, 0, 3, 0,
-			
+
 			4, 0, 4, 0, 4, 0,
 			5, 0, 5, 0, 5, 0,
 			4, 0, 4, 0, 4, 0,
 			5, 0, 5, 0, 5, 0,
 			4, 0, 4, 0, 4, 0,
 			5, 0, 5, 0, 5, 0,
-			
+
 			6, 0, 6, 0, 6, 0,
 			7, 0, 7, 0, 7, 0,
 			6, 0, 6, 0, 6, 0,
@@ -985,14 +985,14 @@ EMV.Patterns = { -- 0 = blank
 		["flash"] = { 1, 1, 0, 0 },
 		["code1"] = { 2, 2, 2, 0, 3, 3, 3, 0 },
 		["code2"] = { 2, 2, 0, 3, 3, 0 },
-		["code3"] = { 
+		["code3"] = {
 			2, 0, 2, 0, 2, 0,
 			3, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 2, 0,
 			3, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 2, 0,
 			3, 0, 3, 0, 3, 0,
-			
+
 			4, 0, 4, 0, 4, 0,
 			5, 0, 5, 0, 5, 0,
 			4, 0, 4, 0, 4, 0,
@@ -1028,14 +1028,14 @@ EMV.Patterns = { -- 0 = blank
 	["lightbar_halogen_takedowns"] ={
 		["code3"] = { 1 }
 	},
-	
+
 	-- WHELEN FREEDOM --
 	["lightbar_freedom_rb"] = {
 		["all"] = { 1 }
 	},
 	["lightbar_freedom_rb_outer"] = {
-		["code1"] = { 
-			2, 0, 2, 0, 2, 
+		["code1"] = {
+			2, 0, 2, 0, 2,
 			0, 0, 0, 0, 0,
 			3, 0, 3, 0, 3,
 			0, 0, 0, 0, 0,
@@ -1065,8 +1065,8 @@ EMV.Patterns = { -- 0 = blank
 		["code3"] = { 2 }
 	},
 	["lightbar_freedom_b_outer"] = {
-		["code1"] = { 
-			2, 0, 2, 0, 2, 
+		["code1"] = {
+			2, 0, 2, 0, 2,
 			0, 0, 0, 0, 0,
 			3, 0, 3, 0, 3,
 			0, 0, 0, 0, 0,
@@ -1095,8 +1095,8 @@ EMV.Patterns = { -- 0 = blank
 		["code1"] = { 1 },
 		["code3"] = { 2 }
 	},
-	
-	
+
+
 	-- WHELEN LIBERTY --
 	["lightbar_liberty"] = {
 		["all"] = { 1 },
@@ -1104,7 +1104,7 @@ EMV.Patterns = { -- 0 = blank
 		["code3"] = { 4, 4, 0, 5, 5, 0 }
 	},
 	["lightbar_liberty_corner"] = {
-		["code1"] = { 
+		["code1"] = {
 			2, 1, 2, 1, 2,
 			1, 1, 1, 1, 1,
 			3, 1, 3, 1, 3,
@@ -1141,7 +1141,7 @@ EMV.Patterns = { -- 0 = blank
 		["all"] = { 1 },
 		["alt"] = { 2, 2, 3, 3 }
 	},
-	
+
 	["lightbar_vector_r"] = {
 		["all"] = { 1 },
 		["code1"] = { 2 },
@@ -1158,9 +1158,9 @@ EMV.Patterns = { -- 0 = blank
 		["code2"] = { 1, 1, 1, 0, 2, 2, 2 },
 		["code3"] = { 1, 0, 1, 0, 1, 2, 0, 2, 0, 2, 0 },
 	},
-	
+
 	-- TRAFFIC --
-	
+
 	["traffic"] = {
 		["right"] = {
 			1, 1,
@@ -1212,14 +1212,14 @@ EMV.Patterns = { -- 0 = blank
 			15, 0, 15, 0,
 			14, 0, 14, 0,
 			15, 0, 15, 0,
-			
+
 			16, 0, 16, 0,
 			17, 0, 17, 0,
 			16, 0, 16, 0,
 			17, 0, 17, 0,
 			16, 0, 16, 0,
 			17, 0, 17, 0,
-			
+
 			18, 0, 18, 0,
 			19, 0, 19, 0,
 			18, 0, 18, 0,
@@ -1379,7 +1379,7 @@ EMV.Sequences = {
 					["0"] = {
 						["traffic"] = "off"
 					}
-				}	
+				}
 			},
 			Disconnect = {
 				1, 2, 3, 4, 10, 11, 12, 13
@@ -1466,7 +1466,7 @@ EMV.Sequences = {
 					["0"] = {
 						["traffic"] = "off"
 					}
-				}	
+				}
 			},
 			Disconnect = { 6, 7, 1, 2, 3, 4, 10, 11, 12, 13 }
 		},
@@ -1527,7 +1527,7 @@ EMV.Sequences = {
 		{
 			Name = "LAMP",
 			Components = {
-				
+
 			},
 			BG_Components = {
 				["spotlights"] = {
@@ -1579,5 +1579,6 @@ EMV.Lamps = {
 	}
 }
 
+EMV.Configuration = true
 Photon.EMVLibrary[name] = EMV
 if EMVU then EMVU:OverwriteIndex( name, EMV ) end

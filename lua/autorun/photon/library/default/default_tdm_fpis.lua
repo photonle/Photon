@@ -398,7 +398,7 @@ EMV.Auto = {
 		Scale = .92,
 		Pos = Vector( 0, -8.9, 77.8 ),
 		Ang = Angle( 1, 90, 0),
-	},	
+	},
 	[2] = {
 		ID = "Federal Signal Legend",
 		Scale = .99,
@@ -2127,6 +2127,7 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 
 }
 
+EMV.Configuration = "fpis13"
 Photon.EMVLibrary[name] = EMV
 if EMVU then EMVU:OverwriteIndex( name, EMV ) end
 -- if PI then Photon:OverwriteIndex( name, PI ) end
