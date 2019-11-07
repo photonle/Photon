@@ -252,50 +252,85 @@ local function safeTableEmpty( tab )
 	end
 end
 
-function EMVU:OverwriteIndex( name, data )
-	if data then
-		EMVU.LightMeta[name] = data.Meta or {}
-		if CLIENT then safeTableEmpty( EMVU.Positions[ name ] ); EMVU.Positions[name] = data.Positions or {} end
-		EMVU.Patterns[name] = data.Patterns or {}
-		if istable( data.Sequences ) then EMVU.LoadModeData( name, data.Sequences ) end
-		EMVU.Sections[name] = data.Sections or {}
-		if istable( data.Lamps ) then EMVU.Lamps[ name ] = data.Lamps end
-		if istable( data.Props ) then
-			EMVU.Props[ name ] = data.Props
-			for _,prop in pairs( data.Props ) do
-				util.PrecacheModel( prop.Model )
-			end
-		end
-		if istable( data.Presets ) then EMVU.PresetIndex[ name ] = data.Presets else EMVU.LoadPresetDefault( name, data ) end
-		if istable( data.Selections ) then EMVU.Selections [ name ] = data.Selections end
-		if istable( data.Liveries ) then EMVU.Liveries[ name ] = data.Liveries end
-		if istable( data.SubMaterials ) then EMVU.SubMaterials[ name ] = data.SubMaterials end
-		if istable( data.AutoInsert ) then EMVU.AutoInsert[ name ] = data.AutoInsert end
-		if istable( data.Auto ) then
-			EMVU.AutoIndex[ name ] = data.Auto
-			EMVU:CalculateAuto( name, data.Auto, data.AutoInsert )
-		end
-		if data.Configuration then
-			if isstring(data.Configuration) then
-				self.Configurations.Supported[name] = data.Configuration
-			elseif isbool(data.Configuration) then
-				local words = {}
-				for word in name:gmatch("(%w+)") do
-					if tonumber(word) ~= nil then
-						table.insert(words, word:sub(-2))
-					else
-						table.insert(words, word:sub(0, 1):lower())
-					end
-				end
-				self.Configurations.Supported[name] = table.concat(words, "")
-			end
-		end
-	else
+function EMVU:OverwriteIndex(name, data)
+	if not data then
 		print("[Photon] Data must be table with valid Meta, Positions, Patterns and Sequences. Overwrite failed.")
+		return
 	end
-	-- if istable( EMVU.Positions[name] ) then
-	-- 	print( tostring( name ) .. " total light positions: " .. tostring( #EMVU.Positions[name] ) )
-	-- end
+
+	EMVU.LightMeta[name] = data.Meta or {}
+	if CLIENT then
+		safeTableEmpty(EMVU.Positions[name])
+		EMVU.Positions[name] = data.Positions or {}
+	end
+
+	EMVU.Patterns[name] = data.Patterns or {}
+	if istable(data.Sequences) then
+		EMVU.LoadModeData(name, data.Sequences)
+	end
+
+	EMVU.Sections[name] = data.Sections or {}
+
+	if istable(data.Lamps) then
+		EMVU.Lamps[name] = data.Lamps
+	end
+
+	if istable(data.Props) then
+		EMVU.Props[name] = data.Props
+		for _, prop in pairs(data.Props) do
+			util.PrecacheModel(prop.Model)
+		end
+	end
+
+	if istable(data.Presets) then
+		EMVU.PresetIndex[name] = data.Presets
+	else
+		EMVU.LoadPresetDefault(name, data)
+	end
+
+	if istable(data.Selections) then
+		EMVU.Selections[name] = data.Selections
+	end
+
+	if istable(data.Liveries) then
+		EMVU.Liveries[name] = data.Liveries
+	end
+
+	if istable(data.SubMaterials) then
+		EMVU.SubMaterials[name] = data.SubMaterials
+	end
+
+	if istable(data.AutoInsert) then
+		EMVU.AutoInsert[name] = data.AutoInsert
+	end
+
+	if istable(data.Auto) then
+		EMVU.AutoIndex[name] = data.Auto
+		EMVU:CalculateAuto(name, data.Auto, data.AutoInsert)
+	end
+
+	if data.Configuration then
+		self:AddSupportedConfiguration(name, data.Configuration)
+	end
+end
+
+--- Mark a vehicle as supporting configs.
+-- @string name Name of the vehicle to add.
+-- @tparam string|bool Either the name of the config, or true to automatically generate a name.
+function EMVU:AddSupportedConfiguration(name, config)
+	if isstring(config) then
+		self.Configurations.Supported[name] = config
+	elseif isbool(config) then
+		local words = {}
+		for word in name:gmatch("(%w+)") do
+			if tonumber(word) ~= nil then
+				table.insert(words, word:sub(-2))
+			else
+				table.insert(words, word:sub(0, 1):lower())
+			end
+		end
+		self.Configurations.Supported[name] = table.concat(words, "")
+	end
 end
 
 function EMVU.LoadPresetDefault( name, data )
