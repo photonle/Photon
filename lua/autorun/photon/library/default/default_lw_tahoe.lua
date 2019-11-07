@@ -314,5 +314,6 @@ EMV.Sequences = {
 	}
 }
 
+EMV.Configuration = "lw_tahoe"
 
 Photon.EMVLibrary[name] = EMV

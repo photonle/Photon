@@ -109,17 +109,17 @@ EMV.Positions = {
 EMV.Sections = {
 	["grille"] = {
 		{
-			{ 5, R }, { 6, B }, { 7, R }, { 8, B }, 
+			{ 5, R }, { 6, B }, { 7, R }, { 8, B },
 		},
 		{ { 6, B } },
 		{ { 8, B } },
 		{ { 7, R } },
 		{ { 5, R } },
 		{
-			{ 5, R }, { 6, B }, 
+			{ 5, R }, { 6, B },
 		},
 		{
-			{ 7, R }, { 8, B }, 
+			{ 7, R }, { 8, B },
 		},
 	},
 	["dash"] = {
@@ -209,4 +209,5 @@ EMV.Sequences = {
 	}
 }
 
+EMV.Configuration = true
 Photon.EMVLibrary[name] = EMV
