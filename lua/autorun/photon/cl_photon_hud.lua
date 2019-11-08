@@ -519,6 +519,8 @@ function PhotonHUD:ResetLayout( primary, auxiliary, sirens, illum, funcs )
 			local siren = sirenTable[i]
 			PhotonHUD.Panel:RunJavascript( "photonUI.addButton('siren', '" .. siren.Icon .. "', '" .. siren.Name .. "', " .. i .. ", " .. siren.State ..");" )
 		end
+	else
+		PhotonHUD.Panel:RunJavascript( "photonUI.updateSirenModel('', '');" )
 	end
 	if istable( illum ) then
 		local illumTable = illum.LightTable
