@@ -18,39 +18,39 @@ function EMVU:MakeEMV( ent, emv )
 	-- whether or not the car truly uses emergency lights
 	function ent:ELS_Enabled( val )
 		if not IsValid( self ) then return end
-		if (val~=nil) then self:SetDTBool(CAR_USE_EL, val) end
-		return self:GetDTBool(CAR_USE_EL)
+		if (val~=nil) then self:SetNW2Bool("PhotonLE.CAR_USE_EL", val) end
+		return self:GetNW2Bool("PhotonLE.CAR_USE_EL")
 
 	end
 
 	-- Lights on/off
 	function ent:ELS_Lights( val )
 		if not IsValid( self ) then return end
-		if (val~=nil) then self:SetDTBool(EMV_LIGHTS_ON, val) end
-		return self:GetDTBool(EMV_LIGHTS_ON)
+		if (val~=nil) then self:SetNW2Bool("PhotonLE.EMV_LIGHTS_ON", val) end
+		return self:GetNW2Bool("PhotonLE.EMV_LIGHTS_ON")
 
 	end
 
 	-- Light pattern/option
 	function ent:ELS_LightOption( val )
 		if not IsValid( self ) then return end
-		if (val~=nil) then self:SetDTInt(EMV_LIGHT_OPTION, val) end
-		return self:GetDTInt(EMV_LIGHT_OPTION)
+		if (val~=nil) then self:SetNW2Int("PhotonLE.EMV_LIGHT_OPTION", val) end
+		return self:GetNW2Int("PhotonLE.EMV_LIGHT_OPTION")
 
 	end
 
 	-- Siren on/off
 	function ent:ELS_Siren( val )
 		if not IsValid( self ) then return end
-		if (val~=nil) then self:SetDTBool(EMV_SIREN_ON, val) end
-		return self:GetDTBool(EMV_SIREN_ON)
+		if (val~=nil) then self:SetNW2Bool("PhotonLE.EMV_SIREN_ON", val) end
+		return self:GetNW2Bool("PhotonLE.EMV_SIREN_ON")
 	end
 
 	-- Siren tone
 	function ent:ELS_SirenOption( val )
 		if not IsValid( self ) then return end
-		if (val~=nil) then self:SetDTInt(EMV_SIREN_OPTION, val) end
-		return self:GetDTInt(EMV_SIREN_OPTION)
+		if (val~=nil) then self:SetNW2Int("PhotonLE.EMV_SIREN_OPTION", val) end
+		return self:GetNW2Int("PhotonLE.EMV_SIREN_OPTION")
 	end
 
 	-- Siren set
@@ -58,17 +58,17 @@ function EMVU:MakeEMV( ent, emv )
 		if not IsValid( self ) then return end
 		if (val~=nil) then
 			self:ELS_SirenOption( 1 )
-			self:SetDTInt(EMV_SIREN_SET, val)
+			self:SetNW2Int("PhotonLE.EMV_SIREN_SET", val)
 		end
-		return self:GetDTInt(EMV_SIREN_SET)
+		return self:GetNW2Int("PhotonLE.EMV_SIREN_SET")
 	end
 
 	function ent:ELS_AuxSirenSet( val )
 		if not IsValid( self ) then return end
 		if (val~=nil) then
-			self:SetDTInt(EMV_SIREN_SECONDARY, val)
+			self:SetNW2Int("PhotonLE.EMV_SIREN_SECONDARY", val)
 		end
-		return self:GetDTInt(EMV_SIREN_SECONDARY)
+		return self:GetNW2Int("PhotonLE.EMV_SIREN_SECONDARY")
 	end
 
 	function ent:ELS_HasAuxSiren()
@@ -78,29 +78,29 @@ function EMVU:MakeEMV( ent, emv )
 	-- Traffic on/off
 	function ent:ELS_Traffic( val )
 		if not IsValid( self ) then return end
-		if (val~=nil) then self:SetDTBool( EMV_TRF_ON, val ) end
-		return self:GetDTBool( EMV_TRF_ON )
+		if (val~=nil) then self:SetNW2Bool( "PhotonLE.EMV_TRF_ON", val ) end
+		return self:GetNW2Bool( "PhotonLE.EMV_TRF_ON" )
 	end
 
 	-- Traffic direction
 	function ent:ELS_TrafficOption( val )
 		if not IsValid( self ) then return end
-		if (val~=nil) then self:SetDTInt (EMV_TRF_OPTION, val ) end
-		return self:GetDTInt( EMV_TRF_OPTION )
+		if (val~=nil) then self:SetNW2Int ("PhotonLE.EMV_TRF_OPTION", val ) end
+		return self:GetNW2Int( "PhotonLE.EMV_TRF_OPTION" )
 	end
 
 	-- Takedowns/alley lights on/off
 	function ent:ELS_Illuminate( val )
 		if not IsValid( self ) then return end
-		if (val~=nil) then self:SetDTBool( EMV_ILLUM_ON, val ) end
-		return self:GetDTBool( EMV_ILLUM_ON )
+		if (val~=nil) then self:SetNW2Bool( "PhotonLE.EMV_ILLUM_ON", val ) end
+		return self:GetNW2Bool( "PhotonLE.EMV_ILLUM_ON" )
 	end
 
 	-- Takedowns/alley lights option
 	function ent:ELS_IlluminateOption( val )
 		if not IsValid( self ) then return end
-		if (val~=nil) then self:SetDTInt( EMV_ILLUM_OPTION, val ) end
-		return self:GetDTInt( EMV_ILLUM_OPTION )
+		if (val~=nil) then self:SetNW2Int( "PhotonLE.EMV_ILLUM_OPTION", val ) end
+		return self:GetNW2Int( "PhotonLE.EMV_ILLUM_OPTION" )
 	end
 
 	function ent:ELS_PresetOption( val )
@@ -108,13 +108,13 @@ function EMVU:MakeEMV( ent, emv )
 		if not EMVU.PresetIndex[ self.Name ] then print( "[Photon] No presets found for " .. tostring( self.Name ) .. ". Please check for errors above." ) return end
 		if (val~=nil) then
 			val = math.Clamp( val, 0, #EMVU.PresetIndex[ self.Name ] )
-			self:SetDTInt( EMV_PRE_OPTION, val )
+			self:SetNW2Int( "PhotonLE.EMV_PRE_OPTION", val )
 			local bgData = EMVU.Helper:BodygroupPreset( self, val )
 			for _,bg in pairs( bgData ) do
 				self:SetBodygroup( bg[1], bg[2] )
 			end
 		end
-		return self:GetDTInt( EMV_PRE_OPTION )
+		return self:GetNW2Int( "PhotonLE.EMV_PRE_OPTION" )
 	end
 
 	function ent:ELS_IllumOn()
@@ -377,10 +377,9 @@ function EMVU:MakeEMV( ent, emv )
 	function ent:ELS_ManualSiren( state )
 		if not IsValid( self ) then return end
 		if self:ELS_NoSiren() then return end
-
 		if state then
 			--if self:ELS_SirenOption() == 1 and self:ELS_Siren() then return end
-			self:SetDTBool( CAR_MANUAL, true )
+			self:SetNW2Bool( "PhotonLE.CAR_MANUAL", true )
 			if ( not self:Photon_HasManualWind() ) or self:ELS_Siren() then
 				local manSiren = EMVU.GetSirenTable()[self:ELS_SirenSet()].Set[1].Sound
 				if EMVU.GetSirenTable()[self:ELS_SirenSet()].Manual then manSiren = EMVU.GetSirenTable()[self:ELS_SirenSet()].Manual end
@@ -420,7 +419,7 @@ function EMVU:MakeEMV( ent, emv )
 					end
 				end
 			end
-			self:SetDTBool( CAR_MANUAL, false )
+			self:SetNW2Bool( "PhotonLE.CAR_MANUAL", false )
  		end
 	end
 
@@ -428,7 +427,7 @@ function EMVU:MakeEMV( ent, emv )
 		if not IsValid( self ) then return end
 		if self:ELS_NoSiren() then return end
 		if state then
-			self:SetDTBool( EMV_HORN, true )
+			self:SetNW2Bool( "PhotonLE.EMV_HORN", true )
 			local horn = EMVU.Horns[1]
 			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Horn then horn = EMVU.GetSirenTable()[self:ELS_SirenSet()].Horn end
 			self.ELS.Horn = CreateSound( self, horn )
@@ -442,7 +441,7 @@ function EMVU:MakeEMV( ent, emv )
 			self.ELS.Horn:PlayEx( 0, 100 )
 			self.ELS.Horn:ChangeVolume( 1, 0 )
 		else
-			self:SetDTBool( EMV_HORN, false )
+			self:SetNW2Bool( "PhotonLE.EMV_HORN", false )
 			if self.ELS.Horn then self.ELS.Horn:Stop() end
 		end
 	end
@@ -521,9 +520,9 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	function ent:Photon_SetLiveryId( val )
-		local curdata = string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )
+		local curdata = string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )
 		curdata[4] = val
-		self:SetDTString( EMV_INDEX, table.concat( curdata, "ö" ))
+		self:SetNW2String( "PhotonLE.EMV_INDEX", table.concat( curdata, "ö" ))
 	end
 
 	function ent:Photon_SetUnitNumber( val )
@@ -531,9 +530,9 @@ function EMVU:MakeEMV( ent, emv )
 		if string.len( val ) > 3 then val = string.sub( val, 1, 3 ) end
 		if not string.match( val, "%w" ) then val = "" end
 		if PHOTON_BANNED_UNIT_IDS[ string.lower( val ) ] then val = "" end
-		local curdata = string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )
+		local curdata = string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )
 		curdata[3] = val
-		self:SetDTString( EMV_INDEX, table.concat( curdata, "ö" ) )
+		self:SetNW2String( "PhotonLE.EMV_INDEX", table.concat( curdata, "ö" ) )
 		return val
 	end
 
@@ -576,7 +575,7 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	function ent:Photon_SetUtilString( str )
-		self:SetDTString( EMV_INDEX, str )
+		self:SetNW2String( "PhotonLE.EMV_INDEX", str )
 	end
 
 	function ent:Photon_HasManualWind()
@@ -603,7 +602,7 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	ent.IsEMV = true
-	ent:SetDTString( EMV_INDEX, "ö" .. tostring( ent.Name ) .. "ööö." ) -- Al
+	ent:SetNW2String( "PhotonLE.EMV_INDEX", "ö" .. tostring( ent.Name ) .. "ööö." ) -- Al
 
 	------ APPLY EMV PARAMETERS ------
 
@@ -646,7 +645,7 @@ function EMVU:MakeEMV( ent, emv )
 	if istable( emv.Auto ) and emv.Auto[1] and istable( emv.Presets ) then
 		ent:ELS_PresetOption( 1 )
 	end
-
+	
 	ent:ELS_SirenOption( 1 )
 	ent:ELS_LightOption( 1 )
 	ent:ELS_IlluminateOption ( 1 )
@@ -654,6 +653,7 @@ function EMVU:MakeEMV( ent, emv )
 	ent:ELS_SirenOff()
 	ent:ELS_LightsOff()
 	ent:ELS_Enabled( true )
+	ent:ELS_ManualSiren( false )
 	ent:Photon_ApplySubMaterials()
 	ent:Photon_ResetSelections()
 end

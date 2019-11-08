@@ -224,7 +224,7 @@ concommand.Add( "photon_stick", function( ply, cmd, args )
 	if not IsValid( ply ) or not ply:IsAdmin() then return end
 	local car = ply:GetVehicle()
 	if not IsValid( car ) or not car:Photon() then return end
-	car:StayOn( !car:StayOn() )
+	car:SetPhotonLEStayOn(!car:GetPhotonLEStayOn())
 end )
 
 function Photon.Net:NotifyLiveryUpdate( id, unit, ent )

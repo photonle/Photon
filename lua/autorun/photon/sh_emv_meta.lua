@@ -9,21 +9,21 @@ local istable = istable
 function ent:IsEMV()
 	if not IsValid( self ) then return false end
 	if not EMV_INDEX then return false end
-	local str = self:GetDTString( EMV_INDEX )
+	local str = self:GetNW2String( "PhotonLE.EMV_INDEX" )
 	if string.StartWith( tostring(str), "ö" ) then return true end
 	return false
 end
 
 function ent:Photon()
 	-- return self:GetNWString( "PhotonVehicle", false )
-	return ( IsValid( self ) and self:IsVehicle() and self:GetDTBool( CAR_HAS_PHOTON ) ) or false
+	return ( IsValid( self ) and self:IsVehicle() and self:GetNW2Bool( "PhotonLE.CAR_HAS_PHOTON" ) ) or false
 end
 
 function ent:HasPhotonELS()
 	if not IsValid( self ) then return false end
 	if not EMV_INDEX then return false end
 	if not self:IsEMV() then return false end
-	if not self:GetDTBool( CAR_USE_EL ) then return false end
+	if not self:GetNW2Bool( "PhotonLE.CAR_USE_EL" ) then return false end
 	return true
 end
 
@@ -31,7 +31,7 @@ function ent:EMVName()
 	if not IsValid( self ) then return "" end
 	if not EMV_INDEX then return "" end
 	if self:IsEMV() then
-		return string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )[2]
+		return string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )[2]
 	end
 	return ""
 end
@@ -47,11 +47,11 @@ function ent:Photon_AdjustedSpeed()
 end
 
 function ent:Photon_GetUnitNumber()
-	return string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )[3] or ""
+	return string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )[3] or ""
 end
 
 function ent:Photon_GetLiveryID()
-	return string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )[4] or ""
+	return string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )[4] or ""
 end
 
 function ent:Photon_GetAutoSkinIndex()
@@ -77,12 +77,12 @@ function ent:SetSkin( index )
 end
 
 function ent:Photon_SelectionString()
-	return string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )[5]
+	return string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )[5]
 end
 
 function ent:Photon_SelectionTable()
-	-- print(tostring(self:GetDTString( EMV_INDEX )))
-	local selectionString =  string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )[5]
+	-- print(tostring(self:GetNW2String( EMV_INDEX )))
+	local selectionString =  string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )[5]
 	-- print(tostring(selectionString))
 	return string.Explode( ".", selectionString, false )
 end
@@ -189,7 +189,7 @@ function ent:Photon_ImportSelectionData( inputData )
 end
 
 function ent:Photon_GetUtilStringTable()
-	return string.Explode( "ö", self:GetDTString( EMV_INDEX ), false )
+	return string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )
 end
 
 function ent:Photon_SelectionEnabled()
