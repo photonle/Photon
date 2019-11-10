@@ -790,7 +790,7 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 				for light, lightData in ipairs(modeData) do
 					local color = lightData[2]
 					if color:StartWith("_") then
-						local idx = color:sub(2)
+						local idx = tonumber(color:sub(2))
 						lightData[2] = autoData["Color" .. idx] or
 							(component.DefaultColors and component.DefaultColors[light]) or
 							"WHITE"
