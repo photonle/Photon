@@ -555,8 +555,8 @@ local function PhotonHtml()
 	if not PhotonHUD.ShouldDraw then return end
 	if drawTexture != false then
 		local opacity = 255 * HUD_OPACITY:GetFloat()
-		setDrawColor( 255, 255, 255, opacity )
-		setMaterial( drawTexture )
+		setDrawColor(255, 255, 255, opacity)
+		setMaterial(drawTexture)
 
 		local wOffset = CV_WIDTH:GetInt()
 		if wOffset < 0 then wOffset = 0 end
