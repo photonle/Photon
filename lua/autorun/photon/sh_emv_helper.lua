@@ -568,3 +568,16 @@ function EMVU.Helper.GetBonePositionFromRE( car, lbEntity, posInput )
 	local boneWorldPos, boneWorldAng = lbEntity:GetBonePosition( boneIndex )
 	return boneWorldPos
 end
+
+--- Fetch the sub props used in multi-prop vehicles.
+-- @ent car Vehicle to fetch sub props for.
+-- @treturn table Array of subprops.
+function EMVU.Helper.GetSubProps(car)
+	local out = {}
+	for _, prop in ipairs(car:GetChildren()) do
+		if prop:GetClass() == "prop_dynamic_ornament" then
+			table.insert(out, prop)
+		end
+	end
+	return out
+end

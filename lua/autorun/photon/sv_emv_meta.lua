@@ -485,8 +485,13 @@ function EMVU:MakeEMV( ent, emv )
 			end
 		end
 		if submaterialIndex == false then return end
-		if index then self:SetSkin( index ) else self:SetSkin( 0 ) end
-		self:SetSubMaterial( submaterialIndex, tostring( mat ) )
+		if index then self:SetSkin(index) else self:SetSkin(0) end
+
+		mat = tostring(mat)
+		self:SetSubMaterial(submaterialIndex, mat)
+		for _, prop in ipairs(EMVU.Helper.GetSubProps(self)) do
+			prop:SetSubMaterial(submaterialIndex, mat)
+		end
 	end
 
 	function ent:ApplyPhotonSkin( skin, index, mat )
@@ -645,7 +650,7 @@ function EMVU:MakeEMV( ent, emv )
 	if istable( emv.Auto ) and emv.Auto[1] and istable( emv.Presets ) then
 		ent:ELS_PresetOption( 1 )
 	end
-	
+
 	ent:ELS_SirenOption( 1 )
 	ent:ELS_LightOption( 1 )
 	ent:ELS_IlluminateOption ( 1 )

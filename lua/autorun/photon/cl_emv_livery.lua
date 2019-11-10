@@ -66,7 +66,7 @@ end
 Photon.AutoLivery.ApplyFallback = function( ent, id )
 	if tostring( ent.VehicleName ) != "nil" then
 		local fallbackMaterial = Photon.AutoLivery.FindFallback( ent.VehicleName, id )
-		if fallbackMaterial != "" then 
+		if fallbackMaterial != "" then
 			local applyIndex = ent:Photon_GetAutoSkinIndex()
 			if applyIndex then
 				ent:SetSubMaterial( applyIndex, fallbackMaterial )
@@ -99,6 +99,9 @@ Photon.AutoLivery.ApplyTexture = function( mat, ent, car, val, id )
 		UnitID = veh:Photon_GetUnitNumber(),
 		LiveryID = veh:Photon_GetLiveryID()
 	}
+	for _, prop in ipairs(EMVU.Helper.GetSubProps(veh)) do
+		prop:SetSubMaterial(applyIndex, "!" .. tostring(newLivery:GetName()))
+	end
 end
 
 Photon.AutoLivery.LoadLivery = function( car, id, val )
