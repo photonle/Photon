@@ -14,7 +14,7 @@ function Photon:RunningScan()
 
 			v.LastSpeed = v:Photon_GetSpeed()
 
-		elseif IsValid( v) and not v:GetDriver():IsValid() and not v:GetDriver():IsPlayer() and not v:StayOn() then
+		elseif IsValid( v) and not v:GetDriver():IsValid() and not v:GetDriver():IsPlayer() and not v:GetPhotonLEStayOn() then
 			v:CAR_Running( false )
 			v:CAR_Braking( false )
 			v:CAR_Reversing( false )

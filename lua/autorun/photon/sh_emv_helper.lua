@@ -198,7 +198,9 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 	-- end
 	EMVU.Sequences = EMVU.Sequences or {}
 	if not name or not option or not vehicle then return {} end
-	if not istable( EMVU.Sequences[ name ] ) or not istable( EMVU.Sequences[ name ].Illumination ) then return {} end
+	if not istable(EMVU.Sequences[name]) then return {} end
+	if not istable(EMVU.Sequences[name].Illumination) then return {} end
+	if not istable(EMVU.Sequences[name].Illumination[option]) then return {} end
 	local resultTable = {}
 
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Illumination"][option]["BG_Components"] ) then
@@ -565,4 +567,17 @@ function EMVU.Helper.GetBonePositionFromRE( car, lbEntity, posInput )
 	local boneIndex = boneData.Bone
 	local boneWorldPos, boneWorldAng = lbEntity:GetBonePosition( boneIndex )
 	return boneWorldPos
+end
+
+--- Fetch the sub props used in multi-prop vehicles.
+-- @ent car Vehicle to fetch sub props for.
+-- @treturn table Array of subprops.
+function EMVU.Helper.GetSubProps(car)
+	local out = {}
+	for _, prop in ipairs(car:GetChildren()) do
+		if prop:GetClass() == "prop_dynamic_ornament" then
+			table.insert(out, prop)
+		end
+	end
+	return out
 end

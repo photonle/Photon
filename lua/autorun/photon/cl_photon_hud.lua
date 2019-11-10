@@ -519,6 +519,8 @@ function PhotonHUD:ResetLayout( primary, auxiliary, sirens, illum, funcs )
 			local siren = sirenTable[i]
 			PhotonHUD.Panel:RunJavascript( "photonUI.addButton('siren', '" .. siren.Icon .. "', '" .. siren.Name .. "', " .. i .. ", " .. siren.State ..");" )
 		end
+	else
+		PhotonHUD.Panel:RunJavascript( "photonUI.updateSirenModel('', '');" )
 	end
 	if istable( illum ) then
 		local illumTable = illum.LightTable
@@ -543,17 +545,26 @@ function PhotonHUD:ResetLayout( primary, auxiliary, sirens, illum, funcs )
 	end
 end
 
-
+local CV_HEIGHT = CreateClientConVar("photon_hud_offset_y", -1, true, false, "The height offset of the photon HUD.")
+local CV_WIDTH = CreateClientConVar("photon_hud_offset_x", -1, true, false, "The side offset of the photon HUD.")
 
 local function PhotonHtml()
 	if not PhotonHUD.Panel then return end
 	PhotonHUD:AutoUpdate()
+
 	if not PhotonHUD.ShouldDraw then return end
 	if drawTexture != false then
 		local opacity = 255 * HUD_OPACITY:GetFloat()
-		setDrawColor( 255, 255, 255, opacity )
-		setMaterial( drawTexture )
-		drawTexturedRect( scrW - 512, scrH - 512, 512, 512 )
+		setDrawColor(255, 255, 255, opacity)
+		setMaterial(drawTexture)
+
+		local wOffset = CV_WIDTH:GetInt()
+		if wOffset < 0 then wOffset = 0 end
+
+		local hOffset = CV_HEIGHT:GetInt()
+		if hOffset < 0 then hOffset = 0 end
+
+		drawTexturedRect(scrW - 512 - wOffset, scrH - 512 - hOffset, 512, 512)
 	end
 end
 hook.Add( "HUDPaint", "Photon.NewHUDPaint", function()
@@ -712,5 +723,25 @@ Photon.AddCustomHUDIcon("volume-mute", "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABz
 -- end
 
 -- hook.Add( "PostDrawTranslucentRenderables", "photoasndflaskdf", function()
-	//PhotonTestDraw()
+	--PhotonTestDraw()
+-- end)
+
+--- TODO: REMOVE (DEV FUNCTION ONLY) FOR GRAND LAKE TESTING
+-- print("PHOTON UPDATED")
+function photonDebugInfo()
+	print("PHOTON DEBUG INFO FUNCTION ==============")
+	local veh = LocalPlayer():GetVehicle()
+	if not IsValid(veh) then
+		print("> Invalid Vehicle")
+		return
+	end
+	print("> Name: " .. tostring(veh.VehicleName))
+	if not veh:Photon() then print("> Photon(): false") end
+	if not veh:IsEMV() then print("> IsEMV(): false") end
+	timer.Simple(0.5, function()
+		photonDebugInfo()
+	end)
+end
+-- timer.Create("PhotonDebugUpdate", 0.5, 0, function()
+-- 	photonDebugInfo()
 -- end)

@@ -157,7 +157,7 @@ EMV.Patterns = { -- 0 = blank
 			1, 1, 1, 2, 2, 2
 		},
 		["code1"] = {
-			3, 3, 3, 4, 4, 3, 3, 3, 4, 4, 
+			3, 3, 3, 4, 4, 3, 3, 3, 4, 4,
 			5, 5, 5, 6, 6, 5, 5, 5, 6, 6
 		},
 		["priority"] = {
@@ -199,7 +199,7 @@ EMV.Sequences = {
 					["0"] = { -- bodygroup option
 						["lightbar"] = "code1"
 					}
-				}	
+				}
 			},
 			Disconnect = {}
 		},
@@ -386,5 +386,5 @@ EMV.Lamps = {
 		Distance = 500,
 	}
 }
-
+EMV.Configuration = "lw_impala"
 Photon.EMVLibrary[name] = EMV

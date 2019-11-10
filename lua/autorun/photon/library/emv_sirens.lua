@@ -36,6 +36,7 @@ local sirenTable = {
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/federal sig tm/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/federal sig tm/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/federal sig tm/pemv_tmjingle.wav", Icon = "phaser"}, -- edit by pringle
 			{Name = "SCAN", Sound = "emv/sirens/federal sig tm/emv_scan.wav", Icon="phaser"},
 		},
 		Horn = "emv/sirens/federal sig tm/emv_horn.wav",
@@ -222,7 +223,7 @@ local sirenTable = {
 			{Name = "HPYP", Sound = "emv/sirens/d&r/intimidator/emv_phaser.wav", Icon="phaser"},
 			{Name = "HILO", Sound = "emv/sirens/d&r/intimidator/emv_hilo.wav", Icon="hilo"},
 		},
-		Horn = "emv/sirens/canada/emv_bullhorn.wav",
+		Horn = "emv/sirens/d&r/intimidator/emv_bullhorn.wav",
 	},
 	[23] = {
 		Name = "Mastercom B", -- Code 3

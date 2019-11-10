@@ -3,38 +3,38 @@ function Photon:SetupCar( ent, index )
 	// whether car headlights are on or off
 	function ent:CAR_Headlights( val )
 		if not IsValid( self ) then return false end
-		if (val!=nil) then self:SetDTBool( CAR_HEADLIGHTS, val ) end
-		return self:GetDTBool(CAR_HEADLIGHTS)
+		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_HEADLIGHTS", val ) end
+		return self:GetNW2Bool("PhotonLE.CAR_HEADLIGHTS")
 
 	end
 
 	// if car is braking
 	function ent:CAR_Braking( val )
 		if not IsValid( self ) then return false end
-		if (val!=nil) then self:SetDTBool( CAR_BRAKING, val ) end
-		return self:GetDTBool( CAR_BRAKING )
+		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_BRAKING", val ) end
+		return self:GetNW2Bool( "PhotonLE.CAR_BRAKING" )
 
 	end
 
 	// car reversing
 	function ent:CAR_Reversing( val )
 		if not IsValid( self ) then return false end
-		if (val!=nil) then self:SetDTBool( CAR_REVERSING, val ) end
-		return self:GetDTBool( CAR_REVERSING )
+		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_REVERSING", val ) end
+		return self:GetNW2Bool( "PhotonLE.CAR_REVERSING" )
 
 	end
 
 	function ent:CAR_Running( val )
 		if not IsValid( self ) then return false end
-		if (val!=nil) then self:SetDTBool( CAR_RUNNING, val ) end
-		return self:GetDTBool( CAR_RUNNING )
+		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_RUNNING", val ) end
+		return self:GetNW2Bool( "PhotonLE.CAR_RUNNING" )
 
 	end
 
 	function ent:CAR_Signal( val )
 		if not IsValid( self ) then return 0 end
-		if (val!=nil) then self:SetDTInt( CAR_BLINKER, val ) end
-		return self:GetDTInt( CAR_BLINKER )
+		if (val!=nil) then self:SetNW2Int( "PhotonLE.CAR_BLINKER", val ) end
+		return self:GetNW2Int( "PhotonLE.CAR_BLINKER" )
 
 	end
 
@@ -92,9 +92,11 @@ function Photon:SetupCar( ent, index )
 		return false
 	end
 
-	function ent:StayOn( val )
-		if val != nil then self:SetNWBool( "PhotonStayOn", val ) end
-		return self:GetNWBool( "PhotonStayOn", false )
+	function ent:GetPhotonLEStayOn()
+		return self:GetNW2Bool("PhotonLEStayOn", false)
+	end
+	function ent:SetPhotonLEStayOn(val)
+		return self:SetNW2Bool("PhotonLEStayOn", val)
 	end
 
 	function ent:Photon_WheelEnabled()
@@ -110,8 +112,8 @@ function Photon:SetupCar( ent, index )
 
 	function ent:Photon_SetWheelIndex( val )
 		if not IsValid( self ) then return 0 end
-		if (val!=nil) then self:SetDTInt( CAR_WHEEL_OPTION, val ) end
-		return self:GetDTInt( CAR_WHEEL_OPTION )
+		if (val!=nil) then self:SetNW2Int( "PhotonLE.CAR_WHEEL_OPTION", val ) end
+		return self:GetNW2Int( "PhotonLE.CAR_WHEEL_OPTION" )
 	end
 
 	ent:CAR_Headlights( false )
@@ -122,6 +124,6 @@ function Photon:SetupCar( ent, index )
 	if ent:Photon_WheelEnabled() then ent:Photon_SetWheelIndex( 1 ) end
 
 	-- ent:SetNWString( "PhotonVehicle", index )
-	ent:SetDTBool( CAR_HAS_PHOTON, true )
+	ent:SetNW2Bool( "PhotonLE.CAR_HAS_PHOTON", true )
 
 end

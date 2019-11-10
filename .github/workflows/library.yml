@@ -21,9 +21,31 @@ jobs:
         uses: Legion2/download-release-action@v2.1.0
         with:
           repository: photonle/linter-library
-          tag: 'v1.2.0'
+          tag: 'v2.0.0'
       -
         name: Lint
         run: |
-          cd linter-library-1.2.0
+          cd linter-library-2.0.0
           lua sirenlint.lua ../lua/autorun/photon/library/sirens/*
+  components:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v1
+      -
+        name: Install Lua
+        uses: leafo/gh-actions-lua@v3
+        with:
+          luaVersion: "5.2"
+      -
+        name: Install Dependencies
+        uses: Legion2/download-release-action@v2.1.0
+        with:
+          repository: photonle/linter-library
+          tag: 'v2.0.1'
+      -
+        name: Lint
+        run: |
+          cd linter-library-2.0.1
+          lua componentlint.lua ../lua/autorun/photon/library/auto/*
