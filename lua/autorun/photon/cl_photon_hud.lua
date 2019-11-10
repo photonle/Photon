@@ -545,17 +545,26 @@ function PhotonHUD:ResetLayout( primary, auxiliary, sirens, illum, funcs )
 	end
 end
 
-
+local CV_HEIGHT = CreateClientConVar("photon_hud_offset_y", -1, true, false, "The height offset of the photon HUD.")
+local CV_WIDTH = CreateClientConVar("photon_hud_offset_x", -1, true, false, "The side offset of the photon HUD.")
 
 local function PhotonHtml()
 	if not PhotonHUD.Panel then return end
 	PhotonHUD:AutoUpdate()
+
 	if not PhotonHUD.ShouldDraw then return end
 	if drawTexture != false then
 		local opacity = 255 * HUD_OPACITY:GetFloat()
 		setDrawColor( 255, 255, 255, opacity )
 		setMaterial( drawTexture )
-		drawTexturedRect( scrW - 512, scrH - 512, 512, 512 )
+
+		local wOffset = CV_WIDTH:GetInt()
+		if wOffset < 0 then wOffset = 0 end
+
+		local hOffset = CV_HEIGHT:GetInt()
+		if hOffset < 0 then hOffset = 0 end
+
+		drawTexturedRect(scrW - 512 - wOffset, scrH - 512 - hOffset, 512, 512)
 	end
 end
 hook.Add( "HUDPaint", "Photon.NewHUDPaint", function()
