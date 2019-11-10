@@ -9,10 +9,6 @@ on:
     branches:
       - development
       - dev
-  pull_request:
-    branches:
-      - development
-      - dev
 
 jobs:
   build:

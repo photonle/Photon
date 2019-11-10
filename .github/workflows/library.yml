@@ -3,6 +3,12 @@ on:
   push:
     paths-ignore:
       - 'docs/**'
+  pull_request:
+    branches:
+      - development
+      - dev
+    paths-ignore:
+      - 'docs/**'
 
 jobs:
   sirens:
