@@ -457,7 +457,7 @@ local sirenTable = {
 		Name = "Holiday",
 		Category = "Other",
 		Set = {
-			{Name = "XMAS", Sound = "emv/sirens/holiday/wish.wav", Icon="wail"},
+			{Name = "XMAS", Sound = "emv/sirens/holiday/wish.wav", Icon="xmas"},
 		}
 	},
 	-- [48] = {
