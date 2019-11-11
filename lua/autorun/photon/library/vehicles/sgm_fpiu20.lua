@@ -149,4 +149,4 @@ PI.States.Running = {
 
 
 
-Photon.VehicleLibrary["noble_fpiu20"] = PI
+Photon.VehicleLibrary["sgm_fpiu20"] = PI
