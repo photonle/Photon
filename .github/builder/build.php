@@ -4,7 +4,7 @@ include __DIR__ . '/vendor/autoload.php';
 use GmodStore\GMad\{AddonWriter, AddonMeta};
 
 $photon = realpath(__DIR__ . '/../../');
-$pl = strlen($photon);
+$pl = strlen($photon) + 1;
 $folders = ['lua', 'materials', 'models', 'sound'];
 
 $files = [];
