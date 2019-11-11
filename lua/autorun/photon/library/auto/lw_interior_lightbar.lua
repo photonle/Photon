@@ -4,7 +4,6 @@ local name = "LW Interior Lightbar %s"
 
 local R = "RED"
 local B = "BLUE"
-local DR = "D_RED"
 local A = "AMBER"
 
 local TMPL = {}
@@ -273,7 +272,7 @@ end
 
 build("Clear/Red", "_1", R, 0, ALT_NONE)
 build("Blue/Red", B, R, 1, ALT_NONE)
-build("Red", DR, DR, 2, ALT_CAN)
+build("Red", R, R, 2, ALT_CAN)
 build("Amber", A, A, 3, ALT_CAN, true)
 build("Clear", "_1", "_2", 4, ALT_CAN, true)
 build("Blue/Red Alt", B, R, 5, ALT_MUST)
