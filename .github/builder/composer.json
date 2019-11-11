@@ -1,6 +1,6 @@
 {
     "require": {
-        "gmodstore/php-gmad": "1.2.1"
+        "gmodstore/php-gmad": "1.2.2"
 	},
 	"repositories": [
 		{
