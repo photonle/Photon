@@ -18,7 +18,7 @@ jobs:
           coverage: none
       -
         name: Install Dependencies
-        run: composer install
+        run: composer install -d .github/builder
       -
         name: Build
         run: php .github/builder/build.php
