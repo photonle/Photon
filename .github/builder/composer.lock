@@ -1,0 +1,99 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "684f202255b01a5ccd18d49eb9dc6a56",
+    "packages": [
+        {
+            "name": "gmodstore/php-gmad",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JoshPiper/php-gmad.git",
+                "reference": "8bdef8c962e6574078c7acf5139129331cd070ee"
+            },
+            "require": {
+                "mdurrant/php-binary-reader": "~1.0",
+                "php-64bit": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GmodStore\\GMad\\": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Stevens",
+                    "email": "matt@handsomematt.co.uk"
+                }
+            ],
+            "description": "package / unpackage garry's mod gma files",
+            "time": "2019-11-11T18:17:00+00:00"
+        },
+        {
+            "name": "mdurrant/php-binary-reader",
+            "version": "1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mdurrant/php-binary-reader.git",
+                "reference": "9abf18d7b361d0ae1cd80fc6782e59b313586db6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mdurrant/php-binary-reader/zipball/9abf18d7b361d0ae1cd80fc6782e59b313586db6",
+                "reference": "9abf18d7b361d0ae1cd80fc6782e59b313586db6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpBinaryReader\\": [
+                        "src/",
+                        "test/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Durrant",
+                    "email": "mdurrant@gmail.com"
+                }
+            ],
+            "description": "Lightweight binary reader for PHP",
+            "time": "2016-12-08T01:24:19+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
