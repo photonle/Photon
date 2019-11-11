@@ -30,7 +30,7 @@ $meta->setDescription('ze best lighting engine in all ze vurld');
 $meta->setAuthor('The Photon Team.');
 $meta->setVersion(1);
 
-$stream = fopen(__DIR__ . '/photonle.gma', 'wb');
+$stream = fopen(__DIR__ . '/photonle.gma', 'wb+');
 $writer = new AddonWriter($stream);
 $writer->setAddonMeta($meta);
 $writer->setFiles($files);
