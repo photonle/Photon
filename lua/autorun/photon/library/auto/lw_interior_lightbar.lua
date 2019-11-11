@@ -65,25 +65,6 @@ local function simple(min, ...)
 
 	return out
 end
-local function all(color, max, min)
-	if not min then min = 0 end
-
-	local out = {}
-	for i = 1, max do
-		out[i] = {min + i, color}
-	end
-	return out
-end
-
-local function colours(tab, min)
-	if not min then min = 0 end
-
-	local out = {}
-	for i, col in ipairs(tab) do
-		out[id] = {min + i, col}
-	end
-	return out
-end
 
 local function alt(color1, color2, max, min)
 	if not min then min = 0 end
