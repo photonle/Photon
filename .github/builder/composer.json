@@ -1,11 +1,5 @@
 {
     "require": {
-        "gmodstore/php-gmad": "1.3.0"
-	},
-	"repositories": [
-		{
-			"type": "git",
-			"url": "https://github.com/JoshPiper/php-gmad.git"
-		}
-	]
+        "gmodstore/php-gmad": "^1.1"
+    }
 }

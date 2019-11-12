@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c405acce5a3cb3de0f4863df8976686b",
+    "content-hash": "78e99bfc544d51eea119208af8641758",
     "packages": [
         {
             "name": "gmodstore/php-gmad",
-            "version": "1.2.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/JoshPiper/php-gmad.git",
-                "reference": "3735a5cf81e4cef9438b4bd5b95a060b5821dc02"
+                "url": "https://github.com/gmodstore/php-gmad.git",
+                "reference": "1793c533d6de048e349524bc298597d91d26f46d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gmodstore/php-gmad/zipball/1793c533d6de048e349524bc298597d91d26f46d",
+                "reference": "1793c533d6de048e349524bc298597d91d26f46d",
+                "shasum": ""
             },
             "require": {
                 "mdurrant/php-binary-reader": "~1.0",
@@ -27,6 +33,7 @@
                     "GmodStore\\GMad\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -37,7 +44,7 @@
                 }
             ],
             "description": "package / unpackage garry's mod gma files",
-            "time": "2019-11-11T18:51:05+00:00"
+            "time": "2018-04-22T11:37:06+00:00"
         },
         {
             "name": "mdurrant/php-binary-reader",
