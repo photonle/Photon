@@ -12,10 +12,17 @@ local CW = "C_WHITE"
 local PI = {}
 
 PI.StateMaterials = {
-    ["main"] = {
+    ["main-r"] = {
         Index = 22,
         States = {
-            ["running"] = "photon/override/20explorer_brake"
+            ["running-r"] = "photon/override/20explorer_brake"
+        }
+    },
+
+    ["main-l"] = {
+        Index = 23,
+        States = {
+            ["running-l"] = "photon/override/20explorer_brake"
         }
     }
 }
@@ -113,8 +120,8 @@ PI.Positions = {
 	[9] = { Vector( -35.3, -109.47, 48.81 ), Angle( 180, -26.1, 180-5 ), "reverse" },
 	[10] = { Vector( 35.3, -109.47, 48.81 ), Angle( 0, 26.1, 5 ), "reverse" },
 
-	[11] = { Vector( 39.4, -108.37, 54.01 ), Angle( 0, 26.1, 0.5 ), "brake_light" },
-	[12] = { Vector( -39.4, -108.37, 54.01 ), Angle( 180, -26.1, 180-0.5 ), "brake_light" },
+	[11] = { Vector( 39.4, -108.57, 54.01 ), Angle( 0, 26.1, 0.5 ), "brake_light" },
+	[12] = { Vector( -39.4, -108.57, 54.01 ), Angle( 180, -26.1, 180-0.5 ), "brake_light" },
 
 	[13] = { Vector( -5.04, -101.37, 79.25 ), Angle( 0, 0, 0 ), "tail_light" },
 	[14] = { Vector( 5.04, -101.37, 79.25 ), Angle( 0, 0, 0 ), "tail_light" },
@@ -144,7 +151,7 @@ PI.States.Running = {
 	{ 3, CW, .5 }, { 4, CW, .5 }, 
 	{ 16, A, .5 }, { 17, A, .5 },
 	{ 11, DR, .5 }, { 12, DR, .5 },
-	{ "_main", "running" }
+	{ "_main-l", "running-l" }, { "_main-r", "running-r" }
 }
 
 
