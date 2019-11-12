@@ -33,7 +33,11 @@ $meta->setVersion(1);
 $stream = fopen(__DIR__ . '/photonle.gma', 'wb+');
 $writer = new AddonWriter($stream);
 $writer->setAddonMeta($meta);
-$writer->setFiles($files);
+$writer->setFiles(function() use ($files){
+	foreach ($files as $path => $file){
+		yield $path => $file->fread($file->getSize());
+	}
+});
 $writer->write();
 fclose($stream);
 
