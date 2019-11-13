@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c405acce5a3cb3de0f4863df8976686b",
+    "content-hash": "09a7f5bdd0ce26c0dc640c1c4dc1e549",
     "packages": [
         {
             "name": "gmodstore/php-gmad",
-            "version": "1.2.2",
+            "version": "1.1.1-rc",
             "source": {
                 "type": "git",
-                "url": "https://github.com/JoshPiper/php-gmad.git",
-                "reference": "3735a5cf81e4cef9438b4bd5b95a060b5821dc02"
+                "url": "https://github.com/photonle/php-gmad.git",
+                "reference": "42a7e0cf56c4709436d9508a42dde42f2980bffc"
             },
             "require": {
                 "mdurrant/php-binary-reader": "~1.0",
@@ -37,7 +37,7 @@
                 }
             ],
             "description": "package / unpackage garry's mod gma files",
-            "time": "2019-11-11T18:51:05+00:00"
+            "time": "2019-11-12T23:39:22+00:00"
         },
         {
             "name": "mdurrant/php-binary-reader",
@@ -91,7 +91,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "gmodstore/php-gmad": 5
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
