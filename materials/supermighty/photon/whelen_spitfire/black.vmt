@@ -1,0 +1,24 @@
+"vertexlitgeneric"
+{
+
+	"$basetexture" "supermighty/photon/whelen_spitfire/black"
+	"$bumpmap" "supermighty/photon/whelen_spitfire/skin_nm"
+
+	"$normalmapalphaenvmapmask" 1
+	"$phong" "1"
+	"$phongexponent" "2"
+	"$phongboost" "0.01"	
+	"$phongfresnelranges"	"[1 1 1]"
+	"$nodecal" "1"
+	"$colorfix" "{19 19 19}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
