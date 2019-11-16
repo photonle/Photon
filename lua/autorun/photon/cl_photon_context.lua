@@ -63,7 +63,8 @@ properties.Add("photon_siren", {
         secondarySubmenu:AddOption("None", function()
             EMVU.Net:SirenSet(0, ent, true)
         end)
-    end
+    end,
+    Action = null
 })
 
 properties.Add("photon_liveries", {
@@ -117,7 +118,8 @@ properties.Add("photon_liveries", {
                 end)
             end
         end
-    end
+    end,
+    Action = null
 })
 
 properties.Add("photon_autoskin", {
@@ -179,7 +181,8 @@ properties.Add("photon_autoskin", {
                 end)
             end
         end
-    end
+    end,
+    Action = null
 })
 
 properties.Add("photon_licenseplates", {
@@ -232,7 +235,8 @@ properties.Add("photon_licenseplates", {
                 end)
             end
         end
-    end
+    end,
+    Action = null
 })
 
 properties.Add("photon_wheels", {
@@ -264,7 +268,8 @@ properties.Add("photon_wheels", {
                 EMVU.Net:WheelOption(index, ent)
             end):SetChecked(tostring(index) == selected)
         end
-    end
+    end,
+    Action = null
 })
 
 properties.Add("photon_preset", {
@@ -314,7 +319,8 @@ properties.Add("photon_preset", {
                 EMVU.Net:Preset(idx, ent)
             end):SetChecked(tostring(idx) == selected)
         end
-    end
+    end,
+    Action = null
 })
 
 properties.Add("photon_selection", {
@@ -388,7 +394,8 @@ properties.Add("photon_selection", {
                 end
             end
         end
-    end
+    end,
+    Action = null
 })
 
 properties.Add("photon_configuration", {
@@ -445,5 +452,6 @@ properties.Add("photon_configuration", {
                 ent:Photon_ApplyEquipmentConfiguration(index)
             end)
         end
-    end
+    end,
+    Action = null
 })
