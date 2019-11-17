@@ -34,7 +34,7 @@ PI.Meta = {
 		W = 8.2,
 		H = 8,
 		Sprite = "sprites/emv/fpiu20_headlight",
-		Scale = 2,
+		Scale = 2.25,
 		WMult = 1
 	},
 
@@ -150,10 +150,10 @@ PI.States.Blink_Right = {
 	{ 6, A, 1 }, { 8, A, 1 },
 }
 PI.States.Reverse = {
-	{ 9, CW, 1 }, { 10, CW, 1 },
+	{ 9, W, 1 }, { 10, W, 1 },
 }
 PI.States.Running = {
-	{ 3, CW, .5 }, { 4, CW, .5 }, 
+	{ 3, W, .5 }, { 4, W, .5 }, 
 	{ 16, A, .5 }, { 17, A, .5 },
 	{ 11, DR, .5 }, { 12, DR, .5 },
 	{ "_main-l", "running-l" }, { "_main-r", "running-r" }
