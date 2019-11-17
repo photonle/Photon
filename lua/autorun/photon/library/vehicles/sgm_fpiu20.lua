@@ -89,8 +89,13 @@ PI.Meta = {
 		W = 0,
 		H = 0,
 		Sprite = "sprites/emv/blank",
-		Scale = 1.5,
-		WMult = 3,
+		Scale = 1.0,
+		WMult = 2.0,
+		EmitArray = {
+			Vector(-6, 0, 0),
+			Vector(0, 0, 0),
+			Vector(6, 0, 0)
+		}
 	},
 
 	running_light = {
