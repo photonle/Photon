@@ -100,7 +100,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	if input.IsKeyTrapping() then return end
 	if vgui.CursorVisible() then return end
 
-	local SHIFTING = keyDown(KEY_LSHIFT)
+	local SHIFTING = keyDown(KEY_LALT)
 
 	if not X_DOWN then
 		if keyDown(key_illum:GetInt()) then
