@@ -223,6 +223,17 @@ function EMVU:MakeEMV( ent, emv )
 		end
 	end
 
+	function ent:ELS_LightsToggleBack()
+		if not IsValid( self ) then return end
+
+		local cur = self:ELS_LightOption()
+		if cur == 1 then
+			self:ELS_LightOption(#EMVU.Sequences[self.Name].Sequences)
+		else
+			self:ELS_LightOption(cur - 1)
+		end
+	end
+
 	-- Turn the siren off
 	function ent:ELS_SirenOff( toneChange )
 		if not IsValid( self ) then return end
@@ -337,7 +348,18 @@ function EMVU:MakeEMV( ent, emv )
 			self:ELS_SirenOff( true )
 			self:ELS_SirenOn()
 		end
+	end
 
+	function ent:ELS_SirenToggleBack()
+		if not IsValid( self ) then return end
+		if self:ELS_NoSiren() then return end
+
+		local cur = self:ELS_SirenOption()
+		if cur == 1 then
+			self:ELS_SirenOption(#EMVU.GetSirenTable()[self:ELS_SirenSet()].Set)
+		else
+			self:ELS_SirenOption(cur - 1)
+		end
 	end
 
 	function ent:ELS_SirenSetToggle()

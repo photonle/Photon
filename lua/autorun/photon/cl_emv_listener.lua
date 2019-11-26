@@ -100,6 +100,8 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	if input.IsKeyTrapping() then return end
 	if vgui.CursorVisible() then return end
 
+	local SHIFTING = keyDown(KEY_LALT)
+
 	if not X_DOWN then
 		if keyDown(key_illum:GetInt()) then
 			EMVU.Sounds:Panel(emv:Photon_Illumination())
@@ -157,7 +159,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 
 	if not LIGHTTOG_DOWN and keyDown(key_primary_alt:GetInt()) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
-		EMVU.Net:Lights("tog")
+		EMVU.Net:Lights(SHIFTING and "togback" or "tog")
 		LIGHTTOG_DOWN = true
 	elseif LIGHTTOG_DOWN and not keyDown(key_primary_alt:GetInt()) then
 		LIGHTTOG_DOWN = false
@@ -165,7 +167,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 
 	if not SIRENTOGGLE_DOWN and keyDown(key_siren_alt:GetInt()) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
-		EMVU.Net:Siren("tog")
+		EMVU.Net:Siren(SHIFTING and "togback" or "tog")
 		SIRENTOGGLE_DOWN = true
 	elseif SIRENTOGGLE_DOWN and not keyDown(key_siren_alt:GetInt()) then
 		SIRENTOGGLE_DOWN = false
