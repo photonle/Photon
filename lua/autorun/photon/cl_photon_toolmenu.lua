@@ -141,7 +141,7 @@ local function buildExpressManager( panel )
 
 		local vehicles = EMVU.FetchExpressVehicles()
 		for _,vehicle in pairs( vehicles ) do
-			local newLine = vehicleList:AddLine( vehicle[1] )  
+			local newLine = vehicleList:AddLine( vehicle[1] )
 			newLine.File = vehicle[2]
 			function newLine:OnCursorEntered()
 				print( tostring(newLine.File) )
@@ -164,7 +164,7 @@ local function buildExpressManager( panel )
 	panel:AddItem( expressPanel )
 end
 
-hook.Add( "PopulateToolMenu", "Photon.AddSettingsMenu", function() 
+hook.Add( "PopulateToolMenu", "Photon.AddSettingsMenu", function()
 	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_controls", "Controls", "", "", buildControlsMenu )
 	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_client", "Client", "", "", buildClientSettings )
 	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_server", "Settings", "", "", buildServerSettings )
