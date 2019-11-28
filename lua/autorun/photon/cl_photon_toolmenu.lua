@@ -24,17 +24,17 @@ local function logoHeader(panel, imgpath)
 	header:Center()
 end
 
-local function buildControlsMenu( panel )
+local function buildControlsMenu(panel)
 	panel:ClearControls()
-	logoHeader( panel )
-	panel:AddControl( "Header", { Description = "Adjust the keys for Photon controls" } )
 
-	panel:AddControl( "Numpad", { Label = "Primary Lights On/Off", Command="photon_key_primary_toggle", Label2 = "Primary Lights Mode", Command2="photon_key_primary_alt" } )
-	panel:AddControl( "Numpad", { Label = "Siren On/Off", Command="photon_key_siren_toggle", Label2 = "Siren Tone", Command2="photon_key_siren_alt" } )
-	panel:AddControl( "Numpad", { Label = "Auxiliary Lights", Command="photon_key_auxiliary", Label2 = "Illumination", Command2="photon_key_illum" } )
-	panel:AddControl( "Numpad", { Label = "Horn", Command="photon_key_horn", Label2 = "Siren Manual", Command2="photon_key_manual" } )
-	panel:AddControl( "Numpad", { Label = "Blackout Mode", Command="photon_key_blackout", Label2 = "Radar", Command2="photon_key_radar" } )
-	panel:AddControl( "Button", { Label = "Reset to Default", Command="photon_keys_reset" } )
+	logoHeader(panel)
+	panel:AddControl("Header", {Description = "Adjust the keys for Photon controls"})
+	panel:AddControl("Numpad", {Label = "Primary Lights On/Off", Command="photon_key_primary_toggle", Label2 = "Primary Lights Mode", Command2="photon_key_primary_alt"})
+	panel:AddControl("Numpad", {Label = "Siren On/Off", Command="photon_key_siren_toggle", Label2 = "Siren Tone", Command2="photon_key_siren_alt"})
+	panel:AddControl("Numpad", {Label = "Auxiliary Lights", Command="photon_key_auxiliary", Label2 = "Illumination", Command2="photon_key_illum"})
+	panel:AddControl("Numpad", {Label = "Horn", Command="photon_key_horn", Label2 = "Siren Manual", Command2="photon_key_manual"})
+	panel:AddControl("Numpad", {Label = "Blackout Mode", Command="photon_key_blackout", Label2 = "Radar", Command2="photon_key_radar"})
+	panel:AddControl("Button", {Label = "Reset to Default", Command="photon_keys_reset"})
 end
 
 local function buildClientSettings( panel )
