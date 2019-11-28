@@ -44,4 +44,4 @@ CreateClientConVar("photon_christmas_mode_auto", "1", true)
 CreateClientConVar("photon_comp_editor_scale", "1", true)
 CreateClientConVar("photon_express_edit", 0, false)
 
-cvars.AddChangeCallback("photon_express_edit",function (name, old, val) PHOTON_EXPRESS = val end)
+cvars.AddChangeCallback("photon_express_edit", function(name, old, new) PHOTON_EXPRESS = new end)
