@@ -77,6 +77,8 @@ function EMVU.Net:Illumination( ply, args )
 		emv:ELS_IllumOff()
 	elseif args == "tog" then
 		emv:ELS_IllumToggle()
+	elseif args == "togback" then
+		emv:ELS_IllumToggleBack()
 	end
 end
 net.Receive("emvu_illum", function( len, ply )
@@ -92,6 +94,8 @@ function EMVU.Net:Traffic( ply, args )
 		emv:ELS_TrafficOff()
 	elseif args == "tog" then
 		emv:ELS_TrafficToggle()
+	elseif args == "togback" then
+		emv:ELS_TrafficToggleBack()
 	end
 end
 net.Receive( "emvu_traffic", function (len, ply )

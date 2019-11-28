@@ -20,6 +20,7 @@ local key_siren1 = GetConVar("photon_key_siren1")
 local key_siren2 = GetConVar("photon_key_siren2")
 local key_siren3 = GetConVar("photon_key_siren3")
 local key_siren4 = GetConVar("photon_key_siren4")
+local key_backtick = GetConVar("photon_key_alt_reverse")
 local should_render =  GetConVar("photon_emerg_enabled")
 
 hook.Add("InitPostEntity", "Photon.SetupLocalKeyBinds", function()
@@ -33,6 +34,7 @@ hook.Add("InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	key_manual = GetConVar("photon_key_manual")
 	key_illum = GetConVar("photon_key_illum")
 	key_radar = GetConVar("photon_key_radar")
+	key_backtick = GetConVar("photon_key_alt_reverse")
 	should_render = GetConVar("photon_emerg_enabled")
 end)
 
@@ -100,7 +102,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	if input.IsKeyTrapping() then return end
 	if vgui.CursorVisible() then return end
 
-	local SHIFTING = keyDown(KEY_BACKSLASH)
+	local SHIFTING = keyDown(key_backtick:GetInt())
 
 	if not X_DOWN then
 		if keyDown(key_illum:GetInt()) then
@@ -113,7 +115,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		if emv:Photon_Illumination() and X_PRESS + .25 > CurTime() then
 			cmd = "off"
 		elseif emv:Photon_Illumination() then
-			cmd = "tog"
+			cmd = SHIFTING and "togback" or "tog"
 		end
 
 		EMVU.Sounds:Panel(cmd ~= "off")
@@ -133,7 +135,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 			if emv:Photon_TrafficAdvisor() and PHOTON_B_PRESS + .25 > CurTime() then
 				cmd = "off"
 			elseif emv:Photon_TrafficAdvisor() then
-				cmd = "tog"
+				cmd = SHIFTING and "togback" or "tog"
 			end
 			EMVU.Sounds:Panel(cmd ~= "off")
 			EMVU.Net:Traffic(cmd)
