@@ -34,6 +34,8 @@ local function buildControlsMenu(panel)
 	panel:AddControl("Numpad", {Label = "Auxiliary Lights", Command="photon_key_auxiliary", Label2 = "Illumination", Command2="photon_key_illum"})
 	panel:AddControl("Numpad", {Label = "Horn", Command="photon_key_horn", Label2 = "Siren Manual", Command2="photon_key_manual"})
 	panel:AddControl("Numpad", {Label = "Blackout Mode", Command="photon_key_blackout", Label2 = "Radar", Command2="photon_key_radar"})
+	panel:AddControl("Numpad", {Label = "Siren 1", Command="photon_key_siren1", Label2 = "Siren 2", Command2="photon_key_siren2"})
+	panel:AddControl("Numpad", {Label = "Siren 3", Command="photon_key_siren3", Label2 = "Siren 4", Command2="photon_key_siren4"})
 	panel:AddControl("Button", {Label = "Reset to Default", Command="photon_keys_reset"})
 end
 
