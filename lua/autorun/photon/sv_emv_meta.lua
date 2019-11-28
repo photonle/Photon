@@ -209,6 +209,17 @@ function EMVU:MakeEMV( ent, emv )
 		end
 	end
 
+	function ent:ELS_TrafficToggleBack()
+		if not IsValid( self ) then return end
+
+		local cur = self:ELS_TrafficOption()
+		if cur == 1 then
+			self:ELS_TrafficOption(#EMVU.Sequences[self.Name].Traffic)
+		else
+			self:ELS_TrafficOption(cur - 1)
+		end
+	end
+
 	-- Turn the lights on
 	function ent:ELS_LightsOn()
 		if not IsValid( self ) then return end
