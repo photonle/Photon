@@ -115,7 +115,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		if emv:Photon_Illumination() and X_PRESS + .25 > CurTime() then
 			cmd = "off"
 		elseif emv:Photon_Illumination() then
-			cmd = "tog"
+			cmd = SHIFTING and "togback" or "tog"
 		end
 
 		EMVU.Sounds:Panel(cmd ~= "off")
@@ -135,7 +135,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 			if emv:Photon_TrafficAdvisor() and PHOTON_B_PRESS + .25 > CurTime() then
 				cmd = "off"
 			elseif emv:Photon_TrafficAdvisor() then
-				cmd = "tog"
+				cmd = SHIFTING and "togback" or "tog"
 			end
 			EMVU.Sounds:Panel(cmd ~= "off")
 			EMVU.Net:Traffic(cmd)
