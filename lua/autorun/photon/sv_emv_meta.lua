@@ -175,6 +175,20 @@ function EMVU:MakeEMV( ent, emv )
 		if self:ELS_Illuminate() then self:ELS_IllumOff(); self:ELS_IllumOn() end
 	end
 
+	function ent:ELS_IllumToggleBack()
+		if not IsValid( self ) then return end
+		local usesLamps = EMVU.Helper:HasLamps( self.Name )
+		if not usesLamps then return false end
+
+		local cur = self:ELS_IlluminateOption()
+		if cur == 1 then
+			self:ELS_IlluminateOption(#EMVU.Sequences[self.Name].Illumination)
+		else
+			self:ELS_IlluminateOption(cur - 1)
+		end
+		if self:ELS_Illuminate() then self:ELS_IllumOff(); self:ELS_IllumOn() end
+	end
+
 	function ent:ELS_TrafficOn()
 		if not IsValid( self ) then return end
 		self:ELS_Traffic( true )
