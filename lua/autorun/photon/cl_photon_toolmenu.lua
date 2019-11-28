@@ -36,6 +36,7 @@ local function buildControlsMenu(panel)
 	panel:AddControl("Numpad", {Label = "Blackout Mode", Command="photon_key_blackout", Label2 = "Radar", Command2="photon_key_radar"})
 	panel:AddControl("Numpad", {Label = "Siren 1", Command="photon_key_siren1", Label2 = "Siren 2", Command2="photon_key_siren2"})
 	panel:AddControl("Numpad", {Label = "Siren 3", Command="photon_key_siren3", Label2 = "Siren 4", Command2="photon_key_siren4"})
+	panel:AddControl("Numpad", {Label = "Reverse Light/Siren/TA Mode (Hold)", Command="photon_key_alt_reverse"})
 	panel:AddControl("Button", {Label = "Reset to Default", Command="photon_keys_reset"})
 end
 
