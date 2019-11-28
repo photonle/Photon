@@ -94,6 +94,8 @@ function EMVU.Net:Traffic( ply, args )
 		emv:ELS_TrafficOff()
 	elseif args == "tog" then
 		emv:ELS_TrafficToggle()
+	elseif args == "togback" then
+		emv:ELS_TrafficToggleBack()
 	end
 end
 net.Receive( "emvu_traffic", function (len, ply )
