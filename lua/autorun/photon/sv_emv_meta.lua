@@ -385,6 +385,11 @@ function EMVU:MakeEMV( ent, emv )
 		else
 			self:ELS_SirenOption(cur - 1)
 		end
+
+		if self:ELS_Siren() then
+			self:ELS_SirenOff( true )
+			self:ELS_SirenOn()
+		end
 	end
 
 	function ent:ELS_SirenSetToggle()
