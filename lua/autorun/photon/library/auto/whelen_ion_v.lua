@@ -21,8 +21,6 @@ COMPONENT.UsePhases = true
 COMPONENT.Category = "Exterior"
 COMPONENT.DefaultColors = {
 	[1] = "WHITE",
-	[2] = "WHITE",
-	[3] = "WHITE",
 }
 
 COMPONENT.Meta = {
@@ -61,21 +59,13 @@ COMPONENT.Positions = {
 }
 
 COMPONENT.Sections = {
-	--[[["auto_whelen_linz6"] = {
-		[1] = { { 1, "_1" }, { 2, "_1" }, { 3, "_1" }, { 4, "_1" }, { 5, "_1" },  },
-	}, ]]--
-	["auto_whelen_linz6"] = {
+	["auto_ion_v"] = {
 		[1] = { { 1, "_1", .88 }, { 2, "_1", .88 },  }
 	},
 }
 
 COMPONENT.Patterns = {
-	--[[["auto_whelen_linz6"] = {
-		["mode1"] = { 1 },
-		["mode1_split"] = { 1 },
-		["mode1_split"] = { 2 },
-	}, ]]--
-	["auto_whelen_linz6"] = {
+	["auto_ion_v"] = {
 		["code1"] = { 1, 1, 1, 0, },
 		["code1A"] = { 1, 1, 1, 0, 0, 0, 0, 0, },
 		["code1B"] = { 0, 0, 0, 0, 1, 1, 1, 0 },
@@ -100,7 +90,7 @@ COMPONENT.Modes = {
 		M1 = { ["auto_ion_v"] = "code1", },
 		M2 = { ["auto_ion_v"] = "code2", },
 		M3 = { ["auto_ion_v"] = "code3", },
-		ALERT = { ["auto_ion"] = "alert", },
+		ALERT = { ["auto_ion_v"] = "alert", },
 	},
 	Auxiliary = {},
 	Illumination = {
