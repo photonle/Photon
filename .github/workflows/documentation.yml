@@ -1,15 +1,14 @@
 name: Documentation
 on:
   push:
-    # paths-ignore:
-    #   - 'docs/**'
-    #   - '.github/**'
+    paths-ignore:
+      - 'docs/**'
+      - '.github/**'
     tags-ignore:
       - '*'
     branches:
       - development
       - dev
-      - fix/doc-on-changes
 
 jobs:
   build:
