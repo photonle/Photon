@@ -436,6 +436,7 @@ function EMVU:MakeEMV( emv, name )
 			end
 			if positions[b[1]] then
 				local colString = b[2]
+				if not colString then print("[Photon] No color specified for position: " .. tostring(b[1]) .. ". Falling back to WHITE"); colString = "WHITE" end
 
 				local col = false
 				local multiColor = false
@@ -447,8 +448,10 @@ function EMVU:MakeEMV( emv, name )
 					multiColor = true
 
 				else
-					col = EMVColors[b[2]]
+					col = EMVColors[colString]
 				end
+				if not col then print("[Photon] Invalid color specified: " .. colString .. ". Falling back to WHITE"); col = EMVColors["WHITE"] end
+
 				if christmasMode:GetBool() then
 					if colString == "BLUE" then col = EMVColors["GREEN"]
 					elseif colString == "AMBER" then col = EMVColors["WHITE"] end
@@ -490,7 +493,7 @@ function EMVU:MakeEMV( emv, name )
 						contingentTransform
 					)
 			else
-				print("No position found for: " .. tostring(b[1]))
+				print("[Photon] No position found for: " .. tostring(b[1]))
 			end
 		end
 	end
