@@ -18,13 +18,12 @@ The master branch contains code which is ready to go live. When the code goes li
 
 ### [Core Development Team](.github/GOVERNANCE.md#core-development-team)
 
-The Core Development team currently contains 7 people.
+The Core Development team currently contains 6 people.
 
 | Name | Role |
 | --- | --- |
 | [ischmal](https://github.com/ischmal) | Photon Engine code, photon.lighting website |
 | [Noble](https://github.com/Noble-N9) | Photon Fire and Rescue, various components |
-| [TheSenDest](https://github.com/TheSenDest) | Photon vehicles & components. |
 | GermanDude | Photon vehicles |
 | [Super Mighty](https://github.com/SuperMighty1) | Photon vehicles & components. |
 | [creator_2013](https://github.com/creator2013) | Photon Engine code & Components & Vehicles |
