@@ -388,6 +388,8 @@ function EMVU.Helper:GetProps( name, ent )
 					propData.Scale = preset.Scale
 					propData.RenderGroup = preset.RenderGroup
 					propData.RenderMode = preset.RenderMode
+					propData.BodyGroups = preset.BodyGroups or propData.BodyGroups
+					propData.SubMaterials = preset.SubMaterials or propData.SubMaterials
 					propData.AutoIndex = id
 					propData.ComponentName = preset[ "ID" ]
 					if autoData.RotationEnabled then
@@ -419,8 +421,8 @@ function EMVU.Helper:GetProps( name, ent )
 							propData.Pos = component.Pos
 							propData.Ang = component.Ang
 							propData.Scale = component.Scale
-							--propData.BodyGroups = component.BodyGroups or false
-							--propData.SubMaterials = component.SubMaterials or false
+							propData.BodyGroups = component.BodyGroups or propData.BodyGroups
+							propData.SubMaterials = component.SubMaterials or propData.SubMaterials
 							propData.AutoIndex = id
 							propData.ComponentName = component[ "ID" ]
 							if autoData.RotationEnabled then
