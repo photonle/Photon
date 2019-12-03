@@ -40,6 +40,7 @@ The Core Development team currently contains 6 people.
 
 ### Contributors
 | Name | Contribution |
+| --- | --- |
 | ANorthCanadianFriend | D&R RDS 17 |
 | DatedGore | D&R RDS 17 |
 | Officer Pringle | Touchmaster Delta |
