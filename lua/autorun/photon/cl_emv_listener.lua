@@ -311,7 +311,7 @@ end)
 
 concommand.Add("car_signal", function(ply, cmd, args)
 	if not ply:InVehicle() or not ply:GetVehicle():Photon() or not args[1] then return end
-	Photon:CarSignal( args[1] )
+	Photon:CarSignal(args[1])
 end)
 
 --- Set the LocalPlayer's vehicle's turn signal state.
