@@ -38,6 +38,12 @@ The Core Development team currently contains 6 people.
 | goigle | Photon Core code |
 | TDM | Vehicle Creator|
 
+### Contributors
+| Name | Contribution |
+| ANorthCanadianFriend | D&R RDS 17 |
+| DatedGore | D&R RDS 17 |
+| Officer Pringle | Touchmaster Delta |
+
 ### Other
 
 Christmas Cracker icon provided by Made, AU, from thenounproject.com.
