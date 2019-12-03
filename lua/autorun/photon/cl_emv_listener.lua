@@ -303,15 +303,15 @@ concommand.Add("emv_siren", function(ply, cmd, args)
 	EMVU.Net:SirenSet(id)
 end, SirenSuggestions, "[Photon] Overrides the default siren on an Emergency Vehicle.")
 
-concommand.Add("car_signal", function(ply, cmd, args)
-	if not ply:InVehicle() or not ply:GetVehicle():Photon() or not args[1] then return end
-	Photon:CarSignal( args[1] )
-end)
-
 concommand.Add( "emv_illum", function( ply, cmd, args )
 	if not args[1] then return end
 	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
 	EMVU.Net:Illuminate( args[1] )
+end)
+
+concommand.Add("car_signal", function(ply, cmd, args)
+	if not ply:InVehicle() or not ply:GetVehicle():Photon() or not args[1] then return end
+	Photon:CarSignal( args[1] )
 end)
 
 --- Set the LocalPlayer's vehicle's turn signal state.
