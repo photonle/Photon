@@ -315,19 +315,38 @@ concommand.Add( "emv_illum", function( ply, cmd, args )
 	EMVU.Net:Illuminate( args[1] )
 end)
 
-function Photon:CarSignal( arg )
-	if not LocalPlayer():InVehicle() or not LocalPlayer():GetVehicle():Photon() or not arg then return end
+--- Set the LocalPlayer's vehicle's turn signal state.
+-- @string arg New state.
+function Photon:CarSignal(arg)
+	local lPly = LocalPlayer()
+	if not IsValid(lPly) then return end
+	if not lPly:InVehicle() then return end
+
 	local car = LocalPlayer():GetVehicle()
+	if not car:Photon() then return end
+
+	if not arg then return end
+
 	if arg == "left" then
-		Photon.Net:Signal( CAR_TURNING_LEFT )
-		if not car:Photon_TurningLeft() then surface.PlaySound( EMVU.Sounds.SignalOn ) else surface.PlaySound( EMVU.Sounds.SignalOff ) end
+		Photon.Net:Signal(CAR_BLINKER_LEFT)
+		EMVU.Sounds:Signal(not car:Photon_TurningLeft())
 		return
 	end
+
 	if arg == "right" then
-		Photon.Net:Signal( CAR_TURNING_RIGHT )
-		if not car:Photon_TurningRight() then surface.PlaySound( EMVU.Sounds.SignalOn ) else surface.PlaySound( EMVU.Sounds.SignalOff ) end
+		Photon.Net:Signal(CAR_BLINKER_RIGHT)
+		EMVU.Sounds:Signal(not car:Photon_TurningRight())
 		return
 	end
-	if arg == "hazard" then Photon.Net:Signal( CAR_HAZARD ) return end
-	if arg == "none" and (car:Photon_BlinkState() != 0) then Photon.Net:Signal( 0 ); surface.PlaySound( EMVU.Sounds.SignalOff ) return end
+
+	if arg == "hazard" then
+		Photon.Net:Signal(CAR_BLINKER_HAZARD)
+		return
+	end
+
+	if arg == "none" and (car:Photon_BlinkState() ~= CAR_BLINKER_NONE) then
+		Photon.Net:Signal(CAR_BLINKER_NONE)
+		EMVU.Sounds:Signal(false) -- Always turn off.
+		return
+	end
 end
