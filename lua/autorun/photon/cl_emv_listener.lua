@@ -272,8 +272,6 @@ concommand.Add("emv_siren", function(ply, cmd, args)
 	local id = tonumber(args[1])
 	if id == nil then
 		-- We're dealing with a name or a named ID.
-		local name = table.concat(args, " "):Trim()
-
 		-- Check for IDs first.
 		for idx, data in ipairs(EMVU.GetSirenTable()) do
 			if data.ID == args[1] then
@@ -283,6 +281,7 @@ concommand.Add("emv_siren", function(ply, cmd, args)
 		end
 
 		-- We've already checked against IDs.
+		local name = table.concat(args, " "):Trim()
 		for idx, data in ipairs(EMVU.GetSirenTable()) do
 			if data.Name == name then
 				id = idx
