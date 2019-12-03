@@ -53,6 +53,12 @@ CAR_TURNING_LEFT	 = 1
 CAR_TURNING_RIGHT	 = 2
 CAR_HAZARD			 = 3
 
+CAR_BLINKER_NONE = 0
+CAR_BLINKER_LEFT = CAR_TURNING_LEFT
+CAR_BLINKER_RIGHT = CAR_TURNING_RIGHT
+CAR_BLINKER_HAZARD = CAR_HAZARD
+
+
 
 -- Speeds
 -- This is the frame speed, it will affect how fast the lights appear to flash.
