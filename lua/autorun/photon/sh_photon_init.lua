@@ -79,42 +79,41 @@ end
 Photon.Messages:BuildLevel("Error")
 Photon.Messages:BuildLevel("Warning")
 
-AddCSLuaFile( "cl_photon_eng.lua" )
-AddCSLuaFile( "cl_photon_meta.lua" )
-AddCSLuaFile( "cl_photon_hooks.lua" )
-AddCSLuaFile( "cl_photon_settings.lua" )
-AddCSLuaFile( "library/photon_vehicles.lua" )
-AddCSLuaFile( "sh_photon_vehicles.lua" )
-AddCSLuaFile( "cl_photon_hud.lua" )
-AddCSLuaFile( "cl_photon_editor.lua" )
-AddCSLuaFile( "cl_photon_toolmenu.lua" )
-AddCSLuaFile( "cl_emv_livery.lua" )
-AddCSLuaFile( "cl_photon_vgui.lua" )
+AddCSLuaFile("cl_photon_eng.lua")
+AddCSLuaFile("cl_photon_meta.lua")
+AddCSLuaFile("cl_photon_hooks.lua")
+AddCSLuaFile("cl_photon_settings.lua")
+AddCSLuaFile("library/photon_vehicles.lua")
+AddCSLuaFile("sh_photon_vehicles.lua")
+AddCSLuaFile("cl_photon_hud.lua")
+AddCSLuaFile("cl_photon_editor.lua")
+AddCSLuaFile("cl_photon_toolmenu.lua")
+AddCSLuaFile("cl_emv_livery.lua")
+AddCSLuaFile("cl_photon_vgui.lua")
 
 if CLIENT then
-	include( "cl_photon_eng.lua" )
-	include( "cl_photon_meta.lua" )
-	include( "cl_photon_hooks.lua" )
-	include( "cl_photon_hud.lua" )
-	include( "cl_photon_settings.lua" )
-	include( "cl_photon_editor.lua" )
-	include( "cl_photon_toolmenu.lua" )
-	include( "cl_emv_livery.lua" )
-	include( "cl_photon_vgui.lua" )
+	include("cl_photon_eng.lua")
+	include("cl_photon_meta.lua")
+	include("cl_photon_hooks.lua")
+	include("cl_photon_hud.lua")
+	include("cl_photon_settings.lua")
+	include("cl_photon_editor.lua")
+	include("cl_photon_toolmenu.lua")
+	include("cl_emv_livery.lua")
+	include("cl_photon_vgui.lua")
 end
 
 if SERVER then
-	include( "sv_photon_meta.lua" )
-	include( "sv_photon_hooks.lua" )
-	include( "sv_photon_settings.lua" )
+	include("sv_photon_meta.lua")
+	include("sv_photon_hooks.lua")
+	include("sv_photon_settings.lua")
 end
 
-include( "library/photon_vehicles.lua" )
-include( "sh_photon_vehicles.lua" )
-
-include( "cl_photon_context.lua" )
-include( "cl_photon_menubar.lua" )
-include( "sh_photon_xml.lua" )
+include("library/photon_vehicles.lua")
+include("sh_photon_vehicles.lua")
+include("cl_photon_context.lua")
+include("cl_photon_menubar.lua")
+include("sh_photon_xml.lua")
 
 local photonVehicleTable = {}
 local photonLastScan = 0
@@ -123,18 +122,20 @@ function Photon:AllVehicles()
 	if CurTime() > photonLastScan + .5 then
 		self:UpdateVehicles()
 	end
+
 	return photonVehicleTable
 end
 
 function Photon:UpdateVehicles()
-	for k,_ in pairs( photonVehicleTable ) do
+	for k, _ in pairs(photonVehicleTable) do
 		photonVehicleTable[k] = nil
 	end
 
-	for _,ent in pairs( ents.GetAll() ) do
-		if IsValid( ent ) and ent:Photon() then
-			photonVehicleTable[ #photonVehicleTable + 1 ] = ent
+	for _, ent in pairs(ents.GetAll()) do
+		if IsValid(ent) and ent:Photon() then
+			photonVehicleTable[#photonVehicleTable + 1] = ent
 		end
 	end
+
 	photonLastScan = CurTime()
 end
