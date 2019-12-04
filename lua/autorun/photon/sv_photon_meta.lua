@@ -8,7 +8,7 @@ function Photon:SetupCar( ent, index )
 
 	end
 
-	// if car is braking
+	-- if car is braking
 	function ent:CAR_Braking( val )
 		if not IsValid( self ) then return false end
 		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_BRAKING", val ) end
