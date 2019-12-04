@@ -61,4 +61,26 @@ function reverse(...)
 	end
 
 	return reverse_h(function() return end, ...)
- end
+end
+
+--- Build a function o from f/g so that f(g(x)) == o(x)
+-- @tparam vararg ... Input functions.
+-- @treturn function Composed function.
+function compose(...)
+    local m = select("#", ...)
+    if m == 0 then return null end
+
+    local funcs = {...}
+    if m == 1 then return funcs[1] end
+
+    return function(...)
+		local values = {...}
+
+		-- Go through the functions backwards.
+		for i = m, 1, -1 do
+			values = {funcs[i](unpack(values))}
+		end
+
+		return unpack(values)
+    end
+end
