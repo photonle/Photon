@@ -29,3 +29,32 @@ function partial(func, ...)
 		func(unpack(args, 1, st + m))
 	end
 end
+
+--- @section params Parameter Manipulation
+
+--- Returns a function where the first two inputs are flipped.
+-- @tparam function func Input function.
+-- @treturn function Flipped function.
+-- @usage local flippedPrint = flip(print)
+-- @usage flippedPrint("hello", "world") -- Outputs: "world hello"
+function flip(func)
+	return function(a, b, ...)
+		func(b, a, ...)
+	end
+end
+
+--- Reverses a set of input arguments.
+-- @tparam ... vararg Input argument.
+-- @treturn vararg Flipped outputs.
+-- @see http://lua-users.org/wiki/CurriedLua
+function reverse(...)
+	local function reverse_h(acc, v, ...)
+		if select('#', ...) == 0 then
+			return v, acc()
+		else
+			return reverse_h(function() return v, acc() end, ...)
+		end
+	end
+
+	return reverse_h(function() return end, ...)
+ end
