@@ -126,19 +126,19 @@ net.Receive("photon_liveryupdate", function()
 	EMVU.Net:ReceiveLiveryUpdate(net.ReadString(), net.ReadString(), net.ReadEntity())
 end)
 
-function EMVU.Net:Color( ent, col )
-	net.Start( "emvu_color" )
-		net.WriteEntity( ent )
-		net.WriteColor( col )
+function EMVU.Net:Color(ent, col)
+	net.Start("emvu_color")
+		net.WriteEntity(ent)
+		net.WriteColor(col)
 	net.SendToServer()
 end
 
 function EMVU.Net:ReceiveUnitNumberRequest()
-	net.Start( "photon_myunitnumber" )
-		net.WriteString( unitid_pref:GetString() or GenerateDefaultUnitID() )
+	net.Start("photon_myunitnumber")
+		net.WriteString(unitid_pref:GetString() or GenerateDefaultUnitID())
 	net.SendToServer()
 end
-net.Receive( "photon_myunitnumber", function() EMVU.Net:ReceiveUnitNumberRequest() end)
+net.Receive("photon_myunitnumber", function() EMVU.Net:ReceiveUnitNumberRequest() end)
 
 function EMVU.Net.Selection( ent, category, option )
 	net.Start( "emvu_selection" )
