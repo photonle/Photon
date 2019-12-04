@@ -1,13 +1,7 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
 
 local name = "Federal Signal Integrity"
 
@@ -139,7 +133,7 @@ COMPONENT.Sections = {
 		{
 			{ 8, "_1"}, { 10, "_1"}, { 12, "_1"}, { 14, "_1"}
 		},
-		{ 
+		{
 			{ 7, "_2" }, { 9, "_2" }, { 11, "_2" }, { 13, "_2" }
 		},
 		{
@@ -236,7 +230,7 @@ COMPONENT.Patterns = {
 	["auto_fedsig_integrity"] = {
 		["all"] = { 1, 0, 1, 0, 1, 0 },
 		["pattern_1"] = { 2, 2, 2, 2, 3, 3, 3, 3, },
-		["code2"] = { 
+		["code2"] = {
 			6, 6, 0, 7, 7, 0,
 			6, 6, 0, 7, 7, 0,
 			6, 6, 0, 7, 7, 0,
@@ -280,16 +274,16 @@ COMPONENT.Patterns = {
 			4, 4, 4, 5, 5, 5
 		},
 		["alt_slow"] = { 1, 1, 1, 1, 2, 2, 2, },
-		["code3"] = { 
+		["code3"] = {
 			1, 0, 1, 0, 1,
 			2, 0, 2, 0, 2,
 		}
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 	["auto_fedsig_integrity_signalmaster"] = {
-		15, 16, 17, 18, 19, 20, 21, 22 
+		15, 16, 17, 18, 19, 20, 21, 22
 	}
 }
 
@@ -326,7 +320,7 @@ COMPONENT.Modes = {
 	},
 	Illumination = {
 		F = {
-			{ 8, W }, { 6, W }, { 4, W }, { 2, W }, { 1, W }, { 3, W }, { 5, W }, { 7, W }, 
+			{ 8, W }, { 6, W }, { 4, W }, { 2, W }, { 1, W }, { 3, W }, { 5, W }, { 7, W },
 		},
 		R = {
 			{ 11, W }

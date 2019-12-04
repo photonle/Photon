@@ -1,12 +1,7 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
 local G = "GREEN"
 
 local name = "Federal Signal Integrity SenCo"
@@ -154,7 +149,7 @@ COMPONENT.Sections = {
 		{
 			{ 8, A }, { 10, G }, { 12, G }, { 14, A }
 		},
-		{ 
+		{
 			{ 7, A }, { 9, G }, { 11, G }, { 13, A }
 		},
 		{
@@ -244,7 +239,7 @@ COMPONENT.Patterns = {
 	["auto_fedsig_integrity_senco"] = {
 		["all"] = { 1, 0, 1, 0, 1, 0 },
 		["pattern_1"] = { 2, 2, 2, 2, 3, 3, 3, 3, },
-		["code2"] = { 
+		["code2"] = {
 			6, 6, 0, 7, 7, 0,
 			6, 6, 0, 7, 7, 0,
 			6, 6, 0, 7, 7, 0,
@@ -284,7 +279,7 @@ COMPONENT.Patterns = {
 	},
 	["auto_fedsig_integrity_senco_corner"] = {
 		["alt_slow"] = { 1, 1, 1, 1, 2, 2, 2, },
-		["code3"] = { 
+		["code3"] = {
 			1, 0, 1, 0, 1,
 			2, 0, 2, 0, 2,
 		}
@@ -297,9 +292,9 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 	["auto_fedsig_integrity_senco_signalmaster"] = {
-		15, 16, 17, 18, 19, 20, 21, 22 
+		15, 16, 17, 18, 19, 20, 21, 22
 	}
 }
 
