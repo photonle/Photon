@@ -71,9 +71,11 @@ function EMVU.Net:Blackout(arg)
 	net.SendToServer()
 end
 
-function EMVU.Net:Horn( arg )
-	net.Start( "emvu_horn" )
-		net.WriteBit( arg )
+--- Write a horn change to the server.
+-- @string arg Change mode.
+function EMVU.Net:Horn(arg)
+	net.Start("emvu_horn")
+		net.WriteBit(arg)
 	net.SendToServer()
 end
 
