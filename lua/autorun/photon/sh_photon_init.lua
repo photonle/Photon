@@ -74,7 +74,7 @@ function Photon.Messages:BuildLevel(level)
 	end
 
 	self[level] = functional.compose(
-		prt
+		prt,
 		"[Photon]",
 		Format("[%s]", level),
 		" "
