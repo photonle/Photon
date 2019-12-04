@@ -567,7 +567,7 @@ EMVU.GetSirenTable = function()
 end
 
 EMVU.AddCustomSiren = function(index, siren)
-	if tonumber(index) ~= nil then return Error("[Photon] Custom sirens need a non-number identifier. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens\n") end
+	if tonumber(index) ~= nil then return Error("[Photon] Custom sirens need a non-number identifier. See: https://github.com/photonle/Photon/wiki/Custom-Sirens\n") end
 
 	siren.ID = index
 	table.insert(sirenTable, siren)
@@ -576,7 +576,7 @@ end
 EMVU.Sirens = {}
 timer.Simple(35, function()
 	if #EMVU.Sirens > 0 then
-		print("[Photon] One or more addons are using a deprecated method to add custom sirens. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens")
+		PhotonWarning("One or more addons are using a deprecated method to add custom sirens. See: https://github.com/photonle/Photon/wiki/Custom-Sirens")
 	end
 end)
 
