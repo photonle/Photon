@@ -1,15 +1,7 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
-
 local name = "Code 3 RX2700 MC"
 
 local COMPONENT = {}
@@ -187,8 +179,8 @@ COMPONENT.Patterns = {
 	["auto_rx2700_mid"] = {
 		["stage_2"] = { 2, 2, 2, 0, 0, 1, 1, 1, 0, 1, 0, 2, 0, 3, 3, 3, 0, 0, 4, 4, 4, 0, 3, 0, 4, 0 },
 		["stage_3"] = {
-			1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 2, 1, 1, 2, 2, 0, 
-			3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 3, 4, 4, 3, 3, 4, 4, 0, 
+			1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 2, 1, 1, 2, 2, 0,
+			3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 3, 4, 4, 3, 3, 4, 4, 0,
 		}
 	},
 	["auto_rx2700_outer"] = {
