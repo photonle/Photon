@@ -39,9 +39,11 @@ function EMVU.Net:SirenSet(arg, ent, aux)
 	net.SendToServer()
 end
 
-function Photon.Net:Signal( arg )
-	net.Start( "photon_signal" )
-		net.WriteInt( arg, 3 )
+--- Write a turn signal change to the server.
+-- @string arg Change mode.
+function Photon.Net:Signal(arg)
+	net.Start("photon_signal")
+		net.WriteInt(arg, 3)
 	net.SendToServer()
 end
 
