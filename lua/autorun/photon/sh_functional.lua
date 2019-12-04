@@ -6,8 +6,6 @@
 --]]--
 module("functional")
 
-AddCSLuaFile()
-
 --- Builds a partial function, with stored arguments.
 -- @usage local positiveOnly = compose(max, 0)
 -- @usage print(positiveOnly(-1)) -- Returns 0.

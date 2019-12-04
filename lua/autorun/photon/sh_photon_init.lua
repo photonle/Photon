@@ -1,5 +1,6 @@
 AddCSLuaFile()
 
+AddCSLuaFile("sh_functional.lua")
 include("sh_functional.lua")
 
 if not Photon then
