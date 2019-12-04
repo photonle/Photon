@@ -111,6 +111,9 @@ local function GenerateDefaultUnitID()
 	return string.sub(tostring(LocalPlayer():SteamID64()), -3) or "000" -- will use the last three digits of Steam64
 end
 
+--- Write a livery change to the server.
+-- @string category Livery catgegory.
+-- @string index Livery ID.
 function EMVU.Net:Livery(category, index)
 	net.Start("emvu_livery")
 		net.WriteString(category)
@@ -119,6 +122,10 @@ function EMVU.Net:Livery(category, index)
 	net.SendToServer()
 end
 
+--- Receive a livery update from the server.
+-- @string id Livery ID
+-- @string unit Unit ID.
+-- @ent ent Entity being applyed to.
 function EMVU.Net:ReceiveLiveryUpdate(id, unit, ent)
 	Photon.AutoLivery.Apply(id, unit, ent)
 end
@@ -126,6 +133,9 @@ net.Receive("photon_liveryupdate", function()
 	EMVU.Net:ReceiveLiveryUpdate(net.ReadString(), net.ReadString(), net.ReadEntity())
 end)
 
+--- Write a color change to the server.
+-- @ent ent Entity to recolor.
+-- @string col New color.
 function EMVU.Net:Color(ent, col)
 	net.Start("emvu_color")
 		net.WriteEntity(ent)
@@ -133,6 +143,7 @@ function EMVU.Net:Color(ent, col)
 	net.SendToServer()
 end
 
+--- Receive unit ID request from the server.
 function EMVU.Net:ReceiveUnitNumberRequest()
 	net.Start("photon_myunitnumber")
 		net.WriteString(unitid_pref:GetString() or GenerateDefaultUnitID())
@@ -140,6 +151,10 @@ function EMVU.Net:ReceiveUnitNumberRequest()
 end
 net.Receive("photon_myunitnumber", function() EMVU.Net:ReceiveUnitNumberRequest() end)
 
+--- Write a selection change to the server.
+-- @ent ent Entity to change selections on.
+-- @int category Selection category.
+-- @int option Selected option.
 function EMVU.Net.Selection(ent, category, option)
 	net.Start("emvu_selection")
 		net.WriteEntity(ent)
@@ -148,17 +163,22 @@ function EMVU.Net.Selection(ent, category, option)
 	net.SendToServer()
 end
 
+--- Send a request for skins to the server.
 function EMVU.Net.RequestAllSkins()
 	net.Start("photon_availableskins")
 	net.SendToServer()
 end
 
+--- Receive a list of autoskins from the server.
 function EMVU.Net.ReceiveAvailableSkins()
 	local received = net.ReadTable()
 	Photon.AutoSkins.Available = received
 end
 net.Receive("photon_availableskins", function() EMVU.Net.ReceiveAvailableSkins() end)
 
+--- Send an autoskin change to the server.
+-- @ent ent Entity to change skin on.
+-- @string skin Skin name.
 function EMVU.Net.ApplyAutoSkin(ent, skin)
 	skin = tostring(skin)
 
@@ -177,6 +197,9 @@ function EMVU.Net.ApplyAutoSkin(ent, skin)
 	net.SendToServer()
 end
 
+--- Write a license plate change to the server.
+-- @ent ent Entity to change license plate on.
+-- @string mat License plate material
 function EMVU.Net.ApplyLicenseMaterial(ent, mat)
 	local cnt = 0
 	for i in string.gmatch( mat, "/" ) do
