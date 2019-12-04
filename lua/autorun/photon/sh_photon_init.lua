@@ -127,13 +127,18 @@ function Photon:AllVehicles()
 end
 
 function Photon:UpdateVehicles()
-	for k, _ in pairs(photonVehicleTable) do
-		photonVehicleTable[k] = nil
+	local i = 1
+	for _, ent in ipairs(ents.GetAll()) do
+		if IsValid(ent) and ent:Photon() then
+			photonVehicleTable[i] = ent
+			i = i + 1
+		end
 	end
 
-	for _, ent in pairs(ents.GetAll()) do
-		if IsValid(ent) and ent:Photon() then
-			photonVehicleTable[#photonVehicleTable + 1] = ent
+	local m = #photonVehicleTable
+	if i < m then
+		for next = i, m do
+			photonVehicleTable[next] = nil
 		end
 	end
 
