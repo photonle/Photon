@@ -29,7 +29,8 @@ if not Photon then
 			Photon.Messages.Print,
 			Photon.Messages.Colours[level],
 			"[Photon]",
-			Format("[%s]", level)
+			Format("[%s]", level),
+			" "
 		)
 		_G["Photon" .. level] = self[level]
 	end
