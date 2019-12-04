@@ -97,10 +97,12 @@ function EMVU.Net:Preset(arg, ent)
 	net.SendToServer()
 end
 
-function EMVU.Net:WheelOption( arg, ent )
-	net.Start( "photon_wheel" )
-		net.WriteEntity( ent )
-		net.WriteInt( arg, 8 )
+--- Write a wheel change to the server.
+-- @string arg Change mode.
+function EMVU.Net:WheelOption(arg, ent)
+	net.Start("photon_wheel")
+		net.WriteEntity(ent)
+		net.WriteInt(arg, 8)
 	net.SendToServer()
 end
 
