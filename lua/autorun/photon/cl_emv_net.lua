@@ -47,9 +47,11 @@ function Photon.Net:Signal(arg)
 	net.SendToServer()
 end
 
-function EMVU.Net:Illuminate( arg )
-	net.Start( "emvu_illum" )
-		net.WriteString( arg )
+--- Write an illumination change to the server.
+-- @string arg Change mode.
+function EMVU.Net:Illuminate(arg)
+	net.Start("emvu_illum")
+		net.WriteString(arg)
 	net.SendToServer()
 end
 
