@@ -4,17 +4,17 @@ EMVU.Net = {}
 
 --- Write a siren change to the server.
 -- @string arg Change mode.
-function EMVU.Net:Siren( arg )
-	net.Start( "emvu_siren" )
-		net.WriteString( arg )
+function EMVU.Net:Siren(arg)
+	net.Start("emvu_siren")
+		net.WriteString(arg)
 	net.SendToServer()
 end
 
 --- Write a els change to the server.
 -- @string arg Change mode.
-function EMVU.Net:Lights( arg )
-	net.Start( "emvu_el" )
-		net.WriteString( arg )
+function EMVU.Net:Lights(arg)
+	net.Start("emvu_el")
+		net.WriteString(arg)
 	net.SendToServer()
 end
 
@@ -22,14 +22,20 @@ end
 -- @string arg Change mode.
 -- @ent[opt=LocalPlayer():GetVehicle()] ent Entity to change siren on.
 -- @bool[opt=false] If the aux siren should be set.
-function EMVU.Net:SirenSet( arg, ent, aux )
-	if aux == nil then aux = false end
-	if not ent then ent = LocalPlayer():GetVehicle() end
-	if not IsValid( ent ) then return end
-	net.Start( "emvu_sirenset" )
-		net.WriteEntity( ent )
-		net.WriteInt( arg, 8 )
-		net.WriteBool( aux )
+function EMVU.Net:SirenSet(arg, ent, aux)
+	if aux == nil then
+		aux = false
+	end
+
+	if not ent then
+		ent = LocalPlayer():GetVehicle()
+	end
+	if not IsValid(ent) then return end
+
+	net.Start("emvu_sirenset")
+		net.WriteEntity(ent)
+		net.WriteInt(arg, 8)
+		net.WriteBool(aux)
 	net.SendToServer()
 end
 
