@@ -68,14 +68,13 @@ end
 function Photon.Messages:BuildLevel(level)
 	if self[level] then self[level] = nil end
 
-	if not self.Colours[level] then
-		self[level] = self.Print
-		return
+	local prt = self.Print
+	if self.Colours[level] then
+		prt = functional.compose(prt, self.Colours[level])
 	end
 
 	self[level] = functional.compose(
-		Photon.Messages.Print,
-		Photon.Messages.Colours[level],
+		prt
 		"[Photon]",
 		Format("[%s]", level),
 		" "
