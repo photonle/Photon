@@ -195,7 +195,7 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 	["auto_rx2700_main_traffic"] = {
 		9, 11, 14, 12, 10
 	}
@@ -222,7 +222,7 @@ COMPONENT.Modes = {
 				["auto_rx2700_outer"] = "stage_3",
 				["auto_rx2700_takedown"] = "stage_3",
 			}
-		},
+	},
 	Auxiliary = {
 			C = {
 				["auto_rx2700_feet"] = "stage_1",
@@ -236,7 +236,7 @@ COMPONENT.Modes = {
 			D = {
 				["auto_rx2700_main_traffic"] = "diverge"
 			}
-		},
+	},
 	Illumination = {
 		R = {
 			{ 18, W }
