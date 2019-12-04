@@ -109,7 +109,7 @@ end
 local unitid_pref = GetConVar( "photon_emerg_unit" )
 
 local function GenerateDefaultUnitID()
-	return string.sub( tostring( LocalPlayer():SteamID64() ), 14 ) or "000" -- will use the last three digits of Steam64
+	return string.sub(tostring(LocalPlayer():SteamID64()), -3) or "000" -- will use the last three digits of Steam64
 end
 
 function EMVU.Net:Livery( category, index )
