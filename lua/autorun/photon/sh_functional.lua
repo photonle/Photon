@@ -30,8 +30,6 @@ function partial(func, ...)
 	end
 end
 
---- @section params Parameter Manipulation
-
 --- Returns parameters without any changes.
 -- @tparam vararg ... Input paramters.
 local function null(...) return ... end
