@@ -163,7 +163,7 @@ function EMVU.Net.ApplyAutoSkin(ent, skin)
 	skin = tostring(skin)
 
 	local cnt = 0
-	for i in string.gfind(skin, "/") do
+	for i in string.gmatch(skin, "/") do
 		cnt = cnt + 1
 	end
 
@@ -177,22 +177,25 @@ function EMVU.Net.ApplyAutoSkin(ent, skin)
 	net.SendToServer()
 end
 
-function EMVU.Net.ApplyLicenseMaterial( ent, mat )
+function EMVU.Net.ApplyLicenseMaterial(ent, mat)
 	local cnt = 0
-	for i in string.gfind( mat, "/" ) do
+	for i in string.gmatch( mat, "/" ) do
 		cnt = cnt + 1
 	end
+
 	if cnt < 2 then
 		mat = string.Replace( mat, "/", "///" )
 	end
-	net.Start( "photon_license_mat" )
-		net.WriteEntity( ent )
-		net.WriteString( mat )
+
+	net.Start("photon_license_mat")
+		net.WriteEntity(ent)
+		net.WriteString(mat)
 	net.SendToServer()
 end
 
-concommand.Add( "photon_debug_getbones", function()
+concommand.Add("photon_debug_getbones", function()
 	local ent = ply:GetEyeTrace().Entity
-	if not IsValid( ent ) then return end
+	if not IsValid(ent) then return end
+
 	print(tostring(ent:GetBoneCount()))
 end)
