@@ -11,12 +11,12 @@ local unpack = unpack
 module("functional")
 
 --- Builds a partial function, with stored arguments.
--- @usage local positiveOnly = compose(max, 0)
+-- @usage local positiveOnly = partial(max, 0)
 -- @usage print(positiveOnly(-1)) -- Returns 0.
 -- @usage print(positiveOnly(2)) -- Returns 2.
 -- @tparam function func Input function to curry.
 -- @tparam vararg ... Arguments to store.
-function compose(func, ...)
+function partial(func, ...)
 	local args = {...}
 	local st = #args
 

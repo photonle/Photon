@@ -70,10 +70,10 @@ function Photon.Messages:BuildLevel(level)
 
 	local prt = self.Print
 	if self.Colours[level] then
-		prt = functional.compose(prt, self.Colours[level])
+		prt = functional.partial(prt, self.Colours[level])
 	end
 
-	self[level] = functional.compose(
+	self[level] = functional.partial(
 		prt,
 		"[Photon]",
 		Format("[%s]", level),
