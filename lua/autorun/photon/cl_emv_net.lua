@@ -87,10 +87,13 @@ function EMVU.Net:Manual(arg)
 	net.SendToServer()
 end
 
-function EMVU.Net:Preset( arg, ent )
-	net.Start( "emvu_preset" )
-		net.WriteEntity( ent )
-		net.WriteInt( arg, 8 )
+--- Write a preset change to the server.
+-- @string arg Change mode.
+-- @ent ent Entity the preset is changing on.
+function EMVU.Net:Preset(arg, ent)
+	net.Start("emvu_preset")
+		net.WriteEntity(ent)
+		net.WriteInt(arg, 8)
 	net.SendToServer()
 end
 
