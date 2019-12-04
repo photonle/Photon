@@ -1,5 +1,9 @@
 #!/bin/bash
-declare -r changes=$(git diff --ignore-cr-at-eol --numstat HEAD docs | grep "\.html$" | grep -Pv "1\s1" | wc -l)
+declare -r diff=$(git diff --ignore-cr-at-eol --numstat HEAD docs | grep "\.html$")
+echo "$diff"
+
+declare -r changes=$(echo "$diff" | grep -Pv "1\s1" | wc -l)
+echo "$changes"
 if (( $changes > 0 )); then
 	echo "::set-output name=status::change"
 	exit 0
