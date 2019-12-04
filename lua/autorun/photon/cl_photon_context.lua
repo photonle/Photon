@@ -1,7 +1,6 @@
 AddCSLuaFile()
 
-local function null()
-end
+local function null() end
 
 properties.Add("photon_siren", {
     MenuLabel = "Siren Model",
