@@ -118,6 +118,8 @@ include("sh_photon_xml.lua")
 local photonVehicleTable = {}
 local photonLastScan = 0
 
+--- Get the list of all photon enabled vehicles.
+-- Updates every .5 seconds.
 function Photon:AllVehicles()
 	if CurTime() > photonLastScan + .5 then
 		self:UpdateVehicles()
@@ -126,6 +128,7 @@ function Photon:AllVehicles()
 	return photonVehicleTable
 end
 
+--- Update the stored vehicle table.
 function Photon:UpdateVehicles()
 	local i = 1
 	for _, ent in ipairs(ents.GetAll()) do
