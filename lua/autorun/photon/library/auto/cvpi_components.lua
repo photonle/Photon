@@ -1,21 +1,5 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
-
-local height = 76.4
-
-local alphaOffset = 10
-local betaOffset = -10
-local gammaOffset = 5
-
 ---------------- BEGIN COMPONENT ------------------
 
 local name = "CVPI Grille LEDs"
@@ -200,7 +184,7 @@ COMPONENT.Sections = {
 COMPONENT.Patterns = {
 	["front_viper"] = {
 		["flash"] = { 1, 1, 0, 0 },
-		["code2"] = { 
+		["code2"] = {
 			2, 0, 2, 0, 2, 0,
 			3, 0, 3, 0, 3, 0
 		},
@@ -561,7 +545,7 @@ COMPONENT.Patterns = {
 		["flash"] = { 1, 1, 0, 0 },
 		["code1"] = { 2, 2, 2, 0, 3, 3, 3, 0 },
 		["code2"] = { 2, 2, 0, 3, 3, 0 },
-		["code3"] = { 
+		["code3"] = {
 			2, 0, 2, 0, 2, 0,
 			3, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 2, 0,
