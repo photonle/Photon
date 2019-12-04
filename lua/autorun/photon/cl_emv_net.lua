@@ -63,9 +63,11 @@ function EMVU.Net:Traffic(arg)
 	net.SendToServer()
 end
 
-function EMVU.Net:Blackout( arg )
-	net.Start( "emvu_blackout" )
-		net.WriteBit( arg )
+--- Write a blackout change to the server.
+-- @string arg Change mode.
+function EMVU.Net:Blackout(arg)
+	net.Start("emvu_blackout")
+		net.WriteBit(arg)
 	net.SendToServer()
 end
 
