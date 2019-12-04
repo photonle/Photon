@@ -140,11 +140,11 @@ function EMVU.Net:ReceiveUnitNumberRequest()
 end
 net.Receive("photon_myunitnumber", function() EMVU.Net:ReceiveUnitNumberRequest() end)
 
-function EMVU.Net.Selection( ent, category, option )
-	net.Start( "emvu_selection" )
-		net.WriteEntity( ent )
-		net.WriteInt( category, 8 )
-		net.WriteInt( option, 8)
+function EMVU.Net.Selection(ent, category, option)
+	net.Start("emvu_selection")
+		net.WriteEntity(ent)
+		net.WriteInt(category, 8)
+		net.WriteInt(option, 8)
 	net.SendToServer()
 end
 
