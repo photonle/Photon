@@ -5,6 +5,35 @@ include("sh_functional.lua")
 if not Photon then
 	Photon = {}
 
+	Photon.Messages = {}
+	Photon.Messages.Colours = {}
+	Photon.Messages.Colours.Error = Color(255, 0, 0)
+	Photon.Messages.Colours.Warning = Color(255, 200, 0)
+
+	function Photon.Messages.Print(...)
+		local args = {...}
+		args[#args + 1] = "\n"
+		return MsgC(unpack(args))
+	end
+
+	function Photon.Messages:BuildLevel(level)
+		if self[level] then self[level] = nil end
+
+		if not self.Colours[level] then
+			self[level] = self.Print
+			return
+		end
+
+		self[level] = functional.compose(
+			Photon.Messages.Print,
+			Photon.Messages.Colours[level]
+		)
+		_G["Photon" .. level] = self[level]
+	end
+
+	Photon.Messages:BuildLevel("Error")
+	Photon.Messages:BuildLevel("Warning")
+
 	Photon.Net = {}
 
 	Photon.Vehicles = {}
