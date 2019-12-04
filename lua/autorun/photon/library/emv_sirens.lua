@@ -573,10 +573,58 @@ EMVU.AddCustomSiren = function(index, siren)
 	table.insert(sirenTable, siren)
 end
 
+local function searchSirenAddon(siren, addon)
+	if not addon.downloaded then return end
+	if not addon.mounted then return end
+
+	local files = file.Find("sound/" .. siren.Horn, addon.title)
+	if files[1] then
+		PhotonWarning(
+			"The addon", addon.title, "(", addon.wsid, ") appears to be trying to load old photon sirens.\n",
+			"The method being used is no longer supported. https://github.com/photonle/Photon/wiki/Custom-Sirens"
+		)
+		return true
+	end
+end
 EMVU.Sirens = {}
 timer.Simple(35, function()
 	if #EMVU.Sirens > 0 then
 		PhotonWarning("One or more addons are using a deprecated method to add custom sirens. See: https://github.com/photonle/Photon/wiki/Custom-Sirens")
+
+		for _, siren in ipairs(EMVU.Sirens) do
+			local found = false
+
+			local search = "sound/"
+			if siren.Horn then
+				search = search .. siren.Horn
+			else
+				search = search .. siren.Set[1].Sound
+			end
+
+			local files = file.Find("sound/" .. siren.Horn, "GAME")
+			if not files[1] then
+				PhotonWarning("Sound file not found for", siren.Category, ":", siren.Name)
+				found = true
+			end
+
+			if not found then
+				local addons = engine.GetAddons()
+				for _, addon in ipairs(addons) do
+					if searchSirenAddon(siren, addon) then
+						found = true
+						break
+					end
+				end
+			end
+
+			if not found then
+				PhotonWarning(
+					"A folder addon appears to be trying to load old photon sirens.\n",
+					"Because it's in a folder, we can't find it.\n",
+					"If it's your addon, please read https://github.com/photonle/Photon/wiki/Custom-Sirens"
+				)
+			end
+		end
 	end
 end)
 
