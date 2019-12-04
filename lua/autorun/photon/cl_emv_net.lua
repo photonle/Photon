@@ -149,7 +149,7 @@ function EMVU.Net.Selection(ent, category, option)
 end
 
 function EMVU.Net.RequestAllSkins()
-	net.Start( "photon_availableskins" )
+	net.Start("photon_availableskins")
 	net.SendToServer()
 end
 
