@@ -1,17 +1,4 @@
-
-
-local COMPONENT = {}
-
 AddCSLuaFile()
-
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
 
 local name = "Federal Signal Jetsolaris"
 
@@ -21,9 +8,9 @@ COMPONENT.Model = "models/schmal/fedsig_jetsolaris.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Lightbar = true
 COMPONENT.NotLegacy = true
-COMPONENT.Bodygroups = {
-}
+COMPONENT.Bodygroups = {}
 COMPONENT.Category = "Lightbar"
+
 COMPONENT.DefaultColors = {
 	[1] = "RED", -- 2+4+8
 	[2] = "BLUE", -- 1
@@ -109,7 +96,7 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 
 }
 
