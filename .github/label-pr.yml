@@ -6,7 +6,7 @@
   labels: ["library"]
 - regExp: "library\/vehicles\/"
   labels: ["library"]
-- regExp: "\.github/builder"
+- regExp: "\\.github/builder"
   labels: ["ci/cd"]
-- regExp: "\.github/workflows"
+- regExp: "\\.github/workflows"
   labels: ["ci/cd"]
