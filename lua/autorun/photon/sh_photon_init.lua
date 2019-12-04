@@ -14,7 +14,7 @@ if not Photon then
 	function Photon.Messages.Print(...)
 		local args = {...}
 		args[#args + 1] = "\n"
-		return MsgC("[Photon]", unpack(args))
+		return MsgC(unpack(args))
 	end
 
 	function Photon.Messages:BuildLevel(level)
@@ -27,8 +27,9 @@ if not Photon then
 
 		self[level] = functional.compose(
 			Photon.Messages.Print,
-			Format("[%s]", level),
-			Photon.Messages.Colours[level]
+			Photon.Messages.Colours[level],
+			"[Photon]",
+			Format("[%s]", level)
 		)
 		_G["Photon" .. level] = self[level]
 	end
