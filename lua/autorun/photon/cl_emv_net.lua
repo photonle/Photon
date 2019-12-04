@@ -79,9 +79,11 @@ function EMVU.Net:Horn(arg)
 	net.SendToServer()
 end
 
-function EMVU.Net:Manual( arg )
-	net.Start( "emvu_manual" )
-		net.WriteBit( arg )
+--- Write a manual siren change to the server.
+-- @string arg Change mode.
+function EMVU.Net:Manual(arg)
+	net.Start("emvu_manual")
+		net.WriteBit(arg)
 	net.SendToServer()
 end
 
