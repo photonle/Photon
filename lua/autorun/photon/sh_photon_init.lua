@@ -1,6 +1,8 @@
 AddCSLuaFile()
 
-if not Photon then 
+include("sh_functional.lua")
+
+if not Photon then
 	Photon = {}
 
 	Photon.Net = {}
