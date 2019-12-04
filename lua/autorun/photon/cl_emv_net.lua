@@ -119,11 +119,11 @@ function EMVU.Net:Livery(category, index)
 	net.SendToServer()
 end
 
-function EMVU.Net:ReceiveLiveryUpdate( id, unit, ent )
-	Photon.AutoLivery.Apply( id, unit, ent )
+function EMVU.Net:ReceiveLiveryUpdate(id, unit, ent)
+	Photon.AutoLivery.Apply(id, unit, ent)
 end
-net.Receive( "photon_liveryupdate", function()
-	EMVU.Net:ReceiveLiveryUpdate( net.ReadString(), net.ReadString(), net.ReadEntity() )
+net.Receive("photon_liveryupdate", function()
+	EMVU.Net:ReceiveLiveryUpdate(net.ReadString(), net.ReadString(), net.ReadEntity())
 end)
 
 function EMVU.Net:Color( ent, col )
