@@ -4,6 +4,10 @@
 @author Joshua Piper
 @module functional
 --]]--
+
+local select = select
+local unpack = unpack
+
 module("functional")
 
 --- Builds a partial function, with stored arguments.
@@ -11,7 +15,7 @@ module("functional")
 -- @usage print(positiveOnly(-1)) -- Returns 0.
 -- @usage print(positiveOnly(2)) -- Returns 2.
 -- @tparam function func Input function to curry.
--- @tparam ... vararg Arguments to store.
+-- @tparam vararg ... Arguments to store.
 function compose(func, ...)
 	local args = {...}
 	local st = #args
@@ -22,6 +26,6 @@ function compose(func, ...)
 			args[st + i] = select(i, ...)
 		end
 
-		callable(unpack(args, 1, st + m))
+		func(unpack(args, 1, st + m))
 	end
 end
