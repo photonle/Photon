@@ -52,12 +52,19 @@ end
 Photon.Messages.Colours.Error = Color(255, 0, 0)
 Photon.Messages.Colours.Warning = Color(255, 200, 0)
 
+--- Print a message to console.
+-- @tparam vararg ... Inputs to display.
+-- @see MsgC
 function Photon.Messages.Print(...)
 	local args = {...}
 	args[#args + 1] = "\n"
 	return MsgC(unpack(args))
 end
 
+--- Build the message functions for a given level.
+-- Creates the global function Photon<LEVEL>, ie PhotonWarning
+-- Also adds the function to Photon.Messages.<LEVEL>, ie Photon.Messages.Warning
+-- @tparam string level Message level.
 function Photon.Messages:BuildLevel(level)
 	if self[level] then self[level] = nil end
 
