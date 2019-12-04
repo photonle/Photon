@@ -55,9 +55,11 @@ function EMVU.Net:Illuminate(arg)
 	net.SendToServer()
 end
 
-function EMVU.Net:Traffic( arg )
-	net.Start( "emvu_traffic" )
-		net.WriteString( arg )
+--- Write a TA change to the server.
+-- @string arg Change mode.
+function EMVU.Net:Traffic(arg)
+	net.Start("emvu_traffic")
+		net.WriteString(arg)
 	net.SendToServer()
 end
 
