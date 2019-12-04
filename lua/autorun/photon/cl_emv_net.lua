@@ -106,17 +106,16 @@ function EMVU.Net:WheelOption(arg, ent)
 	net.SendToServer()
 end
 
-local unitid_pref = GetConVar( "photon_emerg_unit" )
-
+local unitid_pref = GetConVar("photon_emerg_unit")
 local function GenerateDefaultUnitID()
 	return string.sub(tostring(LocalPlayer():SteamID64()), -3) or "000" -- will use the last three digits of Steam64
 end
 
-function EMVU.Net:Livery( category, index )
-	net.Start( "emvu_livery" )
-		net.WriteString( category )
-		net.WriteString( index )
-		net.WriteString( unitid_pref:GetString() or GenerateDefaultUnitID() )
+function EMVU.Net:Livery(category, index)
+	net.Start("emvu_livery")
+		net.WriteString(category)
+		net.WriteString(index)
+		net.WriteString(unitid_pref:GetString() or GenerateDefaultUnitID())
 	net.SendToServer()
 end
 
