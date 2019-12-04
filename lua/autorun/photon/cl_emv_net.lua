@@ -157,20 +157,23 @@ function EMVU.Net.ReceiveAvailableSkins()
 	local received = net.ReadTable()
 	Photon.AutoSkins.Available = received
 end
-net.Receive( "photon_availableskins", function() EMVU.Net.ReceiveAvailableSkins() end)
+net.Receive("photon_availableskins", function() EMVU.Net.ReceiveAvailableSkins() end)
 
-function EMVU.Net.ApplyAutoSkin( ent, skin )
+function EMVU.Net.ApplyAutoSkin(ent, skin)
+	skin = tostring(skin)
+
 	local cnt = 0
-	skin = tostring( skin )
-	for i in string.gfind( skin, "/" ) do
+	for i in string.gfind(skin, "/") do
 		cnt = cnt + 1
 	end
+
 	if cnt < 2 then
-		skin = string.Replace( skin, "/", "///" )
+		skin = string.Replace(skin, "/", "///")
 	end
-	net.Start( "photon_setautoskin" )
-		net.WriteEntity( ent )
-		net.WriteString( skin )
+
+	net.Start("photon_setautoskin")
+		net.WriteEntity(ent)
+		net.WriteString(skin)
 	net.SendToServer()
 end
 
