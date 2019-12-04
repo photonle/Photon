@@ -32,6 +32,10 @@ end
 
 --- @section params Parameter Manipulation
 
+--- Returns parameters without any changes.
+-- @tparam vararg ... Input paramters.
+local function null(...) return ... end
+
 --- Returns a function where the first two inputs are flipped.
 -- @tparam function func Input function.
 -- @treturn function Flipped function.
