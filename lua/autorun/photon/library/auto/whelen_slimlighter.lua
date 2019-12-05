@@ -1,14 +1,8 @@
 AddCSLuaFile()
 
-local A = "AMBER"
 local R = "RED"
-local DR = "D_RED"
 local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "NYPD Whelen Slimlighter"
 
@@ -22,8 +16,8 @@ COMPONENT.NotLegacy = true
 COMPONENT.ColorInput = 1
 COMPONENT.Category = "Interior"
 COMPONENT.DefaultColors = {
-	[1] = "RED",
-	[2] = "BLUE",
+	[1] = R,
+	[2] = B,
 }
 
 COMPONENT.Meta = {
