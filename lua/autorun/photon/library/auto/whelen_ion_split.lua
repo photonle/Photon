@@ -1,15 +1,5 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
-
 local name = "Whelen Ion Split"
 
 local COMPONENT = {}
@@ -69,8 +59,8 @@ COMPONENT.Sections = {
 COMPONENT.Patterns = {
 	["auto_ion"] = {
 		["code1"] = { 2, 0, 2, 0, 2, 2, 2, 0, 3, 0, 3, 0, 3, 3, 3, 0 },
-		["code2"] = { 
-			0, 
+		["code2"] = {
+			0,
 			3, 0, 3, 0,
 			2, 0, 2, 0,
 			3, 0, 3, 0,
@@ -83,7 +73,7 @@ COMPONENT.Patterns = {
 			3, 3, 0, 2, 2,
 			3, 3, 0, 2, 2,
 			3, 3, 0, 2, 2,
-			3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 
+			3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2,
 		}
 	}
 }
