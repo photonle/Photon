@@ -2,13 +2,9 @@ AddCSLuaFile()
 
 local A = "AMBER"
 local R = "RED"
-local DR = "D_RED"
 local B = "BLUE"
 local W = "WHITE"
 local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Whelen Ultra Freedom"
 
@@ -20,10 +16,10 @@ COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
 COMPONENT.Category = "Lightbar"
 COMPONENT.DefaultColors = {
-	[1] = "RED",
-	[2] = "BLUE",
-	[3] = "AMBER",
-	[4] = "AMBER",
+	[1] = R,
+	[2] = B,
+	[3] = A,
+	[4] = A,
 }
 
 COMPONENT.Meta = {
@@ -137,7 +133,7 @@ COMPONENT.Sections = {
 		[1] = {
 			{ 1, R }, { 2, B }, { 3, R }, { 4, B }, { 5, R }, { 6, B }, { 7, R }, { 8, B }, { 9, R }, { 10, B }, { 11, R }, { 12, B }, { 13, R }, { 14, B },
 			{ 15, R }, { 16, B }, { 17, R }, { 18, B }, { 19, R }, { 20, B }, { 21, R }, { 22, B }, { 23, R }, { 24, B }, { 25, R }, { 26, B }, { 27, R }, { 28, B },
-			{ 29, W }, { 30, W }, { 31, W }, { 32, W }, { 33, CW }, { 34, CW }, 
+			{ 29, W }, { 30, W }, { 31, W }, { 32, W }, { 33, CW }, { 34, CW },
 		},
 		[2] = {
 			{ 1, "_1" }, { 3, "_1" }, { 5, "_1" }, { 7, "_1" }, { 9, "_1" }
@@ -256,12 +252,12 @@ COMPONENT.Patterns = {
 		},
 		["code2"] = {
 			{ 5, 8 }, 0, { 5, 8 }, 0, { 5, 8 }, { 5, 8 }, { 5, 8 },
-			{ 6, 7 }, 0, { 6, 7 }, 0, { 6, 7 }, { 6, 7 }, { 6, 7 }, 
+			{ 6, 7 }, 0, { 6, 7 }, 0, { 6, 7 }, { 6, 7 }, { 6, 7 },
 		},
 		["code3"] = {
-			{ 1, 3 }, 0, { 2, 4 }, 0, { 1, 3 }, 0, { 2, 4 }, 0, { 1, 3 }, 0, { 2, 4 }, 0, 
-			{ 1, 3 }, 0, { 2, 4 }, 0, { 1, 3 }, 0, { 2, 4 }, 0, { 1, 3 }, 0, { 2, 4 }, 0, 
-			{ 1, 3 }, 0, { 2, 4 }, 0, { 1, 3 }, 0, { 2, 4 }, 0, { 1, 3 }, 0, { 2, 4 }, 0, 
+			{ 1, 3 }, 0, { 2, 4 }, 0, { 1, 3 }, 0, { 2, 4 }, 0, { 1, 3 }, 0, { 2, 4 }, 0,
+			{ 1, 3 }, 0, { 2, 4 }, 0, { 1, 3 }, 0, { 2, 4 }, 0, { 1, 3 }, 0, { 2, 4 }, 0,
+			{ 1, 3 }, 0, { 2, 4 }, 0, { 1, 3 }, 0, { 2, 4 }, 0, { 1, 3 }, 0, { 2, 4 }, 0,
 			{ 1, 3 }, { 1, 3 }, { 1, 3 }, { 2, 4 }, { 2, 4 }, { 2, 4 },
 			{ 1, 3 }, { 1, 3 }, { 1, 3 }, { 2, 4 }, { 2, 4 }, { 2, 4 },
 			{ 1, 3 }, { 1, 3 }, { 1, 3 }, { 2, 4 }, { 2, 4 }, { 2, 4 },
@@ -303,8 +299,8 @@ COMPONENT.Patterns = {
 			1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0,
 			1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0,
 			1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0,
-			1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 
-			1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 
+			1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,
+			1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,
 			1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,
 		}
 	},
@@ -316,7 +312,7 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 	["auto_whelen_ultra_freedom_traffic"] = {
 		9, 11, 13, 14, 12, 10, 23, 25, 27, 28, 26, 24
 	},
@@ -328,7 +324,7 @@ COMPONENT.TrafficDisconnect = {
 COMPONENT.Modes = {
 	Primary = {
 			M1 = {
-				["auto_whelen_ultra_freedom_outer"] = "code1",	
+				["auto_whelen_ultra_freedom_outer"] = "code1",
 				["auto_whelen_ultra_freedom_m_inner"] = "code1",
 				["auto_whelen_ultra_freedom_rear"] = "code1"
 			},
@@ -362,7 +358,7 @@ COMPONENT.Modes = {
 		},
 		R = {
 			{ 32, W }, { 30, W }
-		}	
+		}
 	}
 }
 
