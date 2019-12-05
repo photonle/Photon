@@ -352,6 +352,8 @@ function EMVU.LoadModeData( name, data )
 
 	local lastSequence = data.Sequences[ #data.Sequences ] or {}
 
+	if data["Traffic"] and istable(data["Traffic"]) and #data["Traffic"] == 0 then data["Traffic"] = nil end
+
 	if not data["Alert"] then
 
 		data.Alert = {
@@ -372,7 +374,6 @@ function EMVU.LoadModeData( name, data )
 	end
 
 	EMVU.Sequences[ name ] = data
-
 end
 
 local function hashPosition( firstPos, lastPos, autoPos, autoAng )
@@ -539,7 +540,6 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 				end
 			end
 		end
-		//PrintTable( activeSelections )
 		for id,metadata in pairs( component.Meta ) do -- add meta template data
 			local useId = tostring( tostring( id ) .. "_" .. tostring( i ) )
 			EMVU.LightMeta[ name ][ useId ]  = {}
@@ -591,7 +591,6 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 									end
 								end
 							end
-							//PrintTable( sequence )
 						end
 
 					end
@@ -619,7 +618,6 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 			if istable( component.Modes.Primary.ALERT ) or ( component.Modes.Primary.M3 ) then
 				local targetCopy = component.Modes.Primary.ALERT or component.Modes.Primary.M3
 				local sequence = EMVU.Sequences[name].Alert
-				// PrintTable( sequence )
 
 				if usesPresets then
 
@@ -691,8 +689,6 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 
 		end
 
-		//PrintTable( EMVU.Sequences[ name ].Traffic )
-
 		-- COMPONENT POSITION REUSE
 		-- added to recyle position data and avoid excessive RAM usage
 		local offset
@@ -722,7 +718,6 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 				local newPos = Vector()
 				newPos:Set( posData[1] )
 				newPos:Rotate( adjustAng )
-				// print(tostring(adjustAng))
 				newPos:Mul( autoScale )
 				newPos:Add( autoPos )
 				local newAng = Angle()
@@ -906,7 +901,6 @@ hook.Add("InitPostEntity", "EMVU.LoadVehicles", function()
 	EMVU:ProcessExpressVehicles()
 	EMVU:LoadVehicles()
 	EMVU.Configurations.LoadConfigurations()
-	//PrintTable( EMVU.Configurations.Library )
 end)
 
 -- if SERVER then
