@@ -1,14 +1,6 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Whelen PAR-46 Spotlight"
 
@@ -22,7 +14,7 @@ COMPONENT.ColorInput = 1
 COMPONENT.UsePhases = true
 COMPONENT.Category = "Exterior"
 COMPONENT.DefaultColors = {
-	[1] = "WHITE"
+	[1] = W
 }
 
 COMPONENT.Meta = {
