@@ -48,7 +48,7 @@ end
 --- Reverses a set of input arguments.
 -- @tparam ... vararg Input argument.
 -- @treturn vararg Flipped outputs.
--- @see http://lua-users.org/wiki/CurriedLua
+-- @see lua-wiki(CurriedLua)
 function reverse(...)
 	local function reverse_h(acc, v, ...)
 		if select('#', ...) == 0 then
