@@ -352,7 +352,7 @@ function EMVU.LoadModeData( name, data )
 
 	local lastSequence = data.Sequences[ #data.Sequences ] or {}
 
-	if data["Traffic"] and istable(data["Traffic"]) and #data["Traffic"] == 0 then data["Traffic"] = nil end
+	if istable(data["Traffic"]) and #data["Traffic"] == 0 then data["Traffic"] = nil end
 
 	if not data["Alert"] then
 
