@@ -20,7 +20,7 @@ COMPONENT.NotLegacy = true
 COMPONENT.ColorInput = 1
 COMPONENT.UsePhases = true 
 COMPONENT.DefaultColors = {
-    [1] = "Amber"
+    [1] = "AMBER"
 }
  
 COMPONENT.Meta = {
