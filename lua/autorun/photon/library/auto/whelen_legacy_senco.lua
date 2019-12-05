@@ -2,11 +2,8 @@ AddCSLuaFile()
 
 local A = "AMBER"
 local R = "RED"
-local DR = "D_RED"
 local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
 local G = "GREEN"
 
 local name = "Whelen Legacy SenCo Front"
@@ -148,33 +145,33 @@ COMPONENT.Sections = {
 			{ 9, A }, { 11, A },
 		},
 		[5] = {
-			{ 5, A }, { 7, A }, { 6, A }, { 8, A }, 
+			{ 5, A }, { 7, A }, { 6, A }, { 8, A },
 		},
 		[6] = {
 			{ 1, A }, { 3, A }, { 10, A }, { 12, A },
 		},
 		[7] = {
-			{ 9, A }, { 11, A }, 
-			{ 1, A }, { 3, A }, 
-			{ 6, A }, { 8, A }, 
+			{ 9, A }, { 11, A },
+			{ 1, A }, { 3, A },
+			{ 6, A }, { 8, A },
 		},
 		[8] = {
-			{ 2, A }, { 4, A }, 
-			{ 10, A }, { 12, A },  
-			{ 5, A }, { 7, A }, 
+			{ 2, A }, { 4, A },
+			{ 10, A }, { 12, A },
+			{ 5, A }, { 7, A },
 		},
 		[9] = {
-			{ 9, A }, { 11, A }, 
-			{ 1, A }, { 3, A }, 
-			{ 6, A }, { 8, A }, 
+			{ 9, A }, { 11, A },
+			{ 1, A }, { 3, A },
+			{ 6, A }, { 8, A },
 		},
 		[10] = {
-			{ 2, A }, { 4, A }, 
-			{ 10, A }, { 12, A },  
-			{ 5, A }, { 7, A }, 
+			{ 2, A }, { 4, A },
+			{ 10, A }, { 12, A },
+			{ 5, A }, { 7, A },
 		},
 		[11] = {
-			 { 5, A }, { 7, A }, { 9, A }, { 11, A }, 
+			 { 5, A }, { 7, A }, { 9, A }, { 11, A },
 		},
 		[12] = {
 			{ 5, A }, { 7, A }, { 1, A }, { 3, A },
@@ -222,15 +219,15 @@ COMPONENT.Patterns = {
 		["all"] = { 1, 0, 1, 0, 1, 0 },
 		["code1"] = { 2, 2, 2, 2, 0, 3, 3, 3, 3, 0 },
 		["code2"] = { 4, 5, 6, 5 },
-		["code3"] = { 
+		["code3"] = {
 			4, 0, 5, 0, 6, 0, 5, 0,
 			4, 0, 5, 0, 6, 0, 5, 0,
 			4, 0, 5, 0, 6, 0, 5, 0,
 			7, 0, 8, 0, 7, 0, 8, 0,
 			7, 0, 8, 0, 7, 0, 8, 0,
 			7, 0, 8, 0, 7, 0, 8, 0,
-			10, 10, 9, 9, 10, 10, 9, 9, 
-			10, 10, 9, 9, 10, 10, 9, 9, 
+			10, 10, 9, 9, 10, 10, 9, 9,
+			10, 10, 9, 9, 10, 10, 9, 9,
 			10, 10, 9, 9, 10, 10, 9, 9, 0,
 			7, 0, 8, 0, 7, 0, 8, 0,
 			7, 0, 8, 0, 7, 0, 8, 0,
@@ -249,7 +246,7 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 	["auto_whelen_legacy_traffic"] = {
 		25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38
 	}
@@ -262,11 +259,11 @@ COMPONENT.Modes = {
 			},
 			M2 = {
 				["auto_whelen_legacy"] = "code2",
-				["auto_whelen_legacy_corner"] = "code2"	
+				["auto_whelen_legacy_corner"] = "code2"
 			},
 			M3 = {
 				["auto_whelen_legacy"] = "code3",
-				["auto_whelen_legacy_corner"] = "code3"	
+				["auto_whelen_legacy_corner"] = "code3"
 			},
 			M4 = {
 				["auto_whelen_legacy_corner"] = "code2"
