@@ -1,28 +1,19 @@
 AddCSLuaFile()
- 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
- 
+
 local name = "Whelen TIR6"
- 
+
 local COMPONENT = {}
- 
+
 COMPONENT.Model = "models/noble/whelen_tir6/whelen_tir6.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
 COMPONENT.ColorInput = 1
-COMPONENT.UsePhases = true 
+COMPONENT.UsePhases = true
 COMPONENT.DefaultColors = {
     [1] = "WHITE"
 }
- 
+
 COMPONENT.Meta = {
 
     tir6_light = {
@@ -35,23 +26,23 @@ COMPONENT.Meta = {
         DirAxis = "Up",
         DirOffset = 90,
         WMult = 1.5
-    }, 
+    },
 
 }
- 
+
 COMPONENT.Positions = {
     [1] = { Vector( 1.35, .03, 4.25 ), Angle( 90, -94.34, 0 ), "tir6_light" },
 
 }
- 
+
 COMPONENT.Sections = {
     ["light_main"] = {
-        [1] = { 
+        [1] = {
             { 1, "_1"}
         }
     }
 }
- 
+
 COMPONENT.Patterns = {
     ["light_main"] = {
         ["code1"] = { 1, 1, 1, 0, 0, 0 },
@@ -75,9 +66,9 @@ COMPONENT.Patterns = {
         ["code3FDNY3"] = { 0, 1, 0 }
     },
 }
- 
+
 COMPONENT.TrafficDisconnect = {}
- 
+
 COMPONENT.Modes = {
     Primary = {
         M1 = {
@@ -102,5 +93,5 @@ COMPONENT.Modes = {
         }
     }
 }
- 
+
 EMVU:AddAutoComponent( COMPONENT, name )

@@ -2,13 +2,8 @@ AddCSLuaFile()
 
 local A = "AMBER"
 local R = "RED"
-local DR = "D_RED"
 local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Whelen Liberty II CHP"
 
@@ -155,7 +150,7 @@ COMPONENT.Sections = {
 		[9] = { { 14, A }, { 12, A },},
 		[10] = { { 12, A },},
 		[11] = {},
-		
+
 		[12] = { { 13, A }, { 14, A } },
 		[13] = { { 11, A }, { 13, A }, { 14, A }, { 12, A } },
 		[14] = {  { 11, A },  { 12, A },},
@@ -194,7 +189,7 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 	["auto_whelen_liberty_traffic_blue"] = {
 		9
 	},

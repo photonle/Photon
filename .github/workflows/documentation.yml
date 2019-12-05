@@ -47,7 +47,7 @@ jobs:
       -
         name: Commit
         uses: EndBug/add-and-commit@v2.1.0
-        if: steps.changes.outputs.status == 'changed'
+        if: steps.changes.outputs.status == 'change'
         with:
           author_name: Documentation Generator
           author_email: docs@photon.lighting

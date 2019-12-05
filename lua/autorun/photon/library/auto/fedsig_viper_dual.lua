@@ -1,15 +1,5 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
-
 local name = "Federal Signal Viper Dual"
 
 local COMPONENT = {}
@@ -81,7 +71,7 @@ COMPONENT.Patterns = {
 		["code3C"] = { 3, 0, 3, 0, 2, 0, 2, 0 },
 		["code3B"] = { 0, 2, 0, 2, 0, 3, 0, 3 },
 		["code3D"] = { 0, 2, 0, 2, 0, 3, 0, 3 },
-		["code3"] = { 
+		["code3"] = {
 			2, 0, 2, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 3, 0, 3, 0,
