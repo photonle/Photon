@@ -2,13 +2,8 @@ AddCSLuaFile()
 
 local A = "AMBER"
 local R = "RED"
-local DR = "D_RED"
 local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Whelen Liberty SX"
 
@@ -20,8 +15,8 @@ COMPONENT.Skin = 0
 COMPONENT.Category = "Lightbar"
 COMPONENT.Bodygroups = {}
 COMPONENT.DefaultColors = {
-	[1] = "RED",
-	[2] = "BLUE"
+	[1] = R,
+	[2] = B
 }
 
 COMPONENT.Meta = {
@@ -150,10 +145,10 @@ COMPONENT.Sections = {
 			{ 17, W }, { 18, W },
 		},
 		[2] = {
-			{ 1, "_1" }, { 4, "_1" }, { 10, "_2" }, 
+			{ 1, "_1" }, { 4, "_1" }, { 10, "_2" },
 		},
 		[3] = {
-			{ 2, "_2" }, { 3, "_2" }, { 9, "_1" }, 
+			{ 2, "_2" }, { 3, "_2" }, { 9, "_1" },
 		},
 		[4] = {
 			{ 3, "_2" }, { 4, "_1" },
@@ -210,8 +205,8 @@ COMPONENT.Patterns = {
 		["all"] = { 1 },
 		["code1"] = { 2, 2, 2, 2, 0, 3, 3, 3, 3, 0 },
 		["code2"] = { 2, 0, 2, 2, 2, 0, 3, 0, 3, 3, 3, 0, },
-		["code3"] = { 
-			4, 4, 5, 5, 4, 4, 5, 5, 4, 4, 5, 5, 4, 4, 5, 5, 
+		["code3"] = {
+			4, 4, 5, 5, 4, 4, 5, 5, 4, 4, 5, 5, 4, 4, 5, 5,
 			2, 2, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3,
 			2, 2, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3,
 			2, 3, 2, 3,2, 3, 2, 3,2, 3, 2, 3,2, 3, 2, 3,2, 3, 2, 3,
@@ -220,7 +215,7 @@ COMPONENT.Patterns = {
 	["auto_whelen_liberty_sx_traffic"] = {
 		["code1"] = { 1, 1, 2, 2 },
 		["code2"] = { 3, 3, 4, 4 },
-		["code3"] = { 
+		["code3"] = {
 			3, 3, 4, 4, 1, 1, 2, 2,
 		},
 		["left"] = {
@@ -232,7 +227,7 @@ COMPONENT.Patterns = {
 		["diverge"] = {
 			16, 16, 16, 17, 17, 17, 5, 5, 5, 5, 0, 0
 		}
-	}, 
+	},
 	["auto_whelen_liberty_sx_corner"] = {
 		["code1"] = { 1, 1, 1, 0, 2, 2, 2, 0 },
 		["code2"] = { 1, 1, 0, 2, 2, 0 },
@@ -246,7 +241,7 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 	["auto_whelen_legacy_traffic"] = {
 		9, 10, 11, 12, 13, 14
 	}
