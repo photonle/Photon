@@ -20,7 +20,7 @@ Photon.AutoLivery.TranslationTable = {
 -- @string val Unit ID.
 -- @ent ent Callback entity.
 -- @tparam function cback Callback function.
--- @tparam function failedback Error callback.
+-- @tparam function failedcback Error callback.
 Photon.AutoLivery.DownloadMaterial = function(car, id, val, ent, cback, failedcback)
 	if not file.Exists("photon", "DATA") then
 		file.CreateDir("photon")
