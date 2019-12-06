@@ -68,7 +68,7 @@ local function buildServerSettings( panel )
 
 	panel:AddControl( "CheckBox", { Label = "Enable Changing Siren Model", Command = "photon_emv_changesirens" } )
 	panel:AddControl( "CheckBox", { Label = "Enable Changing Lighting Presets", Command = "photon_emv_changepresets" } )
-	panel:AddControl( "CheckBox", { Label = "Keep siren stay on", Command = "photon_emv_stayon" } )
+	panel:AddControl( "CheckBox", { Label = "Enable Siren Running Outside Of Vehicle", Command = "photon_emv_stayon" } )
 	// panel:AddControl( "CheckBox", { Label = "Enable Rendering Illumination Light", Command = "photon_emv_useillum" } )
 end
 
