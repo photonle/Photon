@@ -101,7 +101,9 @@ local sirenTable = {
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/federal signal eq2b/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/federal signal eq2b/emv_yelp.wav", Icon="yelp"},
+			{Name = "MAN", Sound = "emv/sirens/federal signal eq2b/emv_manual.wav", Icon="manual"},
 		},
+		Manual = "emv/sirens/federal signal eq2b/emv_manual.wav",
 		Horn = "emv/sirens/federal signal eq2b/emv_horn.wav"
 	},
 	[9] = {
@@ -110,8 +112,9 @@ local sirenTable = {
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/federal sig omega 90/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/federal sig omega 90/emv_yelp.wav", Icon="yelp"},
+			{Name = "HILO", Sound = "emv/sirens/federal sig omega 90/emv_hilo.wav", Icon="hilo"},
+			{Name = "SWEP", Sound = "emv/sirens/federal sig omega 90/emv_sweep.wav", Icon="phaser"},
 		},
-		Manual = "emv/sirens/federal sig omega 90/emv_manual.wav",
 		Horn = "emv/sirens/federal sig omega 90/emv_horn.wav"
 	},
 	[10] = {
@@ -524,6 +527,28 @@ local sirenTable = {
 			{Name = "HILO", Sound = "emv/sirens/west mids/emv_hilo.wav", Icon = "hilo"},
 		},
 		Horn = "emv/sirens/whelen cencom sapphire/emv_horn.wav",
+	},
+	[53] = {
+		Name = "Q2B",
+		Category = "Federal Signal",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/federal signal q2b/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/federal signal q2b/emv_yelp.wav", Icon="yelp"},
+			{Name = "MAN", Sound = "emv/sirens/federal signal eq2b/emv_manual.wav", Icon="manual"},
+		},
+		Manual = "emv/sirens/federal signal eq2b/emv_manual.wav",
+		Horn = "emv/sirens/federal signal eq2b/emv_horn.wav"
+	},
+	[54] = {
+		Name = "Scan Superior",
+		Category = "Other",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/scan superior/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/scan superior/emv_yelp.wav", Icon="yelp"},
+			{Name = "PRTY", Sound = "emv/sirens/scan superior/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/scan superior/emv_hilo.wav", Icon="hilo"},
+		},
+		Horn = "emv/sirens/scan superior/emv_horn.wav"
 	},
 }
 
