@@ -242,27 +242,22 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	end
 end)
 
-local function SirenSuggestions(cmd, args)
-	args = args:Trim():lower()
+local function SirenSuggestions( cmd, args )
 
-	local filtered
-	if args == "" then
-		filtered = EMVU.GetSirenTable()
-	else
-		filtered = {}
-		for k, v in pairs(EMVU.GetSirenTable()) do
-			if v.Name:lower():StartWith(args) then
-				filtered[k] = v
-			end
-		end
-	end
+	args = string.Trim( args )
+	args = string.lower( args )
 
 	local result = {}
-	for k, v in SortedPairs(filtered) do
-		table.insert(result, Format("%s %s", cmd, v.Name))
+
+	local i = 1
+	for k,v in pairs( EMVU.GetSirenTable() ) do
+
+		table.insert( result, "emv_siren " .. k .. " \"" .. v.Name .. "\"")
+
 	end
 
 	return result
+
 end
 
 concommand.Add("emv_siren", function(ply, cmd, args)
@@ -296,11 +291,9 @@ concommand.Add("emv_siren", function(ply, cmd, args)
 	end
 
 	local max = #EMVU.GetSirenTable()
-	if id > max then
-		id = 0
-	end
-
-	EMVU.Net:SirenSet(id)
+	local val = tonumber(args[1])
+	if val and isnumber(val) and val <= max then set = val end
+	EMVU.Net:SirenSet( set )
 end, SirenSuggestions, "[Photon] Overrides the default siren on an Emergency Vehicle.")
 
 concommand.Add("emv_illum", function(ply, cmd, args)
