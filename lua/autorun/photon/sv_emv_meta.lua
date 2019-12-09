@@ -702,7 +702,7 @@ function EMVU:MakeEMV( ent, emv )
 	if istable( emv.Auto ) and emv.Auto[1] and istable( emv.Presets ) then
 		ent:ELS_PresetOption( 1 )
 	end
-
+	
 	ent:ELS_SirenOption( 1 )
 	ent:ELS_LightOption( 1 )
 	ent:ELS_IlluminateOption ( 1 )
