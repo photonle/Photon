@@ -41,6 +41,11 @@
 			"symbol": "🚓",
 			"description": "Photon Vehicle Configurations",
 			"link": "[<%= symbol %>](<%= url %> \"<%= description %>\"),"
+		},
+		"core": {
+			"symbol": "🛠️",
+			"description": "Being a member of Photon's Core Team.",
+			"link": "[<%= symbol %>](<%= url %> \"<%= description %>\"),"
 		}
 	}
 }
