@@ -36,6 +36,8 @@ function EMVU.Net:Lights( ply, args )
 		emv:ELS_LightsOff()
 	elseif args == "tog" then
 		emv:ELS_LightsToggle()
+	elseif args == "togback" then
+		emv:ELS_LightsToggleBack()
 	end
 end
 net.Receive("emvu_el", function(len, ply)
@@ -52,6 +54,8 @@ function EMVU.Net:Siren( ply, args )
 		emv:ELS_SirenOff()
 	elseif args == "tog" then
 		emv:ELS_SirenToggle()
+	elseif args == "togback" then
+		emv:ELS_SirenToggleBack()
 	elseif args == "hon" then
 		emv:ELS_HornOn()
 	elseif args == "hoff" then
@@ -73,6 +77,8 @@ function EMVU.Net:Illumination( ply, args )
 		emv:ELS_IllumOff()
 	elseif args == "tog" then
 		emv:ELS_IllumToggle()
+	elseif args == "togback" then
+		emv:ELS_IllumToggleBack()
 	end
 end
 net.Receive("emvu_illum", function( len, ply )
@@ -88,6 +94,8 @@ function EMVU.Net:Traffic( ply, args )
 		emv:ELS_TrafficOff()
 	elseif args == "tog" then
 		emv:ELS_TrafficToggle()
+	elseif args == "togback" then
+		emv:ELS_TrafficToggleBack()
 	end
 end
 net.Receive( "emvu_traffic", function (len, ply )

@@ -2,12 +2,8 @@ AddCSLuaFile()
 
 local A = "AMBER"
 local R = "RED"
-local DR = "D_RED"
 local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
 local SW = "S_WHITE"
-local G = "GREEN"
 
 local name = "Federal Signal Arjent"
 
@@ -106,7 +102,7 @@ COMPONENT.Sections = {
 		{
 			{ 1, R }, { 2, B }, { 3, R }, { 4, B }, { 5, R }, { 6, B }, { 7, R }, { 8, B },
 			{ 9, R }, { 10, B }, { 11, R }, { 12, B }, { 13, A }, { 14, A }, { 15, A }, { 16, A }, { 17, A }, { 18, A },
-			{ 19, SW }, { 20, SW }, { 21, SW }, { 22, SW }, 
+			{ 19, SW }, { 20, SW }, { 21, SW }, { 22, SW },
 		},
 	},
 	["auto_fedsig_arjent_steady"] = {
@@ -171,7 +167,7 @@ COMPONENT.Patterns = {
 		["code2"] = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 1 },
 	},
 	["auto_fedsig_arjent_takedown"] = {
-		["wigwag"] = { 1 }	
+		["wigwag"] = { 1 }
 	},
 	["auto_fedsig_arjent_signalmaster"] = {
 		["warn"] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 },

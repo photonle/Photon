@@ -1,10 +1,10 @@
 "VertexlitGeneric"
 {
-	"$basetexture" "noble/prisoner_cage/glass2"
+	"$basetexture" "noble/prisoner_cage/glass"
 	"$bumpmap"    "noble/prisoner_cage/glass_nm"
 	"$nodecal" "1"
-//	"$translucent" 1
-	"$alphatest" 1
+	"$translucent" 1
+//	"$alphatest" 1
 	"$phong" 1
 	"$phongboost" "1"
 	"$phongexponent" 2

@@ -21,13 +21,6 @@ EMVU.Colors = {
 		dim = Color( 0, 175, 255, 255 ),
 		raw = Color( 0, 0, 255, 255 ),
 	},
-	-- BLUE = {
-	-- 	src = Color( 245, 255, 255, 255 ),
-	-- 	med = Color( 0, 100, 255, 255 ),
-	-- 	glw = Color( 0, 125, 255, 200 ),
-	-- 	blm = Color( 0, 75, 255, 50 ),
-	-- 	amb = Color( 0, 0, 255, 5 ),
-	-- },
 	RED = {
 		src = Color( 255, 255, 240, 255 ),
 		med = Color( 255, 190, 0, 220 ),
@@ -108,7 +101,6 @@ EMVU.Colors = {
 		amb = Color( 255, 255, 255, 1 ),
 		flr = Color( 0, 64, 96, 255 ),
 		dim = Color( 255, 255, 200, 255 ),
-		raw = Color( 255, 255, 255, 1 ),
 		raw = Color( 16, 200, 255, 128 ),
 	},
 	C_WHITE = { -- cool white (halogen)
@@ -119,6 +111,5 @@ EMVU.Colors = {
 		amb = Color( 128, 128, 255, 2 ),
 		flr = Color( 0, 16, 255, 255 ),
 		raw = Color( 0, 0, 255, 128 ),
-
 	},
 }

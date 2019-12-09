@@ -2,6 +2,7 @@ AddCSLuaFile()
 
 local scrW = ScrW()
 local scrH = ScrH()
+local PhotonHUD = {}
 
 local setDrawColor = surface.SetDrawColor
 local setMaterial = surface.SetMaterial
@@ -10,8 +11,14 @@ local drawTexturedRect = surface.DrawTexturedRect
 local drawTexture = false
 local HUD_OPACITY = GetConVar("photon_hud_opacity")
 hook.Add("InitPostEntity", "Photon.HudOpacityInit", function() HUD_OPACITY = GetConVar("photon_hud_opacity") end)
+cvars.AddChangeCallback("photon_hud_opacity", function(name, old, new)
+	if not IsValid(PhotonHUD.Panel) then return end
+	if tonumber(new) == nil then return end
 
-local PhotonHUD = {}
+	PhotonHUD.Panel:RunJavascript("photonUI.setOpacity(" .. new .. ")")
+end)
+
+
 PhotonHUD.Code = false
 
 PhotonHUD.Icons = {}
@@ -70,7 +77,8 @@ function PhotonHUD:BuildCode()
 				setAuxOn:function(){$("#aux-lights").addClass("on")},setAuxOff:function(){$("#aux-lights").removeClass("on")},setAux:function(t){$("#aux-lights").toggleClass("on",t)},
 				setActiveAux:function(t,e){$("#aux-lights h3").html(e),photonUI.setActiveAuxMeter(t)},setupAuxLights:function(t,e,n,i){photonUI.resetAuxMeter(t),photonUI.setActiveAux(e,n),i?photonUI.setAuxOn():photonUI.setAuxOff()},
 				resetLayout:function(){photonUI.clearSections(),photonUI.setupPrimaryLights(0,0,"None",!1),photonUI.setupAuxLights(0,0,"None",!1)},
-				updateSirenModel:function(t,e){$("#bottom").show(),$("#siren-model").html(t),$("#siren-name").html(e)}
+				updateSirenModel:function(t,e){$("#bottom").show(),$("#siren-model").html(t),$("#siren-name").html(e)},
+				setOpacity: function(o){$("#container").css("opacity", o)}
 			};
 		</script>
 	</head>
@@ -285,7 +293,7 @@ for name, data in pairs(self.Icons) do
 end
 self.Code = self.Code .. [[
 	</style>
-	<body><div class="container"><div class="section" id="warning-lights"><h1>Warning Lights</h1><div class="partial" id="primary-lights"><h2>Primary</h2><div class="stage-meter" id="primary-meter"></div><h3>None</h3></div><div class="partial" id="aux-lights"><h2>Auxiliary</h2><div class="stage-meter" id="aux-meter"></div><h3>None</h3></div></div><div id="bottom"><div class="inner-container"><div id="model-text"><span id="siren-model"></span> <span id="siren-name"></span></div></div></div></div><link href="styles/styles.css" rel="stylesheet"/></body>
+	<body><div class="container" id="container"><div class="section" id="warning-lights"><h1>Warning Lights</h1><div class="partial" id="primary-lights"><h2>Primary</h2><div class="stage-meter" id="primary-meter"></div><h3>None</h3></div><div class="partial" id="aux-lights"><h2>Auxiliary</h2><div class="stage-meter" id="aux-meter"></div><h3>None</h3></div></div><div id="bottom"><div class="inner-container"><div id="model-text"><span id="siren-model"></span> <span id="siren-name"></span></div></div></div></div><link href="styles/styles.css" rel="stylesheet"/></body>
 </html>]]
 end
 
@@ -519,6 +527,8 @@ function PhotonHUD:ResetLayout( primary, auxiliary, sirens, illum, funcs )
 			local siren = sirenTable[i]
 			PhotonHUD.Panel:RunJavascript( "photonUI.addButton('siren', '" .. siren.Icon .. "', '" .. siren.Name .. "', " .. i .. ", " .. siren.State ..");" )
 		end
+	else
+		PhotonHUD.Panel:RunJavascript( "photonUI.updateSirenModel('', '');" )
 	end
 	if istable( illum ) then
 		local illumTable = illum.LightTable
@@ -541,19 +551,31 @@ function PhotonHUD:ResetLayout( primary, auxiliary, sirens, illum, funcs )
 			PhotonHUD.Panel:RunJavascript( "photonUI.addButton('functions', '" .. func.Icon .. "', '" .. func.Name .. "', " .. i .. ", " .. func.State ..");" )
 		end
 	end
+
+	local opacity = HUD_OPACITY:GetFloat()
+	PhotonHUD.Panel:RunJavascript("photonUI.setOpacity(" .. opacity .. ")")
 end
 
-
+local CV_HEIGHT = CreateClientConVar("photon_hud_offset_y", -1, true, false, "The height offset of the photon HUD.")
+local CV_WIDTH = CreateClientConVar("photon_hud_offset_x", -1, true, false, "The side offset of the photon HUD.")
 
 local function PhotonHtml()
 	if not PhotonHUD.Panel then return end
 	PhotonHUD:AutoUpdate()
+
 	if not PhotonHUD.ShouldDraw then return end
 	if drawTexture != false then
 		local opacity = 255 * HUD_OPACITY:GetFloat()
-		setDrawColor( 255, 255, 255, opacity )
-		setMaterial( drawTexture )
-		drawTexturedRect( scrW - 512, scrH - 512, 512, 512 )
+		setDrawColor(255, 255, 255, opacity)
+		setMaterial(drawTexture)
+
+		local wOffset = CV_WIDTH:GetInt()
+		if wOffset < 0 then wOffset = 0 end
+
+		local hOffset = CV_HEIGHT:GetInt()
+		if hOffset < 0 then hOffset = 0 end
+
+		drawTexturedRect(scrW - 512 - wOffset, scrH - 512 - hOffset, 512, 512)
 	end
 end
 hook.Add( "HUDPaint", "Photon.NewHUDPaint", function()

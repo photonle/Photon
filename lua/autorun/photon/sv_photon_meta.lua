@@ -8,7 +8,7 @@ function Photon:SetupCar( ent, index )
 
 	end
 
-	// if car is braking
+	-- if car is braking
 	function ent:CAR_Braking( val )
 		if not IsValid( self ) then return false end
 		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_BRAKING", val ) end
@@ -16,7 +16,7 @@ function Photon:SetupCar( ent, index )
 
 	end
 
-	// car reversing
+	-- car reversing
 	function ent:CAR_Reversing( val )
 		if not IsValid( self ) then return false end
 		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_REVERSING", val ) end
@@ -69,7 +69,7 @@ function Photon:SetupCar( ent, index )
 		if self:IsReversing() then return false end
 		local speed = self:GetPhysicsObject():GetVelocity():Length()
 		if not self.LastSpeed then self.LastSpeed = speed return false end
-		if (self.LastSpeed - speed) >= 0 and ( self:GetDriver():KeyDown( IN_BACK ) and not self:IsReversing() ) or ( self:GetDriver():KeyDown( IN_BACK) and self:Photon_AdjustedSpeed() < 2 ) or self:GetDriver():KeyDown( IN_JUMP ) then 
+		if (self.LastSpeed - speed) >= 0 and ( self:GetDriver():KeyDown( IN_BACK ) and not self:IsReversing() ) or ( self:GetDriver():KeyDown( IN_BACK) and self:Photon_AdjustedSpeed() < 2 ) or self:GetDriver():KeyDown( IN_JUMP ) then
 			return true
 		end
 		return false
@@ -85,7 +85,7 @@ function Photon:SetupCar( ent, index )
 			local sum = Vector()
 			sum.x = velocity.x * direction.x
 			sum.y = velocity.y * direction.y
-			if not (sum.x >= 0 and sum.y >= 0) then 
+			if not (sum.x >= 0 and sum.y >= 0) then
 				if (ply:KeyDown( IN_BACK ) and (ent:Photon_AdjustedSpeed() > 10)) and not ply:KeyDown( IN_JUMP ) then return true end
 			end
 		end

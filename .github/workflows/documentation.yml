@@ -4,7 +4,7 @@ on:
     paths-ignore:
       - 'docs/**'
       - '.github/**'
-    tags:
+    tags-ignore:
       - '*'
     branches:
       - development
@@ -35,6 +35,10 @@ jobs:
         name: Build
         run: ldoc -M -c ./config.ld -t 'Photon Lighting Documentation' -d ./docs ./lua
       -
+        name: Changes
+        id: changes
+        run: chmod +x .github/new-docs.sh && .github/new-docs.sh
+      -
         name: Upload
         uses: actions/upload-artifact@v1.0.0
         with:
@@ -43,6 +47,7 @@ jobs:
       -
         name: Commit
         uses: EndBug/add-and-commit@v2.1.0
+        if: steps.changes.outputs.status == 'change'
         with:
           author_name: Documentation Generator
           author_email: docs@photon.lighting

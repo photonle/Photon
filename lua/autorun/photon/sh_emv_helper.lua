@@ -198,7 +198,9 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 	-- end
 	EMVU.Sequences = EMVU.Sequences or {}
 	if not name or not option or not vehicle then return {} end
-	if not istable( EMVU.Sequences[ name ] ) or not istable( EMVU.Sequences[ name ].Illumination ) then return {} end
+	if not istable(EMVU.Sequences[name]) then return {} end
+	if not istable(EMVU.Sequences[name].Illumination) then return {} end
+	if not istable(EMVU.Sequences[name].Illumination[option]) then return {} end
 	local resultTable = {}
 
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Illumination"][option]["BG_Components"] ) then
@@ -386,6 +388,8 @@ function EMVU.Helper:GetProps( name, ent )
 					propData.Scale = preset.Scale
 					propData.RenderGroup = preset.RenderGroup
 					propData.RenderMode = preset.RenderMode
+					propData.BodyGroups = preset.BodyGroups or propData.BodyGroups
+					propData.SubMaterials = preset.SubMaterials or propData.SubMaterials
 					propData.AutoIndex = id
 					propData.ComponentName = preset[ "ID" ]
 					if autoData.RotationEnabled then
@@ -417,8 +421,8 @@ function EMVU.Helper:GetProps( name, ent )
 							propData.Pos = component.Pos
 							propData.Ang = component.Ang
 							propData.Scale = component.Scale
-							--propData.BodyGroups = component.BodyGroups or false
-							--propData.SubMaterials = component.SubMaterials or false
+							propData.BodyGroups = component.BodyGroups or propData.BodyGroups
+							propData.SubMaterials = component.SubMaterials or propData.SubMaterials
 							propData.AutoIndex = id
 							propData.ComponentName = component[ "ID" ]
 							if autoData.RotationEnabled then
@@ -565,4 +569,17 @@ function EMVU.Helper.GetBonePositionFromRE( car, lbEntity, posInput )
 	local boneIndex = boneData.Bone
 	local boneWorldPos, boneWorldAng = lbEntity:GetBonePosition( boneIndex )
 	return boneWorldPos
+end
+
+--- Fetch the sub props used in multi-prop vehicles.
+-- @ent car Vehicle to fetch sub props for.
+-- @treturn table Array of subprops.
+function EMVU.Helper.GetSubProps(car)
+	local out = {}
+	for _, prop in ipairs(car:GetChildren()) do
+		if prop:GetClass() == "prop_dynamic_ornament" then
+			table.insert(out, prop)
+		end
+	end
+	return out
 end

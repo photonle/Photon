@@ -1,6 +1,6 @@
 --[[-- EMVU Key Listener.
 @copyright Photon Team
-@release v72 Fair Oaks
+@release v73 Grand Lake
 @author Photon Team
 @module EMVU
 --]]--
@@ -14,12 +14,13 @@ local key_auxiliary = GetConVar("photon_key_auxiliary")
 local key_blackout = GetConVar("photon_key_blackout")
 local key_horn = GetConVar("photon_key_horn")
 local key_manual = GetConVar("photon_key_manual")
-local key_illum = GetConVar("photon_key_radar")
+local key_illum = GetConVar("photon_key_illum")
 local key_radar = GetConVar("photon_key_radar")
 local key_siren1 = GetConVar("photon_key_siren1")
 local key_siren2 = GetConVar("photon_key_siren2")
 local key_siren3 = GetConVar("photon_key_siren3")
 local key_siren4 = GetConVar("photon_key_siren4")
+local key_backtick = GetConVar("photon_key_alt_reverse")
 local should_render =  GetConVar("photon_emerg_enabled")
 
 hook.Add("InitPostEntity", "Photon.SetupLocalKeyBinds", function()
@@ -33,6 +34,7 @@ hook.Add("InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	key_manual = GetConVar("photon_key_manual")
 	key_illum = GetConVar("photon_key_illum")
 	key_radar = GetConVar("photon_key_radar")
+	key_backtick = GetConVar("photon_key_alt_reverse")
 	should_render = GetConVar("photon_emerg_enabled")
 end)
 
@@ -100,6 +102,8 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	if input.IsKeyTrapping() then return end
 	if vgui.CursorVisible() then return end
 
+	local SHIFTING = keyDown(key_backtick:GetInt())
+
 	if not X_DOWN then
 		if keyDown(key_illum:GetInt()) then
 			EMVU.Sounds:Panel(emv:Photon_Illumination())
@@ -111,7 +115,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		if emv:Photon_Illumination() and X_PRESS + .25 > CurTime() then
 			cmd = "off"
 		elseif emv:Photon_Illumination() then
-			cmd = "tog"
+			cmd = SHIFTING and "togback" or "tog"
 		end
 
 		EMVU.Sounds:Panel(cmd ~= "off")
@@ -131,7 +135,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 			if emv:Photon_TrafficAdvisor() and PHOTON_B_PRESS + .25 > CurTime() then
 				cmd = "off"
 			elseif emv:Photon_TrafficAdvisor() then
-				cmd = "tog"
+				cmd = SHIFTING and "togback" or "tog"
 			end
 			EMVU.Sounds:Panel(cmd ~= "off")
 			EMVU.Net:Traffic(cmd)
@@ -157,7 +161,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 
 	if not LIGHTTOG_DOWN and keyDown(key_primary_alt:GetInt()) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
-		EMVU.Net:Lights("tog")
+		EMVU.Net:Lights(SHIFTING and "togback" or "tog")
 		LIGHTTOG_DOWN = true
 	elseif LIGHTTOG_DOWN and not keyDown(key_primary_alt:GetInt()) then
 		LIGHTTOG_DOWN = false
@@ -165,7 +169,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 
 	if not SIRENTOGGLE_DOWN and keyDown(key_siren_alt:GetInt()) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
-		EMVU.Net:Siren("tog")
+		EMVU.Net:Siren(SHIFTING and "togback" or "tog")
 		SIRENTOGGLE_DOWN = true
 	elseif SIRENTOGGLE_DOWN and not keyDown(key_siren_alt:GetInt()) then
 		SIRENTOGGLE_DOWN = false
@@ -257,39 +261,84 @@ local function SirenSuggestions( cmd, args )
 end
 
 concommand.Add("emv_siren", function(ply, cmd, args)
-	if not args[1] then return end
+	if args[1] == nil then return end
 	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
-	local set = 0
+
+	local id = tonumber(args[1])
+	if id == nil then
+		-- We're dealing with a name or a named ID.
+		-- Check for IDs first.
+		for idx, data in ipairs(EMVU.GetSirenTable()) do
+			if data.ID == args[1] then
+				id = idx
+				break
+			end
+		end
+
+		-- We've already checked against IDs.
+		local name = table.concat(args, " "):Trim()
+		for idx, data in ipairs(EMVU.GetSirenTable()) do
+			if data.Name == name then
+				id = idx
+				break
+			end
+		end
+	end
+
+	if id == nil or not isnumber(id) then
+		Error("[Photon] emv_siren was sent a bad name, ID or named index.\n")
+		return
+	end
+
 	local max = #EMVU.GetSirenTable()
 	local val = tonumber(args[1])
 	if val and isnumber(val) and val <= max then set = val end
 	EMVU.Net:SirenSet( set )
 end, SirenSuggestions, "[Photon] Overrides the default siren on an Emergency Vehicle.")
 
-concommand.Add("car_signal", function(ply, cmd, args)
-	if not ply:InVehicle() or not ply:GetVehicle():Photon() or not args[1] then return end
-	Photon:CarSignal( args[1] )
-end)
-
-concommand.Add( "emv_illum", function( ply, cmd, args )
+concommand.Add("emv_illum", function(ply, cmd, args)
 	if not args[1] then return end
 	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
-	EMVU.Net:Illuminate( args[1] )
+	EMVU.Net:Illuminate(args[1])
 end)
 
-function Photon:CarSignal( arg )
-	if not LocalPlayer():InVehicle() or not LocalPlayer():GetVehicle():Photon() or not arg then return end
+concommand.Add("car_signal", function(ply, cmd, args)
+	if not ply:InVehicle() or not ply:GetVehicle():Photon() or not args[1] then return end
+	Photon:CarSignal(args[1])
+end)
+
+--- Set the LocalPlayer's vehicle's turn signal state.
+-- @string arg New state.
+function Photon:CarSignal(arg)
+	local lPly = LocalPlayer()
+	if not IsValid(lPly) then return end
+	if not lPly:InVehicle() then return end
+
 	local car = LocalPlayer():GetVehicle()
+	if not car:Photon() then return end
+
+	if not arg then return end
+
 	if arg == "left" then
-		Photon.Net:Signal( CAR_TURNING_LEFT )
-		if not car:Photon_TurningLeft() then surface.PlaySound( EMVU.Sounds.SignalOn ) else surface.PlaySound( EMVU.Sounds.SignalOff ) end
+		Photon.Net:Signal(CAR_BLINKER_LEFT)
+		EMVU.Sounds:Signal(not car:Photon_TurningLeft())
 		return
 	end
+
 	if arg == "right" then
-		Photon.Net:Signal( CAR_TURNING_RIGHT )
-		if not car:Photon_TurningRight() then surface.PlaySound( EMVU.Sounds.SignalOn ) else surface.PlaySound( EMVU.Sounds.SignalOff ) end
+		Photon.Net:Signal(CAR_BLINKER_RIGHT)
+		EMVU.Sounds:Signal(not car:Photon_TurningRight())
 		return
 	end
-	if arg == "hazard" then Photon.Net:Signal( CAR_HAZARD ) return end
-	if arg == "none" and (car:Photon_BlinkState() != 0) then Photon.Net:Signal( 0 ); surface.PlaySound( EMVU.Sounds.SignalOff ) return end
+
+	if arg == "hazard" then
+		Photon.Net:Signal(CAR_BLINKER_HAZARD)
+		return
+	end
+
+	if arg == "none" and (car:Photon_BlinkState() ~= CAR_BLINKER_NONE) then
+		Photon.Net:Signal(CAR_BLINKER_NONE)
+		EMVU.Sounds:Signal(false) -- Always turn off.
+		return
+	end
 end

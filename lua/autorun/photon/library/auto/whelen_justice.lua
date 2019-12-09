@@ -2,12 +2,8 @@ AddCSLuaFile()
 
 local A = "AMBER"
 local R = "RED"
-local DR = "D_RED"
 local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
 
 local name = "Whelen Justice"
 
@@ -19,8 +15,8 @@ COMPONENT.Lightbar = true
 COMPONENT.Bodygroups = {}
 COMPONENT.Category = "Lightbar"
 COMPONENT.DefaultColors = {
-	[1] = "RED",
-	[2] = "BLUE"
+	[1] = R,
+	[2] = B
 }
 
 COMPONENT.Meta = {
@@ -217,7 +213,7 @@ COMPONENT.Patterns = {
 		["all"] = { 1, 0, 1, 0, 1, 0 },
 		["code1"] = { 2, 2, 2, 2, 0, 3, 3, 3, 3, 0 },
 		["code2"] = { 4, 5, 6, 7, 6, 5 },
-		["code3"] = { 
+		["code3"] = {
 			8, 9, 10, 11, 12, 11, 10, 9,
 			8, 9, 10, 11, 12, 11, 10, 9,
 			8, 9, 10, 11, 12, 11, 10, 9,
@@ -244,7 +240,7 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 	["auto_whelen_justice_traffic"] = {
 		12, 13, 14, 15, 16, 17, 18
 	}

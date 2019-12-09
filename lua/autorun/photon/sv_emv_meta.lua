@@ -175,6 +175,20 @@ function EMVU:MakeEMV( ent, emv )
 		if self:ELS_Illuminate() then self:ELS_IllumOff(); self:ELS_IllumOn() end
 	end
 
+	function ent:ELS_IllumToggleBack()
+		if not IsValid( self ) then return end
+		local usesLamps = EMVU.Helper:HasLamps( self.Name )
+		if not usesLamps then return false end
+
+		local cur = self:ELS_IlluminateOption()
+		if cur == 1 then
+			self:ELS_IlluminateOption(#EMVU.Sequences[self.Name].Illumination)
+		else
+			self:ELS_IlluminateOption(cur - 1)
+		end
+		if self:ELS_Illuminate() then self:ELS_IllumOff(); self:ELS_IllumOn() end
+	end
+
 	function ent:ELS_TrafficOn()
 		if not IsValid( self ) then return end
 		self:ELS_Traffic( true )
@@ -192,6 +206,17 @@ function EMVU:MakeEMV( ent, emv )
 			self:ELS_TrafficOption( 1 )
 		else
 			self:ELS_TrafficOption( self:ELS_TrafficOption() + 1 )
+		end
+	end
+
+	function ent:ELS_TrafficToggleBack()
+		if not IsValid( self ) then return end
+
+		local cur = self:ELS_TrafficOption()
+		if cur == 1 then
+			self:ELS_TrafficOption(#EMVU.Sequences[self.Name].Traffic)
+		else
+			self:ELS_TrafficOption(cur - 1)
 		end
 	end
 
@@ -220,6 +245,17 @@ function EMVU:MakeEMV( ent, emv )
 			self:ELS_LightOption(1)
 		else
 			self:ELS_LightOption(self:ELS_LightOption() + 1)
+		end
+	end
+
+	function ent:ELS_LightsToggleBack()
+		if not IsValid( self ) then return end
+
+		local cur = self:ELS_LightOption()
+		if cur == 1 then
+			self:ELS_LightOption(#EMVU.Sequences[self.Name].Sequences)
+		else
+			self:ELS_LightOption(cur - 1)
 		end
 	end
 
@@ -337,7 +373,23 @@ function EMVU:MakeEMV( ent, emv )
 			self:ELS_SirenOff( true )
 			self:ELS_SirenOn()
 		end
+	end
 
+	function ent:ELS_SirenToggleBack()
+		if not IsValid( self ) then return end
+		if self:ELS_NoSiren() then return end
+
+		local cur = self:ELS_SirenOption()
+		if cur == 1 then
+			self:ELS_SirenOption(#EMVU.GetSirenTable()[self:ELS_SirenSet()].Set)
+		else
+			self:ELS_SirenOption(cur - 1)
+		end
+
+		if self:ELS_Siren() then
+			self:ELS_SirenOff( true )
+			self:ELS_SirenOn()
+		end
 	end
 
 	function ent:ELS_SirenSetToggle()
@@ -485,8 +537,13 @@ function EMVU:MakeEMV( ent, emv )
 			end
 		end
 		if submaterialIndex == false then return end
-		if index then self:SetSkin( index ) else self:SetSkin( 0 ) end
-		self:SetSubMaterial( submaterialIndex, tostring( mat ) )
+		if index then self:SetSkin(index) else self:SetSkin(0) end
+
+		mat = tostring(mat)
+		self:SetSubMaterial(submaterialIndex, mat)
+		for _, prop in ipairs(EMVU.Helper.GetSubProps(self)) do
+			prop:SetSubMaterial(submaterialIndex, mat)
+		end
 	end
 
 	function ent:ApplyPhotonSkin( skin, index, mat )

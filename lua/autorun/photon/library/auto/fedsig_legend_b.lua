@@ -1,13 +1,8 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
 local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
 
 local name = "Federal Signal Legend Blue"
 
@@ -131,7 +126,7 @@ COMPONENT.Sections = {
 		},
 		[3] = { -- BLUE SIDE
 			{ 4, B }, { 6, B }, { 8, B }, { 10, B }, { 12, B }, { 14, B },
-			{ 16, B }, { 18, B }, { 20, B }, { 22, B }, { 24, B }, { 26, B }, 
+			{ 16, B }, { 18, B }, { 20, B }, { 22, B }, { 24, B }, { 26, B },
 		},
 		[4] = {
 			{ 5, B }, { 7, B }, { 9, B }, { 11, B }, { 13, B }, { 15, B }, { 17, B }, { 19, B }, { 21, B }
@@ -285,7 +280,7 @@ COMPONENT.Patterns = {
 		["pattern_3"] = { 8, 8, 8, 8, 0, 9, 9, 9, 9, 0 },
 		["pattern_4"] = { 8, 8, 8, 0, 9, 9, 9, 0 },
 		["pattern_5"] = { 10, 10, 10, 10, 0, 11, 11, 11, 11, 0 },
-		["pattern_6"] = { 
+		["pattern_6"] = {
 			13, 15, 17, 18, 18,
 			20, 22, 24, 25, 25
 		},
@@ -320,9 +315,9 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 	["auto_fedsig_legend_signalmaster"] = {
-		23, 25, 26, 24 
+		23, 25, 26, 24
 	}
 }
 

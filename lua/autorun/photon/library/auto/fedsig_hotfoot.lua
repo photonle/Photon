@@ -1,14 +1,6 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Federal Signal Hotfoot"
 
@@ -108,7 +100,7 @@ COMPONENT.Modes = {
 	Illumination = {
 		T = {
 			{ 1, W }, { 2, W }
-		},	
+		},
 		F = {
 			{ 1, W }, { 2, W }
 		}

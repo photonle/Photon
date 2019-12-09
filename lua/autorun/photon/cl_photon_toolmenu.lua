@@ -4,30 +4,40 @@ hook.Add( "AddToolMenuCategories", "Photon.AddMenuCategory", function()
 	spawnmenu.AddToolCategory( "Utilities", "Photon", "Photon" )
 end)
 
-local function logoHeader( panel, imgpath )
-	if not imgpath then imgpath = "photon/ui/settings_logo.png" end
-	panel:AddControl( "Header", { Description = ( string.format( "Photon Lighting Engine | %s | Update #%s", tostring( PHOTON_SERIES ), tostring( PHOTON_UPDATE ) ) ) } )
+local function logoHeader(panel, imgpath)
+	if not imgpath then
+		imgpath = "photon/ui/settings_logo.png"
+	end
+
+	panel:AddControl("Header", {
+		Description = string.format( "Photon Lighting Engine | %s | Update #%s", PHOTON_SERIES, PHOTON_UPDATE)
+	})
+
 	local parent = vgui.Create( "DPanel" )
-	parent:SetSize( 300, 256 )
-	parent:SetBackgroundColor( Color( 0, 0, 0, 0 ) )
-	local header = vgui.Create( "DImage", parent )
-	header:SetImage( imgpath )
-	header:SetSize( 256, 256 )
-	panel:AddPanel( parent )
+	parent:SetSize(300, 256)
+	parent:SetBackgroundColor(Color(0, 0, 0, 0))
+
+	local header = vgui.Create("DImage", parent)
+	header:SetImage(imgpath)
+	header:SetSize(256, 256)
+	panel:AddPanel(parent)
 	header:Center()
 end
 
-local function buildControlsMenu( panel )
+local function buildControlsMenu(panel)
 	panel:ClearControls()
-	logoHeader( panel )
-	panel:AddControl( "Header", { Description = "Adjust the keys for Photon controls" } )
 
-	panel:AddControl( "Numpad", { Label = "Primary Lights On/Off", Command="photon_key_primary_toggle", Label2 = "Primary Lights Mode", Command2="photon_key_primary_alt" } )
-	panel:AddControl( "Numpad", { Label = "Siren On/Off", Command="photon_key_siren_toggle", Label2 = "Siren Tone", Command2="photon_key_siren_alt" } )
-	panel:AddControl( "Numpad", { Label = "Auxiliary Lights", Command="photon_key_auxiliary", Label2 = "Illumination", Command2="photon_key_illum" } )
-	panel:AddControl( "Numpad", { Label = "Horn", Command="photon_key_horn", Label2 = "Siren Manual", Command2="photon_key_manual" } )
-	panel:AddControl( "Numpad", { Label = "Blackout Mode", Command="photon_key_blackout", Label2 = "Radar", Command2="photon_key_radar" } )
-	panel:AddControl( "Button", { Label = "Reset to Default", Command="photon_keys_reset" } )
+	logoHeader(panel)
+	panel:AddControl("Header", {Description = "Adjust the keys for Photon controls"})
+	panel:AddControl("Numpad", {Label = "Primary Lights On/Off", Command="photon_key_primary_toggle", Label2 = "Primary Lights Mode", Command2="photon_key_primary_alt"})
+	panel:AddControl("Numpad", {Label = "Siren On/Off", Command="photon_key_siren_toggle", Label2 = "Siren Tone", Command2="photon_key_siren_alt"})
+	panel:AddControl("Numpad", {Label = "Auxiliary Lights", Command="photon_key_auxiliary", Label2 = "Illumination", Command2="photon_key_illum"})
+	panel:AddControl("Numpad", {Label = "Horn", Command="photon_key_horn", Label2 = "Siren Manual", Command2="photon_key_manual"})
+	panel:AddControl("Numpad", {Label = "Blackout Mode", Command="photon_key_blackout", Label2 = "Radar", Command2="photon_key_radar"})
+	panel:AddControl("Numpad", {Label = "Siren 1", Command="photon_key_siren1", Label2 = "Siren 2", Command2="photon_key_siren2"})
+	panel:AddControl("Numpad", {Label = "Siren 3", Command="photon_key_siren3", Label2 = "Siren 4", Command2="photon_key_siren4"})
+	panel:AddControl("Numpad", {Label = "Reverse Light/Siren/TA Mode (Hold)", Command="photon_key_alt_reverse"})
+	panel:AddControl("Button", {Label = "Reset to Default", Command="photon_keys_reset"})
 end
 
 local function buildClientSettings( panel )
@@ -134,7 +144,7 @@ local function buildExpressManager( panel )
 
 		local vehicles = EMVU.FetchExpressVehicles()
 		for _,vehicle in pairs( vehicles ) do
-			local newLine = vehicleList:AddLine( vehicle[1] )  
+			local newLine = vehicleList:AddLine( vehicle[1] )
 			newLine.File = vehicle[2]
 			function newLine:OnCursorEntered()
 				print( tostring(newLine.File) )
@@ -157,7 +167,7 @@ local function buildExpressManager( panel )
 	panel:AddItem( expressPanel )
 end
 
-hook.Add( "PopulateToolMenu", "Photon.AddSettingsMenu", function() 
+hook.Add( "PopulateToolMenu", "Photon.AddSettingsMenu", function()
 	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_controls", "Controls", "", "", buildControlsMenu )
 	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_client", "Client", "", "", buildClientSettings )
 	spawnmenu.AddToolMenuOption( "Utilities", "Photon", "photon_settings_server", "Settings", "", "", buildServerSettings )

@@ -127,12 +127,12 @@ EMV.Sections = {
 		{ { 1, R }, { 2, B }, { 7, R }, { 8, B } },
 	},
 	["grille_lights"] = {
-		{ { 9, R }, { 10, B } }, 
-		{ { 10, B } }, 
-		{ { 9, R } }, 
+		{ { 9, R }, { 10, B } },
+		{ { 10, B } },
+		{ { 9, R } },
 	},
 	["headlights"] = {
-		{ { 11, SW, { 16, .5, 10 } }, { 12, SW, { 12, .5, 0 } } }, 
+		{ { 11, SW, { 16, .5, 10 } }, { 12, SW, { 12, .5, 0 } } },
 	},
 	["head_running"] = {
 		{ { 13, CW } },
@@ -229,4 +229,5 @@ EMV.Sequences = {
 	}
 }
 
+EMV.Configuration = true
 Photon.EMVLibrary[name] = EMV

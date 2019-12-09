@@ -21,10 +21,10 @@ EMV.BodyGroups = {
 	{ 0, 0 }, -- Dodge
 	{ 1, 0 }, -- Charger
 	{ 2, 0 }, -- 2012
-	{ 3, 0 }, -- 
-	{ 4, 0 }, -- 
-	{ 5, 0 }, -- 
-	{ 6, 0 }, -- 
+	{ 3, 0 }, --
+	{ 4, 0 }, --
+	{ 5, 0 }, --
+	{ 6, 0 }, --
 	{ 7, 2 }, -- push bar
 	{ 8, 1 }, -- grille leds
 	{ 9, 1 }, -- front bumper leds
@@ -696,5 +696,6 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 
 }
 
+EMV.Configuration = true
 Photon.EMVLibrary[name] = EMV
 if EMVU then EMVU:OverwriteIndex( name, EMV ) end

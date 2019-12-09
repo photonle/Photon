@@ -1,0 +1,37 @@
+name: Builds
+on:
+  release:
+    types: [created]
+
+jobs:
+  gma:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v1
+      -
+        name: Install PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: '7.3'
+          coverage: none
+      -
+        name: Install Dependencies
+        run: composer install -d .github/builder
+      -
+        name: Build
+        run: php .github/builder/build.php
+      -
+        name: Upload
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: photonle.gma
+          path: .github/builder/photonle.gma
+      -
+        name: Update
+        uses: skx/github-action-publish-binaries@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: '.github/builder/photonle.gma'

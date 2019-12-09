@@ -1,14 +1,8 @@
 AddCSLuaFile()
 
-local A = "AMBER"
 local R = "RED"
-local DR = "D_RED"
 local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Whelen Ion Trio"
 
@@ -22,9 +16,9 @@ COMPONENT.ColorInput = 1
 COMPONENT.UsePhases = true
 COMPONENT.Category = "Exterior"
 COMPONENT.DefaultColors = {
-	[1] = "RED",
-	[2] = "BLUE",
-	[3] = "WHITE"
+	[1] = R,
+	[2] = B,
+	[3] = W
 }
 
 COMPONENT.Meta = {
@@ -95,11 +89,11 @@ COMPONENT.Modes = {
 	},
 	Auxiliary = {},
 	Illumination = {
-		T = { 
-			{ 1, W }, { 2, W }, 
+		T = {
+			{ 1, W }, { 2, W },
 		},
-		F = { 
-			{ 1, W }, { 2, W }, 
+		F = {
+			{ 1, W }, { 2, W },
 		}
 	}
 }

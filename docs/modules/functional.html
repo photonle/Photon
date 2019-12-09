@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Photon Lighting Documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/autorun.emv_init.html">autorun.emv_init</a></li>
+  <li><a href="../modules/Photon.AirEL.html">Photon.AirEL</a></li>
+  <li><a href="../modules/EMVU.html">EMVU</a></li>
+  <li><a href="../modules/EMVU.AutoLivery.html">EMVU.AutoLivery</a></li>
+  <li><strong>functional</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>functional</code></h1>
+<p>Functional Programming / Currying Library.</p>
+<p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: Photon Team</li>
+        <li><strong>Release</strong>: v73 Grand Lake</li>
+        <li><strong>Author</strong>: Joshua Piper</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#partial">partial (func, ...)</a></td>
+	<td class="summary">Builds a partial function, with stored arguments.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#flip">flip (func)</a></td>
+	<td class="summary">Returns a function where the first two inputs are flipped.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#reverse">reverse (vararg)</a></td>
+	<td class="summary">Reverses a set of input arguments.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#compose">compose (...)</a></td>
+	<td class="summary">Build a function o from f/g so that f(g(x)) == o(x)</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "partial"></a>
+    <strong>partial (func, ...)</strong>
+    </dt>
+    <dd>
+    Builds a partial function, with stored arguments.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">func</span>
+            <span class="types"><span class="type">function</span></span>
+         Input function to curry.
+        </li>
+        <li><span class="parameter">...</span>
+            <span class="types"><span class="type">vararg</span></span>
+         Arguments to store.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example"><span class="keyword">local</span> positiveOnly = partial(max, <span class="number">0</span>)</pre></li>
+        <li><pre class="example"><span class="global">print</span>(positiveOnly(-<span class="number">1</span>)) <span class="comment">-- Returns 0.</span></pre></li>
+        <li><pre class="example"><span class="global">print</span>(positiveOnly(<span class="number">2</span>)) <span class="comment">-- Returns 2.</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "flip"></a>
+    <strong>flip (func)</strong>
+    </dt>
+    <dd>
+    Returns a function where the first two inputs are flipped.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">func</span>
+            <span class="types"><span class="type">function</span></span>
+         Input function.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">function</span></span>
+        Flipped function.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example"><span class="keyword">local</span> flippedPrint = flip(<span class="global">print</span>)</pre></li>
+        <li><pre class="example">flippedPrint(<span class="string">"hello"</span>, <span class="string">"world"</span>) <span class="comment">-- Outputs: "world hello"</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "reverse"></a>
+    <strong>reverse (vararg)</strong>
+    </dt>
+    <dd>
+    Reverses a set of input arguments.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">vararg</span>
+            <span class="types"><span class="type">...</span></span>
+         Input argument.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">vararg</span></span>
+        Flipped outputs.
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="http://lua-users.org/wiki/CurriedLua">Lua Users Wiki: CurriedLua</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "compose"></a>
+    <strong>compose (...)</strong>
+    </dt>
+    <dd>
+    Build a function o from f/g so that f(g(x)) == o(x)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+            <span class="types"><span class="type">vararg</span></span>
+         Input functions.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">function</span></span>
+        Composed function.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2019-12-05 11:26:19 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

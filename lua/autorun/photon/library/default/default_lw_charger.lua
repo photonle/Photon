@@ -1258,9 +1258,9 @@ EMV.AutoInsert = {
 		Component = "Whelen LINZ6",
 		Parent = "Pushbar Layout",
 		Category = "Whelen LINZ6",
-		Mirror = true,	
+		Mirror = true,
 		TransformType = "opp",
-		BodyGroups = { 
+		BodyGroups = {
 			{ 1, 1 }
 		},
 		Position = Vector( 14, 127.5, 30 ),
@@ -1275,7 +1275,7 @@ EMV.AutoInsert = {
 		Component = "Whelen Ion V",
 		Parent = "Pushbar Layout",
 		Category = "Whelen LINZ6",
-		Mirror = true,	
+		Mirror = true,
 		TransformType = "opp",
 		Position = Vector( 22.5, 128, 30 ),
 		Angle = Angle( 0, -90, 0 ),
@@ -1288,7 +1288,7 @@ EMV.AutoInsert = {
 		Component = "SoundOff Intersector",
 		Parent = "Mirror Intersectors",
 		Category = "Intersector",
-		Mirror = true,	
+		Mirror = true,
 		TransformType = "opp",
 		Position = Vector( 44.6, 33, 49.8 ),
 		Angle = Angle( 0, -45, 0 ),
@@ -1300,9 +1300,9 @@ EMV.AutoInsert = {
 		Component = "Whelen LINZ6",
 		Parent = "Side Lighting",
 		Category = "Whelen LINZ6",
-		Mirror = true,	
+		Mirror = true,
 		TransformType = "opp",
-		BodyGroups = { 
+		BodyGroups = {
 			{ 1, 2 }
 		},
 		Position = Vector( 38.1, -24, 54 ),
@@ -1312,6 +1312,7 @@ EMV.AutoInsert = {
 		}
 	}
 }
+EMV.Configuration = true
 
 Photon.EMVLibrary[name] = EMV
 if EMVU then EMVU:OverwriteIndex( name, EMV ) end

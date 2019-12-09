@@ -36,6 +36,7 @@ local sirenTable = {
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/federal sig tm/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/federal sig tm/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/federal sig tm/pemv_tmjingle.wav", Icon = "phaser"}, -- edit by pringle
 			{Name = "SCAN", Sound = "emv/sirens/federal sig tm/emv_scan.wav", Icon="phaser"},
 		},
 		Horn = "emv/sirens/federal sig tm/emv_horn.wav",
@@ -100,7 +101,9 @@ local sirenTable = {
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/federal signal eq2b/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/federal signal eq2b/emv_yelp.wav", Icon="yelp"},
+			{Name = "MAN", Sound = "emv/sirens/federal signal eq2b/emv_manual.wav", Icon="manual"},
 		},
+		Manual = "emv/sirens/federal signal eq2b/emv_manual.wav",
 		Horn = "emv/sirens/federal signal eq2b/emv_horn.wav"
 	},
 	[9] = {
@@ -109,8 +112,9 @@ local sirenTable = {
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/federal sig omega 90/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/federal sig omega 90/emv_yelp.wav", Icon="yelp"},
+			{Name = "HILO", Sound = "emv/sirens/federal sig omega 90/emv_hilo.wav", Icon="hilo"},
+			{Name = "SWEP", Sound = "emv/sirens/federal sig omega 90/emv_sweep.wav", Icon="phaser"},
 		},
-		Manual = "emv/sirens/federal sig omega 90/emv_manual.wav",
 		Horn = "emv/sirens/federal sig omega 90/emv_horn.wav"
 	},
 	[10] = {
@@ -222,7 +226,7 @@ local sirenTable = {
 			{Name = "HPYP", Sound = "emv/sirens/d&r/intimidator/emv_phaser.wav", Icon="phaser"},
 			{Name = "HILO", Sound = "emv/sirens/d&r/intimidator/emv_hilo.wav", Icon="hilo"},
 		},
-		Horn = "emv/sirens/canada/emv_bullhorn.wav",
+		Horn = "emv/sirens/d&r/intimidator/emv_bullhorn.wav",
 	},
 	[23] = {
 		Name = "Mastercom B", -- Code 3
@@ -456,7 +460,9 @@ local sirenTable = {
 		Name = "Holiday",
 		Category = "Other",
 		Set = {
-			{Name = "XMAS", Sound = "emv/sirens/holiday/wish.wav", Icon="wail"},
+			{Name = "JNGL", Sound = "emv/sirens/holiday/jingle.wav", Icon="xmas"},
+			{Name = "CAROL", Sound = "emv/sirens/holiday/carol.wav", Icon="xmas"},
+			{Name = "NOEL", Sound = "emv/sirens/holiday/noel.wav", Icon="xmas"},
 		}
 	},
 	-- [48] = {
@@ -524,6 +530,28 @@ local sirenTable = {
 		},
 		Horn = "emv/sirens/whelen cencom sapphire/emv_horn.wav",
 	},
+	[53] = {
+		Name = "Q2B",
+		Category = "Federal Signal",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/federal signal q2b/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/federal signal q2b/emv_yelp.wav", Icon="yelp"},
+			{Name = "MAN", Sound = "emv/sirens/federal signal eq2b/emv_manual.wav", Icon="manual"},
+		},
+		Manual = "emv/sirens/federal signal eq2b/emv_manual.wav",
+		Horn = "emv/sirens/federal signal eq2b/emv_horn.wav"
+	},
+	[54] = {
+		Name = "Scan Superior",
+		Category = "Other",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/scan superior/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/scan superior/emv_yelp.wav", Icon="yelp"},
+			{Name = "PRTY", Sound = "emv/sirens/scan superior/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/scan superior/emv_hilo.wav", Icon="hilo"},
+		},
+		Horn = "emv/sirens/scan superior/emv_horn.wav"
+	},
 }
 
 EMVU.Horns = {
@@ -566,16 +594,64 @@ EMVU.GetSirenTable = function()
 end
 
 EMVU.AddCustomSiren = function(index, siren)
-	if tonumber(index) ~= nil then return Error("[Photon] Custom sirens need a non-number identifier. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens\n") end
+	if tonumber(index) ~= nil then return Error("[Photon] Custom sirens need a non-number identifier. See: https://github.com/photonle/Photon/wiki/Custom-Sirens\n") end
 
 	siren.ID = index
 	table.insert(sirenTable, siren)
 end
 
+local function searchSirenAddon(siren, addon)
+	if not addon.downloaded then return end
+	if not addon.mounted then return end
+
+	local files = file.Find("sound/" .. siren.Horn, addon.title)
+	if files[1] then
+		PhotonWarning(
+			"The addon", addon.title, "(", addon.wsid, ") appears to be trying to load old photon sirens.\n",
+			"The method being used is no longer supported. https://github.com/photonle/Photon/wiki/Custom-Sirens"
+		)
+		return true
+	end
+end
 EMVU.Sirens = {}
 timer.Simple(35, function()
 	if #EMVU.Sirens > 0 then
-		print("[Photon] One or more addons are using a deprecated method to add custom sirens. See: https://photon.lighting/wiki/index.php?title=Custom_Sirens")
+		PhotonWarning("One or more addons are using a deprecated method to add custom sirens. See: https://github.com/photonle/Photon/wiki/Custom-Sirens")
+
+		for _, siren in ipairs(EMVU.Sirens) do
+			local found = false
+
+			local search = "sound/"
+			if siren.Horn then
+				search = search .. siren.Horn
+			else
+				search = search .. siren.Set[1].Sound
+			end
+
+			local files = file.Find("sound/" .. siren.Horn, "GAME")
+			if not files[1] then
+				PhotonWarning("Sound file not found for", siren.Category, ":", siren.Name)
+				found = true
+			end
+
+			if not found then
+				local addons = engine.GetAddons()
+				for _, addon in ipairs(addons) do
+					if searchSirenAddon(siren, addon) then
+						found = true
+						break
+					end
+				end
+			end
+
+			if not found then
+				PhotonWarning(
+					"A folder addon appears to be trying to load old photon sirens.\n",
+					"Because it's in a folder, we can't find it.\n",
+					"If it's your addon, please read https://github.com/photonle/Photon/wiki/Custom-Sirens"
+				)
+			end
+		end
 	end
 end)
 

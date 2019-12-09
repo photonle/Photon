@@ -1,15 +1,5 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
-
 local name = "Federal Signal MicroPulse"
 
 local COMPONENT = {}
@@ -52,7 +42,7 @@ COMPONENT.Meta = {
 }
 
 COMPONENT.Positions = {
-    
+
     -- L/R, F/B, U,D
     [1] = { Vector( .13, .26, -.86 ), Angle( 0, 0, 0 ), "auto_pulse_left" },
     [2] = { Vector( -2.555, .26, -.86 ), Angle( 0, 0, 0 ), "auto_pulse_right" },
@@ -62,7 +52,7 @@ COMPONENT.Positions = {
 COMPONENT.Sections = {
     ["auto_pulse"] = {
         [1] = { { 1, "_1", .88 }, { 2, "_1", .88 }, },
-        
+
         [2] = { { 1, "_1", .88 } },
         [3] = { { 2, "_2", .88 } },
 
@@ -103,7 +93,7 @@ COMPONENT.Patterns = {
     }
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
     ["auto_pulse"] = {
         1, 2, 3
     }
@@ -120,10 +110,10 @@ COMPONENT.Modes = {
         PK = {
             ["auto_pulse"] = "parkkill",
         },
-        L = { 
+        L = {
 
         },
-        R = { 
+        R = {
 
         },
         D = {
@@ -133,16 +123,16 @@ COMPONENT.Modes = {
     },
     Illumination = {
         L = {
-            
+
         },
         R = {
-            
+
         },
         F = {
 
         },
         T = {
-            
+
         }
     }
 }

@@ -1,8 +1,12 @@
 - regExp: "library\/sirens\/"
-  labels: ["libary"]
+  labels: ["library"]
 - regExp: "library\/auto\/"
-  labels: ["libary"]
+  labels: ["library"]
 - regExp: "library\/default\/"
-  labels: ["libary"]
+  labels: ["library"]
 - regExp: "library\/vehicles\/"
-  labels: ["libary"]
+  labels: ["library"]
+- regExp: "\\.github/builder"
+  labels: ["ci/cd"]
+- regExp: "\\.github/workflows"
+  labels: ["ci/cd"]

@@ -1,14 +1,7 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Code 3 RX2700 Blue"
 
@@ -195,7 +188,7 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 	["auto_rx2700_main_traffic"] = {
 		9, 11, 14, 12, 10
 	}
@@ -222,7 +215,7 @@ COMPONENT.Modes = {
 				["auto_rx2700_outer"] = "stage_3",
 				["auto_rx2700_takedown"] = "stage_3",
 			}
-		},
+	},
 	Auxiliary = {
 			C = {
 				["auto_rx2700_feet"] = "stage_1",
@@ -236,7 +229,7 @@ COMPONENT.Modes = {
 			D = {
 				["auto_rx2700_main_traffic"] = "diverge"
 			}
-		},
+	},
 	Illumination = {
 		R = {
 			{ 18, W }
