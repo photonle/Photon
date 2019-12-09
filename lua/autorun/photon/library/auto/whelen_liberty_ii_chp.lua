@@ -158,6 +158,11 @@ COMPONENT.Sections = {
 	},
 	["auto_whelen_liberty_ii_corner"] = {
 		[1] = { { 5, R, .55 }, { 7, B, .55 }, { 6, B, .55 }, { 8, R, .55 } }
+	},
+	["auto_whelen_liberty_alert"] = {
+		[1] = { { 2, B, .55 }, { 4, B, .55 }, { 5, R, .55 }, 
+			{ 6, B, .55 }, { 7, B, .55 }, { 8, R, .55 }, { 9, B, .55 }, { 10, R, .55 },  
+			{ 11, A, .55 }, { 12, A, .55 }, { 13, A, .55 }, { 14, A, .55 } }
 	}
 }
 
@@ -186,6 +191,9 @@ COMPONENT.Patterns = {
 	},
 	["auto_whelen_liberty_ii_corner"] = {
 		["cruise"] = { 1 }
+	},
+	["auto_whelen_liberty_alert"] = {
+		["alert"] = { 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 }
 	}
 }
 
@@ -212,6 +220,10 @@ COMPONENT.Modes = {
 			M3 = {
 				["auto_whelen_liberty_ii"] = "code3",
 				["auto_whelen_liberty_ii_traffic"] = "off"
+			},
+			ALERT = {
+				["auto_whelen_liberty_alert"] = "alert",
+				["auto_whelen_liberty_ii_front"] = "code2"
 			}
 		},
 	Auxiliary = {
