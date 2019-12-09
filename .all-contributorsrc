@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "JoshPiper",
+      "name": "JoshPiper",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/32164094?v=4",
+      "profile": "https://doctor-internet.dev",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "Photon",
+  "projectOwner": "photonle",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
