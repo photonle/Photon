@@ -7,7 +7,7 @@ allowing for easier maintence and implementation.
 
 ### Style
 
-Code should follow the style outlined in [Limelight Standards Document #1](https://limelightgaming.net/docs/LSD-1.pdf).
+Code should follow the style outlined in [Limelight Standards Document #1](https://github.com/limelight-development/standards/blob/master/lsd-1/readme.adoc).
 
 ### License
 
