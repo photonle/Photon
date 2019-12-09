@@ -20,5 +20,26 @@
   "projectOwner": "photonle",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "types": {
+    "vehicles": {
+      "symbol": "🚌",
+      "description": "Vehicle Creation",
+      "link": "[<%= symbol %>](<%= url %> \"<%= description %>\"),"
+   },
+   "components": {
+    "symbol": "🚨",
+    "description": "Photon Auto Components",
+    "link": "[<%= symbol %>](<%= url %> \"<%= description %>\"),"
+   },
+   "sirens": {
+    "symbol": "🔊",
+    "description": "Photon Sirens",
+    "link": "[<%= symbol %>](<%= url %> \"<%= description %>\"),"
+   },
+   "configs": {
+   "symbol": "🚓",
+    "description": "Photon Vehicle Configurations",
+    "link": "[<%= symbol %>](<%= url %> \"<%= description %>\"),"
+   }
 }
