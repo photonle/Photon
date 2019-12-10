@@ -123,6 +123,8 @@ local sirenTable = {
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/federal sig 80k/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/federal sig 80k/emv_yelp.wav", Icon="yelp"},
+			{Name = "PRTY", Sound = "emv/sirens/federal sig 80k/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/federal sig 80k/emv_hilo.wav", Icon="hilo"},
 		},
 		Manual = "emv/sirens/federal sig 80k/emv_manual.wav",
 		Horn = "emv/sirens/federal sig 80k/emv_horn.wav"
