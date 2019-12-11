@@ -30,7 +30,7 @@ function SetDebugTarget( index, cat )
 		if not IsValid( car ) or not car:Photon() then return end
 		PHOTON_DEBUG_NAME = car.VehicleName
 	end
-	
+
 	PHOTON_DEBUG_INDEX = index
 	if cat == "ELS" then
 		PHOTON_DEBUG_MODE = "ELS"
@@ -39,7 +39,7 @@ function SetDebugTarget( index, cat )
 		PHOTON_DEBUG_MODE = "REG"
 		PHOTON_DEBUG_LIGHT = Photon.Vehicles.Positions[ PHOTON_DEBUG_NAME ][ index ]
 	elseif cat == "PROP" then
-		// PHOTON_DEBUG_LIGHT
+		-- PHOTON_DEBUG_LIGHT
 	end
 end
 
@@ -283,7 +283,6 @@ hook.Add( "Think", "Photon.Debug.ButtonPress", function()
 	elseif not input.IsKeyDown( KEY_PAD_DECIMAL ) then
 		P_KP_DECIMAL = false
 	end
-		
 end)
 
 function PhotonDebugTarget( ply, args )
@@ -329,7 +328,7 @@ end)
 surface.CreateFont( "PHOTON_Debug", {
 	font = "Consolas",
 	size = 16,
-	weight = 900, 
+	weight = 900,
 	antialias = true
 } )
 
@@ -362,13 +361,6 @@ hook.Add( "PostDrawHUD", "Photon.Debug.HUDPaint", function()
 		draw.DrawText( exclusiveModeText, "PHOTON_Debug", ScrW() - 16, 118, Color( 0, 0, 0 ), TEXT_ALIGN_RIGHT )
 		draw.DrawText( exclusiveModeText, "PHOTON_Debug", ScrW() - 16, 119, Color( 100, 200, 255 ), TEXT_ALIGN_RIGHT )
 	end
-end)
-
-concommand.Add("photon_debug_bg", function( ply )
-	if not ply:IsAdmin() then return end
-	local vehicle = ply:GetVehicle()
-	if not vehicle then return end
-	PrintTable( vehicle:GetBodyGroups() )
 end)
 
 local PHOTON_CREATOR_TEMPLATE = [[
@@ -488,7 +480,6 @@ function PhotonCopyConfiguration()
 	local car = LocalPlayer():GetVehicle()
 	if not IsValid( car ) then LocalPlayer():ChatPrint( "[Photon] You must be driving the target vehicle." ) return end
 	local returnCode = PhotonCompileCreatorData( photon_creator_name, photon_creator_category, photon_creator_siren, photon_creator_lightbar, car )
-	// print( returnCode )
 	SetClipboardText( returnCode )
 	LocalPlayer():ChatPrint( "[Photon] Configuration copied to your clipboard.\nPaste the code into a text editor and save as a .lua file in your garrysmod/lua/autorun folder.\nYou will likely need to restart the game for the vehicle to appear for the first time." )
 end
