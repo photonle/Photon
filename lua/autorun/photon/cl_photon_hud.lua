@@ -66,7 +66,7 @@ function PhotonHUD:BuildCode()
 				clearSections: function(){$(".section").each(function(){"warning-lights"!=$(this).attr("id")&&$(this).remove()})},
 				addButton: function(t,e,n,i,o){var r="#"+t+"-section .button-row",s=photonUI.getButtonHtml(e,n,i);$(r).html($(r).html()+s),photonUI.updateButtonState(t,i,o)},
 				updateButtonState: function(t,e,n){t="#"+t+"-section";var i="";switch(n){case 0:i="";break;case 1:i="button_selected";break;case 2:i="button_active"}var o=$(t+' .button[index="'+e+'"]');$(o).removeClass("button_selected button_active"),$(o).addClass(i)},
-				updateButtonExclusive: function(t,e,n){photonUI.updateButtonState(t,e,n)},
+				updateButtonExclusive: function(t,e,n){if (t != 'functions'){$("#"+t+"-section .button").each(function(){$(this).removeClass("button_selected button_active")})};photonUI.updateButtonState(t,e,n)},
 				resetPrimaryMeter: function(t){$("#primary-meter").html("");for(var e=1;t>=e;e++)$("#primary-meter").html($("#primary-meter").html()+'<div index="'+e+'"></div>')},
 				setActivePrimaryMeter:function(t){$("#primary-meter > div").each(function(){$(this).removeClass("active")}),$($("#primary-meter > div[index='"+t+"']")).addClass("active")},setPrimary:function(t){$("#primary-lights").toggleClass("on",t)},
 				setPrimaryOn: function(){$("#primary-lights").addClass("on")},setPrimaryOff:function(){$("#primary-lights").removeClass("on")},
