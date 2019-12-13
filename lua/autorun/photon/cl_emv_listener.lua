@@ -242,22 +242,27 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	end
 end)
 
-local function SirenSuggestions( cmd, args )
-
-	args = string.Trim( args )
-	args = string.lower( args )
+local function SirenSuggestions(cmd, args)
+	arg = args:Trim():lower()
+	if arg == "" then
+		arg = false
+	end
 
 	local result = {}
 
-	local i = 1
-	for k,v in pairs( EMVU.GetSirenTable() ) do
-
-		table.insert( result, "emv_siren " .. k .. " \"" .. v.Name .. "\"")
-
+	for i, siren in ipairs(EMVU.GetSirenTable()) do
+		if arg then
+			if tostring(i) == arg then
+				table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
+			elseif siren.Name == arg then
+				table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
+			end
+		else
+			table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
+		end
 	end
 
 	return result
-
 end
 
 concommand.Add("emv_siren", function(ply, cmd, args)
