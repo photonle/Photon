@@ -1,6 +1,6 @@
 --[[-- Photon EMV Client Loader.
 @copyright Photon Team
-@release v73 Grand Lake
+@release v74 Hot Sulphur Springs
 @author Photon Team
 @module EMVU
 --]]--
