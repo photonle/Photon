@@ -252,10 +252,20 @@ local function SirenSuggestions(cmd, args)
 
 	for i, siren in ipairs(EMVU.GetSirenTable()) do
 		if arg then
+			local cat = siren.Category:lower()
+			local name = siren.Name:lower()
+
 			if tostring(i) == arg then
 				table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
-			elseif siren.Name == arg then
+			elseif name:StartWith(arg) then
 				table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
+			elseif cat:StartWith(arg) then
+				table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
+			elseif arg:StartWith(cat) then
+				local test = arg:sub(#cat + 1):Trim()
+				if name:StartWith(test) then
+					table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
+				end
 			end
 		else
 			table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
