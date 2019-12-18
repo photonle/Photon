@@ -498,6 +498,13 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 		if not autoData.AutoPatterns or autoData.AutoPatterns != false then autoData.AutoPatterns = true end
 
 		if not component then print( "[Photon] Auto component: " .. tostring( data[i].ID ) .. " was not found in the library. Requested in: " .. tostring( name ) .. ".") continue end
+		if component.Deprecated then
+			PhotonWarning("Auto component: " .. tostring(data[i].ID) .. " is deprecated and may be removed in a future version.")
+			if isstring(component.Deprecated) then
+				PhotonWarning(component.Deprecated)
+			end
+			PhotonWarning("The component was requested in: " .. tostring(name) .. ".")
+		end
 
 		if not component.NotLegacy then
 			adjustAng.p = autoAng.r
