@@ -1,6 +1,6 @@
 
 function Photon:RunningScan(v)
-	if IsValid( v ) and IsValid( v:GetDriver() ) and v:GetDriver():IsPlayer() then
+	if IsValid( v ) and IsValid( v:GetDriver() ) and v:GetDriver():IsPlayer() and v:Photon() then
 
 		if v:HasPhotonELS() and v.ELS.Blackout then 
 			v:CAR_Running( false )
