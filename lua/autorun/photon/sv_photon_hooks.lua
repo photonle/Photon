@@ -33,7 +33,6 @@ hook.Add( "Tick", "Photon.RunningScan", function()
 		local lastCheck = client.LastBrakeCheck or 0
 		if client:InVehicle() and ( client:KeyDown( IN_BACK ) or client:KeyDown( IN_FORWARD ) ) and lastCheck + 0.1 < CurTime() then
 			client.LastBrakeCheck = CurTime()
-			print(lastCheck)
 			Photon:RunningScan( client:GetVehicle() )
 		end
 	end
