@@ -37,7 +37,13 @@ hook.Add( "Tick", "Photon.RunningScan", function()
 			Photon:RunningScan( client:GetVehicle() )
 		end
 	end
-end )
+end)
+
+hook.Add("KeyRelease", "Photon.RunningScan", function( client, key )
+	if ( client:InVehicle and ( key == IN_FORWARD or key == IN_BACK ) ) then
+		Photon:RunningScan( client:GetVehicle() )
+	end
+end)
 
 
 hook.Add("CanExitVehicle", "Photon.RunningScan", function(vehicle, client)
