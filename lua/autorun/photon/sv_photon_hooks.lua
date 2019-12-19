@@ -1,34 +1,51 @@
 
-function Photon:RunningScan()
-	for k,v in pairs( self:AllVehicles() ) do
-		if IsValid( v ) and IsValid( v:GetDriver() ) and v:GetDriver():IsPlayer() then
+function Photon:RunningScan(v)
+	if IsValid( v ) and IsValid( v:GetDriver() ) and v:GetDriver():IsPlayer() then
 
-			if v:HasPhotonELS() and v.ELS.Blackout then 
-				v:CAR_Running( false )
-			else
-				v:CAR_Running( true )
-			end
-
-			if v:IsBraking() then v:CAR_Braking( true ) else v:CAR_Braking( false ) end
-			if v:IsReversing() then v:CAR_Reversing( true ) else v:CAR_Reversing( false ) end
-
-			v.LastSpeed = v:Photon_GetSpeed()
-
-		elseif IsValid( v) and not v:GetDriver():IsValid() and not v:GetDriver():IsPlayer() and not v:GetPhotonLEStayOn() then
+		if v:HasPhotonELS() and v.ELS.Blackout then 
 			v:CAR_Running( false )
-			v:CAR_Braking( false )
-			v:CAR_Reversing( false )
-			if v:HasPhotonELS() then
-				if v:ELS_Siren() then v:ELS_SirenOff() end
-				v:ELS_Horn( false )
-				v:ELS_ManualSiren( false )
-			end
+		else
+			v:CAR_Running( true )
+		end
+
+		if v:IsBraking() then v:CAR_Braking( true ) else v:CAR_Braking( false ) end
+		if v:IsReversing() then v:CAR_Reversing( true ) else v:CAR_Reversing( false ) end
+
+		v.LastSpeed = v:Photon_GetSpeed()
+
+	elseif IsValid( v) and not v:GetDriver():IsValid() and not v:GetDriver():IsPlayer() and not v:GetPhotonLEStayOn() then
+		v:CAR_Running( false )
+		v:CAR_Braking( false )
+		v:CAR_Reversing( false )
+		if v:HasPhotonELS() then
+			if v:ELS_Siren() then v:ELS_SirenOff() end
+			v:ELS_Horn( false )
+			v:ELS_ManualSiren( false )
 		end
 	end
 end
-timer.Create("Photon.RunScan", 1, 0, function()
+--[[timer.Create("Photon.RunScan", 1, 0, function()
 	Photon:RunningScan()
+end)]]
+
+hook.Add( "Tick", "KeyDown_Test", function()
+	for k, client in pairs( player.GetAll() ) do
+		local lastCheck = client.LastBrakeCheck or 0
+		if client:InVehicle() and (client:KeyDown( IN_BACK ) or client:KeyDown( IN_FORWARD )) and lastCheck + 0.1 < CurTime() then
+			client.LastBrakeCheck = CurTime()
+			print(lastCheck)
+			Photon:RunningScan( client:GetVehicle() )
+		end
+	end
+end )
+
+
+hook.Add("CanExitVehicle", "Photon.RunningScan", function(vehicle, client)
+	timer.Simple(0.01, function()
+		Photon:RunningScan(vehicle)
+	end)
 end)
+
 timer.Create("Photon.SirenRunScan", 0.2, 0, function()
 	for _,car in pairs( Photon:AllVehicles() ) do
 		if car:HasPhotonELS() and car:ELS_Siren() then car:ELS_SirenContinue() end
