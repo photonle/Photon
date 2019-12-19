@@ -30,10 +30,14 @@ end)]]
 
 hook.Add( "Tick", "Photon.RunningScan", function()
 	for k, client in pairs( player.GetAll() ) do
-		local lastCheck = client.LastBrakeCheck or 0
-		if client:InVehicle() and ( client:KeyDown( IN_BACK ) or client:KeyDown( IN_FORWARD ) ) and lastCheck + 0.1 < CurTime() then
-			client.LastBrakeCheck = CurTime()
-			Photon:RunningScan( client:GetVehicle() )
+		if client:InVehicle() then
+			local veh = client:GetVehicle()
+			local lastCheck = client.LastBrakeCheck or 0
+
+			if veh:Photon() and ( client:KeyDown( IN_BACK ) or client:KeyDown( IN_FORWARD ) ) and lastCheck + 0.1 < CurTime() then
+				client.LastBrakeCheck = CurTime()
+				Photon:RunningScan( veh )
+			end
 		end
 	end
 end)
