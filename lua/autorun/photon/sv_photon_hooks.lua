@@ -40,7 +40,7 @@ hook.Add( "Tick", "Photon.RunningScan", function()
 end)
 
 hook.Add("KeyRelease", "Photon.RunningScan", function( client, key )
-	if ( client:InVehicle and ( key == IN_FORWARD or key == IN_BACK ) ) then
+	if ( client:InVehicle() and ( key == IN_FORWARD or key == IN_BACK ) ) then
 		Photon:RunningScan( client:GetVehicle() )
 	end
 end)
