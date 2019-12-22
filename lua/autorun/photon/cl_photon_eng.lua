@@ -82,7 +82,7 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	-- print("received light to render")
 	
 	if not incolors or not ilpos or not lang or not meta or not gpos then return end
-	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
+	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
 	-- PrintTable( meta )
 	-- PrintTable( incolors )
 	-- print(tostring(lang))
@@ -288,6 +288,10 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		resultTable[23] = viewFlare
 
 		resultTable[24] = false
+		
+		resultTable[25] = meta.SubmatID
+		resultTable[26] = meta.SubmatMaterial
+		resultTable[27] = parent
 
 		if istable( meta.EmitArray ) then
 			local emitResults = {}
@@ -306,6 +310,8 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 
 	end
 	end
+
+	
 end
 
 
@@ -317,7 +323,8 @@ local endCam = cam.End3D2D
 local bloomRef = 0
 local bloomColor = nil
 
-function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, debug_mode )
+function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, SubmatID, SubmatMaterial, SubmatParent, debug_mode )
+
 	if drawSrc then
 		startCam( camPos, camAng, 1 )
 			setRenderLighting( 2 )
@@ -325,7 +332,17 @@ function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 			drawQuad( srcT, srcR, srcB, srcL, colSrc )
 			setRenderLighting( 0 )
 		endCam()
+
+			if SubmatID then
+				SubmatParent:SetSubMaterial(SubmatID, SubmatMaterial)
+				timer.Simple( 0.2, function() 
+					if IsValid(SubmatParent) then  SubmatParent:SetSubMaterial(SubmatID, nil) end
+				end )
+			end	
+
+
 	end
+	
 	if debug_mode == true then return end
 	if not srcOnly then
 		if istable( multiEmit ) then
@@ -369,7 +386,7 @@ local setSurfaceMaterial = surface.SetMaterial
 local setSurfaceColor = surface.SetDrawColor
 local drawTexturedRect = surface.DrawTexturedRect
 
-function Photon.DrawScreenEffects( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, debug_mode )
+function Photon.DrawScreenEffects( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, SubmatID, SubmatMaterial, parent, debug_mode )
 	if false then return end
 	if viewFlare and colFlr and viewFlare > 0 and not cheap then
 		local width = drawW
@@ -499,7 +516,7 @@ function Photon:RenderQueue( effects )
 			if photonRenderTable[i] != nil then
 				local data = photonRenderTable[i]
 				renderFunction( data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
-								data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], debug_mode )
+								data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], data[25], data[26], data[27], debug_mode )
 			end
 		end
 	end
