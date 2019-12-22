@@ -333,16 +333,17 @@ function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 			setRenderLighting( 0 )
 		endCam()
 
-			if SubmatID then
-				SubmatParent:SetSubMaterial(SubmatID, SubmatMaterial)
-				timer.Simple( 0.2, function() 
-					if IsValid(SubmatParent) then  SubmatParent:SetSubMaterial(SubmatID, nil) end
-				end )
-			end	
+
 
 
 	end
-	
+	if SubmatID then
+		SubmatParent:SetSubMaterial(SubmatID, SubmatMaterial)
+		timer.Simple( 0.2, function() 
+			if IsValid(SubmatParent) then  SubmatParent:SetSubMaterial(SubmatID, nil) end
+		end )
+	end	
+
 	if debug_mode == true then return end
 	if not srcOnly then
 		if istable( multiEmit ) then
