@@ -332,10 +332,6 @@ function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 			drawQuad( srcT, srcR, srcB, srcL, colSrc )
 			setRenderLighting( 0 )
 		endCam()
-
-
-
-
 	end
 	if SubmatID then
 		SubmatParent:SetSubMaterial(SubmatID, SubmatMaterial)
