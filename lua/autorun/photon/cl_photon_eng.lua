@@ -322,12 +322,16 @@ function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 			setRenderLighting( 0 )
 		endCam()
 	end
+	
 	if SubmatID then
 		SubmatParent:SetSubMaterial(SubmatID, SubmatMaterial)
-		timer.Simple( 0.2, function() 
-			if IsValid(SubmatParent) then  SubmatParent:SetSubMaterial(SubmatID, nil) end
-		end )
-	end
+		if !timer.Exists(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID) then 
+			timer.Create( SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID, 0.01, 1, function() if SubmatParent:IsValid() then SubmatParent:SetSubMaterial(SubmatID, nil) end end )
+		else
+			timer.Pause(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID)
+			timer.Start(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID)
+		end
+	end	
 
 	if debug_mode == true then return end
 	if not srcOnly then
