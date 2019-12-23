@@ -472,7 +472,7 @@ function EMVU:MakeEMV( ent, emv )
 				end
 			end
 			self:SetNW2Bool( "PhotonLE.CAR_MANUAL", false )
- 		end
+		end
 	end
 
 	function ent:ELS_Horn( state )
@@ -702,7 +702,7 @@ function EMVU:MakeEMV( ent, emv )
 	if istable( emv.Auto ) and emv.Auto[1] and istable( emv.Presets ) then
 		ent:ELS_PresetOption( 1 )
 	end
-	
+
 	ent:ELS_SirenOption( 1 )
 	ent:ELS_LightOption( 1 )
 	ent:ELS_IlluminateOption ( 1 )
@@ -714,13 +714,3 @@ function EMVU:MakeEMV( ent, emv )
 	ent:Photon_ApplySubMaterials()
 	ent:Photon_ResetSelections()
 end
-
--- concommand.Add("makecaronme", function(ply)
--- 	local ent = ents.Create("prop_vehicle_jeep")
--- 	ent:SetModel( "models/schmal/fpiu/ford_utility.mdl" )
--- 	ent:SetKeyValue( "vehiclescript", "scripts/vehicles/schmal/ford_pol_int_2016.txt" )
--- 	ent:SetPos( ply:GetPos() )
--- 	ent:SetAngles( ply:GetAngles() )
--- 	ent:Spawn()
--- 	ent:Activate()
--- end)

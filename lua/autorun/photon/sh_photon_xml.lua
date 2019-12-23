@@ -3,93 +3,53 @@ AddCSLuaFile()
 Photon.XML = {}
 
 local function parseargs(s)
-  local arg = {}
-  string.gsub(s, "([%-%w]+)=([\"'])(.-)%2", function (w, _, a)
-    arg[w] = a
-  end)
-  return arg
-end
-    
-local function collect(s)
-  local stack = {}
-  local top = {}
-  table.insert(stack, top)
-  local ni,c,label,xarg, empty
-  local i, j = 1, 1
-  while true do
-    ni,j,c,label,xarg, empty = string.find(s, "<(%/?)([%w:]+)(.-)(%/?)>", i)
-    if not ni then break end
-    local text = string.sub(s, i, ni-1)
-    if not string.find(text, "^%s*$") then
-      table.insert(top, text)
-    end
-    if empty == "/" then  -- empty element tag
-      table.insert(top, {label=label, xarg=parseargs(xarg), empty=1})
-    elseif c == "" then   -- start tag
-      top = {label=label, xarg=parseargs(xarg)}
-      table.insert(stack, top)   -- new level
-    else  -- end tag
-      local toclose = table.remove(stack)  -- remove top
-      top = stack[#stack]
-      if #stack < 1 then
-        error("nothing to close with "..label)
-      end
-      if toclose.label ~= label then
-        error("trying to close "..toclose.label.." with "..label)
-      end
-      table.insert(top, toclose)
-    end
-    i = j+1
-  end
-  local text = string.sub(s, i)
-  if not string.find(text, "^%s*$") then
-    table.insert(stack[#stack], text)
-  end
-  if #stack > 1 then
-    error("unclosed "..stack[#stack].label)
-  end
-  return stack[1]
+	local arg = {}
+	string.gsub(s, "([%-%w]+)=([\"'])(.-)%2", function (w, _, a)
+		arg[w] = a
+	end)
+	return arg
 end
 
-local xmltest = [[
-<photonemv name="Test GMC Savana">
-	<siren>1</siren>
-	<skin>5</skin>
-	<color r="255" g="128" b="255" />
-	<bodygroups>
-		<bodygroup key="0" desc="">0</bodygroup>
-		<bodygroup key="2" desc="">0</bodygroup>
-		<bodygroup key="3" desc="">0</bodygroup>
-	</bodygroups>
-	<components>
-		<component index="1">
-			<name>Dome Light Amber</name>
-			<Scale>1</Scale>
-			<position x="-26.6" y="12.5" z="98.7" />
-			<angle p="0" y="90" r="0"/>
-			<Phase>A</Phase>
-		</component>
-	</components>
-	<modes>
-		<primary>
-			<stage name="CODE 1" ref="M1" />
-			<stage name="CODE 2" ref="M2" />
-			<stage name="CODE 3" ref="M3" />
-		</primary>
-		<auxiliary>
-			<stage name="LEFT" ref="L" />
-			<stage name="RIGHT" ref="D" />
-			<stage name="DIVERGE" ref="R" />
-		</auxiliary>
-	</modes>
-	<vehicledef>
-		<category>SenCo</category>
-		<author>Schmal</author>
-		<model>models/lonewolfie/gmc_savana.mdl</model>
-		<script>scripts/vehicles/LWCars/gmc_savana.txt</script>
-	</vehicledef>
-</photonemv>
-]]
+local function collect(s)
+	local stack = {}
+	local top = {}
+	table.insert(stack, top)
+	local ni,c,label,xarg, empty
+	local i, j = 1, 1
+	while true do
+		ni,j,c,label,xarg, empty = string.find(s, "<(%/?)([%w:]+)(.-)(%/?)>", i)
+		if not ni then break end
+		local text = string.sub(s, i, ni-1)
+		if not string.find(text, "^%s*$") then
+			table.insert(top, text)
+		end
+		if empty == "/" then  -- empty element tag
+			table.insert(top, {label=label, xarg=parseargs(xarg), empty=1})
+		elseif c == "" then   -- start tag
+			top = {label=label, xarg=parseargs(xarg)}
+			table.insert(stack, top)   -- new level
+		else  -- end tag
+			local toclose = table.remove(stack)  -- remove top
+			top = stack[#stack]
+			if #stack < 1 then
+				error("nothing to close with "..label)
+			end
+			if toclose.label ~= label then
+				error("trying to close "..toclose.label.." with "..label)
+			end
+			table.insert(top, toclose)
+		end
+		i = j+1
+	end
+	local text = string.sub(s, i)
+	if not string.find(text, "^%s*$") then
+		table.insert(stack[#stack], text)
+	end
+	if #stack > 1 then
+		error("unclosed "..stack[#stack].label)
+	end
+	return stack[1]
+end
 
 Photon.XML.ParseVehicleFromXML = function( inputXml )
 	local xt = collect( tostring( inputXml ) )
@@ -174,14 +134,14 @@ Photon.XML.ConvertToXML = function( emv )
 	<siren>%s</siren>
 	<skin>%s</skin>
 	<color r="%s" g="%s" b="%s" />
-]], 
+]],
 	emv.VehicleDefinition.Name or "",
 	emv.Siren or 0,
 	emv.Skin or 0,
 	emv.Color.r or 255, emv.Color.g or 255, emv.Color.b or 255 )
 
 	if ( istable( emv.BodyGroups ) ) then
-		result = result .. 
+		result = result ..
 [[	<bodygroups>
 ]]
 		for _,bodygroup in pairs( emv.BodyGroups ) do
@@ -189,7 +149,7 @@ Photon.XML.ConvertToXML = function( emv )
 		<bodygroup key="%s">%s</bodygroup>
 ]], bodygroup[1], bodygroup[2] )
 		end
-		result = result .. 
+		result = result ..
 [[	</bodygroups>
 ]]
 	end
@@ -211,11 +171,11 @@ Photon.XML.ConvertToXML = function( emv )
 				else inputString = string.format( [[			<%s>%s</%s>]], k, tostring( v ), k ) end
 				result = result .. inputString .. "\n"
 			end
-			result = result .. 
+			result = result ..
 [[		</component>
 ]]
 		end
-		result = result .. 
+		result = result ..
 [[	</components>
 ]]
 	end
@@ -224,7 +184,7 @@ Photon.XML.ConvertToXML = function( emv )
 		result = result .. [[
 	<modes>
 ]]
-		
+
 		for key, sys in pairs( emv.Sequences ) do
 			local displayName = ""
 			if key == "Sequences" then displayName = "primary"
@@ -256,13 +216,42 @@ Photon.XML.ConvertToXML = function( emv )
 	return result
 end
 
-local testemv = Photon.XML.ParseVehicleFromXML( xmltest )
-local back = Photon.XML.ConvertToXML( testemv )
--- print(tostring(back))
--- print( tostring( testemv ) )
--- PrintTable( testemv )
-
-
--- hook.Add( "PopulateVehicles", "AddEntityContentPhotonListen", function( pnlContent, tree, node )
-
--- end )
+--[[local xmltest = [[
+<photonemv name="Test GMC Savana">
+	<siren>1</siren>
+	<skin>5</skin>
+	<color r="255" g="128" b="255" />
+	<bodygroups>
+		<bodygroup key="0" desc="">0</bodygroup>
+		<bodygroup key="2" desc="">0</bodygroup>
+		<bodygroup key="3" desc="">0</bodygroup>
+	</bodygroups>
+	<components>
+		<component index="1">
+			<name>Dome Light Amber</name>
+			<Scale>1</Scale>
+			<position x="-26.6" y="12.5" z="98.7" />
+			<angle p="0" y="90" r="0"/>
+			<Phase>A</Phase>
+		</component>
+	</components>
+	<modes>
+		<primary>
+			<stage name="CODE 1" ref="M1" />
+			<stage name="CODE 2" ref="M2" />
+			<stage name="CODE 3" ref="M3" />
+		</primary>
+		<auxiliary>
+			<stage name="LEFT" ref="L" />
+			<stage name="RIGHT" ref="D" />
+			<stage name="DIVERGE" ref="R" />
+		</auxiliary>
+	</modes>
+	<vehicledef>
+		<category>SenCo</category>
+		<author>Schmal</author>
+		<model>models/lonewolfie/gmc_savana.mdl</model>
+		<script>scripts/vehicles/LWCars/gmc_savana.txt</script>
+	</vehicledef>
+</photonemv>
+]]--
