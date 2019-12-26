@@ -28,11 +28,6 @@ function Photon:SpawnedVehicle( ent )
 end
 
 function Photon:EntityCreated( ent )
-	-- print( tostring( ent ) )
-	-- print( "Valid spawned ent: " .. tostring( IsValid( ent ) ) )
-	-- timer.Simple(.5,function()
-	-- 	print("After .5 seconds: " .. tostring( ent ) )
-	-- end)
 	timer.Simple(.05,function()
 		if  ent:IsVehicle() then
 			local timerId = ent:EntIndex() .. "-PHOTON-" .. CurTime()
@@ -117,7 +112,7 @@ function Photon:PreloadVehicle( car )
 			Photon.Vehicles.Positions[ car.Name ] = {}
 		end
 	end
-	
+
 	if car.Photon.Meta and istable( car.Photon.Meta ) then
 		Photon.Vehicles.Meta[ car.Name ] = car.Photon.Meta
 	elseif car.Photon.Meta and isstring( car.Photon.Meta ) then
@@ -130,7 +125,7 @@ function Photon:PreloadVehicle( car )
 		Photon.Vehicles.States.Headlights[ car.Name ] = car.Photon.States.Headlights
 	elseif car.Photon.States.Headlights and isstring( car.Photon.States.Headlights ) then
 		Photon.Vehicles.States.Headlights[ car.Name ] = Photon.Vehicles.States.Headlights[ car.Photon.States.Headlights ]
-	else 
+	else
 		Photon.Vehicles.States.Headlights[ car.Name ] = {}
 	end
 
@@ -196,7 +191,7 @@ function Photon:OverwriteIndex( name, data )
 	if not data then return end
 	if data.Positions != nil then Photon.Vehicles.Positions[name] = data.Positions end
 	if data.Meta != nil then Photon.Vehicles.Meta[name] = data.Meta end
-	if istable( data.States ) then 
+	if istable( data.States ) then
 		if data.States.Headlights != nil then Photon.Vehicles.States.Headlights[name] = data.States.Headlights end
 		if data.States.Brakes != nil then Photon.Vehicles.States.Brakes[name] = data.States.Brakes end
 		if data.States.Blink_Left != nil then Photon.Vehicles.States.Blink_Left[name] = data.States.Blink_Left end
@@ -204,9 +199,9 @@ function Photon:OverwriteIndex( name, data )
 		if data.States.Reverse != nil then Photon.Vehicles.States.Reverse[name] = data.States.Reverse end
 		if data.States.Running != nil then Photon.Vehicles.States.Running[name] = data.States.Running end
 	end
-	if istable( data.WheelOptions ) then 
-		Photon.Vehicles.WheelOptions[name] = data.WheelOptions 
-		if istable( data.WheelPositions ) then 
+	if istable( data.WheelOptions ) then
+		Photon.Vehicles.WheelOptions[name] = data.WheelOptions
+		if istable( data.WheelPositions ) then
 			Photon.Vehicles.WheelPositions[name] = data.WheelPositions
 		else
 			Photon.Vehicles.WheelPositions[name] = {

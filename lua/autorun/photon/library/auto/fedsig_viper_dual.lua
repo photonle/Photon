@@ -14,6 +14,7 @@ COMPONENT.ForwardTranslation = true
 COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "BLUE",
+	[3] = "WHITE"
 }
 
 COMPONENT.Meta = {
@@ -47,6 +48,9 @@ COMPONENT.Sections = {
 		[1] = { { 1, "_1" }, { 2, "_2" } },
 		[2] = { { 1, "_1" } },
 		[3] = { { 2, "_2" } },
+
+		[4] = { { 1, "_3" } },
+		[5] = { { 2, "_3" } },
 	},
 }
 
@@ -79,6 +83,9 @@ COMPONENT.Patterns = {
 			2, 3, 2, 3, 2, 3, 2, 3,
 			2, 3, 2, 3, 2, 3, 2, 3,
 		},
+		["code1BPD"] = { 3, 0, 3, 0, 3, 3, 3, 3, 3, 2, 0, 2, 0, 2, 2, 2, 2, 2 },
+		["code2BPD"] = { 3, 0, 3, 0, 3, 3, 3, 2, 0, 2, 0, 2, 2, 2 },
+		["code3BPD"] = { 3, 0, 3, 0, 3, 3, 3, 2, 0, 2, 0, 2, 2, 2, 5, 0, 5, 0, 5, 5, 5, 4, 0, 4, 0, 4, 4, 4 },
 		["alert"] = { 2, 3 },
 		["alertA"] = { 2, 3 },
 		["alertB"] = { 3, 2 },
@@ -86,6 +93,7 @@ COMPONENT.Patterns = {
 		["alertD"] = { 2, 3 },
 		["alertNYA"] = { 2, 3 },
 		["alertNYB"] = { 3, 2 },
+		["alertBPD"] = { 2, 3 },
 		["brakeA"] = { 1 },
 		["brakeB"] = { 1 },
 	}

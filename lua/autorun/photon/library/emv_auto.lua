@@ -10,6 +10,13 @@ function EMVU:AddAutoComponent(component, name)
 		return
 	end
 
+	if component.Deprecated then
+		PhotonWarning(Format("Component %s is deprecated and may be removed in a future version.", name))
+		if isstring(component.Deprecated) then
+			PhotonWarning(component.Deprecated)
+		end
+	end
+
 	EMVU.Auto[name] = component
 end
 

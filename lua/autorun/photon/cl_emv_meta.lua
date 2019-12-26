@@ -94,6 +94,11 @@ function EMVU:MakeEMV( emv, name )
 		return ( self:Photon_ManualSiren() and self:Photon_Siren() )
 	end
 
+	function emv:Photon_ParkMode()
+		if not IsValid(self) then return false end
+		return self:GetNW2Bool("PhotonLE.PARK_MODE")
+	end
+
 	function emv:Photon_ManualHorn()
 		if not IsValid( self ) then return false end
 		return self:GetNW2Bool( "PhotonLE.EMV_HORN" )
@@ -195,6 +200,7 @@ function EMVU:MakeEMV( emv, name )
 			result = EMVHelper:GetSequence( self.VehicleName, option, self )
 		end
 		if self.Photon_IsBraking and self:Photon_IsBraking() then result = EMVHelper.GetBrakeSequence( self.VehicleName, self, result ) end
+		if self.Photon_ParkMode and self:Photon_ParkMode() then result = EMVHelper.GetParkSequence(self.VehicleName, self, result) end
 		return result
 	end
 

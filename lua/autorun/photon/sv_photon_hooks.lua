@@ -71,7 +71,7 @@ hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, 
 	local isOwner = ( ent:GetOwner() == ply )
 	local spawner = ent.PhotonVehicleSpawner
 	local isSpawner = ( IsValid( spawner ) and ( spawner == ply ) )
-	if isDriver or ply == owner or game.SinglePlayer() or isSpawner then
+	if isDriver or ply == isOwner or game.SinglePlayer() or isSpawner then
 		return true
 	else
 		return false
