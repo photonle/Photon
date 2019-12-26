@@ -122,13 +122,13 @@ COMPONENT.TrafficDisconnect = {
 
 COMPONENT.Modes = {
     Primary = {
-        M1 = { 
+        M1 = {
             ["auto_boston"] = "code1",
         },
-        M2 = { 
+        M2 = {
             ["auto_boston"] = "code2",
         },
-        M3 = { 
+        M3 = {
             ["auto_boston"] = "code3",
         },
         PARK = {

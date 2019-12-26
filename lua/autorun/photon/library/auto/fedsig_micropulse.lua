@@ -101,9 +101,9 @@ COMPONENT.TrafficDisconnect = {
 
 COMPONENT.Modes = {
     Primary = {
-        M1 = { ["auto_pulse"] = "code1", },
-        M2 = { ["auto_pulse"] = "code2", },
-        M3 = { ["auto_pulse"] = "code3", },
+        M1 = { ["auto_pulse"] = "code1" },
+        M2 = { ["auto_pulse"] = "code2" },
+        M3 = { ["auto_pulse"] = "code3" },
         PARK = {
             ["auto_pulse"] = "parkkill",
         }
