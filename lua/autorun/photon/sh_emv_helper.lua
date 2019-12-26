@@ -65,6 +65,56 @@ function EMVU.Helper.GetAlertSequence( name, vehicle )
 	return resultTable
 end
 
+function EMVU.Helper.GetParkSequence( name, vehicle, resultTable )
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Park"]["BG_Components"] ) then
+		local bodygroups = vehicle:GetBodyGroups() -- BodyGroups of vehicle
+		local bgtable = EMVU.Sequences[name]["Park"]["BG_Components"] -- BodyGroups defined in vehicle specification file
+		for id,data in pairs( bodygroups ) do -- for index,value in each vehicle bodygroup
+			local indexId = id - 1
+			if bgtable[ data["name"] ] then  -- if this index is defined in the vehicle specifications
+				local selected = vehicle:GetBodygroup( indexId )
+				if bgtable[ data["name"] ][ tostring( selected ) ] then
+					for component,option in pairs( bgtable[ data["name"] ][ tostring( selected ) ] ) do
+						resultTable[ component ] = option
+					end
+				end
+			end
+		end
+	end
+
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Park"]["Preset_Components"] ) then
+		local preset = vehicle:Photon_ELPresetOption()
+		local ptable = EMVU.Sequences[name]["Park"]["Preset_Components"][preset]
+		if istable( ptable ) then
+			for id,data in pairs( ptable ) do
+				resultTable[ id ] = data
+			end
+		end
+	end
+
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Park"]["Selection_Components"]) then
+		local selComp = EMVU.Sequences[name]["Park"]["Selection_Components"]
+		for i=1,#selComp do
+			local currentOption = vehicle:Photon_SelectionOption( i )
+			if istable( selComp[i] ) then
+				local ptable = selComp[i][currentOption]
+				if istable( ptable ) then
+					for id,data in pairs( ptable ) do
+						resultTable[ id ] = data
+					end
+				end
+			end
+		end
+	end
+	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Park"]["Components"]) then
+		for component, option in pairs( EMVU.Sequences[name]["Park"]["Components"] ) do
+			resultTable[ component ] = option
+		end
+	end
+
+	return resultTable
+end
+
 function EMVU.Helper.GetBrakeSequence( name, vehicle, resultTable )
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Braking"]["BG_Components"] ) then
 		local bodygroups = vehicle:GetBodyGroups() -- BodyGroups of vehicle

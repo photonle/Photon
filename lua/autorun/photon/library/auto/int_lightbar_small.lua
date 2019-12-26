@@ -131,18 +131,18 @@ COMPONENT.Modes = {
         M3 = { 
             ["auto_boston"] = "code3",
         },
+        PARK = {
+            ["carbide_aux"] = "parkkill",
+        }
     },
     Auxiliary = {
-        PK = {
-            ["carbide_aux"] = "parkkill",
-        },
         C = {
 
         },
-        L = { 
+        L = {
 
         },
-        R = { 
+        R = {
 
         },
         D = {
