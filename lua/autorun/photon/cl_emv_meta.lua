@@ -806,6 +806,7 @@ function EMVU:MakeEMV( emv, name )
 		local fastest, nearest = self:Photon_RadarTargetSpeeds( rear )
 		PHOTON_RADAR_DISP_FAST = fastest or 0
 		PHOTON_RADAR_DISP_NEAR = nearest or 0
+		if not GetConVar("photon_radar_sound"):GetBool() then return end
 		local soundSpeed = nearest
 		if fastest > nearest then soundSpeed = fastest end
 		local handle = self.PhotonRadarSoundHandle

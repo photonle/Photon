@@ -33,6 +33,7 @@ end
 CreateClientConVar("photon_emerg_unit", "", true)
 CreateClientConVar("photon_emerg_enabled", "1", true)
 CreateClientConVar("photon_stand_enabled", "1", true)
+CreateClientConVar("photon_radar_sound", 1, true)
 CreateClientConVar("photon_hud_opacity", "1", true)
 CreateClientConVar("photon_lens_effects", "1", true)
 CreateClientConVar("photon_bloom_modifier", 1, true)
