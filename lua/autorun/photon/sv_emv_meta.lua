@@ -419,7 +419,7 @@ function EMVU:MakeEMV( ent, emv )
 
 	function ent:ELS_SetSirenSet( num )
 		if not IsValid( self ) then return end
-		if num <= 0 or num > #EMVU.GetSirenTable() then return false end
+		if num < 0 or num > #EMVU.GetSirenTable() then return false end
 
 		self:ELS_SirenOff()
 		self:ELS_SirenSet( num )

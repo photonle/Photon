@@ -59,6 +59,10 @@ properties.Add("photon_siren", {
             end
         end
 
+        primarySubmenu:AddOption("None", function()
+            EMVU.Net:SirenSet(0, ent, false)
+        end)
+
         secondarySubmenu:AddOption("None", function()
             EMVU.Net:SirenSet(0, ent, true)
         end)

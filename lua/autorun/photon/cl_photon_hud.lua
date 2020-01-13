@@ -378,6 +378,8 @@ function PhotonHUD:UpdateState()
 			if newData.Siren.Enabled then state = 2 end
 			PhotonHUD.Panel:RunJavascript( "photonUI.updateButtonExclusive('siren'," .. newData.Siren.Active .. ", " .. state .. ");" )
 		end
+	else
+		PhotonHUD:Reset(newData)
 	end
 	if istable( newData.Illumination ) then
 		if not oldData.Illumination then PhotonHUD:Reset( newData ) return end
