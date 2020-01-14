@@ -61,11 +61,11 @@ properties.Add("photon_siren", {
 
         primarySubmenu:AddOption("None", function()
             EMVU.Net:SirenSet(0, ent, false)
-        end)
+        end):SetChecked(ent:Photon_SirenSet() == 0)
 
         secondarySubmenu:AddOption("None", function()
             EMVU.Net:SirenSet(0, ent, true)
-        end)
+        end):SetChecked(ent:Photon_AuxSirenSet() == 0)
     end,
     Action = null
 })
