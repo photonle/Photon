@@ -35,13 +35,13 @@ Photon.Editor.Update = function()
 end
 
 
-concommand.Add( "photon_emv_editor_target", function( ply, cmd, args ) 
+concommand.Add( "photon_emv_editor_target", function( ply, cmd, args )
 	photon_emv_editor_target = args[1]
 	Photon.Editor.SetTarget( photon_emv_editor_target )
 	if PHOTON_EDITOR_MENU_REF then Photon.Editor.CreateMenu( PHOTON_EDITOR_MENU_REF ) end
 end )
 
-concommand.Add( "photon_emv_editor_target_component", function( ply, cmd, args ) 
+concommand.Add( "photon_emv_editor_target_component", function( ply, cmd, args )
 	photon_emv_editor_target_component = tonumber(args[1])
 	Photon.Editor.SetComponentTarget( tonumber( args[1] ) )
 	-- print(tostring(photon_emv_editor_target_component) )
@@ -62,7 +62,7 @@ end
 local function createPhotonTargetLights( index )
 	local autoComponents = EMVU.AutoIndex[index]
 	table.Empty( list.GetForEdit( "PhotonEMVTargetComponents" ) )
-	
+
 	for i=1,#autoComponents do
 		local light = autoComponents[i]
 		-- list.Set( "PhotonEMVTargetComponents", i, tostring(i) .. ". " .. light.ID )
@@ -147,7 +147,7 @@ local function buildComponentList( panel )
 		function newLine:OnCursorEntered()
 			if panel.Preview then panel.Preview:SetComponent( self.NameIndex ) end
 		end
-	end	
+	end
 
 	function autoList:OnRowSelected( id, row )
 		RunConsoleCommand( "photon_emv_editor_create", row.NameIndex )
@@ -341,11 +341,11 @@ Photon.Editor.CreateMenu = function( panel )
 			panel:AddControl( "Button", { Text = "Change Component Selection", Command = "photon_emv_editor_target_component" } )
 
 			buildComponentEdit( panel )
-			
+
 		else
 			buildComponentList( panel )
 		end
-		
+
 	else
 		panel:AddControl( "Header", { Description = "Select a vehicle to modify: " } )
 		buildTargetVehicles( panel )
@@ -353,13 +353,15 @@ Photon.Editor.CreateMenu = function( panel )
 	end
 end
 
-local photon_cfgbld_name = "" 
+local photon_cfgbld_name = ""
 local photon_cfgbld_cat = false
-local photon_cfgbld_bge = true 
-local photon_cfgbld_liv = true 
+local photon_cfgbld_bge = true
+local photon_cfgbld_liv = true
 local photon_cfgbld_srn = true
 
+local photon_cfg_pnl
 Photon.Editor.CreateConfiguration = function( panel )
+	photon_cfg_pnl = panel
 	function panel:MetaReset()
 		Photon.Editor.CreateConfiguration( panel )
 	end
@@ -381,7 +383,7 @@ concommand.Add( "photon_cfgbld_bge", function(_,_,args) photon_cfgbld_bge = tobo
 concommand.Add( "photon_cfgbld_liv", function(_,_,args) photon_cfgbld_liv = tobool( args[1] ) end)
 concommand.Add( "photon_cfgbld_srn", function(_,_,args) photon_cfgbld_srn = tobool( args[1] ) end)
 
-concommand.Add( "photon_cfgbld_savelocal", function() 
+concommand.Add( "photon_cfgbld_savelocal", function()
 	local ply = LocalPlayer()
 	local ent = ply:GetVehicle()
 	if not IsValid( ent ) then chat.AddText( Color(255, 128, 64), "[Photon] You must be driving the vehicle you wish to save the configuration from." ) return end
@@ -389,10 +391,13 @@ concommand.Add( "photon_cfgbld_savelocal", function()
 	if not resultData then chat.AddText( Color(255, 128, 64), "[Photon] This vehicle is not compatible with Photon Configurations." ) return end
 	local result = EMVU.Configurations.SaveConfiguration( photon_cfgbld_name, photon_cfgbld_cat, LocalPlayer():Name(), resultData )
 	if result then
-		chat.AddText( Color(128, 255, 64), string.format( "[Photon] %s has been saved, this configuration can now be selected from the Photon context menu.", tostring( photon_cfgbld_name ) )  ) 
+		chat.AddText( Color(128, 255, 64), string.format( "[Photon] %s has been saved, this configuration can now be selected from the Photon context menu.", tostring( photon_cfgbld_name ) )  )
+		if IsValid(photon_cfg_pnl) then
+			photon_cfg_pnl:MetaReset()
+		end
 		return
 	else
-		chat.AddText( Color(255, 128, 64), "[Photon] An error occurred while saving vehicle configuration." ) 
+		chat.AddText( Color(255, 128, 64), "[Photon] An error occurred while saving vehicle configuration." )
 		return
 	end
 end)
@@ -413,10 +418,10 @@ concommand.Add( "photon_cfgbld_getlua", function()
 	if result then
 		SetClipboardText( result )
 		chat.AddText( Color(128, 255, 64), string.format( "[Photon] %s has been exported to your clipboard.", tostring( photon_cfgbld_name )  ) )
-		chat.AddText( Color(255, 255, 255), luaConfigInstructions ) 
+		chat.AddText( Color(255, 255, 255), luaConfigInstructions )
 		return
 	else
-		chat.AddText( Color(255, 128, 64), "[Photon] An error occurred while saving vehicle configuration." ) 
+		chat.AddText( Color(255, 128, 64), "[Photon] An error occurred while saving vehicle configuration." )
 		return
 	end
 end )
