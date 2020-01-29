@@ -113,83 +113,6 @@ local function buildCreatorMenu(panel)
 	panel:AddControl("Button", {Text = "Copy Configuration", Command = "photon_creator_copyconfig"})
 end
 
-local function buildExpressManager(panel)
-	local expressPanel = vgui.Create("DPanel")
-	expressPanel:Dock(FILL)
-	expressPanel:SetHeight(600)
-	expressPanel:SetBackgroundColor(invis)
-
-	local defaultPanel, vehicleList, importButton, vehicleInfo
-
-	local function drawVehicleInfo(infoPnl, clear, info)
-		if clear and IsValid(vehicleInfo) then
-			vehicleInfo:Remove()
-			vehicleInfo = nil
-		end
-
-		vehicleInfo = vgui.Create("DPanel", infoPnl)
-		vehicleInfo:Dock(TOP)
-		vehicleInfo:DockMargin(0, 0, 0, 12)
-		vehicleInfo:SetBackgroundColor(invis)
-
-		local titleLabel = vgui.Create("DLabel", vehicleInfo)
-		titleLabel:SetDark(1)
-		titleLabel:SetText(info)
-		titleLabel:Dock(TOP)
-	end
-
-	local function drawVehicleList(listPnl)
-		importButton = vgui.Create("DButton", listPnl)
-		importButton:Dock(TOP)
-
-		importButton:SetText("Import Vehicle Code")
-		importButton:DockMargin(140, 0, 0, 12)
-
-		vehicleList = vgui.Create("DListView", listPnl)
-		vehicleList:SetMultiSelect(false)
-		vehicleList:Dock(TOP)
-		vehicleList:SetHeight(140)
-		vehicleList:AddColumn("Vehicle Name")
-
-		function vehicleList:OnRowSelected(id, row)
-			drawVehicleInfo(listPnl, true, row.File)
-		end
-
-		local vehicles = EMVU.FetchExpressVehicles()
-		for _, vehicle in pairs(vehicles) do
-			local newLine = vehicleList:AddLine(vehicle[1])
-			newLine.File = vehicle[2]
-
-			function newLine:OnCursorEntered()
-				print(tostring(newLine.File))
-			end
-		end
-	end
-
-	local function createDefault()
-		defaultPanel = vgui.Create("DPanel", expressPanel)
-		defaultPanel:Dock(TOP)
-		defaultPanel:SetHeight(400)
-		defaultPanel:SetBackgroundColor(invis)
-		drawVehicleList(defaultPanel)
-	end
-
-	-- local function clearPanels()
-	-- 	if IsValid(defaultPanel) then
-	-- 		defaultPanel:Remove()
-	-- 		defaultPanel = nil
-	-- 	end
-
-	-- 	if IsValid(vehicleList) then
-	-- 		vehicleList:Remove()
-	-- 		vehicleList = nil
-	-- 	end
-	-- end
-
-	createDefault()
-	panel:AddItem(expressPanel)
-end
-
 hook.Add("PopulateToolMenu", "Photon.AddSettingsMenu", function()
 	spawnmenu.AddToolMenuOption("Utilities", "Photon", "photon_settings_controls", "Controls", "", "", buildControlsMenu)
 	spawnmenu.AddToolMenuOption("Utilities", "Photon", "photon_settings_client", "Client", "", "", buildClientSettings)
@@ -198,22 +121,6 @@ hook.Add("PopulateToolMenu", "Photon.AddSettingsMenu", function()
 
 	if game.SinglePlayer() then
 		spawnmenu.AddToolMenuOption("Utilities", "Photon", "photon_settings_creator", "Express Creator", "", "", buildCreatorMenu)
-		--spawnmenu.AddToolMenuOption("Utilities", "Photon", "photon_settings_express", "Express Vehicles", "", "", buildExpressManager)
 		spawnmenu.AddToolMenuOption("Utilities", "Photon", "photon_settings_editor", "Express Editor", "", "", Photon.Editor.CreateMenu)
 	end
 end)
-
--- PrintTable( list.Get( "ThrusterSounds" ) )
-
--- cvars.RemoveChangeCallback("photon_christmas_mode_auto","photon.christmas.hook")
--- cvars.AddChangeCallback("photon_christmas_mode_auto",function(name, old, new)
--- 	if tonumber( new ) == 1 then
--- 		if PHOTON_CHRISTMAS_PERMIT then
--- 			RunConsoleCommand( "photon_christmas_mode", "1" )
--- 		end
--- 	else
--- 		RunConsoleCommand( "photon_christmas_mode", "0" )
--- 		chat.AddText( Color( 255, 255, 128), "Photon Holiday Mode has been disabled." )
--- 	end
-
--- end,"photon.christmas.hook")
