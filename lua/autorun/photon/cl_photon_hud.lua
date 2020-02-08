@@ -46,8 +46,14 @@ Photon.AddCustomHUDIcon = function(name, data)
 	end
 
 	PhotonHUD.Icons[name] = data
-	PhotonHUD:BuildCode()
-	PhotonHUD:Init()
+
+	if PhotonHUD.Code then
+		PhotonHUD:BuildCode()
+	end
+
+	if IsValid(PhotonHUD.Panel) then
+		PhotonHUD:Init()
+	end
 end
 
 function PhotonHUD:BuildCode()
@@ -302,7 +308,6 @@ function PhotonHUD:Init()
 	if IsValid(self.Panel) then self.Panel:Remove() end
 
 	self.Panel = vgui.Create( "DHTML" )
-	if not self.Panel then timer.Simple(3, function() self:Init() end) return end
 	self.Panel:SetPaintedManually(true)
 	self.Panel:SetSize(512, 512)
 	self.Panel:SetMouseInputEnabled(false)
@@ -566,28 +571,32 @@ local function PhotonHtml()
 	PhotonHUD:AutoUpdate()
 
 	if not PhotonHUD.ShouldDraw then return end
-	if drawTexture != false then
-		local opacity = 255 * HUD_OPACITY:GetFloat()
-		setDrawColor(255, 255, 255, opacity)
-		setMaterial(drawTexture)
+	if not drawTexture then return end
 
-		local wOffset = CV_WIDTH:GetInt()
-		if wOffset < 0 then wOffset = 0 end
+	local opacity = 255 * HUD_OPACITY:GetFloat()
+	setDrawColor(255, 255, 255, opacity)
+	setMaterial(drawTexture)
 
-		local hOffset = CV_HEIGHT:GetInt()
-		if hOffset < 0 then hOffset = 0 end
+	local wOffset = CV_WIDTH:GetInt()
+	if wOffset < 0 then wOffset = 0 end
 
-		drawTexturedRect(scrW - 512 - wOffset, scrH - 512 - hOffset, 512, 512)
-	end
+	local hOffset = CV_HEIGHT:GetInt()
+	if hOffset < 0 then hOffset = 0 end
+
+	drawTexturedRect(scrW - 512 - wOffset, scrH - 512 - hOffset, 512, 512)
 end
-hook.Add( "HUDPaint", "Photon.NewHUDPaint", function()
-	PhotonHtml()
-end)
 
-if PhotonHUD then PhotonHUD:Init() end
+hook.Add("HUDPaint", "Photon.NewHUDPaint", PhotonHtml)
 
+if vgui.GetControlTable("DHTML") then
+	PhotonHUD:Init()
+else
+	hook.Add("InitPostEntity", "PhotonHUD:Init", function()
+		PhotonHUD:Init()
+	end)
+end
 
-
+Photon.HUD = PhotonHUD
 
 local radarBase = Material( "photon/ui/radar_base.png" )
 
