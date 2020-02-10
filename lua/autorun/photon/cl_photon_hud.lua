@@ -46,10 +46,7 @@ Photon.AddCustomHUDIcon = function(name, data)
 	end
 
 	PhotonHUD.Icons[name] = data
-
-	if PhotonHUD.Code then
-		PhotonHUD:BuildCode()
-	end
+	PhotonHUD:BuildCode()
 
 	if IsValid(PhotonHUD.Panel) then
 		PhotonHUD:Init()
