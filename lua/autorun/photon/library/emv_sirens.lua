@@ -259,6 +259,7 @@ local sirenTable = {
 			{Name = "WAIL", Sound = "emv/sirens/chp/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/chp/emv_yelp.wav", Icon="yelp"},
 		},
+		Horn = "emv/sirens/chp/emv_horn.wav",
 	},
 	[26] = {
 		Name = "SQ Zone",
