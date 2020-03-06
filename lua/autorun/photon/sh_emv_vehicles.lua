@@ -618,7 +618,9 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
 						for componentIndex, patternIndex in pairs( targetCopy ) do
 							local patternPhase = autoData.Phase or ""
-							sequence.Preset_Components[presetIndex][ componentIndex .. "_" .. i ] = tostring( patternIndex .. patternPhase )
+							if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+								sequence.Preset_Components[presetIndex][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+							end
 						end
 					end
 				end
@@ -630,7 +632,9 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 							sequence.Selection_Components[_i][__i] = sequence.Selection_Components[_i][__i] or {}
 							for componentIndex, patternIndex in pairs( targetCopy ) do
 								local patternPhase = autoData.Phase or ""
-								sequence.Selection_Components[_i][__i][ componentIndex .. "_" .. i ] = tostring( patternIndex .. patternPhase )
+								if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+									sequence.Selection_Components[_i][__i][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+								end
 							end
 						end
 					end
@@ -645,7 +649,9 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
 						for componentIndex, patternIndex in pairs( targetCopy ) do
 							local patternPhase = autoData.Phase or ""
-							sequence.Preset_Components[presetIndex][ componentIndex .. "_" .. i ] = tostring( patternIndex .. patternPhase )
+							if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+								sequence.Preset_Components[presetIndex][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+							end
 						end
 					end
 				end
@@ -657,7 +663,9 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 							sequence.Selection_Components[_i][__i] = sequence.Selection_Components[_i][__i] or {}
 							for componentIndex, patternIndex in pairs( targetCopy ) do
 								local patternPhase = autoData.Phase or ""
-								sequence.Selection_Components[_i][__i][ componentIndex .. "_" .. i ] = tostring( patternIndex .. patternPhase )
+								if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+									sequence.Selection_Components[_i][__i][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+								end
 							end
 						end
 					end
