@@ -3,4 +3,4 @@ CreateConVar("photon_emv_changepresets", "1", FCVAR_ARCHIVE, "Whether players ar
 CreateConVar("photon_emv_stayon", "0", FCVAR_ARCHIVE, "Whether the siren stays on after leaving the vehicle")
 CreateConVar("photon_emv_unitnumbers", "1", FCVAR_ARCHIVE, "Whether players are permitted to use custom unit numbers")
 CreateConVar("photon_emv_allowradar", "1", FCVAR_ARCHIVE, "Whether vehicle speed radar is enabled or not")
--- CreateConVar("photon_emv_useillum", "1", FCVAR_ARCHIVE, "Whether emergency vehicle illumination should render light")
+CreateConVar("photon_emv_useillum", "1", FCVAR_ARCHIVE, "Whether emergency vehicle illumination should render light")
