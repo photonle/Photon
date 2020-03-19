@@ -412,7 +412,7 @@ local sirenTable = {
 		Horn = "emv/sirens/federal signal pa 300/emv_horn.wav",
 	},
 	[43] = {
-		Name = "Storm Pro",
+		Name = "Storm",
 		Category = "Feniex",
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/feniex storm pro/emv_wail.wav", Icon="wail"},
