@@ -312,6 +312,12 @@ function EMVU:OverwriteIndex(name, data)
 	if data.Configuration then
 		self:AddSupportedConfiguration(name, data.Configuration)
 	end
+
+	if data.RadarDisabled then
+		EMVU.DisabledRadars[name] = true
+	else
+		EMVU.DisabledRadars[name] = nil
+	end
 end
 
 --- Mark a vehicle as supporting configs.

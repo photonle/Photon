@@ -822,6 +822,7 @@ function EMVU:MakeEMV( emv, name )
 	end
 
 	function emv:Photon_RadarActive( arg )
+		if EMVU.DisabledRadars[self:EMVName()] then return false end
 		local prev = self.PhotonRadarActive or false
 		if arg != nil then self.PhotonRadarActive = arg end
 		if arg == false and IsValid( self.PhotonRadarSoundHandle ) then self.PhotonRadarSoundHandle:Pause() end
