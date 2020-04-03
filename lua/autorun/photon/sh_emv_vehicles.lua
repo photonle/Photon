@@ -568,12 +568,11 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 				if prop == "H" then resultVal = val * autoScale end
 				if prop == "EmitArray" and istable( val ) then
 					local newArray = {}
-					for arrayIdx,pos in pairs(val) do
-						newArray[arrayIdx] = Vector()
-						newArray[arrayIdx]:Set(pos)
-						newArray[arrayIdx]:Mul(autoScale)
+					for __i,__pos in pairs( val ) do
+						newArray[__i] = Vector()
+						newArray[__i]:Set( __pos )
+						newArray[__i]:Mul( autoScale )
 					end
-					resultVal = newArray
 				end
 				EMVU.LightMeta[ name ][ useId ][ prop ] = resultVal
 			end
