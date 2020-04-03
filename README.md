@@ -39,11 +39,11 @@ The Core Development team currently contains 6 people.
 | TDM | Vehicle Creator|
 
 ### Contributors
-| Name | Contribution |
+| Name | Contributions |
 | --- | --- |
-| ANorthCanadianFriend | D&R RDS 17 |
-| DatedGore | D&R RDS 17 |
-| Officer Pringle | Touchmaster Delta |
+| ANorthCanadianFriend | [D&R RDS 17](https://github.com/photonle/Photon/pull/53) |
+| DatedGore | [Various](https://github.com/photonle/Photon/pulls?q=is%3Apr+is%3Amerged+author%3ADatedGore) |
+| Officer Pringle | [Touchmaster Delta Phaser](https://github.com/photonle/Photon/pull/63) |
 | Nardoras | Tinted Whelen Legacy |
 
 ### Other
