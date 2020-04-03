@@ -412,14 +412,14 @@ local sirenTable = {
 		Horn = "emv/sirens/federal signal pa 300/emv_horn.wav",
 	},
 	[43] = {
-		Name = "Storm",
+		Name = "Storm Pro",
 		Category = "Feniex",
 		Set = {
-			{Name = "WAIL", Sound = "emv/sirens/feniex storm/emv_wail.wav", Icon="wail"},
-			{Name = "YELP", Sound = "emv/sirens/feniex storm/emv_yelp.wav", Icon="yelp"},
-			{Name = "PHSR", Sound = "emv/sirens/feniex storm/emv_phaser.wav", Icon="phaser"},
+			{Name = "WAIL", Sound = "emv/sirens/feniex storm pro/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/feniex storm pro/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/feniex storm pro/emv_phaser.wav", Icon="phaser"},
 		},
-		Horn = "emv/sirens/feniex storm/emv_horn.wav",
+		Horn = "emv/sirens/feniex storm pro/emv_horn.wav",
 	},
 	[44] = {
 		Name = "PA640",
