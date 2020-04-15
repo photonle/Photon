@@ -417,22 +417,6 @@ local function PhotonTemplateReplace( text, inject )
 	return text
 end
 
-local function GetVehicleScript( model )
-	local vehicles = list.Get( "Vehicles" )
-	for index, data in pairs( vehicles ) do
-		if string.lower( data["Model"] ) == model then
-			if data["KeyValues"] then
-				for key, value in pairs( data["KeyValues"] ) do
-					if string.lower(tostring(key)) == "vehiclescript" then
-						return data["KeyValues"][key]
-					end
-				end
-			end
-		end
-	end
-	return ""
-end
-
 local function FormatLightbarChoice( id )
 	if not id or not EMVU.Auto[ id ] then return "{}" end
 	return string.format([[
@@ -457,23 +441,27 @@ local function FormatBodygroupChoices( ent )
 	return resultTable
 end
 
-local function PhotonCompileCreatorData( prefName, prefCategory, prefSiren, prefLightbar, ent )
+local function PhotonCompileCreatorData(prefName, prefCategory, prefSiren, prefLightbar, ent)
 	local authorName = LocalPlayer():Nick()
 	local col = ent:GetColor()
-	local formatColor = string.format( "Color(%s,%s,%s)", col.r, col.g, col.b )
+	local formatColor = string.format("Color(%s,%s,%s)", col.r, col.g, col.b)
+
+	local vehicleClass = ent:GetVehicleClass()
+	local vehicleData = list.Get("Vehicles")[vehicleClass]
+
 	local injectTable = {
 		["PREF_NAME"] = prefName or "",
 		["PREF_SIREN"] = prefSiren or "1",
 		["ENT_SKIN"] = ent:GetSkin(),
-		["ENT_BODYGROUPS"] = FormatBodygroupChoices( ent ),
+		["ENT_BODYGROUPS"] = FormatBodygroupChoices(ent),
 		["ENT_COLOR"] = formatColor,
-		["PREF_LIGHTBAR"] = FormatLightbarChoice( prefLightbar ),
+		["PREF_LIGHTBAR"] = FormatLightbarChoice(prefLightbar),
 		["PREF_CATEGORY"] = prefCategory or "Emergency Vehicles",
-		["ENT_MODEL"] = ent:GetModel(),
+		["ENT_MODEL"] = vehicleData.Model,
 		["AUTHOR_NAME"] = authorName,
-		["ENT_SCRIPT"] = GetVehicleScript( ent:GetModel() )
+		["ENT_SCRIPT"] = vehicleData.KeyValues.vehiclescript
 	}
-	return PhotonTemplateReplace( PHOTON_CREATOR_TEMPLATE, injectTable )
+	return PhotonTemplateReplace(PHOTON_CREATOR_TEMPLATE, injectTable)
 end
 
 function PhotonCopyConfiguration()
