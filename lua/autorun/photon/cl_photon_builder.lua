@@ -408,8 +408,6 @@ list.Set( "Vehicles", VehicleName, V )
 if EMVU then EMVU:OverwriteIndex( VehicleName, EMV ) end
 ]]
 
-local photon_creator_name, photon_creator_category, photon_creator_siren, photon_creator_lightbar
-
 local function PhotonTemplateReplace( text, inject )
 	for key,value in pairs( inject ) do
 		text = string.Replace( text, "%" .. key, tostring( value ) )
@@ -445,6 +443,7 @@ local function PhotonCompileCreatorData(prefName, prefCategory, prefSiren, prefL
 	local authorName = LocalPlayer():Nick()
 	local col = ent:GetColor()
 	local formatColor = string.format("Color(%s,%s,%s)", col.r, col.g, col.b)
+	if EMVU.GetSirenTable()[prefSiren] and EMVU.GetSirenTable()[prefSiren].ID then prefSiren = "\"" .. EMVU.GetSirenTable()[prefSiren].ID .. "\"" end
 
 	local vehicleClass = ent:GetVehicleClass()
 	local vehicleData = list.Get("Vehicles")[vehicleClass]
@@ -467,25 +466,13 @@ end
 function PhotonCopyConfiguration()
 	local car = LocalPlayer():GetVehicle()
 	if not IsValid( car ) then LocalPlayer():ChatPrint( "[Photon] You must be driving the target vehicle." ) return end
-	local returnCode = PhotonCompileCreatorData( photon_creator_name, photon_creator_category, photon_creator_siren, photon_creator_lightbar, car )
+	local returnCode = PhotonCompileCreatorData(GetConVar("photon_creator_name"):GetString(), GetConVar("photon_creator_category"):GetString(), GetConVar("photon_creator_siren"):GetInt(), GetConVar("photon_creator_lightbar"):GetString(), car)
 	SetClipboardText( returnCode )
 	LocalPlayer():ChatPrint( "[Photon] Configuration copied to your clipboard.\nPaste the code into a text editor and save as a .lua file in your garrysmod/lua/autorun folder.\nYou will likely need to restart the game for the vehicle to appear for the first time." )
 end
 
 concommand.Add( "photon_creator_copyconfig", PhotonCopyConfiguration )
-
-concommand.Add( "photon_creator_name", function( ply, cmd, args )
-	photon_creator_name = args[1]
-end )
-
-concommand.Add( "photon_creator_category", function( ply, cmd, args )
-	photon_creator_category = args[1]
-end )
-
-concommand.Add( "photon_creator_siren", function( ply, cmd, args )
-	photon_creator_siren = tostring( args[1] )
-end )
-
-concommand.Add( "photon_creator_lightbar", function( ply, cmd, args ) 
-	photon_creator_lightbar = args[1]
-end )
+CreateClientConVar("photon_creator_name", "", false, false, "ConVar for the express creator")
+CreateClientConVar("photon_creator_category", "", false, false, "ConVar for the express creator")
+CreateClientConVar("photon_creator_siren", "", false, false, "ConVar for the express creator")
+CreateClientConVar("photon_creator_lightbar", "", false, false, "ConVar for the express creator")
