@@ -1,27 +1,19 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Whelen Cenator"
 
 local COMPONENT = {}
 
 COMPONENT.Model = "models/supermighty/photon/whelen_cenator.mdl"
- COMPONENT.Lightbar = true
+COMPONENT.Lightbar = true
 COMPONENT.Skin = 0
 COMPONENT.Category = "Lightbar"
 COMPONENT.Bodygroups = {}
 COMPONENT.DefaultColors = {
-	[2] = "RED",
 	[1] = "BLUE",
+	[2] = "RED",
 	[3] = "AMBER"
 }
 
@@ -38,7 +30,7 @@ COMPONENT.Meta = {
 			--Vector( 0, 0, 0 ),
 			Vector( -1.6, 0, 0 )
 		}
-    },
+	},
 	cenator_r_main = {
 		AngleOffset = 90,
 		W = 8.5,
@@ -59,34 +51,33 @@ COMPONENT.Meta = {
 		Sprite = "sprites/emv/freedom_takedown",
 		WMult = 1.4,
 		Scale = 1,
-	},
+	}
 }
 
 COMPONENT.Positions = {
 
 	[1] = { Vector( 3.6, 6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_f_main" },
-    [2] = { Vector( -3.6, 6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_f_main" },
-    [3] = { Vector( 10.9, 6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_f_main" },
-    [4] = { Vector( -10.9, 6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_f_main" },
-    [5] = { Vector( 20.74, 6.09, 0.3 ), Angle( 0, 0, 0 ), "cenator_f_main" },
-    [6] = { Vector( -20.74, 6.09, 0.3 ), Angle( 0, 0, 0 ), "cenator_f_main" },
-    [7] = { Vector( 27.04, 3.69, 0.3 ), Angle( 0, -47, 0 ), "cenator_f_main" },
-    [8] = { Vector( -27.04, 3.69, 0.3 ), Angle( 0, 47, 0 ), "cenator_f_main" },
-    [9] = { Vector( 27.04, -3.69, 0.3 ), Angle( 0, 47, 0 ), "cenator_r_main" },
-    [10] = { Vector( -27.04, -3.69, 0.3 ), Angle( 0, -47, 0 ), "cenator_r_main" },
-    [11] = { Vector( 20.74, -6.09, 0.3 ), Angle( 0, 0, 0 ), "cenator_r_main" },
-    [12] = { Vector( -20.74, -6.09, 0.3 ), Angle( 0, 0, 0 ), "cenator_r_main" },  
-    [13] = { Vector( 10.9, -6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_r_main" }, 
-    [14] = { Vector( -10.9, -6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_r_main" }, 
-    [15] = { Vector( 3.6, -6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_r_main" },
-    [16] = { Vector( -3.6, -6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_r_main" },
+	[2] = { Vector( -3.6, 6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_f_main" },
+	[3] = { Vector( 10.9, 6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_f_main" },
+	[4] = { Vector( -10.9, 6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_f_main" },
+	[5] = { Vector( 20.74, 6.09, 0.3 ), Angle( 0, 0, 0 ), "cenator_f_main" },
+	[6] = { Vector( -20.74, 6.09, 0.3 ), Angle( 0, 0, 0 ), "cenator_f_main" },
+	[7] = { Vector( 27.04, 3.69, 0.3 ), Angle( 0, -47, 0 ), "cenator_f_main" },
+	[8] = { Vector( -27.04, 3.69, 0.3 ), Angle( 0, 47, 0 ), "cenator_f_main" },
+	[9] = { Vector( 27.04, -3.69, 0.3 ), Angle( 0, 47, 0 ), "cenator_r_main" },
+	[10] = { Vector( -27.04, -3.69, 0.3 ), Angle( 0, -47, 0 ), "cenator_r_main" },
+	[11] = { Vector( 20.74, -6.09, 0.3 ), Angle( 0, 0, 0 ), "cenator_r_main" },
+	[12] = { Vector( -20.74, -6.09, 0.3 ), Angle( 0, 0, 0 ), "cenator_r_main" },
+	[13] = { Vector( 10.9, -6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_r_main" },
+	[14] = { Vector( -10.9, -6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_r_main" },
+	[15] = { Vector( 3.6, -6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_r_main" },
+	[16] = { Vector( -3.6, -6.29, 0.3 ), Angle( 0, 0, 0 ), "cenator_r_main" },
 
 	[17] = { Vector( -16.505, 6.18, 0.34 ), Angle( 0, 0, 0 ), "cenator_takedown" },
 	[18] = { Vector( 16.505, 6.18, 0.34), Angle( 0, 0, 0 ), "cenator_takedown" },
 
 	[19] = { Vector( -29.4, 0, 0.34 ), Angle( 0, 90, 0 ), "cenator_takedown" },
-	[20] = { Vector( 29.4, 0, 0.34 ), Angle( 0, -90, 0 ), "cenator_takedown" },
-
+	[20] = { Vector( 29.4, 0, 0.34 ), Angle( 0, -90, 0 ), "cenator_takedown" }
 
 }
 
@@ -103,14 +94,14 @@ COMPONENT.Sections = {
 		}
 	},
 	["auto_cenator"] = {
-		[1] = { 
-            { 1, "_1" },{ 3, "_1"},{ 5, "_1"},{ 7, "_1"},{ 9, "_1"},{ 11, "_1"},{ 13, "_1"},{ 15, "_1"},
-            { 2, "_2" },{ 4, "_2"},{ 6, "_2"},{ 8, "_2"},{ 10, "_2"},{ 12, "_2"},{ 14, "_2"},{ 16, "_2"},
+		[1] = {
+			{ 1, "_1" },{ 3, "_1"},{ 5, "_1"},{ 7, "_1"},{ 9, "_1"},{ 11, "_1"},{ 13, "_1"},{ 15, "_1"},
+			{ 2, "_2" },{ 4, "_2"},{ 6, "_2"},{ 8, "_2"},{ 10, "_2"},{ 12, "_2"},{ 14, "_2"},{ 16, "_2"},
 		},
-		[2] = { 
+		[2] = {
 			{ 1, "_1" },{ 3, "_1"},{ 5, "_1"},{ 7, "_1"},{ 9, "_1"},{ 11, "_1"},{ 13, "_1"},{ 15, "_1"},
 		},
-		[3] = { 
+		[3] = {
 			{ 2, "_2" },{ 4, "_2"},{ 6, "_2"},{ 8, "_2"},{ 10, "_2"},{ 12, "_2"},{ 14, "_2"},{ 16, "_2"},
 		},
 		[4] = {
@@ -118,23 +109,23 @@ COMPONENT.Sections = {
 		},
 		[5] = {
 			{ 7, "_1"},{ 9, "_1"},{ 11, "_1"},{ 16, "_2"},{ 2, "_2" }, { 4, "_2" },{ 14, "_2" }, { 5, "_1" },
-		},
+		}
 	},
-	["auto_cenator_inner_f"] = { 
+	["auto_cenator_inner_f"] = {
 		[1] = { { 1, "_1" }, { 3, "_1" } },
 		[2] = { { 2, "_2" }, { 4, "_2" } },
 		[3] = { { 1, "_1" }, { 4, "_2" } },
 		[4] = { { 2, "_2" }, { 3, "_1" } },
 		[5] = { { 3, "_1" }, { 4, "_2" } },
-		[6] = { { 1, "_1" }, { 2, "_2" } },
+		[6] = { { 1, "_1" }, { 2, "_2" } }
 	},
-	["auto_cenator_inner_r"] = { 
+	["auto_cenator_inner_r"] = {
 		[1] = { { 15, "_1" }, { 13, "_1" } },
 		[2] = { { 16, "_2" }, { 14, "_2" } },
 		[3] = { { 15, "_1" }, { 14, "_2" } },
 		[4] = { { 16, "_2" }, { 13, "_1" } },
 		[5] = { { 13, "_1" }, { 14, "_2" } },
-		[6] = { { 15, "_1" }, { 16, "_2" } },
+		[6] = { { 15, "_1" }, { 16, "_2" } }
 	},
 	["auto_cenator_traffic"] = {
 		 -- left ta --
@@ -154,7 +145,7 @@ COMPONENT.Sections = {
 		-- divide --
 		[13] = { { 15, "_3"},{ 16, "_3"}, },
 		[14] = { { 15, "_3"},{ 16, "_3"},{ 14, "_3"},{ 13, "_3"}, },
-		[15] = { { 15, "_3"},{ 16, "_3"},{ 14, "_3"},{ 13, "_3"},{ 12, "_3"},{ 11, "_3"} }, 
+		[15] = { { 15, "_3"},{ 16, "_3"},{ 14, "_3"},{ 13, "_3"},{ 12, "_3"},{ 11, "_3"} }
 	}
 }
 
@@ -168,16 +159,16 @@ COMPONENT.Patterns = {
 					  4, 0, 4, 4, 4, 0, 0, 0, 5, 0, 5, 5, 5, 0, 0, 0,
 					  4, 0, 4, 4, 4, 0, 0, 0, 5, 0, 5, 5, 5, 0, 0, 0,
 					  4, 0, 4, 4, 4, 0, 0, 0, 5, 0, 5, 5, 5, 0, 0, 0,
-	    },
+	    }
 	},
 	["auto_cenator_corner"] = {
 		["code3"] = { 1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0, 1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0,
 					  3, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0,
 					  3, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-	    },
+	    }
 	},
 	["auto_cenator_inner_f"] = {
-		["code3"] = { 
+		["code3"] = {
 					  1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0,
 					  1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0,
 					  3, 0, 3, 0, 3, 0, 4, 0, 4, 0, 4, 0,
@@ -194,7 +185,7 @@ COMPONENT.Patterns = {
 	    }
 	},
 	["auto_cenator_inner_r"] = {
-		["code3"] = { 
+		["code3"] = {
 					  1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0,
 					  1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0,
 					  3, 0, 3, 0, 3, 0, 4, 0, 4, 0, 4, 0,
@@ -211,13 +202,13 @@ COMPONENT.Patterns = {
 	    }
 	},
 	["auto_cenator_traffic"] = {
-		["left"] = { 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 0, 0, 0, },
-		["right"] = { 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 12, 0, 0, 0, },
-		["divide"] = { 13, 13, 13, 14, 14, 14, 15, 15, 15, 0, 0, 0, },
-	},
+		["left"] = { 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 0, 0, 0 },
+		["right"] = { 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 12, 0, 0, 0 },
+		["divide"] = { 13, 13, 13, 14, 14, 14, 15, 15, 15, 0, 0, 0 },
+	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 	["auto_cenator_traffic"] = {
 		11, 12, 13, 14, 15, 16
 	}
@@ -225,32 +216,29 @@ COMPONENT.TrafficDisconnect = {
 
 COMPONENT.Modes = {
 	Primary = {
-			M1 = {
-				["auto_cenator"] = "code1",
-			},
-			M2 = {
-				["auto_cenator"] = "code2",
-			},
-			M3 = {
-				["auto_cenator_corner"] = "code3",
-				["auto_cenator_inner_f"] = "code3",
-				["auto_cenator_inner_r"] = "code3",
-			}
+		M1 = {
+			["auto_cenator"] = "code1",
 		},
+		M2 = {
+			["auto_cenator"] = "code2",
+		},
+		M3 = {
+			["auto_cenator_corner"] = "code3",
+			["auto_cenator_inner_f"] = "code3",
+			["auto_cenator_inner_r"] = "code3",
+		}
+	},
 	Auxiliary = {
-			C = {
-				
-			},
-			L = {
-				["auto_cenator_traffic"] = "left",
-			},
-			R = {
-				["auto_cenator_traffic"] = "right",
-			},
-			D = {
-				["auto_cenator_traffic"] = "divide",
-			}
+		L = {
+			["auto_cenator_traffic"] = "left",
 		},
+		R = {
+			["auto_cenator_traffic"] = "right",
+		},
+		D = {
+			["auto_cenator_traffic"] = "divide",
+		}
+	},
 	Illumination = {
 		L = {
 			{ 19, W }
@@ -259,7 +247,7 @@ COMPONENT.Modes = {
 			{ 20, W }
 		},
 		F = {
-		 { 17, W }, { 18, W }
+			{ 17, W }, { 18, W }
 		},
 		T = {
 			{ 17, W }, { 18, W }
@@ -268,4 +256,3 @@ COMPONENT.Modes = {
 }
 
 EMVU:AddAutoComponent( COMPONENT, name )
-
