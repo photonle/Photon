@@ -1,7 +1,7 @@
 "VertexlitGeneric"
 {
 	//"$basetexture" "models/smcars/shared/alt_black"
-	"$basetexture" "models/supermighty/photon/whelen_liberty_ii/lib2"
+	"$basetexture" "models/supermighty/photon/whelen_cenator/lib2"
 	"$bumpmap" "models/supermighty/photon/shared/skin_nm"
 "$nocull" "1"
     $surfaceprop "metal"

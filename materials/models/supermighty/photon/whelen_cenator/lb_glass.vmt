@@ -1,6 +1,6 @@
 "VertexlitGeneric"
 {
-	"$basetexture" "models/supermighty/whelen_freedom/clear_glass2"
+	"$basetexture" "models/supermighty/photon/whelen_cenator/clear_glass2"
 	"$bumpmap" "models/smcars/shared/skin_nm"
 
 	"$translucent" 1
