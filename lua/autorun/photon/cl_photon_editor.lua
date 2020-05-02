@@ -375,7 +375,7 @@ function Photon.Editor.CreateConfiguration(panel)
 
 		local configs = EMVU.Configurations.Library
 		for _, car in pairs(configs) do
-			for key, data in pairs(configs) do
+			for key, data in pairs(car) do
 				if data.StoreType ~= "LOCAL FILE" then continue end
 
 				local line = configList:AddLine(data.VehicleTypeID, data.Date, data.Name)
@@ -383,6 +383,7 @@ function Photon.Editor.CreateConfiguration(panel)
 			end
 		end
 	end
+	panel:MetaReset()
 
 	function configList:OnRowSelected(id, row)
 		if row.File then
