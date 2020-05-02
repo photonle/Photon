@@ -410,33 +410,28 @@ concommand.Add("photon_cfgbld_savelocal", function()
 		return
 	end
 
-	local resultData = ent:Photon_ExportConfiguration(
-		GetConVar("photon_cfgbld_bge"):GetBool(),
-		GetConVar("photon_cfgbld_liv"):GetBool(),
-		GetConVar("photon_cfgbld_liv"):GetBool(),
-		GetConVar("photon_cfgbld_srn"):GetBool(),
-		GetConVar("photon_cfgbld_bge"):GetBool()
-	)
+	local bge = GetConVar("photon_cfgbld_bge"):GetBool()
+	local liv = GetConVar("photon_cfgbld_liv"):GetBool()
+	local srn = GetConVar("photon_cfgbld_srn"):GetBool()
+	local resultData = ent:Photon_ExportConfiguration(bge, liv, liv, srn, bge)
 	if not resultData then
 		chat.AddText(Color(255, 128, 64), "[Photon] This vehicle is not compatible with Photon Configurations." )
 		return
 	end
 
-	local result = EMVU.Configurations.SaveConfiguration(
-		GetConVar("photon_cfgbld_name"):GetString(),
-		GetConVar("photon_cfgbld_cat"):GetString(),
-		LocalPlayer():Name(),
-		resultData
-	)
-	if result then
-		chat.AddText(Color(128, 255, 64), string.format( "[Photon] %s has been saved, this configuration can now be selected from the Photon context menu.", tostring( photon_cfgbld_name )))
-
-		hook.Run("Photon.NewConfig", GetConVar("photon_cfgbld_name"):GetString(), GetConVar("photon_cfgbld_cat"):GetString(), resultData)
-		return
-	else
+	local name = GetConVar("photon_cfgbld_name"):GetString()
+	local cat = GetConVar("photon_cfgbld_cat"):GetString()
+	local result = EMVU.Configurations.SaveConfiguration(name, cat, LocalPlayer():Name(), resultData)
+	if not result then
 		chat.AddText(Color(255, 128, 64), "[Photon] An error occurred while saving vehicle configuration.")
 		return
 	end
+
+	chat.AddText(Color(128, 255, 64), string.format(
+		"[Photon] %s has been saved, this configuration can now be selected from the Photon context menu.",
+		name
+	))
+	hook.Run("Photon.NewConfig", name, cat, resultData)
 end)
 
 local luaConfigInstructions = [[
