@@ -48,44 +48,6 @@ hook.Add("InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	should_render = GetConVar("photon_emerg_enabled")
 end)
 
---- Hook function called on key press.
--- @ply ply Player pushing the key.
--- @string bind The bind being pressed.
--- @bool press If the key is going up or down.
-function EMVU:Listener(ply, bind, press)
-	if not should_render:GetBool() then return end
-	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
-
-	local emv = ply:GetVehicle()
-	if not IsValid(emv) then return false end
-
-	if string.find(bind, "+attack") and not string.find(bind, "+attack2") then
-		if ply:KeyDown(IN_MOVELEFT) then
-			Photon:CarSignal("left")
-		elseif ply:KeyDown(IN_MOVERIGHT) then
-			Photon:CarSignal("right")
-		elseif ply:KeyDown(IN_BACK) then
-			Photon:CarSignal("hazard")
-		else
-			Photon:CarSignal("none")
-		end
-	elseif ply:KeyDown(IN_ATTACK) then
-		if string.find(bind, "+moveleft") then
-			Photon:CarSignal("left")
-		elseif string.find(bind, "+moveright") then
-			Photon:CarSignal("right")
-		elseif string.find(bind, "+back") then
-			Photon:CarSignal("hazard")
-		elseif string.find(bind, "+forward") then
-			Photon:CarSignal("none")
-		end
-	end
-end
-
-hook.Add("PlayerBindPress", "EMVU.Listener", function(pl, b, p)
-	EMVU:Listener(pl, b, p)
-end)
-
 local inputKeyDown = input.IsKeyDown
 local inputMouseDown = input.IsMouseDown
 
@@ -103,6 +65,34 @@ local function keyDown(key)
 
 	return false
 end
+
+--- Hook function called on key press.
+-- @ply ply Player pushing the key.
+-- @string bind The bind being pressed.
+-- @bool press If the key is going up or down.
+function EMVU:Listener(ply, bind, press)
+	if not should_render:GetBool() then return end
+	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
+
+	local emv = ply:GetVehicle()
+	if not IsValid(emv) then return false end
+
+	if keyDown(key_signal_activate) and not keyDown(key_signal_deactivate) then
+		if keyDown(key_signal_left) then
+			Photon:CarSignal("left")
+		elseif keyDown(key_signal_right) then
+			Photon:CarSignal("right")
+		elseif keyDown(key_signal_hazard) then
+			Photon:CarSignal("hazard")
+		else
+			Photon:CarSignal("none")
+		end
+	end
+end
+
+hook.Add("PlayerBindPress", "EMVU.Listener", function(pl, b, p)
+	EMVU:Listener(pl, b, p)
+end)
 
 hook.Add("Think", "Photon.ButtonPress", function()
 	if not should_render:GetBool() then return end
