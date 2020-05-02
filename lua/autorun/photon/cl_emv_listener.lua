@@ -77,12 +77,12 @@ function EMVU:Listener(ply, bind, press)
 	local emv = ply:GetVehicle()
 	if not IsValid(emv) then return false end
 
-	if keyDown(key_signal_activate) and not keyDown(key_signal_deactivate) then
-		if keyDown(key_signal_left) then
+	if keyDown(key_signal_activate:GetInt()) and not keyDown(key_signal_deactivate:GetInt()) then
+		if keyDown(key_signal_left:GetInt()) then
 			Photon:CarSignal("left")
-		elseif keyDown(key_signal_right) then
+		elseif keyDown(key_signal_right:GetInt()) then
 			Photon:CarSignal("right")
-		elseif keyDown(key_signal_hazard) then
+		elseif keyDown(key_signal_hazard:GetInt()) then
 			Photon:CarSignal("hazard")
 		else
 			Photon:CarSignal("none")
