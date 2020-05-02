@@ -359,29 +359,35 @@ local photon_cfgbld_bge = true
 local photon_cfgbld_liv = true
 local photon_cfgbld_srn = true
 
-local photon_cfg_pnl
+CreateClientConVar("photon_cfgbld_name", "", false, false, "Photon Configuration Name")
+CreateClientConVar("photon_cfgbld_cat", "", false, false, "Photon Configuration Category")
+CreateClientConVar("photon_cfgbld_bge", "", false, false, "Photon Configuration Bodygroups & Equipment")
+CreateClientConVar("photon_cfgbld_liv", "", false, false, "Photon Configuration Livery")
+CreateClientConVar("photon_cfgbld_srn", "", false, false, "Photon Configuration Siren")
+
 Photon.Editor.CreateConfiguration = function( panel )
+	print("\n\n\n\n\n\n" .. panel:GetClass() .. "\n\n\n\n\n\n")
 	photon_cfg_pnl = panel
 	function panel:MetaReset()
 		Photon.Editor.CreateConfiguration( panel )
 	end
 	panel:ClearControls()
-	panel:AddControl( "Header", { Description = "This is the Photon Configurations menu. Configurations are an easy way to save equipment, siren and livery configurations. Local configurations will only appear to you, while copying the Lua snippet allows server administrators and addon authors to include their own." } )
-	panel:AddControl( "TextBox", { Label = "Name", Command = "photon_cfgbld_name", WaitForEnter = "0" } )
-	panel:AddControl( "TextBox", { Label = "Category", Command = "photon_cfgbld_cat", WaitForEnter = "0" } )
-	panel:AddControl( "CheckBox", { Label = "Bodygroups and Equipment", Command = "photon_cfgbld_bge" } )
-	panel:AddControl( "CheckBox", { Label = "Livery and Color", Command = "photon_cfgbld_liv" } )
-	panel:AddControl( "CheckBox", { Label = "Siren Models", Command = "photon_cfgbld_srn" } )
-	panel:AddControl( "Button", { Text = "Save as Local Configuration", Command = "photon_cfgbld_savelocal" } )
-	panel:AddControl( "Button", { Text = "Copy Lua Code for Export", Command = "photon_cfgbld_getlua" } )
-	buildConfigDeletion( panel )
+	panel:AddControl("Header", {Description = "This is the Photon Configurations menu. Configurations are an easy way to save equipment, siren and livery configurations. Local configurations will only appear to you, while copying the Lua snippet allows server administrators and addon authors to include their own."})
+	panel:AddControl("TextBox", {Label = "Name", Command = "photon_cfgbld_name", WaitForEnter = "0"})
+	panel:AddControl("TextBox", {Label = "Category", Command = "photon_cfgbld_cat", WaitForEnter = "0"})
+	panel:AddControl("CheckBox", {Label = "Bodygroups and Equipment", Command = "photon_cfgbld_bge"})
+	panel:AddControl("CheckBox", {Label = "Livery and Color", Command = "photon_cfgbld_liv"})
+	panel:AddControl("CheckBox", {Label = "Siren Models", Command = "photon_cfgbld_srn"})
+	panel:AddControl("Button", {Text = "Save as Local Configuration", Command = "photon_cfgbld_savelocal"})
+	panel:AddControl("Button", {Text = "Copy Lua Code for Export", Command = "photon_cfgbld_getlua"})
+	buildConfigDeletion(panel)
 end
 
-concommand.Add( "photon_cfgbld_name", function(_,_,args) photon_cfgbld_name = tostring( args[1] ) end)
-concommand.Add( "photon_cfgbld_cat", function(_,_,args) photon_cfgbld_cat = tostring( args[1] ) end)
-concommand.Add( "photon_cfgbld_bge", function(_,_,args) photon_cfgbld_bge = tobool( args[1] ) end)
-concommand.Add( "photon_cfgbld_liv", function(_,_,args) photon_cfgbld_liv = tobool( args[1] ) end)
-concommand.Add( "photon_cfgbld_srn", function(_,_,args) photon_cfgbld_srn = tobool( args[1] ) end)
+-- concommand.Add( "photon_cfgbld_name", function(_,_,args) photon_cfgbld_name = tostring( args[1] ) end)
+-- concommand.Add( "photon_cfgbld_cat", function(_,_,args) photon_cfgbld_cat = tostring( args[1] ) end)
+-- concommand.Add( "photon_cfgbld_bge", function(_,_,args) photon_cfgbld_bge = tobool( args[1] ) end)
+-- concommand.Add( "photon_cfgbld_liv", function(_,_,args) photon_cfgbld_liv = tobool( args[1] ) end)
+-- concommand.Add( "photon_cfgbld_srn", function(_,_,args) photon_cfgbld_srn = tobool( args[1] ) end)
 
 concommand.Add( "photon_cfgbld_savelocal", function()
 	local ply = LocalPlayer()
@@ -389,6 +395,7 @@ concommand.Add( "photon_cfgbld_savelocal", function()
 	if not IsValid( ent ) then chat.AddText( Color(255, 128, 64), "[Photon] You must be driving the vehicle you wish to save the configuration from." ) return end
 	local resultData = ent:Photon_ExportConfiguration( photon_cfgbld_bge, photon_cfgbld_liv, photon_cfgbld_liv, photon_cfgbld_srn, photon_cfgbld_bge )
 	if not resultData then chat.AddText( Color(255, 128, 64), "[Photon] This vehicle is not compatible with Photon Configurations." ) return end
+
 	local result = EMVU.Configurations.SaveConfiguration( photon_cfgbld_name, photon_cfgbld_cat, LocalPlayer():Name(), resultData )
 	if result then
 		chat.AddText( Color(128, 255, 64), string.format( "[Photon] %s has been saved, this configuration can now be selected from the Photon context menu.", tostring( photon_cfgbld_name ) )  )
