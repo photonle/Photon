@@ -36,18 +36,11 @@ if SERVER then
 	include( "sv_emv_net.lua" )
 end
 
+include( "library/emv_other.lua" )
 include( "library/emv_sirens.lua" )
 include( "library/emv_colors.lua" )
 include( "library/emv_sounds.lua" )
-include( "library/emv_patterns.lua" )
-include( "library/emv_position_meta.lua" )
-include( "library/emv_positions.lua" )
-include( "library/emv_sequences.lua" )
-include( "library/emv_sections.lua" )
-include( "library/emv_props.lua" )
-include( "library/emv_lamps.lua" )
 include( "library/emv_auto.lua" )
-include( "library/emv_presets.lua" )
 
 local emvVehicleTable = {}
 local emvLastScan = 0

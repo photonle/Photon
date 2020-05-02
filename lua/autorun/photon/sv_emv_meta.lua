@@ -124,6 +124,7 @@ function EMVU:MakeEMV( ent, emv )
 		self:ELS_Illuminate( true )
 		if not self.ELS_Lamps then self.ELS_Lamps = {} end
 
+		if not GetConVar("photon_emv_useillum"):GetBool() then return end
 		local lampMode = self:ELS_IlluminateOption()
 		local lamps = EMVU.Helper:GetIlluminationLights( self.Name, lampMode )
 		for k,l in pairs( lamps ) do

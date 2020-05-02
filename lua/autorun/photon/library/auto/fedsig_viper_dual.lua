@@ -94,8 +94,7 @@ COMPONENT.Patterns = {
 		["alertNYA"] = { 2, 3 },
 		["alertNYB"] = { 3, 2 },
 		["alertBPD"] = { 2, 3 },
-		["brakeA"] = { 1 },
-		["brakeB"] = { 1 },
+		["brakeBPD"] = { 1 },
 	}
 }
 

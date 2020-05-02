@@ -312,6 +312,12 @@ function EMVU:OverwriteIndex(name, data)
 	if data.Configuration then
 		self:AddSupportedConfiguration(name, data.Configuration)
 	end
+
+	if data.RadarDisabled then
+		EMVU.DisabledRadars[name] = true
+	else
+		EMVU.DisabledRadars[name] = nil
+	end
 end
 
 --- Mark a vehicle as supporting configs.
@@ -562,11 +568,12 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 				if prop == "H" then resultVal = val * autoScale end
 				if prop == "EmitArray" and istable( val ) then
 					local newArray = {}
-					for __i,__pos in pairs( val ) do
-						newArray[__i] = Vector()
-						newArray[__i]:Set( __pos )
-						newArray[__i]:Mul( autoScale )
+					for arrayIdx,pos in pairs(val) do
+						newArray[arrayIdx] = Vector()
+						newArray[arrayIdx]:Set(pos)
+						newArray[arrayIdx]:Mul(autoScale)
 					end
+					resultVal = newArray
 				end
 				EMVU.LightMeta[ name ][ useId ][ prop ] = resultVal
 			end
@@ -618,7 +625,9 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
 						for componentIndex, patternIndex in pairs( targetCopy ) do
 							local patternPhase = autoData.Phase or ""
-							sequence.Preset_Components[presetIndex][ componentIndex .. "_" .. i ] = tostring( patternIndex .. patternPhase )
+							if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+								sequence.Preset_Components[presetIndex][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+							end
 						end
 					end
 				end
@@ -630,7 +639,9 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 							sequence.Selection_Components[_i][__i] = sequence.Selection_Components[_i][__i] or {}
 							for componentIndex, patternIndex in pairs( targetCopy ) do
 								local patternPhase = autoData.Phase or ""
-								sequence.Selection_Components[_i][__i][ componentIndex .. "_" .. i ] = tostring( patternIndex .. patternPhase )
+								if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+									sequence.Selection_Components[_i][__i][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+								end
 							end
 						end
 					end
@@ -645,7 +656,9 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
 						for componentIndex, patternIndex in pairs( targetCopy ) do
 							local patternPhase = autoData.Phase or ""
-							sequence.Preset_Components[presetIndex][ componentIndex .. "_" .. i ] = tostring( patternIndex .. patternPhase )
+							if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+								sequence.Preset_Components[presetIndex][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+							end
 						end
 					end
 				end
@@ -657,7 +670,9 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 							sequence.Selection_Components[_i][__i] = sequence.Selection_Components[_i][__i] or {}
 							for componentIndex, patternIndex in pairs( targetCopy ) do
 								local patternPhase = autoData.Phase or ""
-								sequence.Selection_Components[_i][__i][ componentIndex .. "_" .. i ] = tostring( patternIndex .. patternPhase )
+								if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+									sequence.Selection_Components[_i][__i][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+								end
 							end
 						end
 					end

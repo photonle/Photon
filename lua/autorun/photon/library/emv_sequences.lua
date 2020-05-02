@@ -1,3 +1,0 @@
-AddCSLuaFile()
-
-EMVU.Sequences = {}

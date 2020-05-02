@@ -1,2 +1,0 @@
-AddCSLuaFile()
-EMVU.LightMeta = {}
