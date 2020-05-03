@@ -59,7 +59,7 @@ local function keyDown(key)
 		return inputKeyDown(key)
 	end
 
-	if key > 107 and key < 114 then
+	if key >= 107 and key < 114 then
 		return inputMouseDown(key)
 	end
 
@@ -77,6 +77,7 @@ function EMVU:Listener(ply, bind, press)
 	local emv = ply:GetVehicle()
 	if not IsValid(emv) then return false end
 
+	chat.AddText("hi", tostring(key_signal_activate:GetInt()), tostring(keyDown(key_signal_activate:GetInt())))
 	if keyDown(key_signal_activate:GetInt()) and not keyDown(key_signal_deactivate:GetInt()) then
 		if keyDown(key_signal_left:GetInt()) then
 			Photon:CarSignal("left")
