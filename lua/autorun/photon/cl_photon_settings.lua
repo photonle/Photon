@@ -17,7 +17,12 @@ Photon.DefaultKeys = {
 	Siren2 = KEY_2,
 	Siren3 = KEY_3,
 	Siren4 = KEY_4,
-	Alt_Reverse = KEY_BACKSLASH
+	Alt_Reverse = KEY_BACKSLASH,
+	Signal_Activate = MOUSE_LEFT,
+	Signal_Deactivate = MOUSE_RIGHT,
+	Signal_Hazard = KEY_S,
+	Signal_Left = KEY_A,
+	Signal_Right = KEY_D
 }
 
 concommand.Add("photon_keys_reset", function()
