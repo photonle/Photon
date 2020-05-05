@@ -200,6 +200,7 @@ function EMVU:MakeEMV( emv, name )
 			result = EMVHelper:GetSequence( self.VehicleName, option, self )
 		end
 		if self.Photon_IsBraking and self:Photon_IsBraking() then result = EMVHelper.GetBrakeSequence( self.VehicleName, self, result ) end
+		if self.Photon_IsReversing and self:Photon_IsReversing() then result = EMVHelper.GetReverseSequence( self.VehicleName, self, result ) end
 		if self.Photon_ParkMode and self:Photon_ParkMode() then result = EMVHelper.GetParkSequence(self.VehicleName, self, result) end
 		return result
 	end

@@ -379,6 +379,12 @@ function EMVU.LoadModeData( name, data )
 		}
 	end
 
+	if not data["Reverse"] then
+		data.Reverse = {
+			Preset_Components = {}
+		}
+	end
+
 	if not data["Park"] then
 		data.Park = {
 			Preset_Components = {}
@@ -620,6 +626,37 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 			if istable( component.Modes.Primary.BRAKE ) then
 				local targetCopy = component.Modes.Primary.BRAKE
 				local sequence = EMVU.Sequences[ name ].Braking
+				if usesPresets then
+					for __,presetIndex in pairs( usedPresets ) do
+						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
+						for componentIndex, patternIndex in pairs( targetCopy ) do
+							local patternPhase = autoData.Phase or ""
+							if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+								sequence.Preset_Components[presetIndex][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+							end
+						end
+					end
+				end
+				if usesSelections then
+					if not istable( sequence.Selection_Components ) then sequence.Selection_Components = {} end
+					for _i, selection in pairs( activeSelections ) do
+						sequence.Selection_Components[_i] = sequence.Selection_Components[_i] or {}
+						for __i, option in pairs( selection ) do
+							sequence.Selection_Components[_i][__i] = sequence.Selection_Components[_i][__i] or {}
+							for componentIndex, patternIndex in pairs( targetCopy ) do
+								local patternPhase = autoData.Phase or ""
+								if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+									sequence.Selection_Components[_i][__i][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+								end
+							end
+						end
+					end
+				end
+			end
+
+			if istable( component.Modes.Primary.REVERSE ) then
+				local targetCopy = component.Modes.Primary.REVERSE
+				local sequence = EMVU.Sequences[ name ].Reverse
 				if usesPresets then
 					for __,presetIndex in pairs( usedPresets ) do
 						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
