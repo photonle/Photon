@@ -333,6 +333,7 @@ function Photon:CarSignal(arg)
 	if not car:Photon() then return end
 
 	if not arg then return end
+	if #Photon.Vehicles.States.Blink_Left[car.VehicleName] == 0 and #Photon.Vehicles.States.Blink_Right[car.VehicleName] == 0 then return end
 
 	if arg == "left" then
 		Photon.Net:Signal(CAR_BLINKER_LEFT)
