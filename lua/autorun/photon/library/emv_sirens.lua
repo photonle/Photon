@@ -555,6 +555,17 @@ local sirenTable = {
 		},
 		Horn = "emv/sirens/scan superior/emv_horn.wav"
 	},
+	[55] = {
+		Name = "ST300 Command Center",
+		Category = "Galls",
+		Set = {
+			{Name = "WAIL", Sound = "emv/sirens/galls st300 command center/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/galls st300 command center/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHASER", Sound = "emv/sirens/galls st300 command center/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/galls st300 command center/emv_hilo.wav", Icon = "hilo"},
+		},
+		Horn = "emv/sirens/galls st300 command center/emv_horn.wav",
+	},
 }
 
 EMVU.Horns = {
