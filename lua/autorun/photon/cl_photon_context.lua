@@ -59,9 +59,13 @@ properties.Add("photon_siren", {
             end
         end
 
+        primarySubmenu:AddOption("None", function()
+            EMVU.Net:SirenSet(0, ent, false)
+        end):SetChecked(ent:Photon_SirenSet() == 0)
+
         secondarySubmenu:AddOption("None", function()
             EMVU.Net:SirenSet(0, ent, true)
-        end)
+        end):SetChecked(ent:Photon_AuxSirenSet() == 0)
     end,
     Action = null
 })
@@ -350,6 +354,7 @@ properties.Add("photon_selection", {
         local submenu = option:AddSubMenu()
 
         for catIndex, cat in ipairs(options) do
+            if not cat.Name then cat.Name = "Unspecified #" .. catIndex; print("[Photon] Selection with the index #" .. catIndex .. " has no name specified.") end
             if #cat.Options == 2 and (cat.Options[1].Name == "None" or cat.Options[2].Name == "None") then
                 local selected = ent:Photon_SelectionOption(catIndex)
                 local isActive = cat.Options[selected].Name ~= "None"
@@ -373,6 +378,7 @@ properties.Add("photon_selection", {
                 for index, option in pairs(cat.Options) do
                     local opt
 
+                    if not option.Name then option.Name = "Unspecified #" .. index; print("[Photon] Option in selection '" .. cat.Name .. "' with the index #" .. index .. " has no name specified.") end
                     if option.Category then
                         if not subCategories[option.Category] then
                             subCategories[option.Category] = category:AddSubMenu(option.Category)

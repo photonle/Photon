@@ -1,6 +1,6 @@
 --[[-- Photon Init
 @copyright Photon Team
-@release v73 Grand Lake
+@release v74 Hot Sulphur Springs
 @author Photon Team
 --]]--
 

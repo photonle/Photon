@@ -4,6 +4,8 @@ local name = "Whelen Ion Interior Split"
 
 local COMPONENT = {}
 
+COMPONENT.Deprecated = "Use the 'Whelen Ion Split' with phase 'Interior'"
+
 COMPONENT.Model = "models/schmal/whelen_ion_interior.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}

@@ -59,6 +59,7 @@ COMPONENT.Sections = {
 COMPONENT.Patterns = {
 	["auto_ion"] = {
 		["code1"] = { 2, 0, 2, 0, 2, 2, 2, 0, 3, 0, 3, 0, 3, 3, 3, 0 },
+		["code1Interior"] = { 2, 0, 2, 0, 2, 2, 2, 0, 3, 0, 3, 0, 3, 3, 3, 0 },
 		["code2"] = {
 			0,
 			3, 0, 3, 0,
@@ -74,15 +75,16 @@ COMPONENT.Patterns = {
 			3, 3, 0, 2, 2,
 			3, 3, 0, 2, 2,
 			3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2,
-		}
+		},
+		["code2Interior"] = {0}
 	}
 }
 
 COMPONENT.Modes = {
 	Primary = {
-		M1 = { ["auto_ion"] = "code1", },
-		M2 = { ["auto_ion"] = "code2", },
-		M3 = { ["auto_ion"] = "code2", }
+		M1 = {auto_ion = "code1"},
+		M2 = {auto_ion = "code2"},
+		M3 = {auto_ion = "code2"}
 	},
 	Auxiliary = {},
 	Illumination = {}

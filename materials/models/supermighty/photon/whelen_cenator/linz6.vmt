@@ -1,0 +1,27 @@
+"VertexlitGeneric"
+{
+	//"$basetexture" "models/smcars/shared/alt_black"
+	"$basetexture" "models/supermighty/photon/whelen_linz6/linz6"
+	"$bumpmap" "models/supermighty/photon/shared/skin_nm"
+"$nocull" "1"
+    $surfaceprop "metal"
+	"$envmap" env_cubemap
+	"$envmaptint" "[0.005 0.005 0.005]"
+	"$envmapmasknormalmapalpha" "1"
+    $phong "1"
+    $phongexponent "7"
+    $phongboost "1"
+    $phongfresnelranges "[.05 .3 1]"
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+	"$carpenisenabled" "1"
+	Proxies
+	{
+		Equals 
+		{
+			srcVar1 $carpenisenabled
+			resultVar	$color 
+
+		}
+	}
+}

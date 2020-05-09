@@ -1,27 +1,32 @@
 
 function Photon:RunningScan()
 	for k,v in pairs( self:AllVehicles() ) do
-		if IsValid( v ) and IsValid( v:GetDriver() ) and v:GetDriver():IsPlayer() then
-
-			if v:HasPhotonELS() and v.ELS.Blackout then 
-				v:CAR_Running( false )
+		if IsValid( v ) and IsValid(v:GetDriver()) and v:GetDriver():IsPlayer() then
+			local hasELS = v:HasPhotonELS()
+			if hasELS and v.ELS.Blackout then
+				v:CAR_Running(false)
 			else
-				v:CAR_Running( true )
+				v:CAR_Running(true)
 			end
 
-			if v:IsBraking() then v:CAR_Braking( true ) else v:CAR_Braking( false ) end
-			if v:IsReversing() then v:CAR_Reversing( true ) else v:CAR_Reversing( false ) end
+			if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
+			if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
+			if hasELS then v:ELS_ParkMode(false) end
 
 			v.LastSpeed = v:Photon_GetSpeed()
 
-		elseif IsValid( v) and not v:GetDriver():IsValid() and not v:GetDriver():IsPlayer() and not v:GetPhotonLEStayOn() then
-			v:CAR_Running( false )
-			v:CAR_Braking( false )
-			v:CAR_Reversing( false )
-			if v:HasPhotonELS() then
-				if v:ELS_Siren() then v:ELS_SirenOff() end
-				v:ELS_Horn( false )
-				v:ELS_ManualSiren( false )
+		elseif IsValid(v) and not v:GetDriver():IsValid() and not v:GetDriver():IsPlayer() then
+			local hasELS = v:HasPhotonELS()
+			if hasELS then v:ELS_ParkMode(true) end
+			if not v:GetPhotonLEStayOn() then
+				v:CAR_Running(false)
+				v:CAR_Braking(false)
+				v:CAR_Reversing(false)
+				if hasELS then
+					if v:ELS_Siren() then v:ELS_SirenOff() end
+					v:ELS_Horn(false)
+					v:ELS_ManualSiren(false)
+				end
 			end
 		end
 	end
@@ -71,7 +76,7 @@ hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, 
 	local isOwner = ( ent:GetOwner() == ply )
 	local spawner = ent.PhotonVehicleSpawner
 	local isSpawner = ( IsValid( spawner ) and ( spawner == ply ) )
-	if isDriver or ply == owner or game.SinglePlayer() or isSpawner then
+	if isDriver or ply == isOwner or game.SinglePlayer() or isSpawner then
 		return true
 	else
 		return false

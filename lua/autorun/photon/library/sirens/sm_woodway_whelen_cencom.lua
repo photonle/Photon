@@ -18,7 +18,7 @@ local siren = {
 			Name = "PHASER",
 			Sound = "emv/sirens/woodway whelen cencom/priority.wav",
 			Icon = "phaser"
-		},
+		}
 	},
 	Horn = "emv/sirens/premier hazard 7004/bullhorn.wav" -- uses the same bullhorn
 }

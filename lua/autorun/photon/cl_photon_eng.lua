@@ -75,17 +75,8 @@ function Photon:ClearLightQueue()
 end
 
 function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent )
-	if lnum == 14 then
-		-- print( string.format( "Type:%s\nParent:%s\nColors:%s\nLocal Position:%s\nGlobal Position:%s\nLocal Angle:%s\nMeta:%s\nPixVis:%s\nLocal Number:%s\n", 
-		-- tostring(type), tostring(parent), tostring(incolors), tostring(ilpos), tostring(gpos), tostring(lang), tostring(meta), tostring(pixvis), tostring(lnum) ))
-	end
-	-- print("received light to render")
-	
 	if not incolors or not ilpos or not lang or not meta or not gpos then return end
-	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
-	-- PrintTable( meta )
-	-- PrintTable( incolors )
-	-- print(tostring(lang))
+	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
 	local legacy = true
 	if meta.NoLegacy == true then legacy = false end
 	local colors = incolors
@@ -95,10 +86,10 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	if bloom_multi and bloom_multi:GetFloat() then manualBloom = bloom_multi:GetFloat() end
 
 	lpos:Set( ilpos )
-	
+
 	local rotating = false
-		
-	if offset == "R" or offset == "RR" then 
+
+	if offset == "R" or offset == "RR" then
 		local speed = 2
 		if meta.Speed then speed = meta.Speed end
 		offset = rotatingLight(emvHelp, speed, 10)
@@ -129,7 +120,7 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		lpos[1] = lpos[1] + lposMod
 		lpos[2] = lpos[2] + lposMod
 	end
-		
+
 	local worldPos = gpos
 	// local worldPos = parent:LocalToWorld(lpos)
 
@@ -159,7 +150,7 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		end
 
 	if not visible or visible <= 0 then return end
-	
+
 	if not meta.Scale then meta.Scale = 1 end
 	if not meta.WMult then meta.WMult = 1 end
 	local ca = parent:GetAngles()
@@ -205,7 +196,7 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		local brightness = 1
 		local rawBrightness = 1
 		local pulseOverride = false
-		
+
 		if brght and istable(brght) then
 			brightness = pulsingLight( emvHelp, brght[1], brght[2], brght[3] )
 			pulseOverride = true
@@ -222,8 +213,8 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		local distModifier = ( 1 - clamp( ( dist / 512 ), 0, 1) )
 		viewFlare = viewFlare * distModifier
 
-		if meta.SourceOnly == true then 
-			srcOnly = true 
+		if meta.SourceOnly == true then
+			srcOnly = true
 		end
 
 		local al = Angle()
@@ -289,6 +280,10 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 
 		resultTable[24] = false
 
+		resultTable[25] = meta.SubmatID
+		resultTable[26] = meta.SubmatMaterial
+		resultTable[27] = parent
+
 		if istable( meta.EmitArray ) then
 			local emitResults = {}
 			for _key,_val in pairs( meta.EmitArray ) do
@@ -317,7 +312,8 @@ local endCam = cam.End3D2D
 local bloomRef = 0
 local bloomColor = nil
 
-function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, debug_mode )
+function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, SubmatID, SubmatMaterial, SubmatParent, debug_mode )
+
 	if drawSrc then
 		startCam( camPos, camAng, 1 )
 			setRenderLighting( 2 )
@@ -326,6 +322,17 @@ function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 			setRenderLighting( 0 )
 		endCam()
 	end
+	
+	if SubmatID then
+		SubmatParent:SetSubMaterial(SubmatID, SubmatMaterial)
+		if !timer.Exists(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID) then 
+			timer.Create( SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID, 0.01, 1, function() if SubmatParent:IsValid() then SubmatParent:SetSubMaterial(SubmatID, nil) end end )
+		else
+			timer.Pause(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID)
+			timer.Start(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID)
+		end
+	end	
+
 	if debug_mode == true then return end
 	if not srcOnly then
 		if istable( multiEmit ) then
@@ -356,8 +363,6 @@ function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 				drawSprite( worldPos, 12 * widthScale, 12 * bloomScale, colMed )
 		end
 	end
-	
-
 end
 
 local drawW = ScrW() * .5
@@ -369,7 +374,7 @@ local setSurfaceMaterial = surface.SetMaterial
 local setSurfaceColor = surface.SetDrawColor
 local drawTexturedRect = surface.DrawTexturedRect
 
-function Photon.DrawScreenEffects( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, debug_mode )
+function Photon.DrawScreenEffects( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, SubmatID, SubmatMaterial, parent, debug_mode )
 	if false then return end
 	if viewFlare and colFlr and viewFlare > 0 and not cheap then
 		local width = drawW
@@ -499,14 +504,14 @@ function Photon:RenderQueue( effects )
 			if photonRenderTable[i] != nil then
 				local data = photonRenderTable[i]
 				renderFunction( data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
-								data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], debug_mode )
+								data[17], data[18], data[19], data[20], data[21], data[22], data[23], data[24], data[25], data[26], data[27], debug_mode )
 			end
 		end
 	end
 	if not effects then endCam3d() else endCam2d() end
 	-- Photon:ClearLightQueue()
 end
-hook.Add( "PreDrawEffects", "Photon.RenderQueue", function() 
+hook.Add( "PreDrawEffects", "Photon.RenderQueue", function()
 	Photon:RenderQueue( false )
 	if draw_effects and draw_effects:GetBool() then
 		Photon:RenderQueue( true )
@@ -518,8 +523,8 @@ local isFuckingBloomMap = false
 local fuckingBloomMaps = {
 	["gm_driversheaven_tdm"] = true,
 }
-hook.Add( "InitPostEntity", "Photon.CheckForFuckingBloomMap", function() 
-	isFuckingBloomMap = fuckingBloomMaps[ tostring( game.GetMap() ) ]  
+hook.Add( "InitPostEntity", "Photon.CheckForFuckingBloomMap", function()
+	isFuckingBloomMap = fuckingBloomMaps[ tostring( game.GetMap() ) ]
 end )
 local mapBloomAdjust = 1
 function Photon.DrawDirtyLensEffect()
@@ -538,7 +543,7 @@ function Photon.DrawDirtyLensEffect()
 
 end
 if not mat7:IsError() then
-	hook.Add( "RenderScreenspaceEffects", "Photon.ScreenEffects", function() 
+	hook.Add( "RenderScreenspaceEffects", "Photon.ScreenEffects", function()
 		Photon.DrawDirtyLensEffect()
 	end)
 else
@@ -588,7 +593,6 @@ end)
 -- 	-- end
 -- end )
 
--- print("test")
 -- hook.Add( "PreDrawHalos", "Photon.PleaseFuckingWOrk", function() 
 -- 	render.MaterialOverrideByIndex( 0, "sprites/emv/fs_valor" )
 -- 	for k,v in pairs( ents.GetAll() ) do

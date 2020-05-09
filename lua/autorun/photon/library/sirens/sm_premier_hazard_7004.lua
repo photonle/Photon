@@ -23,7 +23,7 @@ local siren = {
 			Name = "HI-LO",
 			Sound = "emv/sirens/premier hazard 7004/hilo.wav",
 			Icon = "hilo"
-		},
+		}
 	},
 	Horn = "emv/sirens/premier hazard 7004/bullhorn.wav"
 }

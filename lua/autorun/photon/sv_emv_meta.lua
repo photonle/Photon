@@ -124,6 +124,7 @@ function EMVU:MakeEMV( ent, emv )
 		self:ELS_Illuminate( true )
 		if not self.ELS_Lamps then self.ELS_Lamps = {} end
 
+		if not GetConVar("photon_emv_useillum"):GetBool() then return end
 		local lampMode = self:ELS_IlluminateOption()
 		local lamps = EMVU.Helper:GetIlluminationLights( self.Name, lampMode )
 		for k,l in pairs( lamps ) do
@@ -419,7 +420,7 @@ function EMVU:MakeEMV( ent, emv )
 
 	function ent:ELS_SetSirenSet( num )
 		if not IsValid( self ) then return end
-		if num <= 0 or num > #EMVU.GetSirenTable() then return false end
+		if num < 0 or num > #EMVU.GetSirenTable() then return false end
 
 		self:ELS_SirenOff()
 		self:ELS_SirenSet( num )
@@ -472,7 +473,7 @@ function EMVU:MakeEMV( ent, emv )
 				end
 			end
 			self:SetNW2Bool( "PhotonLE.CAR_MANUAL", false )
- 		end
+		end
 	end
 
 	function ent:ELS_Horn( state )
@@ -496,6 +497,11 @@ function EMVU:MakeEMV( ent, emv )
 			self:SetNW2Bool( "PhotonLE.EMV_HORN", false )
 			if self.ELS.Horn then self.ELS.Horn:Stop() end
 		end
+	end
+
+	function ent:ELS_ParkMode(state)
+		if not IsValid(self) then return end
+		self:SetNW2Bool("PhotonLE.PARK_MODE", state)
 	end
 
 	function ent:ELS_Blackout( state )
@@ -702,7 +708,7 @@ function EMVU:MakeEMV( ent, emv )
 	if istable( emv.Auto ) and emv.Auto[1] and istable( emv.Presets ) then
 		ent:ELS_PresetOption( 1 )
 	end
-	
+
 	ent:ELS_SirenOption( 1 )
 	ent:ELS_LightOption( 1 )
 	ent:ELS_IlluminateOption ( 1 )
@@ -714,13 +720,3 @@ function EMVU:MakeEMV( ent, emv )
 	ent:Photon_ApplySubMaterials()
 	ent:Photon_ResetSelections()
 end
-
--- concommand.Add("makecaronme", function(ply)
--- 	local ent = ents.Create("prop_vehicle_jeep")
--- 	ent:SetModel( "models/schmal/fpiu/ford_utility.mdl" )
--- 	ent:SetKeyValue( "vehiclescript", "scripts/vehicles/schmal/ford_pol_int_2016.txt" )
--- 	ent:SetPos( ply:GetPos() )
--- 	ent:SetAngles( ply:GetAngles() )
--- 	ent:Spawn()
--- 	ent:Activate()
--- end)

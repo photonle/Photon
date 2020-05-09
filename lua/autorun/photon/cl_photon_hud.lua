@@ -47,7 +47,10 @@ Photon.AddCustomHUDIcon = function(name, data)
 
 	PhotonHUD.Icons[name] = data
 	PhotonHUD:BuildCode()
-	PhotonHUD:Init()
+
+	if IsValid(PhotonHUD.Panel) then
+		PhotonHUD:Init()
+	end
 end
 
 function PhotonHUD:BuildCode()
@@ -66,7 +69,7 @@ function PhotonHUD:BuildCode()
 				clearSections: function(){$(".section").each(function(){"warning-lights"!=$(this).attr("id")&&$(this).remove()})},
 				addButton: function(t,e,n,i,o){var r="#"+t+"-section .button-row",s=photonUI.getButtonHtml(e,n,i);$(r).html($(r).html()+s),photonUI.updateButtonState(t,i,o)},
 				updateButtonState: function(t,e,n){t="#"+t+"-section";var i="";switch(n){case 0:i="";break;case 1:i="button_selected";break;case 2:i="button_active"}var o=$(t+' .button[index="'+e+'"]');$(o).removeClass("button_selected button_active"),$(o).addClass(i)},
-				updateButtonExclusive: function(t,e,n){$("#"+t+"-section .button").each(function(){$(this).removeClass("button_selected button_active")}),photonUI.updateButtonState(t,e,n)},
+				updateButtonExclusive: function(t,e,n){if (t != 'functions'){$("#"+t+"-section .button").each(function(){$(this).removeClass("button_selected button_active")})};photonUI.updateButtonState(t,e,n)},
 				resetPrimaryMeter: function(t){$("#primary-meter").html("");for(var e=1;t>=e;e++)$("#primary-meter").html($("#primary-meter").html()+'<div index="'+e+'"></div>')},
 				setActivePrimaryMeter:function(t){$("#primary-meter > div").each(function(){$(this).removeClass("active")}),$($("#primary-meter > div[index='"+t+"']")).addClass("active")},setPrimary:function(t){$("#primary-lights").toggleClass("on",t)},
 				setPrimaryOn: function(){$("#primary-lights").addClass("on")},setPrimaryOff:function(){$("#primary-lights").removeClass("on")},
@@ -302,7 +305,6 @@ function PhotonHUD:Init()
 	if IsValid(self.Panel) then self.Panel:Remove() end
 
 	self.Panel = vgui.Create( "DHTML" )
-	if not self.Panel then timer.Simple(3, function() self:Init() end) return end
 	self.Panel:SetPaintedManually(true)
 	self.Panel:SetSize(512, 512)
 	self.Panel:SetMouseInputEnabled(false)
@@ -378,6 +380,8 @@ function PhotonHUD:UpdateState()
 			if newData.Siren.Enabled then state = 2 end
 			PhotonHUD.Panel:RunJavascript( "photonUI.updateButtonExclusive('siren'," .. newData.Siren.Active .. ", " .. state .. ");" )
 		end
+	else
+		PhotonHUD:Reset(newData)
 	end
 	if istable( newData.Illumination ) then
 		if not oldData.Illumination then PhotonHUD:Reset( newData ) return end
@@ -564,28 +568,32 @@ local function PhotonHtml()
 	PhotonHUD:AutoUpdate()
 
 	if not PhotonHUD.ShouldDraw then return end
-	if drawTexture != false then
-		local opacity = 255 * HUD_OPACITY:GetFloat()
-		setDrawColor(255, 255, 255, opacity)
-		setMaterial(drawTexture)
+	if not drawTexture then return end
 
-		local wOffset = CV_WIDTH:GetInt()
-		if wOffset < 0 then wOffset = 0 end
+	local opacity = 255 * HUD_OPACITY:GetFloat()
+	setDrawColor(255, 255, 255, opacity)
+	setMaterial(drawTexture)
 
-		local hOffset = CV_HEIGHT:GetInt()
-		if hOffset < 0 then hOffset = 0 end
+	local wOffset = CV_WIDTH:GetInt()
+	if wOffset < 0 then wOffset = 0 end
 
-		drawTexturedRect(scrW - 512 - wOffset, scrH - 512 - hOffset, 512, 512)
-	end
+	local hOffset = CV_HEIGHT:GetInt()
+	if hOffset < 0 then hOffset = 0 end
+
+	drawTexturedRect(scrW - 512 - wOffset, scrH - 512 - hOffset, 512, 512)
 end
-hook.Add( "HUDPaint", "Photon.NewHUDPaint", function()
-	PhotonHtml()
-end)
 
-if PhotonHUD then PhotonHUD:Init() end
+hook.Add("HUDPaint", "Photon.NewHUDPaint", PhotonHtml)
 
+if vgui.GetControlTable("DHTML") then
+	PhotonHUD:Init()
+else
+	hook.Add("InitPostEntity", "PhotonHUD:Init", function()
+		PhotonHUD:Init()
+	end)
+end
 
-
+Photon.HUD = PhotonHUD
 
 local radarBase = Material( "photon/ui/radar_base.png" )
 

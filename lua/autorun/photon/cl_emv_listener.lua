@@ -1,6 +1,6 @@
 --[[-- EMVU Key Listener.
 @copyright Photon Team
-@release v73 Grand Lake
+@release v74 Hot Sulphur Springs
 @author Photon Team
 @module EMVU
 --]]--
@@ -21,6 +21,11 @@ local key_siren2 = GetConVar("photon_key_siren2")
 local key_siren3 = GetConVar("photon_key_siren3")
 local key_siren4 = GetConVar("photon_key_siren4")
 local key_backtick = GetConVar("photon_key_alt_reverse")
+local key_signal_activate = GetConVar("photon_key_signal_activate")
+local key_signal_deactivate = GetConVar("photon_key_signal_deactivate")
+local key_signal_left = GetConVar("photon_key_signal_left")
+local key_signal_right = GetConVar("photon_key_signal_right")
+local key_signal_hazard = GetConVar("photon_key_signal_hazard")
 local should_render =  GetConVar("photon_emerg_enabled")
 
 hook.Add("InitPostEntity", "Photon.SetupLocalKeyBinds", function()
@@ -35,45 +40,12 @@ hook.Add("InitPostEntity", "Photon.SetupLocalKeyBinds", function()
 	key_illum = GetConVar("photon_key_illum")
 	key_radar = GetConVar("photon_key_radar")
 	key_backtick = GetConVar("photon_key_alt_reverse")
+	key_signal_activate = GetConVar("photon_key_signal_activate")
+	key_signal_deactivate = GetConVar("photon_key_signal_deactivate")
+	key_signal_left = GetConVar("photon_key_signal_left")
+	key_signal_right = GetConVar("photon_key_signal_right")
+	key_signal_hazard = GetConVar("photon_key_signal_hazard")
 	should_render = GetConVar("photon_emerg_enabled")
-end)
-
---- Hook function called on key press.
--- @ply ply Player pushing the key.
--- @string bind The bind being pressed.
--- @bool press If the key is going up or down.
-function EMVU:Listener(ply, bind, press)
-	if not should_render:GetBool() then return end
-	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
-
-	local emv = ply:GetVehicle()
-	if not IsValid(emv) then return false end
-
-	if string.find(bind, "+attack") and not string.find(bind, "+attack2") then
-		if ply:KeyDown(IN_MOVELEFT) then
-			Photon:CarSignal("left")
-		elseif ply:KeyDown(IN_MOVERIGHT) then
-			Photon:CarSignal("right")
-		elseif ply:KeyDown(IN_BACK) then
-			Photon:CarSignal("hazard")
-		else
-			Photon:CarSignal("none")
-		end
-	elseif ply:KeyDown(IN_ATTACK) then
-		if string.find(bind, "+moveleft") then
-			Photon:CarSignal("left")
-		elseif string.find(bind, "+moveright") then
-			Photon:CarSignal("right")
-		elseif string.find(bind, "+back") then
-			Photon:CarSignal("hazard")
-		elseif string.find(bind, "+forward") then
-			Photon:CarSignal("none")
-		end
-	end
-end
-
-hook.Add("PlayerBindPress", "EMVU.Listener", function(pl, b, p)
-	EMVU:Listener(pl, b, p)
 end)
 
 local inputKeyDown = input.IsKeyDown
@@ -87,12 +59,40 @@ local function keyDown(key)
 		return inputKeyDown(key)
 	end
 
-	if key > 107 and key < 114 then
+	if key >= 107 and key < 114 then
 		return inputMouseDown(key)
 	end
 
 	return false
 end
+
+--- Hook function called on key press.
+-- @ply ply Player pushing the key.
+-- @string bind The bind being pressed.
+-- @bool press If the key is going up or down.
+function EMVU:Listener(ply, bind, press)
+	if not should_render:GetBool() then return end
+	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
+
+	local emv = ply:GetVehicle()
+	if not IsValid(emv) then return false end
+
+	if keyDown(key_signal_activate:GetInt()) and not keyDown(key_signal_deactivate:GetInt()) then
+		if keyDown(key_signal_left:GetInt()) then
+			Photon:CarSignal("left")
+		elseif keyDown(key_signal_right:GetInt()) then
+			Photon:CarSignal("right")
+		elseif keyDown(key_signal_hazard:GetInt()) then
+			Photon:CarSignal("hazard")
+		else
+			Photon:CarSignal("none")
+		end
+	end
+end
+
+hook.Add("PlayerBindPress", "EMVU.Listener", function(pl, b, p)
+	EMVU:Listener(pl, b, p)
+end)
 
 hook.Add("Think", "Photon.ButtonPress", function()
 	if not should_render:GetBool() then return end
@@ -242,22 +242,37 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	end
 end)
 
-local function SirenSuggestions( cmd, args )
-
-	args = string.Trim( args )
-	args = string.lower( args )
+local function SirenSuggestions(cmd, args)
+	arg = args:Trim():lower()
+	if arg == "" then
+		arg = false
+	end
 
 	local result = {}
 
-	local i = 1
-	for k,v in pairs( EMVU.GetSirenTable() ) do
+	for i, siren in ipairs(EMVU.GetSirenTable()) do
+		if arg then
+			local cat = siren.Category:lower()
+			local name = siren.Name:lower()
 
-		table.insert( result, "emv_siren " .. k .. " \"" .. v.Name .. "\"")
-
+			if tostring(i) == arg then
+				table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
+			elseif name:StartWith(arg) then
+				table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
+			elseif cat:StartWith(arg) then
+				table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
+			elseif arg:StartWith(cat) then
+				local test = arg:sub(#cat + 1):Trim()
+				if name:StartWith(test) then
+					table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
+				end
+			end
+		else
+			table.insert(result, string.format("%s %s \"%s\"", cmd, i, siren.Name))
+		end
 	end
 
 	return result
-
 end
 
 concommand.Add("emv_siren", function(ply, cmd, args)
@@ -318,6 +333,7 @@ function Photon:CarSignal(arg)
 	if not car:Photon() then return end
 
 	if not arg then return end
+	if #Photon.Vehicles.States.Blink_Left[car.VehicleName] == 0 and #Photon.Vehicles.States.Blink_Right[car.VehicleName] == 0 then return end
 
 	if arg == "left" then
 		Photon.Net:Signal(CAR_BLINKER_LEFT)

@@ -30,7 +30,7 @@ function SetDebugTarget( index, cat )
 		if not IsValid( car ) or not car:Photon() then return end
 		PHOTON_DEBUG_NAME = car.VehicleName
 	end
-	
+
 	PHOTON_DEBUG_INDEX = index
 	if cat == "ELS" then
 		PHOTON_DEBUG_MODE = "ELS"
@@ -39,7 +39,7 @@ function SetDebugTarget( index, cat )
 		PHOTON_DEBUG_MODE = "REG"
 		PHOTON_DEBUG_LIGHT = Photon.Vehicles.Positions[ PHOTON_DEBUG_NAME ][ index ]
 	elseif cat == "PROP" then
-		// PHOTON_DEBUG_LIGHT
+		-- PHOTON_DEBUG_LIGHT
 	end
 end
 
@@ -283,7 +283,6 @@ hook.Add( "Think", "Photon.Debug.ButtonPress", function()
 	elseif not input.IsKeyDown( KEY_PAD_DECIMAL ) then
 		P_KP_DECIMAL = false
 	end
-		
 end)
 
 function PhotonDebugTarget( ply, args )
@@ -329,7 +328,7 @@ end)
 surface.CreateFont( "PHOTON_Debug", {
 	font = "Consolas",
 	size = 16,
-	weight = 900, 
+	weight = 900,
 	antialias = true
 } )
 
@@ -362,13 +361,6 @@ hook.Add( "PostDrawHUD", "Photon.Debug.HUDPaint", function()
 		draw.DrawText( exclusiveModeText, "PHOTON_Debug", ScrW() - 16, 118, Color( 0, 0, 0 ), TEXT_ALIGN_RIGHT )
 		draw.DrawText( exclusiveModeText, "PHOTON_Debug", ScrW() - 16, 119, Color( 100, 200, 255 ), TEXT_ALIGN_RIGHT )
 	end
-end)
-
-concommand.Add("photon_debug_bg", function( ply )
-	if not ply:IsAdmin() then return end
-	local vehicle = ply:GetVehicle()
-	if not vehicle then return end
-	PrintTable( vehicle:GetBodyGroups() )
 end)
 
 local PHOTON_CREATOR_TEMPLATE = [[
@@ -416,29 +408,11 @@ list.Set( "Vehicles", VehicleName, V )
 if EMVU then EMVU:OverwriteIndex( VehicleName, EMV ) end
 ]]
 
-local photon_creator_name, photon_creator_category, photon_creator_siren, photon_creator_lightbar
-
 local function PhotonTemplateReplace( text, inject )
 	for key,value in pairs( inject ) do
 		text = string.Replace( text, "%" .. key, tostring( value ) )
 	end
 	return text
-end
-
-local function GetVehicleScript( model )
-	local vehicles = list.Get( "Vehicles" )
-	for index, data in pairs( vehicles ) do
-		if string.lower( data["Model"] ) == model then
-			if data["KeyValues"] then
-				for key, value in pairs( data["KeyValues"] ) do
-					if string.lower(tostring(key)) == "vehiclescript" then
-						return data["KeyValues"][key]
-					end
-				end
-			end
-		end
-	end
-	return ""
 end
 
 local function FormatLightbarChoice( id )
@@ -465,48 +439,40 @@ local function FormatBodygroupChoices( ent )
 	return resultTable
 end
 
-local function PhotonCompileCreatorData( prefName, prefCategory, prefSiren, prefLightbar, ent )
+local function PhotonCompileCreatorData(prefName, prefCategory, prefSiren, prefLightbar, ent)
 	local authorName = LocalPlayer():Nick()
 	local col = ent:GetColor()
-	local formatColor = string.format( "Color(%s,%s,%s)", col.r, col.g, col.b )
+	local formatColor = string.format("Color(%s,%s,%s)", col.r, col.g, col.b)
+	if EMVU.GetSirenTable()[prefSiren] and EMVU.GetSirenTable()[prefSiren].ID then prefSiren = "\"" .. EMVU.GetSirenTable()[prefSiren].ID .. "\"" end
+
+	local vehicleClass = ent:GetVehicleClass()
+	local vehicleData = list.Get("Vehicles")[vehicleClass]
+
 	local injectTable = {
 		["PREF_NAME"] = prefName or "",
 		["PREF_SIREN"] = prefSiren or "1",
 		["ENT_SKIN"] = ent:GetSkin(),
-		["ENT_BODYGROUPS"] = FormatBodygroupChoices( ent ),
+		["ENT_BODYGROUPS"] = FormatBodygroupChoices(ent),
 		["ENT_COLOR"] = formatColor,
-		["PREF_LIGHTBAR"] = FormatLightbarChoice( prefLightbar ),
+		["PREF_LIGHTBAR"] = FormatLightbarChoice(prefLightbar),
 		["PREF_CATEGORY"] = prefCategory or "Emergency Vehicles",
-		["ENT_MODEL"] = ent:GetModel(),
+		["ENT_MODEL"] = vehicleData.Model,
 		["AUTHOR_NAME"] = authorName,
-		["ENT_SCRIPT"] = GetVehicleScript( ent:GetModel() )
+		["ENT_SCRIPT"] = vehicleData.KeyValues.vehiclescript
 	}
-	return PhotonTemplateReplace( PHOTON_CREATOR_TEMPLATE, injectTable )
+	return PhotonTemplateReplace(PHOTON_CREATOR_TEMPLATE, injectTable)
 end
 
 function PhotonCopyConfiguration()
 	local car = LocalPlayer():GetVehicle()
 	if not IsValid( car ) then LocalPlayer():ChatPrint( "[Photon] You must be driving the target vehicle." ) return end
-	local returnCode = PhotonCompileCreatorData( photon_creator_name, photon_creator_category, photon_creator_siren, photon_creator_lightbar, car )
-	// print( returnCode )
+	local returnCode = PhotonCompileCreatorData(GetConVar("photon_creator_name"):GetString(), GetConVar("photon_creator_category"):GetString(), GetConVar("photon_creator_siren"):GetInt(), GetConVar("photon_creator_lightbar"):GetString(), car)
 	SetClipboardText( returnCode )
 	LocalPlayer():ChatPrint( "[Photon] Configuration copied to your clipboard.\nPaste the code into a text editor and save as a .lua file in your garrysmod/lua/autorun folder.\nYou will likely need to restart the game for the vehicle to appear for the first time." )
 end
 
 concommand.Add( "photon_creator_copyconfig", PhotonCopyConfiguration )
-
-concommand.Add( "photon_creator_name", function( ply, cmd, args )
-	photon_creator_name = args[1]
-end )
-
-concommand.Add( "photon_creator_category", function( ply, cmd, args )
-	photon_creator_category = args[1]
-end )
-
-concommand.Add( "photon_creator_siren", function( ply, cmd, args )
-	photon_creator_siren = tostring( args[1] )
-end )
-
-concommand.Add( "photon_creator_lightbar", function( ply, cmd, args ) 
-	photon_creator_lightbar = args[1]
-end )
+CreateClientConVar("photon_creator_name", "", false, false, "ConVar for the express creator")
+CreateClientConVar("photon_creator_category", "", false, false, "ConVar for the express creator")
+CreateClientConVar("photon_creator_siren", "", false, false, "ConVar for the express creator")
+CreateClientConVar("photon_creator_lightbar", "", false, false, "ConVar for the express creator")

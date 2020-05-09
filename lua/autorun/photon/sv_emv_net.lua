@@ -110,7 +110,7 @@ function EMVU.Net:SirenSet( ply )
 	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, emv )
 	if modifyBlocked != false then
 		if not isAux then
-			if recv != 0 then emv:ELS_SetSirenSet(recv) end
+			emv:ELS_SetSirenSet(recv)
 		else
 			emv:ELS_SetAuxSirenSet( recv )
 		end

@@ -123,6 +123,8 @@ local sirenTable = {
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/federal sig 80k/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/federal sig 80k/emv_yelp.wav", Icon="yelp"},
+			{Name = "PRTY", Sound = "emv/sirens/federal sig 80k/emv_phaser.wav", Icon="phaser"},
+			{Name = "HILO", Sound = "emv/sirens/federal sig 80k/emv_hilo.wav", Icon="hilo"},
 		},
 		Manual = "emv/sirens/federal sig 80k/emv_manual.wav",
 		Horn = "emv/sirens/federal sig 80k/emv_horn.wav"
@@ -257,6 +259,7 @@ local sirenTable = {
 			{Name = "WAIL", Sound = "emv/sirens/chp/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/chp/emv_yelp.wav", Icon="yelp"},
 		},
+		Horn = "emv/sirens/chp/emv_horn.wav",
 	},
 	[26] = {
 		Name = "SQ Zone",
@@ -409,14 +412,14 @@ local sirenTable = {
 		Horn = "emv/sirens/federal signal pa 300/emv_horn.wav",
 	},
 	[43] = {
-		Name = "Storm Pro",
+		Name = "Storm",
 		Category = "Feniex",
 		Set = {
-			{Name = "WAIL", Sound = "emv/sirens/feniex storm pro/emv_wail.wav", Icon="wail"},
-			{Name = "YELP", Sound = "emv/sirens/feniex storm pro/emv_yelp.wav", Icon="yelp"},
-			{Name = "PHSR", Sound = "emv/sirens/feniex storm pro/emv_phaser.wav", Icon="phaser"},
+			{Name = "WAIL", Sound = "emv/sirens/feniex storm/emv_wail.wav", Icon="wail"},
+			{Name = "YELP", Sound = "emv/sirens/feniex storm/emv_yelp.wav", Icon="yelp"},
+			{Name = "PHSR", Sound = "emv/sirens/feniex storm/emv_phaser.wav", Icon="phaser"},
 		},
-		Horn = "emv/sirens/feniex storm pro/emv_horn.wav",
+		Horn = "emv/sirens/feniex storm/emv_horn.wav",
 	},
 	[44] = {
 		Name = "PA640",
@@ -481,7 +484,7 @@ local sirenTable = {
 		Set = {
 			{Name = "WAIL", Sound = "emv/sirens/galls street thunder 800/emv_wail.wav", Icon="wail"},
 			{Name = "YELP", Sound = "emv/sirens/galls street thunder 800/emv_yelp.wav", Icon="yelp"},
-			{Name = "PHSR", Sound = "emv/sirens/galls street thunder 800/emv_phaser.wav", Icon="phaser"},
+			{Name = "THNDR", Sound = "emv/sirens/galls street thunder 800/emv_thunder.wav", Icon="phaser"},
 			{Name = "HILO", Sound = "emv/sirens/galls street thunder 800/emv_hilo.wav", Icon = "hilo"},
 		},
 		Horn = "emv/sirens/galls street thunder 800/emv_horn.wav",

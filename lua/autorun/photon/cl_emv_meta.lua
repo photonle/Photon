@@ -94,6 +94,11 @@ function EMVU:MakeEMV( emv, name )
 		return ( self:Photon_ManualSiren() and self:Photon_Siren() )
 	end
 
+	function emv:Photon_ParkMode()
+		if not IsValid(self) then return false end
+		return self:GetNW2Bool("PhotonLE.PARK_MODE")
+	end
+
 	function emv:Photon_ManualHorn()
 		if not IsValid( self ) then return false end
 		return self:GetNW2Bool( "PhotonLE.EMV_HORN" )
@@ -195,6 +200,8 @@ function EMVU:MakeEMV( emv, name )
 			result = EMVHelper:GetSequence( self.VehicleName, option, self )
 		end
 		if self.Photon_IsBraking and self:Photon_IsBraking() then result = EMVHelper.GetBrakeSequence( self.VehicleName, self, result ) end
+		if self.Photon_IsReversing and self:Photon_IsReversing() then result = EMVHelper.GetReverseSequence( self.VehicleName, self, result ) end
+		if self.Photon_ParkMode and self:Photon_ParkMode() then result = EMVHelper.GetParkSequence(self.VehicleName, self, result) end
 		return result
 	end
 
@@ -800,6 +807,7 @@ function EMVU:MakeEMV( emv, name )
 		local fastest, nearest = self:Photon_RadarTargetSpeeds( rear )
 		PHOTON_RADAR_DISP_FAST = fastest or 0
 		PHOTON_RADAR_DISP_NEAR = nearest or 0
+		if not GetConVar("photon_radar_sound"):GetBool() then return end
 		local soundSpeed = nearest
 		if fastest > nearest then soundSpeed = fastest end
 		local handle = self.PhotonRadarSoundHandle
@@ -815,6 +823,7 @@ function EMVU:MakeEMV( emv, name )
 	end
 
 	function emv:Photon_RadarActive( arg )
+		if EMVU.DisabledRadars[self:EMVName()] then return false end
 		local prev = self.PhotonRadarActive or false
 		if arg != nil then self.PhotonRadarActive = arg end
 		if arg == false and IsValid( self.PhotonRadarSoundHandle ) then self.PhotonRadarSoundHandle:Pause() end

@@ -59,7 +59,7 @@ EMVU.AddCustomSiren("hella_rtk_7_fr_police", {
 			Name = "HILO",
 			Sound = "emv/sirens/hella rtk 7/fr_police.wav",
 			Icon = "hilo"
-		},
+		}
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
 	Volume = 85
@@ -73,7 +73,7 @@ EMVU.AddCustomSiren("hella_rtk_7_fr_gendarmerie", {
 			Name = "HILO",
 			Sound = "emv/sirens/hella rtk 7/fr_gendarmerie.wav",
 			Icon = "hilo"
-		},
+		}
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
 	Volume = 85
@@ -87,7 +87,7 @@ EMVU.AddCustomSiren("hella_rtk_7_fr_firefighter", {
 			Name = "HILO",
 			Sound = "emv/sirens/hella rtk 7/fr_firefighter.wav",
 			Icon = "hilo"
-		},
+		}
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
 	Volume = 85
@@ -101,7 +101,7 @@ EMVU.AddCustomSiren("hella_rtk_7_fr_ambulance", {
 			Name = "HILO",
 			Sound = "emv/sirens/hella rtk 7/fr_ambulance.wav",
 			Icon = "hilo"
-		},
+		}
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
 	Volume = 85
@@ -116,7 +116,7 @@ EMVU.AddCustomSiren("hella_rtk_7_it_police", {
 			Name = "HILO",
 			Sound = "emv/sirens/hella rtk 7/it_police.wav",
 			Icon = "hilo"
-		},
+		}
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
 	Volume = 85
@@ -130,7 +130,7 @@ EMVU.AddCustomSiren("hella_rtk_7_it_firefighter", {
 			Name = "HILO",
 			Sound = "emv/sirens/hella rtk 7/it_firefighter.wav",
 			Icon = "hilo"
-		},
+		}
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
 	Volume = 85
@@ -145,7 +145,7 @@ EMVU.AddCustomSiren("hella_rtk_7_nl_twotone", {
 			Name = "HILO",
 			Sound = "emv/sirens/hella rtk 7/nl_twosound.wav",
 			Icon = "hilo"
-		},
+		}
 	},
 	Horn = "emv/sirens/hella rtk 7/horn.wav",
 	Volume = 85

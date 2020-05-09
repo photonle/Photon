@@ -312,6 +312,12 @@ function EMVU:OverwriteIndex(name, data)
 	if data.Configuration then
 		self:AddSupportedConfiguration(name, data.Configuration)
 	end
+
+	if data.RadarDisabled then
+		EMVU.DisabledRadars[name] = true
+	else
+		EMVU.DisabledRadars[name] = nil
+	end
 end
 
 --- Mark a vehicle as supporting configs.
@@ -369,6 +375,18 @@ function EMVU.LoadModeData( name, data )
 
 	if not data["Braking"] then
 		data.Braking = {
+			Preset_Components = {}
+		}
+	end
+
+	if not data["Reverse"] then
+		data.Reverse = {
+			Preset_Components = {}
+		}
+	end
+
+	if not data["Park"] then
+		data.Park = {
 			Preset_Components = {}
 		}
 	end
@@ -498,6 +516,13 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 		if not autoData.AutoPatterns or autoData.AutoPatterns != false then autoData.AutoPatterns = true end
 
 		if not component then print( "[Photon] Auto component: " .. tostring( data[i].ID ) .. " was not found in the library. Requested in: " .. tostring( name ) .. ".") continue end
+		if component.Deprecated then
+			PhotonWarning("Auto component: " .. tostring(data[i].ID) .. " is deprecated and may be removed in a future version.")
+			if isstring(component.Deprecated) then
+				PhotonWarning(component.Deprecated)
+			end
+			PhotonWarning("The component was requested in: " .. tostring(name) .. ".")
+		end
 
 		if not component.NotLegacy then
 			adjustAng.p = autoAng.r
@@ -549,11 +574,12 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 				if prop == "H" then resultVal = val * autoScale end
 				if prop == "EmitArray" and istable( val ) then
 					local newArray = {}
-					for __i,__pos in pairs( val ) do
-						newArray[__i] = Vector()
-						newArray[__i]:Set( __pos )
-						newArray[__i]:Mul( autoScale )
+					for arrayIdx,pos in pairs(val) do
+						newArray[arrayIdx] = Vector()
+						newArray[arrayIdx]:Set(pos)
+						newArray[arrayIdx]:Mul(autoScale)
 					end
+					resultVal = newArray
 				end
 				EMVU.LightMeta[ name ][ useId ][ prop ] = resultVal
 			end
@@ -600,6 +626,17 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 			if istable( component.Modes.Primary.BRAKE ) then
 				local targetCopy = component.Modes.Primary.BRAKE
 				local sequence = EMVU.Sequences[ name ].Braking
+				if usesPresets then
+					for __,presetIndex in pairs( usedPresets ) do
+						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
+						for componentIndex, patternIndex in pairs( targetCopy ) do
+							local patternPhase = autoData.Phase or ""
+							if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+								sequence.Preset_Components[presetIndex][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+							end
+						end
+					end
+				end
 				if usesSelections then
 					if not istable( sequence.Selection_Components ) then sequence.Selection_Components = {} end
 					for _i, selection in pairs( activeSelections ) do
@@ -608,7 +645,71 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 							sequence.Selection_Components[_i][__i] = sequence.Selection_Components[_i][__i] or {}
 							for componentIndex, patternIndex in pairs( targetCopy ) do
 								local patternPhase = autoData.Phase or ""
-								sequence.Selection_Components[_i][__i][ componentIndex .. "_" .. i ] = tostring( patternIndex .. patternPhase )
+								if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+									sequence.Selection_Components[_i][__i][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+								end
+							end
+						end
+					end
+				end
+			end
+
+			if istable( component.Modes.Primary.REVERSE ) then
+				local targetCopy = component.Modes.Primary.REVERSE
+				local sequence = EMVU.Sequences[ name ].Reverse
+				if usesPresets then
+					for __,presetIndex in pairs( usedPresets ) do
+						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
+						for componentIndex, patternIndex in pairs( targetCopy ) do
+							local patternPhase = autoData.Phase or ""
+							if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+								sequence.Preset_Components[presetIndex][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+							end
+						end
+					end
+				end
+				if usesSelections then
+					if not istable( sequence.Selection_Components ) then sequence.Selection_Components = {} end
+					for _i, selection in pairs( activeSelections ) do
+						sequence.Selection_Components[_i] = sequence.Selection_Components[_i] or {}
+						for __i, option in pairs( selection ) do
+							sequence.Selection_Components[_i][__i] = sequence.Selection_Components[_i][__i] or {}
+							for componentIndex, patternIndex in pairs( targetCopy ) do
+								local patternPhase = autoData.Phase or ""
+								if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+									sequence.Selection_Components[_i][__i][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+								end
+							end
+						end
+					end
+				end
+			end
+
+			if istable( component.Modes.Primary.PARK ) then
+				local targetCopy = component.Modes.Primary.PARK
+				local sequence = EMVU.Sequences[ name ].Park
+				if usesPresets then
+					for __,presetIndex in pairs( usedPresets ) do
+						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
+						for componentIndex, patternIndex in pairs( targetCopy ) do
+							local patternPhase = autoData.Phase or ""
+							if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+								sequence.Preset_Components[presetIndex][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+							end
+						end
+					end
+				end
+				if usesSelections then
+					if not istable( sequence.Selection_Components ) then sequence.Selection_Components = {} end
+					for _i, selection in pairs( activeSelections ) do
+						sequence.Selection_Components[_i] = sequence.Selection_Components[_i] or {}
+						for __i, option in pairs( selection ) do
+							sequence.Selection_Components[_i][__i] = sequence.Selection_Components[_i][__i] or {}
+							for componentIndex, patternIndex in pairs( targetCopy ) do
+								local patternPhase = autoData.Phase or ""
+								if component.Patterns[componentIndex][patternIndex .. patternPhase] then
+									sequence.Selection_Components[_i][__i][componentIndex .. "_" .. i] = tostring(patternIndex .. patternPhase)
+								end
 							end
 						end
 					end
