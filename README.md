@@ -33,7 +33,7 @@ The Core Development team currently contains 6 people.
 
 | Name | Role |
 | --- | --- |
-| SGM | Vehicle Creator |
+| [SGM](https://github.com/SentryGunMan) | Vehicle Creator |
 | Deputy.Jones | Vehicle Creator |
 | goigle | Photon Core code |
 | TDM | Vehicle Creator|
