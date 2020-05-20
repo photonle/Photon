@@ -29,14 +29,6 @@ if EMVU and istable( EMVU.Helper ) then
 	emvHelp = EMVU.Helper
 end
 
-hook.Add( "InitPostEntity", "Photon.AddHelperLocalVars", function()
-	rotatingLight = EMVU.Helper.RotatingLight
-	pulsingLight = EMVU.Helper.PulsingLight
-	emvHelp = EMVU.Helper
-end)
-
-
-
 local function getViewFlare( dot, brght )
 	local dif = dot - .85
 	if dif < 0 then return 0 end
@@ -60,6 +52,21 @@ local up1 = Vector()
 
 local photonRenderTable = {}
 local photonDynamicLights = {}
+
+hook.Add( "InitPostEntity", "Photon.AddHelperLocalVars", function()
+	rotatingLight = EMVU.Helper.RotatingLight
+	pulsingLight = EMVU.Helper.PulsingLight
+	emvHelp = EMVU.Helper
+
+	if not mat7:IsError() then
+		hook.Add( "RenderScreenspaceEffects", "Photon.ScreenEffects", function()
+			Photon.DrawDirtyLensEffect()
+		end)
+	else
+		LocalPlayer():ChatPrint("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
+	end
+end)
+
 
 function Photon:AddLightToQueue( lightInfo )
 	photonRenderTable[ #photonRenderTable + 1 ] = lightInfo
@@ -542,15 +549,7 @@ function Photon.DrawDirtyLensEffect()
 	bloomRef = 0; bloomColor = nil;
 
 end
-if not mat7:IsError() then
-	hook.Add( "RenderScreenspaceEffects", "Photon.ScreenEffects", function()
-		Photon.DrawDirtyLensEffect()
-	end)
-else
-	timer.Simple( 1, function()
-		LocalPlayer():ChatPrint("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
-	end)
-end
+
 function Photon.RenderDynamicLightQueue()
 	local count = #photonDynamicLights
 	if ( count > 0 ) then
