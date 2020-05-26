@@ -175,21 +175,6 @@ concommand.Add( "photon_pause", function()
 	photon_pause = not photon_pause
 end)
 
--- concommand.Add( "photon_selectiondata", function( ply )
--- 	local veh = ply:GetVehicle()
--- 	if not IsValid( veh ) then return end
--- 	-- print("BEFORE:::::::::::::::::::::::")
--- 	-- PrintTable( veh:Photon_SelectionTable() )
--- 	-- print( "AFTER:::::::::::::::::::::::")
--- 	-- PrintTable( veh:Photon_ImportSelectionData( veh:Photon_GetSelectionJSON() ) )
--- 	//veh:Photon_ImportSelectionData( CHP_CONFIGDATA )
--- 	EMVU.Configurations.SaveConfiguration( "NYPD", "Default", "Schmal", veh:Photon_ExportConfiguration( true, true, true, true, true ) )
--- end )
-
--- CHP_CONFIGDATA = [[
--- {"Pushbars":"Setina Pushbar=CHP - Red","Front Upper Deck":"None","Lightbar":"Whelen Liberty II=CHP","Rear Upper Deck":"None","Grille":"None","Reverse Light Hideaways":"None","Rear Lower Deck":"None","Turn Signal Hideaways":"None","Bumper Layout":"Fog Lights=CHP - White","Spotlight":"Full","Forward Hideaways":"None","Roof":"AirEL=All","Forward ALPR":"None","Headlight Wig-Wag":"On","Mid-Level Side":"None","Mirror Lights":"Whelen Ion=CHP - Red","Interior Equipment":"Full"}
--- ]]
-
 --- List of manual sirens.
 EMVU.ManualSirenTable = {}
 
@@ -457,7 +442,6 @@ end
 --- Run bone rotation.
 Photon.BoneRotation = function()
 	if photon_pause then return end
-	-- if true then return end
 	for _,ent in pairs( getPhotonRotationEnts() ) do
 		if not IsValid(ent) then return end
 		if ent.PhotonRotationEnabled then

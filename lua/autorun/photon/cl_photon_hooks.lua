@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 local should_render = false
 
-hook.Add( "InitPostEntity", "Photon.InitStandShouldRender", function() 
+hook.Add( "InitPostEntity", "Photon.InitStandShouldRender", function()
 	should_render = GetConVar( "photon_stand_enabled" )
 end )
 
@@ -17,7 +17,7 @@ hook.Add( "InitPostEntity", "Photon.ReadyReg", function()
 end)
 
 function Photon:AdjustFrameTime()
-	if FrameTime() >= EMV_FRAME_DUR or FrameTime() < EMV_FRAME_DUR and FrameTime() > EMV_FRAME_CONST then 
+	if FrameTime() >= EMV_FRAME_DUR or FrameTime() < EMV_FRAME_DUR and FrameTime() > EMV_FRAME_CONST then
 		EMV_FRAME_DUR = FrameTime()
 	elseif FrameTime() < EMV_FRAME_CONST then
 		EMV_FRAME_DUR = EMV_FRAME_CONST
@@ -36,7 +36,7 @@ local function TurnScan()
 	if not IsValid( car ) then return end
 	if not car:Photon() then return end
 	if not car.Photon_TurningRight or not car.Lighting then return end
-	if ply:KeyDown( IN_MOVERIGHT ) and car:Photon_TurningRight() then 
+	if ply:KeyDown( IN_MOVERIGHT ) and car:Photon_TurningRight() then
 		car.Lighting.GoingForward = false
 		return
 	end
@@ -49,7 +49,7 @@ local function TurnScan()
 		car.Lighting.GoingForward = false
 		return
 	end
-	
+
 	if car.Lighting.GoingForward and (car:Photon_AdjustedSpeed() > 25) then
 		if CurTime() >= car.Lighting.ForwardDuration then
 			Photon:CarSignal( "none" )

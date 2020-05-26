@@ -15,7 +15,6 @@ function ent:IsEMV()
 end
 
 function ent:Photon()
-	-- return self:GetNWString( "PhotonVehicle", false )
 	return ( IsValid( self ) and self:IsVehicle() and self:GetNW2Bool( "PhotonLE.CAR_HAS_PHOTON" ) ) or false
 end
 
@@ -81,9 +80,7 @@ function ent:Photon_SelectionString()
 end
 
 function ent:Photon_SelectionTable()
-	-- print(tostring(self:GetNW2String( EMV_INDEX )))
 	local selectionString =  string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )[5]
-	-- print(tostring(selectionString))
 	return string.Explode( ".", selectionString, false )
 end
 
@@ -91,8 +88,7 @@ function ent:Photon_SelectionOption( index )
 	local bgTable = self:Photon_SelectionTable()
 	if not istable( bgTable ) then return 1 end
 	if index > #bgTable then return 1 end
-	if index < 1 then return 1 end 
-	-- print("index is: " .. tostring( index ))
+	if index < 1 then return 1 end
 	return tonumber( bgTable[ index ] )
 end
 
@@ -100,13 +96,9 @@ function ent:Photon_ExportSelections()
 	local selectTable = self:Photon_SelectionTable()
 	local resultTable = {}
 	local selectRef = EMVU.Selections[ self:EMVName() ]
-	if not istable( selectTable ) or not istable( selectRef ) then return {} end 
-	-- PrintTable( selectRef )
-	-- PrintTable( selectTable )
+	if not istable( selectTable ) or not istable( selectRef ) then return {} end
 	for key,value in pairs( selectTable ) do
 		local keyName = selectRef[key].Name
-		-- print(tostring(keyName))
-		-- print(tostring(selectRef[key].Options[1]))
 		local valueData = selectRef[key].Options[tonumber(value)]
 		local valueName = ""
 		if valueData.Category then valueName = valueData.Category .. "=" end
@@ -149,7 +141,6 @@ function ent:Photon_ExportConfiguration( selections, skin, color, siren, bodygro
 end
 
 function ent:Photon_ImportSelectionData( inputData )
-	-- local inputData = util.JSONToTable( json )
 	if not istable( inputData ) then return {} end
 	local selectRef = EMVU.Selections[ self:EMVName() ]
 	if not istable( selectRef ) then return {} end

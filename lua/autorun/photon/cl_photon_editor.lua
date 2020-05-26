@@ -44,7 +44,6 @@ end )
 concommand.Add( "photon_emv_editor_target_component", function( ply, cmd, args )
 	photon_emv_editor_target_component = tonumber(args[1])
 	Photon.Editor.SetComponentTarget( tonumber( args[1] ) )
-	-- print(tostring(photon_emv_editor_target_component) )
 	if PHOTON_EDITOR_MENU_REF then Photon.Editor.CreateMenu( PHOTON_EDITOR_MENU_REF ) end
 end )
 
@@ -65,7 +64,6 @@ local function createPhotonTargetLights( index )
 
 	for i=1,#autoComponents do
 		local light = autoComponents[i]
-		-- list.Set( "PhotonEMVTargetComponents", i, tostring(i) .. ". " .. light.ID )
 		list.Set( "PhotonEMVTargetComponents", string.format( "%s. %s", i, light.ID ), { ["photon_emv_editor_target_component"] = i } )
 	end
 end
@@ -303,7 +301,6 @@ end
 Photon.Editor.CreateMenu = function( panel )
 	panel:ClearControls()
 	PHOTON_EDITOR_MENU_REF = panel
-	-- logoHeader( panel )
 	createPhotonTargetList()
 	if photon_emv_editor_target then
 		panel:AddControl( "Header", { Description = "Selected: " .. tostring( photon_emv_editor_target ) } )

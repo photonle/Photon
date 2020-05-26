@@ -342,12 +342,3 @@ function Photon:SetupCar( ent, index )
 	ent.DrawLight = Photon.DrawLight
 
 end
-
--- local veh = LocalPlayer():GetEyeTrace().Entity
--- -- veh:ManipulateBoneAngles(1,Angle(0, 0, 90))
-
--- timer.Create( "photon_test_spin", .01, 0, function()
--- 	local targEnt = veh
--- 	local ang = veh:GetManipulateBoneAngles(1)
--- 	veh:ManipulateBoneAngles(1,Angle( ang.p, ang.y, ang.r + 1) )
--- end )

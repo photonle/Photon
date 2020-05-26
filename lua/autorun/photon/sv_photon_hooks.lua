@@ -102,15 +102,6 @@ hook.Add( "PlayerSpawnedVehicle", "Photon.PlayerVehicleSpawn", function( ply, en
 	ent.PhotonVehicleSpawner = ply
 end)
 
-// local ply = player.GetBySteamID("STEAM_0:0:0")
-// local veh = ply:GetVehicle()
-// veh:SetSubMaterial( 0, "photon/override/tal_f150_running" )
-// veh:SetSubMaterial( 7, "photon/override/sgm_fordexplorer/interior" )
-
-// // veh:SetSubMaterial(4, "photon/override/lw_glhs_running" )
-// // veh:SetSubMaterial(6, "photon/override/lw_glhs_trans_running" )
-// veh:SetSubMaterial( 26, "models/tdmcars/emergency/lightbar/plastic" )
-
 -- Photon.AutoSkins.FetchSkins = function( id )
 -- 	local result = {}
 -- 	local baseDir = "materials/" .. tostring(id) .. "_liveries/"
