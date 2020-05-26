@@ -264,7 +264,11 @@ function Photon:SetupCar( ent, index )
 				end
 			end
 
-			if ((left and running) or hazards) and self:Photon_BlinkOn() or pdebug then
+
+			local blinkOn = false
+			if ((left or right) and running) or hazards or pdebug then blinkOn = self:Photon_BlinkOn() end
+
+			if ((left and running) or hazards) and blinkOn or pdebug then
 				if Photon.Vehicles.States.Blink_Left[self.VehicleName] then
 					for _,l in pairs(Photon.Vehicles.States.Blink_Left[self.VehicleName]) do
 						RenderTable[l[1]] = l
@@ -272,7 +276,7 @@ function Photon:SetupCar( ent, index )
 				end
 			end
 
-			if ((right and running) or hazards) and self:Photon_BlinkOn() or pdebug then
+			if ((right and running) or hazards) and blinkOn or pdebug then
 				if Photon.Vehicles.States.Blink_Right[self.VehicleName] then
 					for _,l in pairs(Photon.Vehicles.States.Blink_Right[self.VehicleName]) do
 						RenderTable[l[1]] = l
