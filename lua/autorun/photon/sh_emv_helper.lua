@@ -372,7 +372,7 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 	end
 
 	for component, option in pairs( EMVU.Sequences[name]["Illumination"][option]["Components"] ) do
-		resultTable[ component ] = option
+		resultTable[ #resultTable + 1 ] = option
 	end
 
 	return resultTable
