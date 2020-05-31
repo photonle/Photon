@@ -393,7 +393,7 @@ EMV.Sequences = {
 
 local V = {
 	Name = VehicleName,
-	Class = "prop_vehicle_jeep",
+	Class = "%ENT_CLASS",
 	Category = "%PREF_CATEGORY",
 	Author = "%AUTHOR_NAME",
 	Model = "%ENT_MODEL",
@@ -455,6 +455,7 @@ local function PhotonCompileCreatorData(prefName, prefCategory, prefSiren, prefL
 		["ENT_BODYGROUPS"] = FormatBodygroupChoices(ent),
 		["ENT_COLOR"] = formatColor,
 		["PREF_LIGHTBAR"] = FormatLightbarChoice(prefLightbar),
+		["ENT_CLASS"] = vehicleData.Class,
 		["PREF_CATEGORY"] = prefCategory or "Emergency Vehicles",
 		["ENT_MODEL"] = vehicleData.Model,
 		["AUTHOR_NAME"] = authorName,
