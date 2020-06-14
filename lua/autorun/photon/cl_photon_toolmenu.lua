@@ -83,8 +83,8 @@ end
 local function createSirenOptions()
 	list.Set("PhotonSirenOptions", "None",  {photon_creator_siren = "0"})
 	local sirenTable = EMVU.GetSirenTable()
-	for _, siren in ipairs(sirenTable) do
-		list.Set("PhotonSirenOptions", siren.Category .. " - " .. siren.Name, {photon_creator_siren = tostring(i)})
+	for index, siren in ipairs(sirenTable) do
+		list.Set("PhotonSirenOptions", siren.Category .. " - " .. siren.Name, {photon_creator_siren = tostring(index)})
 	end
 end
 
