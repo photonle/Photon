@@ -178,14 +178,14 @@ function Photon:SetupCar( ent, index )
 		local result = nil
 		if (self.Lighting.LastBlink + self:Photon_GetBlinkRate()) <= RealTime() and RealTime() <= (self.Lighting.LastBlink + (self:Photon_GetBlinkRate() * 2)) then
 			result = false
-			if not self.Lighting.WasOff and driving then surface.PlaySound( EMVU.Sounds.Tick ) end 
+			if not self.Lighting.WasOff and driving then surface.PlaySound( EMVU.Sounds.Tick ) end
 			self.Lighting.WasOff = true
 		elseif RealTime() > (self.Lighting.LastBlink + (self:Photon_GetBlinkRate() * 2)) then
 			result = false
 			self.Lighting.WasOff = true
 			self.Lighting.LastBlink = RealTime()
 		else
-			if self.Lighting.WasOff and driving then surface.PlaySound( EMVU.Sounds.Tock ) end 
+			if self.Lighting.WasOff and driving then surface.PlaySound( EMVU.Sounds.Tock ) end
 			result = true
 			self.Lighting.WasOff = false
 		end
@@ -266,7 +266,7 @@ function Photon:SetupCar( ent, index )
 
 
 			local blinkOn = false
-			if ((left or right) and running) or hazards or pdebug then blinkOn = self:Photon_BlinkOn() end
+			if ((left or right) and running) or hazards then blinkOn = self:Photon_BlinkOn() end
 
 			if ((left and running) or hazards) and blinkOn or pdebug then
 				if Photon.Vehicles.States.Blink_Left[self.VehicleName] then
