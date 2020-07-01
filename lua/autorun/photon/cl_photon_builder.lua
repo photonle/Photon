@@ -291,9 +291,6 @@ function PhotonDebugTarget( ply, args )
 	local ent = ply:GetVehicle() or ply:GetEyeTrace().Entity
 	if not IsValid( ent ) then return end
 	PHOTON_DEBUG_TARGET = ent
-	local lightTarget = 1
-
-	print(tostring(ent))
 
 	if not args[2] then
 		if args[1] == "ELS" then
