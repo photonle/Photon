@@ -336,6 +336,7 @@ hook.Add( "PostDrawHUD", "Photon.Debug.HUDPaint", function()
 	draw.DrawText( "PHOTON DEBUG MODE ON", "PHOTON_Debug", ScrW() - 16, 16, Color( 255, 200, 100 ), TEXT_ALIGN_RIGHT )
 
 	if PHOTON_DEBUG_LIGHT then
+		if istable(PHOTON_DEBUG_LIGHT[1]) then PHOTON_DEBUG_LIGHT = {PHOTON_DEBUG_LIGHT[1][3], PHOTON_DEBUG_LIGHT[1][4]} end -- Support for rotating elements
 		local lightVector = "Vector( " .. math.Round( PHOTON_DEBUG_LIGHT[1].x, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[1].y, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[1].z, 2 ) .. " )"
 		local lightAngle = "Angle( " .. math.Round( PHOTON_DEBUG_LIGHT[2].p, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[2].y, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[2].r, 2 ) .. " )"
 		local vehicleName = PHOTON_DEBUG_NAME or "UNKNOWN"
