@@ -328,7 +328,7 @@ local sirenTable = {
 		},
 	},
 	[34] = {
-		Name = "Sverige (SE)",
+		Name = "Sverige (SE) Old",
 		Category = "European",
 		Set = {
 			{Name = "HILO", Sound = "emv/sirens/code3 sweden/emv_hilo.wav", Icon="hilo"},
