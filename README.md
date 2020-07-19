@@ -45,7 +45,8 @@ The Core Development team currently contains 6 people.
 | DatedGore | [Various](https://github.com/photonle/Photon/pulls?q=is%3Apr+is%3Amerged+author%3ADatedGore) |
 | Officer Pringle | [Touchmaster Delta Phaser](https://github.com/photonle/Photon/pull/63) |
 | Nardoras | Tinted Whelen Legacy |
-| DBotThePony | [DHTML Creation Delay](https://github.com/photonle/Photon/pull/129)
+| DBotThePony | [DHTML Creation Delay](https://github.com/photonle/Photon/pull/129) |
+| jooiiee | [Various](https://github.com/photonle/Photon/pulls?q=is%3Apr+is%3Amerged+author%3Ajooiiee) |
 
 ### Other
 
