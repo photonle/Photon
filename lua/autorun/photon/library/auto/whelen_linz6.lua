@@ -53,18 +53,29 @@ COMPONENT.Sections = {
 
 COMPONENT.Patterns = {
 	["auto_whelen_linz6"] = {
-		["mode1"] = { 1 },
-		["mode1_split"] = { 4, 0, 4, 0, 4, 4, 4, 4, 0, 5, 0, 5, 0, 5, 5, 5, 5, 0 },
-		["mode2_split"] = { 4, 0, 4, 0, 4, 4, 4, 4, 0, 5, 0, 5, 0, 5, 5, 5, 5, 0 },
-		["mode3_split"] = { 4, 0, 4, 4, 0, 5, 0, 5, 5 },
+		["code1"] = { 1, 1, 1, 0, 0, 0 },
+        ["code2"] = { 1, 1, 0, 0 },
+        ["code3"] = {0, 0, 0, 0, 0, 1, 0, 1, 0, 1},
+
+        ["code1A"] = {1, 1, 1, 1, 0, 0, 0, 0},
+        ["code2A"] = {1, 1, 0, 0},
+        ["code3A"] = {1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+        
+        ["code1B"] = {0, 0, 0, 0, 1, 1, 1, 1},
+        ["code2B"] = {0, 0, 1, 1},
+        ["code3B"] = {0, 0, 0, 0, 0, 1, 0, 1, 0, 1},
+		
+		["code1split"] = { 4, 0, 4, 0, 4, 4, 4, 4, 0, 5, 0, 5, 0, 5, 5, 5, 5, 0 },
+		["code2split"] = { 4, 0, 4, 0, 4, 4, 4, 4, 0, 5, 0, 5, 0, 5, 5, 5, 5, 0 },
+		["code3split"] = { 4, 0, 4, 4, 0, 5, 0, 5, 5 },
 	}
 }
 
 COMPONENT.Modes = {
 	Primary = {
-		M1 = { ["auto_whelen_linz6"] = "mode1_", },
-		M2 = { ["auto_whelen_linz6"] = "mode1_", },
-		M3 = { ["auto_whelen_linz6"] = "mode3_", }
+		M1 = { ["auto_whelen_linz6"] = "code1", },
+		M2 = { ["auto_whelen_linz6"] = "code1", },
+		M3 = { ["auto_whelen_linz6"] = "code3", }
 	},
 	Auxiliary = {},
 	Illumination = {}
