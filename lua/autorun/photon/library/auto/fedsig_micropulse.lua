@@ -104,9 +104,7 @@ COMPONENT.Modes = {
         M1 = { ["auto_pulse"] = "code1" },
         M2 = { ["auto_pulse"] = "code2" },
         M3 = { ["auto_pulse"] = "code3" },
-        PARK = {
-            ["auto_pulse"] = "parkkill",
-        }
+        PARK = { ["auto_pulse"] = "parkkill" }
     },
     Auxiliary = {
         L = {
