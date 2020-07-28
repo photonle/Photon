@@ -624,6 +624,7 @@ function EMVU:MakeEMV( emv, name )
 			if p.Material then prop:SetMaterial( p.Material ) end
 			if p.Color then prop:SetColor( p.Color ) end
 			if p.AirEL then prop.AirEL = true end
+
 			prop.AutoIndex = p.AutoIndex or false
 			prop.ComponentName = p.ComponentName or false
 			prop.PhotonRotationEnabled = p.PhotonRotationEnabled or false
@@ -646,6 +647,15 @@ function EMVU:MakeEMV( emv, name )
 						prop:SetSubMaterial( tonumber( index ), value )
 					end
 				end
+			end
+
+			if p.HideBone then
+				emv:ManipulateBoneScale(emv:LookupBone(p.HideBone), Vector(0, 0, 0))
+			end
+
+			if p.AttachmentMerge then 
+				prop:SetParent(nil)
+				prop:SetParent(emv, emv:LookupAttachment(p.AttachmentMerge))
 			end
 
 			table.insert(photonLightModels, prop)
@@ -707,10 +717,14 @@ function EMVU:MakeEMV( emv, name )
 					self:Photon_RemoveEMVProps( true )
 					break
 				end
-				prop:SetParent( self )
-				prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
-				prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
-				prop:DrawShadow( false )
+				/*
+				potentially useless? idk im shit at coding but it gets called every frame
+				and really fucks with bone parenting - sgm
+				*/
+				--prop:SetParent( self )
+				--prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
+				--prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
+				--prop:DrawShadow( false )
 				if PHOTON_DEBUG or PHOTON_EXPRESS then
 					if isvector( emvProps[index].Scale ) then
 						local mat = Matrix()
