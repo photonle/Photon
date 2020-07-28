@@ -619,7 +619,6 @@ function EMVU:MakeEMV( emv, name )
 			prop:SetPos( emv:LocalToWorld( p.Pos ) )
 			prop:SetAngles( emv:LocalToWorldAngles( p.Ang ) )
 			prop:SetRenderMode( rendermode )
-
 			if p.Skin then prop:SetSkin(p.Skin) end
 			if p.Material then prop:SetMaterial( p.Material ) end
 			if p.Color then prop:SetColor( p.Color ) end
@@ -651,6 +650,15 @@ function EMVU:MakeEMV( emv, name )
 
 			if p.HideBone then
 				emv:ManipulateBoneScale(emv:LookupBone(p.HideBone), Vector(0, 0, 0))
+			end
+
+			if p.OffsetBone then
+				if p.OffsetBoneAng then
+					emv:ManipulateBoneAngles(emv:LookupBone(p.OffsetBone), p.OffsetBoneAng)
+				end
+				if p.OffsetBonePos then
+					emv:ManipulateBonePosition(emv:LookupBone(p.OffsetBone), p.OffsetBonePos)
+				end
 			end
 
 			if p.AttachmentMerge then 
@@ -717,14 +725,21 @@ function EMVU:MakeEMV( emv, name )
 					self:Photon_RemoveEMVProps( true )
 					break
 				end
-				/*
-				potentially useless? idk im shit at coding but it gets called every frame
-				and really fucks with bone parenting - sgm
-				*/
-				--prop:SetParent( self )
-				--prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
-				--prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
-				--prop:DrawShadow( false )
+				--[[
+				recoded to only reparent when necessary, fixes detachment when vehicle leaves PVS - sgm
+				--]]
+				if !IsValid(prop:GetParent()) then
+					prop:SetParent( self )
+					prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
+					prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
+
+					if emvProps[index].AttachmentMerge then
+						prop:SetParent(nil)
+						prop:SetParent(self, self:LookupAttachment(emvProps[index].AttachmentMerge))
+					end
+
+				end
+
 				if PHOTON_DEBUG or PHOTON_EXPRESS then
 					if isvector( emvProps[index].Scale ) then
 						local mat = Matrix()
