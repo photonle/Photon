@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-local name = "2016 Ford Police Interceptor Utility"
+local name = "Schmal 2016 Ford Police Interceptor Utility"
 
 local A = "AMBER"
 local R = "RED"
