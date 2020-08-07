@@ -170,4 +170,4 @@ PI.States.Running = {
 }
 
 
-Photon.VehicleLibrary["2016 Ford Police Interceptor Utility"] = PI
+Photon.VehicleLibrary["Schmal 2016 Ford Police Interceptor Utility"] = PI
