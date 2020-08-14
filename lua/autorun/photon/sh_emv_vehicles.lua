@@ -316,6 +316,14 @@ function EMVU:OverwriteIndex(name, data)
 	else
 		EMVU.DisabledRadars[name] = nil
 	end
+
+	-- Updating prop positions
+	if not CLIENT then return end
+
+	for _, ent in ipairs(Photon:AllVehicles()) do
+		if ent.VehicleName ~= name then continue end
+		ent:Photon_UpdateEMVProps()
+	end
 end
 
 --- Mark a vehicle as supporting configs.

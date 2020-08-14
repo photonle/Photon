@@ -759,6 +759,38 @@ function EMVU:MakeEMV( emv, name )
 
 	end
 
+	-- For updating the props after saving the file
+	function emv:Photon_UpdateEMVProps()
+		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
+		if not emvProps or not istable( emvProps) then return end
+
+		for index,prop in ipairs( self.EMVProps ) do
+			if not IsValid( prop ) then
+				self:Photon_RemoveEMVProps( true )
+				break
+			end
+
+			prop:SetParent( self )
+			prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
+			prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
+
+			if emvProps[index].AttachmentMerge then
+				prop:SetParent(nil)
+				prop:SetParent(self, self:LookupAttachment(emvProps[index].AttachmentMerge))
+			end
+
+			if isvector( emvProps[index].Scale ) then
+				local mat = Matrix()
+				mat:Scale( emvProps[index].Scale )
+				prop:EnableMatrix( "RenderMultiply", mat )
+			elseif isnumber( emvProps[index].Scale ) then
+				prop:SetModelScale( emvProps[index].Scale, 0 )
+			end
+			if prop.AirEL then self.AirELEntity = prop end
+			if not IsValid( self.AirELEntity ) then self.AirELEntity = nil end
+		end
+	end
+
 	function emv:Photon_GetRadarCone( rear, force )
 		local normDirection = self:GetForward()
 		if rear then normDirection:Rotate( Angle( 0, -90, 0 ) ) else normDirection:Rotate( Angle( 0, 90, 0 ) ) end
