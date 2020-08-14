@@ -40,7 +40,7 @@ function Photon:EntityCreated( ent )
 				end
 				if timer.RepsLeft( timerId ) == 0 and SERVER then
 					local default = Photon:RecoverVehicleTable( ent )
-					if default then 
+					if default then
 						ent.VehicleTable = default
 						Photon:SpawnedVehicle( ent )
 						EMVU:SpawnedVehicle( ent )

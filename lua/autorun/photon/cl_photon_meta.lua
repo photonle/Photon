@@ -164,11 +164,11 @@ function Photon:SetupCar( ent, index )
 
 	function ent:Photon_GetBlinkRate()
 		if not IsValid( self ) then return PHO_DEFAULT_BLINK end
-		if self:Photon_GetLightingConfig() and isnumber(self:Photon_GetLightingConfig().BlinkRate) then 
-			return self:Photon_GetLightingConfig().BlinkRate 
-		else 
-			return PHO_DEFAULT_BLINK 
-		end 
+		if self:Photon_GetLightingConfig() and isnumber(self:Photon_GetLightingConfig().BlinkRate) then
+			return self:Photon_GetLightingConfig().BlinkRate
+		else
+			return PHO_DEFAULT_BLINK
+		end
 	end
 
 	function ent:Photon_BlinkOn()
@@ -298,7 +298,7 @@ function Photon:SetupCar( ent, index )
 		local drawLight = Photon.PrepareVehicleLight
 
 		local light = false
-		
+
 		for i,light in pairs( RenderTable ) do
 			if light != true then
 				if string.StartWith(tostring(i), "_") then

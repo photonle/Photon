@@ -661,7 +661,7 @@ function EMVU:MakeEMV( emv, name )
 				end
 			end
 
-			if p.AttachmentMerge then 
+			if p.AttachmentMerge then
 				prop:SetParent(nil)
 				prop:SetParent(emv, emv:LookupAttachment(p.AttachmentMerge))
 			end
@@ -770,7 +770,7 @@ function EMVU:MakeEMV( emv, name )
 				if IsValid( ent ) and
 					ent:IsVehicle() and
 					ent != self and
-					-- self:IsLineOfSightClear( ent:GetPos() ) and 
+					-- self:IsLineOfSightClear( ent:GetPos() ) and
 					ent:Photon_GetSpeed() > .5 then
 					validEnts[ #validEnts + 1 ] = ent
 				end

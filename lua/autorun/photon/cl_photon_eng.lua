@@ -329,16 +329,16 @@ function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 			setRenderLighting( 0 )
 		endCam()
 	end
-	
+
 	if SubmatID then
 		SubmatParent:SetSubMaterial(SubmatID, SubmatMaterial)
-		if !timer.Exists(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID) then 
+		if !timer.Exists(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID) then
 			timer.Create( SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID, 0.01, 1, function() if SubmatParent:IsValid() then SubmatParent:SetSubMaterial(SubmatID, nil) end end )
 		else
 			timer.Pause(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID)
 			timer.Start(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID)
 		end
-	end	
+	end
 
 	if debug_mode == true then return end
 	if not srcOnly then
@@ -561,7 +561,7 @@ function Photon.RenderDynamicLightQueue()
 		end
 	end
 end
-hook.Add( "Think", "Photon.RenderDynamicLightQueue", function() 
+hook.Add( "Think", "Photon.RenderDynamicLightQueue", function()
 	if ( dynlights_enabled and dynlights_enabled.GetBool and dynlights_enabled:GetBool() ) then Photon.RenderDynamicLightQueue() end
 end)
 
@@ -579,7 +579,7 @@ hook.Add( "PostDrawTranslucentRenderables", "Photon.UpdateLocalEyeInfo", functio
 	useEyeAng:Set( EyeAngles() )
 end)
 
--- concommand.Add( "photon_maxoverride", function( ply ) 
+-- concommand.Add( "photon_maxoverride", function( ply )
 -- 	local ent = ply:GetEyeTrace().Entity
 -- 	if not IsValid( ent ) then return end
 -- 	ent.Photon_OldDrawModel = ent.Draw
@@ -592,7 +592,7 @@ end)
 -- 	-- end
 -- end )
 
--- hook.Add( "PreDrawHalos", "Photon.PleaseFuckingWOrk", function() 
+-- hook.Add( "PreDrawHalos", "Photon.PleaseFuckingWOrk", function()
 -- 	render.MaterialOverrideByIndex( 0, "sprites/emv/fs_valor" )
 -- 	for k,v in pairs( ents.GetAll() ) do
 -- 		if not IsValid( v ) then continue end
@@ -605,11 +605,11 @@ end)
 -- 	end
 -- end )
 
--- hook.Add( "PreDrawHalos", "Photon.HaloTest", function() 
+-- hook.Add( "PreDrawHalos", "Photon.HaloTest", function()
 -- 	local targs = {}
 -- 	for k,ent in pairs( ents.GetAll() ) do
 -- 		if not IsValid( ent ) then continue end
--- 		if ent:GetModel() == "models/schmal/lwdodch_tail.mdl" then 
+-- 		if ent:GetModel() == "models/schmal/lwdodch_tail.mdl" then
 -- 			targs[#targs+1] = ent
 -- 		end
 -- 	end
@@ -617,7 +617,7 @@ end)
 -- 	local targs = {}
 -- 	for k,ent in pairs( ents.GetAll() ) do
 -- 		if not IsValid( ent ) then continue end
--- 		if ent:GetModel() == "models/schmal/tahoe_rear.mdl" then 
+-- 		if ent:GetModel() == "models/schmal/tahoe_rear.mdl" then
 -- 			targs[#targs+1] = ent
 -- 		end
 -- 	end
@@ -625,7 +625,7 @@ end)
 -- 	local targs = {}
 -- 	for k,ent in pairs( ents.GetAll() ) do
 -- 		if not IsValid( ent ) then continue end
--- 		if ent:GetModel() == "models/schmal/tdm_cvpi_tail.mdl" then 
+-- 		if ent:GetModel() == "models/schmal/tdm_cvpi_tail.mdl" then
 -- 			targs[#targs+1] = ent
 -- 		end
 -- 	end
@@ -634,7 +634,7 @@ end)
 -- 	local targs = {}
 -- 	for k,ent in pairs( ents.GetAll() ) do
 -- 		if not IsValid( ent ) then continue end
--- 		if ent:GetModel() == "models/schmal/lwdodch_head_driver_glw.mdl" then 
+-- 		if ent:GetModel() == "models/schmal/lwdodch_head_driver_glw.mdl" then
 -- 			targs[#targs+1] = ent
 -- 		end
 -- 	end

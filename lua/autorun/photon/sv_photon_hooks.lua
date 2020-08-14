@@ -64,13 +64,13 @@ concommand.Add( "photon_mat", function( ply, cmd, args )
 	PrintTable( veh:GetMaterials() )
 end)
 
-hook.Add( "Photon.EntityChangedSkin", "Photon.LiverySkinCheck", function( ent, skin ) 
+hook.Add( "Photon.EntityChangedSkin", "Photon.LiverySkinCheck", function( ent, skin )
 	if IsValid( ent ) and ent:IsEMV() and ent:Photon_GetLiveryID() != "" and skin > 0 then
 		ent:Photon_SetLiveryId("")
 	end
 end )
 
-hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, ent ) 
+hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, ent )
 	if not IsValid( ent ) then return false end
 	local isDriver = ( ply:GetVehicle() == ent )
 	local isOwner = ( ent:GetOwner() == ply )
@@ -94,11 +94,11 @@ local function PhotonUnitNumberScan()
 		end
 	end
 end
-timer.Create( "Photon.UnitNumberScan", 2, 0, function() 
+timer.Create( "Photon.UnitNumberScan", 2, 0, function()
 	PhotonUnitNumberScan()
 end )
 
-hook.Add( "PlayerSpawnedVehicle", "Photon.PlayerVehicleSpawn", function( ply, ent ) 
+hook.Add( "PlayerSpawnedVehicle", "Photon.PlayerVehicleSpawn", function( ply, ent )
 	ent.PhotonVehicleSpawner = ply
 end)
 
