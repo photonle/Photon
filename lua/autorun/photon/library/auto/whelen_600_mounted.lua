@@ -14,7 +14,7 @@ local name = "Whelen 600 Mounted"
 
 local COMPONENT = {}
 
-COMPONENT.Deprecated = "Use 'Whelen 400 Mounted' instead"
+COMPONENT.Deprecated = "This component is replaced with the 'Whelen 400 Mounted' for ELS and the 'Whelen 400 Mountes Illumination' for solid light"
 
 COMPONENT.Model = "models/schmal/whelen_400_6x6.mdl"
 COMPONENT.Bodygroups = {}
@@ -23,7 +23,7 @@ COMPONENT.UsePhases = true
 COMPONENT.Category = "Exterior"
 
 COMPONENT.Meta = {
-	whelen_400 = {
+	whelen_600 = {
 		AngleOffset = -90,
 		W = 7.25,
 		H = 6.9,
@@ -40,8 +40,8 @@ COMPONENT.Meta = {
 
 COMPONENT.Positions = {
 
-	[1] = { Vector( 0, 1.09, 1.1 ), Angle( 0, 0, 0 ), "whelen_400" },
-	[2] = { Vector( 0, 1.09, -0.83 ), Angle( 0, 0, 0 ), "whelen_400" },
+	[1] = { Vector( 0, 1.09, 1.1 ), Angle( 0, 0, 0 ), "whelen_600" },
+	[2] = { Vector( 0, 1.09, -0.83 ), Angle( 0, 0, 0 ), "whelen_600" },
 
 }
 
@@ -53,25 +53,17 @@ COMPONENT.Sections = {
 
 COMPONENT.Patterns = {
 	["auto_light_dome"] = {
-        ["code1"] = { 1, 1, 1, 0, 0, 0 },
-        ["code2"] = { 1, 1, 0, 0 },
-        ["code3"] = { 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
-
-        ["code1A"] = { 0, 0, 0, 1, 1, 1 },
-        ["code2A"] = { 0, 0, 1, 1 },
-        ["code3A"] = { 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0 },
-        
-        ["code1B"] = { 1, 1, 1, 0, 0, 0 },
-        ["code2B"] = { 1, 1, 0, 0 },
-        ["code3B"] = { 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
+		["mode1"] = { 1 },
+		["mode1A"] = { 1 },
+		["mode1B"] = { 2 },
 	}
 }
 
 COMPONENT.Modes = {
 	Primary = {
-		M1 = { ["auto_light_dome"] = "code1", },
-		M2 = { ["auto_light_dome"] = "code2", },
-		M3 = { ["auto_light_dome"] = "code3", }
+		M1 = { ["auto_light_dome"] = "mode1", },
+		M2 = { ["auto_light_dome"] = "mode1", },
+		M3 = { ["auto_light_dome"] = "mode1", }
 	},
 	Auxiliary = {},
 	Illumination = {}
