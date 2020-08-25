@@ -47,7 +47,7 @@ COMPONENT.Positions = {
 
 COMPONENT.Sections = {
 	["auto_light_dome"] = {
-		[1] = { { 1, W }, { 2, W } },	
+		[1] = {  },	
 	},
 }
 
