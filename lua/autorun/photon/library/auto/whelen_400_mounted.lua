@@ -19,6 +19,9 @@ COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
 COMPONENT.UsePhases = true
 COMPONENT.Category = "Exterior"
+COMPONENT.DefaultColors = {
+    [1] = "BLUE"
+}
 
 COMPONENT.Meta = {
 	whelen_400 = {
@@ -45,7 +48,7 @@ COMPONENT.Positions = {
 
 COMPONENT.Sections = {
 	["auto_light_dome"] = {
-		[1] = { { 1, W }, { 2, W } },
+		[1] = { { 1, "_1" }, { 2, "_1" } },
 	},
 }
 
