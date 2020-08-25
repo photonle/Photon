@@ -47,7 +47,7 @@ COMPONENT.Positions = {
 
 COMPONENT.Sections = {
 	["auto_light_dome"] = {
-		[1] = { {} },
+		[1] = { { 1, W }, { 2, W } },	
 	},
 }
 
@@ -68,7 +68,8 @@ COMPONENT.Modes = {
 	},
 	Auxiliary = {},
 	Illumination = {
-
+		T = { {1, W}, {2, W} },
+		F = { {1, W}, {2, W} },
 	}
 }
 

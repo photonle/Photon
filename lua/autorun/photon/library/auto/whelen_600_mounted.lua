@@ -14,7 +14,7 @@ local name = "Whelen 600 Mounted"
 
 local COMPONENT = {}
 
-COMPONENT.Deprecated = "This component is replaced with the 'Whelen 400 Mounted' for ELS and the 'Whelen 400 Mountes Illumination' for solid light"
+COMPONENT.Deprecated = "This component is replaced with the 'Whelen 400 Mounted' for ELS and the 'Whelen 400 Mounted Illumination'"
 
 COMPONENT.Model = "models/schmal/whelen_400_6x6.mdl"
 COMPONENT.Bodygroups = {}
