@@ -592,6 +592,10 @@ else
 		PhotonHUD:Init()
 	end)
 end
+hook.Add("OnScreenSizeChanged", "PhotonHUD:OnScreenSizeChanged", function()
+	scrW = ScrW()
+	scrH = ScrH()
+end)
 
 Photon.HUD = PhotonHUD
 
