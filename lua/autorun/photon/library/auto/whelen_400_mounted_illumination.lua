@@ -10,11 +10,11 @@ local SW = "S_WHITE"
 local G = "GREEN"
 local RB = "BLUE/RED"
 
-local name = "Whelen 600 Mounted"
+local name = "Whelen 400 Mounted Illumination"
+
+-- ADD ILLUMINIATION STAGE
 
 local COMPONENT = {}
-
-COMPONENT.Deprecated = "This component is replaced with the 'Whelen 400 Mounted' for ELS and the 'Whelen 400 Mounted Illumination'"
 
 COMPONENT.Model = "models/schmal/whelen_400_6x6.mdl"
 COMPONENT.Bodygroups = {}
@@ -23,7 +23,7 @@ COMPONENT.UsePhases = true
 COMPONENT.Category = "Exterior"
 
 COMPONENT.Meta = {
-	whelen_600 = {
+	whelen_400 = {
 		AngleOffset = -90,
 		W = 7.25,
 		H = 6.9,
@@ -40,33 +40,37 @@ COMPONENT.Meta = {
 
 COMPONENT.Positions = {
 
-	[1] = { Vector( 0, 1.09, 1.1 ), Angle( 0, 0, 0 ), "whelen_600" },
-	[2] = { Vector( 0, 1.09, -0.83 ), Angle( 0, 0, 0 ), "whelen_600" },
+	[1] = { Vector( 0, 1.09, 1.1 ), Angle( 0, 0, 0 ), "whelen_400" },
+	[2] = { Vector( 0, 1.09, -0.83 ), Angle( 0, 0, 0 ), "whelen_400" },
 
 }
 
 COMPONENT.Sections = {
 	["auto_light_dome"] = {
-		[1] = { { 1, W }, { 2, W } },
+		[1] = {  },	
 	},
 }
 
 COMPONENT.Patterns = {
 	["auto_light_dome"] = {
-		["mode1"] = { 1 },
-		["mode1A"] = { 1 },
-		["mode1B"] = { 2 },
+        ["code1"] = { 1 },
+        ["code2"] = { 1 },
+        ["code3"] = { 1 },
+
 	}
 }
 
 COMPONENT.Modes = {
 	Primary = {
-		M1 = { ["auto_light_dome"] = "mode1", },
-		M2 = { ["auto_light_dome"] = "mode1", },
-		M3 = { ["auto_light_dome"] = "mode1", }
+		M1 = { ["auto_light_dome"] = "code1", },
+		M2 = { ["auto_light_dome"] = "code2", },
+		M3 = { ["auto_light_dome"] = "code3", }
 	},
 	Auxiliary = {},
-	Illumination = {}
+	Illumination = {
+		T = { {1, W}, {2, W} },
+		F = { {1, W}, {2, W} },
+	}
 }
 
 EMVU:AddAutoComponent( COMPONENT, name )
