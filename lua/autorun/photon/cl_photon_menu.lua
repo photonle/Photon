@@ -15,7 +15,7 @@ function OpenPhotonMenu()
 		PhotonWebPage:SetVisible(false)
 		PhotonWebPage:SetSize(ScrW() * .66, ScrH() * .66)
 		PhotonWebPage:Center()
-		PhotonWebPage:OpenURL("https://photon.lighting/menu/")
+		PhotonWebPage:OpenURL("https://photonle.github.io/menu/photon.html")
 		PhotonWebPage:SetAllowLua(true)
 	end
 	PhotonWebPage:SetVisible(true)
