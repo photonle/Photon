@@ -99,6 +99,9 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	if not LocalPlayer():InVehicle() or not IsValid( LocalPlayer():GetVehicle() ) or not LocalPlayer():GetVehicle():IsEMV() then return end
 
 	local emv = LocalPlayer():GetVehicle()
+		
+	if not emv.Photon_Illumination or not emv.Photon_Lights or not emv.Photon_Siren then return end
+
 	if input.IsKeyTrapping() then return end
 	if vgui.CursorVisible() then return end
 

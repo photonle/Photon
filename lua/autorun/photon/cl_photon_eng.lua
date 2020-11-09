@@ -63,7 +63,7 @@ hook.Add( "InitPostEntity", "Photon.AddHelperLocalVars", function()
 			Photon.DrawDirtyLensEffect()
 		end)
 	else
-		LocalPlayer():ChatPrint("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
+		chat.AddText("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
 	end
 end)
 
