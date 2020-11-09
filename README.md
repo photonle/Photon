@@ -47,6 +47,7 @@ The Core Development team currently contains 6 people.
 | Nardoras | Tinted Whelen Legacy |
 | DBotThePony | [DHTML Creation Delay](https://github.com/photonle/Photon/pull/129) |
 | jooiiee | [Various](https://github.com/photonle/Photon/pulls?q=is%3Apr+is%3Amerged+author%3Ajooiiee) |
+| djtb2924 | [Clientside Errors](https://github.com/photonle/Photon/pull/166) |
 
 ### Other
 
