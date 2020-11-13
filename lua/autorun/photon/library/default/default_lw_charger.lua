@@ -443,7 +443,7 @@ local posRef = {
 		Pos = Vector( -38, -54, 55.2 ),
 		Ang = Angle( 4, 90, -90 )
 	},
-	["Bumper600"] = {
+	["Bumper400"] = {
 		Scale = 1,
 		Pos =  Vector( -12, 129, 30.8 ),
 		Ang = Angle( 0, 0, 0 ),
@@ -931,16 +931,16 @@ EMV.Auto = {
 		Ang = MirrorAngle( posRef.MidSide.Ang, "opp" ),
 	},
 	[64] = {
-		ID = "Whelen 600 Mounted",
-		Scale = posRef.Bumper600.Scale,
-		Pos = posRef.Bumper600.Pos,
-		Ang = posRef.Bumper600.Ang,
+		ID = "Whelen 400 Mounted",
+		Scale = posRef.Bumper400.Scale,
+		Pos = posRef.Bumper400.Pos,
+		Ang = posRef.Bumper400.Ang,
 	},
 	[65] = {
-		ID = "Whelen 600 Mounted",
-		Scale = posRef.Bumper600.Scale,
-		Pos = MirrorVector( posRef.Bumper600.Pos ),
-		Ang = MirrorAngle( posRef.Bumper600.Ang, "opp" ),
+		ID = "Whelen 400 Mounted",
+		Scale = posRef.Bumper400.Scale,
+		Pos = MirrorVector( posRef.Bumper400.Pos ),
+		Ang = MirrorAngle( posRef.Bumper400.Ang, "opp" ),
 	},
 	[66] = {
 		ID = "Whelen Vertex",
@@ -1101,7 +1101,7 @@ EMV.Selections = { -- structured and flexible version of presets designed to mim
 	{
 		Name = "Pushbar Layout",
 		Options = {
-			{ Category = "Whelen 600s", Name = "R/B/W", Auto = { 64, 65, 71, 70 } },
+			{ Category = "Whelen 400s", Name = "R/B/W", Auto = { 64, 65, 71, 70 } },
 			{ Name = "None" },
 			{ Name = "CHP", Props = { 13 }, Auto = { 56, 57 } },
 		}
