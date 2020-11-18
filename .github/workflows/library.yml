@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@v1
       -
         name: Install Lua
-        uses: leafo/gh-actions-lua@v8
+        uses: leafo/gh-actions-lua@v8.0.0
         with:
           luaVersion: "5.2"
       -
