@@ -32,6 +32,8 @@ jobs:
       - name: Install Dependencies
         run: composer install -d .github/builder/update
       - name: Build
+        env:
+          RELEASE_CONTEXT: ${{ toJson(github.event.release) }}
         run: php .github/builder/update/build.php
       - name: Upload
         uses: skx/github-action-publish-binaries@master
