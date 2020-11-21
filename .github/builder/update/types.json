@@ -1,0 +1,41 @@
+{
+	"default": "error",
+	"fallback": {
+		"new":  1,
+		"fix": 2,
+		"change": 3,
+		"remove": 4
+	},
+	"powers": {
+		"word": 3,
+		"class": 100,
+		"category": 2
+	},
+	"words": {
+		"fix": "fix",
+
+		"added": "new",
+		"new": "new",
+
+		"change": "change",
+		"modify": "change",
+		"modified": "change",
+
+		"remove": "remove",
+		"delete": "remove"
+	},
+	"class": {
+		"+": ["new"],
+		"~": ["fix", "change"],
+		"-": ["remove"]
+	},
+	"category": {
+		"changes": "change",
+		"library": "new",
+		"breaking": "warn",
+		"deprecated": "warn",
+		"features": "new",
+		"commands": "new",
+		"fixes": "fix"
+	}
+}

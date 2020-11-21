@@ -1,0 +1,14 @@
+{
+	"Breaking Changes": "breaking",
+	"Deprecation Warnings": "deprecated",
+	"Features": "features",
+	"Commands & Settings": "commands",
+	"Commands": "commands",
+	"Settings": "commands",
+	"Bug Fixes": "fixes",
+	"Fixes": "fixes",
+	"Core Library": "library",
+	"Library": "library",
+	"GitHub": "github",
+	"Changes": "changes"
+}
