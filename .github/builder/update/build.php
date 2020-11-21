@@ -33,11 +33,12 @@ if (stripos($header, '**') === 0){
 	$titleMatch = '*';
 }
 if ($titleMatch === ''){
-	die("{$header} failed to match known headers.");
+	$titleMatch = false;
+	echo "Assuming single-category operation.";
 } elseif ($titleMatch === '**'){
 	$subTitleMatch = '*';
 }
-$titleMatchLen = strlen($titleMatch);
+$titleMatchLen = $titleMatch ? strlen($titleMatch) : 0;
 $itemMatchLen = strlen($itemMatch);
 
 function strcontains(string $haystack, string $needle): bool {
@@ -94,10 +95,11 @@ function resolveLine($line){
 }
 
 $output = [];
-$category = '';
+$category = 'fixes';
 foreach ($lines as $line){
-	if (stripos($line, $titleMatch) === 0){
+	if ($titleMatch && stripos($line, $titleMatch) === 0){
 		$line = substr($line, $titleMatchLen, -$titleMatchLen);
+		if (substr($line, -1) === ':'){$line = substr($line, 0, -1);}
 		$line = trim($line);
 		$category = $categories[$line] ?? $line;
 		$output[$category] = $output[$category] ?? [];
@@ -138,11 +140,11 @@ foreach ($output as &$category){
 	}
 }
 
-$yml = [
-	'name' => $title,
-	'date' => DateTime::createFromFormat(DateTime::RFC3339, $date)->format('M  j, Y'),
-	'changes' => $output
-];
+$yml = [];
+if ($title && $title !== ''){$yml['name'] = $title;}
+$yml['date'] = DateTime::createFromFormat(DateTime::RFC3339, $date)->format('Y-m-d H:i');
+if (!empty($output)){$yml['changes'] = $output;}
+
 $yml = Yaml::dump($yml, 2, 2, Yaml::DUMP_OBJECT_AS_MAP);
 $yml = trim($yml);
 $html = <<<EOF
