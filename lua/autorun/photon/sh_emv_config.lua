@@ -8,8 +8,8 @@ PHOTON_BANNED_UNIT_IDS = {
 	["n1g"] = true
 }
 
-PHOTON_UPDATE = 74
-PHOTON_SERIES = "Hot Sulphur Springs"
+PHOTON_UPDATE = 75
+PHOTON_SERIES = "Idaho Springs"
 
 --[[
 	DATATABLE CONFIGURATIONS

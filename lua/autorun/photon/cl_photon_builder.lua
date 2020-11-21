@@ -20,7 +20,7 @@ end
 
 function PhotonAdjustAngle( angle )
 	if not PHOTON_DEBUG_LIGHT then return end
-	local pos, ang = WorldToLocal( PHOTON_DEBUG_LIGHT[1], PHOTON_DEBUG_LIGHT[2], Vector(0,0,0), angle )
+	local ang = select(2, WorldToLocal(PHOTON_DEBUG_LIGHT[1], PHOTON_DEBUG_LIGHT[2], Vector(0,0,0), angle))
 	PHOTON_DEBUG_LIGHT[2] = ang
 end
 
@@ -38,7 +38,7 @@ function SetDebugTarget( index, cat )
 	elseif cat == "REG" then
 		PHOTON_DEBUG_MODE = "REG"
 		PHOTON_DEBUG_LIGHT = Photon.Vehicles.Positions[ PHOTON_DEBUG_NAME ][ index ]
-	elseif cat == "PROP" then
+	--elseif cat == "PROP" then
 		-- PHOTON_DEBUG_LIGHT
 	end
 end
@@ -54,7 +54,7 @@ hook.Add( "Think", "Photon.Debug.ButtonPress", function()
 	local CTRL = input.IsKeyDown( KEY_LALT )
 	local ALT = input.IsKeyDown( KEY_LCONTROL )
 
-	local VEC_MODE = !PHOTON_DEBUG_VECTOR
+	local VEC_MODE = not PHOTON_DEBUG_VECTOR
 
 	if input.IsKeyDown( KEY_UP ) then
 		if P_UP == 0 or ( P_UP + GRACE_PRESS < CurTime() and SLIDE_INDEX + SLIDE_TIMER < CurTime() ) then
@@ -205,18 +205,18 @@ hook.Add( "Think", "Photon.Debug.ButtonPress", function()
 	end
 
 	if input.IsKeyDown( KEY_PAD_MINUS ) and not P_KPMINUS then
-		if !( not PHOTON_DEBUG_NAME or PHOTON_DEBUG_NAME == "UNKNOWN" ) then
+		if PHOTON_DEBUG_NAME and PHOTON_DEBUG_NAME ~= "UNKNOWN" then
 			surface.PlaySound( EMVU.Sounds.Up )
 			if PHOTON_DEBUG_MODE == "ELS" then
 				local max = #EMVU.Positions[ PHOTON_DEBUG_NAME ]
-				if PHOTON_DEBUG_INDEX <= 1 then 
+				if PHOTON_DEBUG_INDEX <= 1 then
 					SetDebugTarget( max, "ELS" )
 				else
 					SetDebugTarget( PHOTON_DEBUG_INDEX - 1, "ELS" )
 				end
 			elseif PHOTON_DEBUG_MODE == "REG" then
 				local max = #Photon.Vehicles.Positions[ PHOTON_DEBUG_NAME ]
-				if PHOTON_DEBUG_INDEX <= 1 then 
+				if PHOTON_DEBUG_INDEX <= 1 then
 					SetDebugTarget( max, "REG" )
 				else
 					SetDebugTarget( PHOTON_DEBUG_INDEX - 1, "REG" )
@@ -229,18 +229,18 @@ hook.Add( "Think", "Photon.Debug.ButtonPress", function()
 	end
 
 	if input.IsKeyDown( KEY_PAD_PLUS ) and not P_KPPLUS then
-		if !( not PHOTON_DEBUG_NAME or PHOTON_DEBUG_NAME == "UNKNOWN" ) then
+		if PHOTON_DEBUG_NAME and PHOTON_DEBUG_NAME ~= "UNKNOWN" then
 			surface.PlaySound( EMVU.Sounds.Up )
 			if PHOTON_DEBUG_MODE == "ELS" then
 				local max = #EMVU.Positions[ PHOTON_DEBUG_NAME ]
-				if PHOTON_DEBUG_INDEX >= max then 
+				if PHOTON_DEBUG_INDEX >= max then
 					SetDebugTarget( 1, "ELS" )
 				else
 					SetDebugTarget( PHOTON_DEBUG_INDEX + 1, "ELS" )
 				end
 			elseif PHOTON_DEBUG_MODE == "REG" then
 				local max = #Photon.Vehicles.Positions[ PHOTON_DEBUG_NAME ]
-				if PHOTON_DEBUG_INDEX >= max then 
+				if PHOTON_DEBUG_INDEX >= max then
 					SetDebugTarget( 1, "REG" )
 				else
 					SetDebugTarget( PHOTON_DEBUG_INDEX + 1, "REG" )
@@ -253,7 +253,7 @@ hook.Add( "Think", "Photon.Debug.ButtonPress", function()
 	end
 
 	if input.IsKeyDown( KEY_PAD_MULTIPLY ) and not P_KPENTER then
-		if !( not PHOTON_DEBUG_NAME or PHOTON_DEBUG_NAME == "UNKNOWN" ) then
+		if PHOTON_DEBUG_NAME and PHOTON_DEBUG_NAME ~= "UNKNOWN" then
 			surface.PlaySound( EMVU.Sounds.Down )
 			local lightVector = "Vector( " .. math.Round( PHOTON_DEBUG_LIGHT[1].x, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[1].y, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[1].z, 2 ) .. " )"
 			local lightAngle = "Angle( " .. math.Round( PHOTON_DEBUG_LIGHT[2].p, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[2].y, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[2].r, 2 ) .. " )"
@@ -267,9 +267,9 @@ hook.Add( "Think", "Photon.Debug.ButtonPress", function()
 	end
 
 	if input.IsKeyDown( KEY_PAD_DIVIDE ) and not P_KP_DIVIDE then
-		if !( not PHOTON_DEBUG_NAME or PHOTON_DEBUG_NAME == "UNKNOWN" ) then
+		if PHOTON_DEBUG_NAME and PHOTON_DEBUG_NAME ~= "UNKNOWN" then
 			surface.PlaySound( EMVU.Sounds.Up )
-			PHOTON_DEBUG_VECTOR = !PHOTON_DEBUG_VECTOR
+			PHOTON_DEBUG_VECTOR = not PHOTON_DEBUG_VECTOR
 		end
 		P_KP_DIVIDE = true
 	elseif not input.IsKeyDown( KEY_PAD_DIVIDE ) then
@@ -278,7 +278,7 @@ hook.Add( "Think", "Photon.Debug.ButtonPress", function()
 
 	if input.IsKeyDown( KEY_PAD_DECIMAL ) and not P_KP_DECIMAL then
 		surface.PlaySound( EMVU.Sounds.Up )
-		PHOTON_DEBUG_EXCLUSIVE = !PHOTON_DEBUG_EXCLUSIVE
+		PHOTON_DEBUG_EXCLUSIVE = not PHOTON_DEBUG_EXCLUSIVE
 		P_KP_DECIMAL = true
 	elseif not input.IsKeyDown( KEY_PAD_DECIMAL ) then
 		P_KP_DECIMAL = false
@@ -291,9 +291,7 @@ function PhotonDebugTarget( ply, args )
 	local ent = ply:GetVehicle() or ply:GetEyeTrace().Entity
 	if not IsValid( ent ) then return end
 	PHOTON_DEBUG_TARGET = ent
-	local lightTarget = 1
-
-	print(tostring(ent))
+	PHOTON_DEBUG_NAME = ent.VehicleName
 
 	if not args[2] then
 		if args[1] == "ELS" then
@@ -311,13 +309,13 @@ function PhotonDebugTarget( ply, args )
 
 end
 
-concommand.Add( "photon_debugtarget", function( ply, cmd, args ) 
+concommand.Add( "photon_debugtarget", function( ply, cmd, args )
 	PhotonDebugTarget( ply, args )
 end)
 
 concommand.Add( "photon_debug", function( ply, cmd, args )
 	if not ply:IsAdmin() then return end
-	PHOTON_DEBUG = !PHOTON_DEBUG
+	PHOTON_DEBUG = not PHOTON_DEBUG
 	if PHOTON_DEBUG then
 		ply:ChatPrint( "[Photon] Debug mode enabled." )
 	else
@@ -338,6 +336,7 @@ hook.Add( "PostDrawHUD", "Photon.Debug.HUDPaint", function()
 	draw.DrawText( "PHOTON DEBUG MODE ON", "PHOTON_Debug", ScrW() - 16, 16, Color( 255, 200, 100 ), TEXT_ALIGN_RIGHT )
 
 	if PHOTON_DEBUG_LIGHT then
+		if istable(PHOTON_DEBUG_LIGHT[1]) then PHOTON_DEBUG_LIGHT = {PHOTON_DEBUG_LIGHT[1][3], PHOTON_DEBUG_LIGHT[1][4]} end -- Support for rotating elements
 		local lightVector = "Vector( " .. math.Round( PHOTON_DEBUG_LIGHT[1].x, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[1].y, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[1].z, 2 ) .. " )"
 		local lightAngle = "Angle( " .. math.Round( PHOTON_DEBUG_LIGHT[2].p, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[2].y, 2 ) .. ", " .. math.Round( PHOTON_DEBUG_LIGHT[2].r, 2 ) .. " )"
 		local vehicleName = PHOTON_DEBUG_NAME or "UNKNOWN"
@@ -345,7 +344,7 @@ hook.Add( "PostDrawHUD", "Photon.Debug.HUDPaint", function()
 		local exclusiveModeText = "Only Show Active: " .. tostring( PHOTON_DEBUG_EXCLUSIVE )
 		local angColor = Color( 255, 255, 255, 255 )
 		local vecColor = Color( 255, 255, 255, 255 )
-		if !PHOTON_DEBUG_VECTOR then
+		if not PHOTON_DEBUG_VECTOR then
 			angColor.a = 100
 		else
 			vecColor.a = 100
@@ -393,7 +392,7 @@ EMV.Sequences = {
 
 local V = {
 	Name = VehicleName,
-	Class = "prop_vehicle_jeep",
+	Class = "%ENT_CLASS",
 	Category = "%PREF_CATEGORY",
 	Author = "%AUTHOR_NAME",
 	Model = "%ENT_MODEL",
@@ -403,7 +402,7 @@ local V = {
 	HasPhoton = true,
 	Photon = "PHOTON_INHERIT"
 }
-list.Set( "Vehicles", VehicleName, V )
+list.Set( "Vehicles", "%PREF_INDEX", V )
 
 if EMVU then EMVU:OverwriteIndex( VehicleName, EMV ) end
 ]]
@@ -455,10 +454,12 @@ local function PhotonCompileCreatorData(prefName, prefCategory, prefSiren, prefL
 		["ENT_BODYGROUPS"] = FormatBodygroupChoices(ent),
 		["ENT_COLOR"] = formatColor,
 		["PREF_LIGHTBAR"] = FormatLightbarChoice(prefLightbar),
+		["ENT_CLASS"] = vehicleData.Class,
 		["PREF_CATEGORY"] = prefCategory or "Emergency Vehicles",
 		["ENT_MODEL"] = vehicleData.Model,
 		["AUTHOR_NAME"] = authorName,
-		["ENT_SCRIPT"] = vehicleData.KeyValues.vehiclescript
+		["ENT_SCRIPT"] = vehicleData.KeyValues.vehiclescript,
+		["PREF_INDEX"] = string.lower(string.Replace(prefName, " ", "_")) .. "_" .. string.Split(LocalPlayer():SteamID(), ":")[3]
 	}
 	return PhotonTemplateReplace(PHOTON_CREATOR_TEMPLATE, injectTable)
 end

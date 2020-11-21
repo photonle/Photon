@@ -3,6 +3,10 @@
 These guidelines have been written to ensure that code, issues and pull requests are to a good standard;
 allowing for easier maintence and implementation.
 
+## General
+
+We're not looking for new components or sirens, unless there's an overwhelming reason to add them (such as being an example of a new feature).
+
 ## Code
 
 ### Style

@@ -64,13 +64,13 @@ concommand.Add( "photon_mat", function( ply, cmd, args )
 	PrintTable( veh:GetMaterials() )
 end)
 
-hook.Add( "Photon.EntityChangedSkin", "Photon.LiverySkinCheck", function( ent, skin ) 
+hook.Add( "Photon.EntityChangedSkin", "Photon.LiverySkinCheck", function( ent, skin )
 	if IsValid( ent ) and ent:IsEMV() and ent:Photon_GetLiveryID() != "" and skin > 0 then
 		ent:Photon_SetLiveryId("")
 	end
 end )
 
-hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, ent ) 
+hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, ent )
 	if not IsValid( ent ) then return false end
 	local isDriver = ( ply:GetVehicle() == ent )
 	local isOwner = ( ent:GetOwner() == ply )
@@ -94,22 +94,13 @@ local function PhotonUnitNumberScan()
 		end
 	end
 end
-timer.Create( "Photon.UnitNumberScan", 2, 0, function() 
+timer.Create( "Photon.UnitNumberScan", 2, 0, function()
 	PhotonUnitNumberScan()
 end )
 
-hook.Add( "PlayerSpawnedVehicle", "Photon.PlayerVehicleSpawn", function( ply, ent ) 
+hook.Add( "PlayerSpawnedVehicle", "Photon.PlayerVehicleSpawn", function( ply, ent )
 	ent.PhotonVehicleSpawner = ply
 end)
-
-// local ply = player.GetBySteamID("STEAM_0:0:0")
-// local veh = ply:GetVehicle()
-// veh:SetSubMaterial( 0, "photon/override/tal_f150_running" )
-// veh:SetSubMaterial( 7, "photon/override/sgm_fordexplorer/interior" )
-
-// // veh:SetSubMaterial(4, "photon/override/lw_glhs_running" )
-// // veh:SetSubMaterial(6, "photon/override/lw_glhs_trans_running" )
-// veh:SetSubMaterial( 26, "models/tdmcars/emergency/lightbar/plastic" )
 
 -- Photon.AutoSkins.FetchSkins = function( id )
 -- 	local result = {}

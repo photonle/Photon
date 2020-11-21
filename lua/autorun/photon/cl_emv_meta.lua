@@ -619,11 +619,11 @@ function EMVU:MakeEMV( emv, name )
 			prop:SetPos( emv:LocalToWorld( p.Pos ) )
 			prop:SetAngles( emv:LocalToWorldAngles( p.Ang ) )
 			prop:SetRenderMode( rendermode )
-
 			if p.Skin then prop:SetSkin(p.Skin) end
 			if p.Material then prop:SetMaterial( p.Material ) end
 			if p.Color then prop:SetColor( p.Color ) end
 			if p.AirEL then prop.AirEL = true end
+
 			prop.AutoIndex = p.AutoIndex or false
 			prop.ComponentName = p.ComponentName or false
 			prop.PhotonRotationEnabled = p.PhotonRotationEnabled or false
@@ -646,6 +646,24 @@ function EMVU:MakeEMV( emv, name )
 						prop:SetSubMaterial( tonumber( index ), value )
 					end
 				end
+			end
+
+			if p.HideBone then
+				emv:ManipulateBoneScale(emv:LookupBone(p.HideBone), Vector(0, 0, 0))
+			end
+
+			if p.OffsetBone then
+				if p.OffsetBoneAng then
+					emv:ManipulateBoneAngles(emv:LookupBone(p.OffsetBone), p.OffsetBoneAng)
+				end
+				if p.OffsetBonePos then
+					emv:ManipulateBonePosition(emv:LookupBone(p.OffsetBone), p.OffsetBonePos)
+				end
+			end
+
+			if p.AttachmentMerge then
+				prop:SetParent(nil)
+				prop:SetParent(emv, emv:LookupAttachment(p.AttachmentMerge))
 			end
 
 			table.insert(photonLightModels, prop)
@@ -707,10 +725,21 @@ function EMVU:MakeEMV( emv, name )
 					self:Photon_RemoveEMVProps( true )
 					break
 				end
-				prop:SetParent( self )
-				prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
-				prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
-				prop:DrawShadow( false )
+				--[[
+				recoded to only reparent when necessary, fixes detachment when vehicle leaves PVS - sgm
+				--]]
+				if !IsValid(prop:GetParent()) then
+					prop:SetParent( self )
+					prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
+					prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
+
+					if emvProps[index].AttachmentMerge then
+						prop:SetParent(nil)
+						prop:SetParent(self, self:LookupAttachment(emvProps[index].AttachmentMerge))
+					end
+
+				end
+
 				if PHOTON_DEBUG or PHOTON_EXPRESS then
 					if isvector( emvProps[index].Scale ) then
 						local mat = Matrix()
@@ -730,6 +759,38 @@ function EMVU:MakeEMV( emv, name )
 
 	end
 
+	-- For updating the props after saving the file
+	function emv:Photon_UpdateEMVProps()
+		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
+		if not emvProps or not istable( emvProps) then return end
+
+		for index,prop in ipairs( self.EMVProps ) do
+			if not IsValid( prop ) then
+				self:Photon_RemoveEMVProps( true )
+				break
+			end
+
+			prop:SetParent( self )
+			prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
+			prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
+
+			if emvProps[index].AttachmentMerge then
+				prop:SetParent(nil)
+				prop:SetParent(self, self:LookupAttachment(emvProps[index].AttachmentMerge))
+			end
+
+			if isvector( emvProps[index].Scale ) then
+				local mat = Matrix()
+				mat:Scale( emvProps[index].Scale )
+				prop:EnableMatrix( "RenderMultiply", mat )
+			elseif isnumber( emvProps[index].Scale ) then
+				prop:SetModelScale( emvProps[index].Scale, 0 )
+			end
+			if prop.AirEL then self.AirELEntity = prop end
+			if not IsValid( self.AirELEntity ) then self.AirELEntity = nil end
+		end
+	end
+
 	function emv:Photon_GetRadarCone( rear, force )
 		local normDirection = self:GetForward()
 		if rear then normDirection:Rotate( Angle( 0, -90, 0 ) ) else normDirection:Rotate( Angle( 0, 90, 0 ) ) end
@@ -741,7 +802,7 @@ function EMVU:MakeEMV( emv, name )
 				if IsValid( ent ) and
 					ent:IsVehicle() and
 					ent != self and
-					-- self:IsLineOfSightClear( ent:GetPos() ) and 
+					-- self:IsLineOfSightClear( ent:GetPos() ) and
 					ent:Photon_GetSpeed() > .5 then
 					validEnts[ #validEnts + 1 ] = ent
 				end
@@ -948,7 +1009,6 @@ function EMVU:MakeEMV( emv, name )
 	emv.LastPresetOption = 0
 	emv:Photon_SetupEMVProps()
 	emv.PhotonFinishedInit = true
-	-- print("FINISHED INIT")
 end
 
 photonLightModels = {}

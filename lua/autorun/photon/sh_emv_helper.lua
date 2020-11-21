@@ -266,7 +266,7 @@ end
 
 function EMVU.Helper:GetTASequence( name, option, vehicle )
 
-	if not istable( EMVU.Sequences[ name ].Traffic ) then return end
+	if not istable( EMVU.Sequences[ name ].Traffic ) or not istable( EMVU.Sequences[ name ].Traffic[ option ]) then return end
 	local resultTable = {}
 
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["BG_Components"] ) then
@@ -372,7 +372,7 @@ function EMVU.Helper:GetIllumSequence( name, option, vehicle )
 	end
 
 	for component, option in pairs( EMVU.Sequences[name]["Illumination"][option]["Components"] ) do
-		resultTable[ component ] = option
+		resultTable[ #resultTable + 1 ] = option
 	end
 
 	return resultTable

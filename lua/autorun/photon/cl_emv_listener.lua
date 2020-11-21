@@ -99,6 +99,9 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	if not LocalPlayer():InVehicle() or not IsValid( LocalPlayer():GetVehicle() ) or not LocalPlayer():GetVehicle():IsEMV() then return end
 
 	local emv = LocalPlayer():GetVehicle()
+		
+	if not emv.Photon_Illumination or not emv.Photon_Lights or not emv.Photon_Siren then return end
+
 	if input.IsKeyTrapping() then return end
 	if vgui.CursorVisible() then return end
 
@@ -333,6 +336,7 @@ function Photon:CarSignal(arg)
 	if not car:Photon() then return end
 
 	if not arg then return end
+	if not Photon.Vehicles.States.Blink_Left[car.VehicleName] or not Photon.Vehicles.States.Blink_Right[car.VehicleName] then return end
 	if #Photon.Vehicles.States.Blink_Left[car.VehicleName] == 0 and #Photon.Vehicles.States.Blink_Right[car.VehicleName] == 0 then return end
 
 	if arg == "left" then

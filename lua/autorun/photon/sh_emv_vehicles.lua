@@ -78,7 +78,6 @@ function EMVU:ProcessExpressVehicles()
 	for _,_file in pairs( autoFiles ) do
 		local fileContents = file.Read( "photon/express/" .. _file )
 		local resultVehicle = Photon.XML.ParseVehicleFromXML( fileContents )
-		-- PrintTable( resultVehicle )
 		local v = resultVehicle.VehicleDefinition
 		list.Set( "Vehicles", v.Name, {
 			Name = v.Name,
@@ -141,7 +140,6 @@ EMVU.Configurations.DeleteConfiguration = function( cfgFile )
 end
 
 function EMVU:LoadVehicles()
-	-- local cars = list.Get( "Vehicles" )
 	local cars = list.GetForEdit("Vehicles")
 	for k,v in pairs(cars) do
 		if v.IsEMV then
@@ -317,6 +315,14 @@ function EMVU:OverwriteIndex(name, data)
 		EMVU.DisabledRadars[name] = true
 	else
 		EMVU.DisabledRadars[name] = nil
+	end
+
+	-- Updating prop positions
+	if not CLIENT then return end
+
+	for _, ent in ipairs(Photon:AllVehicles()) do
+		if ent.VehicleName ~= name then continue end
+		ent:Photon_UpdateEMVProps()
 	end
 end
 
@@ -502,10 +508,8 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 	end
 	if SERVER then return end
 
-	-- PrintTable( EMVU.PresetIndex[ name ]  )
 	local positionTable = {}
 	for i=1,#data do -- for each component in the vehicle's auto
-		--// print( "Auto ID: " .. tostring( data[ i ].ID ) )
 		local component = EMVU.Auto[ data[ i ].ID ]
 		local autoData = data[i]
 		local autoPos = autoData.Pos
@@ -798,8 +802,6 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 			local firstPosData = component.Positions[ 1 ]
 			local lastPosData = component.Positions[ #component.Positions ]
 			local componentHash = hashPosition( firstPosData, lastPosData, autoPos, autoAng ) -- hash first and last values to determine if the offset can be recycled
-			--print( componentHash )
-			-- local offset
 			if not positionTable[ componentHash ] or not isnumber( positionTable[ componentHash ] ) then
 				offset = #EMVU.Positions[ name ]
 				positionTable[ componentHash ] = offset
@@ -1003,13 +1005,3 @@ hook.Add("InitPostEntity", "EMVU.LoadVehicles", function()
 	EMVU:LoadVehicles()
 	EMVU.Configurations.LoadConfigurations()
 end)
-
--- if SERVER then
--- 	hook.Add("InitPostEntity", "EMVU.EmptyServerPositions", function()
--- 		timer.Simple( 15, function()
--- 			table.Empty( EMVU.Positions )
--- 			table.Empty( EMVU.Meta )
--- 			table.Empty( EMVU.Patterns )
--- 		end )
--- 	end)
--- end

@@ -164,11 +164,11 @@ function Photon:SetupCar( ent, index )
 
 	function ent:Photon_GetBlinkRate()
 		if not IsValid( self ) then return PHO_DEFAULT_BLINK end
-		if self:Photon_GetLightingConfig() and isnumber(self:Photon_GetLightingConfig().BlinkRate) then 
-			return self:Photon_GetLightingConfig().BlinkRate 
-		else 
-			return PHO_DEFAULT_BLINK 
-		end 
+		if self:Photon_GetLightingConfig() and isnumber(self:Photon_GetLightingConfig().BlinkRate) then
+			return self:Photon_GetLightingConfig().BlinkRate
+		else
+			return PHO_DEFAULT_BLINK
+		end
 	end
 
 	function ent:Photon_BlinkOn()
@@ -178,14 +178,14 @@ function Photon:SetupCar( ent, index )
 		local result = nil
 		if (self.Lighting.LastBlink + self:Photon_GetBlinkRate()) <= RealTime() and RealTime() <= (self.Lighting.LastBlink + (self:Photon_GetBlinkRate() * 2)) then
 			result = false
-			if not self.Lighting.WasOff and driving then surface.PlaySound( EMVU.Sounds.Tick ) end 
+			if not self.Lighting.WasOff and driving then surface.PlaySound( EMVU.Sounds.Tick ) end
 			self.Lighting.WasOff = true
 		elseif RealTime() > (self.Lighting.LastBlink + (self:Photon_GetBlinkRate() * 2)) then
 			result = false
 			self.Lighting.WasOff = true
 			self.Lighting.LastBlink = RealTime()
 		else
-			if self.Lighting.WasOff and driving then surface.PlaySound( EMVU.Sounds.Tock ) end 
+			if self.Lighting.WasOff and driving then surface.PlaySound( EMVU.Sounds.Tock ) end
 			result = true
 			self.Lighting.WasOff = false
 		end
@@ -264,7 +264,11 @@ function Photon:SetupCar( ent, index )
 				end
 			end
 
-			if ((left and running) or hazards) and self:Photon_BlinkOn() or pdebug then
+
+			local blinkOn = false
+			if ((left or right) and running) or hazards then blinkOn = self:Photon_BlinkOn() end
+
+			if ((left and running) or hazards) and blinkOn or pdebug then
 				if Photon.Vehicles.States.Blink_Left[self.VehicleName] then
 					for _,l in pairs(Photon.Vehicles.States.Blink_Left[self.VehicleName]) do
 						RenderTable[l[1]] = l
@@ -272,7 +276,7 @@ function Photon:SetupCar( ent, index )
 				end
 			end
 
-			if ((right and running) or hazards) and self:Photon_BlinkOn() or pdebug then
+			if ((right and running) or hazards) and blinkOn or pdebug then
 				if Photon.Vehicles.States.Blink_Right[self.VehicleName] then
 					for _,l in pairs(Photon.Vehicles.States.Blink_Right[self.VehicleName]) do
 						RenderTable[l[1]] = l
@@ -294,7 +298,7 @@ function Photon:SetupCar( ent, index )
 		local drawLight = Photon.PrepareVehicleLight
 
 		local light = false
-		
+
 		for i,light in pairs( RenderTable ) do
 			if light != true then
 				if string.StartWith(tostring(i), "_") then
@@ -338,12 +342,3 @@ function Photon:SetupCar( ent, index )
 	ent.DrawLight = Photon.DrawLight
 
 end
-
--- local veh = LocalPlayer():GetEyeTrace().Entity
--- -- veh:ManipulateBoneAngles(1,Angle(0, 0, 90))
-
--- timer.Create( "photon_test_spin", .01, 0, function()
--- 	local targEnt = veh
--- 	local ang = veh:GetManipulateBoneAngles(1)
--- 	veh:ManipulateBoneAngles(1,Angle( ang.p, ang.y, ang.r + 1) )
--- end )

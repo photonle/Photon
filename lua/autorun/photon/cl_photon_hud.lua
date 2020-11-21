@@ -592,6 +592,10 @@ else
 		PhotonHUD:Init()
 	end)
 end
+hook.Add("OnScreenSizeChanged", "PhotonHUD:OnScreenSizeChanged", function()
+	scrW = ScrW()
+	scrH = ScrH()
+end)
 
 Photon.HUD = PhotonHUD
 
@@ -743,24 +747,4 @@ Photon.AddCustomHUDIcon("volume-mute", "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABz
 
 -- hook.Add( "PostDrawTranslucentRenderables", "photoasndflaskdf", function()
 	--PhotonTestDraw()
--- end)
-
---- TODO: REMOVE (DEV FUNCTION ONLY) FOR GRAND LAKE TESTING
--- print("PHOTON UPDATED")
-function photonDebugInfo()
-	print("PHOTON DEBUG INFO FUNCTION ==============")
-	local veh = LocalPlayer():GetVehicle()
-	if not IsValid(veh) then
-		print("> Invalid Vehicle")
-		return
-	end
-	print("> Name: " .. tostring(veh.VehicleName))
-	if not veh:Photon() then print("> Photon(): false") end
-	if not veh:IsEMV() then print("> IsEMV(): false") end
-	timer.Simple(0.5, function()
-		photonDebugInfo()
-	end)
-end
--- timer.Create("PhotonDebugUpdate", 0.5, 0, function()
--- 	photonDebugInfo()
 -- end)

@@ -24,7 +24,7 @@ The Core Development team currently contains 6 people.
 | --- | --- |
 | [ischmal](https://github.com/ischmal) | Photon Engine code, photon.lighting website |
 | [Noble](https://github.com/Noble-N9) | Photon Fire and Rescue, various components |
-| GermanDude | Photon vehicles |
+| [GermanDude](https://github.com/GermanDude-ger) | Photon vehicles |
 | [Super Mighty](https://github.com/SuperMighty1) | Photon vehicles & components. |
 | [creator_2013](https://github.com/creator2013) | Photon Engine code & Components & Vehicles |
 | [Joshua Piper](https://github.com/JoshPiper) | Photon Engine code, Discord Bot, external services & security.
@@ -33,7 +33,7 @@ The Core Development team currently contains 6 people.
 
 | Name | Role |
 | --- | --- |
-| SGM | Vehicle Creator |
+| [SGM](https://github.com/SentryGunMan) | Vehicle Creator |
 | Deputy.Jones | Vehicle Creator |
 | goigle | Photon Core code |
 | TDM | Vehicle Creator|
@@ -45,7 +45,9 @@ The Core Development team currently contains 6 people.
 | DatedGore | [Various](https://github.com/photonle/Photon/pulls?q=is%3Apr+is%3Amerged+author%3ADatedGore) |
 | Officer Pringle | [Touchmaster Delta Phaser](https://github.com/photonle/Photon/pull/63) |
 | Nardoras | Tinted Whelen Legacy |
-| DBotThePony | [DHTML Creation Delay](https://github.com/photonle/Photon/pull/129)
+| DBotThePony | [DHTML Creation Delay](https://github.com/photonle/Photon/pull/129) |
+| jooiiee | [Various](https://github.com/photonle/Photon/pulls?q=is%3Apr+is%3Amerged+author%3Ajooiiee) |
+| djtb2924 | [Clientside Errors](https://github.com/photonle/Photon/pull/166) |
 
 ### Other
 
