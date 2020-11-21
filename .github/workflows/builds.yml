@@ -7,31 +7,35 @@ jobs:
   gma:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v1
-      -
-        name: Install PHP
+      - name: Install PHP
         uses: shivammathur/setup-php@master
         with:
           php-version: '7.3'
           coverage: none
-      -
-        name: Install Dependencies
-        run: composer install -d .github/builder
-      -
-        name: Build
-        run: php .github/builder/build.php
-      -
-        name: Upload
-        uses: actions/upload-artifact@v1.0.0
-        with:
-          name: photonle.gma
-          path: .github/builder/photonle.gma
-      -
-        name: Update
+      - name: Install Dependencies
+        run: composer install -d .github/builder/gma
+      - name: Build
+        run: php .github/builder/gma/build.php
+      - name: Upload
         uses: skx/github-action-publish-binaries@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: '.github/builder/photonle.gma'
+          args: '.github/builder/gma/photonle.gma'
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: composer install -d
+      - name: Build
+        run: php .github/builder/update/build.php
+      - name: Upload
+        uses: skx/github-action-publish-binaries@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: '.github/builder/update/*.html'
