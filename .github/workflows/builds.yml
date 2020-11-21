@@ -30,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install Dependencies
-        run: composer install -d
+        run: composer install -d .github/builder/update
       - name: Build
         run: php .github/builder/update/build.php
       - name: Upload
