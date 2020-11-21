@@ -1,9 +1,5 @@
 {
     "require": {
-        "gmodstore/php-gmad": "1.1.1-rc"
-    },
-    "repositories": [{
-        "type": "git",
-        "url": "https://github.com/photonle/php-gmad.git"
-    }]
+        "gmodstore/php-gmad": "dev-master"
+    }
 }
