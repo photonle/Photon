@@ -1,18 +1,24 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "09a7f5bdd0ce26c0dc640c1c4dc1e549",
+    "content-hash": "61193fa7d6afa168f479dbc95c4bac29",
     "packages": [
         {
             "name": "gmodstore/php-gmad",
-            "version": "1.1.1-rc",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/photonle/php-gmad.git",
-                "reference": "42a7e0cf56c4709436d9508a42dde42f2980bffc"
+                "url": "https://github.com/everyday-as/php-gmad.git",
+                "reference": "f9c14b4a7187d47eedb6917183c565c5ba819c42"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/everyday-as/php-gmad/zipball/f9c14b4a7187d47eedb6917183c565c5ba819c42",
+                "reference": "f9c14b4a7187d47eedb6917183c565c5ba819c42",
+                "shasum": ""
             },
             "require": {
                 "mdurrant/php-binary-reader": "~1.0",
@@ -27,6 +33,7 @@
                     "GmodStore\\GMad\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -37,7 +44,7 @@
                 }
             ],
             "description": "package / unpackage garry's mod gma files",
-            "time": "2019-11-12T23:39:22+00:00"
+            "time": "2019-11-13T09:23:36+00:00"
         },
         {
             "name": "mdurrant/php-binary-reader",
@@ -92,7 +99,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "gmodstore/php-gmad": 5
+        "gmodstore/php-gmad": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

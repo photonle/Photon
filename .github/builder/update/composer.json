@@ -1,0 +1,16 @@
+{
+    "name": "photonle/update-builder",
+    "description": "A builder to build photon menu files from github releases.",
+    "type": "project",
+    "require": {
+        "symfony/yaml": "^5.1"
+    },
+    "license": "ISC",
+    "authors": [
+        {
+            "name": "John Internet",
+            "email": "photon-updates@doctor-internet.dev"
+        }
+    ],
+    "minimum-stability": "stable"
+}
