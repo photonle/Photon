@@ -8,7 +8,7 @@
 	},
 	"powers": {
 		"word": 3,
-		"class": 1,
+		"class": 100,
 		"category": 2
 	},
 	"words": {
