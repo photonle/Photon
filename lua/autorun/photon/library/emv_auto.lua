@@ -63,9 +63,7 @@ iter = 0
 changed = nil
 while changed ~= 0 do
 	changed = 0
-	iter = iter + 1
-	print(("iteration %s"):format(iter))
-	for name, component in pairs(EMVU.Auto) do
+	for name, component in SortedPairsByMemberValue(EMVU.Auto, "Name") do
 		local errored = false
 		if not errored and not component.Modes then
 			errored = true
