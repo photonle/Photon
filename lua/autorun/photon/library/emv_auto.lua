@@ -32,12 +32,9 @@ local autoFiles = file.Find( "autorun/photon/library/auto/*", "LUA" )
 for _,_file in pairs( autoFiles ) do
 	include( "auto/" .. _file )
 end
-local iter = 0
 local changed, unchanged
 while changed ~= 0 do
 	changed, unchanged = 0, 0
-	iter = iter + 1
-	print(("iteration %s"):format(iter))
 	for name, component in pairs(EMVU.AutoStaging) do
 		print(("\t%s => %s"):format(component.Base, name))
 		if EMVU.Auto[component.Base] then
@@ -82,7 +79,6 @@ while changed ~= 0 do
 		if not errored and component.BaseClass and component.Deprecated then
 			local root = component
 			while root.BaseClass and root.BaseClass.Deprecated and root.Deprecated == root.BaseClass.Deprecated do
-				print(("decending chain %s"):format(root.Name))
 				root = root.BaseClass
 			end
 			PhotonWarning(("Component %s is based on a deprecated component (%s)"):format(name, root.Name))
