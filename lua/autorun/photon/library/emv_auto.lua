@@ -86,7 +86,7 @@ while found ~= lastFound do
 
 		if not errored and component.BaseClass and component.Deprecated then
 			local root = component
-			while root.BaseClass and root.BaseClass.Deprecated do
+			while root.BaseClass and root.BaseClass.Deprecated and root.Deprecated == root.BaseClass.Deprecated do
 				print(("decending chain %s"):format(root.Name))
 				root = root.BaseClass
 			end
