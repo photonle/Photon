@@ -1,6 +1,7 @@
 AddCSLuaFile()
 
 if not EMVU.Auto then EMVU.Auto = {} end
+if not EMVU.AutoStaging then EMVU.AutoStaging = {} end
 if not EMVU.AutoIndex then EMVU.AutoIndex = {} end
 
 
