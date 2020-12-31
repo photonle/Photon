@@ -60,6 +60,45 @@ if found ~= 0 then
 	end
 end
 
+EMVU.AutoStaging = {}
+found = -1
+lastFound = 0
+iter = 1
+while found ~= lastFound do
+	lastFound = found
+	found = 0
+	print(("iteration %s"):format(iter))
+	for name, component in pairs(EMVU.Auto) do
+		local errored = false
+		if not errored and not component.Modes then
+			errored = true
+			EMVU.Auto[name] = nil
+			EMVU.AutoStaging[name] = true
+			PhotonError(("Component %s is missing its Modes field."):format(name))
+		end
+
+		if not errored and component.BaseClass and EMVU.AutoStaging[component.BaseClass.Name] then
+			errored = true
+			EMVU.Auto[name] = nil
+			EMVU.AutoStaging[name] = true
+			PhotonError(("Component %s's BaseClass %s failed to load."):format(name, component.BaseClass.Name))
+		end
+
+		if not errored and component.BaseClass and component.Deprecated then
+			local root = component
+			while root.BaseClass and root.BaseClass.Deprecated do
+				print(("decending chain %s"):format(root.Name))
+				root = root.BaseClass
+			end
+			PhotonWarning(("Component %s is based on a deprecated component (%s)"):format(name, root.Name))
+		end
+
+		if errored then
+			found = found + 1
+		end
+	end
+end
+EMVU.AutoStaging = nil
 
 function EMVU:PrecacheAutoModels()
 	for id,prop in pairs( EMVU.Auto ) do
