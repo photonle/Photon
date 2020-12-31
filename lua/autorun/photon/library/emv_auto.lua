@@ -20,7 +20,13 @@ function EMVU:AddAutoComponent(component, name, base)
 		end
 	end
 
-	EMVU.Auto[name] = component
+	if not base then
+		EMVU.Auto[name] = component
+	elseif EMVU.Auto[base] then
+		EMVU.Auto[name] = table.Inherit(component, EMVU.Auto[base])
+	else
+		EMVU.AutoStaging[name] = {base, component}
+	end
 end
 
 local autoFiles = file.Find( "autorun/photon/library/auto/*", "LUA" )
