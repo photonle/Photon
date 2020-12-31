@@ -32,27 +32,25 @@ local autoFiles = file.Find( "autorun/photon/library/auto/*", "LUA" )
 for _,_file in pairs( autoFiles ) do
 	include( "auto/" .. _file )
 end
-local lastFound = -1
-local found = 0
 local iter = 0
-while found ~= lastFound do
+local changed, unchanged
+while changed ~= 0 do
+	chanaged, unchanged = 0, 0
 	iter = iter + 1
-	lastFound = found
-	found = 0
-
 	print(("iteration %s"):format(iter))
 	for name, component in pairs(EMVU.AutoStaging) do
-		found = found + 1
-
 		print(("\t%s => %s"):format(component.Base, name))
 		if EMVU.Auto[component.Base] then
 			print(("installed %s as auto, based on %s"):format(name, component.Base))
 			EMVU.Auto[name] = table.Inherit(component, EMVU.Auto[component.Base])
 			EMVU.AutoStaging[name] = nil
+			changed = changed + 1
+		else
+			unchanged = unchanged + 1
 		end
 	end
 end
-if found ~= 0 then
+if unchanged ~= 0 then
 	PhotonWarning("Attempted to load inherited components, but the base component wasn't loaded!")
 	for name, data in pairs(EMVU.AutoStaging) do
 		local base, _ = unpack(data)
@@ -61,12 +59,11 @@ if found ~= 0 then
 end
 
 EMVU.AutoStaging = {}
-found = -1
-lastFound = 0
-iter = 1
-while found ~= lastFound do
-	lastFound = found
-	found = 0
+iter = 0
+changed = 0
+while changed ~= 0 do
+	chanaged = 0
+	iter = iter + 1
 	print(("iteration %s"):format(iter))
 	for name, component in pairs(EMVU.Auto) do
 		local errored = false
@@ -94,7 +91,7 @@ while found ~= lastFound do
 		end
 
 		if errored then
-			found = found + 1
+			changed = changed + 1
 		end
 	end
 end
