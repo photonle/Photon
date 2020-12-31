@@ -35,7 +35,7 @@ end
 local iter = 0
 local changed, unchanged
 while changed ~= 0 do
-	chanaged, unchanged = 0, 0
+	changed, unchanged = 0, 0
 	iter = iter + 1
 	print(("iteration %s"):format(iter))
 	for name, component in pairs(EMVU.AutoStaging) do
