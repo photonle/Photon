@@ -62,7 +62,7 @@ EMVU.AutoStaging = {}
 iter = 0
 changed = nil
 while changed ~= 0 do
-	chanaged = 0
+	changed = 0
 	iter = iter + 1
 	print(("iteration %s"):format(iter))
 	for name, component in pairs(EMVU.Auto) do
