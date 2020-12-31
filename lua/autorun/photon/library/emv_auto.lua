@@ -6,12 +6,8 @@ if not EMVU.AutoIndex then EMVU.AutoIndex = {} end
 
 
 function EMVU:AddAutoComponent(component, name, base)
-	base = base or component.Base
-
-	if not component.Modes then
-		ErrorNoHalt(Format("[PHOTON] Component %s is missing its Modes field.\n", name))
-		return
-	end
+	component.Name = name
+	component.Base = component.Base or base or nil
 
 	if component.Deprecated then
 		PhotonWarning(Format("Component %s is deprecated and may be removed in a future version.", name))
@@ -20,12 +16,12 @@ function EMVU:AddAutoComponent(component, name, base)
 		end
 	end
 
-	if not base then
+	if not component.Base then
 		EMVU.Auto[name] = component
-	elseif EMVU.Auto[base] then
-		EMVU.Auto[name] = table.Inherit(component, EMVU.Auto[base])
+	elseif EMVU.Auto[component.Base] then
+		EMVU.Auto[name] = table.Inherit(component, EMVU.Auto[component.Base])
 	else
-		EMVU.AutoStaging[name] = {base, component}
+		EMVU.AutoStaging[name] = component
 	end
 end
 
@@ -42,13 +38,12 @@ while found ~= lastFound do
 	found = 0
 
 	print(("iteration %s"):format(iter))
-	for name, data in pairs(EMVU.AutoStaging) do
+	for name, component in pairs(EMVU.AutoStaging) do
 		found = found + 1
 
-		local base, component = unpack(data)
-		print(("\t%s => %s"):format(base, name))
-		if EMVU.Auto[base] then
-			EMVU.Auto[name] = table.Inherit(component, EMVU.Auto[base])
+		print(("\t%s => %s"):format(component.Base, name))
+		if EMVU.Auto[component.Base] then
+			EMVU.Auto[name] = table.Inherit(component, EMVU.Auto[component.Base])
 			EMVU.AutoStaging[name] = nil
 		end
 	end
