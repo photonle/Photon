@@ -56,7 +56,7 @@ if unchanged ~= 0 then
 end
 
 EMVU.AutoStaging = {}
-iter = 0
+local deprecated = {}
 changed = nil
 while changed ~= 0 do
 	changed = 0
@@ -76,12 +76,13 @@ while changed ~= 0 do
 			PhotonError(("Component %s's BaseClass %s failed to load."):format(name, component.BaseClass.Name))
 		end
 
-		if not errored and component.BaseClass and component.Deprecated then
+		if not errored and component.BaseClass and component.Deprecated and not deprecated[name] then
 			local root = component
 			while root.BaseClass and root.BaseClass.Deprecated and root.Deprecated == root.BaseClass.Deprecated do
 				root = root.BaseClass
 			end
 			PhotonWarning(("Component %s is based on a deprecated component (%s)"):format(name, root.Name))
+			deprecated[name] = true
 		end
 
 		if errored then
