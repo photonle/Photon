@@ -60,7 +60,7 @@ end
 
 EMVU.AutoStaging = {}
 iter = 0
-changed = 0
+changed = nil
 while changed ~= 0 do
 	chanaged = 0
 	iter = iter + 1
