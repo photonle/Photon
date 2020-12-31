@@ -17,13 +17,10 @@ function EMVU:AddAutoComponent(component, name, base)
 	end
 
 	if not component.Base then
-		print(("installed %s as auto"):format(name))
 		EMVU.Auto[name] = component
 	elseif EMVU.Auto[component.Base] then
-		print(("installed %s as auto, based on %s"):format(name, component.Base))
 		EMVU.Auto[name] = table.Inherit(component, EMVU.Auto[component.Base])
 	else
-		print(("deferred %s, %s not yet installed"):format(name, component.Base))
 		EMVU.AutoStaging[name] = component
 	end
 end
@@ -36,9 +33,7 @@ local changed, unchanged
 while changed ~= 0 do
 	changed, unchanged = 0, 0
 	for name, component in pairs(EMVU.AutoStaging) do
-		print(("\t%s => %s"):format(component.Base, name))
 		if EMVU.Auto[component.Base] then
-			print(("installed %s as auto, based on %s"):format(name, component.Base))
 			EMVU.Auto[name] = table.Inherit(component, EMVU.Auto[component.Base])
 			EMVU.AutoStaging[name] = nil
 			changed = changed + 1
