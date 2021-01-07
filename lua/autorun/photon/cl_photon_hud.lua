@@ -351,10 +351,14 @@ end
 
 function PhotonHUD:UpdateState()
 	local newData = PhotonHUD:GetCurrentState()
+
 	if not newData then PhotonHUD.ShouldDraw = false; return end
 	if not PhotonHUD.Data then PhotonHUD.Data = newData; PhotonHUD:Reset( PhotonHUD.Data ) end
 	if PhotonHUD.ShouldDraw == false then PhotonHUD.ShouldDraw = true; PhotonHUD:Reset( newData ) return end
+
 	local oldData = PhotonHUD.Data
+	PhotonHUD.Data = newData
+
 	if istable( newData.PrimaryLights ) then
 		if newData.PrimaryLights.Enabled != oldData.PrimaryLights.Enabled then
 			PhotonHUD.Panel:RunJavascript( "photonUI.setPrimary(" .. tostring( newData.PrimaryLights.Enabled ) .. ");" )
@@ -363,6 +367,7 @@ function PhotonHUD:UpdateState()
 			PhotonHUD.Panel:RunJavascript( "photonUI.setActivePrimary(" .. tostring( newData.PrimaryLights.SelectedIndex ) .. ", '" .. tostring( newData.PrimaryLights.Name ) .. "')")
 		end
 	end
+
 	if istable( newData.AuxLights ) then
 		if not oldData.AuxLights then PhotonHUD:Reset( newData ) return end
 		if newData.AuxLights.Enabled != oldData.AuxLights.Enabled then
@@ -372,6 +377,7 @@ function PhotonHUD:UpdateState()
 			PhotonHUD.Panel:RunJavascript( "photonUI.setActiveAux(" .. tostring( newData.AuxLights.SelectedIndex ) .. ", '" .. tostring( newData.AuxLights.Name ) .. "')")
 		end
 	end
+
 	if istable( newData.Siren ) then
 		if not oldData.Siren then PhotonHUD:Reset( newData ) return end
 		if oldData.Siren.Name != newData.Siren.Name or oldData.Siren.Category != newData.Siren.Category then PhotonHUD:Reset( newData ); return end
@@ -383,6 +389,7 @@ function PhotonHUD:UpdateState()
 	else
 		PhotonHUD:Reset(newData)
 	end
+
 	if istable( newData.Illumination ) then
 		if not oldData.Illumination then PhotonHUD:Reset( newData ) return end
 		if oldData.Illumination.Enabled != newData.Illumination.Enabled or oldData.Illumination.Active != newData.Illumination.Active then
@@ -391,8 +398,9 @@ function PhotonHUD:UpdateState()
 			PhotonHUD.Panel:RunJavascript( "photonUI.updateButtonExclusive('illumination'," .. newData.Illumination.Active .. ", " .. state .. ");" )
 		end
 	end
+
 	if istable( newData.Functions ) then
-		for i=1,#oldData.Functions do
+		for i = 1, #oldData.Functions do
 			local newButton = newData.Functions[i]
 			local oldButton = oldData.Functions[i]
 			if newButton.State != oldButton.State then
@@ -400,7 +408,6 @@ function PhotonHUD:UpdateState()
 			end
 		end
 	end
-	PhotonHUD.Data = newData
 end
 
 function PhotonHUD:Reset( data )
@@ -442,7 +449,7 @@ function PhotonHUD:GetCurrentState()
 			data.Siren.Active = activeSiren
 			data.Siren.Enabled = sirenOn
 			data.Siren.SirenTable = {}
-			for i=1,#EMVU.GetSirenTable()[sirenOption]["Set"] do
+			for i = 1, #EMVU.GetSirenTable()[sirenOption]["Set"] do
 				local useState = 0
 				if activeSiren == i then
 					useState = 1
@@ -486,7 +493,7 @@ function PhotonHUD:GetCurrentState()
 			data.Illumination.Active = activeOption
 			data.Illumination.Enabled = isOn
 			data.Illumination.LightTable = {}
-			for i=1,#EMVU.Sequences[name]["Illumination"] do
+			for i = 1, #EMVU.Sequences[name]["Illumination"] do
 				local useState = 0
 				if activeOption == i then
 					useState = 1
@@ -514,22 +521,22 @@ function PhotonHUD:ResetLayout( primary, auxiliary, sirens, illum, funcs )
 		local index = primary.SelectedIndex
 		local name = primary.Name
 		local enabled = primary.Enabled
-		PhotonHUD.Panel:RunJavascript( "photonUI.setupPrimaryLights(" .. tostring( max ) .. ", " .. tostring( index ) .. ", '" .. tostring( name ) .. "', " .. tostring( enabled ) ..");" )
+		PhotonHUD.Panel:RunJavascript( "photonUI.setupPrimaryLights(" .. tostring( max ) .. ", " .. tostring( index ) .. ", '" .. tostring( name ) .. "', " .. tostring( enabled ) .. ");" )
 	end
 	if istable( auxiliary ) then
 		local max = auxiliary.Max
 		local index = auxiliary.SelectedIndex
 		local name = auxiliary.Name
 		local enabled = auxiliary.Enabled
-		PhotonHUD.Panel:RunJavascript( "photonUI.setupAuxLights(" .. tostring( max ) .. ", " .. tostring( index ) .. ", '" .. tostring( name ) .. "', " .. tostring( enabled ) ..");" )
+		PhotonHUD.Panel:RunJavascript( "photonUI.setupAuxLights(" .. tostring( max ) .. ", " .. tostring( index ) .. ", '" .. tostring( name ) .. "', " .. tostring( enabled ) .. ");" )
 	end
 	if istable( sirens ) then
 		local sirenTable = sirens.SirenTable
 		PhotonHUD.Panel:RunJavascript( "photonUI.addSection('siren');" )
 		PhotonHUD.Panel:RunJavascript( "photonUI.updateSirenModel('" .. tostring( sirens.Model ) .. "', '" .. tostring( sirens.Name ) .. "');" )
-		for i=1,#sirenTable do
+		for i = 1, #sirenTable do
 			local siren = sirenTable[i]
-			PhotonHUD.Panel:RunJavascript( "photonUI.addButton('siren', '" .. siren.Icon .. "', '" .. siren.Name .. "', " .. i .. ", " .. siren.State ..");" )
+			PhotonHUD.Panel:RunJavascript( "photonUI.addButton('siren', '" .. siren.Icon .. "', '" .. siren.Name .. "', " .. i .. ", " .. siren.State .. ");" )
 		end
 	else
 		PhotonHUD.Panel:RunJavascript( "photonUI.updateSirenModel('', '');" )
@@ -537,7 +544,7 @@ function PhotonHUD:ResetLayout( primary, auxiliary, sirens, illum, funcs )
 	if istable( illum ) then
 		local illumTable = illum.LightTable
 		PhotonHUD.Panel:RunJavascript( "photonUI.addSection('illumination');" )
-		for i=1,#illumTable do
+		for i = 1, #illumTable do
 			local light = illumTable[i]
 			if not light.Icon then
 				local tryName = PhotonHUD:TranslateLegacyIllum( tostring( light.Name ) )
@@ -545,14 +552,14 @@ function PhotonHUD:ResetLayout( primary, auxiliary, sirens, illum, funcs )
 				light.Name = tryName
 				light.Icon = tryIcon
 			end
-			PhotonHUD.Panel:RunJavascript( "photonUI.addButton('illumination', '" .. tostring(light.Icon) .. "', '" .. light.Name .. "', " .. i .. ", " .. light.State ..");" )
+			PhotonHUD.Panel:RunJavascript( "photonUI.addButton('illumination', '" .. tostring(light.Icon) .. "', '" .. light.Name .. "', " .. i .. ", " .. light.State .. ");" )
 		end
 	end
 	if istable( funcs ) then
 		PhotonHUD.Panel:RunJavascript( "photonUI.addSection('functions');" )
-		for i=1,#funcs do
+		for i = 1,#funcs do
 			local func = funcs[i]
-			PhotonHUD.Panel:RunJavascript( "photonUI.addButton('functions', '" .. func.Icon .. "', '" .. func.Name .. "', " .. i .. ", " .. func.State ..");" )
+			PhotonHUD.Panel:RunJavascript( "photonUI.addButton('functions', '" .. func.Icon .. "', '" .. func.Name .. "', " .. i .. ", " .. func.State .. ");" )
 		end
 	end
 
@@ -621,14 +628,14 @@ local digitPos = {
 			[3] = 33,
 		},
 	[2] = {
-			[1] = 62+64,
-			[2] = 47+64,
-			[3] = 33+64,
+			[1] = 62 + 64,
+			[2] = 47 + 64,
+			[3] = 33 + 64,
 		},
 	[3] = {
-		[1] = 62+128,
-		[2] = 47+128,
-		[3] = 33+128,
+		[1] = 62 + 128,
+		[2] = 47 + 128,
+		[3] = 33 + 128,
 	}
 }
 
@@ -644,7 +651,7 @@ local function drawDigits( node, num )
 	local digits = string.Split( string.reverse(tostring( num )), '' )
 	local x = ( scrW / 2 ) - 128
 	setDrawColor( nodeColors[node] )
-	for i=1,#digits do
+	for i = 1, #digits do
 		local digit = tostring(digits[i])
 		if digitMaterials[digit] then
 			setMaterial( digitMaterials[digit] )
