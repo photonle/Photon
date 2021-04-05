@@ -44,7 +44,7 @@ function EMVU.Helper.GetAlertSequence( name, vehicle )
 
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Alert"]["Selection_Components"]) then
 		local selComp = EMVU.Sequences[name]["Alert"]["Selection_Components"]
-		for i=1,#selComp do
+		for i = 1, #selComp do
 			-- PrintTable(selComp)
 			local currentOption = vehicle:Photon_SelectionOption( i )
 			if istable( selComp[i] ) then
@@ -94,7 +94,7 @@ function EMVU.Helper.GetParkSequence( name, vehicle, resultTable )
 
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Park"]["Selection_Components"]) then
 		local selComp = EMVU.Sequences[name]["Park"]["Selection_Components"]
-		for i=1,#selComp do
+		for i = 1, #selComp do
 			local currentOption = vehicle:Photon_SelectionOption( i )
 			if istable( selComp[i] ) then
 				local ptable = selComp[i][currentOption]
@@ -144,7 +144,7 @@ function EMVU.Helper.GetBrakeSequence( name, vehicle, resultTable )
 
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Braking"]["Selection_Components"]) then
 		local selComp = EMVU.Sequences[name]["Braking"]["Selection_Components"]
-		for i=1,#selComp do
+		for i = 1, #selComp do
 			local currentOption = vehicle:Photon_SelectionOption( i )
 			if istable( selComp[i] ) then
 				local ptable = selComp[i][currentOption]
@@ -194,7 +194,7 @@ function EMVU.Helper.GetReverseSequence( name, vehicle, resultTable )
 
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Reverse"]["Selection_Components"]) then
 		local selComp = EMVU.Sequences[name]["Reverse"]["Selection_Components"]
-		for i=1,#selComp do
+		for i = 1, #selComp do
 			local currentOption = vehicle:Photon_SelectionOption( i )
 			if istable( selComp[i] ) then
 				local ptable = selComp[i][currentOption]
@@ -532,36 +532,34 @@ function EMVU.Helper:GetProps( name, ent )
 			end
 		end
 	end
-	if ent:Photon_SelectionEnabled() then
-		if istable( EMVU.Selections[ name ] ) then
-			for index,category in pairs( EMVU.Selections[ name ] ) do
-				local selected = ent:Photon_SelectionOption( index )
-				if istable( category.Options[selected] ) then
-					if category.Options[selected].Auto then
-						for _,id in pairs( category.Options[selected].Auto ) do
-							local component = EMVU.AutoIndex[ name ][ id ]
-							if not component then Error( "[Photon] No component (" .. tostring( id ) .. ") found under vehicle (" .. tostring( name ) .. ")" ) end
-							local autoData = EMVU.Auto[ component[ "ID" ] ]
-							local propData = EMVU.Helper:GetAutoModel( component[ "ID" ] )
-							if not propData.Model then continue end
-							propData.Pos = component.Pos
-							propData.Ang = component.Ang
-							propData.Scale = component.Scale
-							propData.BodyGroups = component.BodyGroups or propData.BodyGroups
-							propData.SubMaterials = component.SubMaterials or propData.SubMaterials
-							propData.AutoIndex = id
-							propData.ComponentName = component[ "ID" ]
-							if autoData.RotationEnabled then
-								propData.PhotonRotationEnabled = true
-								propData.PhotonBoneAnimationData = autoData.BoneOperations
-							end
-							results[ #results + 1 ] = propData
+	if ent:Photon_SelectionEnabled() and istable( EMVU.Selections[ name ] ) then
+		for index,category in pairs( EMVU.Selections[ name ] ) do
+			local selected = ent:Photon_SelectionOption( index )
+			if istable( category.Options[selected] ) then
+				if category.Options[selected].Auto then
+					for _,id in pairs( category.Options[selected].Auto ) do
+						local component = EMVU.AutoIndex[ name ][ id ]
+						if not component then Error( "[Photon] No component (" .. tostring( id ) .. ") found under vehicle (" .. tostring( name ) .. ")" ) end
+						local autoData = EMVU.Auto[ component[ "ID" ] ]
+						local propData = EMVU.Helper:GetAutoModel( component[ "ID" ] )
+						if not propData.Model then continue end
+						propData.Pos = component.Pos
+						propData.Ang = component.Ang
+						propData.Scale = component.Scale
+						propData.BodyGroups = component.BodyGroups or propData.BodyGroups
+						propData.SubMaterials = component.SubMaterials or propData.SubMaterials
+						propData.AutoIndex = id
+						propData.ComponentName = component[ "ID" ]
+						if autoData.RotationEnabled then
+							propData.PhotonRotationEnabled = true
+							propData.PhotonBoneAnimationData = autoData.BoneOperations
 						end
+						results[ #results + 1 ] = propData
 					end
-					if category.Options[selected].Props then
-						for _,id in pairs( category.Options[selected].Props ) do
-							results[ #results + 1 ] = EMVU.Props[ name ][ id ]
-						end
+				end
+				if category.Options[selected].Props then
+					for _,id in pairs( category.Options[selected].Props ) do
+						results[ #results + 1 ] = EMVU.Props[ name ][ id ]
 					end
 				end
 			end
