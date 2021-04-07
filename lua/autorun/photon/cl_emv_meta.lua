@@ -396,14 +396,12 @@ function EMVU:MakeEMV( emv, name )
 
 		if self.Photon_DisconnectLight then
 			local disconnect = self:Photon_GetELOverride()
-			if self:Photon_Lights() then
-				if disconnect then
-					for k,v in pairs(disconnect) do
-						if self.Photon_DisconnectLight then
-							self:Photon_DisconnectLight( v )
-						end
-
+			if self:Photon_Lights() and disconnect then
+				for k,v in pairs(disconnect) do
+					if self.Photon_DisconnectLight then
+						self:Photon_DisconnectLight( v )
 					end
+
 				end
 			end
 		end
