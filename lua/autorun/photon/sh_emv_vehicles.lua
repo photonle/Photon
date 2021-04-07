@@ -798,7 +798,7 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 		-- added to recyle position data and avoid excessive RAM usage
 		local offset
 
-		if PHOTON_HASHCOMPONENTS then
+		if PHOTON_HASHCOMPONENTS and not component.RotationEnabled then
 			local firstPosData = component.Positions[ 1 ]
 			local lastPosData = component.Positions[ #component.Positions ]
 			local componentHash = hashPosition( firstPosData, lastPosData, autoPos, autoAng ) -- hash first and last values to determine if the offset can be recycled
@@ -812,8 +812,6 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 			offset = #EMVU.Positions[ name ]
 		end
 
-
-		-- local offset = #EMVU.Positions[ name ] -- count of current meta values
 
 		for id=1,#component.Positions do
 			local posData = component.Positions[ id ]
