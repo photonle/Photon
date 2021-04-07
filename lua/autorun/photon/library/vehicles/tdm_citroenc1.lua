@@ -1,11 +1,6 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local DA = "D_AMBER"
-local R = "RED"
 local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
 local SW = "S_WHITE"
 
 local PI = {}
@@ -46,7 +41,7 @@ PI.Meta = {
 }
 
 PI.Positions = {
-	
+
 	[1] = { Vector( -27, 68.03, 38.4 ), Angle( 28.4, 36.6, 39.7 ), "headlight" },
 	[2] = { Vector( 27.6, 68.03, 38.4 ), Angle( -28.4, -36.6, 39.7 ), "headlight" },
 
@@ -66,7 +61,7 @@ PI.Positions = {
 PI.States = {}
 
 PI.States.Headlights = { -- NOT YET IMPLEMENTED
-	
+
 }
 
 PI.States.Brakes = {

@@ -1,14 +1,7 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
 local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "FPIS13 Reverse"
 
@@ -55,7 +48,7 @@ COMPONENT.Patterns = {
 	["auto_fpis13_reverse"] = {
 		["code1"] = { 1 },
 		["code2"] = { 2, 0, 2, 0, 2, 2, 2, 2, 0, 3, 0, 3, 0, 3, 3, 3, 3, 0 },
-		["code3"] = { 
+		["code3"] = {
 			2, 0, 2, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 3, 0, 3, 0,

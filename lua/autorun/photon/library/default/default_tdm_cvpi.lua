@@ -7,7 +7,6 @@ local R = "RED"
 local DR = "D_RED"
 local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
 local SW = "S_WHITE"
 
 local EMV = {}
@@ -20,8 +19,6 @@ EMV.Skin = 0
 EMV.BodyGroups = {}
 
 EMV.Props = {}
-
-local height = 76.4
 
 local alphaOffset = 10
 local betaOffset = -10
@@ -675,7 +672,7 @@ EMV.Sections = {
 	["lightbar_halogen_rotators"] = {
 		{ { 49, "BLUE_HALOGEN" }, { 50, "RED_HALOGEN" }, { 51, "BLUE_HALOGEN" }, { 52, "RED_HALOGEN" }, { 53, "BLUE_HALOGEN" }, { 54, "RED_HALOGEN" }, { 55, "BLUE_HALOGEN" }, { 56, "RED_HALOGEN" }, { 65, SW }, { 66, SW }, { 67, SW }, { 68, SW } }
 	},
-	["lightbar_halogen_takedowns"] ={
+	["lightbar_halogen_takedowns"] = {
 		{ { 45, SW, { 10, 0, 0 } }, { 46, SW, { 10, 0, 0 } }, { 63, SW, { 10, 0, 0 } }, { 64, SW, { 10, 0, 0 } } }
 	},
 
@@ -1025,7 +1022,7 @@ EMV.Patterns = { -- 0 = blank
 	["lightbar_halogen_rotators"] = {
 		["code3"] = { 1 }
 	},
-	["lightbar_halogen_takedowns"] ={
+	["lightbar_halogen_takedowns"] = {
 		["code3"] = { 1 }
 	},
 

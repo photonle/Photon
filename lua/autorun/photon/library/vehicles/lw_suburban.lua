@@ -1,11 +1,7 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local DA = "D_AMBER"
-local R = "RED"
 local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
 local SW = "S_WHITE"
 
 local PI = {}
@@ -86,9 +82,9 @@ PI.Positions = {
 
 	 [3] = { Vector( -40, -124.8, 53.1 ), Angle( 0,-21,-2 ), "reverse_lights" },
 	 [4] = { Vector( 40, -124.8, 53.1 ), Angle( 0,21, -2 ), "reverse_lights" },
-	 
+
 	 [5] = { Vector( 0, -120.4, 86.1 ), Angle( 0,0,-30 ), "brake_src" },
-	 
+
 	 [6] = { Vector( -1, -120.4, 86.1 ), Angle( 0,0,-35 ), "brake_led" },
 	 [7] = { Vector( 1, -120.4, 86.1 ), Angle( 0,0,-35 ), "brake_led" },
 
@@ -118,11 +114,11 @@ PI.Positions = {
 PI.States = {}
 
 PI.States.Headlights = { -- NOT YET IMPLEMENTED
-	
+
 }
 
 PI.States.Brakes = {
-	{ 1, DR, 1 }, { 2, DR, 1 }, 
+	{ 1, DR, 1 }, { 2, DR, 1 },
 	{ 5, DR, .5 },
 	{ 6, DR, 1 }, { 7, DR, 1 }, { 8, DR, 1 }, { 9, DR, 1 }, { 10, DR, 1 }, { 11, DR, 1 }, { 12, DR, 1 }, { 13, DR, 1 },
 }
@@ -140,8 +136,8 @@ PI.States.Reverse = {
 }
 
 PI.States.Running = {
-	{ 14, SW, 1 }, { 15, SW, 1 }, 
-	{ 16, A, 1 }, { 17, A, 1 }, 
+	{ 14, SW, 1 }, { 15, SW, 1 },
+	{ 16, A, 1 }, { 17, A, 1 },
 	{ 1, DR, .25 }, { 2, DR, .25 },
 	{ 18, DR, .25 }, { 19, DR, .25 }
 }

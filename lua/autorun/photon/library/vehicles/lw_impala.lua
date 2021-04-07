@@ -2,11 +2,7 @@ AddCSLuaFile()
 EMV_DEBUG = false
 
 local A = "AMBER"
-local DA = "D_AMBER"
-local R = "RED"
 local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
 local SW = "S_WHITE"
 
 local PI = {}
@@ -138,7 +134,7 @@ PI.States.Reverse = {
 }
 
 PI.States.Running = {
-	{4, DR, .25}, {5, DR, .25}, {6, DR, .1}, {7, DR, .1}, {8, A, .9}, {9, A, .9}, {10, SW, 1}, {11, SW, 1}, 
+	{4, DR, .25}, {5, DR, .25}, {6, DR, .1}, {7, DR, .1}, {8, A, .9}, {9, A, .9}, {10, SW, 1}, {11, SW, 1},
 	{ "_main", "running" }
 }
 

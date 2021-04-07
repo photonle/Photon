@@ -1,15 +1,7 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
-local WA = "AMBER/WHITE"
 
 local name = "Federal Signal Vision SLR Clear"
 
@@ -65,7 +57,7 @@ COMPONENT.Meta = {
 		AngleOffset = 90,
 		W = 6.2,
 		H = 6,
-		Sprite = "sprites/emv/visionslr_rear", 
+		Sprite = "sprites/emv/visionslr_rear",
 		Scale = 1,
 		WMult = 2,
 	},
@@ -256,8 +248,8 @@ COMPONENT.Positions = {
 
 COMPONENT.Sections = {
 	["auto_fedsig_visionslr"] = {
-		[1] = { { 1, "_1" }, { 2, "_2" }, { 3, "_3" }, { 4, "_4" }, { 5, "_5" }, { 6, "_6" }, { 7, "_7" }, 
-			{ 8, "_1" }, { 9, "_2" }, { 10, "_3" }, { 11, "_4" }, { 12, "_5" }, { 13, "_6" }, { 14, "_7" },  
+		[1] = { { 1, "_1" }, { 2, "_2" }, { 3, "_3" }, { 4, "_4" }, { 5, "_5" }, { 6, "_6" }, { 7, "_7" },
+			{ 8, "_1" }, { 9, "_2" }, { 10, "_3" }, { 11, "_4" }, { 12, "_5" }, { 13, "_6" }, { 14, "_7" },
 		},
 		[2] = {
 			{ 5, "_5" }, { 12, "_5" }, { 6, "_6" }, { 13, "_6" }, { 7, "_7" }, { 14, "_7" }
@@ -308,7 +300,7 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 
 }
 

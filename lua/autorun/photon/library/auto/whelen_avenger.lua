@@ -1,14 +1,7 @@
 AddCSLuaFile()
 
-local A = "AMBER"
 local R = "RED"
-local DR = "D_RED"
 local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Whelen Avenger CHP"
 
@@ -58,7 +51,7 @@ COMPONENT.Patterns = {
 		["code1"] = { 1 }
 	},
 }
-		
+
 
 COMPONENT.Modes = {
 	Primary = {

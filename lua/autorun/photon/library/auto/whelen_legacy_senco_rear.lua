@@ -4,7 +4,6 @@ local A = "AMBER"
 local R = "RED"
 local B = "BLUE"
 local W = "WHITE"
-local G = "GREEN"
 
 local name = "Whelen Legacy SenCo Rear"
 

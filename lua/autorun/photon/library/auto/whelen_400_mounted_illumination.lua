@@ -1,14 +1,6 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Whelen 400 Mounted Illumination"
 
@@ -47,15 +39,15 @@ COMPONENT.Positions = {
 
 COMPONENT.Sections = {
 	["auto_light_dome"] = {
-		[1] = {  },	
+		[1] = {  },
 	},
 }
 
 COMPONENT.Patterns = {
 	["auto_light_dome"] = {
-        ["code1"] = { 1 },
-        ["code2"] = { 1 },
-        ["code3"] = { 1 },
+		["code1"] = { 1 },
+		["code2"] = { 1 },
+		["code3"] = { 1 },
 
 	}
 }

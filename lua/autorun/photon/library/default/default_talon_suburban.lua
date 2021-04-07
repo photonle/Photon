@@ -2,15 +2,6 @@ AddCSLuaFile()
 
 local name = "2015 Chevrolet Suburban"
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-
 local EMV = {}
 
 EMV.Siren = 46
@@ -50,15 +41,6 @@ EMV.Props = {
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
 	},
-	-- [3] = {
-	-- 	Model = "models/schmal/motorola_car_radio.mdl",
-	-- 	Scale = 1,
-	-- 	Skin = 1,
-	-- 	Pos = Vector(0, 31.2, 50),
-	-- 	Ang = Angle( 0, 180, -5),
-	-- 	RenderGroup = RENDERGROUP_OPAQUE,
-	-- 	RenderMode = RENDERMODE_NORMAL
-	-- },
 	[4] = {
 		Model = "models/schmal/laptop_stand.mdl",
 		Scale = .6,
@@ -132,7 +114,6 @@ EMV.Props = {
 	[13] = {
 		Model = "models/tdmcars/emergency/equipment/pushbar.mdl",
 		Scale = Vector( 1.4, 1.4, 1.6 ),
-		//Pos = Vector( 0, 119.5, 16 ),
 		Pos = Vector( 0, 144, 19 ),
 		Ang = Angle( 0, -90, 0),
 		RenderGroup = RENDERGROUP_TRANSLUCENT,
@@ -170,27 +151,9 @@ EMV.Props = {
 		RenderGroup = RENDERGROUP_OPAQUE,
 		RenderMode = RENDERMODE_NORMAL
 	},
-	-- [18] = {
-	-- 	Model = "models/schmal/fpiu_wrap.mdl",
-	-- 	Scale = 1,
-	-- 	Pos = Vector(32, 105, 32.6),
-	-- 	Ang = Angle( 0, 90, 0),
-	-- 	RenderGroup = RENDERGROUP_OPAQUE,
-	-- 	RenderMode = RENDERMODE_NORMAL
-	-- },
-	-- [19] = {
-	-- 	Model = "models/schmal/fpiu_wrap.mdl",
-	-- 	Scale = 1,
-	-- 	Pos = Vector(-32, 105, 32.6),
-	-- 	Ang = Angle( 0, 90, 180),
-	-- 	RenderGroup = RENDERGROUP_OPAQUE,
-	-- 	RenderMode = RENDERMODE_NORMAL
-	-- },
 	[20] = {
 		Model = "models/schmal/fpiu_airel.mdl",
 		Scale = 1,
-		//Pos = Vector(0, -64, 80.8),
-		// y: -26 z: +4.5
 		Pos = Vector(0, -90, 85.3),
 		Ang = Angle( 0, 90, 0),
 		RenderGroup = RENDERGROUP_OPAQUE,

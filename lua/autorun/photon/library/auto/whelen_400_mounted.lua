@@ -1,15 +1,5 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
-
 local name = "Whelen 400 Mounted"
 
 local COMPONENT = {}
@@ -20,7 +10,7 @@ COMPONENT.NotLegacy = true
 COMPONENT.UsePhases = true
 COMPONENT.Category = "Exterior"
 COMPONENT.DefaultColors = {
-    [1] = "BLUE"
+	[1] = "BLUE"
 }
 
 COMPONENT.Meta = {
@@ -54,17 +44,17 @@ COMPONENT.Sections = {
 
 COMPONENT.Patterns = {
 	["auto_light_dome"] = {
-        ["code1"] = { 1, 1, 1, 0, 0, 0 },
-        ["code2"] = { 1, 1, 0, 0 },
-        ["code3"] = { 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
+		["code1"] = { 1, 1, 1, 0, 0, 0 },
+		["code2"] = { 1, 1, 0, 0 },
+		["code3"] = { 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
 
-        ["code1A"] = { 0, 0, 0, 1, 1, 1 },
-        ["code2A"] = { 0, 0, 1, 1 },
-        ["code3A"] = { 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0 },
-        
-        ["code1B"] = { 1, 1, 1, 0, 0, 0 },
-        ["code2B"] = { 1, 1, 0, 0 },
-        ["code3B"] = { 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
+		["code1A"] = { 0, 0, 0, 1, 1, 1 },
+		["code2A"] = { 0, 0, 1, 1 },
+		["code3A"] = { 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0 },
+
+		["code1B"] = { 1, 1, 1, 0, 0, 0 },
+		["code2B"] = { 1, 1, 0, 0 },
+		["code3B"] = { 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
 	}
 }
 

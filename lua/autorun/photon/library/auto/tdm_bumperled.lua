@@ -1,15 +1,5 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
-
 local name = "TDM Pushbar LED"
 
 local COMPONENT = {}
@@ -74,7 +64,7 @@ COMPONENT.Sections = {
 
 COMPONENT.Patterns = {
 	["auto_tdm_pushbar"] = {
-		["code1"] = { 
+		["code1"] = {
 			2, 0, 2, 2, 2, 0, 0, 0, 3, 0, 3, 3, 3, 0, 0, 0,
 		},
 		["code2"] = {
@@ -119,12 +109,12 @@ COMPONENT.Patterns = {
 COMPONENT.Modes = {
 	Primary = {
 		M1 = { ["auto_tdm_pushbar"] = "code1", },
-		M2 = { 
+		M2 = {
 			["auto_tdm_pushbar_inner"] = "code2",
 			["auto_tdm_pushbar_mid"] = "code2",
 			["auto_tdm_pushbar_outter"] = "code2",
 		},
-		M3 = { 
+		M3 = {
 			["auto_tdm_pushbar_inner"] = "code3",
 			["auto_tdm_pushbar_mid"] = "code3",
 			["auto_tdm_pushbar_outter"] = "code3",

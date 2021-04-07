@@ -1,14 +1,7 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
 local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "FPIU16 Foglights"
 
@@ -59,7 +52,7 @@ COMPONENT.Patterns = {
 		["code2CHP"] = { 2, 2, 2, 2, 2, 3, 3, 3, 3, 3 },
 		["code3CHP"] = { 2, 2, 2, 2, 2, 3, 3, 3, 3, 3 },
 		["alertCHP"] = { 2, 2, 2, 2, 2, 3, 3, 3, 3, 3 },
-		["code3"] = { 
+		["code3"] = {
 			2, 0, 2, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 3, 0, 3, 0,
 			2, 0, 2, 0, 3, 0, 3, 0,
@@ -196,10 +189,10 @@ COMPONENT.Meta = {
 COMPONENT.Positions = {
 
 	[1] = { Vector( -35.02, -103.73, 47.67 ), Angle( -5.19, -30.14, -6.99 ), "rear_turn" },
-	[2] = { Vector( 35.02, -103.73, 47.67 ), Angle( 180+5.19, 30.14, 180+6.99 ), "rear_turn" },
+	[2] = { Vector( 35.02, -103.73, 47.67 ), Angle( 185.19, 30.14, 186.99 ), "rear_turn" },
 
 	[3] = { Vector( -37.39, 97.14, 41.43 ), Angle( 1, 58.9, 14 ), "turn_signal" },
-	[4] = { Vector( 37.39, 97.14, 41.43 ), Angle( 180-1, -58.9, 180-14 ), "turn_signal" },
+	[4] = { Vector( 37.39, 97.14, 41.43 ), Angle( 179, -58.9, 166 ), "turn_signal" },
 
 }
 
@@ -249,7 +242,7 @@ COMPONENT.Meta = {
 
 COMPONENT.Positions = {
 	[1] = { Vector( -28, 103.33, 44.13 ), Angle( 0, 31, 17 ), "headlight" },
-	[2] = { Vector( 28, 103.33, 44.13 ), Angle( 180, (-31), 180-17 ), "headlight" },
+	[2] = { Vector( 28, 103.33, 44.13 ), Angle( 180, -31, 163 ), "headlight" },
 }
 
 COMPONENT.Sections = {
