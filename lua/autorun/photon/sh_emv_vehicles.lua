@@ -861,20 +861,18 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 		for id,section in pairs( component.Sections ) do -- for each section ["lightbar"] = { { 1, B } } *SECTION
 			id = tostring( id .. "_" .. i )
 			EMVU.Sections[ name ][ id ] = {}
-			for index=1,#section do -- { { 1, B } } *FRAME
+			for index = 1, #section do -- { { 1, B } } *FRAME
 				EMVU.Sections[ name ][ id ][ index ] = {}
 				local values = section[ index ]
 				for light, lightData in pairs( values ) do -- { 1, B } *LIGHT
 					if not istable( lightData ) then print( "[Photon] Auto-component failed to initialize because of an invalid variable type: " .. tostring( lightData ) .. ". Make sure the Sections table has correctly nested tables." ) return end
 					local lightColor = lightData[2]
-					if istable(component.DefaultColors) and (#component.DefaultColors > 0) then
-						if string.StartWith( lightColor, "_" ) then
-							local colorIndex = string.sub( lightColor, 2 )
-							if autoData["Color" .. tostring( colorIndex )] then
-								lightColor = autoData["Color" .. tostring( colorIndex )]
-							else
-								lightColor = component.DefaultColors[tonumber(colorIndex)] or "WHITE"
-							end
+					if istable(component.DefaultColors) and (#component.DefaultColors > 0) and string.StartWith( lightColor, "_" ) then
+						local colorIndex = string.sub( lightColor, 2 )
+						if autoData["Color" .. tostring( colorIndex )] then
+							lightColor = autoData["Color" .. tostring( colorIndex )]
+						else
+							lightColor = component.DefaultColors[tonumber(colorIndex)] or "WHITE"
 						end
 					end
 					local additionalParams = lightData[3]
@@ -908,21 +906,19 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 		if istable( EMVU.Sequences[ name ]["Traffic"] ) and istable( component.TrafficDisconnect ) then
 			for _,sequence in pairs( EMVU.Sequences[ name ]["Traffic"] ) do
 
-				if usesPresets then
-					if istable( sequence.Preset_Components )  then
-						for __,preset in pairs( sequence.Preset_Components ) do
-							for componentName, ___ in pairs( preset ) do
-								local moddedComponentName = tostring( componentName )
-								if autoData.AutoPatterns then
-									local stPos, edPos = string.find( componentName, "_", -4 )
-									moddedComponentName = string.sub( componentName, 1, edPos - 1 )
-								end
-								if istable( component.TrafficDisconnect[ moddedComponentName ] ) then
-									local disconnectIndexes = component.TrafficDisconnect[ moddedComponentName ]
-									if not istable( sequence.EL_Disconnect ) then sequence.EL_Disconnect = {} end
-									for ____, lightIndex in pairs( disconnectIndexes ) do
-										sequence.EL_Disconnect[ #sequence.EL_Disconnect + 1 ] = lightIndex + offset
-									end
+				if usesPresets and istable( sequence.Preset_Components ) then
+					for __,preset in pairs( sequence.Preset_Components ) do
+						for componentName, ___ in pairs( preset ) do
+							local moddedComponentName = tostring( componentName )
+							if autoData.AutoPatterns then
+								local stPos, edPos = string.find( componentName, "_", -4 )
+								moddedComponentName = string.sub( componentName, 1, edPos - 1 )
+							end
+							if istable( component.TrafficDisconnect[ moddedComponentName ] ) then
+								local disconnectIndexes = component.TrafficDisconnect[ moddedComponentName ]
+								if not istable( sequence.EL_Disconnect ) then sequence.EL_Disconnect = {} end
+								for ____, lightIndex in pairs( disconnectIndexes ) do
+									sequence.EL_Disconnect[ #sequence.EL_Disconnect + 1 ] = lightIndex + offset
 								end
 							end
 						end
