@@ -2,9 +2,6 @@ name: Builds
 on:
   release:
     types: [created]
-  push:
-    branches:
-      - fix/builds
 
 jobs:
   gma:
@@ -21,26 +18,26 @@ jobs:
         run: composer install -d .github/builder/gma
       - name: Build
         run: php .github/builder/gma/build.php
-      # - name: Upload
-      #   uses: skx/github-action-publish-binaries@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     args: '.github/builder/gma/photonle.gma'
-  # update:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #     - name: Install Dependencies
-  #       run: composer install -d .github/builder/update
-  #     - name: Build
-  #       env:
-  #         RELEASE_CONTEXT: ${{ toJson(github.event.release) }}
-  #       run: php .github/builder/update/build.php
-  #     - name: Upload
-  #       uses: skx/github-action-publish-binaries@master
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         args: '.github/builder/update/*.html'
+      - name: Upload
+        uses: skx/github-action-publish-binaries@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: '.github/builder/gma/photonle.gma'
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: composer install -d .github/builder/update
+      - name: Build
+        env:
+          RELEASE_CONTEXT: ${{ toJson(github.event.release) }}
+        run: php .github/builder/update/build.php
+      - name: Upload
+        uses: skx/github-action-publish-binaries@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: '.github/builder/update/*.html'
