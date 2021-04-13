@@ -51,11 +51,18 @@ class FileIterator extends TransformingIterator {
 	}
 }
 
+$description = [
+	'description' => "Photon is a lua based lighting engine, based around emergency vehicles.",
+	'type' => 'tool',
+	'tags' => ['realism', 'roleplay']
+];
+$description = json_encode($description);
+
 $meta = new AddonMeta();
 $meta->setSteamID(76561198033238057);
 $meta->setTimestamp((new DateTime())->getTimestamp());
 $meta->setName('Photon Lighting Engine');
-$meta->setDescription('ze best lighting engine in all ze vurld');
+$meta->setDescription($description);
 $meta->setAuthor('The Photon Team.');
 $meta->setVersion(1);
 
@@ -65,5 +72,3 @@ $writer->setAddonMeta($meta);
 $writer->setFiles(new FileIterator($files));
 $writer->write();
 fclose($stream);
-
-// $reader = new AddonReader(fopen)
