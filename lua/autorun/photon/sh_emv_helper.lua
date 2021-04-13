@@ -391,31 +391,37 @@ function EMVU.Helper.GetUsedLightsFromComponent( name, component )
 	return resultTable
 end
 
-function EMVU.Helper.FetchUsedLights( vehicle )
-	if not IsValid( vehicle ) then return end
+function EMVU.Helper.FetchUsedLights(vehicle)
+	if not IsValid(vehicle) then return end
+
 	local name = vehicle.VehicleName
 	local primaryOption = vehicle:Photon_LightOption()
 	local auxOption = vehicle:Photon_TrafficAdvisorOption()
 	local illumOption = vehicle:Photon_IllumOption()
-	-- print("illum option: ".. tostring(illumOption))
+
 	local resultTable = {}
-	local primaryLights = EMVU.Helper:GetSequence( name, primaryOption, vehicle ) or {}
-	local auxiliaryLights = EMVU.Helper:GetTASequence( name, auxOption, vehicle ) or {}
-	local illumLights = EMVU.Helper:GetIllumSequence( name, illumOption, vehicle )
-	-- print("ILLUM LIGHTS RECEIVED: ")
-	-- PrintTable( illumLights )
-	for component,_ in pairs( primaryLights, auxiliaryLights ) do
-		for key,_ in pairs( EMVU.Helper.GetUsedLightsFromComponent( name, component ) ) do
+	local primaryLights = EMVU.Helper:GetSequence(name, primaryOption, vehicle) or {}
+	local auxiliaryLights = EMVU.Helper:GetTASequence(name, auxOption, vehicle) or {}
+	local illumLights = EMVU.Helper:GetIllumSequence(name, illumOption, vehicle)
+
+	for component, _ in pairs(primaryLights) do
+		for key, _ in pairs(EMVU.Helper.GetUsedLightsFromComponent(name, component)) do
 			resultTable[tostring(key)] = true
 		end
 	end
-	if istable( illumLights ) then
-		for _,lightInfo in pairs( illumLights ) do
+
+	for component, _ in pairs(auxiliaryLights) do
+		for key, _ in pairs(EMVU.Helper.GetUsedLightsFromComponent(name, component)) do
+			resultTable[tostring(key)] = true
+		end
+	end
+
+	if istable(illumLights) then
+		for _, lightInfo in pairs(illumLights) do
 			resultTable[tostring(lightInfo[1])] = true
 		end
 	end
 
-	--PrintTable( resultTable )
 	return resultTable
 end
 
