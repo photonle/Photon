@@ -9,6 +9,9 @@ function EMVU:AddAutoComponent(component, name, base)
 	component.Name = name
 	component.Base = component.Base or base or nil
 
+	local src = debug.getinfo(2, "S")
+	component.Source = src.short_src
+
 	if component.Deprecated then
 		PhotonWarning(Format("Component %s is deprecated and may be removed in a future version.", name))
 		if isstring(component.Deprecated) then
@@ -87,12 +90,58 @@ while changed ~= 0 do
 end
 EMVU.AutoStaging = nil
 
+local pathCache = {}
+for id, component in pairs(EMVU.Auto) do
+	component.Found = false
+
+	if not component.Found and component.Source:sub(0, 7) == "addons/" then
+		component.Source = component.Source:sub(8)
+		local st = component.Source:find("/")
+		local addon = component.Source:sub(0, st - 1)
+		component.Source = "Legacy Addon: " .. addon
+		component.Found = true
+
+		local path = "addons/" .. addon .. "/addon.json"
+		local addonData
+		if pathCache[path] then
+			addonData = pathCache[path]
+		elseif file.Exists(path, "GAME") then
+			addonData = util.JSONToTable(file.Read(path, "GAME"))
+			pathCache[path] = addonData
+		end
+
+		if addonData and addonData.title then
+			component.Source = component.Source .. " (" .. addonData.title .. ")"
+		end
+	end
+
+	if not component.Found then
+		-- This is the wrong way round really, I'd prefer to have the addons iteration outside.
+		for _, addon in ipairs(engine.GetAddons()) do
+			if addon.mounted and addon.title and addon.wsid then
+				-- This is deprecated but is also literally the only way to do it.
+				local fl = file.Find(component.Source, addon.title)
+				if #fl > 0 then
+					component.Source = "Workshop Addon: " .. addon.wsid .. " (" .. addon.title .. ")"
+					component.Found = true
+					break
+				end
+			end
+		end
+	end
+
+	if not component.Found then
+		component.Source = "Unknown"
+	end
+	component.Found = nil
+end
+
 function EMVU:PrecacheAutoModels()
-	for id,prop in pairs( EMVU.Auto ) do
+	for id, prop in pairs(EMVU.Auto) do
 		if not prop.Model then continue end
-		util.PrecacheModel( prop.Model )
+		util.PrecacheModel(prop.Model)
 	end
 end
-hook.Add( "Initialize", "Photon.PrecacheAutoModels", function()
+hook.Add("Initialize", "Photon.PrecacheAutoModels", function()
 	EMVU:PrecacheAutoModels()
 end)
