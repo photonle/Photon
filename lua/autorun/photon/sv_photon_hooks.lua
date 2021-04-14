@@ -163,6 +163,8 @@ concommand.Add("photon_components", function(ply, str, args, argStr)
 
 	for _, component in pairs(EMVU.Auto) do
 		print(component.Name)
-		print("\tSource: " .. component.Source)
+		if component.Source then
+			print("\tSource: " .. component.Source)
+		end
 	end
 end)
