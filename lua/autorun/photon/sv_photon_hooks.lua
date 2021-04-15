@@ -160,6 +160,11 @@ end)
 
 concommand.Add("photon_components", function(ply, str, args, argStr)
 	local print = IsValid(ply) and function(...) ply:ChatPrint(...) end or print
+	local access = game.SinglePlayer() or not IsValid(ply) or ply:IsAdmin()
+	if not access then
+		print("You must be in single-player or an admin to access this command.")
+		return
+	end
 
 	for _, component in pairs(EMVU.Auto) do
 		print(component.Name)
