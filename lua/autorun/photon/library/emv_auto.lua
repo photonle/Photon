@@ -137,9 +137,17 @@ for id, component in pairs(EMVU.Auto) do
 end
 
 function EMVU:PrecacheAutoModels()
-	for id, prop in pairs(EMVU.Auto) do
-		if not prop.Model then continue end
-		util.PrecacheModel(prop.Model)
+	for id, component in pairs( EMVU.Auto ) do
+		local mdl = component.Model
+		if mdl and mdl ~= "" and not util.IsValidModel(mdl) then
+			-- IsValidModel precaches on server, we don't need to worry about manually precaching.
+			local required = component.Required
+			if required then
+				PhotonWarning(Format("%s is missing, you require https://steamcommunity.com/workshop/filedetails/?id=%s!", mdl, required))
+			else
+				PhotonWarning(Format("%s is missing!", mdl))
+			end
+		end
 	end
 end
 hook.Add("Initialize", "Photon.PrecacheAutoModels", function()
