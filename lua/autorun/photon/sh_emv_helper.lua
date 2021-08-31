@@ -520,6 +520,7 @@ function EMVU.Helper:GetProps( name, ent )
 					propData.Scale = preset.Scale
 					propData.RenderGroup = preset.RenderGroup
 					propData.RenderMode = preset.RenderMode
+					propData.Skin = preset.Skin or propData.Skin
 					propData.BodyGroups = preset.BodyGroups or propData.BodyGroups
 					propData.SubMaterials = preset.SubMaterials or propData.SubMaterials
 					propData.AutoIndex = id
@@ -552,6 +553,7 @@ function EMVU.Helper:GetProps( name, ent )
 						propData.Pos = component.Pos
 						propData.Ang = component.Ang
 						propData.Scale = component.Scale
+						propData.Skin = component.Skin or propData.Skin
 						propData.BodyGroups = component.BodyGroups or propData.BodyGroups
 						propData.SubMaterials = component.SubMaterials or propData.SubMaterials
 						propData.AutoIndex = id
