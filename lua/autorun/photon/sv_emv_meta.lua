@@ -278,7 +278,10 @@ function EMVU:MakeEMV( ent, emv )
 		if self:ELS_Siren() then self:ELS_SirenOff() end
 		if not self:ELS_Lights() then self:ELS_LightOption( #EMVU.Sequences[self.Name].Sequences ) end
 		self:ELS_LightsOn()
-		self.ELS.Siren = CreateSound( self, EMVU.GetSirenTable()[self:ELS_SirenSet()].Set[self:ELS_SirenOption()].Sound )
+
+		local recipientFilter = RecipientFilter()
+		recipientFilter:AddAllPlayers()
+		self.ELS.Siren = CreateSound( self, EMVU.GetSirenTable()[self:ELS_SirenSet()].Set[self:ELS_SirenOption()].Sound, recipientFilter )
 
 		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
 			self.ELS.Siren:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
@@ -301,7 +304,7 @@ function EMVU:MakeEMV( ent, emv )
 			if EMVU.GetSirenTable()[secondarySiren].Set[secondIndex] then newSound = EMVU.GetSirenTable()[secondarySiren].Set[secondIndex].Sound end
 			if ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and self.ELS.CurrentSecondarySiren ~= newSound then
 				self.ELS.Siren2:Stop()
-				self.ELS.Siren2 = CreateSound( self, newSound )
+				self.ELS.Siren2 = CreateSound( self, newSound, recipientFilter )
 				if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
 					self.ELS.Siren2:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume - 5 )
 				else
@@ -309,8 +312,7 @@ function EMVU:MakeEMV( ent, emv )
 				end
 				self.ELS.CurrentSecondarySiren = newSound
 			elseif not self.ELS.Siren2 or ( ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and self.ELS.CurrentSecondarySiren ~= newSound ) then
-				-- print(secondIndex)
-				self.ELS.Siren2 = CreateSound( self, newSound )
+				self.ELS.Siren2 = CreateSound( self, newSound, recipientFilter )
 				if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
 					self.ELS.Siren2:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume - 5 )
 				else
