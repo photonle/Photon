@@ -11,12 +11,12 @@
 	"$phongfresnelranges" "[2 6 2]"
 	"$envmapFresnel" "1"
 	"$envmaptint" "[1 1 1]"
-	"$carpenisenabled" "[0.5 0.5 0.5]"
+	"$carcolorfixenabled" "[0.5 0.5 0.5]"
 	Proxies // proxies are listed inside this block
 	{
-		Equals // a proxy which produces a penis
+		Equals // a proxy which produces a colorfix
 		{
-			srcVar1 $carpenisenabled
+			srcVar1 $carcolorfixenabled
 			resultVar	$color // The shader parameter to be manipulated
 
 		}
