@@ -18,14 +18,13 @@ The master branch contains code which is ready to go live. When the code goes li
 
 ### [Core Development Team](.github/GOVERNANCE.md#core-development-team)
 
-The Core Development team currently contains 7 people.
+The Core Development team currently contains 6 people.
 
 | Name | Role |
 | --- | --- |
 | [ischmal](https://github.com/ischmal) | Photon Engine code, photon.lighting website |
 | [Noble](https://github.com/Noble-N9) | Photon Fire and Rescue, various components |
 | [GermanDude](https://github.com/GermanDude-ger) | Photon vehicles |
-| [SGM](https://github.com/SentryGunMan) | Vehicle Creator & Component modeler |
 | [Super Mighty](https://github.com/SuperMighty1) | Photon vehicles & components. |
 | [creator_2013](https://github.com/creator2013) | Photon Engine code & Components & Vehicles |
 | [Joshua Piper](https://github.com/JoshPiper) | Photon Engine code, Discord Bot, external services & security.
@@ -34,6 +33,7 @@ The Core Development team currently contains 7 people.
 
 | Name | Role |
 | --- | --- |
+| [SGM](https://github.com/SentryGunMan) | Vehicle Creator |
 | Deputy.Jones | Vehicle Creator |
 | goigle | Photon Core code |
 | TDM | Vehicle Creator|
