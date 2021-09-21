@@ -4,7 +4,7 @@ local name = "Whelen Ion"
 
 local COMPONENT = {}
 
-COMPONENT.Model = "models/schmal/whelen_ion.mdl"
+COMPONENT.Model = "models/sentry/props/ion_photon.mdl"
 COMPONENT.Skin = 0
 COMPONENT.Bodygroups = {}
 COMPONENT.NotLegacy = true
