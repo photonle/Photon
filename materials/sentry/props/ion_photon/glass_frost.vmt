@@ -1,0 +1,16 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "sentry/props/ion_photon/glass_frost"
+	"$bumpmap"    "sentry/shared/glass_nm"
+	"$envmap" env_cubemap
+	"$translucent" 1
+	"$phong" "1" 
+	"$phongboost" "0.25" 
+	"$phongexponent" "1"
+	"$phongfresnelranges" "[2 4 2]"
+	"$surfaceprop" "Glass"
+	"$envmaptint" "[.25 .25 .25]"
+	"$envmapfresnel" "1"
+ }
+
+

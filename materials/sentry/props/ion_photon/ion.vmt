@@ -1,1 +1,11 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "sentry/props/ion_photon/ion"
+	"$bumpmap" "sentry/props/ion_photon/ion_nm"
+    $phong "1"
+    $phongexponent "7"
+    $phongboost "1"
+    $phongfresnelranges "[.05 .3 1]"
+
+}
 
