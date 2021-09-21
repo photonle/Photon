@@ -18,7 +18,7 @@ The master branch contains code which is ready to go live. When the code goes li
 
 ### [Core Development Team](.github/GOVERNANCE.md#core-development-team)
 
-The Core Development team currently contains 6 people.
+The Core Development team currently contains 7 people.
 
 | Name | Role |
 | --- | --- |
