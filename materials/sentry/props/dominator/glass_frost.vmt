@@ -11,12 +11,12 @@
 	"$surfaceprop" "Glass"
 	"$envmaptint" "[.25 .25 .25]"
 	"$envmapfresnel" "1"
-	"$carpenisenabled" "1"
+	"$carcolorfixenabled" "1"
 	Proxies // proxies are listed inside this block
 	{
-		Equals // a proxy which produces a penis
+		Equals // a proxy which produces a colorfix
 		{
-			srcVar1 $carpenisenabled
+			srcVar1 $carcolorfixenabled
 			resultVar	$color // The shader parameter to be manipulated
 
 		}
