@@ -1,7 +1,7 @@
 "VertexlitGeneric"
 {
 	"$basetexture" "sentry/props/dominator/glass_frost"
-	"$bumpmap"    "sentry/shared/glass_nm"
+	"$bumpmap"    "sentry/props/dominator/flat_nm"
 	"$envmap" env_cubemap
 	"$translucent" 1
 	"$phong" "1" 
