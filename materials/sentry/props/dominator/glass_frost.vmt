@@ -1,7 +1,7 @@
 "VertexlitGeneric"
 {
-	"$basetexture" "sentry/props/dominator_photon/glass_frost"
-	"$bumpmap"    "sentry/props/dominator_photon/flat_nm"
+	"$basetexture" "sentry/props/dominator/glass_frost"
+	"$bumpmap"    "sentry/shared/glass_nm"
 	"$envmap" env_cubemap
 	"$translucent" 1
 	"$phong" "1" 
@@ -11,12 +11,12 @@
 	"$surfaceprop" "Glass"
 	"$envmaptint" "[.25 .25 .25]"
 	"$envmapfresnel" "1"
-	"$carcolorfixenabled" "1"
+	"$carpenisenabled" "1"
 	Proxies // proxies are listed inside this block
 	{
-		Equals // a proxy which produces a colorfix
+		Equals // a proxy which produces a penis
 		{
-			srcVar1 $carcolorfixenabled
+			srcVar1 $carpenisenabled
 			resultVar	$color // The shader parameter to be manipulated
 
 		}

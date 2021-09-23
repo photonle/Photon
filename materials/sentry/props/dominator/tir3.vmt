@@ -1,17 +1,17 @@
 "VertexlitGeneric"
 {
-	"$basetexture" "sentry/props/dominator_photon/wire"
-	"$bumpmap" "sentry/props/dominator_photon/wire_nm"
+	"$basetexture" "sentry/props/dominator/tir3"
+	"$bumpmap" "sentry/props/dominator/tir3_nm"
     $phong "1"
     $phongexponent "7"
     $phongboost "1"
     $phongfresnelranges "[.05 .3 1]"
-	"$carcolorfixenabled" "1"
+	"$carpenisenabled" "1"
 	Proxies // proxies are listed inside this block
 	{
-		Equals // a proxy which produces a colorfix
+		Equals // a proxy which produces a penis
 		{
-			srcVar1 $carcolorfixenabled
+			srcVar1 $carpenisenabled
 			resultVar	$color // The shader parameter to be manipulated
 
 		}

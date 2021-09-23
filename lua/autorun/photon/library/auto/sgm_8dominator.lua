@@ -5,7 +5,7 @@ local name = "Whelen Dominator 8"
 local W = "S_WHITE"
 local COMPONENT = {}
 
-COMPONENT.Model = "models/sentry/props/dominator8_photon.mdl"
+COMPONENT.Model = "models/sentry/props/dominator8.mdl"
 COMPONENT.Lightbar = true
 COMPONENT.Skin = 0
 COMPONENT.Category = "Lightbar" 
@@ -19,7 +19,7 @@ COMPONENT.Meta = {
 		AngleOffset = 90,
 		W = 3.2,
 		H = 3.2,
-		Sprite = "sentry/props/dominator_photon/tir3_sprite",
+		Sprite = "sentry/props/dominator/tir3_sprite",
 		WMult = .5,
 		Scale = .36,
 		EmitArray = {
