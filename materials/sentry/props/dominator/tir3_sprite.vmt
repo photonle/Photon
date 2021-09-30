@@ -1,0 +1,8 @@
+"UnLitGeneric"
+{
+	"$basetexture"		"sentry/props/dominator/tir3_sprite"
+	"$nocull" 1
+	"$additive" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}
