@@ -75,3 +75,10 @@ local function RemoveCarProps( ent )
 	end
 end
 hook.Add("EntityRemoved", "Photon.RemoveCarProps", RemoveCarProps)
+
+local function FixProps( ent, shouldTransmit )
+	if not (IsValid( ent ) and ent:IsVehicle() and ent:HasPhotonELS() and ent.EMVProps) then return end
+	ent:Photon_RemoveEMVProps( shouldTransmit )
+end
+
+hook.Add("NotifyShouldTransmit", "Photon.FixProps", FixProps)
