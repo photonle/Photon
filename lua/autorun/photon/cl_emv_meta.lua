@@ -661,7 +661,6 @@ function EMVU:MakeEMV( emv, name )
 				prop:SetParent(emv, emv:LookupAttachment(p.AttachmentMerge))
 			end
 
-			table.insert(photonLightModels, prop)
 			table.insert( emv.EMVProps, prop )
 
 		end
@@ -1005,5 +1004,3 @@ function EMVU:MakeEMV( emv, name )
 	emv:Photon_SetupEMVProps()
 	emv.PhotonFinishedInit = true
 end
-
-photonLightModels = {}
