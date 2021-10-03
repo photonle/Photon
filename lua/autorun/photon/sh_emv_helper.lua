@@ -648,6 +648,7 @@ function EMVU.Helper.GetPositionFromRE( car, lbEntity, posInput, returnWorld )
 	local boneData = EMVU.Auto[ tostring(lbEntity.ComponentName) ].Bones[ posData[2] ]
 	local boneIndex = boneData.Bone
 	local boneWorldPos, boneWorldAng = lbEntity:GetBonePosition( boneIndex )
+	if not boneWorldPos then return Vector(), Angle(), 0 end
 	-- local boneMatrix = lbEntity:GetBoneMatrix( )
 	-- local bonePos = car:WorldToLocal( boneWorldPos )
 	-- local boneAng = car:WorldToLocalAngles( boneWorldAng )
