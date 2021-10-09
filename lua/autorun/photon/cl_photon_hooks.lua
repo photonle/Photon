@@ -10,12 +10,6 @@ PHOTON_REG_ENABLED = true
 
 local PHOTON_REG_ENABLED = PHOTON_REG_ENABLED
 
-local photon_ready = photon_ready or false
-
-hook.Add( "InitPostEntity", "Photon.ReadyReg", function()
-	photon_ready = true
-end)
-
 function Photon:AdjustFrameTime()
 	if FrameTime() >= EMV_FRAME_DUR or FrameTime() < EMV_FRAME_DUR and FrameTime() > EMV_FRAME_CONST then
 		EMV_FRAME_DUR = FrameTime()
@@ -81,4 +75,6 @@ local function FixProps( ent, shouldTransmit )
 	ent:Photon_RemoveEMVProps( shouldTransmit )
 end
 
-hook.Add("NotifyShouldTransmit", "Photon.FixProps", FixProps)
+hook.Add( "InitPostEntity", "Photon.ReadyHook", function()
+	hook.Add("NotifyShouldTransmit", "Photon.FixProps", FixProps)
+end)
