@@ -321,14 +321,14 @@ local bloomColor = nil
 
 function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, SubmatID, SubmatMaterial, SubmatParent, debug_mode )
 
-	-- if drawSrc then
-	-- 	startCam( camPos, camAng, 1 )
-	-- 		setRenderLighting( 2 )
-	-- 		setMaterial( srcSprite )
-	-- 		drawQuad( srcT, srcR, srcB, srcL, colSrc )
-	-- 		setRenderLighting( 0 )
-	-- 	endCam()
-	-- end
+	if drawSrc then
+		startCam( camPos, camAng, 1 )
+			setRenderLighting( 2 )
+			setMaterial( srcSprite )
+			drawQuad( srcT, srcR, srcB, srcL, colSrc )
+			setRenderLighting( 0 )
+		endCam()
+	end
 
 	if SubmatID then
 		SubmatParent:SetSubMaterial(SubmatID, SubmatMaterial)
@@ -370,19 +370,6 @@ function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 				drawSprite( worldPos, 12 * widthScale, 12 * bloomScale, colMed )
 		end
 	end
-end
---2,3,4,5,6,7,8,9,14
-function Photon.QuickDrawSrc( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, SubmatID, SubmatMaterial, SubmatParent, debug_mode )
-
-	if drawSrc then
-		startCam( camPos, camAng, 1 )
-			setRenderLighting( 2 )
-			setMaterial( srcSprite )
-			drawQuad( srcT, srcR, srcB, srcL, colSrc )
-			setRenderLighting( 0 )
-		endCam()
-	end
-
 end
 
 local drawW = ScrW() * .5
@@ -499,7 +486,6 @@ function Photon.RenderDynamicLight( pos, dir, incol, index )
 end
 
 local quickDrawNoTable = Photon.QuickDrawNoTable
-local quickDrawSrc = Photon.QuickDrawSrc
 local photonScreenEffects = Photon.DrawScreenEffects
 local cam3d = cam.Start3D
 local cam2d = cam.Start2D
@@ -512,7 +498,7 @@ hook.Add( "InitPostEntity", "Photon.DrawEffectsConvar", function()
 	dynlights_enabled = GetConVar( "photon_dynamic_lights" )
 end)
 
-function Photon:RenderQueue( effects, drawSrc )
+function Photon:RenderQueue( effects )
 	local eyePos = EyePos()
 	local eyeAng = EyeAngles()
 	local count = #photonRenderTable
@@ -520,13 +506,7 @@ function Photon:RenderQueue( effects, drawSrc )
 	if ( count > 0 ) then
 		local debug_mode = PHOTON_DEBUG
 		local renderFunction
-		if effects then renderFunction = photonScreenEffects else 
-			if not drawSrc then
-				renderFunction = quickDrawNoTable 
-			else
-				renderFunction = quickDrawSrc
-			end
-		end
+		if effects then renderFunction = photonScreenEffects else renderFunction = quickDrawNoTable end
 		for i=1, count do
 			if photonRenderTable[i] != nil then
 				local data = photonRenderTable[i]
@@ -539,13 +519,10 @@ function Photon:RenderQueue( effects, drawSrc )
 	-- Photon:ClearLightQueue()
 end
 hook.Add( "PreDrawEffects", "Photon.RenderQueue", function()
-	Photon:RenderQueue( false, false )
+	Photon:RenderQueue( false )
 	if draw_effects and draw_effects:GetBool() then
-		Photon:RenderQueue( true, false )
+		Photon:RenderQueue( true )
 	end
-end )
-hook.Add( "PostDrawOpaqueRenderables", "Photon.RenderQueue", function()
-		Photon:RenderQueue( false, true )
 end )
 local overlayX = math.Round(( ScrW() - ScrH() ) / 2)
 
