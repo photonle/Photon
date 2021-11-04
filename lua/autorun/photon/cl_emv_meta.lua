@@ -599,7 +599,7 @@ function EMVU:MakeEMV( emv, name )
 			if p == true then continue end
 			if not p.Model then continue end
 			local rendergroup = p.RenderGroup or RENDERGROUP_OPAQUE
-			local rendermode = p.RenderMode or RENDERMODE_NONE
+			local rendermode = p.RenderMode or RENDERMODE_TRANSALPHA
 			util.PrecacheModel( p.Model )
 			if not util.IsModelLoaded( p.Model ) then self:AlertPhotonMissingRequirements( p.Model ) end
 			local prop = ClientsideModel( p.Model, rendergroup )
