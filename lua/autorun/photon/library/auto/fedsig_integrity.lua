@@ -196,7 +196,7 @@ COMPONENT.Sections = {
 		}
 	},
 	["auto_fedsig_integrity_boston"] = {
-		
+
 		[1] = {
 			{ 22, "_1"}, { 21, "_2"},
 			{ 1, "_2"}, { 2, "_1"},

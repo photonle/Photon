@@ -157,3 +157,19 @@ end)
 -- end
 
 -- hook.Add( "InitPostEntity", "Photon.LoadAvailableMaterials", function() Photon.AutoSkins.LoadAvailable() end )
+
+concommand.Add("photon_components", function(ply, str, args, argStr)
+	local print = IsValid(ply) and function(...) ply:ChatPrint(...) end or print
+	local access = game.SinglePlayer() or not IsValid(ply) or ply:IsAdmin()
+	if not access then
+		print("You must be in single-player or an admin to access this command.")
+		return
+	end
+
+	for _, component in pairs(EMVU.Auto) do
+		print(component.Name)
+		if component.Source then
+			print("\tSource: " .. component.Source)
+		end
+	end
+end)

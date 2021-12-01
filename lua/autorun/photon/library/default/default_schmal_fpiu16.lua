@@ -2,15 +2,6 @@ AddCSLuaFile()
 
 local name = "2016 Ford Police Interceptor Utility"
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-
 local EMV = {}
 
 EMV.Siren = 46

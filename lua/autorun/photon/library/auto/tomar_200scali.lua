@@ -1,13 +1,6 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
 
 local name = "Tomar 200S Rear Cali"
 
@@ -62,7 +55,7 @@ COMPONENT.Sections = {
 	["auto_tomar_200s_redblue"] = {
 		[1] = { { 7, "_1" }, },
 		[2] = { { 8, "_2" }, },
-		
+
 		[3] = { { 7, "_1" }, },
 		[4] = { { 8, "_2" }, },
 		[5] = {},
@@ -98,19 +91,19 @@ COMPONENT.Sections = {
 
 COMPONENT.Patterns = {
 	["auto_tomar_200s_redblue"] = {
-		
+
 		-- STICK CODE PAT
 		["code1"] = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 2 },
-		
+
 		["code2"] = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 2 },
-		
+
 		["code3"] = { 1, 0, 1, 0, 1, 2, 0, 2, 0, 2 },
-		
+
 		-- TRAFFIC PAT
 		["left"] = { 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 0, 0, 0 },
-		
+
 		["right"] = { 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 0, 0, 0, 0 },
-		
+
 		["diverge"] = { 24, 25, 26, 27, 28, 29, 30, 0, 0, 0, 0 }
 	},
 	["auto_tomar_200s_amber"] = {

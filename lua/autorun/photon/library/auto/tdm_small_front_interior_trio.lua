@@ -1,14 +1,6 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Small Front Interior Trio"
 
@@ -81,14 +73,14 @@ COMPONENT.Sections = {
 COMPONENT.Patterns = {
 	["auto_int5led"] = {
 		["slide"] = { 5, 6, 7, 8, 9, 10, 11, 12, 0, 0, 0, 0 },
-		["code3"] = { 
+		["code3"] = {
 			5, 6, 7, 8, 9, 10, 11, 12,
 			5, 6, 7, 8, 9, 10, 11, 12,
 			5, 6, 7, 8, 9, 10, 11, 12,
 			1, 0, 2, 0, 3, 0, 1, 0, 2, 0, 3, 0, 1, 0, 2, 0, 3, 0,
-			13, 0, 13, 0, 14, 0, 14, 0, 13, 0, 13, 0, 14, 0, 14, 0, 13, 0, 13, 0, 14, 0, 14, 0, 
+			13, 0, 13, 0, 14, 0, 14, 0, 13, 0, 13, 0, 14, 0, 14, 0, 13, 0, 13, 0, 14, 0, 14, 0,
 			13, 13, 13, 14, 14, 14, 13, 13, 13, 14, 14, 14, 13, 13, 14, 14, 13, 13, 14, 14, 13, 13, 14, 14,
-			13, 14, 13, 14, 13, 14, 13, 14, 13, 14, 13, 14, 13, 14, 13, 14,  13, 14, 
+			13, 14, 13, 14, 13, 14, 13, 14, 13, 14, 13, 14, 13, 14, 13, 14,  13, 14,
 		},
 		["code1"] = { 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 2, 0, 2, 0, 2, 2, 2, 2, 0, 0, 0 },
 		["alert"] = { 15, 16 },
@@ -99,7 +91,7 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 	["auto_int5cruise"] = {
 		4, 5
 	}
@@ -113,7 +105,7 @@ COMPONENT.Modes = {
 		ALERT = { ["auto_int5led"] = "alert" }
 	},
 	Auxiliary = {
-		C = { ["auto_int5cruise"] = "cruise" }	
+		C = { ["auto_int5cruise"] = "cruise" }
 	},
 	Illumination = {
 		T = {

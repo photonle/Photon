@@ -1,11 +1,7 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local DA = "D_AMBER"
-local R = "RED"
 local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
 local SW = "S_WHITE"
 
 local PI = {}
@@ -131,7 +127,7 @@ PI.States.Reverse = {
 }
 
 PI.States.Running = {
-	{ 1, SW }, { 2, SW }, { 3, CW }, { 4, CW }, 
+	{ 1, SW }, { 2, SW }, { 3, CW }, { 4, CW },
 	{ 9, DR, .25 }, { 10, DR, .25 }
 }
 

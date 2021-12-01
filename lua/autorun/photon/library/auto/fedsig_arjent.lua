@@ -180,7 +180,7 @@ COMPONENT.Patterns = {
 }
 
 COMPONENT.TrafficDisconnect = {
-	["auto_fedsig_arjent_signalmaster"] ={
+	["auto_fedsig_arjent_signalmaster"] = {
 		13, 15, 17, 18, 16, 14
 	}
 }

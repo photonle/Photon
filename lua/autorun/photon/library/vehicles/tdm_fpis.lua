@@ -1,11 +1,8 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local DA = "D_AMBER"
 local R = "RED"
 local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
 local SW = "S_WHITE"
 
 local PI = {}
@@ -179,22 +176,22 @@ PI.Positions = {
 	[35] = { Vector( 28.97, 112.2, 37.62 ), Angle( 180, -35, 180 ), "front_2" },
 
 	[36] = { Vector( -34.22, -108.28, 52.51 ), Angle( -2, -42, -25 ), "brake_upper" }, -- 3
-	[37] = { Vector( 34.22, -108.28, 52.51 ), Angle( 180+2, 42, 180+25 ), "brake_upper" },
+	[37] = { Vector( 34.22, -108.28, 52.51 ), Angle( 182, 42, 205 ), "brake_upper" },
 
 	[38] = { Vector( -33.82, -110.78, 48.41 ), Angle( -2, -42, -25 ), "brake_lower" }, -- 3
-	[39] = { Vector( 33.82, -110.78, 48.41 ), Angle( 180+2, 42, 180+25 ), "brake_lower" },
+	[39] = { Vector( 33.82, -110.78, 48.41 ), Angle( 182, 42, 205 ), "brake_lower" },
 
 }
 
 PI.States = {}
 
 PI.States.Headlights = { -- NOT YET IMPLEMENTED
-	
+
 }
 
 PI.States.Brakes = {
-	{ 17, DR, 1 }, { 18, DR, 1 }, { 19, DR, 1 }, { 20, DR, 1 }, { 21, DR, 1 }, { 22, DR, 1 }, { 23, DR, 1 }, 
-	{ 36, R }, { 37, R }, { 38, R }, { 39, R }, 
+	{ 17, DR, 1 }, { 18, DR, 1 }, { 19, DR, 1 }, { 20, DR, 1 }, { 21, DR, 1 }, { 22, DR, 1 }, { 23, DR, 1 },
+	{ 36, R }, { 37, R }, { 38, R }, { 39, R },
 }
 
 PI.States.Blink_Left = {
@@ -209,9 +206,9 @@ PI.States.Reverse = {
 }
 
 PI.States.Running = {
-	{ 15, SW, 1}, { 16, SW, 1 }, 
+	{ 15, SW, 1}, { 16, SW, 1 },
 	{ 24, A, 1 }, { 25, A, 1 }, { 28, A, .6 }, { 29, A, .6 },
-	{ 36, R, .2 }, { 37, R, .2 }, { 38, R, .2 }, { 39, R, .2 }, 
+	{ 36, R, .2 }, { 37, R, .2 }, { 38, R, .2 }, { 39, R, .2 },
 }
 
 Photon.VehicleLibrary["fortauruspoltdm"] = PI

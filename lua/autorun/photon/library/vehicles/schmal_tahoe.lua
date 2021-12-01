@@ -1,11 +1,7 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local DA = "D_AMBER"
-local R = "RED"
 local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
 local SW = "S_WHITE"
 
 local PI = {}
@@ -119,9 +115,9 @@ PI.Positions = {
 
 	 [3] = { Vector( -39.6, -108.2, 51 ), Angle( 0,-37,0 ), "reverse_lights" },
 	 [4] = { Vector( 39.6, -108.2, 51 ), Angle( 0,37,0 ), "reverse_lights" },
-	 
+
 	 [5] = { Vector( 0, -103.8, 83.3 ), Angle( 0,0,-35 ), "brake_src" },
-	 
+
 	 [6] = { Vector( -1, -103.8, 83.3 ), Angle( 0,0,-35 ), "brake_led" },
 	 [7] = { Vector( 1, -103.8, 83.3 ), Angle( 0,0,-35 ), "brake_led" },
 
@@ -151,11 +147,11 @@ PI.Positions = {
 PI.States = {}
 
 PI.States.Headlights = { -- NOT YET IMPLEMENTED
-	
+
 }
 
 PI.States.Brakes = {
-	{ 1, DR, 1 }, { 2, DR, 1 }, 
+	{ 1, DR, 1 }, { 2, DR, 1 },
 	{ 5, DR, .5 },
 	{ 6, DR, 1 }, { 7, DR, 1 }, { 8, DR, 1 }, { 9, DR, 1 }, { 10, DR, 1 }, { 11, DR, 1 }, { 12, DR, 1 }, { 13, DR, 1 },
 }
@@ -172,14 +168,14 @@ PI.States.Reverse = {
 }
 
 PI.States.Running = {
-	{ 14, SW, 1 }, { 15, SW, 1 }, 
-	{ 16, A, 1 }, { 17, A, 1 }, 
+	{ 14, SW, 1 }, { 15, SW, 1 },
+	{ 16, A, 1 }, { 17, A, 1 },
 	{ 1, DR, .25 }, { 2, DR, .25 },
 	{ 20, DR, .25 }, { 21, DR, .25 }
 }
 
 
--- concommand.Add("bonenames",function(ply) 
+-- concommand.Add("bonenames",function(ply)
 -- 	local car = ply:GetVehicle()
 -- 	local boneCount = car:GetBoneCount() - 1
 -- 	for i=0,boneCount do

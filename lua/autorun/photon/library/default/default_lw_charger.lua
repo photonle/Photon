@@ -29,13 +29,7 @@ local function MirrorAngle( ang, method )
 	return newAng
 end
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
 
 local EMV = {}
 
@@ -277,8 +271,6 @@ EMV.Sequences = {
 			Icon = "takedown",
 			Stage = "F",
 			Components = {},
-			BG_Components = {},
-			Preset_Components = {},
 			BG_Components = {
 				["spotlights"] = {
 					["0"] = {
@@ -287,6 +279,7 @@ EMV.Sequences = {
 					},
 				},
 			},
+			Preset_Components = {},
 			Lights = {
 				{ Vector( 0, 25, 80 ), Angle( 10, 90, 0 ), "flood" },
 			},

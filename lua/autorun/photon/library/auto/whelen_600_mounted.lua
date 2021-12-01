@@ -1,14 +1,6 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Whelen 600 Mounted"
 
@@ -35,20 +27,20 @@ COMPONENT.Meta = {
 			Vector( 0, 0, 0 ),
 			Vector( -1.75, 0, 0 )
 		}
-	},
+	}
 }
 
 COMPONENT.Positions = {
 
 	[1] = { Vector( 0, 1.09, 1.1 ), Angle( 0, 0, 0 ), "whelen_600" },
-	[2] = { Vector( 0, 1.09, -0.83 ), Angle( 0, 0, 0 ), "whelen_600" },
+	[2] = { Vector( 0, 1.09, -0.83 ), Angle( 0, 0, 0 ), "whelen_600" }
 
 }
 
 COMPONENT.Sections = {
 	["auto_light_dome"] = {
-		[1] = { { 1, W }, { 2, W } },
-	},
+		[1] = { { 1, W }, { 2, W } }
+	}
 }
 
 COMPONENT.Patterns = {
@@ -61,9 +53,9 @@ COMPONENT.Patterns = {
 
 COMPONENT.Modes = {
 	Primary = {
-		M1 = { ["auto_light_dome"] = "mode1", },
-		M2 = { ["auto_light_dome"] = "mode1", },
-		M3 = { ["auto_light_dome"] = "mode1", }
+		M1 = { ["auto_light_dome"] = "mode1" },
+		M2 = { ["auto_light_dome"] = "mode1" },
+		M3 = { ["auto_light_dome"] = "mode1" }
 	},
 	Auxiliary = {},
 	Illumination = {}

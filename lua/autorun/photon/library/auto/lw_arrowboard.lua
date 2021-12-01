@@ -24,19 +24,19 @@ COMPONENT.Meta = {
 local zAng = Angle(0, -90, 0)
 COMPONENT.Positions = {
 	{Vector(22, -0.7, 40), zAng, "main"},
-    {Vector(22, -9.2, 40), zAng, "main"},
-    {Vector(22, -18, 40), zAng, "main"},
-    {Vector(22, 15.2, 40), zAng, "main"},
-    {Vector(22, 7.5, 40), zAng, "main"},
-    {Vector(22, -26.8, 40), zAng, "main"},
-    {Vector(22, 23.6, 40), zAng, "main"},
-    {Vector(22, 14.5, 51.6), zAng, "main"},
-    {Vector(22, 20, 45.6), zAng, "main"},
-    {Vector(22, 21.2, 33.8), zAng, "main"},
-    {Vector(22, 16.4, 29.2), zAng, "main"},
-    {Vector(22, -16.8, 51.4), zAng, "main"},
-    {Vector(22, -22.2, 46.1), zAng, "main"},
-    {Vector(22, -22.5, 34.2), zAng, "main"},
+	{Vector(22, -9.2, 40), zAng, "main"},
+	{Vector(22, -18, 40), zAng, "main"},
+	{Vector(22, 15.2, 40), zAng, "main"},
+	{Vector(22, 7.5, 40), zAng, "main"},
+	{Vector(22, -26.8, 40), zAng, "main"},
+	{Vector(22, 23.6, 40), zAng, "main"},
+	{Vector(22, 14.5, 51.6), zAng, "main"},
+	{Vector(22, 20, 45.6), zAng, "main"},
+	{Vector(22, 21.2, 33.8), zAng, "main"},
+	{Vector(22, 16.4, 29.2), zAng, "main"},
+	{Vector(22, -16.8, 51.4), zAng, "main"},
+	{Vector(22, -22.2, 46.1), zAng, "main"},
+	{Vector(22, -22.5, 34.2), zAng, "main"},
 	{Vector(22, -16.6, 29), zAng, "main"}
 }
 

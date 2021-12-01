@@ -354,7 +354,11 @@ properties.Add("photon_selection", {
         local submenu = option:AddSubMenu()
 
         for catIndex, cat in ipairs(options) do
-            if not cat.Name then cat.Name = "Unspecified #" .. catIndex; print("[Photon] Selection with the index #" .. catIndex .. " has no name specified.") end
+            if not cat.Name then
+                cat.Name = "Unspecified #" .. catIndex
+                print("[Photon] Selection with the index #" .. catIndex .. " has no name specified.")
+            end
+
             if #cat.Options == 2 and (cat.Options[1].Name == "None" or cat.Options[2].Name == "None") then
                 local selected = ent:Photon_SelectionOption(catIndex)
                 local isActive = cat.Options[selected].Name ~= "None"
@@ -378,7 +382,11 @@ properties.Add("photon_selection", {
                 for index, option in pairs(cat.Options) do
                     local opt
 
-                    if not option.Name then option.Name = "Unspecified #" .. index; print("[Photon] Option in selection '" .. cat.Name .. "' with the index #" .. index .. " has no name specified.") end
+                    if not option.Name then
+                        option.Name = "Unspecified #" .. index
+                        print("[Photon] Option in selection '" .. cat.Name .. "' with the index #" .. index .. " has no name specified.")
+                    end
+
                     if option.Category then
                         if not subCategories[option.Category] then
                             subCategories[option.Category] = category:AddSubMenu(option.Category)

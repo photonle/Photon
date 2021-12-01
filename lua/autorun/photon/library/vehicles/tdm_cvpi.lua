@@ -1,11 +1,8 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local DA = "D_AMBER"
 local R = "RED"
 local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
 local SW = "S_WHITE"
 
 local PI = {}
@@ -28,7 +25,7 @@ PI.Meta = {
 		Sprite = "sprites/emv/blank",
 		Scale = 3,
 	},
-	
+
 	brake_light = {
 		AngleOffset = 90,
 		W = 8,
@@ -96,7 +93,7 @@ PI.Positions = {
 	-- BOTTOM --
 	[3] = { Vector( -33.6, -122.7, 42.2 ), Angle( 0, -16.2, -4 ), "tail_light" },
 	[4] = { Vector( 33.6, -122.7, 42.2 ), Angle( 0, 16.2, 176 ), "tail_light" },
-	
+
 	-- BRAKE --
 	[5] = { Vector( 0, -81.7, 53.6 ), Angle( 0, 0, 0 ), "brake_light" },
 
@@ -131,18 +128,18 @@ PI.States.Brakes = {
 	{ 1, DR, 1 }, { 2, DR, 1 }, { 3, DR, 1 }, { 4, DR, 1 }, { 5, DR, 1 }
 }
 PI.States.Blink_Left = {
-	{ 1, R }, { 3, R }, --{ 12, R }, 
+	{ 1, R }, { 3, R }, --{ 12, R },
 	{ 8, A, 1 },
 }
 PI.States.Blink_Right = {
-	{ 2, R }, { 4, R }, --{ 13, R }, 
+	{ 2, R }, { 4, R }, --{ 13, R },
 	{ 9, A, 1 },
 }
 PI.States.Reverse = {
 	{ 10, SW }, { 11, SW }
 }
 PI.States.Running = {
-	{ 1, DR, .25 }, { 2, DR, .25 }, { 3, DR, .25 }, { 4, DR, .25 },  --{ 12, DR, .25 }, { 13, DR, .25 }, 
+	{ 1, DR, .25 }, { 2, DR, .25 }, { 3, DR, .25 }, { 4, DR, .25 },  --{ 12, DR, .25 }, { 13, DR, .25 },
 	{ 6, SW, 1 }, { 7, SW, 1 },
 	{ 15, A, .88 }, { 14, A, .88 },
 	{ 8, A, .5 }, { 9, A, .5 },

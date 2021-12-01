@@ -4,10 +4,8 @@ local name = "Dodge Charger SRT8 2012 Police"
 
 local A = "AMBER"
 local R = "RED"
-local DR = "D_RED"
 local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
 local SW = "S_WHITE"
 
 local EMV = {}
@@ -18,13 +16,7 @@ EMV.Color = nil
 EMV.Skin = 0
 
 EMV.BodyGroups = {}
-
 EMV.Props = {}
-
-
-local alphaOffset = 10
-local betaOffset = -10
-local gammaOffset = 5
 
 EMV.Meta = {
 	grille_leds = {
@@ -1161,7 +1153,7 @@ EMV.Sequences = {
 						["rear_int_vipers"] = "code1"
 					}
 				},
-				["front interior lightbar"] ={
+				["front interior lightbar"] = {
 					["0"] = {
 						["front_inner_default"] = "code1"
 					},
@@ -1219,7 +1211,7 @@ EMV.Sequences = {
 						["rear_int_vipers"] = "code2"
 					}
 				},
-				["front interior lightbar"] ={
+				["front interior lightbar"] = {
 					["0"] = {
 						["front_inner_default"] = "code2"
 					},
@@ -1272,7 +1264,7 @@ EMV.Sequences = {
 						["bumper_vertex"] = "code2"
 					}
 				},
-				["front interior lightbar"] ={
+				["front interior lightbar"] = {
 					["0"] = {
 						["front_inner_default"] = "code3"
 					},

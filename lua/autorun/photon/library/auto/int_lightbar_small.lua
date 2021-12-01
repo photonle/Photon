@@ -1,15 +1,5 @@
 AddCSLuaFile()
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
-
 local name = "Small Rear Interior Lightbar"
 
 local COMPONENT = {}
@@ -114,9 +104,9 @@ COMPONENT.Patterns = {
 
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
     ["carbide_aux"] = {
-        5, 6, 7, 8, 9, 10 
+        5, 6, 7, 8, 9, 10
     }
 }
 

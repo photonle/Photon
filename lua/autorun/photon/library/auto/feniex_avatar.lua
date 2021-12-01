@@ -1,14 +1,7 @@
 AddCSLuaFile()
 
 local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
 local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Feniex Avatar"
 
@@ -96,7 +89,7 @@ COMPONENT.Positions = {
 COMPONENT.Sections = {
 	["auto_feniex_avatar"] = {
 		[1] = {
-			{ 1, W }, { 2, W }, { 3, "_1" }, { 4, "_2" }, { 5, "_2" }, { 6, "_1" }, { 7, "_1" }, { 8, "_2" }, { 9, "_1" }, { 10, "_2" }, 
+			{ 1, W }, { 2, W }, { 3, "_1" }, { 4, "_2" }, { 5, "_2" }, { 6, "_1" }, { 7, "_1" }, { 8, "_2" }, { 9, "_1" }, { 10, "_2" },
 			{ 11, W }, { 12, W },
 			{ 13, "_1" }, { 14, "_2" }, { 15, "_1" }, { 16, "_2" }, { 17, A }, { 18, A }, { 19, A }, { 20, A }, { 21, A }, { 22, A },
 		}
@@ -154,9 +147,9 @@ COMPONENT.Patterns = {
 		["code_3"] = { 1, 0, 1, 0, 2, 0, 2, 0 }
 	},
 	["auto_feniex_avatar_front"] = {
-		["code_3"] = { 
-			1, 1, 1, 2, 2, 2, 3, 3, 3, 2, 2, 2, 
-			1, 1, 1, 2, 2, 2, 3, 3, 3, 2, 2, 2, 
+		["code_3"] = {
+			1, 1, 1, 2, 2, 2, 3, 3, 3, 2, 2, 2,
+			1, 1, 1, 2, 2, 2, 3, 3, 3, 2, 2, 2,
 			1, 1, 2, 2, 3, 3, 2, 2,
 			1, 1, 2, 2, 3, 3, 2, 2,
 			1, 1, 2, 2, 3, 3, 2, 2,
@@ -174,7 +167,7 @@ COMPONENT.Patterns = {
 	}
 }
 
-COMPONENT.TrafficDisconnect = { 
+COMPONENT.TrafficDisconnect = {
 
 }
 
@@ -200,30 +193,30 @@ COMPONENT.Modes = {
 		},
 	Auxiliary = {
 			C = {
-				
+
 			},
 			L = {
-				
+
 			},
 			R = {
-				
+
 			},
 			D = {
-				
+
 			}
 		},
 	Illumination = {
 		L = {
-			
+
 		},
 		R = {
-			
+
 		},
 		F = {
-			
+
 		},
 		T = {
-			
+
 		}
 	}
 }

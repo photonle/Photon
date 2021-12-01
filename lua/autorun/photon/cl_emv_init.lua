@@ -447,85 +447,82 @@ Photon.BoneRotation = function()
 		if ent.PhotonRotationEnabled then
 			local emv = ent:GetParent()
 			if not IsValid( emv ) or not emv.Photon_LightOptionID then continue end
-			if true then
-				local stageId = emv:Photon_LightOptionID()
-				local auxState = emv:Photon_AuxOptionID()
-				local illumStage = emv:Photon_IllumOptionID()
-				local componentBoneData = ent.PhotonBoneAnimationData
-				for boneIndex, boneData in pairs( componentBoneData ) do
-					local currentAnimation
-					if boneData.Default then
-						currentAnimation = boneData.Default
-					end
-					if emv:Photon_Lights() and boneData.Primary and boneData.Primary[ stageId ] then
-						currentAnimation = boneData.Primary[ stageId ]
-					end
-					if emv:Photon_AuxLights() and boneData.Auxiliary and boneData.Auxiliary[ auxState ] then
-						currentAnimation = boneData.Auxiliary[ auxState ]
-					end
-					if emv:Photon_Illumination() and boneData.Illumination and boneData.Illumination[ illumStage ] then
-						currentAnimation = boneData.Illumination[ illumStage ]
-					end
+			local stageId = emv:Photon_LightOptionID()
+			local auxState = emv:Photon_AuxOptionID()
+			local illumStage = emv:Photon_IllumOptionID()
+			local componentBoneData = ent.PhotonBoneAnimationData
+			for boneIndex, boneData in pairs( componentBoneData ) do
+				local currentAnimation
+				if boneData.Default then
+					currentAnimation = boneData.Default
+				end
+				if emv:Photon_Lights() and boneData.Primary and boneData.Primary[ stageId ] then
+					currentAnimation = boneData.Primary[ stageId ]
+				end
+				if emv:Photon_AuxLights() and boneData.Auxiliary and boneData.Auxiliary[ auxState ] then
+					currentAnimation = boneData.Auxiliary[ auxState ]
+				end
+				if emv:Photon_Illumination() and boneData.Illumination and boneData.Illumination[ illumStage ] then
+					currentAnimation = boneData.Illumination[ illumStage ]
+				end
 
-					if not currentAnimation then continue end
-					local animAction = currentAnimation[1] or "RP"
-					local animAngle = currentAnimation[2] or 0
-					local animSpeed = currentAnimation[3] or 25
-					local currentAngles = ent:GetManipulateBoneAngles( boneIndex )
-					local currentAngle = currentAngles[3]
-					local difAng = ( FrameTime() * animSpeed ) * 10
-					local addAng = (currentAngles.r + difAng) % 360
-					local subAng = (currentAngles.r - difAng) % 360
-					if animAction == "S" then
-						if animAngle < 0 then animAngle = 360 + animAngle end
-						local lt = animAngle > currentAngle
-						local eq = animAngle == currentAngle
-						if not eq then
-							if lt then
-								if difAng + currentAngle > animAngle then addAng = animAngle end
-								ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, addAng ) )
-							else
-								if currentAngle - difAng < animAngle then subAng = animAngle end
-								ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, subAng ) )
-							end
-						end
-					elseif (animAction == "A" or animAction == "AN") and istable( animAngle ) then
-						if not ent.PhotonBonesAlt then ent.PhotonBonesAlt = {} end
-						if not ent.PhotonBonesAlt[ boneIndex ] then ent.PhotonBonesAlt[ boneIndex ] = 1 end
-						local currentDir = ent.PhotonBonesAlt[ boneIndex ] or 1
-						local gotoAngle = animAngle[ currentDir ]
-						local ang1 = animAngle[1]
-						local ang2 = animAngle[2]
-						local eq = gotoAngle == currentAngle
-						if not eq then
-							if animAction == "A" then
-								if currentDir == 2 then -- even
-									if subAng > ang1 and subAng < ang2 then subAng = gotoAngle end
-									ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, subAng ) )
-								else -- odd
-									if addAng > ang1 and addAng < ang2 then addAng = gotoAngle end
-									ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, addAng ) )
-								end
-							else
-								if currentDir == 2 then -- even
-									if subAng < ang1 and subAng > ang2 then subAng = gotoAngle end
-									ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, subAng ) )
-								else -- odd
-									if addAng < ang1 and addAng > ang2 then addAng = gotoAngle end
-									ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, addAng ) )
-								end
-							end
-
+				if not currentAnimation then continue end
+				local animAction = currentAnimation[1] or "RP"
+				local animAngle = currentAnimation[2] or 0
+				local animSpeed = currentAnimation[3] or 25
+				local currentAngles = ent:GetManipulateBoneAngles( boneIndex )
+				local currentAngle = currentAngles[3]
+				local difAng = ( FrameTime() * animSpeed ) * 10
+				local addAng = (currentAngles.r + difAng) % 360
+				local subAng = (currentAngles.r - difAng) % 360
+				if animAction == "S" then
+					if animAngle < 0 then animAngle = 360 + animAngle end
+					local lt = animAngle > currentAngle
+					local eq = animAngle == currentAngle
+					if not eq then
+						if lt then
+							if difAng + currentAngle > animAngle then addAng = animAngle end
+							ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, addAng ) )
 						else
-							local max = #animAngle
-							if max > currentDir then ent.PhotonBonesAlt[ boneIndex ] = currentDir + 1
-							else  ent.PhotonBonesAlt[ boneIndex ] = 1 end
+							if currentAngle - difAng < animAngle then subAng = animAngle end
+							ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, subAng ) )
 						end
-					elseif animAction == "RP" or animAction == "R" then
-						ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, addAng ) )
-					elseif animAction == "RN" then
-						ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, subAng ) )
 					end
+				elseif (animAction == "A" or animAction == "AN") and istable( animAngle ) then
+					if not ent.PhotonBonesAlt then ent.PhotonBonesAlt = {} end
+					if not ent.PhotonBonesAlt[ boneIndex ] then ent.PhotonBonesAlt[ boneIndex ] = 1 end
+					local currentDir = ent.PhotonBonesAlt[ boneIndex ] or 1
+					local gotoAngle = animAngle[ currentDir ]
+					local ang1 = animAngle[1]
+					local ang2 = animAngle[2]
+					local eq = gotoAngle == currentAngle
+					if not eq then
+						if animAction == "A" then
+							if currentDir == 2 then -- even
+								if subAng > ang1 and subAng < ang2 then subAng = gotoAngle end
+								ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, subAng ) )
+							else -- odd
+								if addAng > ang1 and addAng < ang2 then addAng = gotoAngle end
+								ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, addAng ) )
+							end
+						else
+							if currentDir == 2 then -- even
+								if subAng < ang1 and subAng > ang2 then subAng = gotoAngle end
+								ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, subAng ) )
+							else -- odd
+								if addAng < ang1 and addAng > ang2 then addAng = gotoAngle end
+								ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, addAng ) )
+							end
+						end
+					else
+						local max = #animAngle
+						if max > currentDir then ent.PhotonBonesAlt[ boneIndex ] = currentDir + 1
+						else  ent.PhotonBonesAlt[ boneIndex ] = 1 end
+					end
+				elseif animAction == "RP" or animAction == "R" then
+					ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, addAng ) )
+				elseif animAction == "RN" then
+					ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, subAng ) )
 				end
 			end
 		end

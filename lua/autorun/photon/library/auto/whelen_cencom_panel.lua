@@ -1,14 +1,6 @@
 AddCSLuaFile()
 
-local A = "AMBER"
 local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-local RB = "BLUE/RED"
 
 local name = "Whelen CenCom Panel"
 
@@ -36,7 +28,7 @@ COMPONENT.Meta = {
 		NoLegacy = true,
 		DirAxis = "Right",
 		DirOffset = 0
-	},
+	}
 }
 
 COMPONENT.Positions = {
@@ -69,18 +61,18 @@ COMPONENT.Positions = {
 	[26] = { Vector( -1.74, -1.14, 0.26 ), Angle( 0, 0, -90 ), "auto_cencom_led" },
 	[27] = { Vector( -1.49, -1.14, 0.26 ), Angle( 0, 0, -90 ), "auto_cencom_led" },
 	[28] = { Vector( -1.25, -1.14, 0.26 ), Angle( 0, 0, -90 ), "auto_cencom_led" },
-	[29] = { Vector( -1, -1.14, 0.26 ), Angle( 0, 0, -90 ), "auto_cencom_led" },
+	[29] = { Vector( -1, -1.14, 0.26 ), Angle( 0, 0, -90 ), "auto_cencom_led" }
 
 }
 
 COMPONENT.Sections = {
 	["auto_cencom"] = {
 		[1] = {
-			{ 1, "_1" }, { 2, "_1" }, { 3, "_1" }, { 4, "_1" }, { 5, "_1" }, { 6, "_1" }, { 7, "_1" }, { 8, "_1" }, 
-			{ 9, "_1" }, { 10, "_1" }, { 11, "_1" }, { 12, "_1" }, { 13, "_1" }, 
+			{ 1, "_1" }, { 2, "_1" }, { 3, "_1" }, { 4, "_1" }, { 5, "_1" }, { 6, "_1" }, { 7, "_1" }, { 8, "_1" },
+			{ 9, "_1" }, { 10, "_1" }, { 11, "_1" }, { 12, "_1" }, { 13, "_1" },
 			{ 14, "_1" }, { 15, "_1" }, { 16, "_1" }, { 17, "_1" }, { 18, "_1" },
-			{ 19, "_1" }, { 20, "_1" }, { 21, "_1" }, 
-			{ 22, "_1" }, { 23, "_1" }, { 24, "_1" }, { 25, "_1" }, { 26, "_1" }, { 27, "_1" }, { 28, "_1" }, { 29, "_1" }, 
+			{ 19, "_1" }, { 20, "_1" }, { 21, "_1" },
+			{ 22, "_1" }, { 23, "_1" }, { 24, "_1" }, { 25, "_1" }, { 26, "_1" }, { 27, "_1" }, { 28, "_1" }, { 29, "_1" },
 		}
 	},
 	["slider_stages"] = {
@@ -142,15 +134,15 @@ COMPONENT.Patterns = {
 		["diverge"] = { 22, 22, 22, 23, 23, 23, 24, 24, 24, 14, 14, 14, 14, 14, 14, 0, 0, 0, 0 },
 		["cruise"] = { 25 },
 	},
-	["trf_button"] = { 
-		["on"] = { 1 }, 
-		["off"] = { 0 }, 
+	["trf_button"] = {
+		["on"] = { 1 },
+		["off"] = { 0 },
 	},
-	["cruise_button"] = { 
-		["on"] = { 1 }, 
+	["cruise_button"] = {
+		["on"] = { 1 },
 	},
-	["emrg_button"] = { 
-		["on"] = { 1 }, 
+	["emrg_button"] = {
+		["on"] = { 1 },
 	},
 	["auto_cencom"] = {
 		["code1"] = { 1 },
@@ -179,20 +171,20 @@ COMPONENT.Patterns = {
 
 COMPONENT.Modes = {
 	Primary = {
-		M1 = { 
-			["slider_stages"] = "code1", 
+		M1 = {
+			["slider_stages"] = "code1",
 			["mini_lb"] = "code1",
 			["emrg_button"] = "on",
 			["trf_button"] = "off",
 		},
-		M2 = { 
-			["slider_stages"] = "code2", 
+		M2 = {
+			["slider_stages"] = "code2",
 			["mini_lb"] = "code2",
 			["emrg_button"] = "on",
 			["trf_button"] = "off",
 		},
-		M3 = { 
-			["slider_stages"] = "code3", 
+		M3 = {
+			["slider_stages"] = "code3",
 			["mini_lb"] = "code3",
 			["emrg_button"] = "on",
 			["trf_button"] = "off",

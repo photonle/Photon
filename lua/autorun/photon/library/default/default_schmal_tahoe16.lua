@@ -2,15 +2,6 @@ AddCSLuaFile()
 
 local name = "2016 Chevrolet Tahoe PPV"
 
-local A = "AMBER"
-local R = "RED"
-local DR = "D_RED"
-local B = "BLUE"
-local W = "WHITE"
-local CW = "C_WHITE"
-local SW = "S_WHITE"
-local G = "GREEN"
-
 local EMV = {}
 
 EMV.Siren = 46
@@ -253,9 +244,6 @@ EMV.Props = {
 		Scale = 1.002,
 		Pos = Vector( 0, -.01, 0 ),
 		Ang = Angle( 0, 90, 0),
-		//Color = Color( 0, 0, 0 ),
-		-- RenderGroup = RENDERGROUP_TRANSLUCENT,
-		-- RenderMode = RENDERMODE_TRANSALPHA
 	},
 }
 
@@ -1465,7 +1453,6 @@ EMV.Auto = {
 	},
 	[132] = {
 		ID = "Whelen Ion Split",
-		Scale = .8,
 		Scale = lib.Mirror.Driver.Scale,
 		Pos = lib.Mirror.Driver.Pos,
 		Ang = lib.Mirror.Driver.Ang,
@@ -1482,7 +1469,6 @@ EMV.Auto = {
 	},
 	[134] = {
 		ID = "Whelen Ion Split",
-		Scale = .8,
 		Scale = lib.Mirror.Driver.Scale,
 		Pos = lib.Mirror.Driver.Pos,
 		Ang = lib.Mirror.Driver.Ang,
@@ -1499,7 +1485,6 @@ EMV.Auto = {
 	},
 	[136] = {
 		ID = "Whelen Ion",
-		Scale = .8,
 		Scale = lib.Mirror.Driver.Scale,
 		Pos = lib.Mirror.Driver.Pos,
 		Ang = lib.Mirror.Driver.Ang,
@@ -1516,7 +1501,6 @@ EMV.Auto = {
 	},
 	[138] = {
 		ID = "Whelen Ion",
-		Scale = .8,
 		Scale = lib.Mirror.Driver.Scale,
 		Pos = lib.Mirror.Driver.Pos,
 		Ang = lib.Mirror.Driver.Ang,
