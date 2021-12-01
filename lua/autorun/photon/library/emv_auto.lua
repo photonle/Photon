@@ -90,6 +90,19 @@ while changed ~= 0 do
 end
 EMVU.AutoStaging = nil
 
+local wsidCache = {}
+for _, addon in ipairs(engine.GetAddons()) do
+	local files = file.Find("lua/autorun/photon/library/auto/*", addon.title)
+	for _, path in ipairs(files) do
+		path = string.format("lua/autorun/photon/library/auto/%s", path)
+		if not wsidCache[path] then
+			wsidCache[path] = {}
+		end
+
+		table.insert(wsidCache[path], addon)
+	end
+end
+
 local pathCache = {}
 for id, component in pairs(EMVU.Auto) do
 	component.Found = false
@@ -115,19 +128,11 @@ for id, component in pairs(EMVU.Auto) do
 		end
 	end
 
-	if not component.Found then
-		-- This is the wrong way round really, I'd prefer to have the addons iteration outside.
-		for _, addon in ipairs(engine.GetAddons()) do
-			if addon.mounted and addon.title and addon.wsid then
-				-- This is deprecated but is also literally the only way to do it.
-				local fl = file.Find(component.Source, addon.title)
-				if #fl > 0 then
-					component.Source = "Workshop Addon: " .. addon.wsid .. " (" .. addon.title .. ")"
-					component.Found = true
-					break
-				end
-			end
-		end
+	if not component.Found and wsidCache[component.Source] then
+		local addons = wsidCache[component.Source]
+		local addon = addons[#addons]
+		component.Source = "Workshop Addon: " .. addon.wsid .. " (" .. addon.title .. ")"
+		component.Found = true
 	end
 
 	if not component.Found then
