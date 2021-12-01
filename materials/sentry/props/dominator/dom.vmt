@@ -1,0 +1,21 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "sentry/props/dominator/dom"
+	"$bumpmap" "sentry/props/dominator/dom_nm"
+    $phong "1"
+    $phongexponent "7"
+    $phongboost "1"
+    $phongfresnelranges "[.05 .3 1]"
+	"$carcolorfixenabled" "1"
+	Proxies // proxies are listed inside this block
+	{
+		Equals // a proxy which produces a colorfix
+		{
+			srcVar1 $carcolorfixenabled
+			resultVar	$color // The shader parameter to be manipulated
+
+		}
+	}
+}
+
+

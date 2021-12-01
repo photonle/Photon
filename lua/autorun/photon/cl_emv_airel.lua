@@ -11,14 +11,16 @@ Photon.AirEL = {}
 Photon.AirEL.TranslationTable = {
 	["models/schmal/fpiu_airel.mdl"] = "fpius",
 	["models/schmal/tahoe_airel.mdl"] = "fpius",
-	["models/schmal/lwdodch_airel.mdl"] = "fpius"
+	["models/schmal/lwdodch_airel.mdl"] = "fpius",
+	["models/supermighty/photon/fpiu_airel.mdl"] = "fpius",
 }
 
 --- Translation between models and material indexes.
 Photon.AirEL.TranslationTableIndex = {
 	["models/schmal/fpiu_airel.mdl"] = 1,
 	["models/schmal/lwdodch_airel.mdl"] = 0,
-	["models/schmal/tahoe_airel.mdl"] = 0
+	["models/schmal/tahoe_airel.mdl"] = 0,
+	["models/supermighty/photon/fpiu_airel.mdl"] = 1,
 }
 
 --- Table for storing materials, keyed by material name.
