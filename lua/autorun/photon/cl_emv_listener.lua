@@ -99,7 +99,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	if not LocalPlayer():InVehicle() or not IsValid( LocalPlayer():GetVehicle() ) or not LocalPlayer():GetVehicle():IsEMV() then return end
 
 	local emv = LocalPlayer():GetVehicle()
-		
+
 	if not emv.Photon_Illumination or not emv.Photon_Lights or not emv.Photon_Siren then return end
 
 	if input.IsKeyTrapping() then return end
@@ -114,11 +114,11 @@ hook.Add("Think", "Photon.ButtonPress", function()
 			X_PRESS = CurTime()
 		end
 	elseif X_DOWN and not keyDown(key_illum:GetInt()) then
-		local cmd = "on"
+		local cmd = EMVU_NET_ILLUM_ON
 		if emv:Photon_Illumination() and X_PRESS + .25 > CurTime() then
-			cmd = "off"
+			cmd = EMVU_NET_ILLUM_OFF
 		elseif emv:Photon_Illumination() then
-			cmd = SHIFTING and "togback" or "tog"
+			cmd = SHIFTING and EMVU_NET_ILLUM_REVERSE or EMVU_NET_ILLUM_FORWARD
 		end
 
 		EMVU.Sounds:Panel(cmd ~= "off")
@@ -151,20 +151,20 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		LIGHTON_DOWN = true
 	elseif LIGHTON_DOWN and not keyDown(key_primary_toggle:GetInt()) then
 		EMVU.Sounds:Panel(not emv:Photon_Lights())
-		EMVU.Net:Lights(emv:Photon_Lights() and "off" or "on")
+		EMVU.Net:Lights(emv:Photon_Lights() and EMVU_NET_ELS_OFF or EMVU_NET_ELS_ON)
 		LIGHTON_DOWN = false
 	end
 
 	if not SIRENON_DOWN and keyDown(key_siren_toggle:GetInt()) then
 		SIRENON_DOWN = true
-		EMVU.Net:Siren(emv:Photon_Siren() and "off" or "on")
+		EMVU.Net:Siren(emv:Photon_Siren() and EMVU_NET_SIREN_OFF or EMVU_NET_SIREN_ON)
 	elseif SIRENON_DOWN and not keyDown(key_siren_toggle:GetInt()) then
 		SIRENON_DOWN = false
 	end
 
 	if not LIGHTTOG_DOWN and keyDown(key_primary_alt:GetInt()) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
-		EMVU.Net:Lights(SHIFTING and "togback" or "tog")
+		EMVU.Net:Lights(SHIFTING and EMVU_NET_ELS_REVERSE or EMVU_NET_ELS_FORWARD)
 		LIGHTTOG_DOWN = true
 	elseif LIGHTTOG_DOWN and not keyDown(key_primary_alt:GetInt()) then
 		LIGHTTOG_DOWN = false
@@ -172,7 +172,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 
 	if not SIRENTOGGLE_DOWN and keyDown(key_siren_alt:GetInt()) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
-		EMVU.Net:Siren(SHIFTING and "togback" or "tog")
+		EMVU.Net:Siren(SHIFTING and EMVU_NET_SIREN_REVERSE or EMVU_NET_SIREN_FORWARD)
 		SIRENTOGGLE_DOWN = true
 	elseif SIRENTOGGLE_DOWN and not keyDown(key_siren_alt:GetInt()) then
 		SIRENTOGGLE_DOWN = false
@@ -180,7 +180,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 
 	if not SIRENTOGGLE1_DOWN and keyDown(key_siren1:GetInt()) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
-		EMVU.Net:Siren("1")
+		EMVU.Net:Siren(EMVU_NET_SIREN_SET_1)
 		SIRENTOGGLE1_DOWN = true
 	elseif SIRENTOGGLE1_DOWN and not keyDown(key_siren1:GetInt()) then
 		SIRENTOGGLE1_DOWN = false
@@ -188,7 +188,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 
 	if not SIRENTOGGLE2_DOWN and keyDown(key_siren2:GetInt()) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
-		EMVU.Net:Siren("2")
+		EMVU.Net:Siren(EMVU_NET_SIREN_SET_2)
 		SIRENTOGGLE2_DOWN = true
 	elseif SIRENTOGGLE2_DOWN and not keyDown(key_siren2:GetInt()) then
 		SIRENTOGGLE2_DOWN = false
@@ -196,7 +196,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 
 	if not SIRENTOGGLE3_DOWN and keyDown(key_siren3:GetInt()) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
-		EMVU.Net:Siren("3")
+		EMVU.Net:Siren(EMVU_NET_SIREN_SET_3)
 		SIRENTOGGLE3_DOWN = true
 	elseif SIRENTOGGLE3_DOWN and not keyDown(key_siren3:GetInt()) then
 		SIRENTOGGLE3_DOWN = false
@@ -204,7 +204,7 @@ hook.Add("Think", "Photon.ButtonPress", function()
 
 	if not SIRENTOGGLE4_DOWN and keyDown(key_siren4:GetInt()) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
-		EMVU.Net:Siren("4")
+		EMVU.Net:Siren(EMVU_NET_SIREN_SET_4)
 		SIRENTOGGLE4_DOWN = true
 	elseif SIRENTOGGLE4_DOWN and not keyDown(key_siren4:GetInt()) then
 		SIRENTOGGLE4_DOWN = false
