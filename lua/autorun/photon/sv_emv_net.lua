@@ -59,7 +59,7 @@ function EMVU.Net:Siren( ply, args )
 	if args == EMVU_NET_SIREN_OFF then
 		emv:ELS_SirenOff()
 	elseif args == EMVU_NET_SIREN_ON then
-		emv:ELS_SirenOff()
+		emv:ELS_SirenOn()
 	elseif args == EMVU_NET_SIREN_FORWARD then
 		emv:ELS_SirenToggle()
 	elseif args == EMVU_NET_SIREN_REVERSE then
