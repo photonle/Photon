@@ -1,37 +1,57 @@
 
 function Photon:RunningScan()
 	for k,v in pairs( self:AllVehicles() ) do
-		if IsValid( v ) and IsValid(v:GetDriver()) and v:GetDriver():IsPlayer() then
-			local hasELS = v:HasPhotonELS()
-			if hasELS and v.ELS.Blackout then
-				v:CAR_Running(false)
-			else
-				v:CAR_Running(true)
-			end
-
+		if IsValid( v ) and IsValid(v:GetDriver()) and v:GetDriver():IsPlayer() and v.IsEMV and v:IsEMV() then
 			if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
 			if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
-			if hasELS then v:ELS_ParkMode(false) end
-
-			v.LastSpeed = v:Photon_GetSpeed()
-
-		elseif IsValid(v) and not v:GetDriver():IsValid() and not v:GetDriver():IsPlayer() then
-			local hasELS = v:HasPhotonELS()
-			if hasELS then v:ELS_ParkMode(true) end
-			if not v:GetPhotonLEStayOn() then
-				v:CAR_Running(false)
-				v:CAR_Braking(false)
-				v:CAR_Reversing(false)
-				if hasELS then
-					if v:ELS_Siren() then v:ELS_SirenOff() end
-					v:ELS_Horn(false)
-					v:ELS_ManualSiren(false)
-				end
-			end
 		end
 	end
 end
-timer.Create("Photon.RunScan", 1, 0, function()
+
+hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, v)
+	if IsValid(v) and v.IsEMV and v:IsEMV() then
+		local hasELS = v:HasPhotonELS()
+		if hasELS and v.ELS.Blackout then
+			v:CAR_Running(false)
+		else
+			v:CAR_Running(true)
+		end
+		if hasELS then v:ELS_ParkMode(false) end
+	end
+end)
+
+hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, v)
+	if IsValid(v) and v.IsEMV and v:IsEMV() then
+		local hasELS = v:HasPhotonELS()
+		if hasELS then v:ELS_ParkMode(true) end
+		v:CAR_Running(false)
+		v:CAR_Braking(false)
+		v:CAR_Reversing(false)
+		if hasELS then
+			if v:ELS_Siren() and not v:GetPhotonLEStayOn() then v:ELS_SirenOff() end
+			v:ELS_Horn(false)
+			v:ELS_ManualSiren(false)
+		end
+	end
+end)
+
+hook.Add("KeyPress", "Photon.KeyPress.SGM", function(ply, key)
+	local v = ply:GetVehicle()
+	if IsValid(v) and v.IsEMV and v:IsEMV() then
+		if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
+		if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
+	end
+end)
+
+hook.Add("KeyRelease", "Photon.KeyRelease.SGM", function(ply, key)
+	local v = ply:GetVehicle()
+	if IsValid(v) and v.IsEMV and v:IsEMV() then
+		if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
+		if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
+	end
+end)
+
+timer.Create("Photon.RunScan", 0.5, 0, function()
 	Photon:RunningScan()
 end)
 timer.Create("Photon.SirenRunScan", 0.2, 0, function()

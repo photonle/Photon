@@ -112,4 +112,24 @@ EMVU.Colors = {
 		flr = Color( 0, 16, 255, 255 ),
 		raw = Color( 0, 0, 255, 128 ),
 	},
+	PURPLE = {
+		src = Color( 255, 255, 240, 255 ),
+		med = Color( 255, 0, 187, 220 ),
+		glw = Color( 155, 0, 255, 120 ),
+		blm = Color( 141, 0, 255, 70 ),
+		amb = Color( 131, 0, 255, 10 ),
+		flr = Color( 74, 0, 128, 255 ),
+		dim = Color( 231, 0, 255, 255 ),
+		raw = Color( 131, 0, 255, 255 )
+	},
+	PINK = {
+		src = Color( 248, 255, 247, 255 ),
+		med = Color( 255, 124, 112, 220 ),
+		glw = Color( 255, 112, 195, 120 ),
+		blm = Color( 255, 112, 202, 70 ),
+		amb = Color( 255, 112, 208, 10 ),
+		flr = Color( 184, 112, 115, 255 ),
+		dim = Color( 343, 112, 152, 255 ),
+		raw = Color( 255, 112, 208, 255 )
+	},
 }

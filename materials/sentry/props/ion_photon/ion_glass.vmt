@@ -1,0 +1,26 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "sentry/props/ion_photon/ion_glass"
+	"$bumpmap"    "sentry/props/ion_photon/ion_glass_nm"
+	"$envmap" env_cubemap
+	"$translucent" 1
+	"$halflambert" 1
+	"$phong" "1" 
+	"$phongboost" "5" 
+	"$phongexponent" "3"
+	"$phongfresnelranges" "[2 6 2]"
+	"$envmapFresnel" "1"
+	"$envmaptint" "[1 1 1]"
+	"$carcolorenabled" "[0.5 0.5 0.5]"
+	Proxies // proxies are listed inside this block
+	{
+		Equals 
+		{
+			srcVar1 $carcolorenabled
+			resultVar	$color 
+
+		}
+	}
+ }
+
+

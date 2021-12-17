@@ -1,0 +1,11 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "sentry/props/tactld1/tactld1"
+	"$bumpmap" "sentry/props/tactld1/tactld1_nm"
+	"$phong" "1"
+	"$phongexponent" "20"
+	"$phongboost" "0.15"	
+	"$phongfresnelranges"	"[1 2 1]"
+}
+
+
