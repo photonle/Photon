@@ -553,6 +553,8 @@ function EMVU.Helper:GetProps( name, ent )
 						propData.Pos = component.Pos
 						propData.Ang = component.Ang
 						propData.Scale = component.Scale
+						propData.RenderGroup = component.RenderGroup
+						propData.RenderMode = component.RenderMode
 						propData.Skin = component.Skin or propData.Skin
 						propData.BodyGroups = component.BodyGroups or propData.BodyGroups
 						propData.SubMaterials = component.SubMaterials or propData.SubMaterials

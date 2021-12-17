@@ -20,22 +20,22 @@ hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, v)
 end)
 
 hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, v)
-	if IsValid(v) then
-		if v:Photon() then
-			v:CAR_Running(false)
-			v:CAR_Braking(false)
-			v:CAR_Reversing(false)
-		end
+  if IsValid(v) then
+    if v:Photon() then
+      v:CAR_Running(false)
+      v:CAR_Braking(false)
+      v:CAR_Reversing(false)
+    end
 
-		if v:HasPhotonELS() then
-			if v:ELS_Siren() then
-				v:ELS_SirenOff()
-			end
+    if v:HasPhotonELS() then
+      if v:ELS_Siren() and not v:GetPhotonLEStayOn() then
+        v:ELS_SirenOff()
+      end
 
-			v:ELS_Horn(false)
-			v:ELS_ManualSiren(false)
-		end
-	end
+      v:ELS_Horn(false)
+      v:ELS_ManualSiren(false)
+    end
+  end
 end)
 
 hook.Add("KeyPress", "Photon.KeyPress.SGM", function(ply, key)
