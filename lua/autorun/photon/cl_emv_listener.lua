@@ -6,47 +6,115 @@
 --]]--
 AddCSLuaFile()
 
-local key_primary_toggle = GetConVar("photon_key_primary_toggle")
-local key_primary_alt = GetConVar("photon_key_primary_alt")
-local key_siren_toggle = GetConVar("photon_key_siren_toggle")
-local key_siren_alt = GetConVar("photon_key_siren_alt")
-local key_auxiliary = GetConVar("photon_key_auxiliary")
-local key_blackout = GetConVar("photon_key_blackout")
-local key_horn = GetConVar("photon_key_horn")
-local key_manual = GetConVar("photon_key_manual")
-local key_illum = GetConVar("photon_key_illum")
-local key_radar = GetConVar("photon_key_radar")
-local key_siren1 = GetConVar("photon_key_siren1")
-local key_siren2 = GetConVar("photon_key_siren2")
-local key_siren3 = GetConVar("photon_key_siren3")
-local key_siren4 = GetConVar("photon_key_siren4")
-local key_backtick = GetConVar("photon_key_alt_reverse")
-local key_signal_activate = GetConVar("photon_key_signal_activate")
-local key_signal_deactivate = GetConVar("photon_key_signal_deactivate")
-local key_signal_left = GetConVar("photon_key_signal_left")
-local key_signal_right = GetConVar("photon_key_signal_right")
-local key_signal_hazard = GetConVar("photon_key_signal_hazard")
-local should_render =  GetConVar("photon_emerg_enabled")
+local cv_key_alt_reverse = GetConVar("photon_key_alt_reverse")
+local key_backtick = IsValid(cv_key_alt_reverse) and cv_key_alt_reverse:GetInt() or 0
+local cv_key_illum = GetConVar("photon_key_illum")
+local key_illum = IsValid(cv_key_illum) and cv_key_illum:GetInt() or 0
+local cv_key_primary_alt = GetConVar("photon_key_primary_alt")
+local key_primary_alt = IsValid(cv_key_primary_alt) and cv_key_primary_alt:GetInt() or 0
+local cv_key_siren4 = GetConVar("photon_key_siren4")
+local key_siren4 = IsValid(cv_key_siren4) and cv_key_siren4:GetInt() or 0
+local cv_key_signal_left = GetConVar("photon_key_signal_left")
+local key_signal_left = IsValid(cv_key_signal_left) and cv_key_signal_left:GetInt() or 0
+local cv_key_siren1 = GetConVar("photon_key_siren1")
+local key_siren1 = IsValid(cv_key_siren1) and cv_key_siren1:GetInt() or 0
+local cv_key_siren2 = GetConVar("photon_key_siren2")
+local key_siren2 = IsValid(cv_key_siren2) and cv_key_siren2:GetInt() or 0
+local cv_key_primary_toggle = GetConVar("photon_key_primary_toggle")
+local key_primary_toggle = IsValid(cv_key_primary_toggle) and cv_key_primary_toggle:GetInt() or 0
+local cv_key_signal_activate = GetConVar("photon_key_signal_activate")
+local key_signal_activate = IsValid(cv_key_signal_activate) and cv_key_signal_activate:GetInt() or 0
+local cv_key_blackout = GetConVar("photon_key_blackout")
+local key_blackout = IsValid(cv_key_blackout) and cv_key_blackout:GetInt() or 0
+local cv_key_siren_alt = GetConVar("photon_key_siren_alt")
+local key_siren_alt = IsValid(cv_key_siren_alt) and cv_key_siren_alt:GetInt() or 0
+local cv_key_horn = GetConVar("photon_key_horn")
+local key_horn = IsValid(cv_key_horn) and cv_key_horn:GetInt() or 0
+local cv_key_siren_toggle = GetConVar("photon_key_siren_toggle")
+local key_siren_toggle = IsValid(cv_key_siren_toggle) and cv_key_siren_toggle:GetInt() or 0
+local cv_emerg_enabled = GetConVar("photon_emerg_enabled")
+local should_render = IsValid(cv_emerg_enabled) and cv_emerg_enabled:GetBool() or false
+local cv_key_manual = GetConVar("photon_key_manual")
+local key_manual = IsValid(cv_key_manual) and cv_key_manual:GetInt() or 0
+local cv_key_radar = GetConVar("photon_key_radar")
+local key_radar = IsValid(cv_key_radar) and cv_key_radar:GetInt() or 0
+local cv_key_signal_hazard = GetConVar("photon_key_signal_hazard")
+local key_signal_hazard = IsValid(cv_key_signal_hazard) and cv_key_signal_hazard:GetInt() or 0
+local cv_key_signal_deactivate = GetConVar("photon_key_signal_deactivate")
+local key_signal_deactivate = IsValid(cv_key_signal_deactivate) and cv_key_signal_deactivate:GetInt() or 0
+local cv_key_signal_right = GetConVar("photon_key_signal_right")
+local key_signal_right = IsValid(cv_key_signal_right) and cv_key_signal_right:GetInt() or 0
+local cv_key_siren3 = GetConVar("photon_key_siren3")
+local key_siren3 = IsValid(cv_key_siren3) and cv_key_siren3:GetInt() or 0
+local cv_key_auxiliary = GetConVar("photon_key_auxiliary")
+local key_auxiliary = IsValid(cv_key_auxiliary) and cv_key_auxiliary:GetInt() or 0
 
 hook.Add("InitPostEntity", "Photon.SetupLocalKeyBinds", function()
-	key_primary_toggle = GetConVar("photon_key_primary_toggle")
-	key_primary_alt = GetConVar("photon_key_primary_alt")
-	key_siren_toggle = GetConVar("photon_key_siren_toggle")
-	key_siren_alt = GetConVar("photon_key_siren_alt")
-	key_auxiliary = GetConVar("photon_key_auxiliary")
-	key_blackout = GetConVar("photon_key_blackout")
-	key_horn = GetConVar("photon_key_horn")
-	key_manual = GetConVar("photon_key_manual")
-	key_illum = GetConVar("photon_key_illum")
-	key_radar = GetConVar("photon_key_radar")
-	key_backtick = GetConVar("photon_key_alt_reverse")
-	key_signal_activate = GetConVar("photon_key_signal_activate")
-	key_signal_deactivate = GetConVar("photon_key_signal_deactivate")
-	key_signal_left = GetConVar("photon_key_signal_left")
-	key_signal_right = GetConVar("photon_key_signal_right")
-	key_signal_hazard = GetConVar("photon_key_signal_hazard")
-	should_render = GetConVar("photon_emerg_enabled")
+	cv_key_alt_reverse = GetConVar("photon_key_alt_reverse")
+	key_backtick = cv_key_alt_reverse:GetInt()
+	cv_key_illum = GetConVar("photon_key_illum")
+	key_illum = cv_key_illum:GetInt()
+	cv_key_primary_alt = GetConVar("photon_key_primary_alt")
+	key_primary_alt = cv_key_primary_alt:GetInt()
+	cv_key_siren4 = GetConVar("photon_key_siren4")
+	key_siren4 = cv_key_siren4:GetInt()
+	cv_key_signal_left = GetConVar("photon_key_signal_left")
+	key_signal_left = cv_key_signal_left:GetInt()
+	cv_key_siren1 = GetConVar("photon_key_siren1")
+	key_siren1 = cv_key_siren1:GetInt()
+	cv_key_siren2 = GetConVar("photon_key_siren2")
+	key_siren2 = cv_key_siren2:GetInt()
+	cv_key_primary_toggle = GetConVar("photon_key_primary_toggle")
+	key_primary_toggle = cv_key_primary_toggle:GetInt()
+	cv_key_signal_activate = GetConVar("photon_key_signal_activate")
+	key_signal_activate = cv_key_signal_activate:GetInt()
+	cv_key_blackout = GetConVar("photon_key_blackout")
+	key_blackout = cv_key_blackout:GetInt()
+	cv_key_siren_alt = GetConVar("photon_key_siren_alt")
+	key_siren_alt = cv_key_siren_alt:GetInt()
+	cv_key_horn = GetConVar("photon_key_horn")
+	key_horn = cv_key_horn:GetInt()
+	cv_key_siren_toggle = GetConVar("photon_key_siren_toggle")
+	key_siren_toggle = cv_key_siren_toggle:GetInt()
+	cv_emerg_enabled = GetConVar("photon_emerg_enabled")
+	should_render = cv_emerg_enabled:GetBool()
+	cv_key_manual = GetConVar("photon_key_manual")
+	key_manual = cv_key_manual:GetInt()
+	cv_key_radar = GetConVar("photon_key_radar")
+	key_radar = cv_key_radar:GetInt()
+	cv_key_signal_hazard = GetConVar("photon_key_signal_hazard")
+	key_signal_hazard = cv_key_signal_hazard:GetInt()
+	cv_key_signal_deactivate = GetConVar("photon_key_signal_deactivate")
+	key_signal_deactivate = cv_key_signal_deactivate:GetInt()
+	cv_key_signal_right = GetConVar("photon_key_signal_right")
+	key_signal_right = cv_key_signal_right:GetInt()
+	cv_key_siren3 = GetConVar("photon_key_siren3")
+	key_siren3 = cv_key_siren3:GetInt()
+	cv_key_auxiliary = GetConVar("photon_key_auxiliary")
+	key_auxiliary = cv_key_auxiliary:GetInt()
 end)
+
+cvars.AddChangeCallback("photon_key_alt_reverse", function() key_backtick = cv_key_alt_reverse:GetInt() end)
+cvars.AddChangeCallback("photon_key_illum", function() key_illum = cv_key_illum:GetInt() end)
+cvars.AddChangeCallback("photon_key_primary_alt", function() key_primary_alt = cv_key_primary_alt:GetInt() end)
+cvars.AddChangeCallback("photon_key_siren4", function() key_siren4 = cv_key_siren4:GetInt() end)
+cvars.AddChangeCallback("photon_key_signal_left", function() key_signal_left = cv_key_signal_left:GetInt() end)
+cvars.AddChangeCallback("photon_key_siren1", function() key_siren1 = cv_key_siren1:GetInt() end)
+cvars.AddChangeCallback("photon_key_siren2", function() key_siren2 = cv_key_siren2:GetInt() end)
+cvars.AddChangeCallback("photon_key_primary_toggle", function() key_primary_toggle = cv_key_primary_toggle:GetInt() end)
+cvars.AddChangeCallback("photon_key_signal_activate", function() key_signal_activate = cv_key_signal_activate:GetInt() end)
+cvars.AddChangeCallback("photon_key_blackout", function() key_blackout = cv_key_blackout:GetInt() end)
+cvars.AddChangeCallback("photon_key_siren_alt", function() key_siren_alt = cv_key_siren_alt:GetInt() end)
+cvars.AddChangeCallback("photon_key_horn", function() key_horn = cv_key_horn:GetInt() end)
+cvars.AddChangeCallback("photon_key_siren_toggle", function() key_siren_toggle = cv_key_siren_toggle:GetInt() end)
+cvars.AddChangeCallback("photon_emerg_enabled", function() should_render = cv_emerg_enabled:GetBool() end)
+cvars.AddChangeCallback("photon_key_manual", function() key_manual = cv_key_manual:GetInt() end)
+cvars.AddChangeCallback("photon_key_radar", function() key_radar = cv_key_radar:GetInt() end)
+cvars.AddChangeCallback("photon_key_signal_hazard", function() key_signal_hazard = cv_key_signal_hazard:GetInt() end)
+cvars.AddChangeCallback("photon_key_signal_deactivate", function() key_signal_deactivate = cv_key_signal_deactivate:GetInt() end)
+cvars.AddChangeCallback("photon_key_signal_right", function() key_signal_right = cv_key_signal_right:GetInt() end)
+cvars.AddChangeCallback("photon_key_siren3", function() key_siren3 = cv_key_siren3:GetInt() end)
+cvars.AddChangeCallback("photon_key_auxiliary", function() key_auxiliary = cv_key_auxiliary:GetInt() end)
 
 local inputKeyDown = input.IsKeyDown
 local inputMouseDown = input.IsMouseDown
@@ -71,18 +139,18 @@ end
 -- @string bind The bind being pressed.
 -- @bool press If the key is going up or down.
 function EMVU:Listener(ply, bind, press)
-	if not should_render:GetBool() then return end
+	if not should_render then return end
 	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
 
 	local emv = ply:GetVehicle()
 	if not IsValid(emv) then return false end
 
-	if keyDown(key_signal_activate:GetInt()) and not keyDown(key_signal_deactivate:GetInt()) then
-		if keyDown(key_signal_left:GetInt()) then
+	if keyDown(key_signal_activate) and not keyDown(key_signal_deactivate) then
+		if keyDown(key_signal_left) then
 			Photon:CarSignal("left")
-		elseif keyDown(key_signal_right:GetInt()) then
+		elseif keyDown(key_signal_right) then
 			Photon:CarSignal("right")
-		elseif keyDown(key_signal_hazard:GetInt()) then
+		elseif keyDown(key_signal_hazard) then
 			Photon:CarSignal("hazard")
 		else
 			Photon:CarSignal("none")
@@ -95,25 +163,25 @@ hook.Add("PlayerBindPress", "EMVU.Listener", function(pl, b, p)
 end)
 
 hook.Add("Think", "Photon.ButtonPress", function()
-	if not should_render:GetBool() then return end
+	if not should_render then return end
 	if not LocalPlayer():InVehicle() or not IsValid( LocalPlayer():GetVehicle() ) or not LocalPlayer():GetVehicle():IsEMV() then return end
 
 	local emv = LocalPlayer():GetVehicle()
-		
+
 	if not emv.Photon_Illumination or not emv.Photon_Lights or not emv.Photon_Siren then return end
 
 	if input.IsKeyTrapping() then return end
 	if vgui.CursorVisible() then return end
 
-	local SHIFTING = keyDown(key_backtick:GetInt())
+	local SHIFTING = keyDown(key_backtick)
 
 	if not X_DOWN then
-		if keyDown(key_illum:GetInt()) then
+		if keyDown(key_illum) then
 			EMVU.Sounds:Panel(emv:Photon_Illumination())
 			X_DOWN = true
 			X_PRESS = CurTime()
 		end
-	elseif X_DOWN and not keyDown(key_illum:GetInt()) then
+	elseif X_DOWN and not keyDown(key_illum) then
 		local cmd = "on"
 		if emv:Photon_Illumination() and X_PRESS + .25 > CurTime() then
 			cmd = "off"
@@ -128,12 +196,12 @@ hook.Add("Think", "Photon.ButtonPress", function()
 
 	if emv.Photon_HasTrafficAdvisor and emv:Photon_HasTrafficAdvisor() then
 		if not PHOTON_B_DOWN then
-			if keyDown( key_auxiliary:GetInt() ) then
+			if keyDown( key_auxiliary ) then
 				EMVU.Sounds:Panel(emv:Photon_TrafficAdvisor())
 				PHOTON_B_DOWN = true
 				PHOTON_B_PRESS = CurTime()
 			end
-		elseif PHOTON_B_DOWN and not keyDown(key_auxiliary:GetInt()) then
+		elseif PHOTON_B_DOWN and not keyDown(key_auxiliary) then
 			local cmd = "on"
 			if emv:Photon_TrafficAdvisor() and PHOTON_B_PRESS + .25 > CurTime() then
 				cmd = "off"
@@ -146,99 +214,99 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		end
 	end
 
-	if not LIGHTON_DOWN and keyDown(key_primary_toggle:GetInt()) then
+	if not LIGHTON_DOWN and keyDown(key_primary_toggle) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
 		LIGHTON_DOWN = true
-	elseif LIGHTON_DOWN and not keyDown(key_primary_toggle:GetInt()) then
+	elseif LIGHTON_DOWN and not keyDown(key_primary_toggle) then
 		EMVU.Sounds:Panel(not emv:Photon_Lights())
 		EMVU.Net:Lights(emv:Photon_Lights() and "off" or "on")
 		LIGHTON_DOWN = false
 	end
 
-	if not SIRENON_DOWN and keyDown(key_siren_toggle:GetInt()) then
+	if not SIRENON_DOWN and keyDown(key_siren_toggle) then
 		SIRENON_DOWN = true
 		EMVU.Net:Siren(emv:Photon_Siren() and "off" or "on")
-	elseif SIRENON_DOWN and not keyDown(key_siren_toggle:GetInt()) then
+	elseif SIRENON_DOWN and not keyDown(key_siren_toggle) then
 		SIRENON_DOWN = false
 	end
 
-	if not LIGHTTOG_DOWN and keyDown(key_primary_alt:GetInt()) then
+	if not LIGHTTOG_DOWN and keyDown(key_primary_alt) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
 		EMVU.Net:Lights(SHIFTING and "togback" or "tog")
 		LIGHTTOG_DOWN = true
-	elseif LIGHTTOG_DOWN and not keyDown(key_primary_alt:GetInt()) then
+	elseif LIGHTTOG_DOWN and not keyDown(key_primary_alt) then
 		LIGHTTOG_DOWN = false
 	end
 
-	if not SIRENTOGGLE_DOWN and keyDown(key_siren_alt:GetInt()) then
+	if not SIRENTOGGLE_DOWN and keyDown(key_siren_alt) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
 		EMVU.Net:Siren(SHIFTING and "togback" or "tog")
 		SIRENTOGGLE_DOWN = true
-	elseif SIRENTOGGLE_DOWN and not keyDown(key_siren_alt:GetInt()) then
+	elseif SIRENTOGGLE_DOWN and not keyDown(key_siren_alt) then
 		SIRENTOGGLE_DOWN = false
 	end
 
-	if not SIRENTOGGLE1_DOWN and keyDown(key_siren1:GetInt()) then
+	if not SIRENTOGGLE1_DOWN and keyDown(key_siren1) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
 		EMVU.Net:Siren("1")
 		SIRENTOGGLE1_DOWN = true
-	elseif SIRENTOGGLE1_DOWN and not keyDown(key_siren1:GetInt()) then
+	elseif SIRENTOGGLE1_DOWN and not keyDown(key_siren1) then
 		SIRENTOGGLE1_DOWN = false
 	end
 
-	if not SIRENTOGGLE2_DOWN and keyDown(key_siren2:GetInt()) then
+	if not SIRENTOGGLE2_DOWN and keyDown(key_siren2) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
 		EMVU.Net:Siren("2")
 		SIRENTOGGLE2_DOWN = true
-	elseif SIRENTOGGLE2_DOWN and not keyDown(key_siren2:GetInt()) then
+	elseif SIRENTOGGLE2_DOWN and not keyDown(key_siren2) then
 		SIRENTOGGLE2_DOWN = false
 	end
 
-	if not SIRENTOGGLE3_DOWN and keyDown(key_siren3:GetInt()) then
+	if not SIRENTOGGLE3_DOWN and keyDown(key_siren3) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
 		EMVU.Net:Siren("3")
 		SIRENTOGGLE3_DOWN = true
-	elseif SIRENTOGGLE3_DOWN and not keyDown(key_siren3:GetInt()) then
+	elseif SIRENTOGGLE3_DOWN and not keyDown(key_siren3) then
 		SIRENTOGGLE3_DOWN = false
 	end
 
-	if not SIRENTOGGLE4_DOWN and keyDown(key_siren4:GetInt()) then
+	if not SIRENTOGGLE4_DOWN and keyDown(key_siren4) then
 		EMVU.Sounds:Panel(emv:Photon_Lights())
 		EMVU.Net:Siren("4")
 		SIRENTOGGLE4_DOWN = true
-	elseif SIRENTOGGLE4_DOWN and not keyDown(key_siren4:GetInt()) then
+	elseif SIRENTOGGLE4_DOWN and not keyDown(key_siren4) then
 		SIRENTOGGLE4_DOWN = false
 	end
 
-	if not BLKOUTON_DOWN and keyDown(key_blackout:GetInt()) then
+	if not BLKOUTON_DOWN and keyDown(key_blackout) then
 		EMVU.Sounds:Panel(not emv:Photon_IsRunning())
 		BLKOUTON_DOWN = true
-	elseif BLKOUTON_DOWN and not keyDown( key_blackout:GetInt() ) then
+	elseif BLKOUTON_DOWN and not keyDown( key_blackout ) then
 		EMVU.Sounds:Panel(emv:Photon_IsRunning())
 		EMVU.Net:Blackout(emv:Photon_IsRunning())
 		BLKOUTON_DOWN = false
 	end
 
-	if not HORNTOG_DOWN and keyDown(key_horn:GetInt()) then
+	if not HORNTOG_DOWN and keyDown(key_horn) then
 		EMVU.Net:Horn(true)
 		HORNTOG_DOWN = true
-	elseif HORNTOG_DOWN and not keyDown(key_horn:GetInt()) then
+	elseif HORNTOG_DOWN and not keyDown(key_horn) then
 		EMVU.Net:Horn(false)
 		HORNTOG_DOWN = false
 	end
 
-	if not MANUALTOG_DOWN and keyDown(key_manual:GetInt()) then
+	if not MANUALTOG_DOWN and keyDown(key_manual) then
 		EMVU.Net:Manual(true)
 		MANUALTOG_DOWN = true
-	elseif MANUALTOG_DOWN and not keyDown(key_manual:GetInt()) then
+	elseif MANUALTOG_DOWN and not keyDown(key_manual) then
 		EMVU.Net:Manual(false)
 		MANUALTOG_DOWN = false
 	end
 
-	if not PHOTONRADARTOG_DOWN and keyDown(key_radar:GetInt()) then
+	if not PHOTONRADARTOG_DOWN and keyDown(key_radar) then
 		EMVU.Sounds:Panel(emv:Photon_RadarActive())
 		PHOTONRADARTOG_DOWN = true
-	elseif PHOTONRADARTOG_DOWN and not keyDown( key_radar:GetInt() ) then
+	elseif PHOTONRADARTOG_DOWN and not keyDown( key_radar ) then
 		EMVU.Sounds:Panel(not emv:Photon_RadarActive())
 		emv:Photon_RadarActive(not emv:Photon_RadarActive())
 		PHOTONRADARTOG_DOWN = false
