@@ -1006,4 +1006,315 @@ function EMVU:MakeEMV( emv, name )
 	emv.PhotonFinishedInit = true
 end
 
+local NextDoppler = 0
+local thirdPersonVolume = 0.6
+local interiorVolume = 0.2
+local fadeDist = 4500
+local updateRate = 0.1
+
+hook.Add("Think", "Photon.ELS_SirenDoppler", function()
+	if NextDoppler < CurTime() then
+		for _,v in pairs(ents.FindByClass("prop_vehicle_jeep")) do
+			if v.Siren or v.Siren2 or v.ManualSiren or v.Horn then
+				local pos = LocalPlayer():GetPos()
+				local spos = v:GetPos()
+				local doppler = ((pos:Distance(spos+LocalPlayer():GetVelocity())-pos:Distance(spos+v:GetVelocity()))/200)
+				if IsValid(LocalPlayer():GetVehicle()) then
+					if LocalPlayer():GetVehicle():GetParent() == v then
+						doppler = 0
+					end
+				end
+				updateRate = FrameTime()
+
+
+				if v.Siren then
+					if (IsValid(v:GetDriver()) and v:GetDriver() ~= LocalPlayer()) or !IsValid(v:GetDriver()) then
+						local distBehind = v:WorldToLocal(LocalPlayer():GetPos())[2]
+						
+						if IsValid(LocalPlayer():GetVehicle()) then
+							if LocalPlayer():GetVehicle():GetParent() == v then
+								if v.Siren:GetVolume() ~= thirdPersonVolume and LocalPlayer():GetVehicle():GetThirdPersonMode() then
+									v.Siren:ChangeVolume(thirdPersonVolume, updateRate)
+								elseif v.Siren:GetVolume() ~= interiorVolume and !LocalPlayer():GetVehicle():GetThirdPersonMode() then
+									v.Siren:ChangeVolume(interiorVolume, updateRate)
+								end
+							end
+						else
+							if v.Siren:GetVolume() ~= 1 and distBehind > 0 then
+								v.Siren:ChangeVolume(1, updateRate)
+							elseif distBehind < 0 then
+								v.Siren:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
+							end
+						end
+
+						if math.abs(doppler) > 1 then
+								v.Siren:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
+							elseif v.Siren:GetPitch() ~= 100 then
+								v.Siren:ChangePitch(100, updateRate)
+						end
+					else
+						if v.Siren:GetPitch() ~= 100 then
+							v.Siren:ChangePitch(100)
+						end
+						if v.Siren:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
+							v.Siren:ChangeVolume(thirdPersonVolume, updateRate)
+						elseif v.Siren:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
+							v.Siren:ChangeVolume(interiorVolume, updateRate)
+						end
+					end
+				end
+
+				if v.Siren2 then
+					if (IsValid(v:GetDriver()) and v:GetDriver() ~= LocalPlayer()) or !IsValid(v:GetDriver()) then
+						local distBehind = v:WorldToLocal(LocalPlayer():GetPos())[2]
+						
+						if IsValid(LocalPlayer():GetVehicle()) then
+							if LocalPlayer():GetVehicle():GetParent() == v then
+								if v.Siren2:GetVolume() ~= thirdPersonVolume and LocalPlayer():GetVehicle():GetThirdPersonMode() then
+									v.Siren2:ChangeVolume(thirdPersonVolume, updateRate)
+								elseif v.Siren2:GetVolume() ~= interiorVolume and !LocalPlayer():GetVehicle():GetThirdPersonMode() then
+									v.Siren2:ChangeVolume(interiorVolume, updateRate)
+								end
+							end
+						else
+							if v.Siren2:GetVolume() ~= 1 and distBehind > 0 then
+								v.Siren2:ChangeVolume(1, updateRate)
+							elseif distBehind < 0 then
+								v.Siren2:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
+							end
+						end
+
+						if math.abs(doppler) > 1 then
+								v.Siren2:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
+							elseif v.Siren2:GetPitch() ~= 100 then
+								v.Siren2:ChangePitch(100, updateRate)
+						end
+					else
+						if v.Siren2:GetPitch() ~= 100 then
+							v.Siren2:ChangePitch(100)
+						end
+						if v.Siren2:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
+							v.Siren2:ChangeVolume(thirdPersonVolume, updateRate)
+						elseif v.Siren2:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
+							v.Siren2:ChangeVolume(interiorVolume, updateRate)
+						end
+					end
+				end
+
+				if v.ManualSiren then
+					if (IsValid(v:GetDriver()) and v:GetDriver() ~= LocalPlayer()) or !IsValid(v:GetDriver()) then
+						local distBehind = v:WorldToLocal(LocalPlayer():GetPos())[2]
+						
+						if IsValid(LocalPlayer():GetVehicle()) then
+							if LocalPlayer():GetVehicle():GetParent() == v then
+								if v.ManualSiren:GetVolume() ~= thirdPersonVolume and LocalPlayer():GetVehicle():GetThirdPersonMode() then
+									v.ManualSiren:ChangeVolume(thirdPersonVolume, updateRate)
+								elseif v.ManualSiren:GetVolume() ~= interiorVolume and !LocalPlayer():GetVehicle():GetThirdPersonMode() then
+									v.ManualSiren:ChangeVolume(interiorVolume, updateRate)
+								end
+							end
+						else
+							if v.ManualSiren:GetVolume() ~= 1 and distBehind > 0 then
+								v.ManualSiren:ChangeVolume(1, updateRate)
+							elseif distBehind < 0 then
+								v.ManualSiren:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
+							end
+						end
+
+						if math.abs(doppler) > 1 then
+								v.ManualSiren:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
+							elseif v.ManualSiren:GetPitch() ~= 100 then
+								v.ManualSiren:ChangePitch(100, updateRate)
+						end
+					else
+						if v.ManualSiren:GetPitch() ~= 100 then
+							v.ManualSiren:ChangePitch(100)
+						end
+						if v.ManualSiren:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
+							v.ManualSiren:ChangeVolume(thirdPersonVolume, updateRate)
+						elseif v.ManualSiren:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
+							v.ManualSiren:ChangeVolume(interiorVolume, updateRate)
+						end
+					end
+				end
+
+				if v.Horn then
+					if (IsValid(v:GetDriver()) and v:GetDriver() ~= LocalPlayer()) or !IsValid(v:GetDriver()) then
+						local distBehind = v:WorldToLocal(LocalPlayer():GetPos())[2]
+						
+						if IsValid(LocalPlayer():GetVehicle()) then
+							if LocalPlayer():GetVehicle():GetParent() == v then
+								if v.Horn:GetVolume() ~= thirdPersonVolume and LocalPlayer():GetVehicle():GetThirdPersonMode() then
+									v.Horn:ChangeVolume(thirdPersonVolume, updateRate)
+								elseif v.Horn:GetVolume() ~= interiorVolume and !LocalPlayer():GetVehicle():GetThirdPersonMode() then
+									v.Horn:ChangeVolume(interiorVolume, updateRate)
+								end
+							end
+						else
+							if v.Horn:GetVolume() ~= 1 and distBehind > 0 then
+								v.Horn:ChangeVolume(1, updateRate)
+							elseif distBehind < 0 then
+								v.Horn:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
+							end
+						end
+
+						if math.abs(doppler) > 1 then
+								v.Horn:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
+							elseif v.Horn:GetPitch() ~= 100 then
+								v.Horn:ChangePitch(100, updateRate)
+						end
+					else
+						if v.Horn:GetPitch() ~= 100 then
+							v.Horn:ChangePitch(100)
+						end
+						if v.Horn:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
+							v.Horn:ChangeVolume(thirdPersonVolume, updateRate)
+						elseif v.Horn:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
+							v.Horn:ChangeVolume(interiorVolume, updateRate)
+						end
+					end
+				end
+			end
+		end
+		NextDoppler = CurTime() + updateRate
+	end
+end)
+
+net.Receive("Photon.ELS_PlaySiren", function()
+	local ent = net.ReadEntity()
+	local sound = net.ReadString()
+	local volume = net.ReadFloat()
+	ent.Siren = CreateSound(ent, sound)
+	ent.Siren:SetSoundLevel( volume * 1.8 )
+	if ent:GetThirdPersonMode() then
+		ent.Siren:PlayEx(thirdPersonVolume, 100)
+	elseif !ent:GetThirdPersonMode() then
+		ent.Siren:PlayEx(interiorVolume, 100)
+	else
+		ent.Siren:PlayEx(1, 100)
+	end
+	--ent.Siren:ChangeVolume(0)
+	--ent.Siren:SetDSP(1)
+	ent:CallOnRemove("StopSiren"..ent:EntIndex(), function(ent)
+		if ent.Siren then
+			ent.Siren:Stop()
+		end
+	end)
+	--ent.ELS.Siren = siren
+end)
+
+net.Receive("Photon.ELS_StopSiren", function()
+	local ent = net.ReadEntity()
+	if ent.Siren then
+		ent.Siren:Stop()
+		ent.Siren = nil
+	end
+end)
+
+net.Receive("Photon.ELS_PlaySiren2", function()
+	local ent = net.ReadEntity()
+	local sound = net.ReadString()
+	local volume = net.ReadFloat()
+	ent.Siren2 = CreateSound(ent, sound)
+	ent.Siren2:SetSoundLevel( volume * 1.25 )
+	if ent:GetThirdPersonMode() then
+		ent.Siren2:PlayEx(thirdPersonVolume, 100)
+	elseif !ent:GetThirdPersonMode() then
+		ent.Siren2:PlayEx(interiorVolume, 100)
+	else
+		ent.Siren2:PlayEx(1, 100)
+	end
+	--ent.Siren:ChangeVolume(0)
+	--ent.Siren:SetDSP(129)
+	ent:CallOnRemove("StopSiren2"..ent:EntIndex(), function(ent)
+		if ent.Siren2 then
+			ent.Siren2:Stop()
+		end
+	end)
+	--ent.ELS.Siren = siren
+end)
+
+net.Receive("Photon.ELS_StopSiren2", function()
+	local ent = net.ReadEntity()
+	if ent.Siren2 then
+		ent.Siren2:Stop()
+		ent.Siren2 = nil
+	end
+end)
+
+net.Receive("Photon.ELS_PlayManual", function()
+	local ent = net.ReadEntity()
+	local sound = net.ReadString()
+	local volume = net.ReadFloat()
+	ent.ManualSiren = CreateSound(ent, sound)
+	ent.ManualSiren:SetSoundLevel( volume * 1.25 )
+	if ent:GetThirdPersonMode() then
+		ent.ManualSiren:PlayEx(thirdPersonVolume, 100)
+	elseif !ent:GetThirdPersonMode() then
+		ent.ManualSiren:PlayEx(interiorVolume, 100)
+	else
+		ent.ManualSiren:PlayEx(1, 100)
+	end
+
+	if ent.Siren then
+		ent.Siren:Stop()
+	end
+
+	ent:CallOnRemove("StopManualSiren"..ent:EntIndex(), function(ent)
+		if ent.ManualSiren then
+			ent.ManualSiren:Stop()
+		end
+	end)
+	--ent.ELS.Siren = siren
+end)
+
+net.Receive("Photon.ELS_StopManual", function()
+	local ent = net.ReadEntity()
+
+	if ent.Siren then
+		if ent:GetThirdPersonMode() then
+			ent.Siren:PlayEx(thirdPersonVolume, 100)
+		elseif !ent:GetThirdPersonMode() then
+			ent.Siren:PlayEx(interiorVolume, 100)
+		else
+			ent.Siren:PlayEx(1, 100)
+		end
+	end
+
+	if ent.ManualSiren then
+		ent.ManualSiren:Stop()
+		ent.ManualSiren = nil
+	end
+end)
+
+net.Receive("Photon.ELS_PlayHorn", function()
+	local ent = net.ReadEntity()
+	local sound = net.ReadString()
+	local volume = net.ReadFloat()
+	ent.Horn = CreateSound(ent, sound)
+	ent.Horn:SetSoundLevel( volume * 1.25 )
+	if ent:GetThirdPersonMode() then
+		ent.Horn:PlayEx(thirdPersonVolume, 100)
+	elseif !ent:GetThirdPersonMode() then
+		ent.Horn:PlayEx(interiorVolume, 100)
+	else
+		ent.Horn:PlayEx(1, 100)
+	end
+	ent:CallOnRemove("StopHorn"..ent:EntIndex(), function(ent)
+		if ent.Horn then
+			ent.Horn:Stop()
+		end
+	end)
+	--ent.ELS.Siren = siren
+end)
+
+net.Receive("Photon.ELS_StopHorn", function()
+	local ent = net.ReadEntity()
+
+	if ent.Horn then
+		ent.Horn:Stop()
+		ent.Horn = nil
+	end
+end)
+
 photonLightModels = {}
