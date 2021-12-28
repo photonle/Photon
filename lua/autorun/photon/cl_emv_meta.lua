@@ -1182,96 +1182,11 @@ end)
 
 net.Receive("Photon.ELS_PlaySiren", function()
 	local ent = net.ReadEntity()
-	local sound = net.ReadString()
-	local volume = net.ReadFloat()
-	ent.Siren = CreateSound(ent, sound)
-	ent.Siren:SetSoundLevel( volume * 1.8 )
-	if ent:GetThirdPersonMode() then
-		ent.Siren:PlayEx(thirdPersonVolume, 100)
-	elseif !ent:GetThirdPersonMode() then
-		ent.Siren:PlayEx(interiorVolume, 100)
-	else
-		ent.Siren:PlayEx(1, 100)
-	end
-	--ent.Siren:ChangeVolume(0)
-	--ent.Siren:SetDSP(1)
-	ent:CallOnRemove("StopSiren"..ent:EntIndex(), function(ent)
-		if ent.Siren then
-			ent.Siren:Stop()
-		end
-	end)
-	--ent.ELS.Siren = siren
-end)
-
-net.Receive("Photon.ELS_StopSiren", function()
-	local ent = net.ReadEntity()
-	if ent.Siren then
-		ent.Siren:Stop()
-		ent.Siren = nil
-	end
-end)
-
-net.Receive("Photon.ELS_PlaySiren2", function()
-	local ent = net.ReadEntity()
-	local sound = net.ReadString()
-	local volume = net.ReadFloat()
-	ent.Siren2 = CreateSound(ent, sound)
-	ent.Siren2:SetSoundLevel( volume * 1.25 )
-	if ent:GetThirdPersonMode() then
-		ent.Siren2:PlayEx(thirdPersonVolume, 100)
-	elseif !ent:GetThirdPersonMode() then
-		ent.Siren2:PlayEx(interiorVolume, 100)
-	else
-		ent.Siren2:PlayEx(1, 100)
-	end
-	--ent.Siren:ChangeVolume(0)
-	--ent.Siren:SetDSP(129)
-	ent:CallOnRemove("StopSiren2"..ent:EntIndex(), function(ent)
-		if ent.Siren2 then
-			ent.Siren2:Stop()
-		end
-	end)
-	--ent.ELS.Siren = siren
-end)
-
-net.Receive("Photon.ELS_StopSiren2", function()
-	local ent = net.ReadEntity()
-	if ent.Siren2 then
-		ent.Siren2:Stop()
-		ent.Siren2 = nil
-	end
-end)
-
-net.Receive("Photon.ELS_PlayManual", function()
-	local ent = net.ReadEntity()
-	local sound = net.ReadString()
-	local volume = net.ReadFloat()
-	ent.ManualSiren = CreateSound(ent, sound)
-	ent.ManualSiren:SetSoundLevel( volume * 1.25 )
-	if ent:GetThirdPersonMode() then
-		ent.ManualSiren:PlayEx(thirdPersonVolume, 100)
-	elseif !ent:GetThirdPersonMode() then
-		ent.ManualSiren:PlayEx(interiorVolume, 100)
-	else
-		ent.ManualSiren:PlayEx(1, 100)
-	end
-
-	if ent.Siren then
-		ent.Siren:Stop()
-	end
-
-	ent:CallOnRemove("StopManualSiren"..ent:EntIndex(), function(ent)
-		if ent.ManualSiren then
-			ent.ManualSiren:Stop()
-		end
-	end)
-	--ent.ELS.Siren = siren
-end)
-
-net.Receive("Photon.ELS_StopManual", function()
-	local ent = net.ReadEntity()
-
-	if ent.Siren then
+	if ent:IsValid() and !IsValid(ent.Siren) then
+		local sound = net.ReadString()
+		local volume = net.ReadFloat()
+		ent.Siren = CreateSound(ent, sound)
+		ent.Siren:SetSoundLevel( volume * 1.8 )
 		if ent:GetThirdPersonMode() then
 			ent.Siren:PlayEx(thirdPersonVolume, 100)
 		elseif !ent:GetThirdPersonMode() then
@@ -1279,41 +1194,195 @@ net.Receive("Photon.ELS_StopManual", function()
 		else
 			ent.Siren:PlayEx(1, 100)
 		end
+		--ent.Siren:ChangeVolume(0)
+		--ent.Siren:SetDSP(1)
+		ent:CallOnRemove("StopSiren"..ent:EntIndex(), function(ent)
+			if ent.Siren then
+				ent.Siren:Stop()
+			end
+		end)
+	--ent.ELS.Siren = siren
 	end
+end)
 
-	if ent.ManualSiren then
-		ent.ManualSiren:Stop()
-		ent.ManualSiren = nil
+net.Receive("Photon.ELS_StopSiren", function()
+	local ent = net.ReadEntity()
+	if ent:IsValid() then
+		if ent.Siren then
+			ent.Siren:Stop()
+			ent.Siren = nil
+		end
+	end
+end)
+
+net.Receive("Photon.ELS_PlaySiren2", function()
+	local ent = net.ReadEntity()
+	if ent:IsValid() and !IsValid(ent.Siren2) then
+		local sound = net.ReadString()
+		local volume = net.ReadFloat()
+		ent.Siren2 = CreateSound(ent, sound)
+		ent.Siren2:SetSoundLevel( volume * 1.25 )
+		if ent:GetThirdPersonMode() then
+			ent.Siren2:PlayEx(thirdPersonVolume, 100)
+		elseif !ent:GetThirdPersonMode() then
+			ent.Siren2:PlayEx(interiorVolume, 100)
+		else
+			ent.Siren2:PlayEx(1, 100)
+		end
+		--ent.Siren:ChangeVolume(0)
+		--ent.Siren:SetDSP(129)
+		ent:CallOnRemove("StopSiren2"..ent:EntIndex(), function(ent)
+			if ent.Siren2 then
+				ent.Siren2:Stop()
+			end
+		end)
+	end
+	--ent.ELS.Siren = siren
+end)
+
+net.Receive("Photon.ELS_StopSiren2", function()
+	local ent = net.ReadEntity()
+	if ent:IsValid() then
+		if ent.Siren2 then
+			ent.Siren2:Stop()
+			ent.Siren2 = nil
+		end
+	end
+end)
+
+net.Receive("Photon.ELS_PlayManual", function()
+	local ent = net.ReadEntity()
+	if ent:IsValid() and !IsValid(ent.ManualSiren) then
+		local sound = net.ReadString()
+		local volume = net.ReadFloat()
+		ent.ManualSiren = CreateSound(ent, sound)
+		ent.ManualSiren:SetSoundLevel( volume * 1.25 )
+		if ent:GetThirdPersonMode() then
+			ent.ManualSiren:PlayEx(thirdPersonVolume, 100)
+		elseif !ent:GetThirdPersonMode() then
+			ent.ManualSiren:PlayEx(interiorVolume, 100)
+		else
+			ent.ManualSiren:PlayEx(1, 100)
+		end
+
+		if ent.Siren then
+			ent.Siren:Stop()
+		end
+
+		ent:CallOnRemove("StopManualSiren"..ent:EntIndex(), function(ent)
+			if ent.ManualSiren then
+				ent.ManualSiren:Stop()
+			end
+		end)
+	--ent.ELS.Siren = siren
+	end
+end)
+
+net.Receive("Photon.ELS_StopManual", function()
+	local ent = net.ReadEntity()
+	if ent:IsValid() then
+		if ent.Siren then
+			if ent:GetThirdPersonMode() then
+				ent.Siren:PlayEx(thirdPersonVolume, 100)
+			elseif !ent:GetThirdPersonMode() then
+				ent.Siren:PlayEx(interiorVolume, 100)
+			else
+				ent.Siren:PlayEx(1, 100)
+			end
+		end
+
+		if ent.ManualSiren then
+			ent.ManualSiren:Stop()
+			ent.ManualSiren = nil
+		end
 	end
 end)
 
 net.Receive("Photon.ELS_PlayHorn", function()
 	local ent = net.ReadEntity()
-	local sound = net.ReadString()
-	local volume = net.ReadFloat()
-	ent.Horn = CreateSound(ent, sound)
-	ent.Horn:SetSoundLevel( volume * 1.25 )
-	if ent:GetThirdPersonMode() then
-		ent.Horn:PlayEx(thirdPersonVolume, 100)
-	elseif !ent:GetThirdPersonMode() then
-		ent.Horn:PlayEx(interiorVolume, 100)
-	else
-		ent.Horn:PlayEx(1, 100)
-	end
-	ent:CallOnRemove("StopHorn"..ent:EntIndex(), function(ent)
-		if ent.Horn then
-			ent.Horn:Stop()
+	if ent:IsValid() and !IsValid(ent.Horn) then
+		local sound = net.ReadString()
+		local volume = net.ReadFloat()
+		ent.Horn = CreateSound(ent, sound)
+		ent.Horn:SetSoundLevel( volume * 1.25 )
+		if ent:GetThirdPersonMode() then
+			ent.Horn:PlayEx(thirdPersonVolume, 100)
+		elseif !ent:GetThirdPersonMode() then
+			ent.Horn:PlayEx(interiorVolume, 100)
+		else
+			ent.Horn:PlayEx(1, 100)
 		end
-	end)
-	--ent.ELS.Siren = siren
+		ent:CallOnRemove("StopHorn"..ent:EntIndex(), function(ent)
+			if ent.Horn then
+				ent.Horn:Stop()
+			end
+		end)
+		--ent.ELS.Siren = siren
+	end
 end)
 
 net.Receive("Photon.ELS_StopHorn", function()
 	local ent = net.ReadEntity()
+	if ent:IsValid() then
+		if ent.Horn then
+			ent.Horn:Stop()
+			ent.Horn = nil
+		end
+	end
+end)
 
-	if ent.Horn then
-		ent.Horn:Stop()
-		ent.Horn = nil
+hook.Add("NotifyShouldTransmit", "Photon.ShouldTransmitSirens", function(ent, shouldtransmit)
+
+	if ent:GetNW2String("PhotonLE.Siren_Sound") ~= "" and !IsValid(ent.Siren) then
+		local sound = ent:GetNW2String("PhotonLE.Siren_Sound")
+		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
+		ent.Siren = CreateSound(ent, sound)
+		ent.Siren:SetSoundLevel( volume * 0.05 )
+		ent.Siren:PlayEx(1, 100)
+		ent:CallOnRemove("StopSiren"..ent:EntIndex(), function(ent)
+			if ent.Siren then
+				ent.Siren:Stop()
+			end
+		end)
+	end
+
+	if ent:GetNW2String("PhotonLE.Siren2_Sound") ~= "" and !IsValid(ent.Siren2) then
+		local sound = ent:GetNW2String("PhotonLE.Siren2_Sound")
+		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
+		ent.Siren2 = CreateSound(ent, sound)
+		ent.Siren2:SetSoundLevel( volume * 0.05 )
+		ent.Siren2:PlayEx(1, 100)
+		ent:CallOnRemove("StopSiren2"..ent:EntIndex(), function(ent)
+			if ent.Siren2 then
+				ent.Siren2:Stop()
+			end
+		end)
+	end
+
+	if ent:GetNW2String("PhotonLE.Manual_Sound") ~= "" and !IsValid(ent.ManualSiren) then
+		local sound = ent:GetNW2String("PhotonLE.Manual_Sound")
+		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
+		ent.ManualSiren = CreateSound(ent, sound)
+		ent.ManualSiren:SetSoundLevel( volume * 0.05 )
+		ent.ManualSiren:PlayEx(1, 100)
+		ent:CallOnRemove("StopManualSiren"..ent:EntIndex(), function(ent)
+			if ent.ManualSiren then
+				ent.ManualSiren:Stop()
+			end
+		end)
+	end
+
+	if ent:GetNW2String("PhotonLE.Horn_Sound") ~= "" and !IsValid(ent.Horn) then
+		local sound = ent:GetNW2String("PhotonLE.Horn_Sound")
+		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
+		ent.Horn = CreateSound(ent, sound)
+		ent.Horn:SetSoundLevel( volume * 0.05 )
+		ent.Horn:PlayEx(1, 100)
+		ent:CallOnRemove("StopHorn"..ent:EntIndex(), function(ent)
+			if ent.Horn then
+				ent.Horn:Stop()
+			end
+		end)
 	end
 end)
 

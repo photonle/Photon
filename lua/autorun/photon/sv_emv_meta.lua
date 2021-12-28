@@ -278,12 +278,19 @@ function EMVU:MakeEMV( ent, emv )
 				net.WriteFloat(75)
 			end
 		net.Broadcast()
+		self:SetNW2String("PhotonLE.Siren_Sound", sound)
+		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+		else
+			self:SetNW2Float("PhotonLE.Siren_Volume", 75 )
+		end
 	end
 
 	function ent:ELS_SirenStop()
 		net.Start("Photon.ELS_StopSiren")
 			net.WriteEntity(self)
 		net.Broadcast()
+		self:SetNW2String("PhotonLE.Siren_Sound", nil)
 	end
 
 	function ent:ELS_Siren2Play(sound)
@@ -296,12 +303,19 @@ function EMVU:MakeEMV( ent, emv )
 				net.WriteFloat(75)
 			end
 		net.Broadcast()
+		self:SetNW2String("PhotonLE.Siren2_Sound", sound)
+		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+		else
+			self:SetNW2Float("PhotonLE.Siren_Volume", 75 )
+		end
 	end
 
 	function ent:ELS_Siren2Stop()
 		net.Start("Photon.ELS_StopSiren2")
 			net.WriteEntity(self)
 		net.Broadcast()
+		self:SetNW2String("PhotonLE.Siren2_Sound", nil)
 	end
 
 	function ent:ELS_ManualPlay(sound)
@@ -314,12 +328,19 @@ function EMVU:MakeEMV( ent, emv )
 				net.WriteFloat(75)
 			end
 		net.Broadcast()
+		self:SetNW2String("PhotonLE.Manual_Sound", sound)
+		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+		else
+			self:SetNW2Float("PhotonLE.Siren_Volume", 75 )
+		end
 	end
 
 	function ent:ELS_ManualStop()
 		net.Start("Photon.ELS_StopManual")
 			net.WriteEntity(self)
 		net.Broadcast()
+		self:SetNW2String("PhotonLE.Manual_Sound", nil)
 	end
 
 	function ent:ELS_PlayHorn(sound)
@@ -332,12 +353,19 @@ function EMVU:MakeEMV( ent, emv )
 				net.WriteFloat(75)
 			end
 		net.Broadcast()
+		self:SetNW2String("PhotonLE.Horn_Sound", sound)
+		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+		else
+			self:SetNW2Float("PhotonLE.Siren_Volume", 75 )
+		end
 	end
 
 	function ent:ELS_StopHorn()
 		net.Start("Photon.ELS_StopHorn")
 			net.WriteEntity(self)
 		net.Broadcast()
+		self:SetNW2String("PhotonLE.Horn_Sound", nil)
 	end
 
 	-- Turn the siren off
@@ -629,18 +657,16 @@ function EMVU:MakeEMV( ent, emv )
 
 		mat = tostring(mat)
 		self:SetSubMaterial(submaterialIndex, mat)
-
 		for _, prop in ipairs(EMVU.Helper.GetSubProps(self)) do
-			local propsubmaterialIndex = false
-			local propmaterials = prop:GetMaterials()
-			for i=1,#propmaterials do
-				local propthisMat = tostring( propmaterials[i] )
-				if string.EndsWith( propthisMat, "/skin" ) or string.EndsWith( propthisMat, "/skin0" ) or string.EndsWith( propthisMat, "/carpaint" ) then
-					propsubmaterialIndex = i - 1
-					break
-				end
-			end
-			if propsubmaterialIndex ~= false then prop:SetSubMaterial(propsubmaterialIndex, mat) end
+					local propmaterials = prop:GetMaterials()
+					for i=1,#propmaterials do
+						local propthisMat = tostring( propmaterials[i] )
+						if string.EndsWith( propthisMat, "/skin" ) or string.EndsWith( propthisMat, "/skin0" ) or string.EndsWith( propthisMat, "/carpaint" ) then
+							propsubmaterialIndex = i - 1
+							break
+						end
+					end
+			prop:SetSubMaterial(propsubmaterialIndex, mat)
 		end
 	end
 
