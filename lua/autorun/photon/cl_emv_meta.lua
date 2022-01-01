@@ -1016,11 +1016,12 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 	if NextDoppler < CurTime() then
 		for _,v in pairs(ents.FindByClass("prop_vehicle_jeep")) do
 			if v.Siren or v.Siren2 or v.ManualSiren or v.Horn then
-				local pos = LocalPlayer():GetPos()
+				local ply = LocalPlayer()
+				local pos = ply:GetPos()
 				local spos = v:GetPos()
-				local doppler = ((pos:Distance(spos+LocalPlayer():GetVelocity())-pos:Distance(spos+v:GetVelocity()))/200)
-				if IsValid(LocalPlayer():GetVehicle()) then
-					if LocalPlayer():GetVehicle():GetParent() == v then
+				local doppler = ((pos:Distance(spos+ply:GetVelocity())-pos:Distance(spos+v:GetVelocity()))/200)
+				if IsValid(ply:GetVehicle()) then
+					if ply:GetVehicle():GetParent() == v then
 						doppler = 0
 					end
 				end
@@ -1028,14 +1029,14 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 
 
 				if v.Siren then
-					if (IsValid(v:GetDriver()) and v:GetDriver() ~= LocalPlayer()) or !IsValid(v:GetDriver()) then
-						local distBehind = v:WorldToLocal(LocalPlayer():GetPos())[2]
+					if (IsValid(v:GetDriver()) and v:GetDriver() ~= ply) or !IsValid(v:GetDriver()) then
+						local distBehind = v:WorldToLocal(ply:GetPos())[2]
 						
-						if IsValid(LocalPlayer():GetVehicle()) then
-							if LocalPlayer():GetVehicle():GetParent() == v then
-								if v.Siren:GetVolume() ~= thirdPersonVolume and LocalPlayer():GetVehicle():GetThirdPersonMode() then
+						if IsValid(ply:GetVehicle()) then
+							if ply:GetVehicle():GetParent() == v then
+								if v.Siren:GetVolume() ~= thirdPersonVolume and ply:GetVehicle():GetThirdPersonMode() then
 									v.Siren:ChangeVolume(thirdPersonVolume, updateRate)
-								elseif v.Siren:GetVolume() ~= interiorVolume and !LocalPlayer():GetVehicle():GetThirdPersonMode() then
+								elseif v.Siren:GetVolume() ~= interiorVolume and !ply:GetVehicle():GetThirdPersonMode() then
 									v.Siren:ChangeVolume(interiorVolume, updateRate)
 								end
 							end
@@ -1065,14 +1066,14 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 				end
 
 				if v.Siren2 then
-					if (IsValid(v:GetDriver()) and v:GetDriver() ~= LocalPlayer()) or !IsValid(v:GetDriver()) then
-						local distBehind = v:WorldToLocal(LocalPlayer():GetPos())[2]
+					if (IsValid(v:GetDriver()) and v:GetDriver() ~= ply) or !IsValid(v:GetDriver()) then
+						local distBehind = v:WorldToLocal(ply:GetPos())[2]
 						
-						if IsValid(LocalPlayer():GetVehicle()) then
-							if LocalPlayer():GetVehicle():GetParent() == v then
-								if v.Siren2:GetVolume() ~= thirdPersonVolume and LocalPlayer():GetVehicle():GetThirdPersonMode() then
+						if IsValid(ply:GetVehicle()) then
+							if ply:GetVehicle():GetParent() == v then
+								if v.Siren2:GetVolume() ~= thirdPersonVolume and ply:GetVehicle():GetThirdPersonMode() then
 									v.Siren2:ChangeVolume(thirdPersonVolume, updateRate)
-								elseif v.Siren2:GetVolume() ~= interiorVolume and !LocalPlayer():GetVehicle():GetThirdPersonMode() then
+								elseif v.Siren2:GetVolume() ~= interiorVolume and !ply:GetVehicle():GetThirdPersonMode() then
 									v.Siren2:ChangeVolume(interiorVolume, updateRate)
 								end
 							end
@@ -1102,14 +1103,14 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 				end
 
 				if v.ManualSiren then
-					if (IsValid(v:GetDriver()) and v:GetDriver() ~= LocalPlayer()) or !IsValid(v:GetDriver()) then
-						local distBehind = v:WorldToLocal(LocalPlayer():GetPos())[2]
+					if (IsValid(v:GetDriver()) and v:GetDriver() ~= ply) or !IsValid(v:GetDriver()) then
+						local distBehind = v:WorldToLocal(ply:GetPos())[2]
 						
-						if IsValid(LocalPlayer():GetVehicle()) then
-							if LocalPlayer():GetVehicle():GetParent() == v then
-								if v.ManualSiren:GetVolume() ~= thirdPersonVolume and LocalPlayer():GetVehicle():GetThirdPersonMode() then
+						if IsValid(ply:GetVehicle()) then
+							if ply:GetVehicle():GetParent() == v then
+								if v.ManualSiren:GetVolume() ~= thirdPersonVolume and ply:GetVehicle():GetThirdPersonMode() then
 									v.ManualSiren:ChangeVolume(thirdPersonVolume, updateRate)
-								elseif v.ManualSiren:GetVolume() ~= interiorVolume and !LocalPlayer():GetVehicle():GetThirdPersonMode() then
+								elseif v.ManualSiren:GetVolume() ~= interiorVolume and !ply:GetVehicle():GetThirdPersonMode() then
 									v.ManualSiren:ChangeVolume(interiorVolume, updateRate)
 								end
 							end
@@ -1139,14 +1140,14 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 				end
 
 				if v.Horn then
-					if (IsValid(v:GetDriver()) and v:GetDriver() ~= LocalPlayer()) or !IsValid(v:GetDriver()) then
-						local distBehind = v:WorldToLocal(LocalPlayer():GetPos())[2]
+					if (IsValid(v:GetDriver()) and v:GetDriver() ~= ply) or !IsValid(v:GetDriver()) then
+						local distBehind = v:WorldToLocal(ply:GetPos())[2]
 						
-						if IsValid(LocalPlayer():GetVehicle()) then
-							if LocalPlayer():GetVehicle():GetParent() == v then
-								if v.Horn:GetVolume() ~= thirdPersonVolume and LocalPlayer():GetVehicle():GetThirdPersonMode() then
+						if IsValid(ply:GetVehicle()) then
+							if ply:GetVehicle():GetParent() == v then
+								if v.Horn:GetVolume() ~= thirdPersonVolume and ply:GetVehicle():GetThirdPersonMode() then
 									v.Horn:ChangeVolume(thirdPersonVolume, updateRate)
-								elseif v.Horn:GetVolume() ~= interiorVolume and !LocalPlayer():GetVehicle():GetThirdPersonMode() then
+								elseif v.Horn:GetVolume() ~= interiorVolume and !ply:GetVehicle():GetThirdPersonMode() then
 									v.Horn:ChangeVolume(interiorVolume, updateRate)
 								end
 							end
