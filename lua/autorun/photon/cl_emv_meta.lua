@@ -1014,7 +1014,7 @@ local updateRate = 0.1
 
 hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 	if NextDoppler < CurTime() then
-		for _,v in pairs(ents.FindByClass("prop_vehicle_jeep")) do
+		for _,v in ipairs(ents.FindByClass("prop_vehicle_jeep")) do
 			if v.Siren or v.Siren2 or v.ManualSiren or v.Horn then
 				local ply = LocalPlayer()
 				local pos = ply:GetPos()
