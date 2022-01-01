@@ -1006,180 +1006,183 @@ function EMVU:MakeEMV( emv, name )
 	emv.PhotonFinishedInit = true
 end
 
-local NextDoppler = 0
+local nextDoppler = 0
 local thirdPersonVolume = 0.6
 local interiorVolume = 0.2
 local fadeDist = 4500
 local updateRate = 0.1
-
+local sirenTypes = {
+	"EMVU_Siren",
+	"EMVU_Siren2",
+	"EMVU_ManualSiren",
+	"EMVU_Horn"
+}
 hook.Add("Think", "Photon.ELS_SirenDoppler", function()
-	if NextDoppler < CurTime() then
+	if nextDoppler < CurTime() then
 	local ply = LocalPlayer()
 	local pos = ply:GetPos()
 	local plyVeh = false or ply:GetVehicle()
 		for _,v in ipairs(EMVU:AllVehicles()) do
-			if v.EMVU_Siren or v.EMVU_Siren2 or v.EMVU_ManualSiren or v.EMVU_Horn then
-				local driver = v:GetDriver()
-				local spos = v:GetPos()
-				local doppler = ((pos:Distance(spos+ply:GetVelocity())-pos:Distance(spos+v:GetVelocity()))/200)
-				if IsValid(plyVeh) then
-					if plyVeh:GetParent() == v then
-						doppler = 0
+			for idx, sirenType in ipairs(sirenTypes) do
+				if v[sirenType] then
+					local driver = v:GetDriver()
+					local spos = v:GetPos()
+					local doppler = ((pos:Distance(spos+ply:GetVelocity())-pos:Distance(spos+v:GetVelocity()))/200)
+					if IsValid(plyVeh) then
+						if plyVeh:GetParent() == v then
+							doppler = 0
+						end
 					end
-				end
-				updateRate = FrameTime()
+					updateRate = FrameTime()
 
-
-				if v.EMVU_Siren then
 					if (IsValid(driver) and driver ~= ply) or !IsValid(driver) then
 						local distBehind = v:WorldToLocal(ply:GetPos())[2]
 						
 						if IsValid(plyVeh) then
 							if plyVeh:GetParent() == v then
-								if v.EMVU_Siren:GetVolume() ~= thirdPersonVolume and plyVeh:GetThirdPersonMode() then
-									v.EMVU_Siren:ChangeVolume(thirdPersonVolume, updateRate)
-								elseif v.EMVU_Siren:GetVolume() ~= interiorVolume and !plyVeh:GetThirdPersonMode() then
-									v.EMVU_Siren:ChangeVolume(interiorVolume, updateRate)
+								if v[sirenType]:GetVolume() ~= thirdPersonVolume and plyVeh:GetThirdPersonMode() then
+									v[sirenType]:ChangeVolume(thirdPersonVolume, updateRate)
+								elseif v[sirenType]:GetVolume() ~= interiorVolume and !plyVeh:GetThirdPersonMode() then
+									v[sirenType]:ChangeVolume(interiorVolume, updateRate)
 								end
 							end
 						else
-							if v.EMVU_Siren:GetVolume() ~= 1 and distBehind > 0 then
-								v.EMVU_Siren:ChangeVolume(1, updateRate)
+							if v[sirenType]:GetVolume() ~= 1 and distBehind > 0 then
+								v[sirenType]:ChangeVolume(1, updateRate)
 							elseif distBehind < 0 then
-								v.EMVU_Siren:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
+								v[sirenType]:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
 							end
 						end
 
 						if math.abs(doppler) > 1 then
-								v.EMVU_Siren:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
-							elseif v.EMVU_Siren:GetPitch() ~= 100 then
-								v.EMVU_Siren:ChangePitch(100, updateRate)
+								v[sirenType]:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
+							elseif v[sirenType]:GetPitch() ~= 100 then
+								v[sirenType]:ChangePitch(100, updateRate)
 						end
 					else
-						if v.EMVU_Siren:GetPitch() ~= 100 then
-							v.EMVU_Siren:ChangePitch(100)
+						if v[sirenType]:GetPitch() ~= 100 then
+							v[sirenType]:ChangePitch(100)
 						end
-						if v.EMVU_Siren:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
-							v.EMVU_Siren:ChangeVolume(thirdPersonVolume, updateRate)
-						elseif v.EMVU_Siren:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
-							v.EMVU_Siren:ChangeVolume(interiorVolume, updateRate)
+						if v[sirenType]:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
+							v[sirenType]:ChangeVolume(thirdPersonVolume, updateRate)
+						elseif v[sirenType]:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
+							v[sirenType]:ChangeVolume(interiorVolume, updateRate)
 						end
 					end
 				end
-
-				if v.EMVU_Siren2 then
-					if (IsValid(driver) and driver ~= ply) or !IsValid(driver) then
-						local distBehind = v:WorldToLocal(ply:GetPos())[2]
+				-- if v.EMVU_Siren2 then
+				-- 	if (IsValid(driver) and driver ~= ply) or !IsValid(driver) then
+				-- 		local distBehind = v:WorldToLocal(ply:GetPos())[2]
 						
-						if IsValid(plyVeh) then
-							if plyVeh:GetParent() == v then
-								if v.EMVU_Siren2:GetVolume() ~= thirdPersonVolume and plyVeh:GetThirdPersonMode() then
-									v.EMVU_Siren2:ChangeVolume(thirdPersonVolume, updateRate)
-								elseif v.EMVU_Siren2:GetVolume() ~= interiorVolume and !plyVeh:GetThirdPersonMode() then
-									v.EMVU_Siren2:ChangeVolume(interiorVolume, updateRate)
-								end
-							end
-						else
-							if v.EMVU_Siren2:GetVolume() ~= 1 and distBehind > 0 then
-								v.EMVU_Siren2:ChangeVolume(1, updateRate)
-							elseif distBehind < 0 then
-								v.EMVU_Siren2:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
-							end
-						end
+				-- 		if IsValid(plyVeh) then
+				-- 			if plyVeh:GetParent() == v then
+				-- 				if v.EMVU_Siren2:GetVolume() ~= thirdPersonVolume and plyVeh:GetThirdPersonMode() then
+				-- 					v.EMVU_Siren2:ChangeVolume(thirdPersonVolume, updateRate)
+				-- 				elseif v.EMVU_Siren2:GetVolume() ~= interiorVolume and !plyVeh:GetThirdPersonMode() then
+				-- 					v.EMVU_Siren2:ChangeVolume(interiorVolume, updateRate)
+				-- 				end
+				-- 			end
+				-- 		else
+				-- 			if v.EMVU_Siren2:GetVolume() ~= 1 and distBehind > 0 then
+				-- 				v.EMVU_Siren2:ChangeVolume(1, updateRate)
+				-- 			elseif distBehind < 0 then
+				-- 				v.EMVU_Siren2:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
+				-- 			end
+				-- 		end
 
-						if math.abs(doppler) > 1 then
-								v.EMVU_Siren2:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
-							elseif v.EMVU_Siren2:GetPitch() ~= 100 then
-								v.EMVU_Siren2:ChangePitch(100, updateRate)
-						end
-					else
-						if v.EMVU_Siren2:GetPitch() ~= 100 then
-							v.EMVU_Siren2:ChangePitch(100)
-						end
-						if v.EMVU_Siren2:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
-							v.EMVU_Siren2:ChangeVolume(thirdPersonVolume, updateRate)
-						elseif v.EMVU_Siren2:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
-							v.EMVU_Siren2:ChangeVolume(interiorVolume, updateRate)
-						end
-					end
-				end
+				-- 		if math.abs(doppler) > 1 then
+				-- 				v.EMVU_Siren2:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
+				-- 			elseif v.EMVU_Siren2:GetPitch() ~= 100 then
+				-- 				v.EMVU_Siren2:ChangePitch(100, updateRate)
+				-- 		end
+				-- 	else
+				-- 		if v.EMVU_Siren2:GetPitch() ~= 100 then
+				-- 			v.EMVU_Siren2:ChangePitch(100)
+				-- 		end
+				-- 		if v.EMVU_Siren2:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
+				-- 			v.EMVU_Siren2:ChangeVolume(thirdPersonVolume, updateRate)
+				-- 		elseif v.EMVU_Siren2:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
+				-- 			v.EMVU_Siren2:ChangeVolume(interiorVolume, updateRate)
+				-- 		end
+				-- 	end
+				-- end
 
-				if v.EMVU_ManualSiren then
-					if (IsValid(driver) and driver ~= ply) or !IsValid(driver) then
-						local distBehind = v:WorldToLocal(ply:GetPos())[2]
+				-- if v.EMVU_ManualSiren then
+				-- 	if (IsValid(driver) and driver ~= ply) or !IsValid(driver) then
+				-- 		local distBehind = v:WorldToLocal(ply:GetPos())[2]
 						
-						if IsValid(plyVeh) then
-							if plyVeh:GetParent() == v then
-								if v.EMVU_ManualSiren:GetVolume() ~= thirdPersonVolume and plyVeh:GetThirdPersonMode() then
-									v.EMVU_ManualSiren:ChangeVolume(thirdPersonVolume, updateRate)
-								elseif v.EMVU_ManualSiren:GetVolume() ~= interiorVolume and !plyVeh:GetThirdPersonMode() then
-									v.EMVU_ManualSiren:ChangeVolume(interiorVolume, updateRate)
-								end
-							end
-						else
-							if v.EMVU_ManualSiren:GetVolume() ~= 1 and distBehind > 0 then
-								v.EMVU_ManualSiren:ChangeVolume(1, updateRate)
-							elseif distBehind < 0 then
-								v.EMVU_ManualSiren:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
-							end
-						end
+				-- 		if IsValid(plyVeh) then
+				-- 			if plyVeh:GetParent() == v then
+				-- 				if v.EMVU_ManualSiren:GetVolume() ~= thirdPersonVolume and plyVeh:GetThirdPersonMode() then
+				-- 					v.EMVU_ManualSiren:ChangeVolume(thirdPersonVolume, updateRate)
+				-- 				elseif v.EMVU_ManualSiren:GetVolume() ~= interiorVolume and !plyVeh:GetThirdPersonMode() then
+				-- 					v.EMVU_ManualSiren:ChangeVolume(interiorVolume, updateRate)
+				-- 				end
+				-- 			end
+				-- 		else
+				-- 			if v.EMVU_ManualSiren:GetVolume() ~= 1 and distBehind > 0 then
+				-- 				v.EMVU_ManualSiren:ChangeVolume(1, updateRate)
+				-- 			elseif distBehind < 0 then
+				-- 				v.EMVU_ManualSiren:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
+				-- 			end
+				-- 		end
 
-						if math.abs(doppler) > 1 then
-								v.EMVU_ManualSiren:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
-							elseif v.EMVU_ManualSiren:GetPitch() ~= 100 then
-								v.EMVU_ManualSiren:ChangePitch(100, updateRate)
-						end
-					else
-						if v.EMVU_ManualSiren:GetPitch() ~= 100 then
-							v.EMVU_ManualSiren:ChangePitch(100)
-						end
-						if v.EMVU_ManualSiren:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
-							v.EMVU_ManualSiren:ChangeVolume(thirdPersonVolume, updateRate)
-						elseif v.EMVU_ManualSiren:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
-							v.EMVU_ManualSiren:ChangeVolume(interiorVolume, updateRate)
-						end
-					end
-				end
+				-- 		if math.abs(doppler) > 1 then
+				-- 				v.EMVU_ManualSiren:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
+				-- 			elseif v.EMVU_ManualSiren:GetPitch() ~= 100 then
+				-- 				v.EMVU_ManualSiren:ChangePitch(100, updateRate)
+				-- 		end
+				-- 	else
+				-- 		if v.EMVU_ManualSiren:GetPitch() ~= 100 then
+				-- 			v.EMVU_ManualSiren:ChangePitch(100)
+				-- 		end
+				-- 		if v.EMVU_ManualSiren:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
+				-- 			v.EMVU_ManualSiren:ChangeVolume(thirdPersonVolume, updateRate)
+				-- 		elseif v.EMVU_ManualSiren:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
+				-- 			v.EMVU_ManualSiren:ChangeVolume(interiorVolume, updateRate)
+				-- 		end
+				-- 	end
+				-- end
 
-				if v.EMVU_Horn then
-					if (IsValid(driver) and driver ~= ply) or !IsValid(driver) then
-						local distBehind = v:WorldToLocal(ply:GetPos())[2]
+				-- if v.EMVU_Horn then
+				-- 	if (IsValid(driver) and driver ~= ply) or !IsValid(driver) then
+				-- 		local distBehind = v:WorldToLocal(ply:GetPos())[2]
 						
-						if IsValid(plyVeh) then
-							if plyVeh:GetParent() == v then
-								if v.EMVU_Horn:GetVolume() ~= thirdPersonVolume and plyVeh:GetThirdPersonMode() then
-									v.EMVU_Horn:ChangeVolume(thirdPersonVolume, updateRate)
-								elseif v.EMVU_Horn:GetVolume() ~= interiorVolume and !plyVeh:GetThirdPersonMode() then
-									v.EMVU_Horn:ChangeVolume(interiorVolume, updateRate)
-								end
-							end
-						else
-							if v.EMVU_Horn:GetVolume() ~= 1 and distBehind > 0 then
-								v.EMVU_Horn:ChangeVolume(1, updateRate)
-							elseif distBehind < 0 then
-								v.EMVU_Horn:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
-							end
-						end
+				-- 		if IsValid(plyVeh) then
+				-- 			if plyVeh:GetParent() == v then
+				-- 				if v.EMVU_Horn:GetVolume() ~= thirdPersonVolume and plyVeh:GetThirdPersonMode() then
+				-- 					v.EMVU_Horn:ChangeVolume(thirdPersonVolume, updateRate)
+				-- 				elseif v.EMVU_Horn:GetVolume() ~= interiorVolume and !plyVeh:GetThirdPersonMode() then
+				-- 					v.EMVU_Horn:ChangeVolume(interiorVolume, updateRate)
+				-- 				end
+				-- 			end
+				-- 		else
+				-- 			if v.EMVU_Horn:GetVolume() ~= 1 and distBehind > 0 then
+				-- 				v.EMVU_Horn:ChangeVolume(1, updateRate)
+				-- 			elseif distBehind < 0 then
+				-- 				v.EMVU_Horn:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
+				-- 			end
+				-- 		end
 
-						if math.abs(doppler) > 1 then
-								v.EMVU_Horn:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
-							elseif v.EMVU_Horn:GetPitch() ~= 100 then
-								v.EMVU_Horn:ChangePitch(100, updateRate)
-						end
-					else
-						if v.EMVU_Horn:GetPitch() ~= 100 then
-							v.EMVU_Horn:ChangePitch(100)
-						end
-						if v.EMVU_Horn:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
-							v.EMVU_Horn:ChangeVolume(thirdPersonVolume, updateRate)
-						elseif v.EMVU_Horn:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
-							v.EMVU_Horn:ChangeVolume(interiorVolume, updateRate)
-						end
-					end
-				end
+				-- 		if math.abs(doppler) > 1 then
+				-- 				v.EMVU_Horn:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
+				-- 			elseif v.EMVU_Horn:GetPitch() ~= 100 then
+				-- 				v.EMVU_Horn:ChangePitch(100, updateRate)
+				-- 		end
+				-- 	else
+				-- 		if v.EMVU_Horn:GetPitch() ~= 100 then
+				-- 			v.EMVU_Horn:ChangePitch(100)
+				-- 		end
+				-- 		if v.EMVU_Horn:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
+				-- 			v.EMVU_Horn:ChangeVolume(thirdPersonVolume, updateRate)
+				-- 		elseif v.EMVU_Horn:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
+				-- 			v.EMVU_Horn:ChangeVolume(interiorVolume, updateRate)
+				-- 		end
+				-- 	end
+				-- end
 			end
 		end
-		NextDoppler = CurTime() + updateRate
+		nextDoppler = CurTime() + updateRate
 	end
 end)
 
