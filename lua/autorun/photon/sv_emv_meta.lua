@@ -657,16 +657,18 @@ function EMVU:MakeEMV( ent, emv )
 
 		mat = tostring(mat)
 		self:SetSubMaterial(submaterialIndex, mat)
+
 		for _, prop in ipairs(EMVU.Helper.GetSubProps(self)) do
-					local propmaterials = prop:GetMaterials()
-					for i=1,#propmaterials do
-						local propthisMat = tostring( propmaterials[i] )
-						if string.EndsWith( propthisMat, "/skin" ) or string.EndsWith( propthisMat, "/skin0" ) or string.EndsWith( propthisMat, "/carpaint" ) then
-							propsubmaterialIndex = i - 1
-							break
-						end
-					end
-			prop:SetSubMaterial(propsubmaterialIndex, mat)
+			local propsubmaterialIndex = false
+			local propmaterials = prop:GetMaterials()
+			for i=1,#propmaterials do
+				local propthisMat = tostring( propmaterials[i] )
+				if string.EndsWith( propthisMat, "/skin" ) or string.EndsWith( propthisMat, "/skin0" ) or string.EndsWith( propthisMat, "/carpaint" ) then
+					propsubmaterialIndex = i - 1
+					break
+				end
+			end
+			if propsubmaterialIndex ~= false then prop:SetSubMaterial(propsubmaterialIndex, mat) end
 		end
 	end
 
