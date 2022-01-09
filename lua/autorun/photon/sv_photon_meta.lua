@@ -3,8 +3,8 @@ function Photon:SetupCar( ent, index )
 	function ent:CAR_IsBlackedOut()
 		if self.IsEMV and self:IsEMV() then
 			// Lookup ELS Blackup State
-			local hasELS = v:HasPhotonELS()
-			if hasELS and v.ELS.Blackout then
+			local hasELS = self:HasPhotonELS()
+			if hasELS and self.ELS.Blackout then
 				return true
 			end
 		end
