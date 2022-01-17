@@ -1038,7 +1038,7 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 
 					if (IsValid(driver) and driver ~= ply) or !IsValid(driver) then
 						local distBehind = v:WorldToLocal(ply:GetPos())[2]
-						
+
 						if IsValid(plyVeh) then
 							if plyVeh:GetParent() == v then
 								if currentSiren:GetVolume() ~= thirdPersonVolume and plyVeh:GetThirdPersonMode() then

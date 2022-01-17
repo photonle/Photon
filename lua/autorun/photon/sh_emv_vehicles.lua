@@ -57,7 +57,7 @@ function EMVU:SpawnedVehicle( ent )
 	if not car then return end
 	if not raw or not istable( raw.EMV ) then raw = car end
 
-	if istable( car.EMV ) then
+	if SERVER and istable( car.EMV ) then
 		EMVU:MakeEMV( ent, raw.EMV )
 	end
 end
