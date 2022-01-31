@@ -29,15 +29,10 @@ end
 -- @rint Set signal value.
 function ENT:Photon_Signal(val)
 	if val ~= nil then
-		self.Photon_SignalVal = val
-		Photon.Net.SignalChanged(self, val)
+		self:SetPhotonNet_CurrentSignal(val)
 	end
 
-	if self.Photon_SignalVal == nil then
-		return 0
-	else
-		return self.Photon_SignalVal
-	end
+	return self:GetPhotonNet_CurrentSignal(0)
 end
 
 --- Stop any signals.
