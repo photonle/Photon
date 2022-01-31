@@ -18,11 +18,6 @@ function Photon:SetupCar( ent, index )
 		return self:GetNW2Bool( "PhotonLE.CAR_BRAKING" )
 	end
 
-	function ent:Photon_IsReversing()
-		if not IsValid( self ) then return false end
-		return self:GetNW2Bool( "PhotonLE.CAR_REVERSING" )
-	end
-
 	function ent:Photon_IsRunning()
 		if not IsValid( self ) then return false end
 		return self:GetNW2Bool( "PhotonLE.CAR_RUNNING" )
