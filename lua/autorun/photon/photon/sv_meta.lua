@@ -8,10 +8,14 @@
 
 local ENT = FindMetaTable("Vehicle")
 
+--- Get the World Localised Velocity
+-- @rvec
 function ENT:Photon_WorldVelocity()
 	return self:WorldToLocal(self:GetPos() + self:GetVelocity())
 end
 
+--- Get if the Vehicle is Reversing.
+-- @rbool
 function ENT:Photon_IsReversing()
 	local driver = self:GetDriver()
 	if not IsValid(driver) then return false end
@@ -20,6 +24,8 @@ function ENT:Photon_IsReversing()
 	return self:Photon_WorldVelocity().y < 1 and ply:KeyDown(IN_BACK)
 end
 
+--- Get if the Vehicle is Braking.
+-- @rbool
 function ENT:Photon_IsBraking()
 	if self:Photon_IsReversing() then return false end
 
@@ -31,6 +37,9 @@ function ENT:Photon_IsBraking()
 	return (driver:KeyDown(IN_BACK) and vel.y > 1) or (driver:KeyDown(IN_FORWARD) and vel.y < -1) or driver:KeyDown(IN_JUMP)
 end
 
+--- Set a new signal value.
+-- @int[opt] val New signal value.
+-- @rint Set signal value.
 function ENT:Photon_Signal(val)
 	if val ~= nil then
 		self.Photon_SignalVal = val
@@ -44,10 +53,15 @@ function ENT:Photon_Signal(val)
 	end
 end
 
+--- Stop any signals.
+-- @rint New signal value.
 function ENT:Photon_SignalStop()
 	return self:Photon_Signal(CAR_BLINKER_NONE)
 end
 
+--- Set the left signal.
+-- @bool[opt] bool If the signal should be enabled / disabled / unchanged.
+-- @rint New signal value.
 function ENT:Photon_TurnLeft(bool)
 	if bool == true then
 		return self:Photon_Signal(CAR_BLINKER_LEFT)
@@ -58,6 +72,9 @@ function ENT:Photon_TurnLeft(bool)
 	end
 end
 
+--- Set the right signal.
+-- @bool[opt] bool If the signal should be enabled / disabled / unchanged.
+-- @rint New signal value.
 function ENT:Photon_TurnRight(bool)
 	if bool == true then
 		return self:Photon_Signal(CAR_BLINKER_RIGHT)
@@ -68,6 +85,9 @@ function ENT:Photon_TurnRight(bool)
 	end
 end
 
+--- Set the hazard signals.
+-- @bool[opt] If the signal should be enabled / disabled / unchanged.
+-- @rint New signal value.
 function ENT:Photon_Hazards(bool)
 	if bool == true then
 		return self:Photon_Signal(CAR_BLINKER_HAZARD)
