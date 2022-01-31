@@ -9,6 +9,9 @@
 local ENT = FindMetaTable("Vehicle")
 
 --- Get if the Vehicle is Braking.
+-- @warns This function will only natively work on the Server or Local Client.
+-- @warns It will not work for other players in the Client realm.
+-- @warns Instead, a cached value is fetched from the server.
 -- @rbool
 function ENT:Photon_IsBraking()
 	if self:Photon_IsReversing() then return false end
