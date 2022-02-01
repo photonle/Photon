@@ -90,11 +90,11 @@ if SERVER then
 	-- @internal
 	-- @state server
 	function NET:Set(ent, name, val)
-		name = self.Normalise(name)
+		local varName = self.Normalise(name)
 
-		local old = ent[name]
+		local old = ent[varName]
 		if val ~= old then
-			ent[name] = val
+			ent[varName] = val
 
 			local idx, netType, extra = unpack(self.RMap[name])
 			if not idx then
