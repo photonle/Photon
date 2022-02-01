@@ -24,39 +24,6 @@ function Photon:SetupCar( ent, index )
 
 	end
 
-	function ent:CAR_Signal( val )
-		if not IsValid( self ) then return 0 end
-		if (val!=nil) then self:SetNW2Int( "PhotonLE.CAR_BLINKER", val ) end
-		return self:GetNW2Int( "PhotonLE.CAR_BLINKER" )
-
-	end
-
-	function ent:CAR_TurnLeft( val )
-		if not IsValid( self ) then return false end
-		if (val!=nil) then self:CAR_Signal( CAR_TURNING_LEFT ) end
-		return self:CAR_Signal() == CAR_TURNING_LEFT
-
-	end
-
-	function ent:CAR_TurnRight( val )
-		if not IsValid( self ) then return false end
-		if (val!=nil) then self:CAR_Signal( CAR_TURNING_RIGHT ) end
-		return self:CAR_Signal() == CAR_TURNING_RIGHT
-
-	end
-
-	function ent:CAR_Hazards( val )
-		if not IsValid( self ) then return false end
-		if (val!=nil) then self:CAR_Signal( CAR_HAZARD ) end
-		return self:CAR_Signal() == CAR_HAZARD
-
-	end
-
-	function ent:CAR_StopSignals()
-		if not IsValid( self ) then return false end
-		self:CAR_Signal( 0 )
-	end
-
 	function ent:IsBraking( )
 		if not IsValid( self ) then return false end
 		if self:IsReversing() then return false end
