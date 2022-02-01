@@ -21,7 +21,7 @@ function ENT:Photon_IsBraking()
 	if not IsValid(driver) then return false end
 	if not driver:IsPlayer() then return false end
 
-	if lp() == driver then
+	if driver == lp() then
 		local vel = self:Photon_WorldVelocity()
 		return (driver:KeyDown(IN_BACK) and vel.y > 1) or (driver:KeyDown(IN_FORWARD) and vel.y < -1) or driver:KeyDown(IN_JUMP)
 	end
