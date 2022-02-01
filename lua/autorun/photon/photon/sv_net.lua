@@ -1,3 +1,11 @@
+--[[-- Regular Lighting Networking
+@copyright Photon Team
+@release development
+@author Photon Team
+@module Photon.Net
+@alias ENT
+--]]--
+
 Photon = Photon or {}
 Photon.Net = Photon.Net or {}
 
