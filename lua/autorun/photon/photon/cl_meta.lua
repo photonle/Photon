@@ -26,5 +26,5 @@ function ENT:Photon_IsBraking()
 		return (driver:KeyDown(IN_BACK) and vel.y > 1) or (driver:KeyDown(IN_FORWARD) and vel.y < -1) or driver:KeyDown(IN_JUMP)
 	end
 
-	return self:GetPhotonNet_Reversing(false)
+	return self:GetPhotonNet_Braking(false)
 end
