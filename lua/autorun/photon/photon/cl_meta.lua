@@ -24,9 +24,8 @@ function ENT:Photon_IsReversing()
 		return self:Photon_WorldVelocity().y < 1 and ply:KeyDown(IN_BACK)
 	end
 
-	return self:GetPhotonNet_Reversing()
+	return self:GetPhotonNet_Reversing(false)
 end
-
 
 --- Get if the Vehicle is Braking.
 -- @warns This function will only natively work on the Server or Local Client.
