@@ -24,13 +24,6 @@ function Photon:SetupCar( ent, index )
 
 	end
 
-	function ent:CAR_Running( val )
-		if not IsValid( self ) then return false end
-		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_RUNNING", val ) end
-		return self:GetNW2Bool( "PhotonLE.CAR_RUNNING" )
-
-	end
-
 	function ent:CAR_Signal( val )
 		if not IsValid( self ) then return 0 end
 		if (val!=nil) then self:SetNW2Int( "PhotonLE.CAR_BLINKER", val ) end
@@ -114,7 +107,7 @@ function Photon:SetupCar( ent, index )
 
 	ent:CAR_Headlights( false )
 	ent:CAR_Braking( false )
-	ent:CAR_Running( false )
+	ent:SetPhotonNet_Running( false )
 	ent:CAR_Reversing( false )
 	ent:CAR_StopSignals()
 	if ent:Photon_WheelEnabled() then ent:Photon_SetWheelIndex( 1 ) end
