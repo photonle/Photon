@@ -104,7 +104,7 @@ if SERVER then
 
 			net.Start("Photon_SimpleNet_Change")
 			net.WriteEntity(ent)
-			net.WriteUInt(netType, self.Bits)
+			net.WriteUInt(idx, self.Bits)
 			self.WriteFunctions[netType](val, extra)
 			net.Broadcast()
 		end
@@ -126,8 +126,8 @@ end
 if CLIENT then
 	net.Receive("Photon_SimpleNet_Change", function(len, ply)
 		local ent = net.ReadEntity()
-		local netType = net.ReadUInt(NET.Bits)
-		local name, _, extra = unpack(NET.FMap[netType])
+		local idx = net.ReadUInt(NET.Bits)
+		local name, netType, extra = unpack(NET.FMap[idx])
 		ent[NET.Normalise(name)] = NET.ReadFunctions[netType](extra)
 	end)
 end
