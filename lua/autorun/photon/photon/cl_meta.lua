@@ -46,3 +46,33 @@ function ENT:Photon_IsBraking()
 
 	return self:GetPhotonNet_Braking(false)
 end
+
+--- Gets the running lights state.
+-- @rbool The running light state.
+function ENT:Photon_IsRunning()
+	return self:GetPhotonNet_Running(false)
+end
+
+--- Gets the turn signal value.
+-- @rint Blinker State
+function ENT:Photon_BlinkState()
+	return self:GetPhotonNet_CurrentSignal(CAR_BLINKER_NONE)
+end
+
+--- Gets if the left turn indicator is enabled
+-- @rbool
+function ENT:Photon_TurningLeft()
+	return self:Photon_BlinkState() == CAR_BLINKER_LEFT
+end
+
+--- Gets if the right turn indicator is enabled
+-- @rbool
+function ENT:Photon_TurningRight()
+	return self:Photon_BlinkState() == CAR_BLINKER_RIGHT
+end
+
+--- Gets if the hazard lights are enabled
+-- @rbool
+function ENT:Photon_Hazards()
+	return self:Photon_BlinkState() == CAR_BLINKER_HAZARD
+end
