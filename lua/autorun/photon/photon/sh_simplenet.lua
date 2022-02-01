@@ -74,10 +74,10 @@ function NET:Map(name, netType, extra)
 	end
 
 	self["Get" .. name] = function(env, ent, val, default)
-		env:Get(ent, name, val, default)
+		return env:Get(ent, name, val, default)
 	end
 	ENT["Get" .. iName] = function(ent, val, default)
-		self:Get(ent, name, val, default)
+		return self:Get(ent, name, val, default)
 	end
 end
 
