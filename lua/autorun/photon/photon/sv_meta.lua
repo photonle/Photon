@@ -92,3 +92,13 @@ function ENT:Photon_Hazards(bool)
 		return self:Photon_Signal() == CAR_BLINKER_HAZARD
 	end
 end
+
+--- Gets the running lights state.
+-- @rbool The running light state.
+function ENT:Photon_IsRunning()
+	if self.HasPhotonELS and self:HasPhotonELS() and self.ELS and self.ELS.Blackout then
+		return false
+	end
+
+	return IsValid(self:GetDriver())
+end
