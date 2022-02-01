@@ -12,9 +12,9 @@ hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, v)
 	if IsValid(v) and v.IsEMV and v:IsEMV() then
 		local hasELS = v:HasPhotonELS()
 		if hasELS and v.ELS.Blackout then
-			v:CAR_Running(false)
+			v:SetPhotonNet_Running(false)
 		else
-			v:CAR_Running(true)
+			v:SetPhotonNet_Running(true)
 		end
 		if hasELS then v:ELS_ParkMode(false) end
 	end
@@ -24,7 +24,7 @@ hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, v)
 	if IsValid(v) and v.IsEMV and v:IsEMV() then
 		local hasELS = v:HasPhotonELS()
 		if hasELS then v:ELS_ParkMode(true) end
-		v:CAR_Running(false)
+		v:SetPhotonNet_Running(false)
 		v:CAR_Braking(false)
 		v:CAR_Reversing(false)
 		if hasELS then
