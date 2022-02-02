@@ -138,18 +138,11 @@ include("cl_photon_context.lua")
 include("cl_photon_menubar.lua")
 include("sh_photon_xml.lua")
 
-AddCSLuaFile("photon/sh_simplenet.lua")
-AddCSLuaFile("photon/sh_meta.lua")
-AddCSLuaFile("photon/sv_meta.lua")
-AddCSLuaFile("photon/cl_meta.lua")
-
-include("photon/sh_simplenet.lua")
-include("photon/sh_meta.lua")
-if SERVER then
-	include("photon/sv_meta.lua")
-else
-	include("photon/cl_meta.lua")
-end
+includes("shared/sh_simplenet.lua")
+includes("photon/sh_meta.lua")
+includes("photon/sv_meta.lua")
+includes("photon/cl_meta.lua")
+includes("emv/sv_meta.lua")
 
 local photonVehicleTable = {}
 local photonLastScan = 0
