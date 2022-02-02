@@ -2,8 +2,8 @@
 function Photon:RunningScan()
 	for k,v in pairs( self:AllVehicles() ) do
 		if IsValid( v ) and IsValid(v:GetDriver()) and v:GetDriver():IsPlayer() and v.IsEMV and v:IsEMV() then
-			if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
-			if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
+			v:SetPhotonNet_Braking(v:Photon_IsBraking())
+			v:SetPhotonNet_Reversing(v:Photon_IsReversing())
 		end
 	end
 end
@@ -25,8 +25,9 @@ hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, v)
 		local hasELS = v:HasPhotonELS()
 		if hasELS then v:ELS_ParkMode(true) end
 		v:SetPhotonNet_Running(false)
-		v:CAR_Braking(false)
-		v:CAR_Reversing(false)
+		v:SetPhotonNet_Braking(false)
+		v:SetPhotonNet_Reversing(false)
+
 		if hasELS then
 			if v:ELS_Siren() and not v:GetPhotonLEStayOn() then v:ELS_SirenOff() end
 			v:ELS_Horn(false)
@@ -38,16 +39,16 @@ end)
 hook.Add("KeyPress", "Photon.KeyPress.SGM", function(ply, key)
 	local v = ply:GetVehicle()
 	if IsValid(v) and v.IsEMV and v:IsEMV() then
-		if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
-		if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
+		v:SetPhotonNet_Braking(v:Photon_IsBraking())
+		v:SetPhotonNet_Reversing(v:Photon_IsReversing())
 	end
 end)
 
 hook.Add("KeyRelease", "Photon.KeyRelease.SGM", function(ply, key)
 	local v = ply:GetVehicle()
 	if IsValid(v) and v.IsEMV and v:IsEMV() then
-		if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
-		if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
+		v:SetPhotonNet_Braking(v:Photon_IsBraking())
+		v:SetPhotonNet_Reversing(v:Photon_IsReversing())
 	end
 end)
 
