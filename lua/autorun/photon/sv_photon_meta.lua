@@ -1,13 +1,5 @@
 
 function Photon:SetupCar( ent, index )
-	function ent:GetPhotonLEStayOn()
-		if GetConVar("photon_emv_stayon"):GetBool() then return true end
-		return self:GetNW2Bool("PhotonLEStayOn", false)
-	end
-	function ent:SetPhotonLEStayOn(val)
-		return self:SetNW2Bool("PhotonLEStayOn", val)
-	end
-
 	function ent:Photon_WheelEnabled()
 		return istable( Photon.Vehicles.WheelPositions[ self.VehicleName ] ) and istable( Photon.Vehicles.WheelOptions[ self.VehicleName ] )
 	end
