@@ -51,6 +51,7 @@ end
 
 Photon.Messages.Colours.Error = Color(255, 0, 0)
 Photon.Messages.Colours.Warning = Color(255, 200, 0)
+Photon.Messages.Colours.Debug = Color(160, 160, 160)
 
 --- Print a message to console.
 -- @tparam vararg ... Inputs to display.
@@ -84,6 +85,7 @@ end
 
 Photon.Messages:BuildLevel("Error")
 Photon.Messages:BuildLevel("Warning")
+Photon.Messages:BuildLevel("Debug")
 
 AddCSLuaFile("cl_photon_eng.lua")
 AddCSLuaFile("cl_photon_meta.lua")
