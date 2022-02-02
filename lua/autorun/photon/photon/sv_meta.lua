@@ -18,7 +18,7 @@ function ENT:Photon_IsReversing()
 	if not IsValid(driver) then return false end
 	if not driver:IsPlayer() then return false end
 
-	return self:Photon_WorldVelocity().y < 1 and ply:KeyDown(IN_BACK)
+	return self:Photon_WorldVelocity().y < 1 and driver:KeyDown(IN_BACK)
 end
 
 --- Get if the Vehicle is Braking.
