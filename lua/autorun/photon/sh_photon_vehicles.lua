@@ -200,7 +200,17 @@ function Photon:OverwriteIndex( name, data )
 		if data.States.Running != nil then Photon.Vehicles.States.Running[name] = data.States.Running end
 	end
 	if istable( data.WheelOptions ) then
+		if #data.WheelOptions > 63 then
+			PhotonWarning("PI data had more than 63 WheelOptions.")
+			local new = {}
+			for i = 1, 63 do
+				new[i] = data.WheelOptions[i]
+			end
+
+			data.WheelOptions = new
+		end
 		Photon.Vehicles.WheelOptions[name] = data.WheelOptions
+
 		if istable( data.WheelPositions ) then
 			Photon.Vehicles.WheelPositions[name] = data.WheelPositions
 		else
