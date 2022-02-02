@@ -87,6 +87,21 @@ Photon.Messages:BuildLevel("Error")
 Photon.Messages:BuildLevel("Warning")
 Photon.Messages:BuildLevel("Debug")
 
+local match = string.match
+local function includes(file)
+	local prefix = match(file, "/?(%w%w)[%w_]*.lua$") or "sh"
+	PhotonDebug(file, " => ", prefix)
+
+	if prefix ~= "sv" then
+		AddCSLuaFile(file)
+		if CLIENT or prefix == "sh" then
+			include(file)
+		end
+	elseif SERVER then
+		include(file)
+	end
+end
+
 AddCSLuaFile("cl_photon_eng.lua")
 AddCSLuaFile("cl_photon_meta.lua")
 AddCSLuaFile("cl_photon_hooks.lua")
