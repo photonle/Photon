@@ -72,11 +72,12 @@ function Photon:SetupCar( ent, index )
 		return self:GetNW2Int( "PhotonLE.CAR_WHEEL_OPTION" )
 	end
 
-	ent:CAR_Headlights( false )
-	ent:CAR_Braking( false )
+	ent:SetPhotonNet_Headlights( false )
+	ent:SetPhotonNet_Braking( false )
 	ent:SetPhotonNet_Running( false )
-	ent:CAR_Reversing( false )
-	ent:CAR_StopSignals()
+	ent:SetPhotonNet_Reversing( false )
+	ent:Photon_SignalStop()
+
 	if ent:Photon_WheelEnabled() then ent:Photon_SetWheelIndex( 1 ) end
 
 	-- ent:SetNWString( "PhotonVehicle", index )
