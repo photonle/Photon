@@ -1,52 +1,5 @@
 
 function Photon:SetupCar( ent, index )
-	// whether car headlights are on or off
-	function ent:CAR_Headlights( val )
-		if not IsValid( self ) then return false end
-		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_HEADLIGHTS", val ) end
-		return self:GetNW2Bool("PhotonLE.CAR_HEADLIGHTS")
-
-	end
-
-	-- if car is braking
-	function ent:CAR_Braking( val )
-		if not IsValid( self ) then return false end
-		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_BRAKING", val ) end
-		return self:GetNW2Bool( "PhotonLE.CAR_BRAKING" )
-
-	end
-
-	-- car reversing
-	function ent:CAR_Reversing( val )
-		if not IsValid( self ) then return false end
-		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_REVERSING", val ) end
-		return self:GetNW2Bool( "PhotonLE.CAR_REVERSING" )
-
-	end
-
-	function ent:IsBraking( )
-		if not IsValid( self ) then return false end
-		if self:IsReversing() then return false end
-		--local speed = self:GetPhysicsObject():GetVelocity():Length()
-		local vel = self:WorldToLocal(self:GetVelocity()+self:GetPos())
-		if (self:GetDriver():KeyDown( IN_BACK ) and vel.y > 1) or (self:GetDriver():KeyDown( IN_FORWARD ) and vel.y < -1) or self:GetDriver():KeyDown( IN_JUMP ) then
-			return true
-		end
-		return false
-	end
-
-	function ent:IsReversing()
-		if not IsValid( self ) then return false end
-		if self:GetDriver() and self:GetDriver():IsValid() and self:GetDriver():IsPlayer() then
-			local ply = self:GetDriver()
-			local vel = self:WorldToLocal(self:GetVelocity()+self:GetPos())
-			if (vel.y < 1 and ply:KeyDown( IN_BACK )) then
-				return true
-			end
-		end
-		return false
-	end
-
 	function ent:GetPhotonLEStayOn()
 		if GetConVar("photon_emv_stayon"):GetBool() then return true end
 		return self:GetNW2Bool("PhotonLEStayOn", false)
