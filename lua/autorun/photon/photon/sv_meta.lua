@@ -102,3 +102,24 @@ function ENT:Photon_IsRunning()
 
 	return IsValid(self:GetDriver())
 end
+
+--- Get if this vehicle has wheels.
+-- @rbool
+function ENT:Photon_WheelEnabled()
+	return istable(Photon.Vehicles.WheelPositions[self.VehicleName]) and istable(Photon.Vehicles.WheelOptions[self.VehicleName])
+end
+
+--- Set the wheel index.
+-- @int val New wheel index.
+function ENT:Photon_PlayerSetWheelIndex(val)
+	if not self:Photon_WheelEnabled() then
+		return false
+	end
+
+	local max = math.min(#Photon.Vehicles.WheelOptions[self.VehicleName], 63)
+	if val > max then
+		val = 1
+	end
+
+	self:SetPhotonNet_WheelIndex(val)
+end

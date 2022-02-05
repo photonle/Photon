@@ -305,7 +305,7 @@ function Photon.Net.SetWheel( len, ply )
 	local index = net.ReadInt( 8 )
 	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent, "WHEEL" )
 	if modifyBlocked != false then
-		ent:Photon_SetWheelIndex( index )
+		ent:Photon_PlayerSetWheelIndex( index )
 	end
 end
 net.Receive( "photon_wheel", function( len, ply ) Photon.Net.SetWheel( len, ply ) end )
