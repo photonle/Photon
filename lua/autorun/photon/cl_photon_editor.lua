@@ -318,6 +318,7 @@ Photon.Editor.CreateMenu = function( panel )
 
 	else
 		panel:AddControl( "Header", { Description = "Select a vehicle to modify: " } )
+		panel:AddControl( "Header", { Description = "Imporant Notice: This program is NOT recommened for use by users, this is an extremely dated program that we cannot provide support for. Please use this at your own digression"})
 		buildTargetVehicles( panel )
 		RunConsoleCommand( "photon_express_edit", 0 )
 	end
