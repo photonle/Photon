@@ -142,3 +142,16 @@ NET:Map("Reversing", Bool)
 NET:Map("Running", Bool)
 NET:Map("LEStayOn", Bool)
 NET:Map("WheelIndex", UInt, 6) -- 64 wheels
+
+NET:Map("Enabled", Bool)
+NET:Map("LightOn", Bool)
+NET:Map("LightOption", UInt, 4) -- 16 Lighting Options
+NET:Map("SirenOn", Bool)
+NET:Map("SirenSet", UInt, 10) -- 1024 Siren Sets
+NET:Map("SirenOption", UInt, 4) -- 16 Siren Options
+NET:Map("AuxSirenSet", UInt, 10)
+NET:Map("TrafficOn", Bool)
+NET:Map("TrafficOption", UInt, 4)
+NET:Map("IlluminationOn", Bool)
+NET:Map("IlluminationOption", UInt, 4)
+NET:Map("Preset", UInt, 10)
