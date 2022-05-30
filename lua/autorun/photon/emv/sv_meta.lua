@@ -7,6 +7,7 @@
 --]]--
 
 local ENT = FindMetaTable("Vehicle")
+local helper = EMVU.Helper
 
 local global_stayon = GetConVar("photon_emv_stayon")
 local global_stayon_value = global_stayon:GetBool()
@@ -173,11 +174,74 @@ function ENT:ELS_PresetOption(val)
 		val = math.Clamp(val, 0, #idxs)
 		self:SetPhotonNet_Preset(val)
 
-		local bgData = EMVU.Helper:BodygroupPreset(self, val)
+		local bgData = helper:BodygroupPreset(self, val)
 		for _, bg in ipairs(bgData) do
 			self:SetBodygroup(bg[1], bg[2])
 		end
 	end
 
 	return self:GetPhotonNet_Preset()
+end
+
+local illumination_allowed = GetConVar("photon_emv_useillum")
+local illumination_allowed_value = illumination_allowed:GetBool()
+cvars.AddChangeCallback("photon_emv_useillum", function()
+	illumination_allowed_value = illumination_allowed:GetBool()
+end)
+
+function ENT:ELS_IllumOn()
+	local name = self.Name
+	local usesLamps = helper:HasLamps(name)
+	if not usesLamps then
+		return false
+	end
+
+	self:ELS_Illuminate(true)
+	if not self.ELS_Lamps then
+		self.ELS_Lamps = {}
+	end
+
+	if not illumination_allowed_value then
+		return false
+	end
+
+	local mode = self:ELS_IlluminateOption()
+	local lamps = helper:GetIlluminationLights(name, mode)
+
+	for _, lampData in ipairs(lamps) do
+		local pos, ang, metaName = unpack(lampData)
+		local meta = helper:GetLampMeta(name, metaName)
+
+		local lamp = ents.Create("env_projectedtexture")
+		if not IsValid(lamp) then
+			break
+		end
+
+		lamp:SetParent( self )
+		lamp:SetLocalPos( pos )
+		lamp:SetLocalAngles( ang )
+
+		lamp:SetKeyValue("enableshadows", 1)
+		lamp:SetKeyValue("farz", lampMeta.Distance)
+		lamp:SetKeyValue("nearz", lampMeta.Near)
+		lamp:SetKeyValue("lightfov", lampMeta.FOV)
+		lamp:SetKeyValue("lightcolor", Format("%i %i %i 255", lampMeta.Color.r, lampMeta.Color.g, lampMeta.Color.b))
+
+		lamp:Spawn()
+		lamp:Input("SpotlightTexture", NULL, NULL, lampMeta.Texture)
+
+		table.insert(self.ELS_Lamps, lamp)
+	end
+end
+
+function ENT:ELS_IllumOff()
+	self:ELS_Illuminate(false)
+
+	if not self.ELS_Lamps then
+		return
+	end
+
+	for _, lamp in ipairs(self.ELS_Lamps) do
+		SafeRemoveEntity(lamp)
+	end
 end
