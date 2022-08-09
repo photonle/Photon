@@ -1,3 +1,11 @@
+util.AddNetworkString("Photon.ELS_PlaySiren")
+util.AddNetworkString("Photon.ELS_StopSiren")
+util.AddNetworkString("Photon.ELS_PlaySiren2")
+util.AddNetworkString("Photon.ELS_StopSiren2")
+util.AddNetworkString("Photon.ELS_PlayManual")
+util.AddNetworkString("Photon.ELS_StopManual")
+util.AddNetworkString("Photon.ELS_PlayHorn")
+util.AddNetworkString("Photon.ELS_StopHorn")
 
 function EMVU:MakeEMV( ent, emv )
 
@@ -260,13 +268,118 @@ function EMVU:MakeEMV( ent, emv )
 		end
 	end
 
+	function ent:ELS_SirenPlay(sound)
+		net.Start("Photon.ELS_PlaySiren")
+			net.WriteEntity(self)
+			net.WriteString(sound)
+			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+			else
+				net.WriteFloat(75)
+			end
+		net.Broadcast()
+		self:SetNW2String("PhotonLE.Siren_Sound", sound)
+		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+		else
+			self:SetNW2Float("PhotonLE.Siren_Volume", 75 )
+		end
+	end
+
+	function ent:ELS_SirenStop()
+		net.Start("Photon.ELS_StopSiren")
+			net.WriteEntity(self)
+		net.Broadcast()
+		self:SetNW2String("PhotonLE.Siren_Sound", nil)
+	end
+
+	function ent:ELS_Siren2Play(sound)
+		net.Start("Photon.ELS_PlaySiren2")
+			net.WriteEntity(self)
+			net.WriteString(sound)
+			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+			else
+				net.WriteFloat(75)
+			end
+		net.Broadcast()
+		self:SetNW2String("PhotonLE.Siren2_Sound", sound)
+		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+		else
+			self:SetNW2Float("PhotonLE.Siren_Volume", 75 )
+		end
+	end
+
+	function ent:ELS_Siren2Stop()
+		net.Start("Photon.ELS_StopSiren2")
+			net.WriteEntity(self)
+		net.Broadcast()
+		self:SetNW2String("PhotonLE.Siren2_Sound", nil)
+	end
+
+	function ent:ELS_ManualPlay(sound)
+		net.Start("Photon.ELS_PlayManual")
+			net.WriteEntity(self)
+			net.WriteString(sound)
+			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+			else
+				net.WriteFloat(75)
+			end
+		net.Broadcast()
+		self:SetNW2String("PhotonLE.Manual_Sound", sound)
+		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+		else
+			self:SetNW2Float("PhotonLE.Siren_Volume", 75 )
+		end
+	end
+
+	function ent:ELS_ManualStop()
+		net.Start("Photon.ELS_StopManual")
+			net.WriteEntity(self)
+		net.Broadcast()
+		self:SetNW2String("PhotonLE.Manual_Sound", nil)
+	end
+
+	function ent:ELS_PlayHorn(sound)
+		net.Start("Photon.ELS_PlayHorn")
+			net.WriteEntity(self)
+			net.WriteString(sound)
+			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+			else
+				net.WriteFloat(75)
+			end
+		net.Broadcast()
+		self:SetNW2String("PhotonLE.Horn_Sound", sound)
+		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+		else
+			self:SetNW2Float("PhotonLE.Siren_Volume", 75 )
+		end
+	end
+
+	function ent:ELS_StopHorn()
+		net.Start("Photon.ELS_StopHorn")
+			net.WriteEntity(self)
+		net.Broadcast()
+		self:SetNW2String("PhotonLE.Horn_Sound", nil)
+	end
+
 	-- Turn the siren off
 	function ent:ELS_SirenOff( toneChange )
 		if not IsValid( self ) then return end
-		if not self.ELS.Siren then return end
+		--if not self.ELS.Siren then return end
+		--if not self.Siren then return end
 		self.ELS.SirenContinue = nil
-		self.ELS.Siren:Stop()
-		if self:ELS_HasAuxSiren() and self.ELS.Siren2 and not toneChange then self.ELS.Siren2:Stop() end
+		--self.ELS.Siren:Stop()
+		self:ELS_SirenStop()
+		if self:ELS_HasAuxSiren() and not toneChange then
+			self:ELS_Siren2Stop()
+			self.ELS.CurrentSecondarySiren = ""
+		end
 		self:ELS_Siren(false)
 		self.ELS.SirenPaused = false
 	end
@@ -281,20 +394,15 @@ function EMVU:MakeEMV( ent, emv )
 
 		local recipientFilter = RecipientFilter()
 		recipientFilter:AddAllPlayers()
-		self.ELS.Siren = CreateSound( self, EMVU.GetSirenTable()[self:ELS_SirenSet()].Set[self:ELS_SirenOption()].Sound, recipientFilter )
-
-		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-			self.ELS.Siren:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
-		else
-			self.ELS.Siren:SetSoundLevel( 75 )
-		end
-
+		--self.ELS.Siren = CreateSound( self, EMVU.GetSirenTable()[self:ELS_SirenSet()].Set[self:ELS_SirenOption()].Sound, recipientFilter )
+		self:ELS_SirenPlay(EMVU.GetSirenTable()[self:ELS_SirenSet()].Set[self:ELS_SirenOption()].Sound)
 		-- self.ELS.Siren:SetDSP( 119 )
 		if self:ELS_HasAuxSiren() then
 			local secondIndex = 1
 			local secondarySiren = self:ELS_AuxSirenSet()
 			if self.ELS.LastSecondSiren ~= secondIndex then
-				if self.ELS.Siren2 then self.ELS.Siren2:Stop(); end
+				self:ELS_Siren2Stop()
+				-- print("siren2 off")
 					if not self.ELS.LastSecondSiren then
 						self.ELS.LastSecondSiren = secondIndex
 					end
@@ -302,26 +410,20 @@ function EMVU:MakeEMV( ent, emv )
 			if self:ELS_SirenOption() > 2 then secondIndex = 2 end
 			local newSound = EMVU.GetSirenTable()[secondarySiren].Set[1].Sound
 			if EMVU.GetSirenTable()[secondarySiren].Set[secondIndex] then newSound = EMVU.GetSirenTable()[secondarySiren].Set[secondIndex].Sound end
-			if ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and self.ELS.CurrentSecondarySiren ~= newSound then
-				self.ELS.Siren2:Stop()
-				self.ELS.Siren2 = CreateSound( self, newSound, recipientFilter )
-				if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-					self.ELS.Siren2:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume - 5 )
-				else
-					self.ELS.Siren2:SetSoundLevel( 70 )
-				end
+			if ( self.ELS.CurrentSecondarySiren ) and self.ELS.CurrentSecondarySiren ~= newSound then
+				--self.ELS.Siren2:Stop()
+				self:ELS_Siren2Stop()
+				--self.ELS.Siren2 = CreateSound( self, newSound, recipientFilter )
+				-- print("( self.ELS.CurrentSecondarySiren ) and self.ELS.CurrentSecondarySiren ~= newSound"..newSound)
+				self:ELS_Siren2Play(newSound)
 				self.ELS.CurrentSecondarySiren = newSound
-			elseif not self.ELS.Siren2 or ( ( self.ELS.CurrentSecondarySiren and self.ELS.Siren2 ) and self.ELS.CurrentSecondarySiren ~= newSound ) then
-				self.ELS.Siren2 = CreateSound( self, newSound, recipientFilter )
-				if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-					self.ELS.Siren2:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume - 5 )
-				else
-					self.ELS.Siren2:SetSoundLevel( 70 )
-				end
+			elseif self.ELS.CurrentSecondarySiren ~= newSound  then
+				self:ELS_Siren2Play(newSound)
+				-- print("self.ELS.CurrentSecondarySiren ~= newSound"..newSound)
 				self.ELS.CurrentSecondarySiren = newSound
 			end
 			-- if self.ELS.Siren2 then self.ELS.Siren2:Stop() end
-
+			--self:ELS_Siren2Stop()
 		end
 
 		self:ELS_Siren( true )
@@ -330,7 +432,7 @@ function EMVU:MakeEMV( ent, emv )
 	function ent:ELS_SirenPause()
 		if self:ELS_Siren() then
 			self.ELS.SirenPaused = true
-			self.ELS.Siren:Stop()
+			--self.ELS.Siren:Stop()
 		end
 	end
 
@@ -344,13 +446,16 @@ function EMVU:MakeEMV( ent, emv )
 	function ent:ELS_SirenContinue( force )
 		if not IsValid( self ) then return end
 		if not self:ELS_Siren() then return end
-		if not self.ELS.Siren then return end
+		--if not self.ELS.Siren then return end
 		if self.ELS.SirenPaused and not force then return end
 		if ( self.ELS.SirenContinue and self.ELS.SirenContinue + 2 > CurTime() ) and not force then return end
-		self.ELS.Siren:PlayEx( 0, 100 )
-		if self:ELS_HasAuxSiren() and self.ELS.Siren2 then self.ELS.Siren2:PlayEx( 0, 100 ) end
-		self.ELS.Siren:ChangeVolume( 2, 0 )
-		if self:ELS_HasAuxSiren() and self.ELS.Siren2 then self.ELS.Siren2:ChangeVolume( 2, 0 ) end
+		-- print("continue")
+		--self.ELS.Siren:PlayEx( 0, 100 )
+		-- if self:ELS_HasAuxSiren() then 
+		-- 	print("continue aux")
+		-- end
+		--self.ELS.Siren:ChangeVolume( 2, 0 )
+		--if self:ELS_HasAuxSiren() and self.ELS.Siren2 then self.ELS.Siren2:ChangeVolume( 2, 0 ) end
 		self.ELS.SirenContinue = CurTime()
 	end
 
@@ -451,16 +556,16 @@ function EMVU:MakeEMV( ent, emv )
 					self:ELS_SirenPause()
 					manSiren = manualTone
 				end
-				self.ELS.Manual = CreateSound( self, manSiren )
+				--self.ELS.Manual = CreateSound( self, manSiren )
+				self:ELS_ManualPlay(manSiren)
+				-- if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+				-- 	self.ELS.Manual:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+				-- else
+				-- 	self.ELS.Manual:SetSoundLevel( 75 )
+				-- end
 
-				if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-					self.ELS.Manual:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
-				else
-					self.ELS.Manual:SetSoundLevel( 75 )
-				end
-
-				self.ELS.Manual:PlayEx( 0, 100 )
-				self.ELS.Manual:ChangeVolume( 1, 0 )
+				--self.ELS.Manual:PlayEx( 0, 100 )
+				--self.ELS.Manual:ChangeVolume( 1, 0 )
 			end
 		else
 			if ( not self:Photon_HasManualWind() ) or self:ELS_Siren() then
@@ -468,7 +573,8 @@ function EMVU:MakeEMV( ent, emv )
 				if windDown then
 					if self.ELS.Manual then self.ELS.Manual:FadeOut( 1 ) end
 				else
-					if self.ELS.Manual then self.ELS.Manual:Stop() end
+					--if self.ELS.Manual then self.ELS.Manual:Stop() end
+					self:ELS_ManualStop()
 					if self:ELS_Siren() then
 						self:ELS_SirenResume()
 					end
@@ -485,19 +591,21 @@ function EMVU:MakeEMV( ent, emv )
 			self:SetNW2Bool( "PhotonLE.EMV_HORN", true )
 			local horn = EMVU.Horns[1]
 			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Horn then horn = EMVU.GetSirenTable()[self:ELS_SirenSet()].Horn end
-			self.ELS.Horn = CreateSound( self, horn )
+			--self.ELS.Horn = CreateSound( self, horn )
+			-- print(horn)
+			self:ELS_PlayHorn(horn)
+			-- if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
+			-- 	self.ELS.Horn:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
+			-- else
+			-- 	self.ELS.Horn:SetSoundLevel( 75 )
+			-- end
 
-			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-				self.ELS.Horn:SetSoundLevel( EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
-			else
-				self.ELS.Horn:SetSoundLevel( 75 )
-			end
-
-			self.ELS.Horn:PlayEx( 0, 100 )
-			self.ELS.Horn:ChangeVolume( 1, 0 )
+			--self.ELS.Horn:PlayEx( 0, 100 )
+			--self.ELS.Horn:ChangeVolume( 1, 0 )
 		else
 			self:SetNW2Bool( "PhotonLE.EMV_HORN", false )
-			if self.ELS.Horn then self.ELS.Horn:Stop() end
+			self:ELS_StopHorn()
+			--if self.ELS.Horn then self.ELS.Horn:Stop() end
 		end
 	end
 
@@ -549,8 +657,18 @@ function EMVU:MakeEMV( ent, emv )
 
 		mat = tostring(mat)
 		self:SetSubMaterial(submaterialIndex, mat)
+
 		for _, prop in ipairs(EMVU.Helper.GetSubProps(self)) do
-			prop:SetSubMaterial(submaterialIndex, mat)
+			local propsubmaterialIndex = false
+			local propmaterials = prop:GetMaterials()
+			for i=1,#propmaterials do
+				local propthisMat = tostring( propmaterials[i] )
+				if string.EndsWith( propthisMat, "/skin" ) or string.EndsWith( propthisMat, "/skin0" ) or string.EndsWith( propthisMat, "/carpaint" ) then
+					propsubmaterialIndex = i - 1
+					break
+				end
+			end
+			if propsubmaterialIndex ~= false then prop:SetSubMaterial(propsubmaterialIndex, mat) end
 		end
 	end
 

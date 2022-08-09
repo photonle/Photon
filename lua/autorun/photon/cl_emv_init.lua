@@ -62,7 +62,7 @@ local function DrawCarLights()
 	for _, ent in ipairs(Photon:AllVehicles()) do
 		if IsValid(ent) and ent:Photon() then
 			if not ent.Photon_RenderLights then
-				Photon:SetupCar(ent, ent:EMVName())
+				Photon:SetupCar(ent, ent:GetVehicleClass())
 			else
 				if should_render_reg:GetBool() then
 					ent:Photon_RenderLights(

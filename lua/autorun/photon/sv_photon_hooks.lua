@@ -1,7 +1,7 @@
 
 function Photon:RunningScan()
 	for k,v in pairs( self:AllVehicles() ) do
-		if IsValid( v ) and IsValid(v:GetDriver()) and v:GetDriver():IsPlayer() and v.IsEMV and v:IsEMV() then
+		if IsValid( v ) and IsValid(v:GetDriver()) and v:GetDriver():IsPlayer() and v:Photon() then
 			v:SetPhotonNet_Braking(v:Photon_IsBraking())
 			v:SetPhotonNet_Reversing(v:Photon_IsReversing())
 		end
@@ -9,14 +9,13 @@ function Photon:RunningScan()
 end
 
 hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, v)
-	if IsValid(v) and v.IsEMV and v:IsEMV() then
-		local hasELS = v:HasPhotonELS()
-		if hasELS and v.ELS.Blackout then
-			v:SetPhotonNet_Running(false)
-		else
-			v:SetPhotonNet_Running(true)
+	if IsValid(v) then
+		if v:Photon() then
+			v:CAR_Running(not v:CAR_IsBlackedOut())
 		end
-		if hasELS then v:ELS_ParkMode(false) end
+		if v:HasPhotonELS() then
+			v:ELS_ParkMode(false)
+		end
 	end
 end)
 
