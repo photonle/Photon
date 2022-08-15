@@ -10,8 +10,31 @@ local istable = istable
 local pairs = pairs
 local tostring = tostring
 local math = math
+local insert = table.insert
 
 local printedErrors = {}
+
+--- Resolve a table, which is in either Map<idx, value>, (idx, value)[] or a mix, to be output in (idx, value)[] format, allowing for ipairs.
+-- @tab tab Input table.
+-- @rtab
+function EMVU.Helper.ResolveTable(tab)
+	if not istable(tab) then
+		PhotonWarning("Non table passed to ResolveTable")
+		PhotonWarning(debug.traceback())
+		return tab
+	end
+
+	local out = {}
+	for idx, value in pairs(tab) do
+		if istable(value) then
+			insert(out, value)
+		else
+			insert(out, {idx, value})
+		end
+	end
+
+	return out
+end
 
 function EMVU.Helper.GetAlertSequence( name, vehicle )
 	local resultTable = {}
