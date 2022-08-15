@@ -275,7 +275,12 @@ function EMVU:OverwriteIndex(name, data)
 
 	if istable(data.Props) then
 		EMVU.Props[name] = data.Props
+
 		for _, prop in pairs(data.Props) do
+			if prop.BodyGroups then
+				prop.BodyGroups = EMVU.Helper.ResolveTable(prop.BodyGroups)
+			end
+
 			util.PrecacheModel(prop.Model)
 		end
 	end
@@ -299,10 +304,25 @@ function EMVU:OverwriteIndex(name, data)
 	end
 
 	if istable(data.AutoInsert) then
+		for _, auto in pairs(data.AutoInsert) do
+			if auto.BodyGroups then
+				auto.BodyGroups = EMVU.Helper.ResolveTable(auto.BodyGroups)
+			end
+
+			if auto.Variants then
+				for _, variant in ipairs(auto.Variants) do
+					if variant.BodyGroups then
+						variant.BodyGroups = EMVU.Helper.ResolveTable(variant.BodyGroups)
+					end
+				end
+			end
+		end
+
 		EMVU.AutoInsert[name] = data.AutoInsert
 	end
 
 	if istable(data.Auto) then
+		PrintTable(data.Auto)
 		EMVU.AutoIndex[name] = data.Auto
 		EMVU:CalculateAuto(name, data.Auto, data.AutoInsert)
 	end
