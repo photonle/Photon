@@ -3,23 +3,23 @@ AddCSLuaFile()
 EMVU.Net = {}
 
 --- Write a siren change to the server.
--- @string arg Change mode.
+-- @integer arg Change mode.
 function EMVU.Net:Siren(arg)
 	net.Start("emvu_siren")
-		net.WriteString(arg)
+		net.WriteUInt(arg, 5)
 	net.SendToServer()
 end
 
 --- Write a els change to the server.
--- @string arg Change mode.
+-- @integer arg Change mode.
 function EMVU.Net:Lights(arg)
 	net.Start("emvu_el")
-		net.WriteString(arg)
+		net.WriteUInt(arg, 2)
 	net.SendToServer()
 end
 
 --- Write a siren set change to the server.
--- @string arg Change mode.
+-- @integer arg Change mode.
 -- @ent[opt=LocalPlayer():GetVehicle()] ent Entity to change siren on.
 -- @bool[opt=false] If the aux siren should be set.
 function EMVU.Net:SirenSet(arg, ent, aux)
@@ -48,11 +48,20 @@ function Photon.Net:Signal(arg)
 end
 
 --- Write an illumination change to the server.
--- @string arg Change mode.
-function EMVU.Net:Illuminate(arg)
+-- @integer arg Mode Change.
+
+function EMVU.Net:Illumination(arg)
 	net.Start("emvu_illum")
-		net.WriteString(arg)
+		net.WriteUInt(arg, 2)
 	net.SendToServer()
+end
+
+--- Write an illumination change to the server.
+-- @string arg Change mode.
+-- @deprecated
+-- @see EMVU.Net:Illumination
+function EMVU.Net:Illuminate(arg)
+	self:Illumination(arg)
 end
 
 --- Write a TA change to the server.
