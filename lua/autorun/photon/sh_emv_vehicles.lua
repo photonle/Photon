@@ -322,7 +322,12 @@ function EMVU:OverwriteIndex(name, data)
 	end
 
 	if istable(data.Auto) then
-		PrintTable(data.Auto)
+		for _, auto in pairs(data.Auto) do
+			if auto.BodyGroups then
+				auto.BodyGroups = EMVU.Helper.ResolveTable(auto.BodyGroups)
+			end
+		end
+
 		EMVU.AutoIndex[name] = data.Auto
 		EMVU:CalculateAuto(name, data.Auto, data.AutoInsert)
 	end
