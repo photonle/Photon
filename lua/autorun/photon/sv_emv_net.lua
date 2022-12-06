@@ -116,7 +116,7 @@ end)
 
 function EMVU.Net:SirenSet( ply )
 	local emv = net.ReadEntity()
-	local recv = net.ReadInt(8)
+	local recv = net.ReadUInt(9)
 	local isAux = net.ReadBool()
 	if not emv:IsEMV() or not can_change_siren_model:GetBool() then return end
 	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, emv )
