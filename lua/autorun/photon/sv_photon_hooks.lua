@@ -31,7 +31,7 @@ hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, v)
       if v:ELS_Siren() and not v:GetPhotonLEStayOn() then
         v:ELS_SirenOff()
       end
-
+	  v:ELS_ParkMode(true)
       v:ELS_Horn(false)
       v:ELS_ManualSiren(false)
     end
