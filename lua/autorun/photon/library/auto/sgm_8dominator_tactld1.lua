@@ -9,6 +9,8 @@ COMPONENT.Model = "models/sentry/props/tactld1.mdl"
 COMPONENT.Lightbar = true
 COMPONENT.Skin = 0
 COMPONENT.Category = "Lightbar" 
+COMPONENT.NotLegacy = true
+COMPONENT.RotationEnabled = true
 COMPONENT.Bodygroups = {}
 COMPONENT.DefaultColors = {
 	[1] = "AMBER",
@@ -22,18 +24,45 @@ COMPONENT.Meta = {
 		Sprite = "sprites/emv/blank",
 		WMult = 1,
 		Scale = .15,
+		NoLegacy = true,
+        DirAxis = "Right",
+        DirOffset = 180,
 	},
 }
 
+
+COMPONENT.Bones = {
+	["LEFT"] = {
+		Bone = 1,
+		AxisP = "p", -- pitch of bone affects pitch of rendered light
+		AxisY = "y", -- yaw of bone affects roll of rendered light
+		AxisR = "r" -- roll of bone affects yaw of rendered light
+	},
+}
+
+COMPONENT.BoneOperations = {
+	[1] = {
+		Default = { "S", 0, 50 },
+		Illumination = {},
+		Primary = {},
+		Auxiliary = {
+		L = { "S", 80, 50 }, -- static at 0 degrees
+		D = { "S", 20, 50 }, -- static at 0 degrees
+		R = { "S", 60, 50 }, -- static at 0 degrees
+		},
+	},
+}
+
+
 COMPONENT.Positions = {
-	[1] = { Vector( 0.559, 1.038, 2.29 ), Angle( 0, 0, 0 ), "dominator" },
-	[2] = { Vector( 0.559, 3.548, 2.29 ), Angle( 0, 0, 0 ), "dominator" },
-	[3] = { Vector( 0.559, 1.397, 2.29 ), Angle( 0, 0, 0 ), "dominator" },
-	[4] = { Vector( 0.559, 3.189, 2.29 ), Angle( 0, 0, 0 ), "dominator" },
-	[5] = { Vector( 0.559, 1.755, 2.29 ), Angle( 0, 0, 0 ), "dominator" },
-	[6] = { Vector( 0.559, 2.831, 2.29 ), Angle( 0, 0, 0 ), "dominator" },
-	[7] = { Vector( 0.559, 2.114, 2.29 ), Angle( 0, 0, 0 ), "dominator" },
-	[8] = { Vector( 0.559, 2.472, 2.29 ), Angle( 0, 0, 0 ), "dominator" },
+	[1] = { Vector( 1.038, -0.559, 2.29 ), Angle( 0, 0, 90 ), "dominator" },
+	[2] = { Vector( 3.548, -0.559, 2.29 ), Angle( 0, 0, 90 ), "dominator" },
+	[3] = { Vector( 1.397, -0.559, 2.29 ), Angle( 0, 0, 90 ), "dominator" },
+	[4] = { Vector( 3.189, -0.559, 2.29 ), Angle( 0, 0, 90 ), "dominator" },
+	[5] = { Vector( 1.755, -0.559, 2.29 ), Angle( 0, 0, 90 ), "dominator" },
+	[6] = { Vector( 2.831, -0.559, 2.29 ), Angle( 0, 0, 90 ), "dominator" },
+	[7] = { Vector( 2.114, -0.559, 2.29 ), Angle( 0, 0, 90 ), "dominator" },
+	[8] = { Vector( 2.472, -0.559, 2.29 ), Angle( 0, 0, 90 ), "dominator" },
 }
 
 COMPONENT.Sections = {
