@@ -65,7 +65,10 @@ function ent:Photon_GetAutoSkinIndex()
 end
 
 function ent:Photon_GetAutoSkinData()
-	if self:GetSkin() == 0 then return self:GetSubMaterial( self:Photon_GetAutoSkinIndex() ) end
+	if self:GetSkin() == 0 then
+		local submat = self:GetSubMaterial( self:Photon_GetAutoSkinIndex() )
+		return submat ~= "" and submat or 0
+	end
 	return self:GetSkin()
 end
 
