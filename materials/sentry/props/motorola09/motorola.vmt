@@ -1,0 +1,22 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "sentry/props/motorola09/motorola"
+	"$bumpmap" "sentry/props/motorola09/motorola_nm"
+	"$phong" "1"
+	"$phongexponent" "5"
+	"$phongboost" "0.02"	
+	"$phongfresnelranges"	"[1 2 1]"
+	"$carfixenabled" "1"
+	Proxies // proxies are listed inside this block
+	{
+		Equals // a proxy which produces a fix
+		{
+			srcVar1 $carfixenabled
+			resultVar	$color // The shader parameter to be manipulated
+
+		}
+	}
+}
+
+
+
