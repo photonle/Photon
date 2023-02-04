@@ -98,12 +98,14 @@ function ent:Photon_ExportSelections()
 	local selectRef = EMVU.Selections[ self:EMVName() ]
 	if not istable( selectTable ) or not istable( selectRef ) then return {} end
 	for key,value in pairs( selectTable ) do
-		local keyName = selectRef[key].Name
-		local valueData = selectRef[key].Options[tonumber(value)]
-		local valueName = ""
-		if valueData.Category then valueName = valueData.Category .. "=" end
-		valueName = valueName .. valueData.Name
-		resultTable[keyName] = valueName
+		if value ~= "" then
+			local keyName = selectRef[key].Name
+			local valueData = selectRef[key].Options[tonumber(value)]
+			local valueName = ""
+			if valueData.Category then valueName = valueData.Category .. "=" end
+			valueName = valueName .. valueData.Name
+			resultTable[keyName] = valueName
+		end
 	end
 	return resultTable
 end
