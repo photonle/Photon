@@ -716,3 +716,10 @@ function EMVU.Helper.GetSubProps(car)
 	end
 	return out
 end
+
+-- Returns whether or not the "Alert Mode" should automatically
+-- adjust light patterns.
+function EMVU.Helper.GetAlertModeEnabled( name )
+	if (EMVU.Attributes[ name ].DisableAlertPatterns) then return false end
+	return true
+end
