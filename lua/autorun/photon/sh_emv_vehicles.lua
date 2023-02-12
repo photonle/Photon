@@ -164,6 +164,9 @@ function EMVU:PreloadVehicle( car )
 
 	EMVU.Index[ #EMVU.Index + 1 ] = car.Name
 
+	-- TODO/Caution: the isstring() functionality is error prone if a derivative vehicle loads before a parent vehicle
+	-- ex: Vehicle B derives from Vehicle A, but Vehicle B loads before Vehicle A
+
 	if CLIENT then
 		if istable( car.EMV.Positions ) then
 			EMVU.Positions[ car.Name ] = car.EMV.Positions
@@ -182,6 +185,12 @@ function EMVU:PreloadVehicle( car )
 		else
 			EMVU.LightMeta[ car.Name ] = {}
 		end
+	end
+
+	if istable( car.EMV.Attributes ) then
+		EMVU.Attributes[ car.Name ] = car.EMV.Attributes
+	else
+		EMVU.Attributes[ car.Name ] = {}
 	end
 
 	if istable( car.EMV.Patterns ) then
@@ -315,6 +324,10 @@ function EMVU:OverwriteIndex(name, data)
 		EMVU.DisabledRadars[name] = true
 	else
 		EMVU.DisabledRadars[name] = nil
+	end
+
+	if istable(data.Attributes) then
+		EMVU.Attributes[name] = data.Attributes
 	end
 
 	-- Updating prop positions
