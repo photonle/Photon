@@ -265,6 +265,8 @@ function EMVU:OverwriteIndex(name, data)
 		return
 	end
 
+	EMVU.Attributes[name] = data.Attributes or {}
+
 	EMVU.LightMeta[name] = data.Meta or {}
 	if CLIENT then
 		safeTableEmpty(EMVU.Positions[name])
@@ -326,9 +328,6 @@ function EMVU:OverwriteIndex(name, data)
 		EMVU.DisabledRadars[name] = nil
 	end
 
-	if istable(data.Attributes) then
-		EMVU.Attributes[name] = data.Attributes
-	end
 
 	-- Updating prop positions
 	if not CLIENT then return end

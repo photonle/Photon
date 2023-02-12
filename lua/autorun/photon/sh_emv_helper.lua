@@ -720,6 +720,8 @@ end
 -- Returns whether or not the "Alert Mode" should automatically
 -- adjust light patterns.
 function EMVU.Helper.GetAlertModeEnabled( name )
-	if ((EMVU.Attributes[ name ]) and (EMVU.Attributes[ name ].DisableAlertPatterns)) then return false end
+	-- TODO: Remove below line before publishing update
+	if not istable(EMVU.Attributes[ name ]) then print("[Photon] ERROR: No Attributes table found for: " .. tostring(name) .. ". Please notify @schmal if you see this.") end
+	if (istable(EMVU.Attributes[ name ]) and (EMVU.Attributes[ name ].DisableAlertPatterns)) then return false end
 	return true
 end
