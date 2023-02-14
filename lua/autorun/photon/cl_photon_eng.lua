@@ -81,7 +81,7 @@ function Photon:ClearLightQueue()
 	table.Empty( photonDynamicLights )
 end
 
-function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent )
+function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent, index )
 	if not incolors or not ilpos or not lang or not meta or not gpos then return end
 	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
 	local legacy = true
@@ -111,11 +111,8 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		end
 	end
 
-	local visRadius = .1
-	local cheapLight = false
-	if meta.Cheap then cheapLight = true end
-
-	if meta.VisRadius then visRadius = meta.VisRadius end
+	local visRadius = meta.VisRadius or .1
+	local cheapLight = meta.Cheap or false
 
 	local viewDot = 0
 	-- local visible = 1

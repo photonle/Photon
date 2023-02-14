@@ -433,6 +433,7 @@ function EMVU:MakeEMV( emv, name )
 			b = RenderTable[a]
 			if (b==true) then continue end
 			pos = positions[b[1]]
+			PrintTable(pos)
 			if istable(blockTable) then
 				if illumBlock then blockTable[tostring(b[1])] = true elseif blockTable[tostring(b[1])] then continue end
 			end
@@ -492,7 +493,8 @@ function EMVU:MakeEMV( emv, name )
 						multiColor,
 						0,
 						showDynamic,
-						contingentTransform
+						contingentTransform,
+						0
 					)
 			else
 				print("[Photon] No position found for: " .. tostring(b[1]))

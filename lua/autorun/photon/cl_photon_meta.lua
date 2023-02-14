@@ -320,7 +320,8 @@ function Photon:SetupCar( ent, index )
 							i, -- dynamic light number
 							light[3], -- brightness
 							false,
-							1
+							1,
+							i
 						)
 					end
 				end
