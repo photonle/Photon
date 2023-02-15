@@ -8,6 +8,7 @@ EMVU.AutoInsert = {}
 EMVU.Selections = {}
 EMVU.Configurations = {}
 EMVU.LicensePlates = {}
+EMVU.SmartComponents = {}
 
 EMVU_NET_SIREN_OFF = 0
 EMVU_NET_SIREN_ON = 1
@@ -41,7 +42,7 @@ AddCSLuaFile( "cl_photon_builder.lua" )
 AddCSLuaFile( "cl_photon_menu.lua" )
 AddCSLuaFile( "cl_photon_editor.lua" )
 AddCSLuaFile( "cl_emv_airel.lua" )
-AddCSLuaFile( "library/emv_sirens.lua" )
+AddCSLuaFile( "cl_component_meta.lua" )
 
 include( "sh_emv_config.lua" )
 include( "sh_emv_meta.lua" )
@@ -57,6 +58,7 @@ if SERVER then
 	include( "sv_emv_net.lua" )
 end
 
+AddCSLuaFile( "library/emv_sirens.lua" )
 include( "library/emv_other.lua" )
 include( "library/emv_sirens.lua" )
 include( "library/emv_colors.lua" )

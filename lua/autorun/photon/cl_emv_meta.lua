@@ -320,6 +320,7 @@ function EMVU:MakeEMV( emv, name )
 		self.PhotonAlertedMissingRequirements = true
 	end
 
+	-- Used for pixVis visibility calculations
 	function emv:Photon_UpdateFrameLightPositions()
 		local lights = self:Photon_GetELUsedLights()
 		local posData = EMVU.Positions[ self.VehicleName ]

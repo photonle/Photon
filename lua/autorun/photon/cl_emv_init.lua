@@ -16,6 +16,9 @@ include("cl_photon_menu.lua")
 include("cl_photon_editor.lua")
 include("cl_emv_airel.lua")
 
+exmeta.LoadFile("autorun/photon/cl_component_meta.lua")
+include("cl_component_meta.lua")
+
 local IsValid = IsValid
 local pairs = pairs
 local string = string
