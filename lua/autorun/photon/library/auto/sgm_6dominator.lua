@@ -14,6 +14,7 @@ COMPONENT.DefaultColors = {
 	[1] = "RED",
 	[2] = "BLUE",
 }
+COMPONENT.LegacyPositioning = true
 
 COMPONENT.Meta = {
 	dominator = {
