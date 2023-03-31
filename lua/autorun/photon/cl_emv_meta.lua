@@ -192,7 +192,7 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_GetELSequence()
 		if not IsValid( self ) then return false end
 		local result
-		if self:Photon_AlertMode() then
+		if self:Photon_AlertMode() and EMVHelper.GetAlertModeEnabled(self.VehicleName) then
 			result = EMVHelper.GetAlertSequence( self.VehicleName, self )
 		else
 			local option = self:Photon_LightOption()
@@ -1017,18 +1017,29 @@ local sirenTypes = {
 	"EMVU_ManualSiren",
 	"EMVU_Horn"
 }
+
+hook.Add( "PreDrawTranslucentRenderables", "Photon.ELS_SirenDoppler_FixEyePos", function()
+	EyePos()
+end )
+
 hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 	if nextDoppler < CurTime() then
 	local ply = LocalPlayer()
-	local pos = ply:GetPos()
-	local plyVeh = false or ply:GetVehicle()
+	local pos = EyePos()
+	local viewEnt = GetViewEntity() or LocalPlayer()
+	local camVel = viewEnt:GetVelocity() or 0
+
+	local plyVeh = false
+	if viewEnt == ply then
+		plyVeh = ply:GetVehicle()
+	end
 		for _,v in ipairs(EMVU:AllVehicles()) do
 			for idx, sirenType in ipairs(sirenTypes) do
 				local currentSiren = v[sirenType]
 				if currentSiren then
 					local driver = v:GetDriver()
 					local spos = v:GetPos()
-					local doppler = ((pos:Distance(spos+ply:GetVelocity())-pos:Distance(spos+v:GetVelocity()))/200)
+					local doppler = ((pos:Distance(spos+camVel)-pos:Distance(spos+v:GetVelocity()))/200)
 					if IsValid(plyVeh) then
 						if plyVeh:GetParent() == v then
 							doppler = 0
@@ -1036,8 +1047,8 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 					end
 					updateRate = FrameTime()
 
-					if (IsValid(driver) and driver ~= ply) or !IsValid(driver) then
-						local distBehind = v:WorldToLocal(ply:GetPos())[2]
+					if (IsValid(driver) and driver ~= viewEnt) or !IsValid(driver) then
+						local distBehind = v:WorldToLocal(viewEnt:GetPos())[2]
 
 						if IsValid(plyVeh) then
 							if plyVeh:GetParent() == v then

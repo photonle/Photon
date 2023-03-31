@@ -34,7 +34,7 @@ function EMVU.Net:SirenSet(arg, ent, aux)
 
 	net.Start("emvu_sirenset")
 		net.WriteEntity(ent)
-		net.WriteInt(arg, 8)
+		net.WriteUInt(arg, 9)
 		net.WriteBool(aux)
 	net.SendToServer()
 end
