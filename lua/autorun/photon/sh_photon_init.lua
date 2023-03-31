@@ -51,6 +51,7 @@ end
 
 Photon.Messages.Colours.Error = Color(255, 0, 0)
 Photon.Messages.Colours.Warning = Color(255, 200, 0)
+Photon.Messages.Colours.Debug = Color(160, 160, 160)
 
 --- Print a message to console.
 -- @tparam vararg ... Inputs to display.
@@ -84,6 +85,22 @@ end
 
 Photon.Messages:BuildLevel("Error")
 Photon.Messages:BuildLevel("Warning")
+Photon.Messages:BuildLevel("Debug")
+
+local match = string.match
+local function includes(file)
+	local prefix = match(file, "/?(%w%w)[%w_]*.lua$") or "sh"
+	PhotonDebug(file, " => ", prefix)
+
+	if prefix ~= "sv" then
+		AddCSLuaFile(file)
+		if CLIENT or prefix == "sh" then
+			include(file)
+		end
+	elseif SERVER then
+		include(file)
+	end
+end
 
 AddCSLuaFile("cl_photon_eng.lua")
 AddCSLuaFile("cl_photon_meta.lua")
@@ -120,6 +137,12 @@ include("sh_photon_vehicles.lua")
 include("cl_photon_context.lua")
 include("cl_photon_menubar.lua")
 include("sh_photon_xml.lua")
+
+includes("shared/sh_simplenet.lua")
+includes("photon/sh_meta.lua")
+includes("photon/sv_meta.lua")
+includes("photon/cl_meta.lua")
+includes("emv/sv_meta.lua")
 
 local photonVehicleTable = {}
 local photonLastScan = 0
