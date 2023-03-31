@@ -853,31 +853,30 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 		for id=1,#component.Positions do
 			local posData = component.Positions[ id ]
 			if isvector( posData[1] ) then
-				local newPos = Vector()
-				newPos:Set( posData[1] )
-				newPos:Rotate( adjustAng )
-				newPos:Mul( autoScale )
-				newPos:Add( autoPos )
-				local newAng = Angle()
+				local componentMatrix = Matrix()
+				componentMatrix:Translate(autoPos)
+				componentMatrix:Rotate(autoAng)
 				if not component.NotLegacy then
-					newAng.y = newAng.y + 90
-					newAng:Set( posData[2] )
-					newAng:RotateAroundAxis( autoAng:Right(), -1*autoAng.p )
-					newAng:RotateAroundAxis( autoAng:Up(), -1*autoAng.r )
-				else
-					newAng:Set( posData[2] )
-					if component.ForwardTranslation then
-						newAng.p = newAng.p + (autoAng.r *-1)
-						newAng.y = newAng.y + autoAng.y
-						newAng.r = newAng.r + autoAng.p
-					else
-						newAng.p = newAng.p + autoAng.p
-						newAng.y = newAng.y + autoAng.y
-						newAng.r = newAng.r + autoAng.r
-					end
+					componentMatrix:Rotate(Angle(0, -90, 0))
 				end
+
+				local autoScaleVector = isvector(autoScale) and (autoScale) or Vector(autoScale, autoScale, autoScale)
+
+				local offsetMatrix = Matrix()
+				offsetMatrix:Translate(posData[1] * autoScaleVector)
+				local schmAngle = posData[2]
+				if component.ForwardTranslation then
+					schmAngle = Angle(
+						-schmAngle.r,
+						schmAngle.y,
+						schmAngle.p
+					)
+				end
+				offsetMatrix:Rotate(schmAngle)
+				local out = componentMatrix * offsetMatrix
+
 				EMVU.Positions[ name ][ offset + id ] = {
-					newPos, newAng, tostring( posData[3] .. "_" .. i ), posData[4] or false
+					out:GetTranslation(), out:GetAngles(), tostring( posData[3] .. "_" .. i ), posData[4] or false
 				}
 			else
 				local posCopy = table.Copy( posData )
