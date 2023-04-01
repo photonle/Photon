@@ -13,6 +13,41 @@ function Photon:SetupCar( ent, index )
 		return self:GetNW2Bool( "PhotonLE.CAR_HEADLIGHTS" )
 	end
 
+	function ent:Photon_IsBraking()
+		if not IsValid( self ) then return false end
+		return self:GetNW2Bool( "PhotonLE.CAR_BRAKING" )
+	end
+
+	function ent:Photon_IsReversing()
+		if not IsValid( self ) then return false end
+		return self:GetNW2Bool( "PhotonLE.CAR_REVERSING" )
+	end
+
+	function ent:Photon_IsRunning()
+		if not IsValid( self ) then return false end
+		return self:GetNW2Bool( "PhotonLE.CAR_RUNNING" )
+	end
+
+	function ent:Photon_BlinkState()
+		if not IsValid( self ) then return 0 end
+		return self:GetNW2Int( "PhotonLE.CAR_BLINKER" )
+	end
+
+	function ent:Photon_TurningLeft()
+		if not IsValid( self ) then return false end
+		return self:Photon_BlinkState() == CAR_TURNING_LEFT
+	end
+
+	function ent:Photon_TurningRight()
+		if not IsValid( self ) then return false end
+		return self:Photon_BlinkState() == CAR_TURNING_RIGHT
+	end
+
+	function ent:Photon_Hazards()
+		if not IsValid( self ) then return false end
+		return self:Photon_BlinkState() == CAR_HAZARD
+	end
+
 	function ent:Photon_WheelOption()
 		if not IsValid( self ) then return 1 end
 		return self:GetNW2Int( "PhotonLE.CAR_WHEEL_OPTION" )
