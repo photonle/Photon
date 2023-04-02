@@ -3,7 +3,7 @@
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <head>
-    <title>Photon Lighting Documentation</title>
+    <title>Photon Documentation</title>
     <link rel="stylesheet" href="../ldoc.css" type="text/css" />
 </head>
 <body>
@@ -24,7 +24,7 @@
 
 <div id="navigation">
 <br/>
-<h1>ldoc</h1>
+<h1>Photon Lighting Engine</h1>
 
 <ul>
   <li><a href="../index.html">Index</a></li>
@@ -39,13 +39,18 @@
 
 <h2>Modules</h2>
 <ul class="nowrap">
-  <li><a href="../modules/autorun.emv_init.html">autorun.emv_init</a></li>
+  <li><a href="../modules/Photon.html">Photon</a></li>
   <li><strong>Photon.AirEL</strong></li>
   <li><a href="../modules/EMVU.html">EMVU</a></li>
   <li><a href="../modules/EMVU.AutoLivery.html">EMVU.AutoLivery</a></li>
   <li><a href="../modules/autorun.photon.library.sirens.anemolis_chp_bike.html">autorun.photon.library.sirens.anemolis_chp_bike</a></li>
   <li><a href="../modules/autorun.photon.library.sirens.anemolis_whelen_epsilon_alternate.html">autorun.photon.library.sirens.anemolis_whelen_epsilon_alternate</a></li>
   <li><a href="../modules/functional.html">functional</a></li>
+  <li><a href="../modules/Photon.SNet.html">Photon.SNet</a></li>
+</ul>
+<h2>Classes</h2>
+<ul class="nowrap">
+  <li><a href="../classes/Vehicle.html">Vehicle</a></li>
 </ul>
 
 </div>
@@ -54,7 +59,9 @@
 
 <h1>Module <code>Photon.AirEL</code></h1>
 <p>AirEl Client Handler.</p>
-<p></p>
+<p>
+
+</p>
     <h3>Info:</h3>
     <ul>
         <li><strong>Copyright</strong>: Photon Team</li>
@@ -66,43 +73,43 @@
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AirEL.DownloadMaterial">Photon.AirEL.DownloadMaterial (id, unitString, ent[, cback[, failed]])</a></td>
+	<td class="name" nowrap><a href="#Photon.AirEL.DownloadMaterial"><span class='state state-client'>Photon.AirEL.DownloadMaterial(id, unitString, ent[, cback[, failed]])</span></a></td>
 	<td class="summary">Download a given material and apply it to a given entity.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AirEL.FormatName">Photon.AirEL.FormatName (id, unitString)</a></td>
+	<td class="name" nowrap><a href="#Photon.AirEL.FormatName"><span class='state state-client'>Photon.AirEL.FormatName(id, unitString)</span></a></td>
 	<td class="summary">Get an AirEL formatted material name.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AirEL.LoadMaterial">Photon.AirEL.LoadMaterial (id, unitString, ent)</a></td>
+	<td class="name" nowrap><a href="#Photon.AirEL.LoadMaterial"><span class='state state-client'>Photon.AirEL.LoadMaterial(id, unitString, ent)</span></a></td>
 	<td class="summary">Load a material from the cache or download it if it doesn't exist.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AirEL.LoadCallbackSuccess">Photon.AirEL.LoadCallbackSuccess (id, unitString, ent)</a></td>
+	<td class="name" nowrap><a href="#Photon.AirEL.LoadCallbackSuccess"><span class='state state-client'>Photon.AirEL.LoadCallbackSuccess(id, unitString, ent)</span></a></td>
 	<td class="summary">Callback function called when a texture is done downloading.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AirEL.LoadCallbackFail">Photon.AirEL.LoadCallbackFail (error)</a></td>
+	<td class="name" nowrap><a href="#Photon.AirEL.LoadCallbackFail"><span class='state state-client'>Photon.AirEL.LoadCallbackFail(error)</span></a></td>
 	<td class="summary">Error callback function.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AirEL.ApplyTexture">Photon.AirEL.ApplyTexture (mat, ent, id, unitString)</a></td>
+	<td class="name" nowrap><a href="#Photon.AirEL.ApplyTexture"><span class='state state-client'>Photon.AirEL.ApplyTexture(mat, ent, id, unitString)</span></a></td>
 	<td class="summary">Apply a texture to an ariel system.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AirEL.LoadMaterialFromFile">Photon.AirEL.LoadMaterialFromFile (id, unitString)</a></td>
+	<td class="name" nowrap><a href="#Photon.AirEL.LoadMaterialFromFile"><span class='state state-client'>Photon.AirEL.LoadMaterialFromFile(id, unitString)</span></a></td>
 	<td class="summary">Load a material from a file.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AirEL.Apply">Photon.AirEL.Apply (unitString, ent)</a></td>
+	<td class="name" nowrap><a href="#Photon.AirEL.Apply"><span class='state state-client'>Photon.AirEL.Apply(unitString, ent)</span></a></td>
 	<td class="summary">Apply an AirEL skin to an entity.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AirEL.Scan">Photon.AirEL.Scan ()</a></td>
+	<td class="name" nowrap><a href="#Photon.AirEL.Scan"><span class='state state-client'>Photon.AirEL.Scan()</span></a></td>
 	<td class="summary">Scan function called to apply materials on AirEL entities.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AirEL.IllumScan">Photon.AirEL.IllumScan ()</a></td>
+	<td class="name" nowrap><a href="#Photon.AirEL.IllumScan"><span class='state state-client'>Photon.AirEL.IllumScan()</span></a></td>
 	<td class="summary">Scan function called to set on vs off illumination for AirEL entities.</td>
 	</tr>
 </table>
@@ -131,11 +138,16 @@
     <dl class="function">
     <dt>
     <a name = "Photon.AirEL.DownloadMaterial"></a>
-    <strong>Photon.AirEL.DownloadMaterial (id, unitString, ent[, cback[, failed]])</strong>
+    <strong><span class='state state-client'>Photon.AirEL.DownloadMaterial(id, unitString, ent[, cback[, failed]])</span></strong>
     </dt>
     <dd>
     Download a given material and apply it to a given entity.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -170,11 +182,16 @@
 </dd>
     <dt>
     <a name = "Photon.AirEL.FormatName"></a>
-    <strong>Photon.AirEL.FormatName (id, unitString)</strong>
+    <strong><span class='state state-client'>Photon.AirEL.FormatName(id, unitString)</span></strong>
     </dt>
     <dd>
     Get an AirEL formatted material name.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -201,11 +218,16 @@
 </dd>
     <dt>
     <a name = "Photon.AirEL.LoadMaterial"></a>
-    <strong>Photon.AirEL.LoadMaterial (id, unitString, ent)</strong>
+    <strong><span class='state state-client'>Photon.AirEL.LoadMaterial(id, unitString, ent)</span></strong>
     </dt>
     <dd>
     Load a material from the cache or download it if it doesn't exist.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -230,11 +252,16 @@
 </dd>
     <dt>
     <a name = "Photon.AirEL.LoadCallbackSuccess"></a>
-    <strong>Photon.AirEL.LoadCallbackSuccess (id, unitString, ent)</strong>
+    <strong><span class='state state-client'>Photon.AirEL.LoadCallbackSuccess(id, unitString, ent)</span></strong>
     </dt>
     <dd>
     Callback function called when a texture is done downloading.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -259,11 +286,16 @@
 </dd>
     <dt>
     <a name = "Photon.AirEL.LoadCallbackFail"></a>
-    <strong>Photon.AirEL.LoadCallbackFail (error)</strong>
+    <strong><span class='state state-client'>Photon.AirEL.LoadCallbackFail(error)</span></strong>
     </dt>
     <dd>
     Error callback function.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -280,11 +312,16 @@
 </dd>
     <dt>
     <a name = "Photon.AirEL.ApplyTexture"></a>
-    <strong>Photon.AirEL.ApplyTexture (mat, ent, id, unitString)</strong>
+    <strong><span class='state state-client'>Photon.AirEL.ApplyTexture(mat, ent, id, unitString)</span></strong>
     </dt>
     <dd>
     Apply a texture to an ariel system.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -313,11 +350,16 @@
 </dd>
     <dt>
     <a name = "Photon.AirEL.LoadMaterialFromFile"></a>
-    <strong>Photon.AirEL.LoadMaterialFromFile (id, unitString)</strong>
+    <strong><span class='state state-client'>Photon.AirEL.LoadMaterialFromFile(id, unitString)</span></strong>
     </dt>
     <dd>
     Load a material from a file.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -344,11 +386,16 @@
 </dd>
     <dt>
     <a name = "Photon.AirEL.Apply"></a>
-    <strong>Photon.AirEL.Apply (unitString, ent)</strong>
+    <strong><span class='state state-client'>Photon.AirEL.Apply(unitString, ent)</span></strong>
     </dt>
     <dd>
     Apply an AirEL skin to an entity.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -369,11 +416,16 @@
 </dd>
     <dt>
     <a name = "Photon.AirEL.Scan"></a>
-    <strong>Photon.AirEL.Scan ()</strong>
+    <strong><span class='state state-client'>Photon.AirEL.Scan()</span></strong>
     </dt>
     <dd>
     Scan function called to apply materials on AirEL entities.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
 
 
@@ -383,11 +435,16 @@
 </dd>
     <dt>
     <a name = "Photon.AirEL.IllumScan"></a>
-    <strong>Photon.AirEL.IllumScan ()</strong>
+    <strong><span class='state state-client'>Photon.AirEL.IllumScan()</span></strong>
     </dt>
     <dd>
     Scan function called to set on vs off illumination for AirEL entities.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
 
 
@@ -406,6 +463,11 @@
     <dd>
     Translation between models and remote materials.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
 
 
@@ -420,6 +482,11 @@
     <dd>
     Translation between models and material indexes.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
 
 
@@ -434,6 +501,11 @@
     <dd>
     Table for storing materials, keyed by material name.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
 
 
@@ -448,7 +520,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2020-12-31 20:26:24 </i>
+<i style="float:right;">Last updated 2023-04-02 00:20:11 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
