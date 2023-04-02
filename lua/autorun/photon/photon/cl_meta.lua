@@ -16,11 +16,11 @@ local lp = LocalPlayer
 -- @warns Instead, a cached value is fetched from the server.
 -- @rbool
 function ENT:Photon_IsReversing()
-	local driver = self:GetDriver()
-	if not IsValid(driver) then return false end
-	if not driver:IsPlayer() then return false end
+	local ply = self:GetDriver()
+	if not IsValid(ply) then return false end
+	if not ply:IsPlayer() then return false end
 
-	if driver == lp() then
+	if ply == lp() then
 		return self:Photon_WorldVelocity().y < 1 and ply:KeyDown(IN_BACK)
 	end
 
@@ -35,13 +35,13 @@ end
 function ENT:Photon_IsBraking()
 	if self:Photon_IsReversing() then return false end
 
-	local driver = self:GetDriver()
-	if not IsValid(driver) then return false end
-	if not driver:IsPlayer() then return false end
+	local ply = self:GetDriver()
+	if not IsValid(ply) then return false end
+	if not ply:IsPlayer() then return false end
 
-	if driver == lp() then
+	if ply == lp() then
 		local vel = self:Photon_WorldVelocity()
-		return (driver:KeyDown(IN_BACK) and vel.y > 1) or (driver:KeyDown(IN_FORWARD) and vel.y < -1) or driver:KeyDown(IN_JUMP)
+		return (ply:KeyDown(IN_BACK) and vel.y > 1) or (ply:KeyDown(IN_FORWARD) and vel.y < -1) or ply:KeyDown(IN_JUMP)
 	end
 
 	return self:GetPhotonNet_Braking(false)
