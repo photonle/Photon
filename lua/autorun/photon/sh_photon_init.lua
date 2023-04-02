@@ -121,6 +121,9 @@ include("cl_photon_context.lua")
 include("cl_photon_menubar.lua")
 include("sh_photon_xml.lua")
 
+Photon.include("shared/sh_simplenet.lua")
+Photon.include("photon/cl_meta.lua")
+
 local photonVehicleTable = {}
 local photonLastScan = 0
 
