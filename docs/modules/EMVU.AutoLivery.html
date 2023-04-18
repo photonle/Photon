@@ -3,7 +3,7 @@
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <head>
-    <title>Photon Lighting Documentation</title>
+    <title>Photon Documentation</title>
     <link rel="stylesheet" href="../ldoc.css" type="text/css" />
 </head>
 <body>
@@ -24,7 +24,7 @@
 
 <div id="navigation">
 <br/>
-<h1>ldoc</h1>
+<h1>Photon Lighting Engine</h1>
 
 <ul>
   <li><a href="../index.html">Index</a></li>
@@ -39,13 +39,20 @@
 
 <h2>Modules</h2>
 <ul class="nowrap">
-  <li><a href="../modules/autorun.emv_init.html">autorun.emv_init</a></li>
+  <li><a href="../modules/Photon.html">Photon</a></li>
   <li><a href="../modules/Photon.AirEL.html">Photon.AirEL</a></li>
   <li><a href="../modules/EMVU.html">EMVU</a></li>
   <li><strong>EMVU.AutoLivery</strong></li>
+  <li><a href="../modules/VEHICLE.html">VEHICLE</a></li>
   <li><a href="../modules/autorun.photon.library.sirens.anemolis_chp_bike.html">autorun.photon.library.sirens.anemolis_chp_bike</a></li>
   <li><a href="../modules/autorun.photon.library.sirens.anemolis_whelen_epsilon_alternate.html">autorun.photon.library.sirens.anemolis_whelen_epsilon_alternate</a></li>
+  <li><a href="../modules/Photon.Net.html">Photon.Net</a></li>
   <li><a href="../modules/functional.html">functional</a></li>
+  <li><a href="../modules/Photon.SNet.html">Photon.SNet</a></li>
+</ul>
+<h2>Classes</h2>
+<ul class="nowrap">
+  <li><a href="../classes/Vehicle.html">Vehicle</a></li>
 </ul>
 
 </div>
@@ -54,7 +61,9 @@
 
 <h1>Module <code>EMVU.AutoLivery</code></h1>
 <p>Automatic Liveries</p>
-<p></p>
+<p>
+
+</p>
     <h3>Info:</h3>
     <ul>
         <li><strong>Copyright</strong>: Photon Team</li>
@@ -66,43 +75,43 @@
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AutoLivery.DownloadMaterial">Photon.AutoLivery.DownloadMaterial (car, id, val, ent, cback, failedcback)</a></td>
+	<td class="name" nowrap><a href="#Photon.AutoLivery.DownloadMaterial"><span class='state state-client'>Photon.AutoLivery.DownloadMaterial(car, id, val, ent, cback, failedcback)</span></a></td>
 	<td class="summary">Function to download a material.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AutoLivery.FormatName">Photon.AutoLivery.FormatName (car, id, val)</a></td>
+	<td class="name" nowrap><a href="#Photon.AutoLivery.FormatName"><span class='state state-client'>Photon.AutoLivery.FormatName(car, id, val)</span></a></td>
 	<td class="summary">Format a livery name for caching.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AutoLivery.LoadMaterial">Photon.AutoLivery.LoadMaterial (car, id, val, ent)</a></td>
+	<td class="name" nowrap><a href="#Photon.AutoLivery.LoadMaterial"><span class='state state-client'>Photon.AutoLivery.LoadMaterial(car, id, val, ent)</span></a></td>
 	<td class="summary">Load and fetch a material onto a given vehicle.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AutoLivery.LoadCallback">Photon.AutoLivery.LoadCallback (car, id, val, ent, success)</a></td>
+	<td class="name" nowrap><a href="#Photon.AutoLivery.LoadCallback"><span class='state state-client'>Photon.AutoLivery.LoadCallback(car, id, val, ent, success)</span></a></td>
 	<td class="summary">Callback after a livery has been downloaded.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AutoLivery.FindFallback">Photon.AutoLivery.FindFallback (name, id)</a></td>
+	<td class="name" nowrap><a href="#Photon.AutoLivery.FindFallback"><span class='state state-client'>Photon.AutoLivery.FindFallback(name, id)</span></a></td>
 	<td class="summary">Broken.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AutoLivery.ApplyFallback">Photon.AutoLivery.ApplyFallback (ent, id)</a></td>
+	<td class="name" nowrap><a href="#Photon.AutoLivery.ApplyFallback"><span class='state state-client'>Photon.AutoLivery.ApplyFallback(ent, id)</span></a></td>
 	<td class="summary">Apply a fallback livery to a vehicle.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AutoLivery.ApplyTexture">Photon.AutoLivery.ApplyTexture (mat, ent, car, val, id)</a></td>
+	<td class="name" nowrap><a href="#Photon.AutoLivery.ApplyTexture"><span class='state state-client'>Photon.AutoLivery.ApplyTexture(mat, ent, car, val, id)</span></a></td>
 	<td class="summary">Apply an autolivery to a vehicle.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AutoLivery.LoadLivery">Photon.AutoLivery.LoadLivery (car, id, val)</a></td>
+	<td class="name" nowrap><a href="#Photon.AutoLivery.LoadLivery"><span class='state state-client'>Photon.AutoLivery.LoadLivery(car, id, val)</span></a></td>
 	<td class="summary">Load a livery from file.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AutoLivery.Apply">Photon.AutoLivery.Apply (id, val, ent)</a></td>
+	<td class="name" nowrap><a href="#Photon.AutoLivery.Apply"><span class='state state-client'>Photon.AutoLivery.Apply(id, val, ent)</span></a></td>
 	<td class="summary">Apply an auto livery to a vehicle.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Photon.AutoLivery.Scan">Photon.AutoLivery.Scan ()</a></td>
+	<td class="name" nowrap><a href="#Photon.AutoLivery.Scan"><span class='state state-client'>Photon.AutoLivery.Scan()</span></a></td>
 	<td class="summary">Scan for AutoLivery changes.</td>
 	</tr>
 </table>
@@ -123,11 +132,16 @@
     <dl class="function">
     <dt>
     <a name = "Photon.AutoLivery.DownloadMaterial"></a>
-    <strong>Photon.AutoLivery.DownloadMaterial (car, id, val, ent, cback, failedcback)</strong>
+    <strong><span class='state state-client'>Photon.AutoLivery.DownloadMaterial(car, id, val, ent, cback, failedcback)</span></strong>
     </dt>
     <dd>
     Function to download a material.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -164,11 +178,16 @@
 </dd>
     <dt>
     <a name = "Photon.AutoLivery.FormatName"></a>
-    <strong>Photon.AutoLivery.FormatName (car, id, val)</strong>
+    <strong><span class='state state-client'>Photon.AutoLivery.FormatName(car, id, val)</span></strong>
     </dt>
     <dd>
     Format a livery name for caching.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -199,11 +218,16 @@
 </dd>
     <dt>
     <a name = "Photon.AutoLivery.LoadMaterial"></a>
-    <strong>Photon.AutoLivery.LoadMaterial (car, id, val, ent)</strong>
+    <strong><span class='state state-client'>Photon.AutoLivery.LoadMaterial(car, id, val, ent)</span></strong>
     </dt>
     <dd>
     Load and fetch a material onto a given vehicle.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -232,11 +256,16 @@
 </dd>
     <dt>
     <a name = "Photon.AutoLivery.LoadCallback"></a>
-    <strong>Photon.AutoLivery.LoadCallback (car, id, val, ent, success)</strong>
+    <strong><span class='state state-client'>Photon.AutoLivery.LoadCallback(car, id, val, ent, success)</span></strong>
     </dt>
     <dd>
     Callback after a livery has been downloaded.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -269,11 +298,16 @@
 </dd>
     <dt>
     <a name = "Photon.AutoLivery.FindFallback"></a>
-    <strong>Photon.AutoLivery.FindFallback (name, id)</strong>
+    <strong><span class='state state-client'>Photon.AutoLivery.FindFallback(name, id)</span></strong>
     </dt>
     <dd>
     Broken.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -294,11 +328,16 @@
 </dd>
     <dt>
     <a name = "Photon.AutoLivery.ApplyFallback"></a>
-    <strong>Photon.AutoLivery.ApplyFallback (ent, id)</strong>
+    <strong><span class='state state-client'>Photon.AutoLivery.ApplyFallback(ent, id)</span></strong>
     </dt>
     <dd>
     Apply a fallback livery to a vehicle.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -319,11 +358,16 @@
 </dd>
     <dt>
     <a name = "Photon.AutoLivery.ApplyTexture"></a>
-    <strong>Photon.AutoLivery.ApplyTexture (mat, ent, car, val, id)</strong>
+    <strong><span class='state state-client'>Photon.AutoLivery.ApplyTexture(mat, ent, car, val, id)</span></strong>
     </dt>
     <dd>
     Apply an autolivery to a vehicle.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -356,11 +400,16 @@
 </dd>
     <dt>
     <a name = "Photon.AutoLivery.LoadLivery"></a>
-    <strong>Photon.AutoLivery.LoadLivery (car, id, val)</strong>
+    <strong><span class='state state-client'>Photon.AutoLivery.LoadLivery(car, id, val)</span></strong>
     </dt>
     <dd>
     Load a livery from file.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -385,11 +434,16 @@
 </dd>
     <dt>
     <a name = "Photon.AutoLivery.Apply"></a>
-    <strong>Photon.AutoLivery.Apply (id, val, ent)</strong>
+    <strong><span class='state state-client'>Photon.AutoLivery.Apply(id, val, ent)</span></strong>
     </dt>
     <dd>
     Apply an auto livery to a vehicle.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -414,11 +468,16 @@
 </dd>
     <dt>
     <a name = "Photon.AutoLivery.Scan"></a>
-    <strong>Photon.AutoLivery.Scan ()</strong>
+    <strong><span class='state state-client'>Photon.AutoLivery.Scan()</span></strong>
     </dt>
     <dd>
     Scan for AutoLivery changes.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
 
 
@@ -437,6 +496,11 @@
     <dd>
     Translation table for models to material names for unit generation.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
 
 
@@ -451,7 +515,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2023-04-01 21:57:07 </i>
+<i style="float:right;">Last updated 2023-04-18 13:45:06 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
