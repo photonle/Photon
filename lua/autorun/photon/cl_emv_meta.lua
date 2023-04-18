@@ -39,11 +39,6 @@ function EMVU:MakeEMV( emv, name )
 
 	-- Datatable Functions --
 
-	function emv:Photon_Lights()
-		if not IsValid( self ) then return false end
-		return self:GetNW2Bool("PhotonLE.EMV_LIGHTS_ON", false)
-	end
-
 	function emv:Photon_LightOption()
 		if not IsValid( self ) then return 1 end
 		return self:GetNW2Int( "PhotonLE.EMV_LIGHT_OPTION", 1 )
