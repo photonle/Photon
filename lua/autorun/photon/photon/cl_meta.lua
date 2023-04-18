@@ -2,7 +2,7 @@
 @copyright Photon Team
 @release development
 @author Photon Team
-@module VEHICLE
+@classmod VEHICLE
 @alias ENT
 --]]--
 
