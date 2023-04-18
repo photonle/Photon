@@ -26,7 +26,7 @@ local pairs = pairs
 local christmasMode = GetConVar( "photon_christmas_mode" )
 
 hook.Add( "InitPostEntity", "Photon.CLEMVMETASettings", function()
-	christmasMode = GetConVar( "photon_christmas_mode" )
+	christmasMode = GetConVar("photon_christmas_mode")
 end)
 
 local printedErrors = {}
