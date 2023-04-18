@@ -9,7 +9,7 @@ on:
     branches:
       - development
       - dev
-      - refactor/meta-and-networking
+      - refactor/meta-and-networking/*
 
 jobs:
   build:
