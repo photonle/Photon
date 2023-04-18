@@ -59,7 +59,7 @@ local function DrawCarLights()
 	Photon:ClearLightQueue()
 	local photonDebug = PHOTON_DEBUG
 
-	for _, ent in ipairs(Photon:AllVehicles()) do
+	for _, ent in pairs(Photon:AllVehicles() ) do
 		if IsValid(ent) and ent:Photon() then
 			if not ent.Photon_RenderLights then
 				Photon:SetupCar(ent, ent:GetVehicleClass())

@@ -221,13 +221,9 @@ function Photon.Net:Signal( ply )
 	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
 	local car = ply:GetVehicle()
 	local signal = net.ReadInt(3)
-
-	if signal < CAR_BLINKER_NONE or signal > CAR_BLINKER_HAZARD then return false end
-	if signal == car:Photon_Signal() then
-		return car:Photon_SignalStop()
-	end
-
-	car:SetPhotonNet_CurrentSignal(signal)
+	if not signal == CAR_TURNING_LEFT or not signal == CAR_TURNING_RIGHT or not signal == CAR_HAZARD then return false end
+	if signal == car:CAR_Signal() then car:CAR_StopSignals() return end
+	car:CAR_Signal( signal )
 end
 net.Receive("photon_signal", function( l,p )
 	Photon.Net:Signal( p )
@@ -305,7 +301,7 @@ function Photon.Net.SetWheel( len, ply )
 	local index = net.ReadInt( 8 )
 	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, ent, "WHEEL" )
 	if modifyBlocked != false then
-		ent:Photon_PlayerSetWheelIndex( index )
+		ent:Photon_SetWheelIndex( index )
 	end
 end
 net.Receive( "photon_wheel", function( len, ply ) Photon.Net.SetWheel( len, ply ) end )
