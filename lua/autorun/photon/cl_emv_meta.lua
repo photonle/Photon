@@ -10,10 +10,10 @@ if EMVU.Colors then EMVColors = EMVU.Colors end
 local EMVHelper = nil
 if EMVU.Helper then EMVHelper = EMVU.Helper end
 
-hook.Add( "InitPostEntity", "PhotonEMV.LocalColorSet", function()
-	EMVColors = EMVU.Colors;
-	EMVHelper = EMVU.Helper;
-end )
+hook.Add("InitPostEntity", "PhotonEMV.LocalColorSet", function()
+	EMVColors = EMVU.Colors
+	EMVHelper = EMVU.Helper
+end)
 
 local IsValid = IsValid
 local tostring = tostring
