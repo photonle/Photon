@@ -9,6 +9,10 @@ function EMVU:AddAutoComponent(component, name, base)
 	component.Name = name
 	component.Base = component.Base or base or nil
 
+	if component.BodyGroups then
+		component.BodyGroups = EMVU.Helper.ResolveTable(component.BodyGroups)
+	end
+
 	local src = debug.getinfo(2, "S")
 	component.Source = src.short_src
 

@@ -192,7 +192,7 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_GetELSequence()
 		if not IsValid( self ) then return false end
 		local result
-		if self:Photon_AlertMode() then
+		if self:Photon_AlertMode() and EMVHelper.GetAlertModeEnabled(self.VehicleName) then
 			result = EMVHelper.GetAlertSequence( self.VehicleName, self )
 		else
 			local option = self:Photon_LightOption()

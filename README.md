@@ -22,18 +22,18 @@ The Core Development team currently contains 6 people.
 
 | Name | Role |
 | --- | --- |
-| [ischmal](https://github.com/ischmal) | Photon Engine code, photon.lighting website |
+| [Schmal](https://github.com/ischmal) | Photon Engine code, photon.lighting website |
 | [Noble](https://github.com/Noble-N9) | Photon Fire and Rescue, various components |
 | [GermanDude](https://github.com/GermanDude-ger) | Photon vehicles |
 | [Super Mighty](https://github.com/SuperMighty1) | Photon vehicles & components. |
 | [creator_2013](https://github.com/creator2013) | Photon Engine code & Components & Vehicles |
 | [Joshua Piper](https://github.com/JoshPiper) | Photon Engine code, Discord Bot, external services & security.
+| [SGM](https://github.com/SentryGunMan) | Vehicle Creator |
 
 ### [Development Team](.github/GOVERNANCE.md#development)
 
 | Name | Role |
 | --- | --- |
-| [SGM](https://github.com/SentryGunMan) | Vehicle Creator |
 | Deputy.Jones | Vehicle Creator |
 | goigle | Photon Core code |
 | TDM | Vehicle Creator|
