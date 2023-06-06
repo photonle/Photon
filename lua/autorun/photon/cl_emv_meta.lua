@@ -536,23 +536,28 @@ function EMVU:MakeEMV( emv, name )
 			local skipComponents = {}
 			local skipELIndexes = {}
 
-			if self:Photon_HasTrafficAdvisor() then
-				if self:Photon_TrafficAdvisor() then
-					local taSequence = self:Photon_GetTASequence()
+			if self:Photon_HasTrafficAdvisor() and self:Photon_TrafficAdvisor() then
+				local taSequence = self:Photon_GetTASequence()
 
-					for index, light in pairs( taSequence ) do
-						skipComponents[index] = true
-						local frame = self:Photon_GetFrame( index, light, increment )
-						if frame then table.Add( RenderTable, self:Photon_GetLightSection( index, frame ) ) end
-					end
-
-					local disconnectTable = EMVU.Helper:GetTrafficELDisconnect( self.VehicleName, self:Photon_TrafficAdvisorOption() )
-					if istable( disconnectTable ) then
-						for i=1, #disconnectTable do
-							skipELIndexes[ disconnectTable[ i ] ] = true
+				for index, light in pairs( taSequence ) do
+					skipComponents[index] = true
+					local frame = self:Photon_GetFrame( index, light, increment )
+					if frame then
+						if istable(frame) then
+							for _, idx in ipairs(frame) do
+								table.Add(RenderTable, self:Photon_GetLightSection(index, idx))
+							end
+						else
+							table.Add( RenderTable, self:Photon_GetLightSection( index, frame ) )
 						end
 					end
+				end
 
+				local disconnectTable = EMVU.Helper:GetTrafficELDisconnect( self.VehicleName, self:Photon_TrafficAdvisorOption() )
+				if istable( disconnectTable ) then
+					for i=1, #disconnectTable do
+						skipELIndexes[ disconnectTable[ i ] ] = true
+					end
 				end
 			end
 
