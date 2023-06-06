@@ -3,9 +3,7 @@ AddCSLuaFile()
 AddCSLuaFile("sh_functional.lua")
 include("sh_functional.lua")
 
-if not Photon then
-	Photon = {}
-
+if not Photon.Messages then
 	Photon.Messages = {}
 	Photon.Messages.Colours = {}
 
@@ -51,6 +49,7 @@ end
 
 Photon.Messages.Colours.Error = Color(255, 0, 0)
 Photon.Messages.Colours.Warning = Color(255, 200, 0)
+Photon.Messages.Colours.Debug = Color(160, 160, 160)
 
 --- Print a message to console.
 -- @tparam vararg ... Inputs to display.
@@ -84,6 +83,7 @@ end
 
 Photon.Messages:BuildLevel("Error")
 Photon.Messages:BuildLevel("Warning")
+Photon.Messages:BuildLevel("Debug")
 
 AddCSLuaFile("cl_photon_eng.lua")
 AddCSLuaFile("cl_photon_meta.lua")
@@ -120,6 +120,10 @@ include("sh_photon_vehicles.lua")
 include("cl_photon_context.lua")
 include("cl_photon_menubar.lua")
 include("sh_photon_xml.lua")
+
+Photon.include("shared/sh_simplenet.lua")
+Photon.include("photon/cl_meta.lua")
+Photon.include("photon/sh_meta.lua")
 
 local photonVehicleTable = {}
 local photonLastScan = 0

@@ -3,7 +3,7 @@
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <head>
-    <title>Photon Lighting Documentation</title>
+    <title>Photon Documentation</title>
     <link rel="stylesheet" href="../ldoc.css" type="text/css" />
 </head>
 <body>
@@ -24,7 +24,8 @@
 
 <div id="navigation">
 <br/>
-<h1>ldoc</h1>
+<h1>Photon Lighting Engine</h1>
+
 
 <ul>
   <li><a href="../index.html">Index</a></li>
@@ -38,13 +39,20 @@
 
 <h2>Modules</h2>
 <ul class="nowrap">
-  <li><a href="../modules/autorun.emv_init.html">autorun.emv_init</a></li>
+  <li><a href="../modules/Photon.html">Photon</a></li>
   <li><a href="../modules/Photon.AirEL.html">Photon.AirEL</a></li>
   <li><a href="../modules/EMVU.html">EMVU</a></li>
   <li><a href="../modules/EMVU.AutoLivery.html">EMVU.AutoLivery</a></li>
   <li><a href="../modules/autorun.photon.library.sirens.anemolis_chp_bike.html">autorun.photon.library.sirens.anemolis_chp_bike</a></li>
   <li><a href="../modules/autorun.photon.library.sirens.anemolis_whelen_epsilon_alternate.html">autorun.photon.library.sirens.anemolis_whelen_epsilon_alternate</a></li>
+  <li><a href="../modules/Photon.Net.html">Photon.Net</a></li>
   <li><strong>functional</strong></li>
+  <li><a href="../modules/Photon.SNet.html">Photon.SNet</a></li>
+</ul>
+<h2>Classes</h2>
+<ul class="nowrap">
+  <li><a href="../classes/VEHICLE.html">VEHICLE</a></li>
+  <li><a href="../classes/Vehicle.html">Vehicle</a></li>
 </ul>
 
 </div>
@@ -53,7 +61,9 @@
 
 <h1>Module <code>functional</code></h1>
 <p>Functional Programming / Currying Library.</p>
-<p></p>
+<p>
+
+</p>
     <h3>Info:</h3>
     <ul>
         <li><strong>Copyright</strong>: Photon Team</li>
@@ -65,19 +75,19 @@
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#partial">partial (func, ...)</a></td>
+	<td class="name" nowrap><a href="#partial"><span class='state state-client state-server'>partial(func, ...)</span></a></td>
 	<td class="summary">Builds a partial function, with stored arguments.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#flip">flip (func)</a></td>
+	<td class="name" nowrap><a href="#flip"><span class='state state-client state-server'>flip(func)</span></a></td>
 	<td class="summary">Returns a function where the first two inputs are flipped.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#reverse">reverse (vararg)</a></td>
+	<td class="name" nowrap><a href="#reverse"><span class='state state-client state-server'>reverse(vararg)</span></a></td>
 	<td class="summary">Reverses a set of input arguments.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#compose">compose (...)</a></td>
+	<td class="name" nowrap><a href="#compose"><span class='state state-client state-server'>compose(...)</span></a></td>
 	<td class="summary">Build a function o from f/g so that f(g(x)) == o(x)</td>
 	</tr>
 </table>
@@ -91,11 +101,16 @@
     <dl class="function">
     <dt>
     <a name = "partial"></a>
-    <strong>partial (func, ...)</strong>
+    <strong><span class='state state-client state-server'>partial(func, ...)</span></strong>
     </dt>
     <dd>
     Builds a partial function, with stored arguments.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -114,19 +129,24 @@
 
     <h3>Usage:</h3>
     <ul>
-        <li><pre class="example"><span class="keyword">local</span> positiveOnly = partial(max, <span class="number">0</span>)</pre></li>
-        <li><pre class="example"><span class="global">print</span>(positiveOnly(-<span class="number">1</span>)) <span class="comment">-- Returns 0.</span></pre></li>
-        <li><pre class="example"><span class="global">print</span>(positiveOnly(<span class="number">2</span>)) <span class="comment">-- Returns 2.</span></pre></li>
+        <li><pre class="example"><span class="keyword">local</span> positiveOnly = <span class="function-name">partial</span>(max, <span class="number">0</span>)</pre></li>
+        <li><pre class="example"><span class="global">print</span>(<span class="function-name">positiveOnly</span>(-<span class="number">1</span>)) <span class="comment">-- Returns 0.</span></pre></li>
+        <li><pre class="example"><span class="global">print</span>(<span class="function-name">positiveOnly</span>(<span class="number">2</span>)) <span class="comment">-- Returns 2.</span></pre></li>
     </ul>
 
 </dd>
     <dt>
     <a name = "flip"></a>
-    <strong>flip (func)</strong>
+    <strong><span class='state state-client state-server'>flip(func)</span></strong>
     </dt>
     <dd>
     Returns a function where the first two inputs are flipped.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -147,18 +167,23 @@
 
     <h3>Usage:</h3>
     <ul>
-        <li><pre class="example"><span class="keyword">local</span> flippedPrint = flip(<span class="global">print</span>)</pre></li>
-        <li><pre class="example">flippedPrint(<span class="string">"hello"</span>, <span class="string">"world"</span>) <span class="comment">-- Outputs: "world hello"</span></pre></li>
+        <li><pre class="example"><span class="keyword">local</span> flippedPrint = <span class="function-name">flip</span>(<span class="global">print</span>)</pre></li>
+        <li><pre class="example"><span class="function-name">flippedPrint</span>(<span class="string">"hello"</span>, <span class="string">"world"</span>) <span class="comment">-- Outputs: "world hello"</span></pre></li>
     </ul>
 
 </dd>
     <dt>
     <a name = "reverse"></a>
-    <strong>reverse (vararg)</strong>
+    <strong><span class='state state-client state-server'>reverse(vararg)</span></strong>
     </dt>
     <dd>
     Reverses a set of input arguments.
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -178,18 +203,22 @@
 
     <h3>See also:</h3>
     <ul>
-         <a href="http://lua-users.org/wiki/CurriedLua">Lua Users Wiki: CurriedLua</a>
     </ul>
 
 
 </dd>
     <dt>
     <a name = "compose"></a>
-    <strong>compose (...)</strong>
+    <strong><span class='state state-client state-server'>compose(...)</span></strong>
     </dt>
     <dd>
     Build a function o from f/g so that f(g(x)) == o(x)
 
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -216,8 +245,8 @@
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2023-04-01 21:57:07 </i>
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2023-06-06 14:28:05 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
