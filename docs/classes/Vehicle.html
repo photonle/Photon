@@ -38,8 +38,8 @@
 
 <h2>Classes</h2>
 <ul class="nowrap">
-  <li><a href="../classes/VEHICLE.html">VEHICLE</a></li>
-  <li><strong>Vehicle</strong></li>
+  <li><strong>VEHICLE</strong></li>
+  <li><a href="../classes/Vehicle.html">Vehicle</a></li>
 </ul>
 <h2>Modules</h2>
 <ul class="nowrap">
@@ -58,112 +58,156 @@
 
 <div id="content">
 
-<h1>Class <code>Vehicle</code></h1>
+<h1>Class <code>VEHICLE</code></h1>
+<p>Emergency Lighting Vehicle Meta</p>
 <p>
 
 </p>
-<p>
-
-</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: Photon Team</li>
+        <li><strong>Release</strong>: development</li>
+        <li><strong>Author</strong>: Photon Team</li>
+    </ul>
 
 
 <h2><a href="#Methods">Methods</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:SetPhotonNet_CurrentSignal"><span class='state state-client state-server'>Vehicle:SetPhotonNet_CurrentSignal(value)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_Lights"><span class='state state-client'>VEHICLE:Photon_Lights()</span></a></td>
+	<td class="summary">Get lighting state.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:GetPhotonNet_CurrentSignal"><span class='state state-client state-server'>Vehicle:GetPhotonNet_CurrentSignal(default)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:GetPhotonLEStayOn"><span class='state state-server'>VEHICLE:GetPhotonLEStayOn()</span></a></td>
+	<td class="summary">Gets the Siren StayOn State.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:SetPhotonNet_Blinker"><span class='state state-client state-server'>Vehicle:SetPhotonNet_Blinker(value)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:SetPhotonLEStayOn"><span class='state state-server'>VEHICLE:SetPhotonLEStayOn([val])</span></a></td>
+	<td class="summary">Sets the new Siren Stay On State.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:GetPhotonNet_Blinker"><span class='state state-client state-server'>Vehicle:GetPhotonNet_Blinker(default)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_Enabled"><span class='state state-server'>VEHICLE:ELS_Enabled([val])</span></a></td>
+	<td class="summary">Sets if the vehicle has ELS enabled.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:SetPhotonNet_Headlights"><span class='state state-client state-server'>Vehicle:SetPhotonNet_Headlights(value)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_Lights"><span class='state state-server'>VEHICLE:ELS_Lights([val])</span></a></td>
+	<td class="summary">Sets if the vehicle has ELS lights running.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:GetPhotonNet_Headlights"><span class='state state-client state-server'>Vehicle:GetPhotonNet_Headlights(default)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_LightOption"><span class='state state-server'>VEHICLE:ELS_LightOption([val])</span></a></td>
+	<td class="summary">Sets the active light value.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:SetPhotonNet_Breaking"><span class='state state-client state-server'>Vehicle:SetPhotonNet_Breaking(value)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_Siren"><span class='state state-server'>VEHICLE:ELS_Siren([val])</span></a></td>
+	<td class="summary">Sets if the vehicle has siren running.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:GetPhotonNet_Breaking"><span class='state state-client state-server'>Vehicle:GetPhotonNet_Breaking(default)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_SirenOption"><span class='state state-server'>VEHICLE:ELS_SirenOption([val])</span></a></td>
+	<td class="summary">Sets the active siren.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:SetPhotonNet_Reversing"><span class='state state-client state-server'>Vehicle:SetPhotonNet_Reversing(value)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_SirenSet"><span class='state state-server'>VEHICLE:ELS_SirenSet([val])</span></a></td>
+	<td class="summary">Sets the set of sirens.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:GetPhotonNet_Reversing"><span class='state state-client state-server'>Vehicle:GetPhotonNet_Reversing(default)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_AuxSirenSet"><span class='state state-server'>VEHICLE:ELS_AuxSirenSet([val])</span></a></td>
+	<td class="summary">Sets the set of sirens.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:SetPhotonNet_Running"><span class='state state-client state-server'>Vehicle:SetPhotonNet_Running(value)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_HasAuxSiren"><span class='state state-server'>VEHICLE:ELS_HasAuxSiren()</span></a></td>
+	<td class="summary">Checks if the vehicle has aux sirens.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:GetPhotonNet_Running"><span class='state state-client state-server'>Vehicle:GetPhotonNet_Running(default)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_Traffic"><span class='state state-server'>VEHICLE:ELS_Traffic([val])</span></a></td>
+	<td class="summary">Gets/Sets Traffic Advisor enable state.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:SetPhotonNet_LEStayOn"><span class='state state-client state-server'>Vehicle:SetPhotonNet_LEStayOn(value)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_TrafficOption"><span class='state state-server'>VEHICLE:ELS_TrafficOption([val])</span></a></td>
+	<td class="summary">Gets/Sets Traffic Advisor option.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:GetPhotonNet_LEStayOn"><span class='state state-client state-server'>Vehicle:GetPhotonNet_LEStayOn(default)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_Illuminate"><span class='state state-server'>VEHICLE:ELS_Illuminate([val])</span></a></td>
+	<td class="summary">Gets/Sets illumination enabled.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:SetPhotonNet_WheelIndex"><span class='state state-client state-server'>Vehicle:SetPhotonNet_WheelIndex(value)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_IlluminateOption"><span class='state state-server'>VEHICLE:ELS_IlluminateOption([val])</span></a></td>
+	<td class="summary">Gets/Sets Illumination option.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Vehicle:GetPhotonNet_WheelIndex"><span class='state state-client state-server'>Vehicle:GetPhotonNet_WheelIndex(default)</span></a></td>
-	<td class="summary">
-
-</td>
+	<td class="name" nowrap><a href="#VEHICLE:ELS_PresetOption"><span class='state state-server'>VEHICLE:ELS_PresetOption([New])</span></a></td>
+	<td class="summary">Gets/Sets the a EMV preset.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_IsReversing"><span class='state state-client'>VEHICLE:Photon_IsReversing()</span></a></td>
+	<td class="summary">Get if the Vehicle is Reversing.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_IsBraking"><span class='state state-client'>VEHICLE:Photon_IsBraking()</span></a></td>
+	<td class="summary">Get if the Vehicle is Braking.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_IsRunning"><span class='state state-client'>VEHICLE:Photon_IsRunning()</span></a></td>
+	<td class="summary">Gets the running lights state.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_BlinkState"><span class='state state-client'>VEHICLE:Photon_BlinkState()</span></a></td>
+	<td class="summary">Gets the turn signal value.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_TurningLeft"><span class='state state-client'>VEHICLE:Photon_TurningLeft()</span></a></td>
+	<td class="summary">Gets if the left turn indicator is enabled</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_TurningRight"><span class='state state-client'>VEHICLE:Photon_TurningRight()</span></a></td>
+	<td class="summary">Gets if the right turn indicator is enabled</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_Hazards"><span class='state state-client'>VEHICLE:Photon_Hazards()</span></a></td>
+	<td class="summary">Gets if the hazard lights are enabled</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_WorldVelocity"><span class='state state-client state-server'>VEHICLE:Photon_WorldVelocity()</span></a></td>
+	<td class="summary">Get the World Localised Velocity</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_IsReversing"><span class='state state-server'>VEHICLE:Photon_IsReversing()</span></a></td>
+	<td class="summary">Get if the Vehicle is Reversing.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_IsBraking"><span class='state state-server'>VEHICLE:Photon_IsBraking()</span></a></td>
+	<td class="summary">Get if the Vehicle is Braking.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_Signal"><span class='state state-server'>VEHICLE:Photon_Signal([val])</span></a></td>
+	<td class="summary">Set a new signal value.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_SignalStop"><span class='state state-server'>VEHICLE:Photon_SignalStop()</span></a></td>
+	<td class="summary">Stop any signals.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_TurnLeft"><span class='state state-server'>VEHICLE:Photon_TurnLeft([bool])</span></a></td>
+	<td class="summary">Set the left signal.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_TurnRight"><span class='state state-server'>VEHICLE:Photon_TurnRight([bool])</span></a></td>
+	<td class="summary">Set the right signal.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_Hazards"><span class='state state-server'>VEHICLE:Photon_Hazards([If])</span></a></td>
+	<td class="summary">Set the hazard signals.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_IsRunning"><span class='state state-server'>VEHICLE:Photon_IsRunning()</span></a></td>
+	<td class="summary">Gets the running lights state.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_WheelEnabled"><span class='state state-server'>VEHICLE:Photon_WheelEnabled()</span></a></td>
+	<td class="summary">Get if this vehicle has wheels.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VEHICLE:Photon_PlayerSetWheelIndex"><span class='state state-server'>VEHICLE:Photon_PlayerSetWheelIndex(val)</span></a></td>
+	<td class="summary">Set the wheel index.</td>
 	</tr>
 </table>
 
@@ -175,13 +219,11 @@
 
     <dl class="function">
     <dt>
-    <a name = "Vehicle:SetPhotonNet_CurrentSignal"></a>
-    <strong><span class='state state-client state-server'>Vehicle:SetPhotonNet_CurrentSignal(value)</span></strong>
+    <a name = "VEHICLE:Photon_Lights"></a>
+    <strong><span class='state state-client'>VEHICLE:Photon_Lights()</span></strong>
     </dt>
     <dd>
-
-
-
+    Get lighting state.
 
     </ul>
     </ul>
@@ -189,27 +231,53 @@
     </ul>
     </ul>
 
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">value</span>
-            <span class="types"><span class="type">int</span></span>
-         New Current Signal Value.
-        </li>
-    </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "Vehicle:GetPhotonNet_CurrentSignal"></a>
-    <strong><span class='state state-client state-server'>Vehicle:GetPhotonNet_CurrentSignal(default)</span></strong>
+    <a name = "VEHICLE:GetPhotonLEStayOn"></a>
+    <strong><span class='state state-server'>VEHICLE:GetPhotonLEStayOn()</span></strong>
     </dt>
     <dd>
+    Gets the Siren StayOn State.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
 
 
 
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:SetPhotonLEStayOn"></a>
+    <strong><span class='state state-server'>VEHICLE:SetPhotonLEStayOn([val])</span></strong>
+    </dt>
+    <dd>
+    Sets the new Siren Stay On State.
 
     </ul>
     </ul>
@@ -219,8 +287,109 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">default</span>
-         Default value if no local value is found.
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">bool</span></span>
+         New siren state.
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        The new set value.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:ELS_Enabled"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_Enabled([val])</span></strong>
+    </dt>
+    <dd>
+    Sets if the vehicle has ELS enabled.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">bool</span></span>
+         New enable state
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        The set value.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:ELS_Lights"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_Lights([val])</span></strong>
+    </dt>
+    <dd>
+    Sets if the vehicle has ELS lights running.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">bool</span></span>
+         New enable state
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        The set value.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:ELS_LightOption"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_LightOption([val])</span></strong>
+    </dt>
+    <dd>
+    Sets the active light value.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">int</span></span>
+         New active option
+         (<em>optional</em>)
         </li>
     </ul>
 
@@ -228,7 +397,7 @@
     <ol>
 
            <span class="types"><span class="type">int</span></span>
-        Current Signal Value.
+        The set value.
     </ol>
 
 
@@ -236,13 +405,11 @@
 
 </dd>
     <dt>
-    <a name = "Vehicle:SetPhotonNet_Blinker"></a>
-    <strong><span class='state state-client state-server'>Vehicle:SetPhotonNet_Blinker(value)</span></strong>
+    <a name = "VEHICLE:ELS_Siren"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_Siren([val])</span></strong>
     </dt>
     <dd>
-
-
-
+    Sets if the vehicle has siren running.
 
     </ul>
     </ul>
@@ -252,25 +419,30 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">value</span>
-            <span class="types"><span class="type">int</span></span>
-         New Current Signal Value.
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">bool</span></span>
+         New enable state
+         (<em>optional</em>)
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        The set value.
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "Vehicle:GetPhotonNet_Blinker"></a>
-    <strong><span class='state state-client state-server'>Vehicle:GetPhotonNet_Blinker(default)</span></strong>
+    <a name = "VEHICLE:ELS_SirenOption"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_SirenOption([val])</span></strong>
     </dt>
     <dd>
-
-
-
+    Sets the active siren.
 
     </ul>
     </ul>
@@ -280,8 +452,10 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">default</span>
-         Default value if no local value is found.
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">int</span></span>
+         Siren option.
+         (<em>optional</em>)
         </li>
     </ul>
 
@@ -289,7 +463,7 @@
     <ol>
 
            <span class="types"><span class="type">int</span></span>
-        Current Signal Value.
+        The set value.
     </ol>
 
 
@@ -297,13 +471,11 @@
 
 </dd>
     <dt>
-    <a name = "Vehicle:SetPhotonNet_Headlights"></a>
-    <strong><span class='state state-client state-server'>Vehicle:SetPhotonNet_Headlights(value)</span></strong>
+    <a name = "VEHICLE:ELS_SirenSet"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_SirenSet([val])</span></strong>
     </dt>
     <dd>
-
-
-
+    Sets the set of sirens.
 
     </ul>
     </ul>
@@ -313,44 +485,18 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">value</span>
-            <span class="types"><span class="type">bool</span></span>
-         New Current Signal Value.
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Vehicle:GetPhotonNet_Headlights"></a>
-    <strong><span class='state state-client state-server'>Vehicle:GetPhotonNet_Headlights(default)</span></strong>
-    </dt>
-    <dd>
-
-
-
-
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">default</span>
-         Default value if no local value is found.
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">int</span></span>
+         Siren set.
+         (<em>optional</em>)
         </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">bool</span></span>
-        Current Signal Value.
+           <span class="types"><span class="type">int</span></span>
+        The set value.
     </ol>
 
 
@@ -358,13 +504,11 @@
 
 </dd>
     <dt>
-    <a name = "Vehicle:SetPhotonNet_Breaking"></a>
-    <strong><span class='state state-client state-server'>Vehicle:SetPhotonNet_Breaking(value)</span></strong>
+    <a name = "VEHICLE:ELS_AuxSirenSet"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_AuxSirenSet([val])</span></strong>
     </dt>
     <dd>
-
-
-
+    Sets the set of sirens.
 
     </ul>
     </ul>
@@ -374,44 +518,18 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">value</span>
-            <span class="types"><span class="type">bool</span></span>
-         New Current Signal Value.
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Vehicle:GetPhotonNet_Breaking"></a>
-    <strong><span class='state state-client state-server'>Vehicle:GetPhotonNet_Breaking(default)</span></strong>
-    </dt>
-    <dd>
-
-
-
-
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">default</span>
-         Default value if no local value is found.
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">int</span></span>
+         Siren set.
+         (<em>optional</em>)
         </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">bool</span></span>
-        Current Signal Value.
+           <span class="types"><span class="type">int</span></span>
+        The set value.
     </ol>
 
 
@@ -419,13 +537,11 @@
 
 </dd>
     <dt>
-    <a name = "Vehicle:SetPhotonNet_Reversing"></a>
-    <strong><span class='state state-client state-server'>Vehicle:SetPhotonNet_Reversing(value)</span></strong>
+    <a name = "VEHICLE:ELS_HasAuxSiren"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_HasAuxSiren()</span></strong>
     </dt>
     <dd>
-
-
-
+    Checks if the vehicle has aux sirens.
 
     </ul>
     </ul>
@@ -433,27 +549,26 @@
     </ul>
     </ul>
 
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">value</span>
-            <span class="types"><span class="type">bool</span></span>
-         New Current Signal Value.
-        </li>
-    </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
 
 
 
 
 </dd>
     <dt>
-    <a name = "Vehicle:GetPhotonNet_Reversing"></a>
-    <strong><span class='state state-client state-server'>Vehicle:GetPhotonNet_Reversing(default)</span></strong>
+    <a name = "VEHICLE:ELS_Traffic"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_Traffic([val])</span></strong>
     </dt>
     <dd>
-
-
-
+    Gets/Sets Traffic Advisor enable state.
 
     </ul>
     </ul>
@@ -463,16 +578,18 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">default</span>
-         Default value if no local value is found.
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">int</span></span>
+         TA enabled.
+         (<em>optional</em>)
         </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">bool</span></span>
-        Current Signal Value.
+           <span class="types"><span class="type">int</span></span>
+        The set value.
     </ol>
 
 
@@ -480,13 +597,11 @@
 
 </dd>
     <dt>
-    <a name = "Vehicle:SetPhotonNet_Running"></a>
-    <strong><span class='state state-client state-server'>Vehicle:SetPhotonNet_Running(value)</span></strong>
+    <a name = "VEHICLE:ELS_TrafficOption"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_TrafficOption([val])</span></strong>
     </dt>
     <dd>
-
-
-
+    Gets/Sets Traffic Advisor option.
 
     </ul>
     </ul>
@@ -496,44 +611,18 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">value</span>
-            <span class="types"><span class="type">bool</span></span>
-         New Current Signal Value.
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Vehicle:GetPhotonNet_Running"></a>
-    <strong><span class='state state-client state-server'>Vehicle:GetPhotonNet_Running(default)</span></strong>
-    </dt>
-    <dd>
-
-
-
-
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">default</span>
-         Default value if no local value is found.
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">int</span></span>
+         TA direction.
+         (<em>optional</em>)
         </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">bool</span></span>
-        Current Signal Value.
+           <span class="types"><span class="type">int</span></span>
+        The set value.
     </ol>
 
 
@@ -541,13 +630,11 @@
 
 </dd>
     <dt>
-    <a name = "Vehicle:SetPhotonNet_LEStayOn"></a>
-    <strong><span class='state state-client state-server'>Vehicle:SetPhotonNet_LEStayOn(value)</span></strong>
+    <a name = "VEHICLE:ELS_Illuminate"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_Illuminate([val])</span></strong>
     </dt>
     <dd>
-
-
-
+    Gets/Sets illumination enabled.
 
     </ul>
     </ul>
@@ -557,44 +644,18 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">value</span>
-            <span class="types"><span class="type">bool</span></span>
-         New Current Signal Value.
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Vehicle:GetPhotonNet_LEStayOn"></a>
-    <strong><span class='state state-client state-server'>Vehicle:GetPhotonNet_LEStayOn(default)</span></strong>
-    </dt>
-    <dd>
-
-
-
-
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">default</span>
-         Default value if no local value is found.
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">int</span></span>
+         Illumination State.
+         (<em>optional</em>)
         </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">bool</span></span>
-        Current Signal Value.
+           <span class="types"><span class="type">int</span></span>
+        The set value.
     </ol>
 
 
@@ -602,13 +663,11 @@
 
 </dd>
     <dt>
-    <a name = "Vehicle:SetPhotonNet_WheelIndex"></a>
-    <strong><span class='state state-client state-server'>Vehicle:SetPhotonNet_WheelIndex(value)</span></strong>
+    <a name = "VEHICLE:ELS_IlluminateOption"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_IlluminateOption([val])</span></strong>
     </dt>
     <dd>
-
-
-
+    Gets/Sets Illumination option.
 
     </ul>
     </ul>
@@ -618,45 +677,573 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">value</span>
-            <span class="types"><span class="type">bool</span></span>
-         New Current Signal Value.
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Vehicle:GetPhotonNet_WheelIndex"></a>
-    <strong><span class='state state-client state-server'>Vehicle:GetPhotonNet_WheelIndex(default)</span></strong>
-    </dt>
-    <dd>
-
-
-
-
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-    </ul>
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">default</span>
-         Default value if no local value is found.
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">int</span></span>
+         New Illumination Option.
+         (<em>optional</em>)
         </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">bool</span></span>
-        Current Signal Value.
+           <span class="types"><span class="type">int</span></span>
+        The set value.
     </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:ELS_PresetOption"></a>
+    <strong><span class='state state-server'>VEHICLE:ELS_PresetOption([New])</span></strong>
+    </dt>
+    <dd>
+    Gets/Sets the a EMV preset.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">New</span>
+            <span class="types"><span class="type">int</span></span>
+         preset value.
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        The current preset value.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_IsReversing"></a>
+    <strong><span class='state state-client'>VEHICLE:Photon_IsReversing()</span></strong>
+    </dt>
+    <dd>
+    Get if the Vehicle is Reversing.
+
+    </ul>
+    <h3>Warnings:</h3>
+    <ul>
+         <li><span class='tag-warning'>This function will only natively work on the Server or Local Client.</span></li>
+         <li><span class='tag-warning'>It will not work for other players in the Client realm.</span></li>
+         <li><span class='tag-warning'>Instead, a cached value is fetched from the server.</span></li>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_IsBraking"></a>
+    <strong><span class='state state-client'>VEHICLE:Photon_IsBraking()</span></strong>
+    </dt>
+    <dd>
+    Get if the Vehicle is Braking.
+
+    </ul>
+    <h3>Warnings:</h3>
+    <ul>
+         <li><span class='tag-warning'>This function will only natively work on the Server or Local Client.</span></li>
+         <li><span class='tag-warning'>It will not work for other players in the Client realm.</span></li>
+         <li><span class='tag-warning'>Instead, a cached value is fetched from the server.</span></li>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_IsRunning"></a>
+    <strong><span class='state state-client'>VEHICLE:Photon_IsRunning()</span></strong>
+    </dt>
+    <dd>
+    Gets the running lights state.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        The running light state.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_BlinkState"></a>
+    <strong><span class='state state-client'>VEHICLE:Photon_BlinkState()</span></strong>
+    </dt>
+    <dd>
+    Gets the turn signal value.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        Blinker State
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_TurningLeft"></a>
+    <strong><span class='state state-client'>VEHICLE:Photon_TurningLeft()</span></strong>
+    </dt>
+    <dd>
+    Gets if the left turn indicator is enabled
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_TurningRight"></a>
+    <strong><span class='state state-client'>VEHICLE:Photon_TurningRight()</span></strong>
+    </dt>
+    <dd>
+    Gets if the right turn indicator is enabled
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_Hazards"></a>
+    <strong><span class='state state-client'>VEHICLE:Photon_Hazards()</span></strong>
+    </dt>
+    <dd>
+    Gets if the hazard lights are enabled
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_WorldVelocity"></a>
+    <strong><span class='state state-client state-server'>VEHICLE:Photon_WorldVelocity()</span></strong>
+    </dt>
+    <dd>
+    Get the World Localised Velocity
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Vector</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_IsReversing"></a>
+    <strong><span class='state state-server'>VEHICLE:Photon_IsReversing()</span></strong>
+    </dt>
+    <dd>
+    Get if the Vehicle is Reversing.
+
+    </ul>
+    <h3>Warnings:</h3>
+    <ul>
+         <li><span class='tag-warning'>This function will only natively work on the Server or Local Client.</span></li>
+         <li><span class='tag-warning'>It will not work for other players in the Client realm.</span></li>
+         <li><span class='tag-warning'>Instead, a cached value is fetched from the server.</span></li>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_IsBraking"></a>
+    <strong><span class='state state-server'>VEHICLE:Photon_IsBraking()</span></strong>
+    </dt>
+    <dd>
+    Get if the Vehicle is Braking.
+
+    </ul>
+    <h3>Warnings:</h3>
+    <ul>
+         <li><span class='tag-warning'>This function will only natively work on the Server or Local Client.</span></li>
+         <li><span class='tag-warning'>It will not work for other players in the Client realm.</span></li>
+         <li><span class='tag-warning'>Instead, a cached value is fetched from the server.</span></li>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_Signal"></a>
+    <strong><span class='state state-server'>VEHICLE:Photon_Signal([val])</span></strong>
+    </dt>
+    <dd>
+    Set a new signal value.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">int</span></span>
+         New signal value.
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        Set signal value.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_SignalStop"></a>
+    <strong><span class='state state-server'>VEHICLE:Photon_SignalStop()</span></strong>
+    </dt>
+    <dd>
+    Stop any signals.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        New signal value.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_TurnLeft"></a>
+    <strong><span class='state state-server'>VEHICLE:Photon_TurnLeft([bool])</span></strong>
+    </dt>
+    <dd>
+    Set the left signal.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">bool</span>
+            <span class="types"><span class="type">bool</span></span>
+         If the signal should be enabled / disabled / unchanged.
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        New signal value.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_TurnRight"></a>
+    <strong><span class='state state-server'>VEHICLE:Photon_TurnRight([bool])</span></strong>
+    </dt>
+    <dd>
+    Set the right signal.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">bool</span>
+            <span class="types"><span class="type">bool</span></span>
+         If the signal should be enabled / disabled / unchanged.
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        New signal value.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_Hazards"></a>
+    <strong><span class='state state-server'>VEHICLE:Photon_Hazards([If])</span></strong>
+    </dt>
+    <dd>
+    Set the hazard signals.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">If</span>
+            <span class="types"><span class="type">bool</span></span>
+         the signal should be enabled / disabled / unchanged.
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        New signal value.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_IsRunning"></a>
+    <strong><span class='state state-server'>VEHICLE:Photon_IsRunning()</span></strong>
+    </dt>
+    <dd>
+    Gets the running lights state.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        The running light state.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_WheelEnabled"></a>
+    <strong><span class='state state-server'>VEHICLE:Photon_WheelEnabled()</span></strong>
+    </dt>
+    <dd>
+    Get if this vehicle has wheels.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VEHICLE:Photon_PlayerSetWheelIndex"></a>
+    <strong><span class='state state-server'>VEHICLE:Photon_PlayerSetWheelIndex(val)</span></strong>
+    </dt>
+    <dd>
+    Set the wheel index.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">val</span>
+            <span class="types"><span class="type">int</span></span>
+         New wheel index.
+        </li>
+    </ul>
+
 
 
 
