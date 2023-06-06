@@ -318,16 +318,11 @@ Photon.Editor.CreateMenu = function( panel )
 
 	else
 		panel:AddControl( "Header", { Description = "Select a vehicle to modify: " } )
+		panel:AddControl( "Header", { Description = "Imporant Notice: This program is NOT recommened for use by users, this is an extremely dated program that we cannot provide support for. Please use this at your own digression"})
 		buildTargetVehicles( panel )
 		RunConsoleCommand( "photon_express_edit", 0 )
 	end
 end
-
-local photon_cfgbld_name = ""
-local photon_cfgbld_cat = false
-local photon_cfgbld_bge = true
-local photon_cfgbld_liv = true
-local photon_cfgbld_srn = true
 
 CreateClientConVar("photon_cfgbld_name", "", false, false, "Photon Configuration Name")
 CreateClientConVar("photon_cfgbld_cat", "", false, false, "Photon Configuration Category")
@@ -439,14 +434,28 @@ local luaConfigInstructions = [[
 
 concommand.Add( "photon_cfgbld_getlua", function()
 	local ply = LocalPlayer()
+
 	local ent = ply:GetVehicle()
-	if not IsValid( ent ) then chat.AddText( Color(255, 128, 64), "[Photon] You must be driving the vehicle you wish to save the configuration from." ) return end
-	local resultData = ent:Photon_ExportConfiguration( photon_cfgbld_bge, photon_cfgbld_liv, photon_cfgbld_liv, photon_cfgbld_srn, photon_cfgbld_bge )
-	if not resultData then chat.AddText( Color(255, 128, 64), "[Photon] This vehicle is not compatible with Photon Configurations." ) return end
-	local result = EMVU.Configurations.ConfigurationLua( photon_cfgbld_name, photon_cfgbld_cat, LocalPlayer():Name(), resultData )
+	if not IsValid( ent ) then
+		chat.AddText( Color(255, 128, 64), "[Photon] You must be driving the vehicle you wish to save the configuration from." )
+		return
+	end
+
+	local bge = GetConVar("photon_cfgbld_bge"):GetBool()
+	local liv = GetConVar("photon_cfgbld_liv"):GetBool()
+	local srn = GetConVar("photon_cfgbld_srn"):GetBool()
+	local resultData = ent:Photon_ExportConfiguration(bge, liv, liv, srn, bge)
+	if not resultData then
+		chat.AddText(Color(255, 128, 64), "[Photon] This vehicle is not compatible with Photon Configurations." )
+		return
+	end
+
+	local name = GetConVar("photon_cfgbld_name"):GetString()
+	local cat = GetConVar("photon_cfgbld_cat"):GetString()
+	local result = EMVU.Configurations.ConfigurationLua( name, cat, LocalPlayer():Name(), resultData )
 	if result then
 		SetClipboardText( result )
-		chat.AddText( Color(128, 255, 64), string.format( "[Photon] %s has been exported to your clipboard.", tostring( photon_cfgbld_name )  ) )
+		chat.AddText( Color(128, 255, 64), string.format( "[Photon] %s has been exported to your clipboard.", tostring( name )  ) )
 		chat.AddText( Color(255, 255, 255), luaConfigInstructions )
 		return
 	else
