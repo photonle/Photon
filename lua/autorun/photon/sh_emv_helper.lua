@@ -489,19 +489,21 @@ end
 
 do
 	local round = math.Round
+	local clamp = math.Clamp
+	local sin = math.sin
 	local ct = CurTime
 
 	function EMVU.Helper.RotatingLight(speed, offset)
 		return round(ct() * 100) * speed + offset
 	end
-end
 
-function EMVU.Helper:RadiusLight( speed, radius )
-	return math.sin( CurTime() * speed ) * radius
-end
+	function EMVU.Helper.RadiusLight(speed, radius)
+		return sin(ct() * speed) * radius
+	end
 
-function EMVU.Helper:PulsingLight( speed, min, offset )
-	return math.Clamp( ( (math.sin( (CurTime() + offset) * speed ) * .5 ) + .5), min, 1 )
+	function EMVU.Helper.PulsingLight(speed, min, offset)
+		return clamp((sin((ct() + offset) * speed) * .5) + .5, min, 1)
+	end
 end
 
 function EMVU.Helper:GetProps( name, ent )
