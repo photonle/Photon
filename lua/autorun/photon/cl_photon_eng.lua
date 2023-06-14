@@ -217,11 +217,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	end
 
 	lightNormal = ca:Forward()
-	lightNormal:Normalize()
-	local ViewNormal = Vector()
-	ViewNormal:Set(worldPos)
-	ViewNormal:Sub(useEyePos)
-	ViewNormal:Normalize()
+	local ViewNormal = (worldPos - useEyePos):GetNormalized()
 	viewDot = ViewNormal:Dot(lightNormal)
 
 	if viewDot and viewDot >= 0 then
