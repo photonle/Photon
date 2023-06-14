@@ -39,13 +39,6 @@ local up1 = Vector()
 local photonRenderTable = {}
 local photonDynamicLights = {}
 
--- Import EMV libraries.
-local rotatingLight, pulsingLight, emvHelp
-if EMVU and istable(EMVU.Helper) then
-	rotatingLight = EMVU.Helper.RotatingLight
-	pulsingLight = EMVU.Helper.PulsingLight
-	emvHelp = EMVU.Helper
-end
 
 -- And helper functions.
 local function getViewFlare(dot, brght)
@@ -56,6 +49,13 @@ local function getViewFlare(dot, brght)
 	return pow(calc, 1.01) * .025
 end
 
+-- Import EMV libraries.
+local rotatingLight, pulsingLight, emvHelp
+if EMVU and istable(EMVU.Helper) then
+	rotatingLight = EMVU.Helper.RotatingLight
+	pulsingLight = EMVU.Helper.PulsingLight
+	emvHelp = EMVU.Helper
+end
 hook.Add("InitPostEntity", "Photon.AddHelperLocalVars", function()
 	rotatingLight = EMVU.Helper.RotatingLight
 	pulsingLight = EMVU.Helper.PulsingLight
