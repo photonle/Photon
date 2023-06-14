@@ -578,12 +578,6 @@ local endCam2d = cam.End2D
 local endCam3d = cam.End3D
 local draw_effects = GetConVar("photon_lens_effects")
 
-hook.Add("InitPostEntity", "Photon.DrawEffectsConvar", function()
-	draw_effects = GetConVar("photon_lens_effects")
-	bloom_multi = GetConVar("photon_bloom_modifier")
-	dynlights_enabled = GetConVar("photon_dynamic_lights")
-end)
-
 function Photon:RenderQueue(effects)
 	local eyePos = EyePos()
 	local eyeAng = EyeAngles()
