@@ -235,14 +235,18 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	end
 
 	-- store our normal, as the lamp's forward
-	lightNormal = ca:Forward()
+	lightNormal = ca:Forward():GetNormalized()
 	local ViewNormal = (worldPos - useEyePos):GetNormalized()
 	viewDot = ViewNormal:Dot(lightNormal)
 	-- dot product the world position of the light, minus our difference in eye position, with the normal of the light, which gives us a view "percentage", how "aimed at the player" it is.
 	-- print(viewDot)
-	debugoverlay.Sphere(worldPos, 0.1, 0.1)
-	debugoverlay.Line(worldPos, worldPos + (lightNormal * 3), 0.1)
-	print(viewDot)
+	debugoverlay.Sphere(worldPos, 0.1, 0.01, Color(255, 255, 255), true)
+	debugoverlay.Line(worldPos, worldPos + (lightNormal * 3), 0.01, Color(255, 255, 255), true)
+	-- print(viewDot)
+
+	if PHOTON_DEBUG then
+		viewDot = 1
+	end
 
 	if not viewDot or viewDot <= 0 then
 		return
