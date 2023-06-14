@@ -1,5 +1,17 @@
 
 function Photon:SetupCar( ent, index )
+	function ent:CAR_IsBlackedOut()
+		if self.IsEMV and self:IsEMV() then
+			// Lookup ELS Blackup State
+			local hasELS = self:HasPhotonELS()
+			if hasELS and self.ELS.Blackout then
+				return true
+			end
+		end
+
+		return false
+	end
+
 	// whether car headlights are on or off
 	function ent:CAR_Headlights( val )
 		if not IsValid( self ) then return false end
@@ -67,9 +79,9 @@ function Photon:SetupCar( ent, index )
 	function ent:IsBraking( )
 		if not IsValid( self ) then return false end
 		if self:IsReversing() then return false end
-		local speed = self:GetPhysicsObject():GetVelocity():Length()
-		if not self.LastSpeed then self.LastSpeed = speed return false end
-		if (self.LastSpeed - speed) >= 0 and ( self:GetDriver():KeyDown( IN_BACK ) and not self:IsReversing() ) or ( self:GetDriver():KeyDown( IN_BACK) and self:Photon_AdjustedSpeed() < 2 ) or self:GetDriver():KeyDown( IN_JUMP ) then
+		--local speed = self:GetPhysicsObject():GetVelocity():Length()
+		local vel = self:WorldToLocal(self:GetVelocity()+self:GetPos())
+		if (self:GetDriver():KeyDown( IN_BACK ) and vel.y > 1) or (self:GetDriver():KeyDown( IN_FORWARD ) and vel.y < -1) or self:GetDriver():KeyDown( IN_JUMP ) then
 			return true
 		end
 		return false
@@ -79,14 +91,9 @@ function Photon:SetupCar( ent, index )
 		if not IsValid( self ) then return false end
 		if self:GetDriver() and self:GetDriver():IsValid() and self:GetDriver():IsPlayer() then
 			local ply = self:GetDriver()
-			local velocity = self:GetPhysicsObject():GetVelocity()
-			velocity:Normalize()
-			local direction = self:GetForward()
-			local sum = Vector()
-			sum.x = velocity.x * direction.x
-			sum.y = velocity.y * direction.y
-			if not (sum.x >= 0 and sum.y >= 0) then
-				if (ply:KeyDown( IN_BACK ) and (ent:Photon_AdjustedSpeed() > 10)) and not ply:KeyDown( IN_JUMP ) then return true end
+			local vel = self:WorldToLocal(self:GetVelocity()+self:GetPos())
+			if (vel.y < 1 and ply:KeyDown( IN_BACK )) then
+				return true
 			end
 		end
 		return false

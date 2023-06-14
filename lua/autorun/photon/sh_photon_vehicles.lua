@@ -38,6 +38,17 @@ function Photon:EntityCreated( ent )
 					timer.Stop( timerId )
 					timer.Destroy( timerId )
 				end
+				if timer.RepsLeft( timerId ) == 0 and CLIENT then
+					local class = ent:GetVehicleClass()
+					local lst = list.Get("Vehicles")[class]
+					if lst and istable(lst) then
+						ent.VehicleTable = lst
+						Photon:SpawnedVehicle( ent )
+						EMVU:SpawnedVehicle( ent )
+						timer.Stop( timerId )
+						timer.Destroy( timerId )
+					end
+				end
 				if timer.RepsLeft( timerId ) == 0 and SERVER then
 					local default = Photon:RecoverVehicleTable( ent )
 					if default then

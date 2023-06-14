@@ -1,5 +1,6 @@
 AddCSLuaFile()
 
+EMVU.Attributes = {}
 EMVU.Lamps = {}
 EMVU.Patterns = {}
 EMVU.LightMeta = {}

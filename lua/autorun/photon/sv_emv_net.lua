@@ -28,61 +28,73 @@ EMVU.Net = {}
 
 function EMVU.Net:Lights( ply, args )
 	if not ply:InVehicle() then return end
+
 	local emv = ply:GetVehicle()
 	if not emv:IsEMV() then return end
-	if args == "on" then
+
+	if args == EMVU_NET_ELS_ON then
 		emv:ELS_LightsOn()
-	elseif args == "off" then
+	elseif args == EMVU_NET_ELS_OFF then
 		emv:ELS_LightsOff()
-	elseif args == "tog" then
+	elseif args == EMVU_NET_ELS_FORWARD then
 		emv:ELS_LightsToggle()
-	elseif args == "togback" then
+	elseif args == EMVU_NET_ELS_REVERSE then
 		emv:ELS_LightsToggleBack()
 	end
 end
 net.Receive("emvu_el", function(len, ply)
-	EMVU.Net:Lights( ply, net.ReadString() )
+	EMVU.Net:Lights( ply, net.ReadUInt(2) )
 end)
 
+local sirens = {
+	[EMVU_NET_SIREN_SET_1] = 1,
+	[EMVU_NET_SIREN_SET_2] = 2,
+	[EMVU_NET_SIREN_SET_3] = 3,
+	[EMVU_NET_SIREN_SET_4] = 4
+}
 function EMVU.Net:Siren( ply, args )
 	local emv = ply:GetVehicle()
 	if not emv:IsEMV() then return end
-	local argNum = tonumber( args )
-	if args == "on" then
-		emv:ELS_SirenOn()
-	elseif args == "off" then
+
+	if args == EMVU_NET_SIREN_OFF then
 		emv:ELS_SirenOff()
-	elseif args == "tog" then
+	elseif args == EMVU_NET_SIREN_ON then
+		emv:ELS_SirenOn()
+	elseif args == EMVU_NET_SIREN_FORWARD then
 		emv:ELS_SirenToggle()
-	elseif args == "togback" then
+	elseif args == EMVU_NET_SIREN_REVERSE then
 		emv:ELS_SirenToggleBack()
-	elseif args == "hon" then
+	elseif args == EMVU_NET_SIREN_HORN_ON then
 		emv:ELS_HornOn()
-	elseif args == "hoff" then
+	elseif args == EMVU_NET_SIREN_HORN_OFF then
 		emv:ELS_HornOff()
-	elseif isnumber( argNum ) then
-		emv:ELS_SirenToggle( argNum )
+	else
+		local siren = sirens[args]
+		if siren then
+			emv:ELS_SirenToggle(siren)
+		end
 	end
 end
 net.Receive("emvu_siren", function( len, ply )
-	EMVU.Net:Siren( ply, net.ReadString() )
+	EMVU.Net:Siren( ply, net.ReadUInt(4) )
 end)
 
 function EMVU.Net:Illumination( ply, args )
 	local emv = ply:GetVehicle()
 	if not emv:IsEMV() then return end
-	if args=="on" then
+
+	if args == EMVU_NET_ILLUM_ON then
 		emv:ELS_IllumOn()
-	elseif args == "off" then
+	elseif args == EMVU_NET_ILLUM_OFF then
 		emv:ELS_IllumOff()
-	elseif args == "tog" then
+	elseif args == EMVU_NET_ILLUM_FORWARD then
 		emv:ELS_IllumToggle()
-	elseif args == "togback" then
+	elseif args == EMVU_NET_ILLUM_REVERSE then
 		emv:ELS_IllumToggleBack()
 	end
 end
 net.Receive("emvu_illum", function( len, ply )
-	EMVU.Net:Illumination( ply, net.ReadString() )
+	EMVU.Net:Illumination( ply, net.ReadUInt(2) )
 end)
 
 function EMVU.Net:Traffic( ply, args )
@@ -104,7 +116,7 @@ end)
 
 function EMVU.Net:SirenSet( ply )
 	local emv = net.ReadEntity()
-	local recv = net.ReadInt(8)
+	local recv = net.ReadUInt(9)
 	local isAux = net.ReadBool()
 	if not emv:IsEMV() or not can_change_siren_model:GetBool() then return end
 	local modifyBlocked = hook.Call( "Photon.CanPlayerModify", GM, ply, emv )

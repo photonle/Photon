@@ -9,6 +9,27 @@ EMVU.Selections = {}
 EMVU.Configurations = {}
 EMVU.LicensePlates = {}
 
+EMVU_NET_SIREN_OFF = 0
+EMVU_NET_SIREN_ON = 1
+EMVU_NET_SIREN_FORWARD = 2
+EMVU_NET_SIREN_REVERSE = 3
+EMVU_NET_SIREN_SET_1 = 4
+EMVU_NET_SIREN_SET_2 = 5
+EMVU_NET_SIREN_SET_3 = 6
+EMVU_NET_SIREN_SET_4 = 7
+EMVU_NET_SIREN_HORN_ON = 8
+EMVU_NET_SIREN_HORN_OFF = 9
+
+EMVU_NET_ELS_OFF = 0
+EMVU_NET_ELS_ON = 1
+EMVU_NET_ELS_FORWARD = 2
+EMVU_NET_ELS_REVERSE = 3
+
+EMVU_NET_ILLUM_OFF = 0
+EMVU_NET_ILLUM_ON = 1
+EMVU_NET_ILLUM_FORWARD = 2
+EMVU_NET_ILLUM_REVERSE = 3
+
 AddCSLuaFile( "sh_emv_init.lua" )
 AddCSLuaFile( "sh_emv_meta.lua" )
 AddCSLuaFile( "sh_emv_vehicles.lua")
@@ -69,4 +90,3 @@ EMVU.Configurations.Supported = {
 	["2016 Ford Police Interceptor Utility"] = "fpiu16",
 	["Ford Taurus 2013"] = "fpis13",
 }
-

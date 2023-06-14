@@ -10,8 +10,31 @@ local istable = istable
 local pairs = pairs
 local tostring = tostring
 local math = math
+local insert = table.insert
 
 local printedErrors = {}
+
+--- Resolve a table, which is in either Map<idx, value>, (idx, value)[] or a mix, to be output in (idx, value)[] format, allowing for ipairs.
+-- @tab tab Input table.
+-- @rtab
+function EMVU.Helper.ResolveTable(tab)
+	if not istable(tab) then
+		PhotonWarning("Non table passed to ResolveTable")
+		PhotonWarning(debug.traceback())
+		return tab
+	end
+
+	local out = {}
+	for idx, value in pairs(tab) do
+		if istable(value) then
+			insert(out, value)
+		else
+			insert(out, {idx, value})
+		end
+	end
+
+	return out
+end
 
 function EMVU.Helper.GetAlertSequence( name, vehicle )
 	local resultTable = {}
@@ -560,6 +583,8 @@ function EMVU.Helper:GetProps( name, ent )
 						propData.Pos = component.Pos
 						propData.Ang = component.Ang
 						propData.Scale = component.Scale
+						propData.RenderGroup = component.RenderGroup
+						propData.RenderMode = component.RenderMode
 						propData.Skin = component.Skin or propData.Skin
 						propData.BodyGroups = component.BodyGroups or propData.BodyGroups
 						propData.SubMaterials = component.SubMaterials or propData.SubMaterials
@@ -720,4 +745,13 @@ function EMVU.Helper.GetSubProps(car)
 		end
 	end
 	return out
+end
+
+-- Returns whether or not the "Alert Mode" should automatically
+-- adjust light patterns.
+function EMVU.Helper.GetAlertModeEnabled( name )
+	-- TODO: Remove below line before publishing update
+	if not istable(EMVU.Attributes[ name ]) then print("[Photon] ERROR: No Attributes table found for: " .. tostring(name) .. ". Please notify @schmal if you see this.") end
+	if (istable(EMVU.Attributes[ name ]) and (EMVU.Attributes[ name ].DisableAlertPatterns)) then return false end
+	return true
 end

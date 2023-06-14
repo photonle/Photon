@@ -192,7 +192,7 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_GetELSequence()
 		if not IsValid( self ) then return false end
 		local result
-		if self:Photon_AlertMode() then
+		if self:Photon_AlertMode() and EMVHelper.GetAlertModeEnabled(self.VehicleName) then
 			result = EMVHelper.GetAlertSequence( self.VehicleName, self )
 		else
 			local option = self:Photon_LightOption()
@@ -1005,5 +1005,293 @@ function EMVU:MakeEMV( emv, name )
 	emv:Photon_SetupEMVProps()
 	emv.PhotonFinishedInit = true
 end
+
+local nextDoppler = 0
+local thirdPersonVolume = 0.6
+local interiorVolume = 0.2
+local fadeDist = 4500
+local updateRate = 0.1
+local sirenTypes = {
+	"EMVU_Siren",
+	"EMVU_Siren2",
+	"EMVU_ManualSiren",
+	"EMVU_Horn"
+}
+
+hook.Add( "PreDrawTranslucentRenderables", "Photon.ELS_SirenDoppler_FixEyePos", function()
+	EyePos()
+end )
+
+hook.Add("Think", "Photon.ELS_SirenDoppler", function()
+	if nextDoppler < CurTime() then
+	local ply = LocalPlayer()
+	local pos = EyePos()
+	local viewEnt = GetViewEntity() or LocalPlayer()
+	local camVel = viewEnt:GetVelocity() or 0
+
+	local plyVeh = false
+	if viewEnt == ply then
+		plyVeh = ply:GetVehicle()
+	end
+		for _,v in ipairs(EMVU:AllVehicles()) do
+			for idx, sirenType in ipairs(sirenTypes) do
+				local currentSiren = v[sirenType]
+				if currentSiren then
+					local driver = v:GetDriver()
+					local spos = v:GetPos()
+					local doppler = ((pos:Distance(spos+camVel)-pos:Distance(spos+v:GetVelocity()))/200)
+					if IsValid(plyVeh) then
+						if plyVeh:GetParent() == v then
+							doppler = 0
+						end
+					end
+					updateRate = FrameTime()
+
+					if (IsValid(driver) and driver ~= viewEnt) or !IsValid(driver) then
+						local distBehind = v:WorldToLocal(viewEnt:GetPos())[2]
+
+						if IsValid(plyVeh) then
+							if plyVeh:GetParent() == v then
+								if currentSiren:GetVolume() ~= thirdPersonVolume and plyVeh:GetThirdPersonMode() then
+									currentSiren:ChangeVolume(thirdPersonVolume, updateRate)
+								elseif currentSiren:GetVolume() ~= interiorVolume and !plyVeh:GetThirdPersonMode() then
+									currentSiren:ChangeVolume(interiorVolume, updateRate)
+								end
+							end
+						else
+							if currentSiren:GetVolume() ~= 1 and distBehind > 0 then
+								currentSiren:ChangeVolume(1, updateRate)
+							elseif distBehind < 0 then
+								currentSiren:ChangeVolume(math.Clamp(1 + (distBehind/fadeDist), 0.05, 1), updateRate)
+							end
+						end
+
+						if math.abs(doppler) > 1 then
+								currentSiren:ChangePitch(math.Clamp(100 + doppler, 50, 150), updateRate)
+							elseif currentSiren:GetPitch() ~= 100 then
+								currentSiren:ChangePitch(100, updateRate)
+						end
+					else
+						if currentSiren:GetPitch() ~= 100 then
+							currentSiren:ChangePitch(100)
+						end
+						if currentSiren:GetVolume() ~= thirdPersonVolume and v:GetThirdPersonMode() then
+							currentSiren:ChangeVolume(thirdPersonVolume, updateRate)
+						elseif currentSiren:GetVolume() ~= interiorVolume and !v:GetThirdPersonMode() then
+							currentSiren:ChangeVolume(interiorVolume, updateRate)
+						end
+					end
+				end
+			end
+		end
+		nextDoppler = CurTime() + updateRate
+	end
+end)
+
+net.Receive("Photon.ELS_PlaySiren", function()
+	local ent = net.ReadEntity()
+	if IsValid(ent) and !IsValid(ent.EMVU_Siren) then
+		local sound = net.ReadString()
+		local volume = net.ReadFloat()
+		ent.EMVU_Siren = CreateSound(ent, sound)
+		ent.EMVU_Siren:SetSoundLevel( volume * 1.8 )
+		if ent:GetThirdPersonMode() then
+			ent.EMVU_Siren:PlayEx(thirdPersonVolume, 100)
+		elseif !ent:GetThirdPersonMode() then
+			ent.EMVU_Siren:PlayEx(interiorVolume, 100)
+		else
+			ent.EMVU_Siren:PlayEx(1, 100)
+		end
+		--ent.EMVU_Siren:ChangeVolume(0)
+		--ent.EMVU_Siren:SetDSP(1)
+		ent:CallOnRemove("StopSiren", function(ent)
+			if ent.EMVU_Siren then
+				ent.EMVU_Siren:Stop()
+			end
+		end)
+	--ent.ELS.Siren = siren
+	end
+end)
+
+net.Receive("Photon.ELS_StopSiren", function()
+	local ent = net.ReadEntity()
+	if IsValid(ent) then
+		if ent.EMVU_Siren then
+			ent.EMVU_Siren:Stop()
+			ent.EMVU_Siren = nil
+		end
+	end
+end)
+
+net.Receive("Photon.ELS_PlaySiren2", function()
+	local ent = net.ReadEntity()
+	if IsValid(ent) and !IsValid(ent.EMVU_Siren2) then
+		local sound = net.ReadString()
+		local volume = net.ReadFloat()
+		ent.EMVU_Siren2 = CreateSound(ent, sound)
+		ent.EMVU_Siren2:SetSoundLevel( volume * 1.25 )
+		if ent:GetThirdPersonMode() then
+			ent.EMVU_Siren2:PlayEx(thirdPersonVolume, 100)
+		elseif !ent:GetThirdPersonMode() then
+			ent.EMVU_Siren2:PlayEx(interiorVolume, 100)
+		else
+			ent.EMVU_Siren2:PlayEx(1, 100)
+		end
+		--ent.EMVU_Siren:ChangeVolume(0)
+		--ent.EMVU_Siren:SetDSP(129)
+		ent:CallOnRemove("StopSiren2", function(ent)
+			if ent.EMVU_Siren2 then
+				ent.EMVU_Siren2:Stop()
+			end
+		end)
+	end
+	--ent.ELS.Siren = siren
+end)
+
+net.Receive("Photon.ELS_StopSiren2", function()
+	local ent = net.ReadEntity()
+	if IsValid(ent) then
+		if ent.EMVU_Siren2 then
+			ent.EMVU_Siren2:Stop()
+			ent.EMVU_Siren2 = nil
+		end
+	end
+end)
+
+net.Receive("Photon.ELS_PlayManual", function()
+	local ent = net.ReadEntity()
+	if IsValid(ent) and !IsValid(ent.EMVU_ManualSiren) then
+		local sound = net.ReadString()
+		local volume = net.ReadFloat()
+		ent.EMVU_ManualSiren = CreateSound(ent, sound)
+		ent.EMVU_ManualSiren:SetSoundLevel( volume * 1.25 )
+		if ent:GetThirdPersonMode() then
+			ent.EMVU_ManualSiren:PlayEx(thirdPersonVolume, 100)
+		elseif !ent:GetThirdPersonMode() then
+			ent.EMVU_ManualSiren:PlayEx(interiorVolume, 100)
+		else
+			ent.EMVU_ManualSiren:PlayEx(1, 100)
+		end
+
+		if ent.EMVU_Siren then
+			ent.EMVU_Siren:Stop()
+		end
+
+		ent:CallOnRemove("StopManualSiren", function(ent)
+			if ent.EMVU_ManualSiren then
+				ent.EMVU_ManualSiren:Stop()
+			end
+		end)
+	--ent.ELS.Siren = siren
+	end
+end)
+
+net.Receive("Photon.ELS_StopManual", function()
+	local ent = net.ReadEntity()
+	if IsValid(ent) then
+		if ent.EMVU_Siren then
+			if ent:GetThirdPersonMode() then
+				ent.EMVU_Siren:PlayEx(thirdPersonVolume, 100)
+			elseif !ent:GetThirdPersonMode() then
+				ent.EMVU_Siren:PlayEx(interiorVolume, 100)
+			else
+				ent.EMVU_Siren:PlayEx(1, 100)
+			end
+		end
+
+		if ent.EMVU_ManualSiren then
+			ent.EMVU_ManualSiren:Stop()
+			ent.EMVU_ManualSiren = nil
+		end
+	end
+end)
+
+net.Receive("Photon.ELS_PlayHorn", function()
+	local ent = net.ReadEntity()
+	if IsValid(ent) and !IsValid(ent.EMVU_Horn) then
+		local sound = net.ReadString()
+		local volume = net.ReadFloat()
+		ent.EMVU_Horn = CreateSound(ent, sound)
+		ent.EMVU_Horn:SetSoundLevel( volume * 1.25 )
+		if ent:GetThirdPersonMode() then
+			ent.EMVU_Horn:PlayEx(thirdPersonVolume, 100)
+		elseif !ent:GetThirdPersonMode() then
+			ent.EMVU_Horn:PlayEx(interiorVolume, 100)
+		else
+			ent.EMVU_Horn:PlayEx(1, 100)
+		end
+		ent:CallOnRemove("StopHorn", function(ent)
+			if ent.EMVU_Horn then
+				ent.EMVU_Horn:Stop()
+			end
+		end)
+		--ent.ELS.Siren = siren
+	end
+end)
+
+net.Receive("Photon.ELS_StopHorn", function()
+	local ent = net.ReadEntity()
+	if IsValid(ent) then
+		if ent.EMVU_Horn then
+			ent.EMVU_Horn:Stop()
+			ent.EMVU_Horn = nil
+		end
+	end
+end)
+
+hook.Add("NotifyShouldTransmit", "Photon.ShouldTransmitSirens", function(ent, shouldtransmit)
+
+	if ent:GetNW2String("PhotonLE.Siren_Sound") ~= "" and !IsValid(ent.EMVU_Siren) then
+		local sound = ent:GetNW2String("PhotonLE.Siren_Sound")
+		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
+		ent.EMVU_Siren = CreateSound(ent, sound)
+		ent.EMVU_Siren:SetSoundLevel( volume * 0.05 )
+		ent.EMVU_Siren:PlayEx(1, 100)
+		ent:CallOnRemove("StopSiren", function(ent)
+			if ent.EMVU_Siren then
+				ent.EMVU_Siren:Stop()
+			end
+		end)
+	end
+
+	if ent:GetNW2String("PhotonLE.Siren2_Sound") ~= "" and !IsValid(ent.EMVU_Siren2) then
+		local sound = ent:GetNW2String("PhotonLE.Siren2_Sound")
+		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
+		ent.EMVU_Siren2 = CreateSound(ent, sound)
+		ent.EMVU_Siren2:SetSoundLevel( volume * 0.05 )
+		ent.EMVU_Siren2:PlayEx(1, 100)
+		ent:CallOnRemove("StopSiren2", function(ent)
+			if ent.EMVU_Siren2 then
+				ent.EMVU_Siren2:Stop()
+			end
+		end)
+	end
+
+	if ent:GetNW2String("PhotonLE.Manual_Sound") ~= "" and !IsValid(ent.EMVU_ManualSiren) then
+		local sound = ent:GetNW2String("PhotonLE.Manual_Sound")
+		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
+		ent.EMVU_ManualSiren = CreateSound(ent, sound)
+		ent.EMVU_ManualSiren:SetSoundLevel( volume * 0.05 )
+		ent.EMVU_ManualSiren:PlayEx(1, 100)
+		ent:CallOnRemove("StopManualSiren", function(ent)
+			if ent.EMVU_ManualSiren then
+				ent.EMVU_ManualSiren:Stop()
+			end
+		end)
+	end
+
+	if ent:GetNW2String("PhotonLE.Horn_Sound") ~= "" and !IsValid(ent.EMVU_Horn) then
+		local sound = ent:GetNW2String("PhotonLE.Horn_Sound")
+		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
+		ent.EMVU_Horn = CreateSound(ent, sound)
+		ent.EMVU_Horn:SetSoundLevel( volume * 0.05 )
+		ent.EMVU_Horn:PlayEx(1, 100)
+		ent:CallOnRemove("StopHorn", function(ent)
+			if ent.EMVU_Horn then
+				ent.EMVU_Horn:Stop()
+			end
+		end)
+	end
+end)
 
 photonLightModels = {}
