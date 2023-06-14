@@ -196,10 +196,20 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	-- normal angle, as relating to the light.
 	local lightNormal = Angle()
 
+	local lnMtx = Matrix()
+	lnMtx:SetAngles(ca)
+	lnMtx:Rotate(Angle(0, -90, 0))
+	local lnRMtx = Matrix()
+	lnMtx:Rotate(lang)
+	ca = lnMtx:GetAngles()
+
 	if legacy and not contingent then
 		-- basic bitch lamp.
 		-- rotate our light around up, by whatever offset we have.
-		ca:RotateAroundAxis(parent:GetUp(), lang.y + offset)
+		-- ca:RotateAroundAxis(parent:GetUp(), lang.y + offset)
+		-- ca:RotateAroundAxis(parent:GetForward(), lang.r)
+		-- ca:RotateAroundAxis(parent:GetRight(), -lang.p)
+		ca = ca + lang
 	elseif contingent then
 		-- bone attached, so just attach it to the bone ig?
 		ca:RotateAroundAxis(parent:GetUp(), lang.r + 180)
