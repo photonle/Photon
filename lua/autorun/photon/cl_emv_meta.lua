@@ -10,10 +10,10 @@ if EMVU.Colors then EMVColors = EMVU.Colors end
 local EMVHelper = nil
 if EMVU.Helper then EMVHelper = EMVU.Helper end
 
-hook.Add( "InitPostEntity", "PhotonEMV.LocalColorSet", function()
-	EMVColors = EMVU.Colors;
-	EMVHelper = EMVU.Helper;
-end )
+hook.Add("InitPostEntity", "PhotonEMV.LocalColorSet", function()
+	EMVColors = EMVU.Colors
+	EMVHelper = EMVU.Helper
+end)
 
 local IsValid = IsValid
 local tostring = tostring
@@ -26,7 +26,7 @@ local pairs = pairs
 local christmasMode = GetConVar( "photon_christmas_mode" )
 
 hook.Add( "InitPostEntity", "Photon.CLEMVMETASettings", function()
-	christmasMode = GetConVar( "photon_christmas_mode" )
+	christmasMode = GetConVar("photon_christmas_mode")
 end)
 
 local printedErrors = {}
@@ -38,11 +38,6 @@ function EMVU:MakeEMV( emv, name )
 	if name == "1" then return end
 
 	-- Datatable Functions --
-
-	function emv:Photon_Lights()
-		if not IsValid( self ) then return false end
-		return self:GetNW2Bool("PhotonLE.EMV_LIGHTS_ON", false)
-	end
 
 	function emv:Photon_LightOption()
 		if not IsValid( self ) then return 1 end
@@ -536,23 +531,28 @@ function EMVU:MakeEMV( emv, name )
 			local skipComponents = {}
 			local skipELIndexes = {}
 
-			if self:Photon_HasTrafficAdvisor() then
-				if self:Photon_TrafficAdvisor() then
-					local taSequence = self:Photon_GetTASequence()
+			if self:Photon_HasTrafficAdvisor() and self:Photon_TrafficAdvisor() then
+				local taSequence = self:Photon_GetTASequence()
 
-					for index, light in pairs( taSequence ) do
-						skipComponents[index] = true
-						local frame = self:Photon_GetFrame( index, light, increment )
-						if frame then table.Add( RenderTable, self:Photon_GetLightSection( index, frame ) ) end
-					end
-
-					local disconnectTable = EMVU.Helper:GetTrafficELDisconnect( self.VehicleName, self:Photon_TrafficAdvisorOption() )
-					if istable( disconnectTable ) then
-						for i=1, #disconnectTable do
-							skipELIndexes[ disconnectTable[ i ] ] = true
+				for index, light in pairs( taSequence ) do
+					skipComponents[index] = true
+					local frame = self:Photon_GetFrame( index, light, increment )
+					if frame then
+						if istable(frame) then
+							for _, idx in ipairs(frame) do
+								table.Add(RenderTable, self:Photon_GetLightSection(index, idx))
+							end
+						else
+							table.Add( RenderTable, self:Photon_GetLightSection( index, frame ) )
 						end
 					end
+				end
 
+				local disconnectTable = EMVU.Helper:GetTrafficELDisconnect( self.VehicleName, self:Photon_TrafficAdvisorOption() )
+				if istable( disconnectTable ) then
+					for i=1, #disconnectTable do
+						skipELIndexes[ disconnectTable[ i ] ] = true
+					end
 				end
 			end
 
