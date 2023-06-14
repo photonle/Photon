@@ -487,8 +487,13 @@ function EMVU.Helper:Photon_GetLightSection( name, component, frame, skip )
 	end
 end
 
-function EMVU.Helper:RotatingLight( speed, offset )
-	return math.Round( CurTime() * 100 ) * speed + offset
+do
+	local round = math.Round
+	local ct = CurTime
+
+	function EMVU.Helper.RotatingLight(speed, offset)
+		return round(ct() * 100) * speed + offset
+	end
 end
 
 function EMVU.Helper:RadiusLight( speed, radius )
