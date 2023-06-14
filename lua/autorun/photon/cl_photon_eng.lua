@@ -118,9 +118,10 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 
 	-- Store the local pos, locally.
 	lpos:Set(ilpos)
-	local rotating = false
 
-	if offset == "R" or offset == "RR" then
+	-- Check if we're a rotating light.
+	local rotating = offset == "R" or offset == "RR"
+	if rotating then
 		local speed = 2
 
 		if meta.Speed then
