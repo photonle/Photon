@@ -83,6 +83,17 @@ function Photon:ClearLightQueue()
 	table.Empty(photonDynamicLights)
 end
 
+--- Prepare a vehicle light for rendering.
+-- @veh parent Vehicle the light is being rendered on.
+-- @tab incolors EMVColors reference of the light to be rendered.
+-- @vec ilpos Local Light Position
+-- @vec gpos Global Light Position
+-- @ang lang Light Angle
+-- @tab Light Meta Details
+-- @number pixvis Light Visibility.
+-- @int lnum Dynamic Light Index
+-- @number brght Light Brightness
+-- @bool multicolor If the light is multicolour.
 function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent)
 	if not incolors or not ilpos or not lang or not meta or not gpos then return end
 
