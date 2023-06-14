@@ -153,7 +153,6 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	-- local worldPos = parent:LocalToWorld(lpos)
 	-- visible = 1
 	--visible = utilPixVis( worldPos, visRadius, pixvis )
-	visible = pixvis
 
 	-- visible = 1
 	if visible and visible > 0 then
