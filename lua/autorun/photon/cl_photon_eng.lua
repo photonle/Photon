@@ -181,10 +181,12 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 
 	if not visible or visible <= 0 then return end
 
+	-- todo: move this assert into the meta loader.
 	if not meta.Scale then
 		meta.Scale = 1
 	end
 
+	-- todo: move this assert into the meta loader.
 	if not meta.WMult then
 		meta.WMult = 1
 	end
