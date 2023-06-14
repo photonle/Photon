@@ -216,6 +216,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		end
 	end
 
+	-- store our normal, as the lamp's forward
 	lightNormal = ca:Forward()
 	local ViewNormal = (worldPos - useEyePos):GetNormalized()
 	viewDot = ViewNormal:Dot(lightNormal)
