@@ -20,7 +20,15 @@ local setMaterial = render.SetMaterial
 local drawSprite = render.DrawSprite
 
 -- Localise ConVars
-local bloom_multi = GetConVar("photon_bloom_modifier")
+local bloom_mult = 1
+local bloom_mult_cvar = GetConVar("photon_bloom_modifier")
+if IsValid(bloom_mult_cvar) then
+	bloom_mult = bloom_mult_cvar:GetFloat()
+end
+cvars.AddChangeCallback("photon_bloom_modifier", function(_, _, new)
+	bloom_mult = tonumber(new) or 1
+end)
+
 local dynlights_enabled = GetConVar("photon_dynamic_lights")
 
 -- Local Variables
