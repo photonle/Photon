@@ -109,7 +109,9 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 
 	local legacy = not meta.NoLegacy
 
+	-- by ref pass?
 	local colors = incolors
+	-- get our offset angle
 	local offset = meta.AngleOffset
 	-- bloom shit
 	local manualBloom = bloom_mult
