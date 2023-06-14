@@ -211,6 +211,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 			ca:RotateAroundAxis(parent:GetUp(), lang.y)
 		elseif meta.DirAxis and rotating then
 			-- rotating around a specific axis, but offset by the rotating offset.
+			ca:RotateAroundAxis(parent["Get" .. meta.DirAxis](parent), lang.r - meta.DirOffset + offset)
 			ca:RotateAroundAxis(parent:GetUp(), lang.y)
 		end
 	end
