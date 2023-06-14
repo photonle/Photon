@@ -58,11 +58,11 @@ local function getViewFlare(dot, brght)
 end
 
 -- Import EMV libraries.
-local rotatingLight, pulsingLight, emvHelp
+local rotatingLight, pulsingLight, radiusLight
 if EMVU and istable(EMVU.Helper) then
 	rotatingLight = EMVU.Helper.RotatingLight
 	pulsingLight = EMVU.Helper.PulsingLight
-	emvHelp = EMVU.Helper
+	radiusLight = EMVU.Helper.RadiusLight
 end
 hook.Add("InitPostEntity", "Photon.AddHelperLocalVars", function()
 	rotatingLight = EMVU.Helper.RotatingLight
