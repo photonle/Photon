@@ -140,8 +140,8 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 
 	local viewDot = 0
 	-- local visible = 1
-	local visible = 0
 	local viewPercent = 0
+	local visible = EMV_DEBUG and 1 or pixvis
 
 	if offset == "RR" then
 		local lposMod = radiusLight(1, 4)
