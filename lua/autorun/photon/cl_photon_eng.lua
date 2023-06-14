@@ -125,10 +125,9 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		local speed = meta.Speed or 2
 
 		offset = rotatingLight(speed, 10)
-		local degrees = offset % 360
 
 		if multicolor then
-			if degrees > 0 and degrees < 180 then
+			if (offset % 360) <= 180 then
 				colors = incolors[2]
 			else
 				colors = incolors[1]
