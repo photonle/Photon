@@ -22,14 +22,22 @@ local drawSprite = render.DrawSprite
 -- Localise ConVars
 local bloom_mult = 1
 local bloom_mult_cvar = GetConVar("photon_bloom_modifier")
-if IsValid(bloom_mult_cvar) then
-	bloom_mult = bloom_mult_cvar:GetFloat()
+if bloom_mult_cvar then
+	bloom_mult = bloom_mult_cvar:GetFloat() or bloom_mult_cvar:GetDefault() or 1
 end
 cvars.AddChangeCallback("photon_bloom_modifier", function(_, _, new)
 	bloom_mult = tonumber(new) or 1
 end)
 
+
 local dynlights_enabled = GetConVar("photon_dynamic_lights")
+hook.Add("InitPostEntity", "Photon.DrawEffectsConvar", function()
+	bloom_mult_cvar = GetConVar("photon_bloom_modifier")
+	bloom_mult = bloom_mult_cvar:GetFloat() or bloom_mult_cvar:GetDefault() or 1
+
+	draw_effects = GetConVar("photon_lens_effects")
+	dynlights_enabled = GetConVar("photon_dynamic_lights")
+end)
 
 -- Local Variables
 local lpos = Vector()
