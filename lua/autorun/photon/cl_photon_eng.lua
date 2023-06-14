@@ -191,19 +191,26 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		meta.WMult = 1
 	end
 
+	-- car angles, later used for lights?
 	local ca = parent:GetAngles()
+	-- normal angle, as relating to the light.
 	local lightNormal = Angle()
 
 	if legacy and not contingent then
+		-- basic bitch lamp.
+		-- rotate our light around up, by whatever offset we have.
 		ca:RotateAroundAxis(parent:GetUp(), lang.y + offset)
 	elseif contingent then
+		-- bone attached, so just attach it to the bone ig?
 		ca:RotateAroundAxis(parent:GetUp(), lang.r + 180)
 	else
+		-- non legacy lights.
 		if meta.DirAxis and not rotating then
+			-- rotate around a specific vehicle axis.
 			ca:RotateAroundAxis(parent["Get" .. meta.DirAxis](parent), lang.r - meta.DirOffset)
 			ca:RotateAroundAxis(parent:GetUp(), lang.y)
 		elseif meta.DirAxis and rotating then
-			ca:RotateAroundAxis(parent["Get" .. meta.DirAxis](parent), lang.r - meta.DirOffset - offset)
+			-- rotating around a specific axis, but offset by the rotating offset.
 			ca:RotateAroundAxis(parent:GetUp(), lang.y)
 		end
 	end
