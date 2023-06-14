@@ -67,15 +67,16 @@ end
 hook.Add("InitPostEntity", "Photon.AddHelperLocalVars", function()
 	rotatingLight = EMVU.Helper.RotatingLight
 	pulsingLight = EMVU.Helper.PulsingLight
-	emvHelp = EMVU.Helper
+	radiusLight = EMVU.Helper.RadiusLight
 
-	if not mat7:IsError() then
-		hook.Add("RenderScreenspaceEffects", "Photon.ScreenEffects", function()
-			Photon.DrawDirtyLensEffect()
-		end)
-	else
+	if mat7:IsError() then
 		chat.AddText("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
+		return
 	end
+
+	hook.Add("RenderScreenspaceEffects", "Photon.ScreenEffects", function()
+		Photon.DrawDirtyLensEffect()
+	end)
 end)
 
 function Photon:AddLightToQueue(lightInfo)
