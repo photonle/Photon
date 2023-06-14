@@ -99,11 +99,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 
 	local resultTable = {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}
 
-	local legacy = true
-
-	if meta.NoLegacy == true then
-		legacy = false
-	end
+	local legacy = not meta.NoLegacy
 
 	local colors = incolors
 	local offset = meta.AngleOffset
