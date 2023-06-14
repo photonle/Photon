@@ -116,7 +116,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	-- bloom shit
 	local manualBloom = bloom_mult
 
-
+	-- Store the local pos, locally.
 	lpos:Set(ilpos)
 	local rotating = false
 
