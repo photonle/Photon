@@ -30,9 +30,6 @@ EMVU_NET_ILLUM_ON = 1
 EMVU_NET_ILLUM_FORWARD = 2
 EMVU_NET_ILLUM_REVERSE = 3
 
-Photon.include("emv/cl_meta.lua")
-Photon.include("emv/sv_meta.lua")
-
 AddCSLuaFile( "sh_emv_init.lua" )
 AddCSLuaFile( "sh_emv_meta.lua" )
 AddCSLuaFile( "sh_emv_vehicles.lua")
@@ -65,6 +62,9 @@ include( "library/emv_sirens.lua" )
 include( "library/emv_colors.lua" )
 include( "library/emv_sounds.lua" )
 include( "library/emv_auto.lua" )
+
+Photon.include("emv/cl_meta.lua")
+Photon.include("emv/sv_meta.lua")
 
 local emvVehicleTable = {}
 local emvLastScan = 0
