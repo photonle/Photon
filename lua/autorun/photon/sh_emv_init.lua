@@ -1,8 +1,5 @@
 AddCSLuaFile()
 
-Photon.include("emv/cl_meta.lua")
-Photon.include("emv/sv_meta.lua")
-
 if not EMVU then EMVU = {} end
 EMVU.Liveries = {}
 EMVU.SubMaterials = {}
@@ -32,6 +29,9 @@ EMVU_NET_ILLUM_OFF = 0
 EMVU_NET_ILLUM_ON = 1
 EMVU_NET_ILLUM_FORWARD = 2
 EMVU_NET_ILLUM_REVERSE = 3
+
+Photon.include("emv/cl_meta.lua")
+Photon.include("emv/sv_meta.lua")
 
 AddCSLuaFile( "sh_emv_init.lua" )
 AddCSLuaFile( "sh_emv_meta.lua" )
