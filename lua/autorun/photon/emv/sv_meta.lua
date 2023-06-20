@@ -246,3 +246,7 @@ function ENT:ELS_IllumOff()
 		SafeRemoveEntity(lamp)
 	end
 end
+
+function ent:ELS_HasAuxSiren()
+	return self:ELS_AuxSirenSet() ~= nil and self:ELS_AuxSirenSet() ~= 0
+end
