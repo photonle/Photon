@@ -37,48 +37,6 @@ function EMVU:MakeEMV( emv, name )
 
 	if name == "1" then return end
 
-	-- Datatable Functions --
-
-	function emv:Photon_LightOption()
-		if not IsValid( self ) then return 1 end
-		return self:GetNW2Int( "PhotonLE.EMV_LIGHT_OPTION", 1 )
-	end
-
-	function emv:Photon_LightOptionID()
-		local currentIndex = self:Photon_LightOption()
-		return EMVU.Sequences[ self:EMVName() ].Sequences[ currentIndex ].Stage or ""
-	end
-
-	function emv:Photon_AuxOptionID()
-		local currentIndex = self:Photon_TrafficAdvisorOption()
-		return EMVU.Sequences[ self:EMVName() ].Traffic[ currentIndex ].Stage or ""
-	end
-
-	function emv:Photon_IllumOptionID()
-		local currentIndex = self:Photon_IllumOption()
-		if not EMVU.Sequences[ self:EMVName() ] or not EMVU.Sequences[ self:EMVName() ].Illumination then return "" end
-		return EMVU.Sequences[ self:EMVName() ].Illumination[ currentIndex ].Stage or ""
-	end
-
-	function emv:Photon_Siren()
-		if not IsValid( self ) then return false end
-		return self:GetNW2Bool( "PhotonLE.EMV_SIREN_ON" )
-	end
-
-	function emv:Photon_SirenOption()
-		if not IsValid( self ) then return 1 end
-		return self:GetNW2Int( "PhotonLE.EMV_SIREN_OPTION" )
-	end
-
-	function emv:Photon_AuxSirenSet()
-		if not IsValid( self ) then return end
-		return self:GetNW2Int("PhotonLE.EMV_SIREN_SECONDARY")
-	end
-
-	function emv:Photon_SirenSet()
-		if not IsValid( self ) then return 1 end
-		return self:GetNW2Int("PhotonLE.EMV_SIREN_SET")
-	end
 
 	function emv:Photon_ManualSiren()
 		if not IsValid( self ) then return false end
@@ -104,16 +62,6 @@ function EMVU:MakeEMV( emv, name )
 		return self:Photon_SirenSet() == 0
 	end
 
-	function emv:Photon_Illumination()
-		if not IsValid( self ) then return false end
-		return self:GetNW2Bool( "PhotonLE.EMV_ILLUM_ON" )
-	end
-
-	function emv:Photon_IllumOption()
-		if not IsValid( self ) then return 1 end
-		return self:GetNW2Int( "PhotonLE.EMV_ILLUM_OPTION" )
-	end
-
 	function emv:Photon_IllumLights()
 		if not IsValid( self ) then return {} end
 		// local renderIllum = EMVHelper:GetIllumSequence( self.VehicleName, self:Photon_IllumOption(), self )
@@ -133,28 +81,14 @@ function EMVU:MakeEMV( emv, name )
 		return self.ELSIllum
 	end
 
-	function emv:Photon_TrafficAdvisor()
-		if not IsValid( self ) then return false end
-		return self:GetNW2Bool( "PhotonLE.EMV_TRF_ON" )
-	end
 
 	function emv:Photon_AuxLights()
 		return self:Photon_TrafficAdvisor()
 	end
 
-	function emv:Photon_TrafficAdvisorOption()
-		if not IsValid( self ) then return 1 end
-		return self:GetNW2Int( "PhotonLE.EMV_TRF_OPTION" )
-	end
-
 	function emv:Photon_HasTrafficAdvisor()
 		if self.ELSTraffic == nil then self.ELSTraffic = EMVHelper:HasTrafficAdvisor( self.VehicleName ) end
 		return self.ELSTraffic
-	end
-
-	function emv:Photon_ELPresetOption()
-		if not IsValid( self ) then return 0 end
-		return self:GetNW2Int( "PhotonLE.EMV_PRE_OPTION" )
 	end
 
 	function emv:Photon_PresetEnabled()
