@@ -157,7 +157,7 @@ function ENT:ELS_IlluminateOption(val)
 		self:SetPhotonNet_IlluminationOption(val)
 	end
 
-	return self:GetPhotonNet_IlluminationOption()
+	return self:GetPhotonNet_IlluminationOption(1)
 end
 
 --- Gets/Sets the a EMV preset.
