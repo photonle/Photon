@@ -40,7 +40,7 @@ function ENT:ELS_Enabled(val)
 		self:SetPhotonNet_Enabled(val)
 	end
 
-	return self:GetPhotonNet_Enabled()
+	return self:GetPhotonNet_Enabled(false)
 end
 
 --- Sets if the vehicle has ELS lights running.
@@ -51,7 +51,7 @@ function ENT:ELS_Lights(val)
 		self:SetPhotonNet_LightOn(val)
 	end
 
-	return self:GetPhotonNet_LightOn()
+	return self:GetPhotonNet_LightOn(false)
 end
 
 --- Sets the active light value.
@@ -62,7 +62,7 @@ function ENT:ELS_LightOption(val)
 		self:SetPhotonNet_LightOption(val)
 	end
 
-	return self:GetPhotonNet_LightOption()
+	return self:GetPhotonNet_LightOption(1)
 end
 
 --- Sets if the vehicle has siren running.
@@ -73,7 +73,7 @@ function ENT:ELS_Siren(val)
 		self:SetPhotonNet_SirenOn(val)
 	end
 
-	return self:GetPhotonNet_SirenOn()
+	return self:GetPhotonNet_SirenOn(false)
 end
 
 --- Sets the active siren.
@@ -84,7 +84,7 @@ function ENT:ELS_SirenOption(val)
 		self:SetPhotonNet_SirenOption(val)
 	end
 
-	return self:GetPhotonNet_SirenOption()
+	return self:GetPhotonNet_SirenOption(1)
 end
 
 --- Sets the set of sirens.
@@ -135,7 +135,7 @@ function ENT:ELS_TrafficOption(val)
 		self:SetPhotonNet_TrafficOption(val)
 	end
 
-	return self:GetPhotonNet_TrafficOption()
+	return self:GetPhotonNet_TrafficOption(1)
 end
 
 --- Gets/Sets illumination enabled.
