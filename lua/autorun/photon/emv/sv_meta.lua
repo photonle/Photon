@@ -218,9 +218,9 @@ function ENT:ELS_IllumOn()
 			break
 		end
 
-		lamp:SetParent( self )
-		lamp:SetLocalPos( pos )
-		lamp:SetLocalAngles( ang )
+		lamp:SetParent(self)
+		lamp:SetLocalPos(pos)
+		lamp:SetLocalAngles(ang)
 
 		lamp:SetKeyValue("enableshadows", 1)
 		lamp:SetKeyValue("farz", lampMeta.Distance)
