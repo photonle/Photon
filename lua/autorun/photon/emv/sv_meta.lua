@@ -247,6 +247,6 @@ function ENT:ELS_IllumOff()
 	end
 end
 
-function ent:ELS_HasAuxSiren()
+function ENT:ELS_HasAuxSiren()
 	return self:ELS_AuxSirenSet() ~= nil and self:ELS_AuxSirenSet() ~= 0
 end
