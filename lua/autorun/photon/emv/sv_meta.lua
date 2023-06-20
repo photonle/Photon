@@ -92,6 +92,7 @@ end
 -- @rint The set value.
 function ENT:ELS_SirenSet(val)
 	if val ~= nil then
+		self:ELS_SirenOption(1)
 		self:SetPhotonNet_SirenSet(val)
 	end
 
