@@ -211,7 +211,7 @@ function ENT:ELS_IllumOn()
 
 	for _, lampData in ipairs(lamps) do
 		local pos, ang, metaName = unpack(lampData)
-		local meta = helper:GetLampMeta(name, metaName)
+		local lampMeta = helper:GetLampMeta(name, metaName)
 
 		local lamp = ents.Create("env_projectedtexture")
 		if not IsValid(lamp) then
