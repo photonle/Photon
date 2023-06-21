@@ -142,19 +142,19 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	end
 
 	if emitDynamic then
-			local addDynamic = { true, true, true, true }
-			local normalDir = parent:GetForward()
-			if emitDynamic == 1 then normalDir:Rotate( Angle( 0, 135, 0 ) )
-			elseif emitDynamic == 2 then normalDir:Rotate( Angle( 0, 45, 0 ) )
-			elseif emitDynamic == 3 then normalDir:Rotate( Angle( 0, -135, 0 ) )
-			elseif emitDynamic == 4 then normalDir:Rotate( Angle( 0, -45, 0 ) ) end
-			addDynamic[1] = worldPos
-			addDynamic[2] = normalDir
-			addDynamic[3] = { colors.raw.r, colors.raw.g, colors.raw.b }
-			addDynamic[4] = ( parent:EntIndex() * 400 ) + emitDynamic
-			-- addDynamic[4] = (parent:EntIndex()*100) + ( lnum * 4 )
-			Photon.AddDynamicLightToQueue( addDynamic )
-		end
+		local addDynamic = { true, true, true, true }
+		local normalDir = parent:GetForward()
+		if emitDynamic == 1 then normalDir:Rotate( Angle( 0, 135, 0 ) )
+		elseif emitDynamic == 2 then normalDir:Rotate( Angle( 0, 45, 0 ) )
+		elseif emitDynamic == 3 then normalDir:Rotate( Angle( 0, -135, 0 ) )
+		elseif emitDynamic == 4 then normalDir:Rotate( Angle( 0, -45, 0 ) ) end
+		addDynamic[1] = worldPos
+		addDynamic[2] = normalDir
+		addDynamic[3] = { colors.raw.r, colors.raw.g, colors.raw.b }
+		addDynamic[4] = ( parent:EntIndex() * 400 ) + emitDynamic
+		-- addDynamic[4] = (parent:EntIndex()*100) + ( lnum * 4 )
+		Photon.AddDynamicLightToQueue( addDynamic )
+	end
 
 	if not visible or visible <= 0 then return end
 
