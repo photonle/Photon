@@ -10,8 +10,8 @@ local utilPixVis = util.PixelVisible
 local istable, isnumber, pairs, ColorAlpha, Lerp, tostring, Material, Vector = istable, isnumber, pairs, ColorAlpha, Lerp, tostring, Material, Vector
 
 -- Localise our Local Variables / Material Cache
-local photonRenderTable = {}
-local photonDynamicLights = {}
+local photonRenderTable, photonRenderTableCount = {}, 0
+local photonDynamicLights, photonDynamicLightsCount = {}, 0
 local mat1 = Material("sprites/emv/flare_secondary")
 local mat2 = Material("sprites/emv/emv_smoothglow")
 local mat3 = Material("sprites/emv/light_initial")
