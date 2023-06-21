@@ -191,6 +191,11 @@ function Photon.Logging:Build(level)
 		prt,
 		unpack(args)
 	)
+	self["Force" .. level] = Photon.Functional.partial(
+		prt,
+		unpack(args)
+	)
+
 	_G["Photon" .. level] = self[level]
 end
 
