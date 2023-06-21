@@ -38,7 +38,7 @@ hook.Add("InitPostEntity", "Photon.AddHelperLocalVars", function()
 
 	if mat7:IsError() then
 		chat.AddText("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
-		Photon.Logging.Fatal("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
+		Photon.Logging.Fatal("Photon Content is missing. Try forcing a redownload.")
 		return
 	end
 
