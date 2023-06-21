@@ -117,24 +117,33 @@ Photon.Logging.Phrases = {
 		Color(255, 255, 255), "ot",
 		Color(245, 169, 184), "o",
 		Color(91, 206, 250), "n",
+	},
+	PhotonChristmas = {
+		Color(0, 120, 0), "Ph",
+		Color(200, 0, 0), "ot",
+		Color(0, 120, 0), "on",
 	}
 }
 
 --- Create a "Photon" or "[Photon]" table.
 -- @bool wrapped Should the Photon be wrapped in [].
--- @number pride It's a secret tool that'll help us later.
+-- @string event It's a secret tool that'll help us later.
 -- @rtab
-function Photon.Logging:Photon(wrapped, pride)
-	pride = 1
-	local photon
-	if pride == 1 then
-		photon = self.Phrases.PhotonLGBT
-	elseif pride == 2 then
-		photon = self.Phrases.PhotonTrans
-	else
-		photon = self.Phrases.Photon
+function Photon.Logging:Photon(wrapped, event)
+	if not event then
+		event = ""
+
+		local dt = os.date("%d-%m")
+		if dt == "31-03" then
+			event = "Trans"
+		elseif dt == "25-12" then
+			event = "Christmas"
+		elseif os.date("%m") == "06" then
+			event = "Pride"
+		end
 	end
 
+	local photon = self.Phrases["Photon" .. event] or self.Phrases.Photon
 	if wrapped then
 		return {self.Colours.Text, "[", photon, self.Colours.Text, "]"}
 	end
@@ -154,7 +163,8 @@ function Photon.Logging:Build(level)
 	end
 
 	local args = {}
-	table.insert(args, self:Photon(true, 2))
+	table.insert(args, Photon.Functional.partial(self.Photon, self, true))
+	table.insert(args, self:Photon(true))
 	table.insert(args, self.Colours.Text)
 	table.insert(args, "[")
 
