@@ -360,64 +360,62 @@ end
 
 hook.Add( "InitPostEntity", "Photon.LoadAvailablePlateMaterials", function() timer.Simple( 3, Photon.LicensePlates.LoadAvailable ) end )
 
-function PrintPhotonDebugInformation()
+concommand.Add( "photon_debugprint", function()
 	if CLIENT then
 		local emergEnabled = GetConVar( "photon_emerg_enabled" )
 		local standEnabled = GetConVar( "photon_stand_enabled" )
 		local expEdit = GetConVar("photon_express_edit")
 		local car = LocalPlayer():GetVehicle()
-		print( [[---------- PHOTON LIGHTING ENGINE DEBUG INFORMATION (CLIENT) ----------]] )
-		print( [[VERSION: ]] .. tostring( PHOTON_UPDATE ) )
-		print( [[EMERGENCY LIGHTS ENABLED: ]] .. tostring( emergEnabled:GetBool() ) )
-		print( [[STANDARD LIGHTS ENABLED: ]] .. tostring( standEnabled:GetBool() ) )
-		print( [[EXPRESS EDIT ENGAGED: ]] .. tostring( expEdit:GetBool() ) )
-		print( [[PHOTON LOADED VEHICLES-------------------------------------------------]])
+
+		local l, w, e = Photon.Logging.ForceInfo, Photon.Logging.ForceWarning, Photon.Logging.ForceError
+		l( [[---------- PHOTON LIGHTING ENGINE DEBUG INFORMATION (CLIENT) ----------]] )
+		l( [[VERSION: ]] .. tostring( PHOTON_UPDATE ) )
+		l( [[EMERGENCY LIGHTS ENABLED: ]] .. tostring( emergEnabled:GetBool() ) )
+		l( [[STANDARD LIGHTS ENABLED: ]] .. tostring( standEnabled:GetBool() ) )
+		l( [[EXPRESS EDIT ENGAGED: ]] .. tostring( expEdit:GetBool() ) )
+		l( [[PHOTON LOADED VEHICLES-------------------------------------------------]])
 		local total = 0
 		for carName,_ in pairs( EMVU.Positions ) do
-			print( tostring( carName ) )
+			l( tostring( carName ) )
 			total = total + 1 --# was not working??????
 		end
-		print( [[END ALL LOADED VEHICLES, TOTAL: ]] .. tostring( total ) .. "-------------------------" )
+		l( [[END ALL LOADED VEHICLES, TOTAL: ]] .. tostring( total ) .. "-------------------------" )
 		if IsValid( car ) then
 			if car.EMVName then
-				print( [[CURRENT VEHICLE: ]] .. tostring( car:EMVName() ) )
+				l( [[CURRENT VEHICLE: ]] .. tostring( car:EMVName() ) )
 			else
-				print( [[CURRENT VEHICLE NAME NOT VALID, METATABLE FAILURE (E1)]]) -- E1
+				l( [[CURRENT VEHICLE NAME NOT VALID, METATABLE FAILURE (E1)]]) -- E1
 			end
 			if car.Photon then
-				print( [[CURRENT VEHICLE HAS PHOTON: ]] .. tostring( car:Photon() ) )
+				l( [[CURRENT VEHICLE HAS PHOTON: ]] .. tostring( car:Photon() ) )
 			else
-				print( [[CURRENT VEHICLE PHOTON STATUS NOT VALID, METATABLE FAILURE (E4)]]) -- E4
+				l( [[CURRENT VEHICLE PHOTON STATUS NOT VALID, METATABLE FAILURE (E4)]]) -- E4
 			end
 			if car.HasPhotonELS then
-				print( [[CURRENT VEHICLE HAS ELS: ]] .. tostring( car:HasPhotonELS() ) )
+				l( [[CURRENT VEHICLE HAS ELS: ]] .. tostring( car:HasPhotonELS() ) )
 			else
-				print( [[CURRENT VEHICLE ELS STATUS NOT VALID, METATABLE FAILURE (E2)]]) -- E2
+				l( [[CURRENT VEHICLE ELS STATUS NOT VALID, METATABLE FAILURE (E2)]]) -- E2
 			end
 			if car.IsEMV then
-				print( [[CURRENT VEHICLE IS EMV: ]] .. tostring( car:IsEMV() ) )
+				l( [[CURRENT VEHICLE IS EMV: ]] .. tostring( car:IsEMV() ) )
 				if car:IsEMV() then
-					print( [[CURRENT VEHICLE SELECTION_ENABLED: ]] .. tostring( car:Photon_SelectionEnabled() ) )
-					print( [[CURRENT VEHICLE SUPPPORTS CONFIGS: ]] .. tostring( car:Photon_SupportsConfigurations() ) )
-					print( [[CURRENT VEHICLE SIREN MODEL: ]] .. tostring( car:Photon_SirenSet() ) )
-					print( [[CURRENT VEHICLE SIREN ON: ]] .. tostring( car:Photon_Siren() ) )
-					print( [[CURRENT VEHICLE WARNING LIGHTS: ]] .. tostring( car:Photon_Lights() ) )
-					print( [[CURRENT VEHICLE LIGHT STAGE: ]] .. tostring( car:Photon_LightOption() ) )
-					print( [[CURRENT VEHICLE FINISHED INIT: ]] .. tostring( car.PhotonFinishedInit ) )
-					print( [[CURRENT VEHICLE POSITIONS: ]] .. tostring( #EMVU.Positions[car:EMVName()] ))
+					l( [[CURRENT VEHICLE SELECTION_ENABLED: ]] .. tostring( car:Photon_SelectionEnabled() ) )
+					l( [[CURRENT VEHICLE SUPPPORTS CONFIGS: ]] .. tostring( car:Photon_SupportsConfigurations() ) )
+					l( [[CURRENT VEHICLE SIREN MODEL: ]] .. tostring( car:Photon_SirenSet() ) )
+					l( [[CURRENT VEHICLE SIREN ON: ]] .. tostring( car:Photon_Siren() ) )
+					l( [[CURRENT VEHICLE WARNING LIGHTS: ]] .. tostring( car:Photon_Lights() ) )
+					l( [[CURRENT VEHICLE LIGHT STAGE: ]] .. tostring( car:Photon_LightOption() ) )
+					l( [[CURRENT VEHICLE FINISHED INIT: ]] .. tostring( car.PhotonFinishedInit ) )
+					l( [[CURRENT VEHICLE POSITIONS: ]] .. tostring( #EMVU.Positions[car:EMVName()] ))
 				end
 			else
-				print( [[CURRENT VEHICLE EMV STATUS NOT VALID, METATABLE FAILURE (E3)]]) -- E3
+				e( [[CURRENT VEHICLE EMV STATUS NOT VALID, METATABLE FAILURE (E3)]]) -- E3
 			end
 		else
-			print( [[PLAYER NOT IN VEHICLE OR VEHICLE IS INVALID]] )
+			w( [[PLAYER NOT IN VEHICLE OR VEHICLE IS INVALID]] )
 		end
-		print( [[---------- PHOTON END DEBUG READOUT ----------------------------------]] )
+		l( [[---------- PHOTON END DEBUG READOUT ----------------------------------]] )
 	end
-end
-
-concommand.Add( "photon_debugprint", function()
-	PrintPhotonDebugInformation()
 end)
 
 -- timer.Create("photon_spinnnnnn", .01, 0, function()
