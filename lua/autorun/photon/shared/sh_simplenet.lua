@@ -152,7 +152,7 @@ if CLIENT then
 		local normalName = NET.Normalise(name)
 		local old = ent[normalName]
 		ent[normalName] = NET.ReadFunctions[netType](extra)
-		hook.Run("Photon.SimpleNet.ValueChanged", name, old, ent[normalName])
+		hook.Run("Photon.SimpleNet.ValueChanged", name, old, ent[normalName], ent)
 	end)
 
 	hook.Add("NotifyShouldTransmit", "EMVU.Net.NotifyShouldTransmit", function(ent, shouldTransmit)
