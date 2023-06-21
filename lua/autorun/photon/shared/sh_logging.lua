@@ -103,7 +103,7 @@ end
 --- A table storing often used logging "phrases".
 Photon.Logging.Phrases = {
 	Photon = {Photon.Logging.Colours.Brand, "Photon"},
-	PhotonLGBT = {
+	PhotonPride = {
 		Color(228, 3, 3), "P",
 		Color(255, 140, 0), "h",
 		Color(255, 237, 0), "o",
