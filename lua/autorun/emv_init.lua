@@ -33,5 +33,7 @@ end
 
 Photon.include("shared/sh_functional.lua")
 Photon.include("shared/sh_logging.lua")
+Photon.Logging.Info("Welcome to ", Photon.Logging:Photon())
+
 Photon.include("sh_photon_init.lua")
 Photon.include("sh_emv_init.lua")
