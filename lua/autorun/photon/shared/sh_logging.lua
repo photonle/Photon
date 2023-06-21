@@ -230,12 +230,6 @@ Photon.Logging:Build("Info")
 -- Emit a Debug Level Log.
 Photon.Logging:Build("Debug")
 
-Photon.Messages = {
-	Error = Photon.Logging.Error,
-	Warning = Photon.Logging.Warning,
-	Debug = Photon.Logging.Debug
-}
-
 concommand.Add("photon_logging_level_report", function()
 	local last = math.huge
 	local cur = Photon.Logging.Level
