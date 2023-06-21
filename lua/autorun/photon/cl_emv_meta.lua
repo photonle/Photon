@@ -262,11 +262,6 @@ function EMVU:MakeEMV( emv, name )
 			if not istable( pData ) then error("[Photon] Unable to find light index (#" .. tostring( key ) .. "). Check EMV.Sections and ensure the the defined light number exists as [" .. tostring( key ) .. "] in the EMV.Positions table.") return end
 			if pData[1][1] == "RE" then
 				local npos, nang = EMVU.Helper.GetPositionFromRE( self, self:Photon_GetPropByAutoIndex( pData[1][5] ), pData[1], true )
-				-- local newPos = self:LocalToWorld( npos )
-				-- newPos.x = math.Round( newPos.x )
-				-- newPos.y = math.Round( newPos.y )
-				-- newPos.z = math.Round( newPos.z )
-				-- print( string.format( "[%s] %s", key, tostring( newPos ) ) )
 				resultTable[key] = npos
 			elseif isvector( pData[1] ) then
 				resultTable[key] = self:LocalToWorld( posData[tonumber(key)][1] )
