@@ -277,10 +277,6 @@ function ENT:Photon_SetSelection(index, value)
 
 	local selectionTable = self:Photon_SelectionTable()
 	selectionTable[index] = value
-	PrintTable(selectionTable)
-	print()
-	print(index, value, table.concat(selectionTable, "."))
-	print("--")
 	self:SetPhotonNet_SelectionString(table.concat(selectionTable, "."))
 
 	local selectionData = EMVU.Selections[self.Name][index].Options[value]
