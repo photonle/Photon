@@ -257,7 +257,7 @@ concommand.Add("photon_logging_level_report", function()
 		end
 
 		if cur < last and cur > level then
-			MsgC(t, "+--> Current Logging Level (" .. cur .. ")\n")
+			MsgC(t, "--> Current Logging Level (" .. cur .. ")\n")
 		end
 
 		local args = {}
