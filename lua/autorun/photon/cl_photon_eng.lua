@@ -154,12 +154,8 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		if rotator then
 			normalDir:Rotate(rotator)
 		end
-		addDynamic[1] = worldPos
-		addDynamic[2] = normalDir
-		addDynamic[3] = { colors.raw.r, colors.raw.g, colors.raw.b }
-		addDynamic[4] = ( parent:EntIndex() * 400 ) + emitDynamic
-		-- addDynamic[4] = (parent:EntIndex()*100) + ( lnum * 4 )
-		Photon.AddDynamicLightToQueue( addDynamic )
+
+		Photon.AddDynamicLightToQueue({worldPos, normalDir, {colors.raw.r, colors.raw.g, colors.raw.b}}, (parent:EntIndex() * 400) + emitDynamic)
 	end
 
 	if not visible or visible <= 0 then return end
