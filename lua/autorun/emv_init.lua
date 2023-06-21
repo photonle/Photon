@@ -15,11 +15,10 @@ function Photon.include(path, force_full)
 	if debug.getinfo(2, "S").short_src:EndsWith("autorun/emv_init.lua") and not force_full then
 		path = "photon/" .. path
 	end
+
 	local prefix = match(path, "/?(%w%w)[%w_]*.lua$") or "sh"
-	if PhotonDebug then
-		PhotonDebug(path, " => ", prefix)
-	else
-		print(string.format("[Photon Bootstrapper] %s => %s", path, prefix))
+	if Photon.Logging then
+		Photon.Logging.Debug("Path: '", path, "'. Prefix: ", prefix)
 	end
 
 	if prefix ~= "sv" then
