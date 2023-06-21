@@ -79,24 +79,21 @@ local function getViewFlare(dot, brght)
 	return pow(calc, 1.01) * .025
 end
 
-
-
-
-
-
-
-
-function Photon:AddLightToQueue( lightInfo )
-	photonRenderTable[ #photonRenderTable + 1 ] = lightInfo
+function Photon:AddLightToQueue(lightInfo)
+	photonRenderTableCount = photonRenderTableCount + 1
+	photonRenderTable[photonRenderTableCount] = lightInfo
 end
 
-function Photon.AddDynamicLightToQueue( lightInfo )
-	photonDynamicLights[ #photonDynamicLights + 1 ] = lightInfo
+function Photon.AddDynamicLightToQueue(lightInfo)
+	photonDynamicLightsCount = photonDynamicLightsCount + 1
+	photonDynamicLights[photonDynamicLightsCount] = lightInfo
 end
 
 function Photon:ClearLightQueue()
-	table.Empty( photonRenderTable )
-	table.Empty( photonDynamicLights )
+	photonRenderTableCount = 0
+	table.Empty(photonRenderTable)
+	photonDynamicLightsCount = 0
+	table.Empty(photonDynamicLights)
 end
 
 function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent )
