@@ -136,8 +136,6 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		return
 	end
 
-	-- visible = 1
-
 	if EMV_DEBUG then visible = 1 end
 	if EMV_DEBUG then viewDot = 1 end
 
