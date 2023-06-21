@@ -1,7 +1,6 @@
 AddCSLuaFile()
 
-
-
+if not Photon.Net then
 	Photon.Net = {}
 
 	Photon.Vehicles = {}
