@@ -206,9 +206,9 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	local pulseOverride = false
 
 	if brght and istable(brght) then
-		brightness = pulsingLight( emvHelp, brght[1], brght[2], brght[3] )
+		brightness = pulsingLight(brght[1], brght[2], brght[3])
 		pulseOverride = true
-	elseif isnumber( brght ) then
+	elseif isnumber(brght) then
 		brightness = brght
 		rawBrightness = brght
 	end
