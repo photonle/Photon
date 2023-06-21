@@ -132,12 +132,7 @@ function Photon:PreloadVehicle( car )
 		Photon.Vehicles.Meta[ car.Name ] = {}
 	end
 	for _, meta in pairs(Photon.Vehicles.Meta[car.Name]) do
-		if not meta.Scale then
-			meta.Scale = 1
-		end
-		if not meta.WMult then
-			meta.WMult = 1
-		end
+		EMVU.Helper.PrepareMeta(meta)
 	end
 
 	if car.Photon.States.Headlights and istable( car.Photon.States.Headlights ) then
@@ -211,12 +206,7 @@ function Photon:OverwriteIndex( name, data )
 	if data.Positions != nil then Photon.Vehicles.Positions[name] = data.Positions end
 	if data.Meta != nil then Photon.Vehicles.Meta[name] = data.Meta end
 	for _, meta in pairs(Photon.Vehicles.Meta[name]) do
-		if not meta.Scale then
-			meta.Scale = 1
-		end
-		if not meta.WMult then
-			meta.WMult = 1
-		end
+		EMVU.Helper.PrepareMeta(meta)
 	end
 	if istable( data.States ) then
 		if data.States.Headlights != nil then Photon.Vehicles.States.Headlights[name] = data.States.Headlights end
