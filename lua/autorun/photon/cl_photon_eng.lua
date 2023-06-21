@@ -22,6 +22,25 @@ local lpos = Vector()
 local useEyePos = Vector(0, 0, 0)
 local useEyeAng = Angle(0, 0, 0)
 
+-- ConVar Caching
+local bloom_multi = 1
+local bloom_multi_cvar = GetConVar("photon_bloom_modifier")
+if bloom_multi_cvar then
+	bloom_multi = bloom_multi_cvar:GetFloat()
+end
+cvars.AddChangeCallback("photon_bloom_modifier", function()
+	bloom_multi = bloom_multi_cvar:GetFloat()
+end, "Photon.Engine.CvarSettings")
+
+local dynlights_enabled = true
+local dynlights_enabled_cvar = GetConVar("photon_dynamic_lights")
+if dynlights_enabled_cvar then
+	dynlights_enabled = dynlights_enabled_cvar:GetBool()
+end
+cvars.AddChangeCallback("photon_dynamic_lights", function()
+	bloom_multi = dynlights_enabled_cvar:GetBool()
+end, "Photon.Engine.CvarSettings")
+
 -- Localise 1st Party Libraries
 local rotatingLight, pulsingLight, radiusLight
 if EMVU and EMVU.Helper then
@@ -36,6 +55,11 @@ hook.Add("InitPostEntity", "Photon.AddHelperLocalVars", function()
 	pulsingLight = h.PulsingLight
 	radiusLight = h.RadiusLight
 
+	bloom_multi_cvar = GetConVar("photon_bloom_modifier")
+	bloom_multi = bloom_multi_cvar:GetFloat() or 1
+	dynlights_enabled_cvar = GetConVar("photon_dynamic_lights")
+	dynlights_enabled = dynlights_enabled_cvar:GetBool() or true
+
 	if mat7:IsError() then
 		chat.AddText("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
 		Photon.Logging.Fatal("Photon Content is missing. Try forcing a redownload.")
@@ -44,29 +68,11 @@ hook.Add("InitPostEntity", "Photon.AddHelperLocalVars", function()
 
 	hook.Add("RenderScreenspaceEffects", "Photon.ScreenEffects", Photon.DrawDirtyLensEffect)
 end)
-local useEyePos = Vector( 0, 0, 0 )
-local useEyeAng = Angle( 0, 0, 0 )
-local istable = istable
-local isnumber = isnumber
-local pairs = pairs
-local ColorAlpha = ColorAlpha
-local Lerp = Lerp
-local tostring = tostring
-local Material = Material
-local Vector = Vector
 
-local bloom_multi = GetConVar( "photon_bloom_modifier" )
-local dynlights_enabled = GetConVar( "photon_dynamic_lights" )
 
-local getLightColor = render.GetLightColor
-local utilPixVis = util.PixelVisible
-local rotatingLight, pulsingLight, emvHelp
 
-if EMVU and istable( EMVU.Helper ) then
-	rotatingLight = EMVU.Helper.RotatingLight
-	pulsingLight = EMVU.Helper.PulsingLight
-	emvHelp = EMVU.Helper
-end
+
+
 
 local function getViewFlare( dot, brght )
 	local dif = dot - .85
