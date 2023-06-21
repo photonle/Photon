@@ -1,6 +1,10 @@
 AddCSLuaFile()
 
-local lpos = Vector()
+-- Localise Libraries and Methods
+local math, render, util = math, render, util
+local clamp, pow, round = math.Clamp, math.pow, math.Round
+local getLightColor, setMaterial, drawSprite = render.GetLightColor, render.SetMaterial, render.DrawSprite
+local utilPixVis = util.PixelVisible
 
 local clamp = math.Clamp
 local pow = math.pow
