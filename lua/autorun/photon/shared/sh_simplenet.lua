@@ -124,7 +124,7 @@ function NET:Get(ent, name, default)
 end
 
 if CLIENT then
-	net.Receive("Photon_SimpleNet_Change", function(len, ply)
+	net.Receive("Photon_SimpleNet_Change", function()
 		local ent = net.ReadEntity()
 		local idx = net.ReadUInt(NET.Bits)
 		local name, netType, extra = unpack(NET.FMap[idx])
