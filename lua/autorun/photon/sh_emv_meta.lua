@@ -9,8 +9,7 @@ local istable = istable
 function ent:IsEMV()
 	if not IsValid( self ) then return false end
 	if not EMV_INDEX then return false end
-	local str = self:GetNW2String( "PhotonLE.EMV_INDEX" )
-	if string.StartWith( tostring(str), "ö" ) then return true end
+	if self:EMVName() ~= "" then return true end
 	return false
 end
 
@@ -26,15 +25,6 @@ function ent:HasPhotonELS()
 	return true
 end
 
-function ent:EMVName()
-	if not IsValid( self ) then return "" end
-	if not EMV_INDEX then return "" end
-	if self:IsEMV() then
-		return string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )[2]
-	end
-	return ""
-end
-
 function ent:Photon_GetSpeed()
 	if not IsValid( self ) then return 0 end
 	return self:GetVelocity():Length()
@@ -43,14 +33,6 @@ end
 function ent:Photon_AdjustedSpeed()
 	if not IsValid( self ) then return 0 end
 	return ( self:GetVelocity():Length() * ( 3600 / 63360 ) )
-end
-
-function ent:Photon_GetUnitNumber()
-	return string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )[3] or ""
-end
-
-function ent:Photon_GetLiveryID()
-	return string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )[4] or ""
 end
 
 function ent:Photon_GetAutoSkinIndex()
@@ -75,16 +57,9 @@ end
 ent.LegacySetSkin = ent.LegacySetSkin or ent.SetSkin
 function ent:SetSkin( index )
 	self:LegacySetSkin( index )
-	hook.Call( "Photon.EntityChangedSkin", GM, self, index )
-end
-
-function ent:Photon_SelectionString()
-	return string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )[5]
-end
-
-function ent:Photon_SelectionTable()
-	local selectionString =  string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )[5]
-	return string.Explode( ".", selectionString, false )
+	if self:IsVehicle() and self:IsEMV() then
+		hook.Call( "Photon.EntityChangedSkin", GM, self, index )
+	end
 end
 
 function ent:Photon_SelectionOption( index )
@@ -182,10 +157,6 @@ function ent:Photon_ImportSelectionData( inputData )
 		self:Photon_ApplyEquipmentPreset( resultTable )
 	end
 	return resultTable
-end
-
-function ent:Photon_GetUtilStringTable()
-	return string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )
 end
 
 function ent:Photon_SelectionEnabled()
