@@ -136,8 +136,10 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		return
 	end
 
-	if EMV_DEBUG then visible = 1 end
-	if EMV_DEBUG then viewDot = 1 end
+	if EMV_DEBUG then
+		visible = 1
+		viewDot = 1
+	end
 
 	if emitDynamic then
 			local addDynamic = { true, true, true, true }
