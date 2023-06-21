@@ -111,7 +111,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	local rotating = offset == "R" or offset == "RR"
 	if rotating then
 		local speed = meta.Speed or 2
-		offset = rotatingLight(emvHelp, speed, 10)
+		offset = rotatingLight(speed, 10)
 		local degrees = offset % 360
 		if multicolor then
 			if ( degrees > 0 and degrees < 180 ) then
