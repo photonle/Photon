@@ -82,7 +82,7 @@ function EMVU:UpdateVehicles()
 	end
 
 	for _,ent in pairs( ents.GetAll() ) do
-		if IsValid( ent ) and ent.IsEMV and ent:IsEMV() then
+		if IsValid( ent ) and ent:IsVehicle() and ent.IsEMV and ent:IsEMV() then
 			emvVehicleTable[ #emvVehicleTable + 1 ] = ent
 		end
 	end
