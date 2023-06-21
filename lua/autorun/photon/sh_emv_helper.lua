@@ -754,3 +754,27 @@ function EMVU.Helper.GetAlertModeEnabled( name )
 	if (istable(EMVU.Attributes[ name ]) and (EMVU.Attributes[ name ].DisableAlertPatterns)) then return false end
 	return true
 end
+
+function EMVU.Helper.PrepareMeta(meta)
+	if not meta.Scale then
+		meta.Scale = 1
+	end
+	if not meta.WMult then
+		meta.WMult = 1
+	end
+	if not meta.SpriteMaterial then
+		meta.SpriteMaterial = Material(meta.Sprite)
+	end
+	if not meta.SprT then
+		meta.SprT = Vector(meta.W * .5, meta.H * .5, 0)
+	end
+	if not meta.SprR then
+		meta.SprR = Vector(-meta.W * .5, meta.H * .5, 0)
+	end
+	if not meta.SprB then
+		meta.SprB = Vector(-meta.W * .5, -meta.H * .5, 0)
+	end
+	if not meta.SprL then
+		meta.SprL = Vector(meta.W * .5, -meta.H * .5, 0)
+	end
+end
