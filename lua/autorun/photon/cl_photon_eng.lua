@@ -195,9 +195,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	local lightMod = clamp(1 - round(((( curLight[1] * curLight[2] * curLight[3] ) * .3) * 10) * 2, 5), .66, 1)
 
 	local srcOnly = false
-	local srcSkip = false
-
-	if (meta.Sprite and meta.Sprite == "sprites/emv/blank") or meta.Cheap then srcSkip = true end
+	local srcSkip = (meta.Sprite and meta.Sprite == "sprites/emv/blank") or cheapLight
 
 	local UC = { true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true }
 
