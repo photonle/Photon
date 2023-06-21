@@ -9,6 +9,19 @@ local utilPixVis = util.PixelVisible
 -- Localise Globals
 local istable, isnumber, pairs, ColorAlpha, Lerp, tostring, Material, Vector = istable, isnumber, pairs, ColorAlpha, Lerp, tostring, Material, Vector
 
+-- Localise our Local Variables / Material Cache
+local mat1 = Material("sprites/emv/flare_secondary")
+local mat2 = Material("sprites/emv/emv_smoothglow")
+local mat3 = Material("sprites/emv/light_initial")
+local mat4 = Material("sprites/emv/flare_primary")
+local mat5 = Material("sprites/emv/effect_artifact1")
+local mat6 = Material("sprites/emv/effect_artifact2")
+local mat7 = Material("sprites/emv/dirty_lens_1")
+local mat8 = Material("sprites/emv/dirty_lens_2")
+local lpos = Vector()
+local useEyePos = Vector(0, 0, 0)
+local useEyeAng = Angle(0, 0, 0)
+
 -- Localise 1st Party Libraries
 local rotatingLight, pulsingLight, radiusLight
 if EMVU and EMVU.Helper then
