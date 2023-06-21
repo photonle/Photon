@@ -245,8 +245,15 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		end
 	end
 
-	if PHOTON_DEBUG and !PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 255, 255, 0, 255 ) elseif PHOTON_DEBUG and PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 0, 0, 0, 0 ) end
-	if PHOTON_DEBUG and PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then srcColor = Color( 0, 255, 255 ) end
+	if PHOTON_DEBUG then
+		if PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then
+			srcColor = Color(0, 255, 255)
+		elseif not PHOTON_DEBUG_EXCLUSIVE then
+			srcColor = Color(255, 255, 0, 255)
+		else
+			srcColor = Color(0, 0, 0, 0)
+		end
+	end
 
 	resultTable[1] = srcOnly
 	resultTable[2] = !srcSkip
