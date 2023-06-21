@@ -72,11 +72,11 @@ hook.Add("InitPostEntity", "Photon.AddHelperLocalVars", function()
 	hook.Add("RenderScreenspaceEffects", "Photon.ScreenEffects", Photon.DrawDirtyLensEffect)
 end)
 
-local function getViewFlare( dot, brght )
+local function getViewFlare(dot, brght)
 	local dif = dot - .85
 	if dif < 0 then return 0 end
-	local calc = (dif * 1000) * clamp( brght, 0, 1 )
-	return pow( calc, 1.01 ) * .025
+	local calc = (dif * 1000) * clamp(brght, 0, 1)
+	return pow(calc, 1.01) * .025
 end
 
 
