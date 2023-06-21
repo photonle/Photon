@@ -10,6 +10,8 @@ local utilPixVis = util.PixelVisible
 local istable, isnumber, pairs, ColorAlpha, Lerp, tostring, Material, Vector = istable, isnumber, pairs, ColorAlpha, Lerp, tostring, Material, Vector
 
 -- Localise our Local Variables / Material Cache
+local photonRenderTable = {}
+local photonDynamicLights = {}
 local mat1 = Material("sprites/emv/flare_secondary")
 local mat2 = Material("sprites/emv/emv_smoothglow")
 local mat3 = Material("sprites/emv/light_initial")
@@ -21,6 +23,7 @@ local mat8 = Material("sprites/emv/dirty_lens_2")
 local lpos = Vector()
 local useEyePos = Vector(0, 0, 0)
 local useEyeAng = Angle(0, 0, 0)
+local up1 = Vector()
 
 -- ConVar Caching
 local bloom_multi = 1
@@ -69,11 +72,6 @@ hook.Add("InitPostEntity", "Photon.AddHelperLocalVars", function()
 	hook.Add("RenderScreenspaceEffects", "Photon.ScreenEffects", Photon.DrawDirtyLensEffect)
 end)
 
-
-
-
-
-
 local function getViewFlare( dot, brght )
 	local dif = dot - .85
 	if dif < 0 then return 0 end
@@ -81,36 +79,11 @@ local function getViewFlare( dot, brght )
 	return pow( calc, 1.01 ) * .025
 end
 
-local setMaterial = render.SetMaterial
-local drawSprite = render.DrawSprite
 
-local mat1 = Material("sprites/emv/flare_secondary")
-local mat2 = Material("sprites/emv/emv_smoothglow")
-local mat3 = Material("sprites/emv/light_initial")
-local mat4 = Material("sprites/emv/flare_primary")
-local mat5 = Material("sprites/emv/effect_artifact1")
-local mat6 = Material("sprites/emv/effect_artifact2")
-local mat7 = Material("sprites/emv/dirty_lens_1")
-local mat8 = Material("sprites/emv/dirty_lens_2")
 
-local up1 = Vector()
 
-local photonRenderTable = {}
-local photonDynamicLights = {}
 
-hook.Add( "InitPostEntity", "Photon.AddHelperLocalVars", function()
-	rotatingLight = EMVU.Helper.RotatingLight
-	pulsingLight = EMVU.Helper.PulsingLight
-	emvHelp = EMVU.Helper
 
-	if not mat7:IsError() then
-		hook.Add( "RenderScreenspaceEffects", "Photon.ScreenEffects", function()
-			Photon.DrawDirtyLensEffect()
-		end)
-	else
-		chat.AddText("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
-	end
-end)
 
 
 function Photon:AddLightToQueue( lightInfo )
