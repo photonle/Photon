@@ -132,9 +132,11 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		lpos[2] = lpos[2] + lposMod
 	end
 
-	-- visible = 1
-	if( visible and visible > 0) then
+	if not visible or visible <= 0 then
+		return
+	end
 
+	-- visible = 1
 
 	if EMV_DEBUG then visible = 1 end
 	if EMV_DEBUG then viewDot = 1 end
@@ -304,7 +306,6 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 
 		self:AddLightToQueue( resultTable )
 
-	end
 	end
 end
 
