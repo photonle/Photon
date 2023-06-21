@@ -18,7 +18,7 @@ function Photon.include(path, force_full)
 
 	local prefix = match(path, "/?(%w%w)[%w_]*.lua$") or "sh"
 	if Photon.Logging then
-		Photon.Logging.Debug("Path: '", path, "'. Prefix: ", prefix)
+		Photon.Logging.Debug("Prefix: ", prefix, ". Path: '", path, "'")
 	end
 
 	if prefix ~= "sv" then
