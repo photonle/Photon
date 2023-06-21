@@ -65,6 +65,7 @@ include( "library/emv_auto.lua" )
 
 Photon.include("emv/cl_meta.lua")
 Photon.include("emv/sv_meta.lua")
+Photon.include("emv/sh_meta.lua")
 
 local emvVehicleTable = {}
 local emvLastScan = 0
