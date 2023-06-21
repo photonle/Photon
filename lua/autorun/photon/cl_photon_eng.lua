@@ -122,7 +122,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	local cheapLight = meta.Cheap == true
 
 	local viewDot = 0
-	local visible = 0
+	local visible = pixvis
 	local viewPercent = 0
 	local worldPos = gpos
 
@@ -132,8 +132,6 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		lpos[2] = lpos[2] + lposMod
 	end
 
-
-	visible = pixvis
 	-- visible = 1
 	if( visible and visible > 0) then
 
