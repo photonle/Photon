@@ -259,15 +259,10 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	resultTable[2] = !srcSkip
 	resultTable[3] = worldPos
 	resultTable[4] = ua
-	if not meta.SpriteMaterial then meta.SpriteMaterial = Material( meta.Sprite ) end
 	resultTable[5] = meta.SpriteMaterial
-	if not meta.SprT then meta.SprT = Vector( meta.W * .5, meta.H * .5, 0 ) end
 	resultTable[6] = meta.SprT
-	if not meta.SprR then meta.SprR = Vector( -meta.W * .5, meta.H * .5, 0 ) end
 	resultTable[7] = meta.SprR
-	if not meta.SprB then meta.SprB = Vector( -meta.W * .5, -meta.H * .5, 0 ) end
 	resultTable[8] = meta.SprB
-	if not meta.SprL then meta.SprL = Vector( meta.W * .5, -meta.H * .5, 0 ) end
 	resultTable[9] = meta.SprL
 	resultTable[10] = worldPos
 	local fovModifier = math.Clamp( ( ( 1 - ( LocalPlayer():GetFOV() / 90 ) ) * 5 ) + 1, 1, 1000 )
