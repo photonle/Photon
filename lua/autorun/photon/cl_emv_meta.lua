@@ -365,7 +365,10 @@ function EMVU:MakeEMV( emv, name )
 			end
 			if positions[b[1]] then
 				local colString = b[2]
-				if not colString then print("[Photon] No color specified for position: " .. tostring(b[1]) .. ". Falling back to WHITE"); colString = "WHITE" end
+				if not colString then
+					Photon.Logging.Warning("[Photon] No color specified for position: " .. tostring(b[1]) .. ". Falling back to WHITE")
+					colString = "WHITE"
+				end
 
 				local col = false
 				local multiColor = false
@@ -379,7 +382,10 @@ function EMVU:MakeEMV( emv, name )
 				else
 					col = EMVColors[colString]
 				end
-				if not col then print("[Photon] Invalid color specified: " .. colString .. ". Falling back to WHITE"); col = EMVColors["WHITE"] end
+				if not col then
+					Photon.Logging.Warning("[Photon] Invalid color specified: " .. colString .. ". Falling back to WHITE")
+					col = EMVColors["WHITE"]
+				end
 
 				if christmasMode:GetBool() then
 					if colString == "BLUE" then col = EMVColors["GREEN"]
