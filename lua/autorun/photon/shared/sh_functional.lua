@@ -26,7 +26,7 @@ function Photon.Functional.partial(func, ...)
 			args[st + i] = select(i, ...)
 		end
 
-		func(unpack(args, 1, st + m))
+		return func(unpack(args, 1, st + m))
 	end
 end
 
