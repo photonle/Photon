@@ -427,7 +427,7 @@ function EMVU:MakeEMV( emv, name )
 						contingentTransform
 					)
 			else
-				print("[Photon] No position found for: " .. tostring(b[1]))
+				Photon.Logging.Error("[Photon] No position found for: " .. tostring(b[1]))
 			end
 		end
 	end
