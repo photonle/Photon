@@ -194,7 +194,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	local curLight = getLightColor(worldPos)
 	local lightMod = clamp(1 - round(((( curLight[1] * curLight[2] * curLight[3] ) * .3) * 10) * 2, 5), .66, 1)
 
-	local srcOnly = false
+	local srcOnly = meta.SourceOnly == true
 	local srcSkip = (meta.Sprite and meta.Sprite == "sprites/emv/blank") or cheapLight
 
 	local UC = { true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true }
@@ -214,14 +214,10 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	brightness = brightness * lightMod
 
 	viewDot = viewDot * brightness
-	local viewFlare = getViewFlare( viewPercent, brightness )
-	local dist = worldPos:Distance( EyePos() )
-	local distModifier = ( 1 - clamp( ( dist / 512 ), 0, 1) )
+	local viewFlare = getViewFlare(viewPercent, brightness)
+	local dist = worldPos:Distance(EyePos())
+	local distModifier = (1 - clamp( ( dist / 512 ), 0, 1))
 	viewFlare = viewFlare * distModifier
-
-	if meta.SourceOnly == true then
-		srcOnly = true
-	end
 
 	local al = Angle()
 	al:Set(lang)
