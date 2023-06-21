@@ -104,7 +104,6 @@ end
 
 function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent)
 	if not incolors or not ilpos or not lang or not meta or not gpos then return end
-	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
 
 	local legacy = meta.NoLegacy ~= true
 	local colors = incolors
@@ -186,7 +185,6 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		return
 	end
 
-
 	viewPercent = viewDot
 	local viewMod = viewDot * 10
 	viewDot = (pow( viewMod, 1.25 ) * .1) * manualBloom
@@ -255,41 +253,11 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		end
 	end
 
-	resultTable[1] = srcOnly
-	resultTable[2] = !srcSkip
-	resultTable[3] = worldPos
-	resultTable[4] = ua
-	resultTable[5] = meta.SpriteMaterial
-	resultTable[6] = meta.SprT
-	resultTable[7] = meta.SprR
-	resultTable[8] = meta.SprB
-	resultTable[9] = meta.SprL
-	resultTable[10] = worldPos
 	local fovModifier = math.Clamp( ( ( 1 - ( LocalPlayer():GetFOV() / 90 ) ) * 5 ) + 1, 1, 1000 )
-	resultTable[11] = (meta.Scale * viewDot) * manualBloom
-	resultTable[12] = ((meta.Scale * viewFlare) * fovModifier) * manualBloom
-	resultTable[13] = (meta.Scale * meta.WMult*viewDot) * manualBloom
-	resultTable[14] = srcColor
 
-	resultTable[15] = UC.med
-	resultTable[16] = UC.amb
-	resultTable[17] = UC.blm
-	resultTable[18] = UC.glw
-	resultTable[19] = UC.raw
-	resultTable[20] = UC.flr
-
-	resultTable[21] = lightMod
-	resultTable[22] = cheapLight
-	resultTable[23] = viewFlare
-
-	resultTable[24] = false
-
-	resultTable[25] = meta.SubmatID
-	resultTable[26] = meta.SubmatMaterial
-	resultTable[27] = parent
-
+	local emitResults = false
 	if istable( meta.EmitArray ) then
-		local emitResults = {}
+		emitResults = {}
 		for _key,_val in pairs( meta.EmitArray ) do
 			if not isvector( _val ) then continue end
 			emitResults[ #emitResults + 1 ] = Vector()
@@ -298,10 +266,37 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 			insertRef:Rotate( ua )
 			insertRef:Add( worldPos )
 		end
-		resultTable[24] = emitResults
 	end
 
-	self:AddLightToQueue( resultTable )
+	self:AddLightToQueue({
+		srcOnly,
+		!srcSkip,
+		worldPos,
+		ua,
+		meta.SpriteMaterial,
+		meta.SprT,
+		meta.SprR,
+		meta.SprB,
+		meta.SprL,
+		worldPos,
+		(meta.Scale * viewDot) * manualBloom,
+		((meta.Scale * viewFlare) * fovModifier) * manualBloom,
+		(meta.Scale * meta.WMult*viewDot) * manualBloom,
+		srcColor,
+		UC.med,
+		UC.amb,
+		UC.blm,
+		UC.glw,
+		UC.raw,
+		UC.flr,
+		lightMod,
+		cheapLight,
+		viewFlare,
+		emitResults,
+		meta.SubmatID,
+		meta.SubmatMaterial,
+		parent
+	})
 end
 
 
