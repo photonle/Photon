@@ -41,7 +41,7 @@ local function null(...) return ... end
 -- @usage flippedPrint("hello", "world") -- Outputs: "world hello"
 function Photon.Functional.flip(func)
 	return function(a, b, ...)
-		func(b, a, ...)
+		return func(b, a, ...)
 	end
 end
 
