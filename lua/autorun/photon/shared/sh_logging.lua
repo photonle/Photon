@@ -164,7 +164,6 @@ function Photon.Logging:Build(level)
 
 	local args = {}
 	table.insert(args, Photon.Functional.partial(self.Photon, self, true))
-	table.insert(args, self:Photon(true))
 	table.insert(args, self.Colours.Text)
 	table.insert(args, "[")
 
