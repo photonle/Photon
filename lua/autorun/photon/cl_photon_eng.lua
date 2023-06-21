@@ -182,129 +182,130 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	ViewNormal:Normalize()
 	viewDot = ViewNormal:Dot( lightNormal )
 
-	if ( viewDot and viewDot >= 0 ) then
-
-		viewPercent = viewDot
-		local viewMod = viewDot * 10
-		viewDot = ( pow( viewMod, 1.25 ) * .1 ) * manualBloom
-
-		local curLight = getLightColor( worldPos )
-		local lightMod = clamp(1 - round(((( curLight[1] * curLight[2] * curLight[3] ) * .3) * 10) * 2, 5), .66, 1)
-
-		local srcOnly = false
-		local srcSkip = false
-
-		if (meta.Sprite and meta.Sprite == "sprites/emv/blank") or meta.Cheap then srcSkip = true end
-
-		local UC = { true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true }
-
-		local brightness = 1
-		local rawBrightness = 1
-		local pulseOverride = false
-
-		if brght and istable(brght) then
-			brightness = pulsingLight( emvHelp, brght[1], brght[2], brght[3] )
-			pulseOverride = true
-		elseif isnumber( brght ) then
-			brightness = brght
-			rawBrightness = brght
-		end
-
-		brightness = brightness * lightMod
-
-		viewDot = viewDot * brightness
-		local viewFlare = getViewFlare( viewPercent, brightness )
-		local dist = worldPos:Distance( EyePos() )
-		local distModifier = ( 1 - clamp( ( dist / 512 ), 0, 1) )
-		viewFlare = viewFlare * distModifier
-
-		if meta.SourceOnly == true then
-			srcOnly = true
-		end
-
-		local al = Angle()
-		al:Set(lang)
-		al.r = al.r - 90
-		if rotating then al.y = offset - 90 end
-
-		up1:Set( worldPos )
-		local ua = parent:LocalToWorldAngles( al )
-
-		for k,v in pairs( colors ) do
-			UC[k] = v
-		end
-
-		local srcColor = Color(255,255,255,255)
-
-		if not srcSkip then
-			local srcMod = ( viewDot * .5 ) * manualBloom
-			//srcColor = ColorAlpha( UC.src, UC.src.a * rawBrightness )
-			srcColor = ColorAlpha( UC.src, 255 )
-			if pulseOverride then srcColor.a = ( srcColor.a * brightness ) end
-			if istable(UC["dim"]) then
-				srcColor.r = Lerp( srcMod, UC.dim.r, UC.src.r )
-				srcColor.g = Lerp( srcMod, UC.dim.g, UC.src.g )
-				srcColor.b = Lerp( srcMod, UC.dim.b, UC.src.b )
-			end
-		end
-
-		if PHOTON_DEBUG and !PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 255, 255, 0, 255 ) elseif PHOTON_DEBUG and PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 0, 0, 0, 0 ) end
-		if PHOTON_DEBUG and PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then srcColor = Color( 0, 255, 255 ) end
-
-		resultTable[1] = srcOnly
-		resultTable[2] = !srcSkip
-		resultTable[3] = worldPos
-		resultTable[4] = ua
-		if not meta.SpriteMaterial then meta.SpriteMaterial = Material( meta.Sprite ) end
-		resultTable[5] = meta.SpriteMaterial
-		if not meta.SprT then meta.SprT = Vector( meta.W * .5, meta.H * .5, 0 ) end
-		resultTable[6] = meta.SprT
-		if not meta.SprR then meta.SprR = Vector( -meta.W * .5, meta.H * .5, 0 ) end
-		resultTable[7] = meta.SprR
-		if not meta.SprB then meta.SprB = Vector( -meta.W * .5, -meta.H * .5, 0 ) end
-		resultTable[8] = meta.SprB
-		if not meta.SprL then meta.SprL = Vector( meta.W * .5, -meta.H * .5, 0 ) end
-		resultTable[9] = meta.SprL
-		resultTable[10] = worldPos
-		local fovModifier = math.Clamp( ( ( 1 - ( LocalPlayer():GetFOV() / 90 ) ) * 5 ) + 1, 1, 1000 )
-		resultTable[11] = (meta.Scale * viewDot) * manualBloom
-		resultTable[12] = ((meta.Scale * viewFlare) * fovModifier) * manualBloom
-		resultTable[13] = (meta.Scale * meta.WMult*viewDot) * manualBloom
-		resultTable[14] = srcColor
-
-		resultTable[15] = UC.med
-		resultTable[16] = UC.amb
-		resultTable[17] = UC.blm
-		resultTable[18] = UC.glw
-		resultTable[19] = UC.raw
-		resultTable[20] = UC.flr
-
-		resultTable[21] = lightMod
-		resultTable[22] = cheapLight
-		resultTable[23] = viewFlare
-
-		resultTable[24] = false
-
-		resultTable[25] = meta.SubmatID
-		resultTable[26] = meta.SubmatMaterial
-		resultTable[27] = parent
-
-		if istable( meta.EmitArray ) then
-			local emitResults = {}
-			for _key,_val in pairs( meta.EmitArray ) do
-				if not isvector( _val ) then continue end
-				emitResults[ #emitResults + 1 ] = Vector()
-				local insertRef = emitResults[ #emitResults ]
-				insertRef:Set( _val )
-				insertRef:Rotate( ua )
-				insertRef:Add( worldPos )
-			end
-			resultTable[24] = emitResults
-		end
-
-		self:AddLightToQueue( resultTable )
-
+	if not viewDot or viewDot < 0 then
+		return
 	end
+
+
+	viewPercent = viewDot
+	local viewMod = viewDot * 10
+	viewDot = (pow( viewMod, 1.25 ) * .1) * manualBloom
+
+	local curLight = getLightColor(worldPos)
+	local lightMod = clamp(1 - round(((( curLight[1] * curLight[2] * curLight[3] ) * .3) * 10) * 2, 5), .66, 1)
+
+	local srcOnly = false
+	local srcSkip = false
+
+	if (meta.Sprite and meta.Sprite == "sprites/emv/blank") or meta.Cheap then srcSkip = true end
+
+	local UC = { true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true }
+
+	local brightness = 1
+	local rawBrightness = 1
+	local pulseOverride = false
+
+	if brght and istable(brght) then
+		brightness = pulsingLight( emvHelp, brght[1], brght[2], brght[3] )
+		pulseOverride = true
+	elseif isnumber( brght ) then
+		brightness = brght
+		rawBrightness = brght
+	end
+
+	brightness = brightness * lightMod
+
+	viewDot = viewDot * brightness
+	local viewFlare = getViewFlare( viewPercent, brightness )
+	local dist = worldPos:Distance( EyePos() )
+	local distModifier = ( 1 - clamp( ( dist / 512 ), 0, 1) )
+	viewFlare = viewFlare * distModifier
+
+	if meta.SourceOnly == true then
+		srcOnly = true
+	end
+
+	local al = Angle()
+	al:Set(lang)
+	al.r = al.r - 90
+	if rotating then al.y = offset - 90 end
+
+	up1:Set( worldPos )
+	local ua = parent:LocalToWorldAngles( al )
+
+	for k,v in pairs( colors ) do
+		UC[k] = v
+	end
+
+	local srcColor = Color(255,255,255,255)
+
+	if not srcSkip then
+		local srcMod = ( viewDot * .5 ) * manualBloom
+		//srcColor = ColorAlpha( UC.src, UC.src.a * rawBrightness )
+		srcColor = ColorAlpha( UC.src, 255 )
+		if pulseOverride then srcColor.a = ( srcColor.a * brightness ) end
+		if istable(UC["dim"]) then
+			srcColor.r = Lerp( srcMod, UC.dim.r, UC.src.r )
+			srcColor.g = Lerp( srcMod, UC.dim.g, UC.src.g )
+			srcColor.b = Lerp( srcMod, UC.dim.b, UC.src.b )
+		end
+	end
+
+	if PHOTON_DEBUG and !PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 255, 255, 0, 255 ) elseif PHOTON_DEBUG and PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 0, 0, 0, 0 ) end
+	if PHOTON_DEBUG and PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then srcColor = Color( 0, 255, 255 ) end
+
+	resultTable[1] = srcOnly
+	resultTable[2] = !srcSkip
+	resultTable[3] = worldPos
+	resultTable[4] = ua
+	if not meta.SpriteMaterial then meta.SpriteMaterial = Material( meta.Sprite ) end
+	resultTable[5] = meta.SpriteMaterial
+	if not meta.SprT then meta.SprT = Vector( meta.W * .5, meta.H * .5, 0 ) end
+	resultTable[6] = meta.SprT
+	if not meta.SprR then meta.SprR = Vector( -meta.W * .5, meta.H * .5, 0 ) end
+	resultTable[7] = meta.SprR
+	if not meta.SprB then meta.SprB = Vector( -meta.W * .5, -meta.H * .5, 0 ) end
+	resultTable[8] = meta.SprB
+	if not meta.SprL then meta.SprL = Vector( meta.W * .5, -meta.H * .5, 0 ) end
+	resultTable[9] = meta.SprL
+	resultTable[10] = worldPos
+	local fovModifier = math.Clamp( ( ( 1 - ( LocalPlayer():GetFOV() / 90 ) ) * 5 ) + 1, 1, 1000 )
+	resultTable[11] = (meta.Scale * viewDot) * manualBloom
+	resultTable[12] = ((meta.Scale * viewFlare) * fovModifier) * manualBloom
+	resultTable[13] = (meta.Scale * meta.WMult*viewDot) * manualBloom
+	resultTable[14] = srcColor
+
+	resultTable[15] = UC.med
+	resultTable[16] = UC.amb
+	resultTable[17] = UC.blm
+	resultTable[18] = UC.glw
+	resultTable[19] = UC.raw
+	resultTable[20] = UC.flr
+
+	resultTable[21] = lightMod
+	resultTable[22] = cheapLight
+	resultTable[23] = viewFlare
+
+	resultTable[24] = false
+
+	resultTable[25] = meta.SubmatID
+	resultTable[26] = meta.SubmatMaterial
+	resultTable[27] = parent
+
+	if istable( meta.EmitArray ) then
+		local emitResults = {}
+		for _key,_val in pairs( meta.EmitArray ) do
+			if not isvector( _val ) then continue end
+			emitResults[ #emitResults + 1 ] = Vector()
+			local insertRef = emitResults[ #emitResults ]
+			insertRef:Set( _val )
+			insertRef:Rotate( ua )
+			insertRef:Add( worldPos )
+		end
+		resultTable[24] = emitResults
+	end
+
+	self:AddLightToQueue( resultTable )
 end
 
 
