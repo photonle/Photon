@@ -11,6 +11,7 @@ Photon = Photon or {}
 
 --- Include a file with the given path, automatically setting AddCSLuaFile or include as appropriate.
 -- @str path File path to include.
+function Photon.include(path, force_full)
 	if debug.getinfo(2, "S").short_src:EndsWith("autorun/emv_init.lua") and not force_full then
 		path = "photon/" .. path
 	end
