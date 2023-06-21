@@ -135,7 +135,7 @@ if CLIENT then
 	end)
 end
 
-local UInt, Bool = NET.UINT, NET.BOOL
+local UInt, Bool, Str = NET.UINT, NET.BOOL, NET.STR
 
 NET:Map("CurrentSignal", UInt, 2)
 NET:Map("Blinker", UInt, 2)
@@ -158,3 +158,8 @@ NET:Map("TrafficOption", UInt, 4)
 NET:Map("IlluminationOn", Bool)
 NET:Map("IlluminationOption", UInt, 4)
 NET:Map("Preset", UInt, 10)
+
+NET:Map("VehicleIndex", Str)
+NET:Map("UnitNumber", Str)
+NET:Map("LiveryID", Str)
+NET:Map("SelectionString", Str)
