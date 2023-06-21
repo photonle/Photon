@@ -153,7 +153,7 @@ end
 
 --- Build the message functions for a given level.
 -- Creates the global function Photon<LEVEL>, ie PhotonWarning
--- Also adds the function to Photon.Messages.<LEVEL>, ie Photon.Messages.Warning
+-- Also adds the function to Photon.Logging.<LEVEL>, ie Photon.Logging.Warning
 -- @tparam string level Message level.
 function Photon.Logging:Build(level)
 	local levelValue = isnumber(level) and level or self.Levels[level:upper()]
