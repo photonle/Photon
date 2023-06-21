@@ -125,7 +125,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	local visible = 0
 	local viewPercent = 0
 
-	if meta.AngleOffset and meta.AngleOffset == "RR" then
+	if offset == "RR" then
 		local lposMod = EMVU.Helper:RadiusLight( 1, 4 )
 		lpos[1] = lpos[1] + lposMod
 		lpos[2] = lpos[2] + lposMod
