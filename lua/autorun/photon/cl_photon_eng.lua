@@ -118,11 +118,8 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		end
 	end
 
-	local visRadius = .1
-	local cheapLight = false
-	if meta.Cheap then cheapLight = true end
-
-	if meta.VisRadius then visRadius = meta.VisRadius end
+	local visRadius = meta.VisRadius or .1
+	local cheapLight = meta.Cheap == true
 
 	local viewDot = 0
 	-- local visible = 1
