@@ -59,7 +59,7 @@ end
 
 function ENT:Photon_Illumination()
 	if not IsValid(self) then return false end
-	return self:GetPhotonNet_IlluminationOn()
+	return self:GetPhotonNet_IlluminationOn(false)
 end
 
 function ENT:Photon_IllumOption()
