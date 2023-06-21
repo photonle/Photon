@@ -122,7 +122,6 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	local cheapLight = meta.Cheap == true
 
 	local viewDot = 0
-	-- local visible = 1
 	local visible = 0
 	local viewPercent = 0
 
