@@ -210,11 +210,14 @@ function EMVU:MakeEMV( emv, name )
 		local k = component
 		local a = index
 
-		if not self.EL.Frames[k] then print("[Photon] Unregistered component name: " .. tostring( component ) .. " defined in vehicle: " .. tostring( self.VehicleName ) ) return end
+		if not self.EL.Frames[k] then
+			Photon.Logging.Error("[Photon] Unregistered component name: " .. tostring( component ) .. " defined in vehicle: " .. tostring( self.VehicleName ) )
+			return
+		end
 		if not self.EL.Frames[k][a] then
 			local comp = tostring( component )
 			if not printedErrors[comp] then
-				local errorOutput = print("[Photon] Unregistered pattern: " .. tostring( index ) .. " under component: " .. component .. " defined in vehicle: " .. tostring( self.VehicleName ) )
+				Photon.Logging.Error("[Photon] Unregistered pattern: " .. tostring( index ) .. " under component: " .. component .. " defined in vehicle: " .. tostring( self.VehicleName ) )
 				printedErrors[comp] = true
 			end
 			return
