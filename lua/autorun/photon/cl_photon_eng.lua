@@ -124,6 +124,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	local viewDot = 0
 	local visible = 0
 	local viewPercent = 0
+	local worldPos = gpos
 
 	if offset == "RR" then
 		local lposMod = radiusLight(1, 4)
@@ -131,7 +132,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		lpos[2] = lpos[2] + lposMod
 	end
 
-	local worldPos = gpos
+
 	visible = pixvis
 	-- visible = 1
 	if( visible and visible > 0) then
