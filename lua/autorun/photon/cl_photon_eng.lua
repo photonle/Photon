@@ -6,9 +6,17 @@ local clamp, pow, round = math.Clamp, math.pow, math.Round
 local getLightColor, setMaterial, drawSprite = render.GetLightColor, render.SetMaterial, render.DrawSprite
 local utilPixVis = util.PixelVisible
 
-local clamp = math.Clamp
-local pow = math.pow
-local round = math.Round
+-- Localise Globals
+local istable, isnumber, pairs, ColorAlpha, Lerp, tostring, Material, Vector = istable, isnumber, pairs, ColorAlpha, Lerp, tostring, Material, Vector
+
+-- Localise 1st Party Libraries
+local rotatingLight, pulsingLight, radiusLight
+if EMVU and EMVU.Helper then
+	local h = EMVU.Helper
+	rotatingLight = h.RotatingLight
+	pulsingLight = h.PulsingLight
+	radiusLight = h.RadiusLight
+end
 local useEyePos = Vector( 0, 0, 0 )
 local useEyeAng = Angle( 0, 0, 0 )
 local istable = istable
