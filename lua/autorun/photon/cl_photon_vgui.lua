@@ -42,7 +42,11 @@ function PANEL:SetComponent( componentId )
 	elseif componentId then
 
 		local component = EMVU.Auto[ componentId ]
-		if not component then print( "component not found" ); return end
+		if not component then
+			Photon.Logging.Error("Could not find Component ID: ", componentId)
+			return
+		end
+
 		self.ModelViewer:SetModel( component.Model or "" )
 		if self.ModelViewer:GetEntity() then
 			self.ModelViewer:GetEntity():SetSkin( 0 )
