@@ -96,7 +96,7 @@ function Photon:ClearLightQueue()
 	table.Empty(photonDynamicLights)
 end
 
-function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent )
+function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent)
 	if not incolors or not ilpos or not lang or not meta or not gpos then return end
 	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
 	local legacy = true
