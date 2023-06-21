@@ -17,6 +17,20 @@ if EMVU and EMVU.Helper then
 	pulsingLight = h.PulsingLight
 	radiusLight = h.RadiusLight
 end
+hook.Add("InitPostEntity", "Photon.AddHelperLocalVars", function()
+	local h = EMVU.Helper
+	rotatingLight = h.RotatingLight
+	pulsingLight = h.PulsingLight
+	radiusLight = h.RadiusLight
+
+	if mat7:IsError() then
+		chat.AddText("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
+		Photon.Logging.Fatal("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
+		return
+	end
+
+	hook.Add("RenderScreenspaceEffects", "Photon.ScreenEffects", Photon.DrawDirtyLensEffect)
+end)
 local useEyePos = Vector( 0, 0, 0 )
 local useEyeAng = Angle( 0, 0, 0 )
 local istable = istable
