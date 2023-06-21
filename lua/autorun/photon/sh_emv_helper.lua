@@ -517,8 +517,11 @@ do
 	end
 end
 
-function EMVU.Helper:RadiusLight( speed, radius )
-	return math.sin( CurTime() * speed ) * radius
+do
+	local sin, time = math.sin, CurTime
+	function EMVU.Helper:RadiusLight(speed, radius)
+		return sin(time() * speed) * radius
+	end
 end
 
 function EMVU.Helper:PulsingLight( speed, min, offset )
