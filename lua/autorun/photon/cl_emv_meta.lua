@@ -378,7 +378,6 @@ function EMVU:MakeEMV( emv, name )
 					colorRecycle = { EMVColors[cols[1]], EMVColors[cols[2]] }
 					col = colorRecycle
 					multiColor = true
-
 				else
 					col = EMVColors[colString]
 				end
