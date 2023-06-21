@@ -104,8 +104,7 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	local colors = incolors
 	local offset = meta.AngleOffset
 
-	local manualBloom = 1
-	if bloom_multi and bloom_multi:GetFloat() then manualBloom = bloom_multi:GetFloat() end
+	local manualBloom = bloom_multi
 
 	lpos:Set( ilpos )
 
