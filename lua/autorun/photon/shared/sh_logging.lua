@@ -81,6 +81,8 @@ local function flatten(...)
 		local v = (select(i, ...))
 		if istable(v) and not IsColor(v) then
 			table.Add(out, flatten(unpack(v)))
+		elseif isfunction(v) then
+			table.Add(out, flatten(v()))
 		else
 			table.insert(out, v)
 		end
