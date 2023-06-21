@@ -158,8 +158,6 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 		Photon.AddDynamicLightToQueue({worldPos, normalDir, {colors.raw.r, colors.raw.g, colors.raw.b}}, (parent:EntIndex() * 400) + emitDynamic)
 	end
 
-	if not meta.Scale then meta.Scale = 1 end
-	if not meta.WMult then meta.WMult = 1 end
 	local ca = parent:GetAngles()
 	local lightNormal = Angle()
 	if legacy and not contingent then

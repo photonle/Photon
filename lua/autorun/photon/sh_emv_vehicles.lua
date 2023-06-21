@@ -185,6 +185,15 @@ function EMVU:PreloadVehicle( car )
 		else
 			EMVU.LightMeta[ car.Name ] = {}
 		end
+
+		for _, meta in pairs(EMVU.LightMeta[car.Name]) do
+			if not meta.Scale then
+				meta.Scale = 1
+			end
+			if not meta.WMult then
+				meta.WMult = 1
+			end
+		end
 	end
 
 	if istable( car.EMV.Attributes ) then
@@ -268,6 +277,15 @@ function EMVU:OverwriteIndex(name, data)
 	EMVU.Attributes[name] = data.Attributes or {}
 
 	EMVU.LightMeta[name] = data.Meta or {}
+	for _, meta in pairs(EMVU.LightMeta[name]) do
+		if not meta.Scale then
+			meta.Scale = 1
+		end
+		if not meta.WMult then
+			meta.WMult = 1
+		end
+	end
+
 	if CLIENT then
 		safeTableEmpty(EMVU.Positions[name])
 		EMVU.Positions[name] = data.Positions or {}
