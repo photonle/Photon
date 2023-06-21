@@ -50,6 +50,15 @@ cvars.AddChangeCallback("photon_dynamic_lights", function()
 	bloom_multi = dynlights_enabled_cvar:GetBool()
 end, "Photon.Engine.CvarSettings")
 
+local draw_effects = true
+local draw_effects_cvar = GetConVar("photon_lens_effects")
+if draw_effects_cvar then
+	draw_effects = draw_effects_cvar:GetBool()
+end
+cvars.AddChangeCallback("photon_lens_effects", function()
+	draw_effects = draw_effects_cvar:GetBool()
+end, "Photon.Engine.CvarSettings")
+
 -- Localise 1st Party Libraries
 local rotatingLight, pulsingLight, radiusLight
 if EMVU and EMVU.Helper then
@@ -68,6 +77,8 @@ hook.Add("InitPostEntity", "Photon.AddHelperLocalVars", function()
 	bloom_multi = bloom_multi_cvar:GetFloat() or 1
 	dynlights_enabled_cvar = GetConVar("photon_dynamic_lights")
 	dynlights_enabled = dynlights_enabled_cvar:GetBool() or true
+	draw_effects_cvar = GetConVar("photon_lens_effects")
+	draw_effects = draw_effects_cvar:GetBool() or true
 
 	if mat7:IsError() then
 		chat.AddText("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
@@ -77,6 +88,7 @@ hook.Add("InitPostEntity", "Photon.AddHelperLocalVars", function()
 
 	hook.Add("RenderScreenspaceEffects", "Photon.ScreenEffects", Photon.DrawDirtyLensEffect)
 end)
+
 
 local function getViewFlare(dot, brght)
 	local dif = dot - .85
@@ -480,12 +492,6 @@ local cam3d = cam.Start3D
 local cam2d = cam.Start2D
 local endCam2d = cam.End2D
 local endCam3d = cam.End3D
-local draw_effects = GetConVar( "photon_lens_effects" )
-hook.Add( "InitPostEntity", "Photon.DrawEffectsConvar", function()
-	draw_effects = GetConVar( "photon_lens_effects" )
-	bloom_multi = GetConVar( "photon_bloom_modifier" )
-	dynlights_enabled = GetConVar( "photon_dynamic_lights" )
-end)
 
 function Photon:RenderQueue( effects )
 	local eyePos = EyePos()
@@ -509,7 +515,7 @@ function Photon:RenderQueue( effects )
 end
 hook.Add( "PreDrawEffects", "Photon.RenderQueue", function()
 	Photon:RenderQueue( false )
-	if draw_effects and draw_effects:GetBool() then
+	if draw_effects then
 		Photon:RenderQueue( true )
 	end
 end )
@@ -550,8 +556,10 @@ function Photon.RenderDynamicLightQueue()
 		end
 	end
 end
-hook.Add( "Think", "Photon.RenderDynamicLightQueue", function()
-	if ( dynlights_enabled and dynlights_enabled.GetBool and dynlights_enabled:GetBool() ) then Photon.RenderDynamicLightQueue() end
+hook.Add("Think", "Photon.RenderDynamicLightQueue", function()
+	if dynlights_enabled then
+		Photon.RenderDynamicLightQueue()
+	end
 end)
 
 local IsValid = IsValid
