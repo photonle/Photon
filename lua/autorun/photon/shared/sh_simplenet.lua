@@ -128,7 +128,10 @@ if CLIENT then
 		local ent = net.ReadEntity()
 		local idx = net.ReadUInt(NET.Bits)
 		local name, netType, extra = unpack(NET.FMap[idx])
-		ent[NET.Normalise(name)] = NET.ReadFunctions[netType](extra)
+		local normalName = NET.Normalise(name)
+		local old = ent[normalName]
+		ent[normalName] = NET.ReadFunctions[netType](extra)
+		hook.Run("Photon.SimpleNet.ValueChanged", name, old, ent[normalName])
 	end)
 end
 
