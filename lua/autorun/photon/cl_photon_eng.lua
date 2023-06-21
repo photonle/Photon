@@ -24,6 +24,12 @@ local lpos = Vector()
 local useEyePos = Vector(0, 0, 0)
 local useEyeAng = Angle(0, 0, 0)
 local up1 = Vector()
+local emitToDirs = {
+	Angle(0, 135, 0),
+	Angle(0, 45, 0),
+	Angle(0, -135, 0),
+	Angle(0, -45, 0)
+}
 
 -- ConVar Caching
 local bloom_multi = 1
@@ -144,10 +150,10 @@ function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, p
 	if emitDynamic then
 		local addDynamic = { true, true, true, true }
 		local normalDir = parent:GetForward()
-		if emitDynamic == 1 then normalDir:Rotate( Angle( 0, 135, 0 ) )
-		elseif emitDynamic == 2 then normalDir:Rotate( Angle( 0, 45, 0 ) )
-		elseif emitDynamic == 3 then normalDir:Rotate( Angle( 0, -135, 0 ) )
-		elseif emitDynamic == 4 then normalDir:Rotate( Angle( 0, -45, 0 ) ) end
+		local rotator = emitToDirs[emitDynamic]
+		if rotator then
+			normalDir:Rotate(rotator)
+		end
 		addDynamic[1] = worldPos
 		addDynamic[2] = normalDir
 		addDynamic[3] = { colors.raw.r, colors.raw.g, colors.raw.b }
