@@ -38,9 +38,12 @@ function Photon:SetupCar( ent, index )
 
 	function ent:CAR_Running( val )
 		if not IsValid( self ) then return false end
-		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_RUNNING", val ) end
-		return self:GetNW2Bool( "PhotonLE.CAR_RUNNING" )
+		if (val!=nil) then
+			self:SetNW2Bool( "PhotonLE.CAR_RUNNING", val )
+			self:SetPhotonNet_Running(val)
+		end
 
+		return self:GetPhotonNet_Running(false)
 	end
 
 	function ent:CAR_Signal( val )

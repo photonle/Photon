@@ -23,6 +23,14 @@ function EMVU:AddAutoComponent(component, name, base)
 		end
 	end
 
+	if component.IsSGM then
+		for _, position in pairs(component.Positions) do
+			if position[2] then
+				position[2].y = position[2].y - 90
+			end
+		end
+	end
+
 	if not component.Base then
 		EMVU.Auto[name] = component
 	elseif EMVU.Auto[component.Base] then
