@@ -1,12 +1,6 @@
 AddCSLuaFile()
 
-AddCSLuaFile("sh_functional.lua")
-include("sh_functional.lua")
-
-if not Photon.Messages then
-	Photon.Messages = {}
-	Photon.Messages.Colours = {}
-
+if not Photon.Net then
 	Photon.Net = {}
 
 	Photon.Vehicles = {}
@@ -46,44 +40,6 @@ if not Photon.Messages then
 		return false
 	end
 end
-
-Photon.Messages.Colours.Error = Color(255, 0, 0)
-Photon.Messages.Colours.Warning = Color(255, 200, 0)
-Photon.Messages.Colours.Debug = Color(160, 160, 160)
-
---- Print a message to console.
--- @tparam vararg ... Inputs to display.
--- @see MsgC
-function Photon.Messages.Print(...)
-	local args = {...}
-	args[#args + 1] = "\n"
-	return MsgC(unpack(args))
-end
-
---- Build the message functions for a given level.
--- Creates the global function Photon<LEVEL>, ie PhotonWarning
--- Also adds the function to Photon.Messages.<LEVEL>, ie Photon.Messages.Warning
--- @tparam string level Message level.
-function Photon.Messages:BuildLevel(level)
-	if self[level] then self[level] = nil end
-
-	local prt = self.Print
-	if self.Colours[level] then
-		prt = functional.partial(prt, self.Colours[level])
-	end
-
-	self[level] = functional.partial(
-		prt,
-		"[Photon]",
-		Format("[%s]", level),
-		" "
-	)
-	_G["Photon" .. level] = self[level]
-end
-
-Photon.Messages:BuildLevel("Error")
-Photon.Messages:BuildLevel("Warning")
-Photon.Messages:BuildLevel("Debug")
 
 AddCSLuaFile("cl_photon_eng.lua")
 AddCSLuaFile("cl_photon_meta.lua")

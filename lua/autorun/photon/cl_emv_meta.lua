@@ -210,11 +210,14 @@ function EMVU:MakeEMV( emv, name )
 		local k = component
 		local a = index
 
-		if not self.EL.Frames[k] then print("[Photon] Unregistered component name: " .. tostring( component ) .. " defined in vehicle: " .. tostring( self.VehicleName ) ) return end
+		if not self.EL.Frames[k] then
+			Photon.Logging.Error("[Photon] Unregistered component name: " .. tostring( component ) .. " defined in vehicle: " .. tostring( self.VehicleName ) )
+			return
+		end
 		if not self.EL.Frames[k][a] then
 			local comp = tostring( component )
 			if not printedErrors[comp] then
-				local errorOutput = print("[Photon] Unregistered pattern: " .. tostring( index ) .. " under component: " .. component .. " defined in vehicle: " .. tostring( self.VehicleName ) )
+				Photon.Logging.Error("[Photon] Unregistered pattern: " .. tostring( index ) .. " under component: " .. component .. " defined in vehicle: " .. tostring( self.VehicleName ) )
 				printedErrors[comp] = true
 			end
 			return
@@ -259,11 +262,6 @@ function EMVU:MakeEMV( emv, name )
 			if not istable( pData ) then error("[Photon] Unable to find light index (#" .. tostring( key ) .. "). Check EMV.Sections and ensure the the defined light number exists as [" .. tostring( key ) .. "] in the EMV.Positions table.") return end
 			if pData[1][1] == "RE" then
 				local npos, nang = EMVU.Helper.GetPositionFromRE( self, self:Photon_GetPropByAutoIndex( pData[1][5] ), pData[1], true )
-				-- local newPos = self:LocalToWorld( npos )
-				-- newPos.x = math.Round( newPos.x )
-				-- newPos.y = math.Round( newPos.y )
-				-- newPos.z = math.Round( newPos.z )
-				-- print( string.format( "[%s] %s", key, tostring( newPos ) ) )
 				resultTable[key] = npos
 			elseif isvector( pData[1] ) then
 				resultTable[key] = self:LocalToWorld( posData[tonumber(key)][1] )
@@ -367,7 +365,10 @@ function EMVU:MakeEMV( emv, name )
 			end
 			if positions[b[1]] then
 				local colString = b[2]
-				if not colString then print("[Photon] No color specified for position: " .. tostring(b[1]) .. ". Falling back to WHITE"); colString = "WHITE" end
+				if not colString then
+					Photon.Logging.Warning("[Photon] No color specified for position: " .. tostring(b[1]) .. ". Falling back to WHITE")
+					colString = "WHITE"
+				end
 
 				local col = false
 				local multiColor = false
@@ -377,11 +378,13 @@ function EMVU:MakeEMV( emv, name )
 					colorRecycle = { EMVColors[cols[1]], EMVColors[cols[2]] }
 					col = colorRecycle
 					multiColor = true
-
 				else
 					col = EMVColors[colString]
 				end
-				if not col then print("[Photon] Invalid color specified: " .. colString .. ". Falling back to WHITE"); col = EMVColors["WHITE"] end
+				if not col then
+					Photon.Logging.Warning("[Photon] Invalid color specified: " .. colString .. ". Falling back to WHITE")
+					col = EMVColors["WHITE"]
+				end
 
 				if christmasMode:GetBool() then
 					if colString == "BLUE" then col = EMVColors["GREEN"]
@@ -424,7 +427,7 @@ function EMVU:MakeEMV( emv, name )
 						contingentTransform
 					)
 			else
-				print("[Photon] No position found for: " .. tostring(b[1]))
+				Photon.Logging.Error("[Photon] No position found for: " .. tostring(b[1]))
 			end
 		end
 	end
