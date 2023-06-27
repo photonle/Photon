@@ -4,6 +4,7 @@ if not EMVU.Auto then EMVU.Auto = {} end
 if not EMVU.AutoStaging then EMVU.AutoStaging = {} end
 if not EMVU.AutoIndex then EMVU.AutoIndex = {} end
 
+local notifiedLegacyPositioning = false
 
 function EMVU:AddAutoComponent(component, name, base)
 	component.Name = name
@@ -28,6 +29,49 @@ function EMVU:AddAutoComponent(component, name, base)
 			if position[2] then
 				position[2].y = position[2].y - 90
 			end
+		end
+	end
+
+	if istable(component.Positions) and component.LegacyPositioning == nil then
+		for _, dt in ipairs(component.Positions) do
+			if istable(dt) and isvector(dt[1]) then
+				local _, ang = self.Helper.ResolvePositionMatrix(component, dt[1], dt[2], Vector(0, 0, 0), Angle(0, 0, 0), 1)
+				ang:SnapTo("r", 0.01)
+				ang:SnapTo("p", 0.01)
+				ang:SnapTo("y", 0.01)
+				local _, ang2 = self.Helper.ResolvePositionLegacy(component, dt[1], dt[2], Vector(0, 0, 0), Angle(0, 0, 0), 1)
+				ang2:SnapTo("r", 0.01)
+				ang2:SnapTo("p", 0.01)
+				ang2:SnapTo("y", 0.01)
+
+				local meta = component.Meta[dt[3]]
+				if meta then
+					if not meta.NotLegacy then
+						if meta.AngleOffset and isnumber(meta.AngleOffset) then
+							ang2.y = ang2.y + meta.AngleOffset
+						end
+					elseif meta.DirAxis and meta.DirAxis == "Up" then
+						ang2.y = ang2.y + meta.DirOffset
+					end
+				end
+
+				if
+					math.abs((ang[1] + 360) % 360) ~= math.abs((ang2[1] + 360) % 360) or
+					math.abs((ang[2] + 360) % 360) ~= math.abs((ang2[2] + 360) % 360) or
+					math.abs((ang[3] + 360) % 360) ~= math.abs((ang2[3] + 360) % 360) then
+						Photon.Logging.Warning("An angle is resolved differently using the matrix and legacy postioning resolver in '", component.Name, "', falling back to legacy.")
+						if not notifiedLegacyPositioning then
+							Photon.Logging.Warning("Set COMPONENT.LegacyPositioning to false suppress this check.")
+							notifiedLegacyPositioning = true
+						end
+
+						component.LegacyPositioning = true
+						break
+				end
+			end
+		end
+		if not component.LegacyPositioning then
+			Photon.Logging.Debug(component.Name, " works as expected.")
 		end
 	end
 
