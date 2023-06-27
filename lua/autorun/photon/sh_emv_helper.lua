@@ -748,3 +748,79 @@ function EMVU.Helper.GetAlertModeEnabled( name )
 	if (istable(EMVU.Attributes[ name ]) and (EMVU.Attributes[ name ].DisableAlertPatterns)) then return false end
 	return true
 end
+
+function EMVU.Helper:ResolvePosition(component, lightPos, lightAng, autoPos, autoAng, autoScale)
+	if component.LegacyPositioning then
+		return self.ResolvePositionLegacy(component, lightPos, lightAng, autoPos, autoAng, autoScale)
+	end
+
+	return self.ResolvePositionMatrix(component, lightPos, lightAng, autoPos, autoAng, autoScale)
+end
+
+local legacyRot = Angle(0, -90, 0)
+function EMVU.Helper.ResolvePositionMatrix(component, lightPos, lightAng, autoPos, autoAng, autoScale)
+	local componentMatrix = Matrix()
+	componentMatrix:Translate(autoPos)
+	componentMatrix:Rotate(autoAng)
+	if not component.NotLegacy then
+		componentMatrix:Rotate(legacyRot)
+	end
+
+	local autoScaleVector = isvector(autoScale) and (autoScale) or Vector(autoScale, autoScale, autoScale)
+
+	local offsetMatrix = Matrix()
+	offsetMatrix:Translate(lightPos * autoScaleVector)
+
+	local schmAngle = lightAng
+	if component.ForwardTranslation then
+		schmAngle = Angle(
+			-schmAngle.r,
+			schmAngle.y,
+			schmAngle.p
+		)
+	end
+	offsetMatrix:Rotate(schmAngle)
+	local out = componentMatrix * offsetMatrix
+
+	return out:GetTranslation(), out:GetAngles()
+end
+
+function EMVU.Helper.ResolvePositionLegacy(component, lightPos, lightAng, autoPos, autoAng, autoScale)
+	local adjustAng = Angle()
+	if not component.NotLegacy then
+		adjustAng.p = autoAng.r
+		adjustAng.y = autoAng.y - 90
+		adjustAng.r = autoAng.p * -1
+	else
+		adjustAng.p = autoAng.p
+		adjustAng.y = autoAng.y
+		adjustAng.r = autoAng.r
+	end
+
+	local newPos = Vector()
+	newPos:Set(lightPos)
+	newPos:Rotate(adjustAng)
+	newPos:Mul(autoScale)
+	newPos:Add(autoPos)
+
+	local newAng = Angle()
+	if not component.NotLegacy then
+		newAng.y = newAng.y + 90
+		newAng:Set( lightAng )
+		newAng:RotateAroundAxis( autoAng:Right(), -1*autoAng.p )
+		newAng:RotateAroundAxis( autoAng:Up(), -1*autoAng.r )
+	else
+		newAng:Set( lightAng )
+		if component.ForwardTranslation then
+			newAng.p = newAng.p + (autoAng.r *-1)
+			newAng.y = newAng.y + autoAng.y
+			newAng.r = newAng.r + autoAng.p
+		else
+			newAng.p = newAng.p + autoAng.p
+			newAng.y = newAng.y + autoAng.y
+			newAng.r = newAng.r + autoAng.r
+		end
+	end
+
+	return newPos, newAng
+end
