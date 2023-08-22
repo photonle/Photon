@@ -92,7 +92,7 @@ end
 --- Error callback function.
 -- @string error The error which occured.
 Photon.AirEL.LoadCallbackFail = function(error)
-	print("[Photon] An error occurred: " .. tostring(error))
+	Photon.Logging.Error("AirEL failed to load: " .. tostring(error))
 end
 
 --- Apply a texture to an ariel system.
@@ -157,8 +157,7 @@ Photon.AirEL.Apply = function(unitString, ent)
 	local mdlId = Photon.AirEL.TranslationTable[tostring(mdl)]
 
 	if not mdlId then
-		print(string.format("[Photon] %s is not a supported AirEL model.", tostring(mdl)))
-
+		Photon.Logging.Warning(mdl, " is not a supported AirEL model!")
 		return false
 	end
 

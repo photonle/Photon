@@ -226,8 +226,20 @@ function EMVU.Net.ApplyLicenseMaterial(ent, mat)
 end
 
 concommand.Add("photon_debug_getbones", function()
+	local ply = LocalPlayer()
 	local ent = ply:GetEyeTrace().Entity
-	if not IsValid(ent) then return end
+	if not IsValid(ent) then
+		ent = ply:GetVehicle()
+	end
+	if not IsValid(ent) then
+		return
+	end
 
-	print(tostring(ent:GetBoneCount()))
+	Photon.Logging.ForceInfo("--< Bones Report >--")
+	local bones = ent:GetBoneCount()
+	Photon.Logging.ForceInfo("Bone Count: ", bones)
+
+	for i = 0, bones - 1 do
+		Photon.Logging.ForceInfo("Bone #", i, ": ", ent:GetBoneName(i))
+	end
 end)

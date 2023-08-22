@@ -22,7 +22,7 @@ function ent:HasPhotonELS()
 	if not IsValid( self ) then return false end
 	if not EMV_INDEX then return false end
 	if not self:IsEMV() then return false end
-	if not self:GetNW2Bool( "PhotonLE.CAR_USE_EL" ) then return false end
+	if not self:GetPhotonNet_Enabled() then return false end
 	return true
 end
 

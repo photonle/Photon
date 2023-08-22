@@ -40,7 +40,7 @@ function ENT:ELS_Enabled(val)
 		self:SetPhotonNet_Enabled(val)
 	end
 
-	return self:GetPhotonNet_Enabled()
+	return self:GetPhotonNet_Enabled(false)
 end
 
 --- Sets if the vehicle has ELS lights running.
@@ -51,7 +51,7 @@ function ENT:ELS_Lights(val)
 		self:SetPhotonNet_LightOn(val)
 	end
 
-	return self:GetPhotonNet_LightOn()
+	return self:GetPhotonNet_LightOn(false)
 end
 
 --- Sets the active light value.
@@ -62,7 +62,7 @@ function ENT:ELS_LightOption(val)
 		self:SetPhotonNet_LightOption(val)
 	end
 
-	return self:GetPhotonNet_LightOption()
+	return self:GetPhotonNet_LightOption(1)
 end
 
 --- Sets if the vehicle has siren running.
@@ -73,7 +73,7 @@ function ENT:ELS_Siren(val)
 		self:SetPhotonNet_SirenOn(val)
 	end
 
-	return self:GetPhotonNet_SirenOn()
+	return self:GetPhotonNet_SirenOn(false)
 end
 
 --- Sets the active siren.
@@ -84,7 +84,7 @@ function ENT:ELS_SirenOption(val)
 		self:SetPhotonNet_SirenOption(val)
 	end
 
-	return self:GetPhotonNet_SirenOption()
+	return self:GetPhotonNet_SirenOption(1)
 end
 
 --- Sets the set of sirens.
@@ -92,6 +92,7 @@ end
 -- @rint The set value.
 function ENT:ELS_SirenSet(val)
 	if val ~= nil then
+		self:ELS_SirenOption(1)
 		self:SetPhotonNet_SirenSet(val)
 	end
 
@@ -134,7 +135,7 @@ function ENT:ELS_TrafficOption(val)
 		self:SetPhotonNet_TrafficOption(val)
 	end
 
-	return self:GetPhotonNet_TrafficOption()
+	return self:GetPhotonNet_TrafficOption(1)
 end
 
 --- Gets/Sets illumination enabled.
@@ -156,7 +157,7 @@ function ENT:ELS_IlluminateOption(val)
 		self:SetPhotonNet_IlluminationOption(val)
 	end
 
-	return self:GetPhotonNet_IlluminationOption()
+	return self:GetPhotonNet_IlluminationOption(1)
 end
 
 --- Gets/Sets the a EMV preset.
@@ -180,7 +181,7 @@ function ENT:ELS_PresetOption(val)
 		end
 	end
 
-	return self:GetPhotonNet_Preset()
+	return self:GetPhotonNet_Preset(0)
 end
 
 local illumination_allowed = GetConVar("photon_emv_useillum")
@@ -210,16 +211,16 @@ function ENT:ELS_IllumOn()
 
 	for _, lampData in ipairs(lamps) do
 		local pos, ang, metaName = unpack(lampData)
-		local meta = helper:GetLampMeta(name, metaName)
+		local lampMeta = helper:GetLampMeta(name, metaName)
 
 		local lamp = ents.Create("env_projectedtexture")
 		if not IsValid(lamp) then
 			break
 		end
 
-		lamp:SetParent( self )
-		lamp:SetLocalPos( pos )
-		lamp:SetLocalAngles( ang )
+		lamp:SetParent(self)
+		lamp:SetLocalPos(pos)
+		lamp:SetLocalAngles(ang)
 
 		lamp:SetKeyValue("enableshadows", 1)
 		lamp:SetKeyValue("farz", lampMeta.Distance)
@@ -244,4 +245,8 @@ function ENT:ELS_IllumOff()
 	for _, lamp in ipairs(self.ELS_Lamps) do
 		SafeRemoveEntity(lamp)
 	end
+end
+
+function ENT:ELS_HasAuxSiren()
+	return self:ELS_AuxSirenSet() ~= nil and self:ELS_AuxSirenSet() ~= 0
 end

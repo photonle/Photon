@@ -1,0 +1,426 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Photon Documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Photon Lighting Engine</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Photon.html">Photon</a></li>
+  <li><a href="../modules/Photon.AirEL.html">Photon.AirEL</a></li>
+  <li><a href="../modules/EMVU.html">EMVU</a></li>
+  <li><a href="../modules/EMVU.AutoLivery.html">EMVU.AutoLivery</a></li>
+  <li><a href="../modules/autorun.photon.library.sirens.anemolis_chp_bike.html">autorun.photon.library.sirens.anemolis_chp_bike</a></li>
+  <li><a href="../modules/autorun.photon.library.sirens.anemolis_whelen_epsilon_alternate.html">autorun.photon.library.sirens.anemolis_whelen_epsilon_alternate</a></li>
+  <li><a href="../modules/Photon.Net.html">Photon.Net</a></li>
+  <li><a href="../modules/Photon.Functional.html">Photon.Functional</a></li>
+  <li><strong>Photon.Logging</strong></li>
+  <li><a href="../modules/Photon.SNet.html">Photon.SNet</a></li>
+</ul>
+<h2>Classes</h2>
+<ul class="nowrap">
+  <li><a href="../classes/VEHICLE.html">VEHICLE</a></li>
+  <li><a href="../classes/Vehicle.html">Vehicle</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Photon.Logging</code></h1>
+<p>Photon Logging Module</p>
+<p>
+
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Photon.Logging.Parse"><span class='state state-client state-server'>Photon.Logging.Parse(level)</span></a></td>
+	<td class="summary">Parse a string logging level (such as that from cvars.String) into a level.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.Logging._print"><span class='state state-client state-server'>Photon.Logging._print(...)</span></a></td>
+	<td class="summary">Print a message with colour to console.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.Logging:Photon"><span class='state state-client state-server'>Photon.Logging:Photon(wrapped, event)</span></a></td>
+	<td class="summary">Create a "Photon" or "[Photon]" table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.Logging:Build"><span class='state state-client state-server'>Photon.Logging:Build(level)</span></a></td>
+	<td class="summary">Build the message functions for a given level.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Photon.Logging.Levels">Photon.Logging.Levels</a></td>
+	<td class="summary">Various Logging Level Enumerations</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.Logging.Colours">Photon.Logging.Colours</a></td>
+	<td class="summary">Colours used in the logging library.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Photon.Logging.Phrases">Photon.Logging.Phrases</a></td>
+	<td class="summary">A table storing often used logging "phrases".</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Photon.Logging.Parse"></a>
+    <strong><span class='state state-client state-server'>Photon.Logging.Parse(level)</span></strong>
+    </dt>
+    <dd>
+    Parse a string logging level (such as that from cvars.String) into a level.
+ If it fails to parse, the default is used instead.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">level</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         Input Level
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        Logging Level
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.Logging._print"></a>
+    <strong><span class='state state-client state-server'>Photon.Logging._print(...)</span></strong>
+    </dt>
+    <dd>
+    Print a message with colour to console.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    <h3>Internal:</h3>
+    <ul>
+         <span class='tag-internal'>This function is internal. Whilst you can call it, you probably shouldn't.</span>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+    <h3>See also:</h3>
+    <ul>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "Photon.Logging:Photon"></a>
+    <strong><span class='state state-client state-server'>Photon.Logging:Photon(wrapped, event)</span></strong>
+    </dt>
+    <dd>
+    Create a "Photon" or "[Photon]" table.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">wrapped</span>
+            <span class="types"><span class="type">boolean</span></span>
+         Should the Photon be wrapped in [].
+        </li>
+        <li><span class="parameter">event</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         It's a secret tool that'll help us later.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.Logging:Build"></a>
+    <strong><span class='state state-client state-server'>Photon.Logging:Build(level)</span></strong>
+    </dt>
+    <dd>
+    Build the message functions for a given level.
+ Creates the global function Photon<LEVEL>, ie PhotonWarning
+ Also adds the function to Photon.Logging.<LEVEL>, ie Photon.Logging.Warning
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">level</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         Message level.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Photon.Logging.Levels"></a>
+    <strong>Photon.Logging.Levels</strong>
+    </dt>
+    <dd>
+    Various Logging Level Enumerations
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">NONE</span>
+
+
+
+        </li>
+        <li><span class="parameter">FATAL</span>
+
+
+
+        </li>
+        <li><span class="parameter">ERROR</span>
+
+
+
+        </li>
+        <li><span class="parameter">WARNING</span>
+
+
+
+        </li>
+        <li><span class="parameter">INFO</span>
+
+
+
+        </li>
+        <li><span class="parameter">DEBUG</span>
+
+
+
+        </li>
+        <li><span class="parameter">ANY</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.Logging.Colours"></a>
+    <strong>Photon.Logging.Colours</strong>
+    </dt>
+    <dd>
+    Colours used in the logging library.
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">[Photon]</span>
+
+
+
+        </li>
+        <li><span class="parameter">[Photon]</span>
+
+
+
+        </li>
+        <li><span class="parameter">[Photon]</span>
+
+
+
+        </li>
+        <li><span class="parameter">[Photon]</span>
+
+
+
+        </li>
+        <li><span class="parameter">[Photon]</span>
+
+
+
+        </li>
+        <li><span class="parameter">[Photon]</span>
+
+
+
+        </li>
+        <li><span class="parameter">Brand</span>
+
+
+
+        </li>
+        <li><span class="parameter">Client</span>
+
+
+
+        </li>
+        <li><span class="parameter">Server</span>
+
+
+
+        </li>
+        <li><span class="parameter">Text</span>
+
+
+
+        </li>
+        <li><span class="parameter">Disabled</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Photon.Logging.Phrases"></a>
+    <strong>Photon.Logging.Phrases</strong>
+    </dt>
+    <dd>
+    A table storing often used logging "phrases".
+
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+    </ul>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">Photon</span>
+
+
+
+        </li>
+        <li><span class="parameter">Photon</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
+<i style="float:right;">Last updated 2023-06-27 16:16:26 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
