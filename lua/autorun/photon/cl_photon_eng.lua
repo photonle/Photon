@@ -1,44 +1,17 @@
 AddCSLuaFile()
 
-local lpos = Vector()
-
-local clamp = math.Clamp
-local pow = math.pow
-local round = math.Round
-local useEyePos = Vector( 0, 0, 0 )
-local useEyeAng = Angle( 0, 0, 0 )
-local istable = istable
-local isnumber = isnumber
-local pairs = pairs
-local ColorAlpha = ColorAlpha
-local Lerp = Lerp
-local tostring = tostring
-local Material = Material
-local Vector = Vector
-
-local bloom_multi = GetConVar( "photon_bloom_modifier" )
-local dynlights_enabled = GetConVar( "photon_dynamic_lights" )
-
-local getLightColor = render.GetLightColor
+-- Localise Libraries and Methods
+local math, render, util = math, render, util
+local clamp, pow, round = math.Clamp, math.pow, math.Round
+local getLightColor, setMaterial, drawSprite = render.GetLightColor, render.SetMaterial, render.DrawSprite
 local utilPixVis = util.PixelVisible
-local rotatingLight, pulsingLight, emvHelp
 
-if EMVU and istable( EMVU.Helper ) then
-	rotatingLight = EMVU.Helper.RotatingLight
-	pulsingLight = EMVU.Helper.PulsingLight
-	emvHelp = EMVU.Helper
-end
+-- Localise Globals
+local istable, isnumber, pairs, ColorAlpha, Lerp, tostring, Material, Vector = istable, isnumber, pairs, ColorAlpha, Lerp, tostring, Material, Vector
 
-local function getViewFlare( dot, brght )
-	local dif = dot - .85
-	if dif < 0 then return 0 end
-	local calc = (dif * 1000) * clamp( brght, 0, 1 )
-	return pow( calc, 1.01 ) * .025
-end
-
-local setMaterial = render.SetMaterial
-local drawSprite = render.DrawSprite
-
+-- Localise our Local Variables / Material Cache
+local photonRenderTable, photonRenderTableCount = {}, 0
+local photonDynamicLights, photonDynamicLightsCount = {}, 0
 local mat1 = Material("sprites/emv/flare_secondary")
 local mat2 = Material("sprites/emv/emv_smoothglow")
 local mat3 = Material("sprites/emv/light_initial")
@@ -47,119 +20,155 @@ local mat5 = Material("sprites/emv/effect_artifact1")
 local mat6 = Material("sprites/emv/effect_artifact2")
 local mat7 = Material("sprites/emv/dirty_lens_1")
 local mat8 = Material("sprites/emv/dirty_lens_2")
-
+local lpos = Vector()
+local useEyePos = Vector(0, 0, 0)
+local useEyeAng = Angle(0, 0, 0)
 local up1 = Vector()
+local emitToDirs = {
+	Angle(0, 135, 0),
+	Angle(0, 45, 0),
+	Angle(0, -135, 0),
+	Angle(0, -45, 0)
+}
 
-local photonRenderTable = {}
-local photonDynamicLights = {}
+-- ConVar Caching
+local bloom_multi = 1
+local bloom_multi_cvar = GetConVar("photon_bloom_modifier")
+if bloom_multi_cvar then
+	bloom_multi = bloom_multi_cvar:GetFloat()
+end
+cvars.AddChangeCallback("photon_bloom_modifier", function()
+	bloom_multi = bloom_multi_cvar:GetFloat()
+end, "Photon.Engine.CvarSettings")
 
-hook.Add( "InitPostEntity", "Photon.AddHelperLocalVars", function()
-	rotatingLight = EMVU.Helper.RotatingLight
-	pulsingLight = EMVU.Helper.PulsingLight
-	emvHelp = EMVU.Helper
+local dynlights_enabled = true
+local dynlights_enabled_cvar = GetConVar("photon_dynamic_lights")
+if dynlights_enabled_cvar then
+	dynlights_enabled = dynlights_enabled_cvar:GetBool()
+end
+cvars.AddChangeCallback("photon_dynamic_lights", function()
+	bloom_multi = dynlights_enabled_cvar:GetBool()
+end, "Photon.Engine.CvarSettings")
 
-	if not mat7:IsError() then
-		hook.Add( "RenderScreenspaceEffects", "Photon.ScreenEffects", function()
-			Photon.DrawDirtyLensEffect()
-		end)
-	else
+local draw_effects = true
+local draw_effects_cvar = GetConVar("photon_lens_effects")
+if draw_effects_cvar then
+	draw_effects = draw_effects_cvar:GetBool()
+end
+cvars.AddChangeCallback("photon_lens_effects", function()
+	draw_effects = draw_effects_cvar:GetBool()
+end, "Photon.Engine.CvarSettings")
+
+-- Localise 1st Party Libraries
+local rotatingLight, pulsingLight, radiusLight
+if EMVU and EMVU.Helper then
+	local h = EMVU.Helper
+	rotatingLight = h.RotatingLight
+	pulsingLight = h.PulsingLight
+	radiusLight = h.RadiusLight
+end
+hook.Add("InitPostEntity", "Photon.AddHelperLocalVars", function()
+	local h = EMVU.Helper
+	rotatingLight = h.RotatingLight
+	pulsingLight = h.PulsingLight
+	radiusLight = h.RadiusLight
+
+	bloom_multi_cvar = GetConVar("photon_bloom_modifier")
+	bloom_multi = bloom_multi_cvar:GetFloat() or 1
+	dynlights_enabled_cvar = GetConVar("photon_dynamic_lights")
+	dynlights_enabled = dynlights_enabled_cvar:GetBool() or true
+	draw_effects_cvar = GetConVar("photon_lens_effects")
+	draw_effects = draw_effects_cvar:GetBool() or true
+
+	if mat7:IsError() then
 		chat.AddText("[Photon] It seems that some content of photon is missing. Try to redownload photon by deleting the gma file in your addons folder.")
+		Photon.Logging.Fatal("Photon Content is missing. Try forcing a redownload.")
+		return
 	end
+
+	hook.Add("RenderScreenspaceEffects", "Photon.ScreenEffects", Photon.DrawDirtyLensEffect)
 end)
 
 
-function Photon:AddLightToQueue( lightInfo )
-	photonRenderTable[ #photonRenderTable + 1 ] = lightInfo
+local function getViewFlare(dot, brght)
+	local dif = dot - .85
+	if dif < 0 then return 0 end
+	local calc = (dif * 1000) * clamp(brght, 0, 1)
+	return pow(calc, 1.01) * .025
 end
 
-function Photon.AddDynamicLightToQueue( lightInfo )
-	photonDynamicLights[ #photonDynamicLights + 1 ] = lightInfo
+function Photon:AddLightToQueue(lightInfo)
+	photonRenderTableCount = photonRenderTableCount + 1
+	photonRenderTable[photonRenderTableCount] = lightInfo
+end
+
+function Photon.AddDynamicLightToQueue(lightInfo)
+	photonDynamicLightsCount = photonDynamicLightsCount + 1
+	photonDynamicLights[photonDynamicLightsCount] = lightInfo
 end
 
 function Photon:ClearLightQueue()
-	table.Empty( photonRenderTable )
-	table.Empty( photonDynamicLights )
+	photonRenderTableCount = 0
+	table.Empty(photonRenderTable)
+	photonDynamicLightsCount = 0
+	table.Empty(photonDynamicLights)
 end
 
-function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent )
+function Photon:PrepareVehicleLight(parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent)
 	if not incolors or not ilpos or not lang or not meta or not gpos then return end
-	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
-	local legacy = true
-	if meta.NoLegacy == true then legacy = false end
+
+	local legacy = meta.NoLegacy ~= true
 	local colors = incolors
 	local offset = meta.AngleOffset
 
-	local manualBloom = 1
-	if bloom_multi and bloom_multi:GetFloat() then manualBloom = bloom_multi:GetFloat() end
+	local manualBloom = bloom_multi
 
-	lpos:Set( ilpos )
+	lpos:Set(ilpos)
 
-	local rotating = false
-
-	if offset == "R" or offset == "RR" then
-		local speed = 2
-		if meta.Speed then speed = meta.Speed end
-		offset = rotatingLight(emvHelp, speed, 10)
-		rotating = true
-		local degrees = offset % 360
+	local rotating = offset == "R" or offset == "RR"
+	if rotating then
+		local speed = meta.Speed or 2
+		offset = rotatingLight(speed, 10)
 		if multicolor then
-			if ( degrees > 0 and degrees < 180 ) then
-				colors = incolors[2]
-			else
-				colors = incolors[1]
-			end
+			-- This is in the range 0 - 360, each side should have exactly 180 degrees.
+			colors = (offset % 360) < 180 and incolors[2] or incolors[1]
 		end
 	end
 
-	local visRadius = .1
-	local cheapLight = false
-	if meta.Cheap then cheapLight = true end
-
-	if meta.VisRadius then visRadius = meta.VisRadius end
+	local visRadius = meta.VisRadius or .1
+	local cheapLight = meta.Cheap == true
 
 	local viewDot = 0
-	-- local visible = 1
-	local visible = 0
+	local visible = pixvis
 	local viewPercent = 0
+	local worldPos = gpos
 
-	if meta.AngleOffset and meta.AngleOffset == "RR" then
-		local lposMod = EMVU.Helper:RadiusLight( 1, 4 )
+	if offset == "RR" then
+		local lposMod = radiusLight(1, 4)
 		lpos[1] = lpos[1] + lposMod
 		lpos[2] = lpos[2] + lposMod
 	end
 
-	local worldPos = gpos
-	// local worldPos = parent:LocalToWorld(lpos)
+	if not visible or visible <= 0 then
+		return
+	end
 
-	// visible = 1
-	//visible = utilPixVis( worldPos, visRadius, pixvis )
-	visible = pixvis
-	-- visible = 1
-	if( visible and visible > 0) then
-
-
-	if EMV_DEBUG then visible = 1 end
-	if EMV_DEBUG then viewDot = 1 end
+	if EMV_DEBUG then
+		visible = 1
+		viewDot = 1
+	end
 
 	if emitDynamic then
-			local addDynamic = { true, true, true, true }
-			local normalDir = parent:GetForward()
-			if emitDynamic == 1 then normalDir:Rotate( Angle( 0, 135, 0 ) )
-			elseif emitDynamic == 2 then normalDir:Rotate( Angle( 0, 45, 0 ) )
-			elseif emitDynamic == 3 then normalDir:Rotate( Angle( 0, -135, 0 ) )
-			elseif emitDynamic == 4 then normalDir:Rotate( Angle( 0, -45, 0 ) ) end
-			addDynamic[1] = worldPos
-			addDynamic[2] = normalDir
-			addDynamic[3] = { colors.raw.r, colors.raw.g, colors.raw.b }
-			addDynamic[4] = ( parent:EntIndex() * 400 ) + emitDynamic
-			-- addDynamic[4] = (parent:EntIndex()*100) + ( lnum * 4 )
-			Photon.AddDynamicLightToQueue( addDynamic )
+		local addDynamic = { true, true, true, true }
+		local normalDir = parent:GetForward()
+		local rotator = emitToDirs[emitDynamic]
+		if rotator then
+			normalDir:Rotate(rotator)
 		end
 
-	if not visible or visible <= 0 then return end
+		Photon.AddDynamicLightToQueue({worldPos, normalDir, {colors.raw.r, colors.raw.g, colors.raw.b}}, (parent:EntIndex() * 400) + emitDynamic)
+	end
 
-	if not meta.Scale then meta.Scale = 1 end
-	if not meta.WMult then meta.WMult = 1 end
 	local ca = parent:GetAngles()
 	local lightNormal = Angle()
 	if legacy and not contingent then
@@ -184,130 +193,122 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	ViewNormal:Normalize()
 	viewDot = ViewNormal:Dot( lightNormal )
 
-	if ( viewDot and viewDot >= 0 ) then
-
-		viewPercent = viewDot
-		local viewMod = viewDot * 10
-		viewDot = ( pow( viewMod, 1.25 ) * .1 ) * manualBloom
-
-		local curLight = getLightColor( worldPos )
-		local lightMod = clamp(1 - round(((( curLight[1] * curLight[2] * curLight[3] ) * .3) * 10) * 2, 5), .66, 1)
-
-		local srcOnly = false
-		local srcSkip = false
-
-		if (meta.Sprite and meta.Sprite == "sprites/emv/blank") or meta.Cheap then srcSkip = true end
-
-		local UC = { true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true }
-
-		local brightness = 1
-		local rawBrightness = 1
-		local pulseOverride = false
-
-		if brght and istable(brght) then
-			brightness = pulsingLight( emvHelp, brght[1], brght[2], brght[3] )
-			pulseOverride = true
-		elseif isnumber( brght ) then
-			brightness = brght
-			rawBrightness = brght
-		end
-
-		brightness = brightness * lightMod
-
-		viewDot = viewDot * brightness
-		local viewFlare = getViewFlare( viewPercent, brightness )
-		local dist = worldPos:Distance( EyePos() )
-		local distModifier = ( 1 - clamp( ( dist / 512 ), 0, 1) )
-		viewFlare = viewFlare * distModifier
-
-		if meta.SourceOnly == true then
-			srcOnly = true
-		end
-
-		local al = Angle()
-		al:Set(lang)
-		al.r = al.r - 90
-		if rotating then al.y = offset - 90 end
-
-		up1:Set( worldPos )
-		local ua = parent:LocalToWorldAngles( al )
-
-		for k,v in pairs( colors ) do
-			UC[k] = v
-		end
-
-		local srcColor = Color(255,255,255,255)
-
-		if not srcSkip then
-			local srcMod = ( viewDot * .5 ) * manualBloom
-			//srcColor = ColorAlpha( UC.src, UC.src.a * rawBrightness )
-			srcColor = ColorAlpha( UC.src, 255 )
-			if pulseOverride then srcColor.a = ( srcColor.a * brightness ) end
-			if istable(UC["dim"]) then
-				srcColor.r = Lerp( srcMod, UC.dim.r, UC.src.r )
-				srcColor.g = Lerp( srcMod, UC.dim.g, UC.src.g )
-				srcColor.b = Lerp( srcMod, UC.dim.b, UC.src.b )
-			end
-		end
-
-		if PHOTON_DEBUG and !PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 255, 255, 0, 255 ) elseif PHOTON_DEBUG and PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 0, 0, 0, 0 ) end
-		if PHOTON_DEBUG and PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then srcColor = Color( 0, 255, 255 ) end
-
-		resultTable[1] = srcOnly
-		resultTable[2] = !srcSkip
-		resultTable[3] = worldPos
-		resultTable[4] = ua
-		if not meta.SpriteMaterial then meta.SpriteMaterial = Material( meta.Sprite ) end
-		resultTable[5] = meta.SpriteMaterial
-		if not meta.SprT then meta.SprT = Vector( meta.W * .5, meta.H * .5, 0 ) end
-		resultTable[6] = meta.SprT
-		if not meta.SprR then meta.SprR = Vector( -meta.W * .5, meta.H * .5, 0 ) end
-		resultTable[7] = meta.SprR
-		if not meta.SprB then meta.SprB = Vector( -meta.W * .5, -meta.H * .5, 0 ) end
-		resultTable[8] = meta.SprB
-		if not meta.SprL then meta.SprL = Vector( meta.W * .5, -meta.H * .5, 0 ) end
-		resultTable[9] = meta.SprL
-		resultTable[10] = worldPos
-		local fovModifier = math.Clamp( ( ( 1 - ( LocalPlayer():GetFOV() / 90 ) ) * 5 ) + 1, 1, 1000 )
-		resultTable[11] = (meta.Scale * viewDot) * manualBloom
-		resultTable[12] = ((meta.Scale * viewFlare) * fovModifier) * manualBloom
-		resultTable[13] = (meta.Scale * meta.WMult*viewDot) * manualBloom
-		resultTable[14] = srcColor
-
-		resultTable[15] = UC.med
-		resultTable[16] = UC.amb
-		resultTable[17] = UC.blm
-		resultTable[18] = UC.glw
-		resultTable[19] = UC.raw
-		resultTable[20] = UC.flr
-
-		resultTable[21] = lightMod
-		resultTable[22] = cheapLight
-		resultTable[23] = viewFlare
-
-		resultTable[24] = false
-
-		resultTable[25] = meta.SubmatID
-		resultTable[26] = meta.SubmatMaterial
-		resultTable[27] = parent
-
-		if istable( meta.EmitArray ) then
-			local emitResults = {}
-			for _key,_val in pairs( meta.EmitArray ) do
-				if not isvector( _val ) then continue end
-				emitResults[ #emitResults + 1 ] = Vector()
-				local insertRef = emitResults[ #emitResults ]
-				insertRef:Set( _val )
-				insertRef:Rotate( ua )
-				insertRef:Add( worldPos )
-			end
-			resultTable[24] = emitResults
-		end
-
-		self:AddLightToQueue( resultTable )
-
+	if not viewDot or viewDot < 0 then
+		return
 	end
+
+	viewPercent = viewDot
+	local viewMod = viewDot * 10
+	viewDot = (pow( viewMod, 1.25 ) * .1) * manualBloom
+
+	local curLight = getLightColor(worldPos)
+	local lightMod = clamp(1 - round(((( curLight[1] * curLight[2] * curLight[3] ) * .3) * 10) * 2, 5), .66, 1)
+
+	local srcOnly = meta.SourceOnly == true
+	local srcSkip = (meta.Sprite and meta.Sprite == "sprites/emv/blank") or cheapLight
+
+	local UC = { true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true }
+
+	local brightness = 1
+	local rawBrightness = 1
+	local pulseOverride = false
+
+	if brght and istable(brght) then
+		brightness = pulsingLight(brght[1], brght[2], brght[3])
+		pulseOverride = true
+	elseif isnumber(brght) then
+		brightness = brght
+		rawBrightness = brght
 	end
+
+	brightness = brightness * lightMod
+
+	viewDot = viewDot * brightness
+	local viewFlare = getViewFlare(viewPercent, brightness)
+	local dist = worldPos:Distance(EyePos())
+	local distModifier = (1 - clamp( ( dist / 512 ), 0, 1))
+	viewFlare = viewFlare * distModifier
+
+	local al = Angle()
+	al:Set(lang)
+	al.r = al.r - 90
+	if rotating then al.y = offset - 90 end
+
+	up1:Set( worldPos )
+	local ua = parent:LocalToWorldAngles( al )
+
+	for k,v in pairs( colors ) do
+		UC[k] = v
+	end
+
+	local srcColor = Color(255,255,255,255)
+
+	if not srcSkip then
+		local srcMod = ( viewDot * .5 ) * manualBloom
+		//srcColor = ColorAlpha( UC.src, UC.src.a * rawBrightness )
+		srcColor = ColorAlpha( UC.src, 255 )
+		if pulseOverride then srcColor.a = ( srcColor.a * brightness ) end
+		if istable(UC["dim"]) then
+			srcColor.r = Lerp( srcMod, UC.dim.r, UC.src.r )
+			srcColor.g = Lerp( srcMod, UC.dim.g, UC.src.g )
+			srcColor.b = Lerp( srcMod, UC.dim.b, UC.src.b )
+		end
+	end
+
+	if PHOTON_DEBUG then
+		if PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then
+			srcColor = Color(0, 255, 255)
+		elseif not PHOTON_DEBUG_EXCLUSIVE then
+			srcColor = Color(255, 255, 0, 255)
+		else
+			srcColor = Color(0, 0, 0, 0)
+		end
+	end
+
+	local fovModifier = math.Clamp( ( ( 1 - ( LocalPlayer():GetFOV() / 90 ) ) * 5 ) + 1, 1, 1000 )
+
+	local emitResults = false
+	if istable( meta.EmitArray ) then
+		emitResults = {}
+		for _key,_val in pairs( meta.EmitArray ) do
+			if not isvector( _val ) then continue end
+			emitResults[ #emitResults + 1 ] = Vector()
+			local insertRef = emitResults[ #emitResults ]
+			insertRef:Set( _val )
+			insertRef:Rotate( ua )
+			insertRef:Add( worldPos )
+		end
+	end
+
+	self:AddLightToQueue({
+		srcOnly,
+		!srcSkip,
+		worldPos,
+		ua,
+		meta.SpriteMaterial,
+		meta.SprT,
+		meta.SprR,
+		meta.SprB,
+		meta.SprL,
+		worldPos,
+		(meta.Scale * viewDot) * manualBloom,
+		((meta.Scale * viewFlare) * fovModifier) * manualBloom,
+		(meta.Scale * meta.WMult*viewDot) * manualBloom,
+		srcColor,
+		UC.med,
+		UC.amb,
+		UC.blm,
+		UC.glw,
+		UC.raw,
+		UC.flr,
+		lightMod,
+		cheapLight,
+		viewFlare,
+		emitResults,
+		meta.SubmatID,
+		meta.SubmatMaterial,
+		parent
+	})
 end
 
 
@@ -491,12 +492,6 @@ local cam3d = cam.Start3D
 local cam2d = cam.Start2D
 local endCam2d = cam.End2D
 local endCam3d = cam.End3D
-local draw_effects = GetConVar( "photon_lens_effects" )
-hook.Add( "InitPostEntity", "Photon.DrawEffectsConvar", function()
-	draw_effects = GetConVar( "photon_lens_effects" )
-	bloom_multi = GetConVar( "photon_bloom_modifier" )
-	dynlights_enabled = GetConVar( "photon_dynamic_lights" )
-end)
 
 function Photon:RenderQueue( effects )
 	local eyePos = EyePos()
@@ -520,7 +515,7 @@ function Photon:RenderQueue( effects )
 end
 hook.Add( "PreDrawEffects", "Photon.RenderQueue", function()
 	Photon:RenderQueue( false )
-	if draw_effects and draw_effects:GetBool() then
+	if draw_effects then
 		Photon:RenderQueue( true )
 	end
 end )
@@ -561,8 +556,10 @@ function Photon.RenderDynamicLightQueue()
 		end
 	end
 end
-hook.Add( "Think", "Photon.RenderDynamicLightQueue", function()
-	if ( dynlights_enabled and dynlights_enabled.GetBool and dynlights_enabled:GetBool() ) then Photon.RenderDynamicLightQueue() end
+hook.Add("Think", "Photon.RenderDynamicLightQueue", function()
+	if dynlights_enabled then
+		Photon.RenderDynamicLightQueue()
+	end
 end)
 
 local IsValid = IsValid

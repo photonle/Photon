@@ -251,6 +251,11 @@ function EMVU:PreloadVehicle( car )
 		EMVU.Selections[ car.Name ] = car.EMV.Selections
 	end
 
+	if CLIENT then
+		for _, meta in pairs(EMVU.LightMeta[car.Name]) do
+			EMVU.Helper.PrepareMeta(meta)
+		end
+	end
 end
 
 local function safeTableEmpty( tab )
@@ -268,6 +273,7 @@ function EMVU:OverwriteIndex(name, data)
 	EMVU.Attributes[name] = data.Attributes or {}
 
 	EMVU.LightMeta[name] = data.Meta or {}
+
 	if CLIENT then
 		safeTableEmpty(EMVU.Positions[name])
 		EMVU.Positions[name] = data.Positions or {}
@@ -341,6 +347,10 @@ function EMVU:OverwriteIndex(name, data)
 
 		EMVU.AutoIndex[name] = data.Auto
 		EMVU:CalculateAuto(name, data.Auto, data.AutoInsert)
+	end
+
+	for _, meta in pairs(EMVU.LightMeta[name]) do
+		EMVU.Helper.PrepareMeta(meta)
 	end
 
 	if data.Configuration then

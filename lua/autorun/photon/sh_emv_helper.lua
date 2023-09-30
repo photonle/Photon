@@ -510,12 +510,18 @@ function EMVU.Helper:Photon_GetLightSection( name, component, frame, skip )
 	end
 end
 
-function EMVU.Helper:RotatingLight( speed, offset )
-	return math.Round( CurTime() * 100 ) * speed + offset
+do
+	local round, time = math.Round, CurTime
+	function EMVU.Helper.RotatingLight(speed, offset)
+		return round(time() * 100) * speed + offset
+	end
 end
 
-function EMVU.Helper:RadiusLight( speed, radius )
-	return math.sin( CurTime() * speed ) * radius
+do
+	local sin, time = math.sin, CurTime
+	function EMVU.Helper:RadiusLight(speed, radius)
+		return sin(time() * speed) * radius
+	end
 end
 
 function EMVU.Helper:PulsingLight( speed, min, offset )
@@ -747,4 +753,28 @@ function EMVU.Helper.GetAlertModeEnabled( name )
 	if not istable(EMVU.Attributes[ name ]) then print("[Photon] ERROR: No Attributes table found for: " .. tostring(name) .. ". Please notify @schmal if you see this.") end
 	if (istable(EMVU.Attributes[ name ]) and (EMVU.Attributes[ name ].DisableAlertPatterns)) then return false end
 	return true
+end
+
+function EMVU.Helper.PrepareMeta(meta)
+	if not meta.Scale then
+		meta.Scale = 1
+	end
+	if not meta.WMult then
+		meta.WMult = 1
+	end
+	if not meta.SpriteMaterial then
+		meta.SpriteMaterial = Material(meta.Sprite)
+	end
+	if not meta.SprT then
+		meta.SprT = Vector(meta.W * .5, meta.H * .5, 0)
+	end
+	if not meta.SprR then
+		meta.SprR = Vector(-meta.W * .5, meta.H * .5, 0)
+	end
+	if not meta.SprB then
+		meta.SprB = Vector(-meta.W * .5, -meta.H * .5, 0)
+	end
+	if not meta.SprL then
+		meta.SprL = Vector(meta.W * .5, -meta.H * .5, 0)
+	end
 end
