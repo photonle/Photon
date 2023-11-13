@@ -124,15 +124,18 @@ function NET:Get(ent, name, default)
 end
 
 if CLIENT then
-	net.Receive("Photon_SimpleNet_Change", function(len, ply)
+	net.Receive("Photon_SimpleNet_Change", function()
 		local ent = net.ReadEntity()
 		local idx = net.ReadUInt(NET.Bits)
 		local name, netType, extra = unpack(NET.FMap[idx])
-		ent[NET.Normalise(name)] = NET.ReadFunctions[netType](extra)
+		local normalName = NET.Normalise(name)
+		local old = ent[normalName]
+		ent[normalName] = NET.ReadFunctions[netType](extra)
+		hook.Run("Photon.SimpleNet.ValueChanged", name, old, ent[normalName], ent)
 	end)
 end
 
-local UInt, Bool = NET.UINT, NET.BOOL
+local UInt, Bool, Str = NET.UINT, NET.BOOL, NET.STR
 
 NET:Map("CurrentSignal", UInt, 2)
 NET:Map("Blinker", UInt, 2)
@@ -155,3 +158,8 @@ NET:Map("TrafficOption", UInt, 4)
 NET:Map("IlluminationOn", Bool)
 NET:Map("IlluminationOption", UInt, 4)
 NET:Map("Preset", UInt, 10)
+
+NET:Map("VehicleIndex", Str)
+NET:Map("UnitNumber", Str)
+NET:Map("LiveryID", Str)
+NET:Map("SelectionString", Str)

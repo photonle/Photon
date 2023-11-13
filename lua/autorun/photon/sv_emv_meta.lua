@@ -555,23 +555,6 @@ function EMVU:MakeEMV( ent, emv )
 		end
 	end
 
-	function ent:Photon_SetLiveryId( val )
-		local curdata = string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )
-		curdata[4] = val
-		self:SetNW2String( "PhotonLE.EMV_INDEX", table.concat( curdata, "ö" ))
-	end
-
-	function ent:Photon_SetUnitNumber( val )
-		val = string.upper( tostring( val ) )
-		if string.len( val ) > 3 then val = string.sub( val, 1, 3 ) end
-		if not string.match( val, "%w" ) then val = "" end
-		if PHOTON_BANNED_UNIT_IDS[ string.lower( val ) ] then val = "" end
-		local curdata = string.Explode( "ö", self:GetNW2String( "PhotonLE.EMV_INDEX" ), false )
-		curdata[3] = val
-		self:SetNW2String( "PhotonLE.EMV_INDEX", table.concat( curdata, "ö" ) )
-		return val
-	end
-
 	function ent:Photon_ApplySubMaterials()
 		if istable( EMVU.SubMaterials[ self.Name ] ) then
 			local submaterials = EMVU.SubMaterials[ self.Name ]
@@ -583,35 +566,12 @@ function EMVU:MakeEMV( ent, emv )
 		end
 	end
 
-	function ent:Photon_SetSelection( index, value )
-			-- print(string.format( "index: %s value: %s", index, value ))
-		if istable( EMVU.Selections[ self.Name ][ index ] ) then
-			local selectionTable = self:Photon_SelectionTable()
-			selectionTable[index] = value
-			-- PrintTable( selectionTable )
-			local photonUtilString = self:Photon_GetUtilStringTable()
-			photonUtilString[5] = table.concat( selectionTable, "." )
-			--PrintTable( photonUtilString )
-			self:Photon_SetUtilString( table.concat( photonUtilString, "ö" ) )
-			local selectionData = EMVU.Selections[ self.Name ][ index ].Options[value]
-			if istable( selectionData.Bodygroups ) then
-				for _,bgData in pairs( selectionData.Bodygroups ) do
-					self:SetBodygroup( bgData[1], bgData[2] )
-				end
-			end
-		end
-	end
-
 	function ent:Photon_ResetSelections()
 		if istable( EMVU.Selections[ self.Name ] ) then
 			for i=1,#EMVU.Selections[ self.Name ] do
 				self:Photon_SetSelection( i, 1 )
 			end
 		end
-	end
-
-	function ent:Photon_SetUtilString( str )
-		self:SetNW2String( "PhotonLE.EMV_INDEX", str )
 	end
 
 	function ent:Photon_HasManualWind()
@@ -638,7 +598,7 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	ent.IsEMV = true
-	ent:SetNW2String( "PhotonLE.EMV_INDEX", "ö" .. tostring( ent.Name ) .. "ööö." ) -- Al
+	ent:SetPhotonNet_VehicleIndex(ent.Name)
 
 	------ APPLY EMV PARAMETERS ------
 
