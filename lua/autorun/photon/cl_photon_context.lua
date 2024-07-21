@@ -356,7 +356,7 @@ properties.Add("photon_selection", {
         for catIndex, cat in ipairs(options) do
             if not cat.Name then
                 cat.Name = "Unspecified #" .. catIndex
-                print("[Photon] Selection with the index #" .. catIndex .. " has no name specified.")
+                Photon.Logging.Warning("Selection with the index #" .. catIndex .. " has no name specified.")
             end
 
             if #cat.Options == 2 and (cat.Options[1].Name == "None" or cat.Options[2].Name == "None") then
@@ -384,7 +384,7 @@ properties.Add("photon_selection", {
 
                     if not option.Name then
                         option.Name = "Unspecified #" .. index
-                        print("[Photon] Option in selection '" .. cat.Name .. "' with the index #" .. index .. " has no name specified.")
+                        Photon.Logging.Warning("Option in selection '" .. cat.Name .. "' with the index #" .. index .. " has no name specified.")
                     end
 
                     if option.Category then

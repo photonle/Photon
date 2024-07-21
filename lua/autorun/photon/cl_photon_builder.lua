@@ -286,8 +286,12 @@ hook.Add( "Think", "Photon.Debug.ButtonPress", function()
 end)
 
 function PhotonDebugTarget( ply, args )
+	if not args[1] then
+		args[1] = "ELS"
+		Photon.Logging.Debug("Defaulting Debug Mode to ELS targeting.")
+		return
+	end
 
-	if not args[1] then args[1] = "ELS"; print( "[Photon] Defaulting to ELS mode." ) return end
 	local ent = ply:GetVehicle() or ply:GetEyeTrace().Entity
 	if not IsValid( ent ) then return end
 	PHOTON_DEBUG_TARGET = ent

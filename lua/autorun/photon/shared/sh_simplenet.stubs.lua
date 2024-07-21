@@ -1,5 +1,5 @@
 ---
--- @classmod Vehicle
+-- @classmod VEHICLE
 
 ---
 -- @function Vehicle:SetPhotonNet_CurrentSignal(value)

@@ -40,7 +40,7 @@ Photon.AutoLivery.DownloadMaterial = function(car, id, val, ent, cback, failedcb
 			cback(car, id, val, ent, true)
 		end
 	end, function(error)
-		print("[Photon] Failed to fetch custom livery, reverting to fallback. Error: " .. tostring(error))
+		Photon.Logging.Error("[Photon] Failed to fetch custom livery, reverting to fallback. Error: " .. tostring(error))
 
 		if isfunction(cback) then
 			cback(car, id, val, ent, false)
@@ -177,7 +177,7 @@ Photon.AutoLivery.Apply = function(id, val, ent)
 	local car = Photon.AutoLivery.TranslationTable[tostring(carMdl)]
 
 	if not car then
-		print(string.format("[Photon] %s is not a supported livery model.", carMdl))
+		Photon.Logging.Warning(carMdl, " is not a supported livery model!")
 		return false
 	end
 

@@ -11,12 +11,14 @@ Photon = Photon or {}
 
 --- Include a file with the given path, automatically setting AddCSLuaFile or include as appropriate.
 -- @str path File path to include.
-function Photon.include(path)
+function Photon.include(path, force_full)
+	if debug.getinfo(2, "S").short_src:EndsWith("autorun/emv_init.lua") and not force_full then
+		path = "photon/" .. path
+	end
+
 	local prefix = match(path, "/?(%w%w)[%w_]*.lua$") or "sh"
-	if PhotonDebug then
-		PhotonDebug(path, " => ", prefix)
-	else
-		print(string.format("[Photon Bootstrapper] %s => %s", path, prefix))
+	if Photon.Logging then
+		Photon.Logging.Debug("Prefix: ", prefix, ". Path: '", path, "'")
 	end
 
 	if prefix ~= "sv" then
@@ -29,5 +31,9 @@ function Photon.include(path)
 	end
 end
 
-Photon.include("photon/sh_photon_init.lua")
-Photon.include("photon/sh_emv_init.lua")
+Photon.include("shared/sh_functional.lua")
+Photon.include("shared/sh_logging.lua")
+Photon.Logging.Info("Welcome to ", Photon.Logging:Photon())
+
+Photon.include("sh_photon_init.lua")
+Photon.include("sh_emv_init.lua")

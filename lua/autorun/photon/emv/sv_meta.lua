@@ -181,7 +181,7 @@ function ENT:ELS_PresetOption(val)
 		end
 	end
 
-	return self:GetPhotonNet_Preset()
+	return self:GetPhotonNet_Preset(0)
 end
 
 local illumination_allowed = GetConVar("photon_emv_useillum")
