@@ -545,7 +545,10 @@ function EMVU:MakeEMV( emv, name )
 				mat:Scale( p.Scale )
 				prop:EnableMatrix( "RenderMultiply", mat )
 			elseif isnumber( p.Scale ) then
-				prop:SetModelScale( p.Scale, 0 )
+				local mat = Matrix()
+				local scale = Vector( p.Scale, p.Scale, p.Scale )
+				mat:Scale( scale )
+				prop:EnableMatrix( "RenderMultiply", mat )
 			end
 			prop:SetParent( emv )
 			prop:SetPos( emv:LocalToWorld( p.Pos ) )
