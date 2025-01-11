@@ -164,7 +164,13 @@ function EMVU:CalculateFrames()
 	if photon_pause then return end
 	if not should_render:GetBool() then return end
 	for _,ent in pairs( EMVU:AllVehicles() ) do
-		if IsValid( ent ) and ent.HasPhotonELS and ent:HasPhotonELS() and (ent.Photon_Lights and ent:Photon_Lights() or ent.Photon_TrafficAdvisor and ent:Photon_TrafficAdvisor() or ent.Photon_Illumination and ent:Photon_Illumination()) then ent:Photon_CalculateELFrames() end
+		if IsValid(ent) and ent.EMV and ent.HasPhotonELS and ent:HasPhotonELS() and (
+			(ent.Photon_Lights and ent:Photon_Lights()) or
+			(ent.Photon_TrafficAdvisor and ent:Photon_TrafficAdvisor()) or
+			(ent.Photon_Illumination and ent:Photon_Illumination())
+		) then
+			ent:Photon_CalculateELFrames()
+		end
 	end
 end
 timer.Create("EMVU.CalculateFrames", .03, 0, function()
