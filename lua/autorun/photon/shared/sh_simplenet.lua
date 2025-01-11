@@ -158,7 +158,6 @@ if CLIENT then
 			net.WriteEntity(ent)
 			net.SendToServer()
 		end
-
 	end)
 end
 
