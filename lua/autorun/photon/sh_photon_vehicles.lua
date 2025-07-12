@@ -38,8 +38,15 @@ function Photon:EntityCreated( ent )
 					timer.Stop( timerId )
 					timer.Destroy( timerId )
 				end
+
 				if timer.RepsLeft( timerId ) == 0 and IsValid( ent ) and CLIENT then
-					local class = ent:GetVehicleClass()
+					local base = ent.Base or ""
+					if not string.find(base, "glide") then
+						local class = ent:GetVehicleClass()
+					else
+						local class = ent:GetClass()
+					end
+
 					local lst = list.Get("Vehicles")[class]
 					if lst and istable(lst) then
 						ent.VehicleTable = lst
