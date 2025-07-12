@@ -38,13 +38,15 @@ function Photon:EntityCreated( ent )
 					timer.Stop( timerId )
 					timer.Destroy( timerId )
 				end
-				if timer.RepsLeft( timerId ) == 0 and CLIENT then
+
+				if timer.RepsLeft( timerId ) == 0 and IsValid( ent ) and CLIENT then
 					local base = ent.Base or ""
 					if not string.find(base, "glide") then
 						local class = ent:GetVehicleClass()
 					else
 						local class = ent:GetClass()
 					end
+
 					local lst = list.Get("Vehicles")[class]
 					if lst and istable(lst) then
 						ent.VehicleTable = lst
@@ -54,7 +56,7 @@ function Photon:EntityCreated( ent )
 						timer.Destroy( timerId )
 					end
 				end
-				if timer.RepsLeft( timerId ) == 0 and SERVER then
+				if timer.RepsLeft( timerId ) == 0 and IsValid( ent ) and SERVER then
 					local default = Photon:RecoverVehicleTable( ent )
 					if default then
 						ent.VehicleTable = default

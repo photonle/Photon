@@ -62,7 +62,7 @@ local function DrawCarLights()
 	for _, ent in pairs(Photon:AllVehicles() ) do
 		if IsValid(ent) and ent:Photon() then
 			if not ent.Photon_RenderLights then
-				Photon:SetupCar(ent, ent:GetVehicleClass())
+				Photon:SetupCar(ent, list.Get("Vehicles")[ent:GetVehicleClass()].Name)
 			else
 				if should_render_reg:GetBool() then
 					ent:Photon_RenderLights(
@@ -164,7 +164,13 @@ function EMVU:CalculateFrames()
 	if photon_pause then return end
 	if not should_render:GetBool() then return end
 	for _,ent in pairs( EMVU:AllVehicles() ) do
-		if IsValid( ent ) and ent.HasPhotonELS and ent:HasPhotonELS() and (ent.Photon_Lights and ent:Photon_Lights() or ent.Photon_TrafficAdvisor and ent:Photon_TrafficAdvisor() or ent.Photon_Illumination and ent:Photon_Illumination()) then ent:Photon_CalculateELFrames() end
+		if IsValid(ent) and ent.EMV and ent.HasPhotonELS and ent:HasPhotonELS() and (
+			(ent.Photon_Lights and ent:Photon_Lights()) or
+			(ent.Photon_TrafficAdvisor and ent:Photon_TrafficAdvisor()) or
+			(ent.Photon_Illumination and ent:Photon_Illumination())
+		) then
+			ent:Photon_CalculateELFrames()
+		end
 	end
 end
 timer.Create("EMVU.CalculateFrames", .03, 0, function()

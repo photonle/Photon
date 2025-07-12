@@ -15,6 +15,7 @@ local ENT = FindMetaTable("Entity")
 
 if SERVER then
 	util.AddNetworkString("Photon_SimpleNet_Change")
+	util.AddNetworkString("Photon_SimpleNet_RequestSync")
 end
 
 NET.BOOL = 1
@@ -123,12 +124,40 @@ function NET:Get(ent, name, default)
 	return v
 end
 
+if SERVER then
+	net.Receive("Photon_SimpleNet_RequestSync", function(len, ply)
+		local ent = net.ReadEntity()
+		if IsValid(ent) and ent.IsEMV and ent:IsEMV() then
+			for k,v in pairs(NET.RMap) do
+				local varName = NET.Normalise(k)
+				local varValue = ent[varName]
+				if varValue then
+					local idx, netType, extra = unpack(v)
+					net.Start("Photon_SimpleNet_Change")
+					net.WriteEntity(ent)
+					net.WriteUInt(idx, NET.Bits)
+					NET.WriteFunctions[netType](varValue, extra)
+					net.Send(ply)
+				end
+			end
+		end
+	end)
+end
+
 if CLIENT then
 	net.Receive("Photon_SimpleNet_Change", function(len, ply)
 		local ent = net.ReadEntity()
 		local idx = net.ReadUInt(NET.Bits)
 		local name, netType, extra = unpack(NET.FMap[idx])
 		ent[NET.Normalise(name)] = NET.ReadFunctions[netType](extra)
+	end)
+
+	hook.Add("NotifyShouldTransmit", "EMVU.Net.NotifyShouldTransmit", function(ent, shouldTransmit)
+		if shouldTransmit and ent.IsEMV and ent:IsEMV() then
+			net.Start("Photon_SimpleNet_RequestSync")
+			net.WriteEntity(ent)
+			net.SendToServer()
+		end
 	end)
 end
 
