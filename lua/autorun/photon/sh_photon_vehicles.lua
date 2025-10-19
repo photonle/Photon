@@ -4,14 +4,16 @@ local modelIgnore = {
 	["models/props_phx/carseat2.mdl"] = true,
 }
 
-function Photon:RecoverVehicleTable( ent )
+function Photon:RecoverVehicleName( ent )
 	if not IsValid( ent ) then return false end
 	local model = tostring(ent:GetModel())
 	local PhotonIndex = Photon.GetDefaultMapping( model )
-	if PhotonIndex then return list.Get("Vehicles")[PhotonIndex] end
+	if PhotonIndex then
+		return PhotonIndex
+	end
 	for key,car in pairs( list.Get("Vehicles") ) do
 		if string.lower(car.Model) == string.lower(model) then
-			return list.Get("Vehicles")[key]
+			return key
 		end
 	end
 	return false
@@ -59,9 +61,9 @@ function Photon:EntityCreated( ent )
 					end
 				end
 				if timer.RepsLeft( timerId ) == 0 and IsValid( ent ) and SERVER then
-					local default = Photon:RecoverVehicleTable( ent )
-					if default then
-						ent.VehicleName = default.Class
+					local vehicleName = Photon:RecoverVehicleName( ent )
+					if vehicleName then
+						ent.VehicleName = vehicleName
 						Photon:SpawnedVehicle( ent )
 						EMVU:SpawnedVehicle( ent )
 						if not (modelIgnore[tostring(ent:GetModel())]) then
