@@ -19,10 +19,11 @@ end
 
 function Photon:SpawnedVehicle( ent )
 	if not IsValid( ent ) then return end
-	if not istable( ent.VehicleTable ) then return end
-	local name = ent.VehicleTable.Name
+	local vehicleTable = Photon:GetVehicleTable( ent )
+	if not istable( vehicleTable ) then return end
+	local name = vehicleTable.Name
 	ent.Name = name
-	if ent.VehicleTable.Photon then
+	if vehicleTable.Photon then
 		Photon:SetupCar( ent, name )
 	end
 end
@@ -32,7 +33,8 @@ function Photon:EntityCreated( ent )
 		if  ent:IsVehicle() then
 			local timerId = ent:EntIndex() .. "-PHOTON-" .. CurTime()
 			timer.Create( timerId, .01, 10, function()
-				if ent.VehicleTable and istable(ent.VehicleTable) then
+				local vehicleTable = Photon:GetVehicleTable(ent)
+				if istable(vehicleTable) then
 					Photon:SpawnedVehicle( ent )
 					EMVU:SpawnedVehicle( ent )
 					timer.Stop( timerId )
@@ -49,7 +51,7 @@ function Photon:EntityCreated( ent )
 
 					local lst = list.Get("Vehicles")[class]
 					if lst and istable(lst) then
-						ent.VehicleTable = lst
+						ent.VehicleName = class
 						Photon:SpawnedVehicle( ent )
 						EMVU:SpawnedVehicle( ent )
 						timer.Stop( timerId )
@@ -59,11 +61,11 @@ function Photon:EntityCreated( ent )
 				if timer.RepsLeft( timerId ) == 0 and IsValid( ent ) and SERVER then
 					local default = Photon:RecoverVehicleTable( ent )
 					if default then
-						ent.VehicleTable = default
+						ent.VehicleName = default.Class
 						Photon:SpawnedVehicle( ent )
 						EMVU:SpawnedVehicle( ent )
 						if not (modelIgnore[tostring(ent:GetModel())]) then
-							print("[Photon] No .VehicleTable present, assuming " .. tostring(ent:GetModel()) .. " is a(n) " .. tostring(default.Name) .. ".")
+							print("[Photon] No .VehicleName present, assuming " .. tostring(ent:GetModel()) .. " is a(n) " .. tostring(default.Name) .. ".")
 						end
 					end
 				end
@@ -232,4 +234,21 @@ function Photon:OverwriteIndex( name, data )
 	end
 	if data.Config != nil then Photon.Vehicles.Config[name] = data.Config end
 	if data.StateMaterials then Photon.Vehicles.StateMaterials[name] = data.StateMaterials end
+end
+
+function Photon:GetVehicleTable(ent)
+	if not IsValid(ent) then return end
+
+	-- Backwards compatibility
+	if ent.VehicleTable and istable(ent.VehicleTable) then
+		return ent.VehicleTable
+	end
+
+	local vehicleName = ent.VehicleName
+	if isstring(vehicleName) and vehicleName ~= "" then
+		local vehicleTable = list.Get("Vehicles")[vehicleName] -- list.GetEntry("Vehicles", vehicleName)
+		if istable(vehicleTable) then
+			return vehicleTable
+		end
+	end
 end
