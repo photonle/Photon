@@ -11,6 +11,15 @@ function Photon:RecoverVehicleName( ent )
 	if PhotonIndex then
 		return PhotonIndex
 	end
+
+	if ent.GetVehicleClass and ent:GetVehicleClass() then
+		local vehicleClass = ent:GetVehicleClass()
+		local vehicleTable = list.Get("Vehicles")[vehicleClass]
+		if vehicleTable and istable(vehicleTable) then
+			return vehicleClass
+		end
+	end
+
 	for key,car in pairs( list.Get("Vehicles") ) do
 		if string.lower(car.Model) == string.lower(model) then
 			return key
