@@ -76,7 +76,7 @@ function Photon:EntityCreated( ent )
 						Photon:SpawnedVehicle( ent )
 						EMVU:SpawnedVehicle( ent )
 						if not (modelIgnore[tostring(ent:GetModel())]) then
-							print("[Photon] No .VehicleName present, assuming " .. tostring(ent:GetModel()) .. " is a(n) " .. tostring(default.Name) .. ".")
+							print("[Photon] No .VehicleName present, assuming " .. tostring(ent:GetModel()) .. " is a(n) " .. vehicleName .. ".")
 						end
 					end
 				end
