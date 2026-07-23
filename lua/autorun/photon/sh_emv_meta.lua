@@ -8,6 +8,7 @@ local istable = istable
 
 function ent:IsEMV()
 	if not IsValid( self ) then return false end
+	if not self:IsVehicle() then return false end
 	if not EMV_INDEX then return false end
 	if self:EMVName() ~= "" then return true end
 	return false
