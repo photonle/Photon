@@ -5,7 +5,6 @@ Easily optimise networking for setting local values on entities.
 @author Photon Team
 @module Photon.SNet
 @alias NET
-@todo Add Spawn-Sync for all Photon Variables.
 --]]--
 
 Photon = Photon or {}
@@ -16,6 +15,7 @@ local ENT = FindMetaTable("Entity")
 if SERVER then
 	util.AddNetworkString("Photon_SimpleNet_Change")
 	util.AddNetworkString("Photon_SimpleNet_RequestSync")
+	util.AddNetworkString("Photon_SimpleNet_Resync")
 end
 
 NET.BOOL = 1
@@ -83,6 +83,31 @@ function NET:Map(name, netType, extra)
 end
 
 if SERVER then
+	--- Send the current value of a networked variable to a recipient.
+	-- @ent ent The entity the value belongs to.
+	-- @str name The name to send.
+	-- @param val Value to send.
+	-- @param[opt] to Player to send to. Broadcasts to everyone if omitted.
+	-- @internal
+	-- @state server
+	function NET:SendChange(ent, name, val, to)
+		local idx, netType, extra = unpack(self.RMap[name])
+		if not idx then
+			PhotonError(("Attempted to call SimpleNet:Change with an unregistered name: %s"):format(name))
+			return
+		end
+
+		net.Start("Photon_SimpleNet_Change")
+		net.WriteEntity(ent)
+		net.WriteUInt(idx, self.Bits)
+		self.WriteFunctions[netType](val, extra)
+		if to then
+			net.Send(to)
+		else
+			net.Broadcast()
+		end
+	end
+
 	--- Change a networked entity variable.
 	-- @ent ent The entity to change the value on.
 	-- @str name The name to change.
@@ -96,20 +121,59 @@ if SERVER then
 		local old = ent[varName]
 		if val ~= old then
 			ent[varName] = val
-
-			local idx, netType, extra = unpack(self.RMap[name])
-			if not idx then
-				PhotonError(("Attempted to call SimpleNet:Change with an unregistered name: %s"):format(name))
-				return
-			end
-
-			net.Start("Photon_SimpleNet_Change")
-			net.WriteEntity(ent)
-			net.WriteUInt(idx, self.Bits)
-			self.WriteFunctions[netType](val, extra)
-			net.Broadcast()
+			self:SendChange(ent, name, val)
 		end
 	end
+
+	--- Resend every currently-set networked variable on every vehicle to a
+	-- player, batched into a single net message.
+	-- Needed because values are only broadcast when they change, so a player
+	-- who joins after a value was set would otherwise never receive it.
+	-- @ply to Player to send the current state to.
+	-- @internal
+	-- @state server
+	function NET:Resync(to)
+		local groups = {}
+		for _, ent in ipairs(ents.GetAll()) do
+			if IsValid(ent) and ent:IsVehicle() then
+				local fields
+				for name in pairs(self.RMap) do
+					local val = ent[self.Normalise(name)]
+					if val ~= nil then
+						fields = fields or {}
+						local idx, netType, extra = unpack(self.RMap[name])
+						fields[#fields + 1] = {idx, netType, extra, val}
+					end
+				end
+				if fields then
+					groups[#groups + 1] = {ent, fields}
+				end
+			end
+		end
+
+		if #groups == 0 then return end
+
+		net.Start("Photon_SimpleNet_Resync")
+		net.WriteUInt(#groups, 16)
+		for _, group in ipairs(groups) do
+			local ent, fields = group[1], group[2]
+			net.WriteEntity(ent)
+			net.WriteUInt(#fields, self.Bits)
+			for _, field in ipairs(fields) do
+				local idx, netType, extra, val = field[1], field[2], field[3], field[4]
+				net.WriteUInt(idx, self.Bits)
+				self.WriteFunctions[netType](val, extra)
+			end
+		end
+		net.Send(to)
+	end
+
+	hook.Add("PlayerInitialSpawn", "Photon.SimpleNet.Resync", function(ply)
+		timer.Simple(2, function()
+			if not IsValid(ply) then return end
+			NET:Resync(ply)
+		end)
+	end)
 end
 
 --- Get the latest cached version of a value on an entity.
@@ -145,11 +209,33 @@ if SERVER then
 end
 
 if CLIENT then
-	net.Receive("Photon_SimpleNet_Change", function(len, ply)
+	net.Receive("Photon_SimpleNet_Change", function()
 		local ent = net.ReadEntity()
 		local idx = net.ReadUInt(NET.Bits)
 		local name, netType, extra = unpack(NET.FMap[idx])
-		ent[NET.Normalise(name)] = NET.ReadFunctions[netType](extra)
+		local normalName = NET.Normalise(name)
+		local old = ent[normalName]
+		ent[normalName] = NET.ReadFunctions[netType](extra)
+		hook.Run("Photon.SimpleNet.ValueChanged", name, old, ent[normalName], ent)
+	end)
+
+	net.Receive("Photon_SimpleNet_Resync", function()
+		local entCount = net.ReadUInt(16)
+		for _ = 1, entCount do
+			local ent = net.ReadEntity()
+			local fieldCount = net.ReadUInt(NET.Bits)
+			for _ = 1, fieldCount do
+				local idx = net.ReadUInt(NET.Bits)
+				local name, netType, extra = unpack(NET.FMap[idx])
+				local val = NET.ReadFunctions[netType](extra)
+				if IsValid(ent) then
+					local normalName = NET.Normalise(name)
+					local old = ent[normalName]
+					ent[normalName] = val
+					hook.Run("Photon.SimpleNet.ValueChanged", name, old, val, ent)
+				end
+			end
+		end
 	end)
 
 	hook.Add("NotifyShouldTransmit", "EMVU.Net.NotifyShouldTransmit", function(ent, shouldTransmit)
@@ -161,7 +247,7 @@ if CLIENT then
 	end)
 end
 
-local UInt, Bool = NET.UINT, NET.BOOL
+local UInt, Bool, Str = NET.UINT, NET.BOOL, NET.STR
 
 NET:Map("CurrentSignal", UInt, 2)
 NET:Map("Blinker", UInt, 2)
@@ -184,3 +270,8 @@ NET:Map("TrafficOption", UInt, 4)
 NET:Map("IlluminationOn", Bool)
 NET:Map("IlluminationOption", UInt, 4)
 NET:Map("Preset", UInt, 10)
+
+NET:Map("VehicleIndex", Str)
+NET:Map("UnitNumber", Str)
+NET:Map("LiveryID", Str)
+NET:Map("SelectionString", Str)

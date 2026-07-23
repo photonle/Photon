@@ -65,6 +65,7 @@ include( "library/emv_auto.lua" )
 
 Photon.include("emv/cl_meta.lua")
 Photon.include("emv/sv_meta.lua")
+Photon.include("emv/sh_meta.lua")
 
 local emvVehicleTable = {}
 local emvLastScan = 0
@@ -82,7 +83,7 @@ function EMVU:UpdateVehicles()
 	end
 
 	for _,ent in pairs( ents.GetAll() ) do
-		if IsValid( ent ) and ent.IsEMV and ent:IsEMV() then
+		if IsValid( ent ) and ent:IsVehicle() and ent.IsEMV and ent:IsEMV() then
 			emvVehicleTable[ #emvVehicleTable + 1 ] = ent
 		end
 	end
