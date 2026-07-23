@@ -530,7 +530,7 @@ function EMVU.Helper:GetProps( name, ent )
 		end
 	end
 	if ent:Photon_PresetEnabled() then
-		local presetData = EMVU.Helper:GetPresetData( name, ent:Photon_ELPresetOption() )
+		local presetData = EMVU.Helper:GetPresetData( name, ent:Photon_ELPresetOption() ) or {}
 		if istable( presetData.Auto ) then
 			for _,id in pairs( presetData.Auto ) do
 				local preset = EMVU.AutoIndex[ name ][ id ]
@@ -618,7 +618,9 @@ function EMVU.Helper:BodygroupPreset( ent, index )
 end
 
 function EMVU.Helper:GetPresetData( name, index )
-	return EMVU.PresetIndex[ name ][ index ]
+	local presets = EMVU.PresetIndex[ name ]
+	if not presets then return {} end
+	return presets[ index ]
 end
 
 function EMVU.Helper:GetIlluminationName( name, option )
