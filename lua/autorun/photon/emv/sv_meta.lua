@@ -252,7 +252,7 @@ function ENT:ELS_HasAuxSiren()
 end
 
 function ENT:Photon_SetLiveryId(val)
-	return self:SetPhotonNet_UnitNumber(val)
+	return self:SetPhotonNet_LiveryID(val)
 end
 
 function ENT:Photon_SetUnitNumber(val)
@@ -267,7 +267,7 @@ function ENT:Photon_SetUnitNumber(val)
 		val = ""
 	end
 
-	return self:GetPhotonNet_LiveryID(val)
+	return self:SetPhotonNet_UnitNumber(val)
 end
 
 function ENT:Photon_SetSelection(index, value)
