@@ -62,7 +62,14 @@ local function DrawCarLights()
 	for _, ent in pairs(Photon:AllVehicles() ) do
 		if IsValid(ent) and ent:Photon() then
 			if not ent.Photon_RenderLights then
-				Photon:SetupCar(ent, list.GetForEdit("Vehicles")[ent:GetVehicleClass()].Name)
+				local vname = ent.VehicleName
+				if not isstring(vname) or vname == "" then
+					local vdata = list.GetForEdit("Vehicles")[ent:GetVehicleClass()]
+					vname = vdata and vdata.Name
+				end
+				if vname then
+					Photon:SetupCar(ent, vname)
+				end
 			else
 				if should_render_reg:GetBool() then
 					ent:Photon_RenderLights(
