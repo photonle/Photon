@@ -598,7 +598,6 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	ent.IsEMV = true
-	print("[PhotonDebug] MakeEMV(server) for", ent, "ent.Name=", ent.Name, "prev VehicleIndex=", ent:GetPhotonNet_VehicleIndex(""))
 	ent:SetPhotonNet_VehicleIndex(ent.Name)
 
 	------ APPLY EMV PARAMETERS ------

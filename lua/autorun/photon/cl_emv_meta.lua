@@ -33,9 +33,7 @@ local printedErrors = {}
 
 hook.Add("Photon.SimpleNet.ValueChanged", "Photon.SetupEMV", function(name, old, new, ent)
 	if name == "VehicleIndex" then
-		print("[PhotonDebug] VehicleIndex ValueChanged for", ent, "old=", old, "new=", new)
 		EMVU:MakeEMV(ent, new)
-		print("[PhotonDebug] post-MakeEMV VehicleName=", ent.VehicleName)
 	end
 end)
 
