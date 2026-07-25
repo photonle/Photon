@@ -14,13 +14,13 @@ function Photon:RecoverVehicleName( ent )
 
 	if ent.GetVehicleClass and ent:GetVehicleClass() then
 		local vehicleClass = ent:GetVehicleClass()
-		local vehicleTable = list.Get("Vehicles")[vehicleClass]
+		local vehicleTable = list.GetForEdit("Vehicles")[vehicleClass]
 		if vehicleTable and istable(vehicleTable) then
 			return vehicleClass
 		end
 	end
 
-	for key,car in pairs( list.Get("Vehicles") ) do
+	for key,car in pairs( list.GetForEdit("Vehicles") ) do
 		if string.lower(car.Model) == string.lower(model) then
 			return key
 		end
@@ -60,7 +60,7 @@ function Photon:EntityCreated( ent )
 						local class = ent:GetClass()
 					end
 
-					local lst = list.Get("Vehicles")[class]
+					local lst = list.GetForEdit("Vehicles")[class]
 					if lst and istable(lst) then
 						ent.VehicleName = class
 						Photon:SpawnedVehicle( ent )
@@ -257,7 +257,7 @@ function Photon:GetVehicleTable(ent)
 
 	local vehicleName = ent.VehicleName
 	if isstring(vehicleName) and vehicleName ~= "" then
-		local vehicleTable = list.Get("Vehicles")[vehicleName] -- list.GetEntry("Vehicles", vehicleName)
+		local vehicleTable = list.GetForEdit("Vehicles")[vehicleName] -- list.GetEntry("Vehicles", vehicleName)
 		if istable(vehicleTable) then
 			return vehicleTable
 		end

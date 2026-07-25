@@ -45,10 +45,11 @@ function EMVU:SpawnedVehicle( ent )
 	local vehicleTable = Photon:GetVehicleTable( ent )
 	local name = vehicleTable.Name
 	ent.Name = name
-	local raw = list.Get("Vehicles")[name]
+	local vehicles = list.GetForEdit("Vehicles")
+	local raw = vehicles[name]
 	local car = false
 
-	for _,scar in pairs(list.Get("Vehicles")) do
+	for _,scar in pairs(vehicles) do
 		if scar.Name == name then
 			car = scar
 			break
