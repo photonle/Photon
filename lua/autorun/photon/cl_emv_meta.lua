@@ -526,6 +526,13 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_SetupEMVProps()
 		if not IsValid( self ) then return false end
 		local emv = self
+
+		if istable( emv.EMVProps ) then
+			for _,prop in pairs( emv.EMVProps ) do
+				if prop and IsValid( prop ) then SafeRemoveEntity( prop ) end
+			end
+		end
+
 		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
 		if emvProps then
 
