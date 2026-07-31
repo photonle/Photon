@@ -1034,7 +1034,8 @@ net.Receive("Photon.ELS_PlaySiren", function()
 		local sound = net.ReadString()
 		local volume = net.ReadFloat()
 		ent.EMVU_Siren = CreateSound(ent, sound)
-		ent.EMVU_Siren:SetSoundLevel( volume * 1.8 )
+		-- Volume is a Source SNDLVL (default 75); do not scale it.
+		ent.EMVU_Siren:SetSoundLevel( volume )
 		if ent:GetThirdPersonMode() then
 			ent.EMVU_Siren:PlayEx(thirdPersonVolume, 100)
 		elseif !ent:GetThirdPersonMode() then
@@ -1069,7 +1070,7 @@ net.Receive("Photon.ELS_PlaySiren2", function()
 		local sound = net.ReadString()
 		local volume = net.ReadFloat()
 		ent.EMVU_Siren2 = CreateSound(ent, sound)
-		ent.EMVU_Siren2:SetSoundLevel( volume * 1.25 )
+		ent.EMVU_Siren2:SetSoundLevel( volume )
 		if ent:GetThirdPersonMode() then
 			ent.EMVU_Siren2:PlayEx(thirdPersonVolume, 100)
 		elseif !ent:GetThirdPersonMode() then
@@ -1104,7 +1105,7 @@ net.Receive("Photon.ELS_PlayManual", function()
 		local sound = net.ReadString()
 		local volume = net.ReadFloat()
 		ent.EMVU_ManualSiren = CreateSound(ent, sound)
-		ent.EMVU_ManualSiren:SetSoundLevel( volume * 1.25 )
+		ent.EMVU_ManualSiren:SetSoundLevel( volume )
 		if ent:GetThirdPersonMode() then
 			ent.EMVU_ManualSiren:PlayEx(thirdPersonVolume, 100)
 		elseif !ent:GetThirdPersonMode() then
@@ -1152,7 +1153,7 @@ net.Receive("Photon.ELS_PlayHorn", function()
 		local sound = net.ReadString()
 		local volume = net.ReadFloat()
 		ent.EMVU_Horn = CreateSound(ent, sound)
-		ent.EMVU_Horn:SetSoundLevel( volume * 1.25 )
+		ent.EMVU_Horn:SetSoundLevel( volume )
 		if ent:GetThirdPersonMode() then
 			ent.EMVU_Horn:PlayEx(thirdPersonVolume, 100)
 		elseif !ent:GetThirdPersonMode() then
@@ -1185,7 +1186,7 @@ hook.Add("NotifyShouldTransmit", "Photon.ShouldTransmitSirens", function(ent, sh
 		local sound = ent:GetNW2String("PhotonLE.Siren_Sound")
 		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
 		ent.EMVU_Siren = CreateSound(ent, sound)
-		ent.EMVU_Siren:SetSoundLevel( volume * 0.05 )
+		ent.EMVU_Siren:SetSoundLevel( volume )
 		ent.EMVU_Siren:PlayEx(1, 100)
 		ent:CallOnRemove("StopSiren", function(ent)
 			if ent.EMVU_Siren then
@@ -1198,7 +1199,7 @@ hook.Add("NotifyShouldTransmit", "Photon.ShouldTransmitSirens", function(ent, sh
 		local sound = ent:GetNW2String("PhotonLE.Siren2_Sound")
 		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
 		ent.EMVU_Siren2 = CreateSound(ent, sound)
-		ent.EMVU_Siren2:SetSoundLevel( volume * 0.05 )
+		ent.EMVU_Siren2:SetSoundLevel( volume )
 		ent.EMVU_Siren2:PlayEx(1, 100)
 		ent:CallOnRemove("StopSiren2", function(ent)
 			if ent.EMVU_Siren2 then
@@ -1211,7 +1212,7 @@ hook.Add("NotifyShouldTransmit", "Photon.ShouldTransmitSirens", function(ent, sh
 		local sound = ent:GetNW2String("PhotonLE.Manual_Sound")
 		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
 		ent.EMVU_ManualSiren = CreateSound(ent, sound)
-		ent.EMVU_ManualSiren:SetSoundLevel( volume * 0.05 )
+		ent.EMVU_ManualSiren:SetSoundLevel( volume )
 		ent.EMVU_ManualSiren:PlayEx(1, 100)
 		ent:CallOnRemove("StopManualSiren", function(ent)
 			if ent.EMVU_ManualSiren then
@@ -1224,7 +1225,7 @@ hook.Add("NotifyShouldTransmit", "Photon.ShouldTransmitSirens", function(ent, sh
 		local sound = ent:GetNW2String("PhotonLE.Horn_Sound")
 		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
 		ent.EMVU_Horn = CreateSound(ent, sound)
-		ent.EMVU_Horn:SetSoundLevel( volume * 0.05 )
+		ent.EMVU_Horn:SetSoundLevel( volume )
 		ent.EMVU_Horn:PlayEx(1, 100)
 		ent:CallOnRemove("StopHorn", function(ent)
 			if ent.EMVU_Horn then
