@@ -620,7 +620,7 @@ end
 function EMVU.Helper:GetPresetData( name, index )
 	local presets = EMVU.PresetIndex[ name ]
 	if not presets then return {} end
-	return presets[ index ]
+	return presets[ index ] or {}
 end
 
 function EMVU.Helper:GetIlluminationName( name, option )
