@@ -23,9 +23,16 @@ NET.INT = 2
 NET.UINT = 3
 NET.STR = 4
 
+--- Bit width for 1 based index of max value count.
+-- @int count Number of registered entries.
+-- @treturn int Bit width.
+local function IndexBits(count)
+	return math.max(1, math.ceil(math.log(count + 1, 2)))
+end
+
 NET.FMap = NET.FMap or {}
 NET.RMap = NET.RMap or {}
-NET.Bits = math.ceil(math.log(#NET.FMap, 2))
+NET.Bits = IndexBits(#NET.FMap)
 
 NET.WriteFunctions = {
 	[NET.BOOL] = net.WriteBool,
@@ -57,7 +64,7 @@ function NET:Map(name, netType, extra)
 		self.RMap[name][3] = extra
 	else
 		self.RMap[name] = {table.insert(self.FMap, {name, netType, extra}), netType, extra}
-		self.Bits = math.ceil(math.log(#self.FMap, 2))
+		self.Bits = IndexBits(#self.FMap)
 	end
 
 	if not self.WriteFunctions[netType] then
