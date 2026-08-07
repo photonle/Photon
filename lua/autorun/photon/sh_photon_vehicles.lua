@@ -53,6 +53,16 @@ function Photon:EntityCreated( ent )
 				end
 
 				if timer.RepsLeft( timerId ) == 0 and IsValid( ent ) and CLIENT then
+					local emvName = ent.EMVName and ent:EMVName()
+					if isstring(emvName) and emvName ~= "" then
+						ent.VehicleName = emvName
+						Photon:SpawnedVehicle( ent )
+						EMVU:SpawnedVehicle( ent )
+						timer.Stop( timerId )
+						timer.Destroy( timerId )
+						return
+					end
+
 					local base = ent.Base or ""
 					if not string.find(base, "glide") then
 						local class = ent:GetVehicleClass()
