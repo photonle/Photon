@@ -43,6 +43,7 @@ end
 function EMVU:SpawnedVehicle( ent )
 	if not IsValid( ent ) then print( "[Photon] Tried to setup an invalid entity: " .. tostring(ent) ) end
 	local vehicleTable = Photon:GetVehicleTable( ent )
+	if not istable( vehicleTable ) then return end
 	local name = vehicleTable.Name
 	ent.Name = name
 	local vehicles = list.GetForEdit("Vehicles")
