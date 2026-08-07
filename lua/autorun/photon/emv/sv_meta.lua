@@ -6,7 +6,7 @@
 @alias ENT
 --]]--
 
-local ENT = FindMetaTable("Vehicle")
+local ENT = FindMetaTable("Entity")
 local helper = EMVU.Helper
 
 local global_stayon = GetConVar("photon_emv_stayon")
@@ -29,7 +29,8 @@ end
 -- @bool[opt] val New siren state.
 -- @rbool The new set value.
 function ENT:SetPhotonLEStayOn(val)
-	return self:SetPhotonNet_LEStayOn(val)
+	self:SetPhotonNet_LEStayOn(val)
+	return self:GetPhotonNet_LEStayOn(false)
 end
 
 --- Sets if the vehicle has ELS enabled.
@@ -249,4 +250,43 @@ end
 
 function ENT:ELS_HasAuxSiren()
 	return self:ELS_AuxSirenSet() ~= nil and self:ELS_AuxSirenSet() ~= 0
+end
+
+function ENT:Photon_SetLiveryId(val)
+	self:SetPhotonNet_LiveryID(val)
+	return self:Photon_GetLiveryID()
+end
+
+function ENT:Photon_SetUnitNumber(val)
+	val = tostring(val):upper()
+	if #val > 3 then
+		val = string.sub(val, 1, 3)
+	end
+	if not val:match("%w") then
+		val = ""
+	end
+	if PHOTON_BANNED_UNIT_IDS[val:lower()] then
+		val = ""
+	end
+
+	self:SetPhotonNet_UnitNumber(val)
+	return self:Photon_GetUnitNumber()
+end
+
+function ENT:Photon_SetSelection(index, value)
+	if not istable(EMVU.Selections[self.Name][index]) then
+		return
+	end
+
+	local selectionTable = self:Photon_SelectionTable()
+	selectionTable[index] = value
+	self:SetPhotonNet_SelectionString(table.concat(selectionTable, "."))
+
+	local selectionData = EMVU.Selections[self.Name][index].Options[value]
+
+	if istable(selectionData.Bodygroups) then
+		for _, bgData in ipairs(selectionData.Bodygroups) do
+			self:SetBodygroup(bgData[1], bgData[2])
+		end
+	end
 end

@@ -31,9 +31,15 @@ end)
 
 local printedErrors = {}
 
+hook.Add("Photon.SimpleNet.ValueChanged", "Photon.SetupEMV", function(name, old, new, ent)
+	if name == "VehicleIndex" then
+		EMVU:MakeEMV(ent, new)
+	end
+end)
+
 function EMVU:MakeEMV( emv, name )
 
-	if not emv or not emv:IsValid() or not emv:IsVehicle() then return false end
+	if not emv or not emv:IsValid() or not emv:IsVehicle() or not emv:IsEMV() then return false end
 
 	if name == "1" then return end
 
