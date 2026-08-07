@@ -91,11 +91,13 @@ if SERVER then
 	-- @internal
 	-- @state server
 	function NET:SendChange(ent, name, val, to)
-		local idx, netType, extra = unpack(self.RMap[name])
-		if not idx then
-			PhotonError(("Attempted to call SimpleNet:Change with an unregistered name: %s"):format(name))
+		local mapping = self.RMap[name]
+		if not mapping then
+			PhotonError(("Attempted to call SimpleNet:SendChange with an unregistered name: %s"):format(name))
 			return
 		end
+
+		local idx, netType, extra = unpack(mapping)
 
 		net.Start("Photon_SimpleNet_Change")
 		net.WriteEntity(ent)
