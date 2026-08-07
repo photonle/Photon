@@ -21,7 +21,7 @@ function ENT:Photon_GetLiveryID()
 end
 
 function ENT:Photon_SelectionString()
-	return self:GetPhotonNet_SelectionString("")
+	return self:GetPhotonNet_SelectionString(".")
 end
 
 function ENT:Photon_SelectionTable()
