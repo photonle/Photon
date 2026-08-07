@@ -178,7 +178,7 @@ function EMVU:MakeEMV( ent, emv )
 			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
 				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
 			else
-				net.WriteFloat(90
+				net.WriteFloat(90)
 			end
 		net.Broadcast()
 		self:SetNW2String("PhotonLE.Manual_Sound", sound)
