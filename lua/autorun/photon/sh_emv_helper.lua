@@ -530,7 +530,7 @@ function EMVU.Helper:GetProps( name, ent )
 		end
 	end
 	if ent:Photon_PresetEnabled() then
-		local presetData = EMVU.Helper:GetPresetData( name, ent:Photon_ELPresetOption() ) or {}
+		local presetData = EMVU.Helper:GetPresetData( name, ent:Photon_ELPresetOption() )
 		if istable( presetData.Auto ) then
 			for _,id in pairs( presetData.Auto ) do
 				local preset = EMVU.AutoIndex[ name ][ id ]
