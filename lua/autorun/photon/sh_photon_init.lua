@@ -41,6 +41,43 @@ if not Photon.Net then
 	end
 end
 
+--- Run an entity-processing callback, quarantining the entity if it errors.
+-- Errors inside timer callbacks permanently kill the timer and errors inside
+-- render hooks repeat every frame, so one vehicle with bad data must not be
+-- allowed to take a shared scan loop down with it. The offending entity is
+-- flagged and skipped on subsequent calls; the error itself is still reported
+-- through the engine error handler with a full stack trace.
+-- @ent ent Entity to process.
+-- @tparam function fn Callback, invoked as fn( ent ).
+-- @treturn bool If the callback ran without error.
+function Photon.RunQuarantined( ent, fn )
+	if ent.PhotonQuarantined then return false end
+
+	local ok = ProtectedCall( fn, ent )
+	if not ok then
+		ent.PhotonQuarantined = true
+		PhotonError( string.format(
+			"'%s' (%s) errored and has been disabled. Fix the vehicle/component data, then run photon_quarantine_reset to re-enable it.",
+			tostring( ent.VehicleName or ent.ComponentName or ent.Name or ent:GetClass() ),
+			tostring( ent )
+		) )
+	end
+
+	return ok
+end
+
+concommand.Add( "photon_quarantine_reset", function( ply )
+	if SERVER and IsValid( ply ) and not ply:IsAdmin() then return end
+	local count = 0
+	for _, ent in ipairs( ents.GetAll() ) do
+		if ent.PhotonQuarantined then
+			ent.PhotonQuarantined = nil
+			count = count + 1
+		end
+	end
+	PhotonWarning( string.format( "Re-enabled %d quarantined entities.", count ) )
+end )
+
 AddCSLuaFile("cl_photon_eng.lua")
 AddCSLuaFile("cl_photon_meta.lua")
 AddCSLuaFile("cl_photon_hooks.lua")
