@@ -618,7 +618,9 @@ function EMVU.Helper:BodygroupPreset( ent, index )
 end
 
 function EMVU.Helper:GetPresetData( name, index )
-	return EMVU.PresetIndex[ name ][ index ]
+	local presets = EMVU.PresetIndex[ name ]
+	if not presets then return {} end
+	return presets[ index ] or {}
 end
 
 function EMVU.Helper:GetIlluminationName( name, option )
