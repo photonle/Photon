@@ -11,7 +11,7 @@ local helper = EMVU.Helper
 
 local global_stayon = GetConVar("photon_emv_stayon")
 local global_stayon_value = global_stayon:GetBool()
-cvars.AddChangeCallback("photon_env_stayon", function()
+cvars.AddChangeCallback("photon_emv_stayon", function()
 	global_stayon_value = global_stayon:GetBool()
 end)
 
