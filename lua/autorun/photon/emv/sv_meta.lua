@@ -29,7 +29,8 @@ end
 -- @bool[opt] val New siren state.
 -- @rbool The new set value.
 function ENT:SetPhotonLEStayOn(val)
-	return self:SetPhotonNet_LEStayOn(val)
+	self:SetPhotonNet_LEStayOn(val)
+	return self:GetPhotonNet_LEStayOn(false)
 end
 
 --- Sets if the vehicle has ELS enabled.
@@ -252,7 +253,8 @@ function ENT:ELS_HasAuxSiren()
 end
 
 function ENT:Photon_SetLiveryId(val)
-	return self:SetPhotonNet_LiveryID(val)
+	self:SetPhotonNet_LiveryID(val)
+	return self:Photon_GetLiveryID()
 end
 
 function ENT:Photon_SetUnitNumber(val)
@@ -267,7 +269,8 @@ function ENT:Photon_SetUnitNumber(val)
 		val = ""
 	end
 
-	return self:SetPhotonNet_UnitNumber(val)
+	self:SetPhotonNet_UnitNumber(val)
+	return self:Photon_GetUnitNumber()
 end
 
 function ENT:Photon_SetSelection(index, value)
