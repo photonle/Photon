@@ -6,7 +6,7 @@
 @alias ENT
 --]]--
 
-local ENT = FindMetaTable("Vehicle")
+local ENT = FindMetaTable("Entity")
 
 --- Get lighting state.
 -- @rbool

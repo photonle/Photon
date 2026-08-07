@@ -6,7 +6,7 @@
 @alias ENT
 --]]--
 
-local ENT = FindMetaTable("Vehicle")
+local ENT = FindMetaTable("Entity")
 
 function ENT:EMVName()
 	return self:GetPhotonNet_VehicleIndex("")

@@ -6,7 +6,7 @@
 @alias ENT
 --]]--
 
-local ENT = FindMetaTable("Vehicle")
+local ENT = FindMetaTable("Entity")
 local helper = EMVU.Helper
 
 local global_stayon = GetConVar("photon_emv_stayon")
