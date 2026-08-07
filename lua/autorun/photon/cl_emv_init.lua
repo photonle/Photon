@@ -33,6 +33,16 @@ hook.Add("InitPostEntity", "Photon.ReadyEL", function()
 	photon_ready = true
 end)
 
+--- Render a single vehicle's Emergency and Illumination lighting.
+local function DrawVehicleEMVLights(v)
+	if v.Photon_RenderEL then
+		v:Photon_RenderEL()
+	end
+	if v.Photon_RenderIllum then
+		v:Photon_RenderIllum()
+	end
+end
+
 --- Render function to draw Emergency and Illumination lighting.
 local function DrawEMVLights()
 	if not photon_ready then return end
@@ -40,12 +50,40 @@ local function DrawEMVLights()
 
 	for k, v in pairs(EMVU:AllVehicles()) do
 		if IsValid(v) then
-			if v.Photon_RenderEL then
-				v:Photon_RenderEL()
-			end
-			if v.Photon_RenderIllum then
-				v:Photon_RenderIllum()
-			end
+			Photon.RunQuarantined(v, DrawVehicleEMVLights)
+		end
+	end
+end
+
+--- Render a single vehicle's running lights and run its prop/wheel scans.
+local function DrawVehicleCarLights(ent)
+	if not ent.Photon_RenderLights then
+		local vname = ent.VehicleName
+		if not isstring(vname) or vname == "" then
+			local vdata = list.GetForEdit("Vehicles")[ent:GetVehicleClass()]
+			vname = vdata and vdata.Name
+		end
+		if vname then
+			Photon:SetupCar(ent, vname)
+		end
+	else
+		if should_render_reg:GetBool() then
+			ent:Photon_RenderLights(
+				ent:Photon_HeadlightsOn(),
+				ent:Photon_IsRunning(),
+				ent:Photon_IsReversing(),
+				ent:Photon_IsBraking(),
+				ent:Photon_TurningLeft(),
+				ent:Photon_TurningRight(),
+				ent:Photon_Hazards(),
+				PHOTON_DEBUG
+			)
+		end
+		if ent:IsEMV() and ent.Photon_ScanEMVProps then
+			ent:Photon_ScanEMVProps()
+		end
+		if ent:Photon_WheelEnabled() and ent.Photon_ScanWheels then
+			ent:Photon_ScanWheels()
 		end
 	end
 end
@@ -55,43 +93,13 @@ local function DrawCarLights()
 	if not photon_ready then return end
 
 	Photon:ClearLightQueue()
-	local photonDebug = PHOTON_DEBUG
 
 	for _, ent in pairs(Photon:AllVehicles() ) do
 		if IsValid(ent) and ent:Photon() then
-			if not ent.Photon_RenderLights then
-				local vname = ent.VehicleName
-				if not isstring(vname) or vname == "" then
-					local vdata = list.GetForEdit("Vehicles")[ent:GetVehicleClass()]
-					vname = vdata and vdata.Name
-				end
-				if vname then
-					Photon:SetupCar(ent, vname)
-				end
-			else
-				if should_render_reg:GetBool() then
-					ent:Photon_RenderLights(
-						ent:Photon_HeadlightsOn(),
-						ent:Photon_IsRunning(),
-						ent:Photon_IsReversing(),
-						ent:Photon_IsBraking(),
-						ent:Photon_TurningLeft(),
-						ent:Photon_TurningRight(),
-						ent:Photon_Hazards(),
-						photonDebug
-					)
-				end
-				if ent:IsEMV() and ent.Photon_ScanEMVProps then
-					ent:Photon_ScanEMVProps()
-				end
-				if ent:Photon_WheelEnabled() and ent.Photon_ScanWheels then
-					ent:Photon_ScanWheels()
-				end
-			end
+			Photon.RunQuarantined(ent, DrawVehicleCarLights)
 		end
 	end
 end
-
 hook.Add( "PreRender", "Photon.RenderScan", function()
 	DrawCarLights()
 	DrawEMVLights()
@@ -152,16 +160,32 @@ local function PhotonManualWindFocus()
 end
 -- hook.Add( "PreRender", "Photon.ManualFocusCheck", function() PhotonManualWindFocus() end )
 
+--- Tick the radar on a single vehicle.
+local function RadarTickVehicle( emv )
+	if emv.Photon_RadarActive and emv:Photon_RadarActive() then emv:Photon_RadarTick() end
+end
+
 --- Render function to tick the radar.
 local function PhotonRadarScan()
 	if not photon_ready or not should_render:GetBool() then return end
 	for _, emv in pairs( EMVU:AllVehicles() ) do
-		if IsValid( emv ) and emv.Photon_RadarActive and emv:Photon_RadarActive() then emv:Photon_RadarTick() end
+		if IsValid( emv ) then Photon.RunQuarantined( emv, RadarTickVehicle ) end
 	end
 end
 hook.Add( "Tick", "Photon.RadarScan", function() PhotonRadarScan() end)
 
 local photon_pause = false
+
+--- Calculate light frames for a single vehicle.
+local function CalculateVehicleFrames( ent )
+	if ent.EMV and ent.HasPhotonELS and ent:HasPhotonELS() and (
+		(ent.Photon_Lights and ent:Photon_Lights()) or
+		(ent.Photon_TrafficAdvisor and ent:Photon_TrafficAdvisor()) or
+		(ent.Photon_Illumination and ent:Photon_Illumination())
+	) then
+		ent:Photon_CalculateELFrames()
+	end
+end
 
 --- Timer to update frame calculations.
 function EMVU:CalculateFrames()
@@ -169,13 +193,7 @@ function EMVU:CalculateFrames()
 	if photon_pause then return end
 	if not should_render:GetBool() then return end
 	for _,ent in pairs( EMVU:AllVehicles() ) do
-		if IsValid(ent) and ent.EMV and ent.HasPhotonELS and ent:HasPhotonELS() and (
-			(ent.Photon_Lights and ent:Photon_Lights()) or
-			(ent.Photon_TrafficAdvisor and ent:Photon_TrafficAdvisor()) or
-			(ent.Photon_Illumination and ent:Photon_Illumination())
-		) then
-			ent:Photon_CalculateELFrames()
-		end
+		if IsValid( ent ) then Photon.RunQuarantined( ent, CalculateVehicleFrames ) end
 	end
 end
 timer.Create("EMVU.CalculateFrames", .03, 0, function()
@@ -448,14 +466,11 @@ local function getPhotonRotationEnts()
 	return _rotationEntCache
 end
 
---- Run bone rotation.
-Photon.BoneRotation = function()
-	if photon_pause then return end
-	for _,ent in pairs( getPhotonRotationEnts() ) do
-		if not IsValid(ent) then return end
-		if ent.PhotonRotationEnabled then
+--- Run bone rotation on a single rotating component entity.
+local function RotateComponentBones( ent )
+	if ent.PhotonRotationEnabled then
 			local emv = ent:GetParent()
-			if not IsValid( emv ) or not emv.Photon_LightOptionID then continue end
+			if not IsValid( emv ) or not emv.Photon_LightOptionID then return end
 			local stageId = emv:Photon_LightOptionID()
 			local auxState = emv:Photon_AuxOptionID()
 			local illumStage = emv:Photon_IllumOptionID()
@@ -534,7 +549,14 @@ Photon.BoneRotation = function()
 					ent:ManipulateBoneAngles( boneIndex, Angle( currentAngles.p, currentAngles.y, subAng ) )
 				end
 			end
-		end
+	end
+end
+
+--- Run bone rotation.
+Photon.BoneRotation = function()
+	if photon_pause then return end
+	for _,ent in pairs( getPhotonRotationEnts() ) do
+		if IsValid( ent ) then Photon.RunQuarantined( ent, RotateComponentBones ) end
 	end
 end
 
