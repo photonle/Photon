@@ -197,7 +197,8 @@ const version = tag.replace(/^v/i, '');
 // The menu site indexes updates by the two-part id (76.4), not the full semver.
 const shortVersion = version.match(/^(\d+\.\d+)/)?.[1] ?? version;
 const sections = parseBody(release.body);
-const title = release.name && release.name !== '' ? release.name : `Photon ${version}`;
+const named = Boolean(release.name && release.name !== '');
+const title = named ? release.name : `Photon ${version}`;
 
 if (sections.length === 0) {
 	console.warn('No changelog entries were parsed from the release body.');
@@ -206,7 +207,10 @@ if (sections.length === 0) {
 await mkdir(outDir, { recursive: true });
 await Promise.all([
 	writeFile(join(outDir, 'workshop.bbcode.txt'), buildWorkshop(sections, title)),
-	writeFile(join(outDir, 'discord.md'), buildDiscord(sections, `Photon ${tag || version}`, release.html_url)),
+	// Discord keeps the version alongside the title, since the announcement is
+	// read on its own without the release page for context. The fallback title
+	// already carries the version, so it is left alone.
+	writeFile(join(outDir, 'discord.md'), buildDiscord(sections, named && tag ? `${title} (${tag})` : title, release.html_url)),
 	writeFile(join(outDir, `${shortVersion}.html`), buildMenuPage(sections, {
 		title,
 		date: formatDate(release.published_at ?? release.created_at)
