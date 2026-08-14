@@ -85,6 +85,32 @@ jobs:
         if: steps.detect.outputs.release == 'true'
         run: awk '/^##[^#]/{n++} n==1' CHANGELOG.md > "${RUNNER_TEMP}/notes.md"
       -
+        # Titles read as the series name, with the update number appended for
+        # anything past the first release of that series: "Johnstown",
+        # "Johnstown Patch #4". A new series picks up its own name because the
+        # series is read from the addon rather than hardcoded here.
+        name: Compose Title
+        id: title
+        if: steps.detect.outputs.release == 'true'
+        env:
+          VERSION: ${{ steps.detect.outputs.version }}
+        run: |
+          series=$(sed -n 's/^PHOTON_SERIES = "\(.*\)"/\1/p' \
+            lua/autorun/photon/sh_emv_config.lua)
+          update=$(echo "${VERSION}" | cut -d. -f2)
+
+          if [ -z "$series" ]; then
+            echo "::warning::PHOTON_SERIES not found; falling back to the version."
+            title="v${VERSION}"
+          elif [ "$update" = "0" ]; then
+            title="${series}"
+          else
+            title="${series} Patch #${update}"
+          fi
+
+          echo "Release title: ${title}"
+          echo "title=${title}" >> "$GITHUB_OUTPUT"
+      -
         # Targeting the SHA rather than "master" keeps the tag correct even if
         # something else lands on master between the push and here.
         name: Create Release
@@ -92,10 +118,11 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           VERSION: ${{ steps.detect.outputs.version }}
+          TITLE: ${{ steps.title.outputs.title }}
         run: |
           gh release create "v${VERSION}" \
             --target "${GITHUB_SHA}" \
-            --title "v${VERSION}" \
+            --title "${TITLE}" \
             --notes-file "${RUNNER_TEMP}/notes.md"
       -
         # Mirrors release-please's own state model so the merged PR reads as
