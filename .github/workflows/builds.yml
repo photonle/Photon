@@ -69,9 +69,19 @@ jobs:
   changelog:
     name: Changelogs
     runs-on: ubuntu-latest
-    env:
-      MENU_TOKEN: ${{ secrets.MENU_REPO_TOKEN }}
     steps:
+      -
+        # Scoped to the menu repo, which the app is also installed on. Fails
+        # loudly if that installation goes away rather than skipping silently.
+        name: Mint Menu Token
+        id: menu-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          owner: photonle
+          repositories: menu
+          permission-contents: write
       -
         name: Checkout
         uses: actions/checkout@v7
@@ -90,15 +100,18 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ github.event.release.tag_name }}
+        # The menu page is uploaded too, so it survives even if publishing to the
+        # menu repo fails and can be copied across by hand.
         run: |
           gh release upload "${TAG}" \
             dist/workshop.bbcode.txt \
             dist/discord.md \
+            dist/*.html \
             --clobber
       -
         name: Publish to Menu
-        if: env.MENU_TOKEN != ''
         env:
+          MENU_TOKEN: ${{ steps.menu-token.outputs.token }}
           TAG: ${{ github.event.release.tag_name }}
         run: |
           version="${TAG#v}"
