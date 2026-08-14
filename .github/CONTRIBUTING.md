@@ -23,6 +23,21 @@ Contributors agree to their code being published under the Creative Commons Non-
 - PRs should focus on one main feature or change each.
 - PRs should target development branch, not master.
 
+### Titles
+
+PR titles follow [Conventional Commits](https://www.conventionalcommits.org/), because
+release notes and the changelog are generated from them:
+
+```
+feat(library): add Whelen Dominator siren models
+fix: don't crash when a component is missing
+```
+
+Use `feat` for additions, `fix` for bug fixes, `perf` for optimisations and
+`refactor` for internal changes. `docs`, `chore`, `style`, `test`, `build` and `ci`
+are valid but are hidden from release notes. A title that doesn't follow this
+format is left out of the changelog entirely.
+
 ## Issues
 
 - Issues should have meaningful titles.

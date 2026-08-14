@@ -1,5 +1,6 @@
 {
 	"title": "Photon: Lighting Engine",
+	"description": "Photon is a lua based lighting engine, based around emergency vehicles.",
 	"type": "tool",
 	"tags": [
 		"realism",

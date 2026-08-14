@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "simple",
+  "packages": {
+    ".": {
+      "package-name": "photon",
+      "include-component-in-tag": false,
+      "include-v-in-tag": true,
+      "versioning": "always-bump-minor",
+      "skip-github-release": true,
+      "pull-request-title-pattern": "chore: release ${version}",
+      "changelog-sections": [
+        { "type": "feat", "section": "Features" },
+        { "type": "fix", "section": "Bug Fixes" },
+        { "type": "perf", "section": "Performance" },
+        { "type": "revert", "section": "Removals" },
+        { "type": "deps", "section": "Dependencies" },
+        { "type": "refactor", "section": "Internal Changes" },
+        { "type": "docs", "section": "Documentation", "hidden": true },
+        { "type": "chore", "section": "Miscellaneous", "hidden": true },
+        { "type": "style", "section": "Internal Changes", "hidden": true },
+        { "type": "test", "section": "Internal Changes", "hidden": true },
+        { "type": "build", "section": "Internal Changes", "hidden": true },
+        { "type": "ci", "section": "Internal Changes", "hidden": true }
+      ],
+      "extra-files": [
+        { "type": "generic", "path": "lua/autorun/photon/sh_emv_config.lua" }
+      ]
+    }
+  }
+}
