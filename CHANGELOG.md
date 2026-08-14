@@ -1,5 +1,12 @@
 # Changelog
 
+## [76.5.0](https://github.com/photonle/Photon/compare/v76.4.0...v76.5.0) (2026-08-14)
+
+
+### Bug Fixes
+
+* Wrap photon scans in protected calls, so we don't kill the entire timer for once broken car. ([#245](https://github.com/photonle/Photon/issues/245)) ([1d0252e](https://github.com/photonle/Photon/commit/1d0252ef09a1e848b21340ff3e48d1e517ad9b7e))
+
 ## [76.4.0](https://github.com/photonle/Photon/compare/v76.3.0...v76.4.0) (2026-08-14)
 
 
