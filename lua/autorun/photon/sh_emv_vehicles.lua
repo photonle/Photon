@@ -881,17 +881,7 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 						end
 					end
 				else
-					local componentMatrix = Matrix()
-					componentMatrix:Translate(autoPos)
-					componentMatrix:Rotate(autoAng)
-					if not component.NotLegacy then
-						componentMatrix:Rotate(Angle(0, -90, 0))
-					end
-
 					local autoScaleVector = isvector(autoScale) and (autoScale) or Vector(autoScale, autoScale, autoScale)
-
-					local offsetMatrix = Matrix()
-					offsetMatrix:Translate(posData[1] * autoScaleVector)
 					local schmAngle = posData[2]
 					if component.ForwardTranslation then
 						schmAngle = Angle(
@@ -900,11 +890,42 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 							schmAngle.p
 						)
 					end
-					offsetMatrix:Rotate(schmAngle)
-					local out = componentMatrix * offsetMatrix
 
-					newPos = out:GetTranslation()
-					newAng = out:GetAngles()
+					-- Matrix:GetAngles() decomposes pitch via atan2() against a non-negative
+					-- term, so it can never return |pitch| > 90 - it silently re-expresses
+					-- angles like the mirrored-component convention Angle(180-p, -y, 180-r)
+					-- as an equivalent rotation with a ~180 degree different yaw. That's fine
+					-- for anything reading Forward()/Right()/Up(), but PrepareVehicleLight's
+					-- lightNormal calc reads .y directly, so the swap flips the sprite to face
+					-- backwards.
+					-- Yaw is the outermost axis in Source's Euler convention, so a pure-yaw
+					-- anchor (no pitch/roll) composes with the component angle the same way
+					-- whether you add onto .y directly or go through the matrix - provably,
+					-- not just usually. That case can skip the lossy round-trip entirely.
+					-- Anchors with real pitch/roll don't have that guarantee: true composition
+					-- and naive addition genuinely diverge there, and nothing in the numbers
+					-- says which one a given component's angle was authored against.
+					if component.NotLegacy and autoAng.p == 0 and autoAng.r == 0 then
+						newPos = posData[1] * autoScaleVector
+						newPos:Rotate( Angle( 0, autoAng.y, 0 ) )
+						newPos:Add( autoPos )
+						newAng = Angle( schmAngle.p, schmAngle.y + autoAng.y, schmAngle.r )
+					else
+						local componentMatrix = Matrix()
+						componentMatrix:Translate(autoPos)
+						componentMatrix:Rotate(autoAng)
+						if not component.NotLegacy then
+							componentMatrix:Rotate(Angle(0, -90, 0))
+						end
+
+						local offsetMatrix = Matrix()
+						offsetMatrix:Translate(posData[1] * autoScaleVector)
+						offsetMatrix:Rotate(schmAngle)
+						local out = componentMatrix * offsetMatrix
+
+						newPos = out:GetTranslation()
+						newAng = out:GetAngles()
+					end
 				end
 
 				EMVU.Positions[ name ][ offset + id ] = {
