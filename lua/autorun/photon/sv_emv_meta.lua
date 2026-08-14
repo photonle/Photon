@@ -128,14 +128,14 @@ function EMVU:MakeEMV( ent, emv )
 			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
 				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
 			else
-				net.WriteFloat(75)
+				net.WriteFloat(90)
 			end
 		net.Broadcast()
 		self:SetNW2String("PhotonLE.Siren_Sound", sound)
 		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
 			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
 		else
-			self:SetNW2Float("PhotonLE.Siren_Volume", 75 )
+			self:SetNW2Float("PhotonLE.Siren_Volume", 90 )
 		end
 	end
 
@@ -153,14 +153,14 @@ function EMVU:MakeEMV( ent, emv )
 			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
 				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
 			else
-				net.WriteFloat(75)
+				net.WriteFloat(90)
 			end
 		net.Broadcast()
 		self:SetNW2String("PhotonLE.Siren2_Sound", sound)
 		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
 			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
 		else
-			self:SetNW2Float("PhotonLE.Siren_Volume", 75 )
+			self:SetNW2Float("PhotonLE.Siren_Volume", 90 )
 		end
 	end
 
@@ -178,14 +178,14 @@ function EMVU:MakeEMV( ent, emv )
 			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
 				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
 			else
-				net.WriteFloat(75)
+				net.WriteFloat(90)
 			end
 		net.Broadcast()
 		self:SetNW2String("PhotonLE.Manual_Sound", sound)
 		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
 			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
 		else
-			self:SetNW2Float("PhotonLE.Siren_Volume", 75 )
+			self:SetNW2Float("PhotonLE.Siren_Volume", 90 )
 		end
 	end
 
@@ -203,14 +203,14 @@ function EMVU:MakeEMV( ent, emv )
 			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
 				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
 			else
-				net.WriteFloat(75)
+				net.WriteFloat(85)
 			end
 		net.Broadcast()
 		self:SetNW2String("PhotonLE.Horn_Sound", sound)
 		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
 			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
 		else
-			self:SetNW2Float("PhotonLE.Siren_Volume", 75 )
+			self:SetNW2Float("PhotonLE.Siren_Volume", 85 )
 		end
 	end
 
