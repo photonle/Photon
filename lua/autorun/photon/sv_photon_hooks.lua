@@ -1,13 +1,16 @@
 
-function Photon:RunningScan()
-	for k,v in pairs( self:AllVehicles() ) do
-		if IsValid( v ) and IsValid(v:GetDriver()) and v:GetDriver():IsPlayer() and v:Photon() then
-			if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
-			if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
-		end
+local function ScanRunningVehicle( v )
+	if IsValid( v:GetDriver() ) and v:GetDriver():IsPlayer() and v:Photon() then
+		if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
+		if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
 	end
 end
 
+function Photon:RunningScan()
+	for k,v in pairs( self:AllVehicles() ) do
+		if IsValid( v ) then Photon.RunQuarantined( v, ScanRunningVehicle ) end
+	end
+end
 hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, v)
 	if IsValid(v) then
 		if v:Photon() then
@@ -57,9 +60,13 @@ end)
 timer.Create("Photon.RunScan", 0.5, 0, function()
 	Photon:RunningScan()
 end)
+
+local function ContinueVehicleSiren( car )
+	if car:HasPhotonELS() and car:ELS_Siren() then car:ELS_SirenContinue() end
+end
 timer.Create("Photon.SirenRunScan", 0.2, 0, function()
 	for _,car in pairs( Photon:AllVehicles() ) do
-		if car:HasPhotonELS() and car:ELS_Siren() then car:ELS_SirenContinue() end
+		if IsValid( car ) then Photon.RunQuarantined( car, ContinueVehicleSiren ) end
 	end
 end)
 
@@ -106,15 +113,18 @@ hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, 
 	end
 end )
 
+local function ScanVehicleUnitNumber( ent )
+	if not IsValid( ent:GetDriver() ) then return end
+	local ply = ent:GetDriver()
+	if ( ent:Photon_GetLiveryID() == "" and ( (not ent.PhotonUnitIDRequestTime) or ( RealTime() < ent.PhotonUnitIDRequestTime + 10 ) ) ) then
+		Photon.Net:RequestUnitNumber( ply )
+		ent.PhotonUnitIDRequestTime = RealTime()
+	end
+end
+
 local function PhotonUnitNumberScan()
 	for _,ent in pairs( EMVU:AllVehicles() ) do
-		if not IsValid( ent ) then continue end
-		if not IsValid( ent:GetDriver() ) then continue end
-		local ply = ent:GetDriver()
-		if ( ent:Photon_GetLiveryID() == "" and ( (not ent.PhotonUnitIDRequestTime) or ( RealTime() < ent.PhotonUnitIDRequestTime + 10 ) ) ) then
-			Photon.Net:RequestUnitNumber( ply )
-			ent.PhotonUnitIDRequestTime = RealTime()
-		end
+		if IsValid( ent ) then Photon.RunQuarantined( ent, ScanVehicleUnitNumber ) end
 	end
 end
 timer.Create( "Photon.UnitNumberScan", 2, 0, function()
