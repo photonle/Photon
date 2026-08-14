@@ -1,43 +1,118 @@
 name: Builds
+
 on:
   release:
-    types: [created]
+    types: [published]
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+env:
+  FASTGMAD_VERSION: v0.2.1
 
 jobs:
-  gma:
+  addon:
+    name: Addon Packages
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Install PHP
-        uses: shivammathur/setup-php@master
+      -
+        name: Checkout
+        uses: actions/checkout@v7
+      -
+        # fastgmad rejects files outside the GMA whitelist, so only the shipped
+        # content is staged. addon.json supplies the title, type and tags.
+        name: Stage Addon
+        run: |
+          mkdir -p stage
+          cp -r lua materials models sound addon.json stage/
+      -
+        name: Install fastgmad
+        run: |
+          curl -fsSL -o fastgmad.zip \
+            "https://github.com/WilliamVenner/fastgmad/releases/download/${FASTGMAD_VERSION}/fastgmad_linux.zip"
+          unzip -q fastgmad.zip -d fastgmad
+          binary=$(find fastgmad -type f -name fastgmad | head -1)
+          if [ -z "$binary" ]; then
+            echo "fastgmad binary not found in release archive." >&2
+            exit 1
+          fi
+          install -m 755 "$binary" /usr/local/bin/fastgmad
+      -
+        name: Build GMA
+        run: fastgmad create -folder stage -out photonle.gma -noprogress
+      -
+        name: Build Zip
+        run: cd stage && zip -qr ../addon.zip lua materials models sound addon.json
+      -
+        name: Attest GMA
+        uses: actions/attest-build-provenance@v4
         with:
-          php-version: '7.3'
-          coverage: none
-      - name: Install Dependencies
-        run: composer install -d .github/builder/gma
-      - name: Build
-        run: php .github/builder/gma/build.php
-      - name: Upload
-        uses: skx/github-action-publish-binaries@master
+          subject-path: photonle.gma
+      -
+        name: Attest Zip
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: addon.zip
+      -
+        name: Upload
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: '.github/builder/gma/photonle.gma'
-  update:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          gh release upload "${TAG}" \
+            photonle.gma \
+            addon.zip \
+            --clobber
+
+  changelog:
+    name: Changelogs
     runs-on: ubuntu-latest
+    env:
+      MENU_TOKEN: ${{ secrets.MENU_REPO_TOKEN }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: composer install -d .github/builder/update
-      - name: Build
+      -
+        name: Checkout
+        uses: actions/checkout@v7
+      -
+        name: Install Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      -
+        name: Build
         env:
           RELEASE_CONTEXT: ${{ toJson(github.event.release) }}
-        run: php .github/builder/update/build.php
-      - name: Upload
-        uses: skx/github-action-publish-binaries@master
+        run: node .github/builder/changelog/build.mjs --out-dir dist
+      -
+        name: Upload
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: '.github/builder/update/*.html'
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          gh release upload "${TAG}" \
+            dist/workshop.bbcode.txt \
+            dist/discord.md \
+            --clobber
+      -
+        name: Publish to Menu
+        if: env.MENU_TOKEN != ''
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          version="${TAG#v}"
+          short="$(echo "${version}" | cut -d. -f1,2)"
+          git clone --depth 1 \
+            "https://x-access-token:${MENU_TOKEN}@github.com/photonle/menu.git" menu
+          cp "dist/${short}.html" "menu/_updates/${short}.html"
+          cd menu
+          git config user.name 'photon-release-bot'
+          git config user.email 'photon-release-bot@users.noreply.github.com'
+          git add "_updates/${short}.html"
+          if git diff --cached --quiet; then
+            echo "Update page for ${short} is already current."
+            exit 0
+          fi
+          git commit -m "Add update notes for ${short}"
+          git push origin HEAD:master
