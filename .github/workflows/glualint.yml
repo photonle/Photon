@@ -1,0 +1,57 @@
+name: GLua Lint
+
+on:
+  push:
+    paths:
+      - '**.lua'
+  pull_request:
+    paths:
+      - '**.lua'
+
+permissions:
+  contents: read
+
+jobs:
+  glualint:
+    name: glualint (changed hunks)
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      -
+        name: Determine Diff Range
+        id: diff-range
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+          else
+            base="${{ github.event.before }}"
+            head="${{ github.sha }}"
+            if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
+              # New branch or force-push with no known parent: diff against the empty tree so
+              # every line in every changed file is treated as touched.
+              base="4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+            fi
+          fi
+          echo "base=${base}" >> "$GITHUB_OUTPUT"
+          echo "head=${head}" >> "$GITHUB_OUTPUT"
+      -
+        name: Install glualint
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          asset_url=$(gh api repos/FPtje/GLuaFixer/releases/latest \
+            -q '.assets[] | select(.name | endswith("-x86_64-linux.zip")) | .browser_download_url')
+          curl --retry 3 --location "$asset_url" --output glualint.zip
+          unzip -q glualint.zip -d glualint-bin
+          install -m 755 glualint-bin/glualint /usr/local/bin/glualint
+      -
+        name: Lint Changed Hunks
+        run: |
+          python3 .github/scripts/lua_hunk_gate.py \
+            --base "${{ steps.diff-range.outputs.base }}" \
+            --head "${{ steps.diff-range.outputs.head }}"
