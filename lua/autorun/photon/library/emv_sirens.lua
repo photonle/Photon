@@ -670,8 +670,17 @@ EMVU.AddCustomSiren("internets special siren number UNO", {
 ]]--
 
 EMVU.IncludeSiren = function(siren)
-	AddCSLuaFile("autorun/photon/library/sirens/" .. siren)
-	include("autorun/photon/library/sirens/" .. siren)
+	local path = "autorun/photon/library/sirens/" .. siren
+	AddCSLuaFile(path)
+
+	local ok, err = pcall(include, path)
+	if not ok then
+		PhotonError(
+			"Siren '" .. siren .. "' failed to load and has been skipped.\n",
+			"If you are the author, check your file for errors.\n",
+			tostring(err)
+		)
+	end
 end
 
 local sirens = file.Find("autorun/photon/library/sirens/*.lua", "LUA")
