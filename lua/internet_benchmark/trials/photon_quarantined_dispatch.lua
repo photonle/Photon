@@ -32,10 +32,10 @@ TRIAL
 	:Describe("Catches the error but discards the stack trace, leaving nothing to debug the broken vehicle with.")
 	:Function(c)
 	:Label("xpcall")
-	:Describe("The handler only runs when the call actually errors, so on the happy path this is paying for the extra argument, not the handler.")
+	:Describe("What Photon.RunQuarantined uses - the handler only runs when the call actually errors, so on the happy path this is paying for the extra argument, not the handler.")
 	:Function(d)
 	:Label("ProtectedCall")
-	:Describe("What Photon.RunQuarantined uses - errors are reported through the engine's error handler, with the full stack trace intact.")
+	:Describe("Errors are reported through the engine's error handler, with the full stack trace intact, but the engine round-trip costs ~6x a plain Lua protected call.")
 	:Before(function()
 		ent.count = 0
 	end)
