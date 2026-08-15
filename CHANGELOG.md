@@ -1,5 +1,14 @@
 # Changelog
 
+## [76.6.0](https://github.com/photonle/Photon/compare/v76.5.0...v76.6.0) (2026-08-15)
+
+
+### Bug Fixes
+
+* guard against nil bone position in GetPositionFromRE ([#250](https://github.com/photonle/Photon/issues/250)) ([3a6e2a8](https://github.com/photonle/Photon/commit/3a6e2a8dde0e84458776c2788290bda573ed3d14))
+* guard GetVehicleClass and hoist class variable in vehicle name recovery ([#251](https://github.com/photonle/Photon/issues/251)) ([bbabc29](https://github.com/photonle/Photon/commit/bbabc29ab524150c16690353b3939c3a3b68d809))
+* Skip lossy matrix round-trip for pure-yaw auto anchors ([#246](https://github.com/photonle/Photon/issues/246)) ([fec7910](https://github.com/photonle/Photon/commit/fec7910b525ad87255022194a02049eb3041c70b))
+
 ## [76.5.0](https://github.com/photonle/Photon/compare/v76.4.0...v76.5.0) (2026-08-14)
 
 
