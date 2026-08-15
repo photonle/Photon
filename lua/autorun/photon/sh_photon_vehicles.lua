@@ -64,13 +64,14 @@ function Photon:EntityCreated( ent )
 					end
 
 					local base = ent.Base or ""
-					if not string.find(base, "glide") then
-						local class = ent:GetVehicleClass()
+					local class
+					if not string.find(base, "glide") and ent.GetVehicleClass then
+						class = ent:GetVehicleClass()
 					else
-						local class = ent:GetClass()
+						class = ent:GetClass()
 					end
 
-					local lst = list.GetForEdit("Vehicles")[class]
+					local lst = class and list.GetForEdit("Vehicles")[class]
 					if lst and istable(lst) then
 						ent.VehicleName = class
 						Photon:SpawnedVehicle( ent )
