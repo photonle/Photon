@@ -161,7 +161,6 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	if not meta.Scale then meta.Scale = 1 end
 	if not meta.WMult then meta.WMult = 1 end
 	local ca = parent:GetAngles()
-	local lightNormal = Angle()
 	if legacy and not contingent then
 		ca:RotateAroundAxis( parent:GetUp(), ( lang.y + offset ) )
 	elseif contingent then
@@ -175,7 +174,7 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 			ca:RotateAroundAxis( parent:GetUp(), lang.y )
 		end
 	end
-	lightNormal = ca:Forward()
+	local lightNormal = ca:Forward()
 	lightNormal:Normalize()
 
 	local ViewNormal = Vector()
