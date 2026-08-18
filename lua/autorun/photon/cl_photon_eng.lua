@@ -52,6 +52,15 @@ local mat8 = Material("sprites/emv/dirty_lens_2")
 
 local up1 = Vector()
 
+-- Fixed corner rotations applied to dynamic light emission, indexed by emitDynamic.
+-- These are read-only: Rotate() mutates the vector being rotated, not the angle.
+local dynamicEmitRotations = {
+	Angle( 0, 135, 0 ),
+	Angle( 0, 45, 0 ),
+	Angle( 0, -135, 0 ),
+	Angle( 0, -45, 0 ),
+}
+
 local photonRenderTable = {}
 local photonDynamicLights = {}
 
@@ -146,10 +155,8 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	if emitDynamic then
 			local addDynamic = { true, true, true, true }
 			local normalDir = parent:GetForward()
-			if emitDynamic == 1 then normalDir:Rotate( Angle( 0, 135, 0 ) )
-			elseif emitDynamic == 2 then normalDir:Rotate( Angle( 0, 45, 0 ) )
-			elseif emitDynamic == 3 then normalDir:Rotate( Angle( 0, -135, 0 ) )
-			elseif emitDynamic == 4 then normalDir:Rotate( Angle( 0, -45, 0 ) ) end
+			local emitRotation = dynamicEmitRotations[ emitDynamic ]
+			if emitRotation then normalDir:Rotate( emitRotation ) end
 			addDynamic[1] = worldPos
 			addDynamic[2] = normalDir
 			addDynamic[3] = { colors.raw.r, colors.raw.g, colors.raw.b }
