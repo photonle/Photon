@@ -612,6 +612,10 @@ EMVU.ValidateSiren = function(siren)
 		if not isstring(tone.Sound) or tone.Sound == "" then return false, "Set[" .. i .. "] is missing required field 'Sound'" end
 	end
 
+	if siren.Horn ~= nil and (not isstring(siren.Horn) or siren.Horn == "") then return false, "optional field 'Horn' must be a non-empty string" end
+	if siren.Manual ~= nil and (not isstring(siren.Manual) or siren.Manual == "") then return false, "optional field 'Manual' must be a non-empty string" end
+	if siren.Volume ~= nil and not isnumber(siren.Volume) then return false, "optional field 'Volume' must be a number" end
+
 	return true
 end
 
