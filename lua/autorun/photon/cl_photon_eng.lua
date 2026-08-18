@@ -289,8 +289,6 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 
 		if (meta.Sprite and meta.Sprite == "sprites/emv/blank") or meta.Cheap then srcSkip = true end
 
-		local UC = { true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true }
-
 		local brightness = 1
 		local rawBrightness = 1
 		local pulseOverride = false
@@ -323,10 +321,6 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		up1:Set( worldPos )
 		local ua = parent:LocalToWorldAngles( al )
 
-		for k,v in pairs( colors ) do
-			UC[k] = v
-		end
-
 		local resultTable = acquireLightEntry()
 
 		-- The source colour belongs to the pooled entry, so it is rewritten in place instead
@@ -335,15 +329,15 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		writeColor( srcColor, 255, 255, 255, 255 )
 
 		if not srcSkip then
-			//srcColor = ColorAlpha( UC.src, UC.src.a * rawBrightness )
-			local src = UC.src
+			//srcColor = ColorAlpha( colors.src, colors.src.a * rawBrightness )
+			local src = colors.src
 			srcColor.r = src.r
 			srcColor.g = src.g
 			srcColor.b = src.b
 			if pulseOverride then srcColor.a = ( srcColor.a * brightness ) end
-			if istable(UC["dim"]) then
+			if istable(colors["dim"]) then
 				local srcMod = ( viewDot * .5 ) * manualBloom
-				local dim = UC.dim
+				local dim = colors.dim
 				srcColor.r = Lerp( srcMod, dim.r, src.r )
 				srcColor.g = Lerp( srcMod, dim.g, src.g )
 				srcColor.b = Lerp( srcMod, dim.b, src.b )
@@ -373,12 +367,12 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		resultTable[13] = (meta.Scale * meta.WMult*viewDot) * manualBloom
 		resultTable[14] = srcColor
 
-		resultTable[15] = UC.med
-		resultTable[16] = UC.amb
-		resultTable[17] = UC.blm
-		resultTable[18] = UC.glw
-		resultTable[19] = UC.raw
-		resultTable[20] = UC.flr
+		resultTable[15] = colors.med
+		resultTable[16] = colors.amb
+		resultTable[17] = colors.blm
+		resultTable[18] = colors.glw
+		resultTable[19] = colors.raw
+		resultTable[20] = colors.flr
 
 		resultTable[21] = lightMod
 		resultTable[22] = cheapLight
