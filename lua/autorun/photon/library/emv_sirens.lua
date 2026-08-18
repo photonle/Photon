@@ -596,8 +596,35 @@ EMVU.GetSirenTable = function()
 	return sirenTable
 end
 
+--- Checks a siren table for the fields required for it to work at runtime.
+-- @tparam table siren The siren table to check.
+-- @treturn bool Whether the siren is valid.
+-- @treturn string|nil A description of the first missing/invalid field, if any.
+EMVU.ValidateSiren = function(siren)
+	if not istable(siren) then return false, "siren must be a table" end
+	if not isstring(siren.Name) or siren.Name == "" then return false, "missing required field 'Name'" end
+	if not isstring(siren.Category) or siren.Category == "" then return false, "missing required field 'Category'" end
+	if not istable(siren.Set) or #siren.Set == 0 then return false, "missing required field 'Set' (must be a non-empty array of tones)" end
+
+	for i, tone in ipairs(siren.Set) do
+		if not istable(tone) then return false, "Set[" .. i .. "] must be a table" end
+		if not isstring(tone.Name) or tone.Name == "" then return false, "Set[" .. i .. "] is missing required field 'Name'" end
+		if not isstring(tone.Sound) or tone.Sound == "" then return false, "Set[" .. i .. "] is missing required field 'Sound'" end
+	end
+
+	return true
+end
+
 EMVU.AddCustomSiren = function(index, siren)
 	if tonumber(index) ~= nil then return Error("[Photon] Custom sirens need a non-number identifier. See: https://github.com/photonle/Photon/wiki/Custom-Sirens\n") end
+
+	local valid, err = EMVU.ValidateSiren(siren)
+	if not valid then
+		return PhotonError(
+			"Custom siren '" .. tostring(index) .. "' has an invalid format and has been skipped.\n",
+			err .. ". See: https://github.com/photonle/Photon/wiki/Custom-Sirens"
+		)
+	end
 
 	siren.ID = index
 	table.insert(sirenTable, siren)
