@@ -266,8 +266,11 @@ function Photon:SetupCar( ent, index )
 
 		for i,light in pairs( RenderTable ) do
 			if light != true then
-				if string.StartWith(tostring(i), "_") then
-					self:SetStateMaterial( string.sub( tostring(i), 2 ), light[2] )
+				-- State material entries are keyed by an underscore-prefixed string; every
+				-- other key is a numeric light index, which can never start with one. Testing
+				-- the type first avoids converting each index to a string every frame.
+				if isstring(i) and string.StartWith(i, "_") then
+					self:SetStateMaterial( string.sub( i, 2 ), light[2] )
 				else
 					if not handles[light[1]] then setupVis( self ) return end -- for debugging mostly
 					local pos = positions[light[1]]
