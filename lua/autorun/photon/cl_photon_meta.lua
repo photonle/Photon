@@ -204,8 +204,6 @@ function Photon:SetupCar( ent, index )
 				self.PhotonStateRenderTable = RenderTable
 			end
 
-			for i = 1, 72 do RenderTable[i] = true end
-
 			if headlights then
 				if Photon.Vehicles.States.Headlights[self.VehicleName] or pdebug then
 					for _,l in pairs(Photon.Vehicles.States.Headlights[self.VehicleName]) do
@@ -273,6 +271,10 @@ function Photon:SetupCar( ent, index )
 
 		local light = false
 
+		-- Only lights that are actually on are in here, so this walks a handful of entries
+		-- rather than the 72 placeholder slots the table used to be padded out with. The
+		-- true check is kept for the hot-reload window, where a vehicle can still be holding
+		-- a cached table that was padded by the previous version of this file.
 		for i,light in pairs( RenderTable ) do
 			if light != true then
 				-- State material entries are keyed by an underscore-prefixed string; every
