@@ -261,7 +261,18 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_UpdateFrameLightPositions()
 		local lights = self:Photon_GetELUsedLights()
 		local posData = EMVU.Positions[ self.VehicleName ]
-		local resultTable = {}
+
+		-- Reuse the vehicle's own table rather than building a new one every frame. It is
+		-- emptied first so a light that is no longer in use cannot leave a stale position
+		-- behind, which is what dropping the old table used to guarantee.
+		local resultTable = self.PhotonELFramePositions
+		if resultTable then
+			table.Empty( resultTable )
+		else
+			resultTable = {}
+			self.PhotonELFramePositions = resultTable
+		end
+
 		for key,_ in pairs( lights ) do
 			if PHOTON_DEBUG and not istable( posData[tonumber(key)] ) then continue end
 			local pData = posData[tonumber(key)]
@@ -273,8 +284,8 @@ function EMVU:MakeEMV( emv, name )
 				resultTable[key] = self:LocalToWorld( posData[tonumber(key)][1] )
 			end
 		end
-		self.PhotonELFramePositions = resultTable
-		return self.PhotonELFramePositions
+
+		return resultTable
 	end
 
 	-- Basic KV Shit --
