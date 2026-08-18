@@ -628,7 +628,9 @@ function EMVU.Helper:GetIlluminationName( name, option )
 end
 
 function EMVU.Helper:GetIlluminationLights( name, option )
-	return EMVU.Sequences[name].Illumination[option].Lights
+	local stageData = EMVU.Sequences[name].Illumination[option]
+	if not istable( stageData ) then return {} end
+	return stageData.Lights or {}
 end
 
 function EMVU.Helper:GetLampMeta( name, index )
