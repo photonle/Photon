@@ -35,6 +35,33 @@ return {
 				expect(#EMVU.GetSirenTable()).to.equal(before)
 				expect(photonError).was.called()
 			end
+		},
+		{
+			name = "A custom siren reusing an existing identifier is rejected and logged instead of being added",
+			func = function(state)
+				EMVU.AddCustomSiren("gluatest_duplicate_siren", {
+					Name = "First Siren",
+					Category = "Examples",
+					Set = {
+						{Name = "WAIL", Sound = "emv/sirens/example/example.wav"}
+					}
+				})
+
+				local photonError = stub(_G, "PhotonError")
+				local before = #EMVU.GetSirenTable()
+
+				EMVU.AddCustomSiren("gluatest_duplicate_siren", {
+					Name = "Second Siren",
+					Category = "Examples",
+					Set = {
+						{Name = "WAIL", Sound = "emv/sirens/example/example.wav"}
+					}
+				})
+
+				expect(#EMVU.GetSirenTable()).to.equal(before)
+				expect(EMVU.GetSiren("gluatest_duplicate_siren").Name).to.equal("First Siren")
+				expect(photonError).was.called()
+			end
 		}
 	}
 }

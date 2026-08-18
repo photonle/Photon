@@ -622,6 +622,15 @@ end
 EMVU.AddCustomSiren = function(index, siren)
 	if tonumber(index) ~= nil then return Error("[Photon] Custom sirens need a non-number identifier. See: https://github.com/photonle/Photon/wiki/Custom-Sirens\n") end
 
+	for _, existing in ipairs(sirenTable) do
+		if existing.ID == index then
+			return PhotonError(
+				"Custom siren '" .. tostring(index) .. "' uses an identifier that's already in use and has been skipped.\n",
+				"Choose a unique identifier. See: https://github.com/photonle/Photon/wiki/Custom-Sirens"
+			)
+		end
+	end
+
 	local valid, err = EMVU.ValidateSiren(siren)
 	if not valid then
 		return PhotonError(
