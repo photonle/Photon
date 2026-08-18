@@ -190,13 +190,22 @@ function Photon:SetupCar( ent, index )
 		self:ResetStateMaterials()
 		if not self.LastPhotonRenderCache or self.LastPhotonRenderCache + .05 < RealTime() then self.PhotonRenderCache = nil end
 
-		local RenderTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
+		local RenderTable = self.PhotonRenderCache
 
-		if istable( self.PhotonRenderCache ) then
+		if not istable( RenderTable ) then
+			-- The cache is rebuilt every .05s, but the table itself was being allocated on
+			-- every frame and then thrown away unused whenever the cache was still valid.
+			-- The vehicle keeps one table and refills it instead.
+			RenderTable = self.PhotonStateRenderTable
+			if RenderTable then
+				table.Empty( RenderTable )
+			else
+				RenderTable = {}
+				self.PhotonStateRenderTable = RenderTable
+			end
 
-			RenderTable = self.PhotonRenderCache
+			for i = 1, 72 do RenderTable[i] = true end
 
-		else
 			if headlights then
 				if Photon.Vehicles.States.Headlights[self.VehicleName] or pdebug then
 					for _,l in pairs(Photon.Vehicles.States.Headlights[self.VehicleName]) do
