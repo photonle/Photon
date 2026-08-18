@@ -40,9 +40,34 @@ function EMVU:AddAutoComponent(component, name, base)
 	end
 end
 
-local autoFiles = file.Find( "autorun/photon/library/auto/*", "LUA" )
+--- Includes a single auto component file, isolating compile-time and runtime
+-- errors so one broken component doesn't abort the rest of EMV init.
+-- @tparam string component The file name, relative to autorun/photon/library/auto/.
+EMVU.IncludeAutoComponent = function(component)
+	local path = "autorun/photon/library/auto/" .. component
+	AddCSLuaFile(path)
+
+	local func = CompileFile(path)
+	if not func then
+		return PhotonError(
+			"Component file '" .. component .. "' failed to compile and has been skipped.\n",
+			"If you are the author, check your file for syntax errors (see the compile error above)."
+		)
+	end
+
+	local ok, err = pcall(func)
+	if not ok then
+		PhotonError(
+			"Component file '" .. component .. "' failed to load and has been skipped.\n",
+			"If you are the author, check your file for errors.\n",
+			tostring(err)
+		)
+	end
+end
+
+local autoFiles = file.Find( "autorun/photon/library/auto/*.lua", "LUA" )
 for _,_file in pairs( autoFiles ) do
-	include( "auto/" .. _file )
+	EMVU.IncludeAutoComponent( _file )
 end
 local changed, unchanged
 while changed ~= 0 do
