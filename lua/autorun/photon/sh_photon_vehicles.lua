@@ -108,7 +108,7 @@ function Photon:LoadVehicles()
 	local cars = list.Get( "Vehicles" )
 	local found = false
 	for key,car in pairs(cars) do
-		if car.HasPhoton and car.Photon then
+		if car.HasPhoton and car.Photon and car.Photon != "PHOTON_INHERIT" then
 			found = true
 			Photon:PreloadVehicle( car )
 		elseif Photon:CheckForPhoton( car.Model ) then
@@ -117,6 +117,10 @@ function Photon:LoadVehicles()
 			car.Photon = Photon:CheckForPhoton( car.Model )
 			list.Set( "Vehicles", key, car )
 			Photon:PreloadVehicle( list.Get( "Vehicles" )[key] )
+		elseif car.HasPhoton and car.Photon then
+			-- PHOTON_INHERIT requested but no predefined Photon config exists for this model
+			found = true
+			Photon:PreloadVehicle( car )
 		end
 	end
 	if not found then
