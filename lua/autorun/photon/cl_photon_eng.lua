@@ -11,6 +11,7 @@ local useEyeAng = Angle( 0, 0, 0 )
 local useFovModifier = 1
 local istable = istable
 local isnumber = isnumber
+local isstring = isstring
 local pairs = pairs
 local ColorAlpha = ColorAlpha
 local Lerp = Lerp
@@ -29,6 +30,33 @@ if EMVU and istable( EMVU.Helper ) then
 	rotatingLight = EMVU.Helper.RotatingLight
 	pulsingLight = EMVU.Helper.PulsingLight
 	emvHelp = EMVU.Helper
+end
+
+local entityMeta = FindMetaTable( "Entity" )
+
+--- Resolves meta.DirAxis ( "Up", "Right", ... ) to its Entity getter and caches the result on
+-- the meta table, in the same way the sprite material and quad corners are cached further down.
+-- Rebuilding "Get" .. meta.DirAxis per light per frame was allocating a string every frame.
+-- An axis with no matching getter caches false, so a bad library definition is reported once
+-- instead of erroring out of the render path on every frame.
+local function resolveDirAxis( meta )
+	local resolved = meta.PhotonDirAxisGetter
+	if resolved ~= nil then return resolved end
+
+	if isstring( meta.DirAxis ) then
+		resolved = entityMeta[ "Get" .. meta.DirAxis ] or false
+	else
+		resolved = false
+	end
+
+	meta.PhotonDirAxisGetter = resolved
+
+	if not resolved then
+		ErrorNoHalt( "[Photon] Light meta has an unknown DirAxis (" .. tostring( meta.DirAxis ) ..
+			"); directional aiming will be skipped for it.\n" )
+	end
+
+	return resolved
 end
 
 local function getViewFlare( dot, brght )
@@ -174,12 +202,12 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		ca:RotateAroundAxis( parent:GetUp(), ( lang.y + offset ) )
 	elseif contingent then
 		ca:RotateAroundAxis( parent:GetUp(), ( lang.r + 180 ) )
-	else
-		if meta.DirAxis and not rotating then
-			ca:RotateAroundAxis( parent["Get"..meta.DirAxis](parent), lang.r - meta.DirOffset )
-			ca:RotateAroundAxis( parent:GetUp(), lang.y )
-		elseif meta.DirAxis and rotating then
-			ca:RotateAroundAxis( parent["Get"..meta.DirAxis](parent), lang.r - meta.DirOffset - offset )
+	elseif meta.DirAxis then
+		local dirAxisGetter = resolveDirAxis( meta )
+		if dirAxisGetter then
+			local roll = lang.r - meta.DirOffset
+			if rotating then roll = roll - offset end
+			ca:RotateAroundAxis( dirAxisGetter( parent ), roll )
 			ca:RotateAroundAxis( parent:GetUp(), lang.y )
 		end
 	end
