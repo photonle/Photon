@@ -108,10 +108,10 @@ return {
 			end
 		},
 		{
-			name = "A component with an empty Positions is invalid",
+			name = "A component with empty light-pattern tables is valid, since empty tables don't error",
 			func = function(state)
 				local valid, err = EMVU.ValidateAutoComponent({
-					Name = "Example Component",
+					Name = "Example Prop Component",
 					Meta = {},
 					Sections = {},
 					Patterns = {},
@@ -119,8 +119,8 @@ return {
 					Modes = { Primary = {} }
 				})
 
-				expect(valid).to.beFalse()
-				expect(err).to.beA("string")
+				expect(valid).to.beTrue()
+				expect(err).to.beNil()
 			end
 		},
 		{

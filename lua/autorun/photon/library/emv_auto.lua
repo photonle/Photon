@@ -40,6 +40,36 @@ function EMVU:AddAutoComponent(component, name, base)
 	end
 end
 
+--- Checks an auto component table for the fields whose absence would error at runtime.
+-- EMVU:CalculateAuto iterates Meta, Sections, Patterns, Positions and Modes.Primary
+-- unguarded, so a nil in any of them is a guaranteed error when a vehicle using the
+-- component spawns. Empty tables are safe there and are left to the component author:
+-- this checks that a component won't break, not that it does anything useful.
+-- Components loaded via Base inheritance are exempt, since they may legitimately rely
+-- on their base for every field checked here.
+-- @tparam table component The component table to check.
+-- @treturn bool Whether the component is valid.
+-- @treturn string|nil A description of the first missing/invalid field, if any.
+EMVU.ValidateAutoComponent = function(component)
+	if not istable(component) then return false, "component must be a table" end
+	if not isstring(component.Name) or component.Name == "" then return false, "missing required field 'Name'" end
+
+	if component.Model ~= nil and (not isstring(component.Model) or component.Model == "") then return false, "optional field 'Model' must be a non-empty string" end
+	if component.Category ~= nil and (not isstring(component.Category) or component.Category == "") then return false, "optional field 'Category' must be a non-empty string" end
+	if component.Skin ~= nil and not isnumber(component.Skin) then return false, "optional field 'Skin' must be a number" end
+
+	if component.Base then return true end
+
+	if not istable(component.Meta) then return false, "missing required field 'Meta'" end
+	if not istable(component.Sections) then return false, "missing required field 'Sections'" end
+	if not istable(component.Patterns) then return false, "missing required field 'Patterns'" end
+	if not istable(component.Positions) then return false, "missing required field 'Positions'" end
+	if not istable(component.Modes) then return false, "missing required field 'Modes'" end
+	if not istable(component.Modes.Primary) then return false, "missing required field 'Modes.Primary'" end
+
+	return true
+end
+
 --- Includes a single auto component file, isolating compile-time and runtime
 -- errors so one broken component doesn't abort the rest of EMV init.
 -- @tparam string component The file name, relative to autorun/photon/library/auto/.
@@ -97,11 +127,15 @@ while changed ~= 0 do
 	changed = 0
 	for name, component in SortedPairsByMemberValue(EMVU.Auto, "Name") do
 		local errored = false
-		if not errored and not component.Modes then
+		local valid, invalidReason = EMVU.ValidateAutoComponent(component)
+		if not errored and not valid then
 			errored = true
 			EMVU.Auto[name] = nil
 			EMVU.AutoStaging[name] = true
-			PhotonError(("Component %s is missing its Modes field."):format(name))
+			PhotonError(
+				("Component %s has an invalid format and has been skipped.\n"):format(name),
+				invalidReason .. ". Source: " .. tostring(component.Source)
+			)
 		end
 
 		if not errored and component.BaseClass and EMVU.AutoStaging[component.BaseClass.Name] then
