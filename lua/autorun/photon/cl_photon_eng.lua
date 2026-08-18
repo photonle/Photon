@@ -7,6 +7,8 @@ local pow = math.pow
 local round = math.Round
 local useEyePos = Vector( 0, 0, 0 )
 local useEyeAng = Angle( 0, 0, 0 )
+-- Refreshed once per frame alongside the eye info below, rather than per light.
+local useFovModifier = 1
 local istable = istable
 local isnumber = isnumber
 local pairs = pairs
@@ -215,7 +217,7 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 
 		viewDot = viewDot * brightness
 		local viewFlare = getViewFlare( viewPercent, brightness )
-		local dist = worldPos:Distance( EyePos() )
+		local dist = worldPos:Distance( useEyePos )
 		local distModifier = ( 1 - clamp( ( dist / 512 ), 0, 1) )
 		viewFlare = viewFlare * distModifier
 
@@ -267,9 +269,8 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		if not meta.SprL then meta.SprL = Vector( meta.W * .5, -meta.H * .5, 0 ) end
 		resultTable[9] = meta.SprL
 		resultTable[10] = worldPos
-		local fovModifier = math.Clamp( ( ( 1 - ( LocalPlayer():GetFOV() / 90 ) ) * 5 ) + 1, 1, 1000 )
 		resultTable[11] = (meta.Scale * viewDot) * manualBloom
-		resultTable[12] = ((meta.Scale * viewFlare) * fovModifier) * manualBloom
+		resultTable[12] = ((meta.Scale * viewFlare) * useFovModifier) * manualBloom
 		resultTable[13] = (meta.Scale * meta.WMult*viewDot) * manualBloom
 		resultTable[14] = srcColor
 
@@ -573,9 +574,15 @@ end
 
 local EyePos = EyePos
 local EyeAngles = EyeAngles
+local LocalPlayer = LocalPlayer
 hook.Add( "PostDrawTranslucentRenderables", "Photon.UpdateLocalEyeInfo", function()
 	useEyePos:Set( EyePos() )
 	useEyeAng:Set( EyeAngles() )
+
+	local ply = LocalPlayer()
+	if IsValid( ply ) then
+		useFovModifier = clamp( ( ( 1 - ( ply:GetFOV() / 90 ) ) * 5 ) + 1, 1, 1000 )
+	end
 end)
 
 -- concommand.Add( "photon_maxoverride", function( ply )
