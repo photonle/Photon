@@ -673,7 +673,16 @@ EMVU.IncludeSiren = function(siren)
 	local path = "autorun/photon/library/sirens/" .. siren
 	AddCSLuaFile(path)
 
-	local ok, err = pcall(include, path)
+	local func = CompileFile(path)
+	if not func then
+		PhotonError(
+			"Siren '" .. siren .. "' failed to compile and has been skipped.\n",
+			"If you are the author, check your file for syntax errors (see the compile error above)."
+		)
+		return
+	end
+
+	local ok, err = pcall(func)
 	if not ok then
 		PhotonError(
 			"Siren '" .. siren .. "' failed to load and has been skipped.\n",
