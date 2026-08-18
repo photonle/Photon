@@ -86,7 +86,10 @@ local mat6 = Material("sprites/emv/effect_artifact2")
 local mat7 = Material("sprites/emv/dirty_lens_1")
 local mat8 = Material("sprites/emv/dirty_lens_2")
 
-local up1 = Vector()
+-- Scratch values reused across every light. PrepareVehicleLight fills each one and consumes
+-- it a few lines later without calling out in between, so a single instance is enough.
+local viewNormal = Vector()
+local lightAngle = Angle()
 
 -- Fixed corner rotations applied to dynamic light emission, indexed by emitDynamic.
 -- These are read-only: Rotate() mutates the vector being rotated, not the angle.
@@ -269,11 +272,10 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	local lightNormal = ca:Forward()
 	lightNormal:Normalize()
 
-	local ViewNormal = Vector()
-	ViewNormal:Set(worldPos)
-	ViewNormal:Sub( useEyePos )
-	ViewNormal:Normalize()
-	viewDot = ViewNormal:Dot( lightNormal )
+	viewNormal:Set(worldPos)
+	viewNormal:Sub( useEyePos )
+	viewNormal:Normalize()
+	viewDot = viewNormal:Dot( lightNormal )
 
 	if ( viewDot and viewDot >= 0 ) then
 
@@ -313,13 +315,11 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 			srcOnly = true
 		end
 
-		local al = Angle()
-		al:Set(lang)
-		al.r = al.r - 90
-		if rotating then al.y = offset - 90 end
+		lightAngle:Set(lang)
+		lightAngle.r = lightAngle.r - 90
+		if rotating then lightAngle.y = offset - 90 end
 
-		up1:Set( worldPos )
-		local ua = parent:LocalToWorldAngles( al )
+		local ua = parent:LocalToWorldAngles( lightAngle )
 
 		local resultTable = acquireLightEntry()
 
