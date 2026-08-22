@@ -7,8 +7,11 @@ local pow = math.pow
 local round = math.Round
 local useEyePos = Vector( 0, 0, 0 )
 local useEyeAng = Angle( 0, 0, 0 )
+-- Refreshed once per frame alongside the eye info below, rather than per light.
+local useFovModifier = 1
 local istable = istable
 local isnumber = isnumber
+local isstring = isstring
 local pairs = pairs
 local ColorAlpha = ColorAlpha
 local Lerp = Lerp
@@ -27,6 +30,33 @@ if EMVU and istable( EMVU.Helper ) then
 	rotatingLight = EMVU.Helper.RotatingLight
 	pulsingLight = EMVU.Helper.PulsingLight
 	emvHelp = EMVU.Helper
+end
+
+local entityMeta = FindMetaTable( "Entity" )
+
+--- Resolves meta.DirAxis ( "Up", "Right", ... ) to its Entity getter and caches the result on
+-- the meta table, in the same way the sprite material and quad corners are cached further down.
+-- Rebuilding "Get" .. meta.DirAxis per light per frame was allocating a string every frame.
+-- An axis with no matching getter caches false, so a bad library definition is reported once
+-- instead of erroring out of the render path on every frame.
+local function resolveDirAxis( meta )
+	local resolved = meta.PhotonDirAxisGetter
+	if resolved ~= nil then return resolved end
+
+	if isstring( meta.DirAxis ) then
+		resolved = entityMeta[ "Get" .. meta.DirAxis ] or false
+	else
+		resolved = false
+	end
+
+	meta.PhotonDirAxisGetter = resolved
+
+	if not resolved then
+		ErrorNoHalt( "[Photon] Light meta has an unknown DirAxis (" .. tostring( meta.DirAxis ) ..
+			"); directional aiming will be skipped for it.\n" )
+	end
+
+	return resolved
 end
 
 local function getViewFlare( dot, brght )
@@ -49,6 +79,15 @@ local mat7 = Material("sprites/emv/dirty_lens_1")
 local mat8 = Material("sprites/emv/dirty_lens_2")
 
 local up1 = Vector()
+
+-- Fixed corner rotations applied to dynamic light emission, indexed by emitDynamic.
+-- These are read-only: Rotate() mutates the vector being rotated, not the angle.
+local dynamicEmitRotations = {
+	Angle( 0, 135, 0 ),
+	Angle( 0, 45, 0 ),
+	Angle( 0, -135, 0 ),
+	Angle( 0, -45, 0 ),
+}
 
 local photonRenderTable = {}
 local photonDynamicLights = {}
@@ -83,7 +122,6 @@ end
 
 function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent )
 	if not incolors or not ilpos or not lang or not meta or not gpos then return end
-	local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
 	local legacy = true
 	if meta.NoLegacy == true then legacy = false end
 	local colors = incolors
@@ -144,10 +182,8 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	if emitDynamic then
 			local addDynamic = { true, true, true, true }
 			local normalDir = parent:GetForward()
-			if emitDynamic == 1 then normalDir:Rotate( Angle( 0, 135, 0 ) )
-			elseif emitDynamic == 2 then normalDir:Rotate( Angle( 0, 45, 0 ) )
-			elseif emitDynamic == 3 then normalDir:Rotate( Angle( 0, -135, 0 ) )
-			elseif emitDynamic == 4 then normalDir:Rotate( Angle( 0, -45, 0 ) ) end
+			local emitRotation = dynamicEmitRotations[ emitDynamic ]
+			if emitRotation then normalDir:Rotate( emitRotation ) end
 			addDynamic[1] = worldPos
 			addDynamic[2] = normalDir
 			addDynamic[3] = { colors.raw.r, colors.raw.g, colors.raw.b }
@@ -161,21 +197,20 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	if not meta.Scale then meta.Scale = 1 end
 	if not meta.WMult then meta.WMult = 1 end
 	local ca = parent:GetAngles()
-	local lightNormal = Angle()
 	if legacy and not contingent then
 		ca:RotateAroundAxis( parent:GetUp(), ( lang.y + offset ) )
 	elseif contingent then
 		ca:RotateAroundAxis( parent:GetUp(), ( lang.r + 180 ) )
-	else
-		if meta.DirAxis and not rotating then
-			ca:RotateAroundAxis( parent["Get"..meta.DirAxis](parent), lang.r - meta.DirOffset )
-			ca:RotateAroundAxis( parent:GetUp(), lang.y )
-		elseif meta.DirAxis and rotating then
-			ca:RotateAroundAxis( parent["Get"..meta.DirAxis](parent), lang.r - meta.DirOffset - offset )
+	elseif meta.DirAxis then
+		local dirAxisGetter = resolveDirAxis( meta )
+		if dirAxisGetter then
+			local roll = lang.r - meta.DirOffset
+			if rotating then roll = roll - offset end
+			ca:RotateAroundAxis( dirAxisGetter( parent ), roll )
 			ca:RotateAroundAxis( parent:GetUp(), lang.y )
 		end
 	end
-	lightNormal = ca:Forward()
+	local lightNormal = ca:Forward()
 	lightNormal:Normalize()
 
 	local ViewNormal = Vector()
@@ -216,7 +251,7 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 
 		viewDot = viewDot * brightness
 		local viewFlare = getViewFlare( viewPercent, brightness )
-		local dist = worldPos:Distance( EyePos() )
+		local dist = worldPos:Distance( useEyePos )
 		local distModifier = ( 1 - clamp( ( dist / 512 ), 0, 1) )
 		viewFlare = viewFlare * distModifier
 
@@ -253,6 +288,8 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		if PHOTON_DEBUG and !PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 255, 255, 0, 255 ) elseif PHOTON_DEBUG and PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 0, 0, 0, 0 ) end
 		if PHOTON_DEBUG and PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then srcColor = Color( 0, 255, 255 ) end
 
+		local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
+
 		resultTable[1] = srcOnly
 		resultTable[2] = !srcSkip
 		resultTable[3] = worldPos
@@ -268,9 +305,8 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		if not meta.SprL then meta.SprL = Vector( meta.W * .5, -meta.H * .5, 0 ) end
 		resultTable[9] = meta.SprL
 		resultTable[10] = worldPos
-		local fovModifier = math.Clamp( ( ( 1 - ( LocalPlayer():GetFOV() / 90 ) ) * 5 ) + 1, 1, 1000 )
 		resultTable[11] = (meta.Scale * viewDot) * manualBloom
-		resultTable[12] = ((meta.Scale * viewFlare) * fovModifier) * manualBloom
+		resultTable[12] = ((meta.Scale * viewFlare) * useFovModifier) * manualBloom
 		resultTable[13] = (meta.Scale * meta.WMult*viewDot) * manualBloom
 		resultTable[14] = srcColor
 
@@ -574,9 +610,15 @@ end
 
 local EyePos = EyePos
 local EyeAngles = EyeAngles
+local LocalPlayer = LocalPlayer
 hook.Add( "PostDrawTranslucentRenderables", "Photon.UpdateLocalEyeInfo", function()
 	useEyePos:Set( EyePos() )
 	useEyeAng:Set( EyeAngles() )
+
+	local ply = LocalPlayer()
+	if IsValid( ply ) then
+		useFovModifier = clamp( ( ( 1 - ( ply:GetFOV() / 90 ) ) * 5 ) + 1, 1, 1000 )
+	end
 end)
 
 -- concommand.Add( "photon_maxoverride", function( ply )
