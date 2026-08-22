@@ -34,6 +34,14 @@ end
 
 local entityMeta = FindMetaTable( "Entity" )
 
+--- Overwrites a colour in place, for colours owned by a pooled render queue entry.
+local function writeColor( color, r, g, b, a )
+	color.r = r
+	color.g = g
+	color.b = b
+	color.a = a
+end
+
 --- Resolves meta.DirAxis ( "Up", "Right", ... ) to its Entity getter and caches the result on
 -- the meta table, in the same way the sprite material and quad corners are cached further down.
 -- Rebuilding "Get" .. meta.DirAxis per light per frame was allocating a string every frame.
@@ -78,7 +86,10 @@ local mat6 = Material("sprites/emv/effect_artifact2")
 local mat7 = Material("sprites/emv/dirty_lens_1")
 local mat8 = Material("sprites/emv/dirty_lens_2")
 
-local up1 = Vector()
+-- Scratch values reused across every light. PrepareVehicleLight fills each one and consumes
+-- it a few lines later without calling out in between, so a single instance is enough.
+local viewNormal = Vector()
+local lightAngle = Angle()
 
 -- Fixed corner rotations applied to dynamic light emission, indexed by emitDynamic.
 -- These are read-only: Rotate() mutates the vector being rotated, not the angle.
@@ -89,8 +100,15 @@ local dynamicEmitRotations = {
 	Angle( 0, -45, 0 ),
 }
 
+-- Both queues are rebuilt from scratch every frame, so their entries are pooled rather than
+-- reallocated: ClearLightQueue rewinds the counts below and the next frame overwrites the
+-- entries in place. Entries past the current count are retained deliberately - they are the
+-- pool. Anything an entry owns mutably (its source colour, its emit positions) is allocated
+-- once with the entry and rewritten per frame.
 local photonRenderTable = {}
+local photonRenderCount = 0
 local photonDynamicLights = {}
+local photonDynamicCount = 0
 
 hook.Add( "InitPostEntity", "Photon.AddHelperLocalVars", function()
 	rotatingLight = EMVU.Helper.RotatingLight
@@ -108,16 +126,53 @@ end)
 
 
 function Photon:AddLightToQueue( lightInfo )
-	photonRenderTable[ #photonRenderTable + 1 ] = lightInfo
+	photonRenderCount = photonRenderCount + 1
+	photonRenderTable[ photonRenderCount ] = lightInfo
 end
 
 function Photon.AddDynamicLightToQueue( lightInfo )
-	photonDynamicLights[ #photonDynamicLights + 1 ] = lightInfo
+	photonDynamicCount = photonDynamicCount + 1
+	photonDynamicLights[ photonDynamicCount ] = lightInfo
 end
 
 function Photon:ClearLightQueue()
-	table.Empty( photonRenderTable )
-	table.Empty( photonDynamicLights )
+	photonRenderCount = 0
+	photonDynamicCount = 0
+end
+
+--- Claims the next render queue entry, building it on first use.
+-- Slot 14 holds the source colour and slot 24 the rotated emit positions; both are owned by
+-- the entry and rewritten in place, so neither is reallocated once the pool has grown to the
+-- frame's light count.
+local function acquireLightEntry()
+	photonRenderCount = photonRenderCount + 1
+
+	-- AddLightToQueue is public, so a caller outside Photon may have parked its own table at
+	-- this index. Anything without the pooled layout is replaced rather than written into.
+	local entry = photonRenderTable[ photonRenderCount ]
+	if not entry or not entry.emitPositions then
+		entry = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
+		entry[14] = Color( 255, 255, 255, 255 )
+		entry[24] = false
+		entry.emitPositions = { n = 0 }
+		photonRenderTable[ photonRenderCount ] = entry
+	end
+
+	return entry
+end
+
+--- Claims the next dynamic light queue entry, building it on first use.
+-- Slot 3 is the entry's own { r, g, b } triple, rewritten per frame.
+local function acquireDynamicEntry()
+	photonDynamicCount = photonDynamicCount + 1
+
+	local entry = photonDynamicLights[ photonDynamicCount ]
+	if not entry or not istable( entry[3] ) then
+		entry = { true, true, { 0, 0, 0 }, 0 }
+		photonDynamicLights[ photonDynamicCount ] = entry
+	end
+
+	return entry
 end
 
 function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, pixvis, lnum, brght, multicolor, type, emitDynamic, contingent )
@@ -180,16 +235,20 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	if EMV_DEBUG then viewDot = 1 end
 
 	if emitDynamic then
-			local addDynamic = { true, true, true, true }
 			local normalDir = parent:GetForward()
 			local emitRotation = dynamicEmitRotations[ emitDynamic ]
 			if emitRotation then normalDir:Rotate( emitRotation ) end
+
+			local addDynamic = acquireDynamicEntry()
+			local rawColor = colors.raw
+			local dynamicColor = addDynamic[3]
+			dynamicColor[1] = rawColor.r
+			dynamicColor[2] = rawColor.g
+			dynamicColor[3] = rawColor.b
 			addDynamic[1] = worldPos
 			addDynamic[2] = normalDir
-			addDynamic[3] = { colors.raw.r, colors.raw.g, colors.raw.b }
 			addDynamic[4] = ( parent:EntIndex() * 400 ) + emitDynamic
 			-- addDynamic[4] = (parent:EntIndex()*100) + ( lnum * 4 )
-			Photon.AddDynamicLightToQueue( addDynamic )
 		end
 
 	if not visible or visible <= 0 then return end
@@ -213,11 +272,10 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 	local lightNormal = ca:Forward()
 	lightNormal:Normalize()
 
-	local ViewNormal = Vector()
-	ViewNormal:Set(worldPos)
-	ViewNormal:Sub( useEyePos )
-	ViewNormal:Normalize()
-	viewDot = ViewNormal:Dot( lightNormal )
+	viewNormal:Set(worldPos)
+	viewNormal:Sub( useEyePos )
+	viewNormal:Normalize()
+	viewDot = viewNormal:Dot( lightNormal )
 
 	if ( viewDot and viewDot >= 0 ) then
 
@@ -232,8 +290,6 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		local srcSkip = false
 
 		if (meta.Sprite and meta.Sprite == "sprites/emv/blank") or meta.Cheap then srcSkip = true end
-
-		local UC = { true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true }
 
 		local brightness = 1
 		local rawBrightness = 1
@@ -259,36 +315,37 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 			srcOnly = true
 		end
 
-		local al = Angle()
-		al:Set(lang)
-		al.r = al.r - 90
-		if rotating then al.y = offset - 90 end
+		lightAngle:Set(lang)
+		lightAngle.r = lightAngle.r - 90
+		if rotating then lightAngle.y = offset - 90 end
 
-		up1:Set( worldPos )
-		local ua = parent:LocalToWorldAngles( al )
+		local ua = parent:LocalToWorldAngles( lightAngle )
 
-		for k,v in pairs( colors ) do
-			UC[k] = v
-		end
+		local resultTable = acquireLightEntry()
 
-		local srcColor = Color(255,255,255,255)
+		-- The source colour belongs to the pooled entry, so it is rewritten in place instead
+		-- of being rebuilt. It starts opaque white, matching the old default.
+		local srcColor = resultTable[14]
+		writeColor( srcColor, 255, 255, 255, 255 )
 
 		if not srcSkip then
-			local srcMod = ( viewDot * .5 ) * manualBloom
-			//srcColor = ColorAlpha( UC.src, UC.src.a * rawBrightness )
-			srcColor = ColorAlpha( UC.src, 255 )
+			//srcColor = ColorAlpha( colors.src, colors.src.a * rawBrightness )
+			local src = colors.src
+			srcColor.r = src.r
+			srcColor.g = src.g
+			srcColor.b = src.b
 			if pulseOverride then srcColor.a = ( srcColor.a * brightness ) end
-			if istable(UC["dim"]) then
-				srcColor.r = Lerp( srcMod, UC.dim.r, UC.src.r )
-				srcColor.g = Lerp( srcMod, UC.dim.g, UC.src.g )
-				srcColor.b = Lerp( srcMod, UC.dim.b, UC.src.b )
+			if istable(colors["dim"]) then
+				local srcMod = ( viewDot * .5 ) * manualBloom
+				local dim = colors.dim
+				srcColor.r = Lerp( srcMod, dim.r, src.r )
+				srcColor.g = Lerp( srcMod, dim.g, src.g )
+				srcColor.b = Lerp( srcMod, dim.b, src.b )
 			end
 		end
 
-		if PHOTON_DEBUG and !PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 255, 255, 0, 255 ) elseif PHOTON_DEBUG and PHOTON_DEBUG_EXCLUSIVE then srcColor = Color( 0, 0, 0, 0 ) end
-		if PHOTON_DEBUG and PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then srcColor = Color( 0, 255, 255 ) end
-
-		local resultTable = { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
+		if PHOTON_DEBUG and !PHOTON_DEBUG_EXCLUSIVE then writeColor( srcColor, 255, 255, 0, 255 ) elseif PHOTON_DEBUG and PHOTON_DEBUG_EXCLUSIVE then writeColor( srcColor, 0, 0, 0, 0 ) end
+		if PHOTON_DEBUG and PHOTON_DEBUG_LIGHT and lpos == PHOTON_DEBUG_LIGHT[1] then writeColor( srcColor, 0, 255, 255, 255 ) end
 
 		resultTable[1] = srcOnly
 		resultTable[2] = !srcSkip
@@ -310,12 +367,12 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		resultTable[13] = (meta.Scale * meta.WMult*viewDot) * manualBloom
 		resultTable[14] = srcColor
 
-		resultTable[15] = UC.med
-		resultTable[16] = UC.amb
-		resultTable[17] = UC.blm
-		resultTable[18] = UC.glw
-		resultTable[19] = UC.raw
-		resultTable[20] = UC.flr
+		resultTable[15] = colors.med
+		resultTable[16] = colors.amb
+		resultTable[17] = colors.blm
+		resultTable[18] = colors.glw
+		resultTable[19] = colors.raw
+		resultTable[20] = colors.flr
 
 		resultTable[21] = lightMod
 		resultTable[22] = cheapLight
@@ -328,19 +385,25 @@ function Photon:PrepareVehicleLight( parent, incolors, ilpos, gpos, lang, meta, 
 		resultTable[27] = parent
 
 		if istable( meta.EmitArray ) then
-			local emitResults = {}
+			-- Reuse the entry's emit vectors, tracking how many are live in this frame so
+			-- stale positions past the count are never drawn.
+			local emitPositions = resultTable.emitPositions
+			local emitCount = 0
 			for _key,_val in pairs( meta.EmitArray ) do
 				if not isvector( _val ) then continue end
-				emitResults[ #emitResults + 1 ] = Vector()
-				local insertRef = emitResults[ #emitResults ]
+				emitCount = emitCount + 1
+				local insertRef = emitPositions[ emitCount ]
+				if not insertRef then
+					insertRef = Vector()
+					emitPositions[ emitCount ] = insertRef
+				end
 				insertRef:Set( _val )
 				insertRef:Rotate( ua )
 				insertRef:Add( worldPos )
 			end
-			resultTable[24] = emitResults
+			emitPositions.n = emitCount
+			resultTable[24] = emitPositions
 		end
-
-		self:AddLightToQueue( resultTable )
 
 	end
 	end
@@ -379,7 +442,9 @@ function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 	if debug_mode == true then return end
 	if not srcOnly then
 		if istable( multiEmit ) then
-			for _,wPos in pairs( multiEmit ) do
+			-- multiEmit is a pooled array: only the first n entries belong to this frame.
+			for i = 1, ( multiEmit.n or #multiEmit ) do
+				local wPos = multiEmit[i]
 				setMaterial( mat1 )
 				drawSprite( wPos, (48 * bloomScale), (32 * bloomScale), colGlw )
 
@@ -537,7 +602,7 @@ end)
 function Photon:RenderQueue( effects )
 	local eyePos = EyePos()
 	local eyeAng = EyeAngles()
-	local count = #photonRenderTable
+	local count = photonRenderCount
 	if not effects then cam3d( eyePos, eyeAng ) else cam2d( eyePos, eyeAng ) end
 	if ( count > 0 ) then
 		local debug_mode = PHOTON_DEBUG
@@ -587,7 +652,7 @@ function Photon.DrawDirtyLensEffect()
 end
 
 function Photon.RenderDynamicLightQueue()
-	local count = #photonDynamicLights
+	local count = photonDynamicCount
 	if ( count > 0 ) then
 		for i=1, count do
 			if photonDynamicLights[i] != nil then
