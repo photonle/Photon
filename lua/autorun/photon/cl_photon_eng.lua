@@ -418,6 +418,54 @@ local endCam = cam.End3D2D
 local bloomRef = 0
 local bloomColor = nil
 
+-- Submaterials applied by a drawing light have to be cleared again once the light stops.
+-- This was a timer per submaterial per vehicle, created (or paused and restarted) on every
+-- frame the light drew, with its name rebuilt by concatenating the vehicle class, entity
+-- index and submaterial id each time. It is now a plain registry of the frame each
+-- submaterial was last drawn on, swept once per frame below.
+local submaterialHolds = {}
+
+local function holdSubMaterial( ent, submatId )
+	local held = submaterialHolds[ ent ]
+	if not held then
+		held = {}
+		submaterialHolds[ ent ] = held
+	end
+
+	held[ submatId ] = FrameNumber()
+end
+
+-- The vehicle model itself is drawn before PreDrawEffects, where lights are rendered, so a
+-- submaterial applied while drawing a light first shows up on the following frame. Holds are
+-- therefore kept for one frame after their last draw - clearing them any sooner would mean
+-- the submaterial never rendered at all.
+hook.Add( "Think", "Photon.ClearHeldSubMaterials", function()
+	local frame = FrameNumber()
+
+	for ent, held in pairs( submaterialHolds ) do
+		if not IsValid( ent ) then
+			submaterialHolds[ ent ] = nil
+			continue
+		end
+
+		local stillHeld = false
+		for submatId, lastFrame in pairs( held ) do
+			if ( frame - lastFrame ) > 1 then
+				ent:SetSubMaterial( submatId, nil )
+				held[ submatId ] = nil
+			else
+				stillHeld = true
+			end
+		end
+
+		if not stillHeld then submaterialHolds[ ent ] = nil end
+	end
+end )
+
+hook.Add( "EntityRemoved", "Photon.ClearHeldSubMaterials", function( ent )
+	submaterialHolds[ ent ] = nil
+end )
+
 function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, srcT, srcR, srcB, srcL, worldPos, bloomScale, flareScale, widthScale, colSrc, colMed, colAmb, colBlm, colGlw, colRaw, colFlr, lightMod, cheap, viewFlare, multiEmit, SubmatID, SubmatMaterial, SubmatParent, debug_mode )
 
 	if drawSrc then
@@ -431,12 +479,7 @@ function Photon.QuickDrawNoTable( srcOnly, drawSrc, camPos, camAng, srcSprite, s
 
 	if SubmatID then
 		SubmatParent:SetSubMaterial(SubmatID, SubmatMaterial)
-		if !timer.Exists(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID) then
-			timer.Create( SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID, FrameTime(), 1, function() if SubmatParent:IsValid() then SubmatParent:SetSubMaterial(SubmatID, nil) end end )
-		else
-			timer.Pause(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID)
-			timer.Start(SubmatParent:GetVehicleClass() .. SubmatParent:EntIndex() .. SubmatID)
-		end
+		holdSubMaterial( SubmatParent, SubmatID )
 	end
 
 	if debug_mode == true then return end
