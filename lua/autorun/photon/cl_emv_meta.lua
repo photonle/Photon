@@ -18,6 +18,20 @@ end)
 local IsValid = IsValid
 local tostring = tostring
 local istable = istable
+
+-- Light positions, pixel visibility and illumination blocks are all keyed by the light index
+-- as a string, while the render tables carry it as a number, so the render path converted it
+-- several times per light per frame. Indices are small and shared by every vehicle, so the
+-- conversions are memoised here instead.
+local lightKeyStrings = {}
+local function lightKey( index )
+	local key = lightKeyStrings[ index ]
+	if not key then
+		key = tostring( index )
+		lightKeyStrings[ index ] = key
+	end
+	return key
+end
 local math = math
 local isstring = isstring
 local system = system
@@ -261,7 +275,18 @@ function EMVU:MakeEMV( emv, name )
 	function emv:Photon_UpdateFrameLightPositions()
 		local lights = self:Photon_GetELUsedLights()
 		local posData = EMVU.Positions[ self.VehicleName ]
-		local resultTable = {}
+
+		-- Reuse the vehicle's own table rather than building a new one every frame. It is
+		-- emptied first so a light that is no longer in use cannot leave a stale position
+		-- behind, which is what dropping the old table used to guarantee.
+		local resultTable = self.PhotonELFramePositions
+		if resultTable then
+			table.Empty( resultTable )
+		else
+			resultTable = {}
+			self.PhotonELFramePositions = resultTable
+		end
+
 		for key,_ in pairs( lights ) do
 			if PHOTON_DEBUG and not istable( posData[tonumber(key)] ) then continue end
 			local pData = posData[tonumber(key)]
@@ -273,8 +298,8 @@ function EMVU:MakeEMV( emv, name )
 				resultTable[key] = self:LocalToWorld( posData[tonumber(key)][1] )
 			end
 		end
-		self.PhotonELFramePositions = resultTable
-		return self.PhotonELFramePositions
+
+		return resultTable
 	end
 
 	-- Basic KV Shit --
@@ -366,8 +391,9 @@ function EMVU:MakeEMV( emv, name )
 			b = RenderTable[a]
 			if (b==true) then continue end
 			pos = positions[b[1]]
+			local lightIndexKey = lightKey( b[1] )
 			if istable(blockTable) then
-				if illumBlock then blockTable[tostring(b[1])] = true elseif blockTable[tostring(b[1])] then continue end
+				if illumBlock then blockTable[lightIndexKey] = true elseif blockTable[lightIndexKey] then continue end
 			end
 			if positions[b[1]] then
 				local colString = b[2]
@@ -421,10 +447,10 @@ function EMVU:MakeEMV( emv, name )
 						self, -- parent
 						col, -- color of the light (colors)
 						calcPos or pos[1], -- local pos if needed
-						gpos[b[1]] or gpos[tostring(b[1])], -- position (GLOBAL POS)
+						gpos[b[1]] or gpos[lightIndexKey], -- position (GLOBAL POS)
 						calcAng or pos[2], -- angle (lang)
 						meta[pos[3]], -- meta data (meta)
-						pixviscache[tostring(b[1])], -- pixvis handle (pixvis)
+						pixviscache[lightIndexKey], -- pixvis handle (pixvis)
 						a, -- int for dynamic light (lnum)
 						b[3], -- brightness
 						multiColor,
@@ -454,9 +480,14 @@ function EMVU:MakeEMV( emv, name )
 		local handles = self.EL.VisHandles
 		local usedLights = self:Photon_GetELUsedLights()
 		local usedPositions = self.PhotonELFramePositions
+		local pixVisCache = self.EL.PixVisCache
+		-- FetchUsedLights already stores these keys as strings, so they index the handle,
+		-- position and cache tables as they are; the three tostring calls per light per frame
+		-- were returning the key unchanged.
 		for index,_ in pairs( usedLights ) do
-			if not handles[tostring(index)] then self:Photon_SetupVisHandles() return end
-			self.EL.PixVisCache[ tostring(index) ] = util.PixelVisible( usedPositions[tostring(index)], 1, handles[tostring(index)] )
+			local handle = handles[index]
+			if not handle then self:Photon_SetupVisHandles() return end
+			pixVisCache[ index ] = util.PixelVisible( usedPositions[index], 1, handle )
 		end
 	end
 
