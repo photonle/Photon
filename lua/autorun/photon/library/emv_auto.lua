@@ -85,6 +85,15 @@ EMVU.IncludeAutoComponent = function(component)
 		)
 	end
 
+	-- Component files conventionally open with a bare AddCSLuaFile(). That form infers
+	-- its own path from the calling file, which only resolves under include() - run via
+	-- CompileFile it fails, erroring the chunk on line 1 and skipping the whole file.
+	-- We've already sent the file above, so point the no-argument form at the known path.
+	-- Writes still fall through to _G so the chunk behaves as it would under include().
+	setfenv(func, setmetatable({
+		AddCSLuaFile = function(target) return AddCSLuaFile(target or path) end
+	}, { __index = _G, __newindex = _G }))
+
 	local ok, err = pcall(func)
 	if not ok then
 		PhotonError(
