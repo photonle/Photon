@@ -1,12 +1,3 @@
-util.AddNetworkString("Photon.ELS_PlaySiren")
-util.AddNetworkString("Photon.ELS_StopSiren")
-util.AddNetworkString("Photon.ELS_PlaySiren2")
-util.AddNetworkString("Photon.ELS_StopSiren2")
-util.AddNetworkString("Photon.ELS_PlayManual")
-util.AddNetworkString("Photon.ELS_StopManual")
-util.AddNetworkString("Photon.ELS_PlayHorn")
-util.AddNetworkString("Photon.ELS_StopHorn")
-
 function EMVU:MakeEMV( ent, emv )
 
 	-- Avoid any uncaught errors if a bad entity is passed in
@@ -122,103 +113,39 @@ function EMVU:MakeEMV( ent, emv )
 	end
 
 	function ent:ELS_SirenPlay(sound)
-		net.Start("Photon.ELS_PlaySiren")
-			net.WriteEntity(self)
-			net.WriteString(sound)
-			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
-			else
-				net.WriteFloat(90)
-			end
-		net.Broadcast()
-		self:SetNW2String("PhotonLE.Siren_Sound", sound)
-		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
-		else
-			self:SetNW2Float("PhotonLE.Siren_Volume", 90 )
-		end
+		self:SetPhotonNet_SirenVolume(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume or 90)
+		self:SetPhotonNet_SirenSound(sound)
 	end
 
 	function ent:ELS_SirenStop()
-		net.Start("Photon.ELS_StopSiren")
-			net.WriteEntity(self)
-		net.Broadcast()
-		self:SetNW2String("PhotonLE.Siren_Sound", nil)
+		self:SetPhotonNet_SirenSound("")
 	end
 
 	function ent:ELS_Siren2Play(sound)
-		net.Start("Photon.ELS_PlaySiren2")
-			net.WriteEntity(self)
-			net.WriteString(sound)
-			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
-			else
-				net.WriteFloat(90)
-			end
-		net.Broadcast()
-		self:SetNW2String("PhotonLE.Siren2_Sound", sound)
-		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
-		else
-			self:SetNW2Float("PhotonLE.Siren_Volume", 90 )
-		end
+		self:SetPhotonNet_Siren2Volume(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume or 90)
+		self:SetPhotonNet_Siren2Sound(sound)
 	end
 
 	function ent:ELS_Siren2Stop()
-		net.Start("Photon.ELS_StopSiren2")
-			net.WriteEntity(self)
-		net.Broadcast()
-		self:SetNW2String("PhotonLE.Siren2_Sound", nil)
+		self:SetPhotonNet_Siren2Sound("")
 	end
 
 	function ent:ELS_ManualPlay(sound)
-		net.Start("Photon.ELS_PlayManual")
-			net.WriteEntity(self)
-			net.WriteString(sound)
-			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
-			else
-				net.WriteFloat(90)
-			end
-		net.Broadcast()
-		self:SetNW2String("PhotonLE.Manual_Sound", sound)
-		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
-		else
-			self:SetNW2Float("PhotonLE.Siren_Volume", 90 )
-		end
+		self:SetPhotonNet_ManualVolume(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume or 90)
+		self:SetPhotonNet_ManualSound(sound)
 	end
 
 	function ent:ELS_ManualStop()
-		net.Start("Photon.ELS_StopManual")
-			net.WriteEntity(self)
-		net.Broadcast()
-		self:SetNW2String("PhotonLE.Manual_Sound", nil)
+		self:SetPhotonNet_ManualSound("")
 	end
 
 	function ent:ELS_PlayHorn(sound)
-		net.Start("Photon.ELS_PlayHorn")
-			net.WriteEntity(self)
-			net.WriteString(sound)
-			if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-				net.WriteFloat(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
-			else
-				net.WriteFloat(85)
-			end
-		net.Broadcast()
-		self:SetNW2String("PhotonLE.Horn_Sound", sound)
-		if EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume then
-			self:SetNW2Float("PhotonLE.Siren_Volume", EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume )
-		else
-			self:SetNW2Float("PhotonLE.Siren_Volume", 85 )
-		end
+		self:SetPhotonNet_HornVolume(EMVU.GetSirenTable()[self:ELS_SirenSet()].Volume or 85)
+		self:SetPhotonNet_HornSound(sound)
 	end
 
 	function ent:ELS_StopHorn()
-		net.Start("Photon.ELS_StopHorn")
-			net.WriteEntity(self)
-		net.Broadcast()
-		self:SetNW2String("PhotonLE.Horn_Sound", nil)
+		self:SetPhotonNet_HornSound("")
 	end
 
 	-- Turn the siren off

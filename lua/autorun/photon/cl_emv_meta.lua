@@ -1072,210 +1072,86 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 	end
 end)
 
-net.Receive("Photon.ELS_PlaySiren", function()
-	local ent = net.ReadEntity()
-	if IsValid(ent) and !IsValid(ent.EMVU_Siren) then
-		local sound = net.ReadString()
-		local volume = net.ReadFloat()
-		ent.EMVU_Siren = CreateSound(ent, sound)
-		-- Volume is a Source SNDLVL (default 75); do not scale it.
-		ent.EMVU_Siren:SetSoundLevel( volume )
-		if ent:GetThirdPersonMode() then
-			ent.EMVU_Siren:PlayEx(thirdPersonVolume, 100)
-		elseif !ent:GetThirdPersonMode() then
-			ent.EMVU_Siren:PlayEx(interiorVolume, 100)
-		else
-			ent.EMVU_Siren:PlayEx(1, 100)
-		end
-		--ent.EMVU_Siren:ChangeVolume(0)
-		--ent.EMVU_Siren:SetDSP(1)
-		ent:CallOnRemove("StopSiren", function(ent)
-			if ent.EMVU_Siren then
-				ent.EMVU_Siren:Stop()
-			end
-		end)
-	--ent.ELS.Siren = siren
+--- Play a siren-family sound on an entity field and hook its cleanup.
+-- @ent ent Entity the sound belongs to.
+-- @str key Entity field the CSoundPatch is cached under (e.g. "EMVU_Siren").
+-- @str soundName Sound file/script to play.
+-- @float volume Source SNDLVL to apply (not a 0-1 scale).
+-- @str removeHookName Unique CallOnRemove identifier for this field.
+-- @internal
+local function StartSirenSound(ent, key, soundName, volume, removeHookName)
+	local patch = CreateSound(ent, soundName)
+	patch:SetSoundLevel(volume)
+	if ent:GetThirdPersonMode() then
+		patch:PlayEx(thirdPersonVolume, 100)
+	else
+		patch:PlayEx(interiorVolume, 100)
 	end
-end)
-
-net.Receive("Photon.ELS_StopSiren", function()
-	local ent = net.ReadEntity()
-	if IsValid(ent) then
-		if ent.EMVU_Siren then
-			ent.EMVU_Siren:Stop()
-			ent.EMVU_Siren = nil
+	ent[key] = patch
+	ent:CallOnRemove(removeHookName, function(e)
+		if e[key] then
+			e[key]:Stop()
 		end
+	end)
+end
+
+--- Stop and clear a siren-family sound previously started with StartSirenSound.
+-- @ent ent Entity the sound belongs to.
+-- @str key Entity field the CSoundPatch is cached under.
+-- @internal
+local function StopSirenSound(ent, key)
+	if ent[key] then
+		ent[key]:Stop()
+		ent[key] = nil
 	end
-end)
+end
 
-net.Receive("Photon.ELS_PlaySiren2", function()
-	local ent = net.ReadEntity()
-	if IsValid(ent) and !IsValid(ent.EMVU_Siren2) then
-		local sound = net.ReadString()
-		local volume = net.ReadFloat()
-		ent.EMVU_Siren2 = CreateSound(ent, sound)
-		ent.EMVU_Siren2:SetSoundLevel( volume )
-		if ent:GetThirdPersonMode() then
-			ent.EMVU_Siren2:PlayEx(thirdPersonVolume, 100)
-		elseif !ent:GetThirdPersonMode() then
-			ent.EMVU_Siren2:PlayEx(interiorVolume, 100)
-		else
-			ent.EMVU_Siren2:PlayEx(1, 100)
+-- Siren playback state (which sound is active per channel) is synced through
+-- Photon.SNet rather than bespoke net messages, so there is a single ordered,
+-- late-join-aware channel driving CreateSound/Stop instead of two racing ones.
+hook.Add("Photon.SimpleNet.ValueChanged", "Photon.SirenSounds", function(name, old, new, ent)
+	if !IsValid(ent) then return end
+
+	if name == "SirenSound" then
+		if old and old ~= "" then StopSirenSound(ent, "EMVU_Siren") end
+		if new and new ~= "" then
+			StartSirenSound(ent, "EMVU_Siren", new, ent:GetPhotonNet_SirenVolume(90), "StopSiren")
 		end
-		--ent.EMVU_Siren:ChangeVolume(0)
-		--ent.EMVU_Siren:SetDSP(129)
-		ent:CallOnRemove("StopSiren2", function(ent)
-			if ent.EMVU_Siren2 then
-				ent.EMVU_Siren2:Stop()
-			end
-		end)
-	end
-	--ent.ELS.Siren = siren
-end)
-
-net.Receive("Photon.ELS_StopSiren2", function()
-	local ent = net.ReadEntity()
-	if IsValid(ent) then
-		if ent.EMVU_Siren2 then
-			ent.EMVU_Siren2:Stop()
-			ent.EMVU_Siren2 = nil
+	elseif name == "Siren2Sound" then
+		if old and old ~= "" then StopSirenSound(ent, "EMVU_Siren2") end
+		if new and new ~= "" then
+			StartSirenSound(ent, "EMVU_Siren2", new, ent:GetPhotonNet_Siren2Volume(90), "StopSiren2")
 		end
-	end
-end)
-
-net.Receive("Photon.ELS_PlayManual", function()
-	local ent = net.ReadEntity()
-	if IsValid(ent) and !IsValid(ent.EMVU_ManualSiren) then
-		local sound = net.ReadString()
-		local volume = net.ReadFloat()
-		ent.EMVU_ManualSiren = CreateSound(ent, sound)
-		ent.EMVU_ManualSiren:SetSoundLevel( volume )
-		if ent:GetThirdPersonMode() then
-			ent.EMVU_ManualSiren:PlayEx(thirdPersonVolume, 100)
-		elseif !ent:GetThirdPersonMode() then
-			ent.EMVU_ManualSiren:PlayEx(interiorVolume, 100)
-		else
-			ent.EMVU_ManualSiren:PlayEx(1, 100)
-		end
-
-		if ent.EMVU_Siren then
-			ent.EMVU_Siren:Stop()
-		end
-
-		ent:CallOnRemove("StopManualSiren", function(ent)
-			if ent.EMVU_ManualSiren then
-				ent.EMVU_ManualSiren:Stop()
-			end
-		end)
-	--ent.ELS.Siren = siren
-	end
-end)
-
-net.Receive("Photon.ELS_StopManual", function()
-	local ent = net.ReadEntity()
-	if IsValid(ent) then
-		if ent.EMVU_Siren then
+	elseif name == "ManualSound" then
+		if old and old ~= "" then StopSirenSound(ent, "EMVU_ManualSiren") end
+		if new and new ~= "" then
+			-- The manual siren ducks the primary siren rather than stopping it
+			-- outright, so it can resume without being replayed from scratch.
+			if ent.EMVU_Siren then ent.EMVU_Siren:Stop() end
+			StartSirenSound(ent, "EMVU_ManualSiren", new, ent:GetPhotonNet_ManualVolume(90), "StopManualSiren")
+		elseif ent.EMVU_Siren then
 			if ent:GetThirdPersonMode() then
 				ent.EMVU_Siren:PlayEx(thirdPersonVolume, 100)
-			elseif !ent:GetThirdPersonMode() then
-				ent.EMVU_Siren:PlayEx(interiorVolume, 100)
 			else
-				ent.EMVU_Siren:PlayEx(1, 100)
+				ent.EMVU_Siren:PlayEx(interiorVolume, 100)
 			end
 		end
-
-		if ent.EMVU_ManualSiren then
-			ent.EMVU_ManualSiren:Stop()
-			ent.EMVU_ManualSiren = nil
+	elseif name == "HornSound" then
+		if old and old ~= "" then StopSirenSound(ent, "EMVU_Horn") end
+		if new and new ~= "" then
+			StartSirenSound(ent, "EMVU_Horn", new, ent:GetPhotonNet_HornVolume(85), "StopHorn")
 		end
-	end
-end)
-
-net.Receive("Photon.ELS_PlayHorn", function()
-	local ent = net.ReadEntity()
-	if IsValid(ent) and !IsValid(ent.EMVU_Horn) then
-		local sound = net.ReadString()
-		local volume = net.ReadFloat()
-		ent.EMVU_Horn = CreateSound(ent, sound)
-		ent.EMVU_Horn:SetSoundLevel( volume )
-		if ent:GetThirdPersonMode() then
-			ent.EMVU_Horn:PlayEx(thirdPersonVolume, 100)
-		elseif !ent:GetThirdPersonMode() then
-			ent.EMVU_Horn:PlayEx(interiorVolume, 100)
-		else
-			ent.EMVU_Horn:PlayEx(1, 100)
-		end
-		ent:CallOnRemove("StopHorn", function(ent)
-			if ent.EMVU_Horn then
-				ent.EMVU_Horn:Stop()
-			end
-		end)
-		--ent.ELS.Siren = siren
-	end
-end)
-
-net.Receive("Photon.ELS_StopHorn", function()
-	local ent = net.ReadEntity()
-	if IsValid(ent) then
-		if ent.EMVU_Horn then
-			ent.EMVU_Horn:Stop()
-			ent.EMVU_Horn = nil
-		end
-	end
-end)
-
-hook.Add("NotifyShouldTransmit", "Photon.ShouldTransmitSirens", function(ent, shouldtransmit)
-
-	if ent:GetNW2String("PhotonLE.Siren_Sound") ~= "" and !IsValid(ent.EMVU_Siren) then
-		local sound = ent:GetNW2String("PhotonLE.Siren_Sound")
-		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
-		ent.EMVU_Siren = CreateSound(ent, sound)
-		ent.EMVU_Siren:SetSoundLevel( volume )
-		ent.EMVU_Siren:PlayEx(1, 100)
-		ent:CallOnRemove("StopSiren", function(ent)
-			if ent.EMVU_Siren then
-				ent.EMVU_Siren:Stop()
-			end
-		end)
-	end
-
-	if ent:GetNW2String("PhotonLE.Siren2_Sound") ~= "" and !IsValid(ent.EMVU_Siren2) then
-		local sound = ent:GetNW2String("PhotonLE.Siren2_Sound")
-		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
-		ent.EMVU_Siren2 = CreateSound(ent, sound)
-		ent.EMVU_Siren2:SetSoundLevel( volume )
-		ent.EMVU_Siren2:PlayEx(1, 100)
-		ent:CallOnRemove("StopSiren2", function(ent)
-			if ent.EMVU_Siren2 then
-				ent.EMVU_Siren2:Stop()
-			end
-		end)
-	end
-
-	if ent:GetNW2String("PhotonLE.Manual_Sound") ~= "" and !IsValid(ent.EMVU_ManualSiren) then
-		local sound = ent:GetNW2String("PhotonLE.Manual_Sound")
-		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
-		ent.EMVU_ManualSiren = CreateSound(ent, sound)
-		ent.EMVU_ManualSiren:SetSoundLevel( volume )
-		ent.EMVU_ManualSiren:PlayEx(1, 100)
-		ent:CallOnRemove("StopManualSiren", function(ent)
-			if ent.EMVU_ManualSiren then
-				ent.EMVU_ManualSiren:Stop()
-			end
-		end)
-	end
-
-	if ent:GetNW2String("PhotonLE.Horn_Sound") ~= "" and !IsValid(ent.EMVU_Horn) then
-		local sound = ent:GetNW2String("PhotonLE.Horn_Sound")
-		local volume = ent:GetNW2Float("PhotonLE.Siren_Volume")
-		ent.EMVU_Horn = CreateSound(ent, sound)
-		ent.EMVU_Horn:SetSoundLevel( volume )
-		ent.EMVU_Horn:PlayEx(1, 100)
-		ent:CallOnRemove("StopHorn", function(ent)
-			if ent.EMVU_Horn then
-				ent.EMVU_Horn:Stop()
-			end
-		end)
+	-- A resync (late join / PVS re-entry) sends every field for an entity in
+	-- one message but doesn't guarantee volume lands before its sound, so an
+	-- already-created patch needs to pick up a volume that arrives after it.
+	elseif name == "SirenVolume" and IsValid(ent.EMVU_Siren) then
+		ent.EMVU_Siren:SetSoundLevel(new)
+	elseif name == "Siren2Volume" and IsValid(ent.EMVU_Siren2) then
+		ent.EMVU_Siren2:SetSoundLevel(new)
+	elseif name == "ManualVolume" and IsValid(ent.EMVU_ManualSiren) then
+		ent.EMVU_ManualSiren:SetSoundLevel(new)
+	elseif name == "HornVolume" and IsValid(ent.EMVU_Horn) then
+		ent.EMVU_Horn:SetSoundLevel(new)
 	end
 end)
 
