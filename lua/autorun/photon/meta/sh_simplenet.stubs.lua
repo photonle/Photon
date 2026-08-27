@@ -100,17 +100,6 @@ function ENTITY:SetPhotonNet_Running(value) end
 --- @state shared
 function ENTITY:GetPhotonNet_Running(default) end
 
---- Set the index of the vehicle's selected wheel option.
---- @param value integer Wheel option index, 1-63.
---- @state server
-function ENTITY:SetPhotonNet_WheelIndex(value) end
-
---- The index of the vehicle's selected wheel option.
---- @param default integer? Value to return if none has been networked yet.
---- @return integer index Wheel option index.
---- @state shared
-function ENTITY:GetPhotonNet_WheelIndex(default) end
-
 --- Set whether the vehicle's emergency lighting stays on with the engine off.
 --- @param value boolean Whether lighting stays on.
 --- @state server
