@@ -1,0 +1,102 @@
+[
+	{
+		"name": "CL_Greet",
+		"type": "variable",
+		"defines": [
+			{
+				"file": "autorun/photon/cl_greet.lua",
+				"start": [0, 0],
+				"rawdesc": "Greets the local player on spawn.",
+				"extends": {
+					"type": "function",
+					"args": [
+						{"name": "ply", "view": "Player"},
+						{"name": "message", "view": "string", "desc": "The greeting text."}
+					],
+					"returns": []
+				}
+			}
+		]
+	},
+	{
+		"name": "DB",
+		"type": "variable",
+		"defines": [
+			{
+				"file": "autorun/photon/db.lua",
+				"start": [0, 0],
+				"rawdesc": "Database Handling Class.\n\nWraps a single tmysql connection.\n@author John Internet\n@classmod DB\n@state server"
+			}
+		],
+		"fields": [
+			{
+				"name": "Connect",
+				"file": "autorun/photon/db.lua",
+				"start": [40, 0],
+				"rawdesc": "Initialize the internal database object.\n@internal",
+				"extends": {
+					"type": "function",
+					"args": [
+						{"name": "self", "view": "DB", "type": "self"}
+					],
+					"returns": [
+						{"view": "bool", "desc": "Whether the connection succeeded."}
+					]
+				}
+			},
+			{
+				"name": "Query",
+				"file": "autorun/photon/db.lua",
+				"start": [80, 0],
+				"rawdesc": "Runs a query against the connection.\n@warns Not sanitised, callers must escape input themselves.\n@bugs Silently drops callbacks if the connection is down.\n@param query The SQL string to run.\n@return bool Whether the query was queued.",
+				"extends": {
+					"type": "function",
+					"args": [
+						{"name": "self", "view": "DB", "type": "self"},
+						{"name": "query", "view": "string"}
+					],
+					"returns": []
+				}
+			}
+		]
+	},
+	{
+		"name": "sh_LegacyRankCheck",
+		"type": "variable",
+		"defines": [
+			{
+				"file": "autorun/photon/sh_ranks.lua",
+				"start": [0, 0],
+				"rawdesc": "Old rank lookup kept for addon compatibility.\n@deprecated Use Photon.Ranks.Get instead.",
+				"extends": {
+					"type": "function",
+					"args": [
+						{"name": "ply", "view": "Player"}
+					],
+					"returns": [
+						{"view": "string", "desc": "The player's legacy rank name."}
+					]
+				}
+			}
+		]
+	},
+	{
+		"name": "sv_WipeInventory",
+		"type": "variable",
+		"defines": [
+			{
+				"file": "autorun/photon/sv_inventory.lua",
+				"start": [0, 0],
+				"rawdesc": "Clears every item from a player's inventory.",
+				"deprecated": false,
+				"extends": {
+					"type": "function",
+					"args": [
+						{"name": "ply", "view": "Player"}
+					],
+					"returns": []
+				}
+			}
+		]
+	}
+]

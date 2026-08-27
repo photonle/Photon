@@ -1,0 +1,90 @@
+name: Documentation
+
+on:
+  push:
+    paths:
+      - '.github/workflows/docs.yml'
+      - 'lua/**'
+      - 'docs/**'
+      - 'tools/docs/**'
+    branches:
+      - development
+      - master
+  pull_request:
+    paths:
+      - '.github/workflows/docs.yml'
+      - 'lua/**'
+      - 'docs/**'
+      - 'tools/docs/**'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      LUALS_VERSION: 3.18.2
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v7
+      # Only this one. `submodules: true` would pull anything else added later,
+      # none of which the docs build reads.
+      -
+        name: Fetch base-game type definitions
+        run: git submodule update --init tools/docs/vendor/glua-api-snippets
+      -
+        name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      -
+        name: Install Python Dependencies
+        run: pip install -r tools/docs/requirements.txt
+      -
+        name: Run generator tests
+        run: python3 -m unittest test_generate
+        working-directory: tools/docs
+      -
+        name: Install LuaLS
+        run: |
+          wget -q https://github.com/LuaLS/lua-language-server/releases/download/$LUALS_VERSION/lua-language-server-$LUALS_VERSION-linux-x64.tar.gz
+          mkdir -p /tmp/luals
+          tar -xzf lua-language-server-$LUALS_VERSION-linux-x64.tar.gz -C /tmp/luals
+      -
+        name: Generate LuaLS JSON
+        run: |
+          # LuaLS writes nothing at all if --doc_out_path does not already
+          # exist, and still prints "Documentation exported:" and exits 0 - so
+          # the failure would only surface in the next step, as a traceback
+          # about a missing doc.json.
+          mkdir -p tools/docs/out
+          /tmp/luals/bin/lua-language-server \
+            --doc=lua \
+            --doc_out_path=tools/docs/out \
+            --configpath=tools/docs/luarc-docs.json \
+            --logpath=/tmp/luals-log
+          if [ ! -s tools/docs/out/doc.json ]; then
+            echo "::error::LuaLS exported no doc.json; see /tmp/luals-log"
+            exit 1
+          fi
+      -
+        name: Generate HTML Documentation
+        run: |
+          python3 tools/docs/generate.py \
+            --json tools/docs/out/doc.json \
+            --output tools/docs/build \
+            --style-dir tools/docs/style \
+            --topics docs \
+            --repo-ref "$GITHUB_SHA"
+      -
+        name: Upload Built Docs
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-site
+          path: tools/docs/build/
+      # The build is artifact-only for now. To publish it, add a deploy step
+      # here gated on `github.ref == 'refs/heads/master'`, and pass the site's
+      # public URL to generate.py as --site-url so llms.txt links absolutely.
