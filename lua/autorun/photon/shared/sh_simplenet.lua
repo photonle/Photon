@@ -22,6 +22,7 @@ NET.BOOL = 1
 NET.INT = 2
 NET.UINT = 3
 NET.STR = 4
+NET.FLOAT = 5
 
 --- Bit width for 1 based index of max value count.
 -- @int count Number of registered entries.
@@ -38,14 +39,16 @@ NET.WriteFunctions = {
 	[NET.BOOL] = net.WriteBool,
 	[NET.INT] = net.WriteInt,
 	[NET.UINT] = net.WriteUInt,
-	[NET.STR] = net.WriteString
+	[NET.STR] = net.WriteString,
+	[NET.FLOAT] = net.WriteFloat
 }
 
 NET.ReadFunctions = {
 	[NET.BOOL] = net.ReadBool,
 	[NET.INT] = net.ReadInt,
 	[NET.UINT] = net.ReadUInt,
-	[NET.STR] = net.ReadString
+	[NET.STR] = net.ReadString,
+	[NET.FLOAT] = net.ReadFloat
 }
 
 function NET.Normalise(name)
@@ -396,7 +399,7 @@ if CLIENT then
 	end)
 end
 
-local UInt, Bool, Str = NET.UINT, NET.BOOL, NET.STR
+local UInt, Bool, Str, Float = NET.UINT, NET.BOOL, NET.STR, NET.FLOAT
 
 NET:Map("CurrentSignal", UInt, 2)
 NET:Map("Blinker", UInt, 2)
@@ -419,6 +422,15 @@ NET:Map("TrafficOption", UInt, 4)
 NET:Map("IlluminationOn", Bool)
 NET:Map("IlluminationOption", UInt, 4)
 NET:Map("Preset", UInt, 10)
+
+NET:Map("SirenSound", Str)
+NET:Map("SirenVolume", Float)
+NET:Map("Siren2Sound", Str)
+NET:Map("Siren2Volume", Float)
+NET:Map("ManualSound", Str)
+NET:Map("ManualVolume", Float)
+NET:Map("HornSound", Str)
+NET:Map("HornVolume", Float)
 
 NET:Map("VehicleIndex", Str)
 NET:Map("UnitNumber", Str)
