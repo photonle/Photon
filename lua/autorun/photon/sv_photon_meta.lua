@@ -1,4 +1,19 @@
 
+-- Backs the three signal toggles below. `true` turns that signal on, `false`
+-- clears it but only when it is the signal currently running, so cancelling one
+-- indicator cannot silently kill another, and `nil` only reports the state.
+-- Guarding on `val ~= nil` instead turns the signal on for every non-nil
+-- argument, `false` included.
+local function ToggleSignal(ent, val, signal)
+	if val == true then
+		ent:CAR_Signal(signal)
+	elseif val == false and ent:CAR_Signal() == signal then
+		ent:CAR_StopSignals()
+	end
+
+	return ent:CAR_Signal() == signal
+end
+
 function Photon:SetupCar( ent, index )
 	function ent:CAR_IsBlackedOut()
 		if self.IsEMV and self:IsEMV() then
@@ -64,23 +79,17 @@ function Photon:SetupCar( ent, index )
 
 	function ent:CAR_TurnLeft( val )
 		if not IsValid( self ) then return false end
-		if (val!=nil) then self:CAR_Signal( CAR_TURNING_LEFT ) end
-		return self:CAR_Signal() == CAR_TURNING_LEFT
-
+		return ToggleSignal(self, val, CAR_TURNING_LEFT)
 	end
 
 	function ent:CAR_TurnRight( val )
 		if not IsValid( self ) then return false end
-		if (val!=nil) then self:CAR_Signal( CAR_TURNING_RIGHT ) end
-		return self:CAR_Signal() == CAR_TURNING_RIGHT
-
+		return ToggleSignal(self, val, CAR_TURNING_RIGHT)
 	end
 
 	function ent:CAR_Hazards( val )
 		if not IsValid( self ) then return false end
-		if (val!=nil) then self:CAR_Signal( CAR_HAZARD ) end
-		return self:CAR_Signal() == CAR_HAZARD
-
+		return ToggleSignal(self, val, CAR_HAZARD)
 	end
 
 	function ent:CAR_StopSignals()
