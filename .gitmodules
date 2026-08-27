@@ -1,0 +1,4 @@
+[submodule "tools/docs/vendor/glua-api-snippets"]
+	path = tools/docs/vendor/glua-api-snippets
+	url = https://github.com/luttje/glua-api-snippets.git
+	branch = lua-language-server-addon

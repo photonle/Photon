@@ -1,0 +1,19 @@
+{
+	"workspace.library": [
+		"../tools/docs/vendor/glua-api-snippets/library"
+	],
+	"runtime.version": "LuaJIT",
+	"runtime.special": {
+		"include": "dofile",
+		"IncludeCS": "dofile"
+	},
+	"runtime.nonstandardSymbol": [
+		"!",
+		"!=",
+		"&&",
+		"||",
+		"//",
+		"/**/",
+		"continue"
+	]
+}
