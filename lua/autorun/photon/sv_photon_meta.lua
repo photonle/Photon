@@ -23,17 +23,23 @@ function Photon:SetupCar( ent, index )
 	-- if car is braking
 	function ent:CAR_Braking( val )
 		if not IsValid( self ) then return false end
-		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_BRAKING", val ) end
-		return self:GetNW2Bool( "PhotonLE.CAR_BRAKING" )
+		if (val!=nil) then
+			self:SetNW2Bool( "PhotonLE.CAR_BRAKING", val )
+			self:SetPhotonNet_Braking( val )
+		end
 
+		return self:GetPhotonNet_Braking( false )
 	end
 
 	-- car reversing
 	function ent:CAR_Reversing( val )
 		if not IsValid( self ) then return false end
-		if (val!=nil) then self:SetNW2Bool( "PhotonLE.CAR_REVERSING", val ) end
-		return self:GetNW2Bool( "PhotonLE.CAR_REVERSING" )
+		if (val!=nil) then
+			self:SetNW2Bool( "PhotonLE.CAR_REVERSING", val )
+			self:SetPhotonNet_Reversing( val )
+		end
 
+		return self:GetPhotonNet_Reversing( false )
 	end
 
 	function ent:CAR_Running( val )
@@ -48,9 +54,12 @@ function Photon:SetupCar( ent, index )
 
 	function ent:CAR_Signal( val )
 		if not IsValid( self ) then return 0 end
-		if (val!=nil) then self:SetNW2Int( "PhotonLE.CAR_BLINKER", val ) end
-		return self:GetNW2Int( "PhotonLE.CAR_BLINKER" )
+		if (val!=nil) then
+			self:SetNW2Int( "PhotonLE.CAR_BLINKER", val )
+			self:SetPhotonNet_CurrentSignal( val )
+		end
 
+		return self:GetPhotonNet_CurrentSignal( CAR_BLINKER_NONE )
 	end
 
 	function ent:CAR_TurnLeft( val )
