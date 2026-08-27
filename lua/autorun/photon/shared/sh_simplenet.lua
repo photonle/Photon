@@ -503,7 +503,6 @@ NET:Map("Braking", Bool)
 NET:Map("Reversing", Bool)
 NET:Map("Running", Bool)
 NET:Map("LEStayOn", Bool)
-NET:Map("WheelIndex", UInt, 6) -- 64 wheels
 
 NET:Map("Enabled", Bool)
 NET:Map("LightOn", Bool)
