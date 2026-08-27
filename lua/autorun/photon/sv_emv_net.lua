@@ -217,11 +217,18 @@ net.Receive( "emvu_livery", function( len, ply )
 	EMVU.Net:Livery( ply, tostring( net.ReadString() ), tostring( net.ReadString() ), tostring( net.ReadString() ) )
 end)
 
+-- CAR_BLINKER_NONE is a legitimate request, not a rejection: the client sends it
+-- to cancel a signal (see the auto-cancel in cl_photon_hooks.lua TurnScan).
+-- Listing only the three active states here instead silently drops every cancel.
+function Photon.Net.IsValidSignal(signal)
+	return isnumber(signal) and signal >= CAR_BLINKER_NONE and signal <= CAR_BLINKER_HAZARD
+end
+
 function Photon.Net:Signal( ply )
 	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
 	local car = ply:GetVehicle()
 	local signal = net.ReadInt(3)
-	if signal ~= CAR_TURNING_LEFT and signal ~= CAR_TURNING_RIGHT and signal ~= CAR_HAZARD then return false end
+	if not Photon.Net.IsValidSignal(signal) then return false end
 	if signal == car:CAR_Signal() then car:CAR_StopSignals() return end
 	car:CAR_Signal( signal )
 end
