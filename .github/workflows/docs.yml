@@ -20,12 +20,22 @@ on:
 permissions:
   contents: read
 
+# The deploy pushes to gh-pages, so a second run starting mid-deploy would race
+# the first for the branch. Queue them instead, and let a superseded build drop:
+# the site is a full rebuild every time, so only the newest one matters.
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       LUALS_VERSION: 3.18.2
+      SITE_URL: https://photonle.github.io/Photon
     steps:
       -
         name: Checkout
@@ -78,13 +88,33 @@ jobs:
             --output tools/docs/build \
             --style-dir tools/docs/style \
             --topics docs \
-            --repo-ref "$GITHUB_SHA"
+            --repo-ref "$GITHUB_SHA" \
+            --site-url "$SITE_URL"
       -
         name: Upload Built Docs
         uses: actions/upload-artifact@v4
         with:
           name: docs-site
           path: tools/docs/build/
-      # The build is artifact-only for now. To publish it, add a deploy step
-      # here gated on `github.ref == 'refs/heads/master'`, and pass the site's
-      # public URL to generate.py as --site-url so llms.txt links absolutely.
+      # Only from development, which is what GitHub Pages serves. A push to
+      # master builds (so a docs break is caught there too) but must not
+      # publish: Pages serves one branch, and two would overwrite each other.
+      -
+        name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/development'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./tools/docs/build
+          publish_branch: gh-pages
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_message: "docs: rebuild site for ${{ github.sha }}"
+          # Replace the branch outright rather than committing on top of it.
+          # The site is a full rebuild every run, so anything already on
+          # gh-pages that this build did not produce is stale by definition -
+          # a page whose module was renamed, a topic that moved into a folder,
+          # a previous build's content-hashed stylesheet. force_orphan also
+          # keeps the branch at a single commit, so the repository does not
+          # carry a full copy of the site for every push it has ever had.
+          force_orphan: true

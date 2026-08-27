@@ -49,6 +49,20 @@ Everything under `lua/autorun/photon/library/`, `lua/tests/` and `lua/internet_b
 excluded from the export. The library tree is content — vehicles, components, sirens and presets
 registered as data tables — and listing it would bury the engine's own pages several times over.
 
+### Publishing
+
+`.github/workflows/docs.yml` runs both steps on every push and pull request, and on a push to
+`development` it also publishes the result to the `gh-pages` branch, which is what
+[photonle.github.io/Photon](https://photonle.github.io/Photon/) serves. A push to `master` builds
+but does not publish: Pages serves one branch, and two publishing into it would overwrite each
+other.
+
+The deploy replaces `gh-pages` outright rather than committing on top of it. The site is a full
+rebuild every run, so anything already on the branch that the build did not just produce is stale by
+definition — a page whose module was renamed, a topic that moved into a folder, a previous build's
+content-hashed stylesheet. That also keeps the branch at one commit, so the repository isn't carrying
+a copy of the whole site for every push it has ever had.
+
 ### Definition-only files
 
 Some of Photon's API is generated at load time — `Photon.SNet:Map` hangs a `Set`/`Get` pair off the
