@@ -1,15 +1,29 @@
---[[-- Regular Simplified Networking.
-Easily optimise networking for setting local values on entities.
-@copyright Photon Team
-@release development
-@author Photon Team
-@module Photon.SNet
-@alias NET
---]]--
+--- Regular Simplified Networking.
+--- Easily optimise networking for setting local values on entities.
+---
+--- Registering a variable with `Photon.SNet:Map` generates a matching setter and
+--- getter on both this table and the `Entity` metatable, and networks every
+--- change to it automatically. The generated entity methods are listed on the
+--- Entity page.
+--- @copyright Photon Team
+--- @release development
+--- @author Photon Team
+--- @namespace Photon.SNet
+--- @state shared
 
 Photon = Photon or {}
-Photon.SNet = Photon.SNet or {}
-local NET = Photon.SNet
+
+-- Declared local-first, then published, rather than the other way round: LuaLS
+-- only attributes `function NET:X()` to a table it can name when the local *is*
+-- the definition, so `Photon.SNet = Photon.SNet or {} ; local NET = Photon.SNet`
+-- leaves every method on this table invisible to the docs build and to editors.
+-- Same two references to the same table either way. Kept a blank line clear of
+-- the annotation below so it stays an aside rather than becoming its blurb.
+
+--- @class Photon.SNet
+local NET = Photon.SNet or {}
+Photon.SNet = NET
+
 local ENT = FindMetaTable("Entity")
 
 if SERVER then
@@ -18,22 +32,64 @@ if SERVER then
 	util.AddNetworkString("Photon_SimpleNet_Resync")
 end
 
+--- The wire types a variable can be registered as, passed to `Photon.SNet:Map`.
+--- Each one picks the `net` library reader/writer pair the value is sent with.
+--- @section Network Types
+--- @alias PhotonNetType
+---| `Photon.SNet.BOOL`
+---| `Photon.SNet.INT`
+---| `Photon.SNet.UINT`
+---| `Photon.SNet.STR`
+
+--- A boolean, sent as one bit. Takes no extra data.
+--- @state shared
 NET.BOOL = 1
+--- A signed integer. The extra data is its bit width.
+--- @state shared
 NET.INT = 2
+--- An unsigned integer. The extra data is its bit width.
+--- @state shared
 NET.UINT = 3
+--- A string, sent null-terminated. Takes no extra data.
+--- @state shared
 NET.STR = 4
 
---- Bit width for 1 based index of max value count.
--- @int count Number of registered entries.
--- @treturn int Bit width.
+--- Bit width needed to index a table of `count` entries, one-based.
+--- @param count integer Number of registered entries.
+--- @return integer bits Bit width.
+--- @internal
+--- @state shared
+--- @section Registration
 local function IndexBits(count)
 	return math.max(1, math.ceil(math.log(count + 1, 2)))
 end
 
+--- Registered variables by index, as `{name, netType, extra}`. This is the
+--- order indices are sent in, so an entry's position is part of the wire
+--- format for as long as both realms are running the same build.
+--- @type table<integer, table>
+--- @internal
+--- @state shared
 NET.FMap = NET.FMap or {}
+
+--- Registered variables by name, as `{index, netType, extra}` — the reverse of
+--- `Photon.SNet.FMap`.
+--- @type table<string, table>
+--- @internal
+--- @state shared
 NET.RMap = NET.RMap or {}
+
+--- Bit width currently needed to send a variable index, kept in step with
+--- `Photon.SNet.FMap` by `Photon.SNet:Map`.
+--- @type integer
+--- @internal
+--- @state shared
 NET.Bits = IndexBits(#NET.FMap)
 
+--- The `net` writer used for each `PhotonNetType`.
+--- @type table<integer, function>
+--- @internal
+--- @state shared
 NET.WriteFunctions = {
 	[NET.BOOL] = net.WriteBool,
 	[NET.INT] = net.WriteInt,
@@ -41,6 +97,10 @@ NET.WriteFunctions = {
 	[NET.STR] = net.WriteString
 }
 
+--- The `net` reader used for each `PhotonNetType`.
+--- @type table<integer, function>
+--- @internal
+--- @state shared
 NET.ReadFunctions = {
 	[NET.BOOL] = net.ReadBool,
 	[NET.INT] = net.ReadInt,
@@ -48,15 +108,29 @@ NET.ReadFunctions = {
 	[NET.STR] = net.ReadString
 }
 
+--- The key a registered variable is cached under on an entity.
+--- @param name string Registered variable name.
+--- @return string key The prefixed field name, e.g. `PhotonNet_SirenOn`.
+--- @state shared
 function NET.Normalise(name)
 	return "PhotonNet_" .. name
 end
 
---- Add a network mapping, with a name and type.
--- Adds NET:Set<name> to set the value on an entity and Get<name>.
--- @str name Variable name to use.
--- @int The NET.<TYPE> enum to use.
--- @param[opt] extra Any extra data required for a type.
+--- Register a variable to be networked, under a name and a wire type.
+---
+--- Generates four accessors for it: `Photon.SNet:Set<name>(ent, value)` and
+--- `ent:SetPhotonNet_<name>(value)` on the server, and `Photon.SNet:Get<name>`
+--- and `ent:GetPhotonNet_<name>` on both realms. Re-registering an existing
+--- name updates its type in place and keeps its index, so the wire format does
+--- not shift under a client that is already connected.
+--- @param name string Variable name to use.
+--- @param netType PhotonNetType The wire type to send the value as.
+--- @param extra integer? Bit width, for `Photon.SNet.INT` and `Photon.SNet.UINT`; unused by the others.
+--- @warning Both realms have to register the same names in the same order:
+--- indices are what go over the wire, not names.
+--- @state shared
+--- @example Photon.SNet:Map("SirenOn", Photon.SNet.BOOL)
+---  Photon.SNet:Map("SirenSet", Photon.SNet.UINT, 10)
 function NET:Map(name, netType, extra)
 	if self.RMap[name] then
 		self.FMap[self.RMap[name][1]] = {name, netType, extra}
@@ -91,12 +165,13 @@ end
 
 if SERVER then
 	--- Send the current value of a networked variable to a recipient.
-	-- @ent ent The entity the value belongs to.
-	-- @str name The name to send.
-	-- @param val Value to send.
-	-- @param[opt] to Player to send to. Broadcasts to everyone if omitted.
-	-- @internal
-	-- @state server
+	--- @param ent Entity The entity the value belongs to.
+	--- @param name string The registered name to send.
+	--- @param val any Value to send.
+	--- @param to Player|table|nil Player (or players) to send to; broadcasts to everyone if omitted.
+	--- @internal
+	--- @state server
+	--- @section Sending
 	function NET:SendChange(ent, name, val, to)
 		local mapping = self.RMap[name]
 		if not mapping then
@@ -117,13 +192,13 @@ if SERVER then
 		end
 	end
 
-	--- Change a networked entity variable.
-	-- @ent ent The entity to change the value on.
-	-- @str name The name to change.
-	-- @param val Value to set.
-	-- @warns name must be pre-registed with NET:Map
-	-- @internal
-	-- @state server
+	--- Change a networked entity variable, broadcasting it if it actually moved.
+	--- @param ent Entity The entity to change the value on.
+	--- @param name string The registered name to change.
+	--- @param val any Value to set.
+	--- @warns `name` must be pre-registered with `Photon.SNet:Map`.
+	--- @internal
+	--- @state server
 	function NET:Set(ent, name, val)
 		local varName = self.Normalise(name)
 
@@ -134,12 +209,24 @@ if SERVER then
 		end
 	end
 
+	--- `photon_simplenet_resync_rate` — how many vehicles the resync queue is
+	--- allowed to send to each player per frame. Lower it on a server whose
+	--- outbound bandwidth is the bottleneck; a value below 1 is clamped to 1.
+	--- @type ConVar
+	--- @internal
+	--- @state server
 	local resyncRate = CreateConVar(
 		"photon_simplenet_resync_rate", "32", FCVAR_ARCHIVE,
 		"Maximum number of vehicles the SimpleNet resync queue sends to each player per frame"
 	)
 
-	-- [player] = {list = {ent, ...}, set = {[ent] = true}, pos = <next index to send>}
+	--- Pending full-state sends, keyed by player, as
+	--- `{list = {ent, ...}, set = {[ent] = true}, pos = <next index to send>}`.
+	--- Drained a few entities per frame by the `Think` hook below.
+	--- @type table<Player, table>
+	--- @internal
+	--- @state server
+	--- @section Resync Queue
 	NET.ResyncQueue = NET.ResyncQueue or {}
 
 	-- Entries are deduped, so a legitimate queue never exceeds the number of
@@ -148,10 +235,10 @@ if SERVER then
 	local MAX_QUEUED = 8192
 
 	--- Collect every currently-set networked variable on an entity.
-	-- @ent ent Entity to read the values from.
-	-- @treturn table|nil Array of {idx, netType, extra, val}, or nil if nothing is set.
-	-- @internal
-	-- @state server
+	--- @param ent Entity Entity to read the values from.
+	--- @return table? fields Array of `{idx, netType, extra, val}`, or nil if nothing is set.
+	--- @internal
+	--- @state server
 	function NET:CollectFields(ent)
 		local fields
 		for name, mapping in pairs(self.RMap) do
@@ -167,12 +254,12 @@ if SERVER then
 	end
 
 	--- Queue vehicles to have their full networked state sent to a player.
-	-- Values are only broadcast when they change, so a client that has just
-	-- become aware of an entity has to pull the current state explicitly.
-	-- @ply ply Player to send the current state to.
-	-- @tab targets Array of entities to queue.
-	-- @internal
-	-- @state server
+	--- Values are only broadcast when they change, so a client that has just
+	--- become aware of an entity has to pull the current state explicitly.
+	--- @param ply Player Player to send the current state to.
+	--- @param targets Entity[] Array of entities to queue.
+	--- @internal
+	--- @state server
 	function NET:QueueResync(ply, targets)
 		local queue = self.ResyncQueue[ply]
 		if not queue then
@@ -191,12 +278,12 @@ if SERVER then
 	end
 
 	--- Drain up to `count` vehicles from a player's queue into one net message.
-	-- Draining over several frames keeps any single message well under the
-	-- 64KiB net limit, which a whole-map resync could otherwise exceed.
-	-- @ply ply Player to send to.
-	-- @int count Maximum number of vehicles to process this frame.
-	-- @internal
-	-- @state server
+	--- Draining over several frames keeps any single message well under the
+	--- 64KiB net limit, which a whole-map resync could otherwise exceed.
+	--- @param ply Player Player to send to.
+	--- @param count integer Maximum number of vehicles to process this frame.
+	--- @internal
+	--- @state server
 	function NET:SendQueuedResync(ply, count)
 		local queue = self.ResyncQueue[ply]
 		if not queue then return end
@@ -260,9 +347,14 @@ if SERVER then
 	end)
 end
 
---- Get the latest cached version of a value on an entity.
--- @ent ent The entity to change the value on.
--- @str name The name to change.
+--- Get the latest cached value of a networked variable on an entity.
+--- Reads the client's local copy; it never asks the server for a fresh one.
+--- @param ent Entity The entity to read the value from.
+--- @param name string The registered name to read.
+--- @param default any? Value to return when nothing has been networked yet.
+--- @return any value The networked value, or `default`.
+--- @state shared
+--- @section Reading
 function NET:Get(ent, name, default)
 	local v = ent[self.Normalise(name)]
 	if v == nil then
@@ -295,11 +387,14 @@ end
 
 if CLIENT then
 	--- Apply a received value to an entity and notify listeners.
-	-- @ent ent Entity to apply to.
-	-- @str name Registered variable name.
-	-- @param val Value that was read off the wire.
-	-- @internal
-	-- @state client
+	--- Runs the `Photon.SimpleNet.ValueChanged` hook with
+	--- `(name, old, new, ent)` after the value has been stored.
+	--- @param ent Entity Entity to apply to.
+	--- @param name string Registered variable name.
+	--- @param val any Value that was read off the wire.
+	--- @internal
+	--- @state client
+	--- @section Receiving
 	local function ApplyValue(ent, name, val)
 		local normalName = NET.Normalise(name)
 		local old = ent[normalName]
@@ -347,8 +442,8 @@ if CLIENT then
 	local pending, flushQueued = {}, false
 
 	--- Send one batched sync request for every vehicle queued this frame.
-	-- @internal
-	-- @state client
+	--- @internal
+	--- @state client
 	local function FlushSyncRequests()
 		flushQueued = false
 
@@ -371,11 +466,11 @@ if CLIENT then
 	end
 
 	--- Queue a vehicle for a full state sync from the server.
-	-- Requests are debounced into a single message because joining a server
-	-- fires NetworkEntityCreated for every entity in the initial PVS at once.
-	-- @ent ent Entity to request state for.
-	-- @internal
-	-- @state client
+	--- Requests are debounced into a single message because joining a server
+	--- fires `NetworkEntityCreated` for every entity in the initial PVS at once.
+	--- @param ent Entity Entity to request state for.
+	--- @internal
+	--- @state client
 	local function RequestSync(ent)
 		-- Gated on IsVehicle rather than IsEMV: IsEMV reads VehicleIndex, which
 		-- is exactly the value an unsynced client is missing, so an EMV gate
