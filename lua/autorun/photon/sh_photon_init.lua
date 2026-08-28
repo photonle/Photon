@@ -117,6 +117,7 @@ include("cl_photon_menubar.lua")
 include("sh_photon_xml.lua")
 
 Photon.include("shared/sh_simplenet.lua")
+Photon.include("shared/sh_registry.lua")
 Photon.include("photon/cl_meta.lua")
 Photon.include("photon/sh_meta.lua")
 
