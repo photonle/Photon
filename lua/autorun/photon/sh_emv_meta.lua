@@ -15,7 +15,7 @@ function ent:IsEMV()
 end
 
 function ent:Photon()
-	return ( IsValid( self ) and self:IsVehicle() and self:GetNW2Bool( "PhotonLE.CAR_HAS_PHOTON" ) ) or false
+	return ( IsValid( self ) and self:IsVehicle() and self:GetPhotonNet_HasPhoton( false ) ) or false
 end
 
 function ent:HasPhotonELS()

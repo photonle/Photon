@@ -27,10 +27,23 @@
 --- @class Entity
 local ENTITY = {}
 
+--- Set whether the vehicle is a Photon vehicle, i.e. whether `Photon:SetupCar`
+--- has run on it. Set once during setup and never cleared.
+--- @param value boolean Whether the vehicle has Photon.
+--- @state server
+--- @section Vehicle State
+function ENTITY:SetPhotonNet_HasPhoton(value) end
+
+--- Whether the vehicle is a Photon vehicle. Prefer `Entity:Photon`, which is
+--- the supported way to ask and also covers the non-vehicle case.
+--- @param default boolean? Value to return if none has been networked yet.
+--- @return boolean hasPhoton Whether the vehicle has Photon.
+--- @state shared
+function ENTITY:GetPhotonNet_HasPhoton(default) end
+
 --- Set the vehicle's turn-signal state, as one of the `CAR_BLINKER_*` constants.
 --- @param value integer New signal value.
 --- @state server
---- @section Vehicle State
 function ENTITY:SetPhotonNet_CurrentSignal(value) end
 
 --- The vehicle's turn-signal state, as one of the `CAR_BLINKER_*` constants.
@@ -112,14 +125,15 @@ function ENTITY:SetPhotonNet_LEStayOn(value) end
 --- @state shared
 function ENTITY:GetPhotonNet_LEStayOn(default) end
 
---- Set whether Photon is enabled on the vehicle at all.
---- @param value boolean Whether Photon is enabled.
+--- Set whether emergency lighting is enabled on the vehicle. Read through
+--- `Entity:ELS_Enabled`; whether the vehicle has Photon at all is `HasPhoton`.
+--- @param value boolean Whether emergency lighting is enabled.
 --- @state server
 function ENTITY:SetPhotonNet_Enabled(value) end
 
---- Whether Photon is enabled on the vehicle at all.
+--- Whether emergency lighting is enabled on the vehicle.
 --- @param default boolean? Value to return if none has been networked yet.
---- @return boolean enabled Whether Photon is enabled.
+--- @return boolean enabled Whether emergency lighting is enabled.
 --- @state shared
 function ENTITY:GetPhotonNet_Enabled(default) end
 
