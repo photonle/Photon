@@ -21,9 +21,10 @@ changed bit width does not read as a bug.
 
 Two things that live outside that file and go stale quietly:
 
-- `Photon.SimpleNet.ValueChanged` runs **client-side only**, from `ApplyValue`, and it runs on every
-  receipt rather than on every change — a resync repeats it for values that have not moved, and a full
-  update replays the entire state of every vehicle in the PVS. Listeners have to be idempotent.
+- `Photon.SimpleNet.ValueChanged` runs on **both** realms, and they do not fire alike. The server runs it
+  from `NET:Set` only when a value actually moves. The client runs it from `ApplyValue` on every receipt,
+  so a resync repeats it for values that have not moved, and a full update replays the entire state of
+  every vehicle in the PVS. Listeners have to be idempotent.
 - [`meta/sh_simplenet.stubs.lua`](lua/autorun/photon/meta/sh_simplenet.stubs.lua) declares the generated
   `Set`/`Get` entity methods for LuaLS by hand. A new `Map` call needs a matching stub pair or the method
   works at runtime and is invisible to tooling and the docs site.

@@ -135,6 +135,6 @@ function Photon:SetupCar( ent, index )
 	if ent:Photon_WheelEnabled() then ent:Photon_SetWheelIndex( 1 ) end
 
 	-- ent:SetNWString( "PhotonVehicle", index )
-	ent:SetNW2Bool( "PhotonLE.CAR_HAS_PHOTON", true )
+	ent:SetPhotonNet_HasPhoton( true )
 
 end

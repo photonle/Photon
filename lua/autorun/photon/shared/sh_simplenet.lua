@@ -193,6 +193,11 @@ if SERVER then
 	end
 
 	--- Change a networked entity variable, broadcasting it if it actually moved.
+	---
+	--- Runs the `Photon.SimpleNet.ValueChanged` hook with `(name, old, new, ent)`
+	--- once the change has been sent, mirroring what the client does on receipt.
+	--- A value that has not moved broadcasts nothing and runs nothing, so a
+	--- listener sees a given change once per realm rather than once per write.
 	--- @param ent Entity The entity to change the value on.
 	--- @param name string The registered name to change.
 	--- @param val any Value to set.
@@ -206,6 +211,7 @@ if SERVER then
 		if val ~= old then
 			ent[varName] = val
 			self:SendChange(ent, name, val)
+			hook.Run("Photon.SimpleNet.ValueChanged", name, old, val, ent)
 		end
 	end
 
@@ -493,6 +499,7 @@ end
 
 local UInt, Bool, Str = NET.UINT, NET.BOOL, NET.STR
 
+NET:Map("HasPhoton", Bool)
 NET:Map("CurrentSignal", UInt, 2)
 NET:Map("Blinker", UInt, 2)
 NET:Map("Headlights", Bool)
