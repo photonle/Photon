@@ -479,7 +479,7 @@ function PhotonHUD:GetCurrentState()
 				Icon = "horn",
 				State = useState
 			}
-			if not (ent.Photon_IsRunning and ent:Photon_IsRunning()) then useState = 2 else useState = 0 end
+			if ent:Photon_Blackout() then useState = 2 else useState = 0 end
 			data.Functions[3] = {
 				Name = "",
 				Icon = "blackout",

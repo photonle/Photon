@@ -516,6 +516,7 @@ NET:Map("TrafficOption", UInt, 4)
 NET:Map("IlluminationOn", Bool)
 NET:Map("IlluminationOption", UInt, 4)
 NET:Map("Preset", UInt, 10)
+NET:Map("Blackout", Bool)
 
 NET:Map("SirenSound", Str)
 NET:Map("SirenVolume", Float)

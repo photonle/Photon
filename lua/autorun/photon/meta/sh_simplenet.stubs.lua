@@ -156,6 +156,17 @@ function ENTITY:SetPhotonNet_Preset(value) end
 --- @state shared
 function ENTITY:GetPhotonNet_Preset(default) end
 
+--- Set whether the vehicle is blacked out.
+--- @param value boolean Whether the vehicle is blacked out.
+--- @state server
+function ENTITY:SetPhotonNet_Blackout(value) end
+
+--- Whether the vehicle is blacked out, suppressing its running lights.
+--- @param default boolean? Value to return if none has been networked yet.
+--- @return boolean blackout Whether the vehicle is blacked out.
+--- @state shared
+function ENTITY:GetPhotonNet_Blackout(default) end
+
 --- Set whether the vehicle's siren is on.
 --- @param value boolean Whether the siren is on.
 --- @state server

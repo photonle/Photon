@@ -28,6 +28,16 @@ function ENT:Photon_SelectionTable()
 	return string.Split(self:Photon_SelectionString(), ".")
 end
 
+--- Whether the vehicle is blacked out, suppressing its running lights.
+--- @return boolean blackout Whether the vehicle is blacked out.
+--- @note `CAR_IsBlackedOut`, in `sv_photon_meta.lua`, is now nothing but an
+--- alias for this. Its one caller is the `PlayerEnteredVehicle` hook, which
+--- could call this directly and let the alias go.
+--- @state shared
+function ENT:Photon_Blackout()
+	return self:GetPhotonNet_Blackout(false)
+end
+
 function ENT:Photon_GetUtilStringTable()
 	return {
 		"",
