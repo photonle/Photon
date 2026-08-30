@@ -201,6 +201,104 @@ function ENTITY:SetPhotonNet_AuxSirenSet(value) end
 --- @state shared
 function ENTITY:GetPhotonNet_AuxSirenSet(default) end
 
+--- Set the sound playing on the vehicle's primary siren channel. Setting it
+--- starts playback; clearing it to an empty string stops the channel.
+--- @param value string Sound file or script to play, or `""` to stop.
+--- @state server
+function ENTITY:SetPhotonNet_SirenSound(value) end
+
+--- The sound playing on the vehicle's primary siren channel.
+--- @param default string? Value to return if none has been networked yet.
+--- @return string sound Sound file or script, or `""` when the channel is silent.
+--- @state shared
+function ENTITY:GetPhotonNet_SirenSound(default) end
+
+--- Set the sound level of the vehicle's primary siren, taken from the siren
+--- set's `Volume` field.
+--- @param value number Source sound level (SNDLVL), not a 0-1 scale.
+--- @state server
+function ENTITY:SetPhotonNet_SirenVolume(value) end
+
+--- The sound level of the vehicle's primary siren.
+--- @param default number? Value to return if none has been networked yet.
+--- @return number level Source sound level (SNDLVL), not a 0-1 scale.
+--- @state shared
+function ENTITY:GetPhotonNet_SirenVolume(default) end
+
+--- Set the sound playing on the vehicle's secondary siren channel, layered
+--- over the primary siren when the vehicle has an auxiliary siren set.
+--- @param value string Sound file or script to play, or `""` to stop.
+--- @state server
+function ENTITY:SetPhotonNet_Siren2Sound(value) end
+
+--- The sound playing on the vehicle's secondary siren channel.
+--- @param default string? Value to return if none has been networked yet.
+--- @return string sound Sound file or script, or `""` when the channel is silent.
+--- @state shared
+function ENTITY:GetPhotonNet_Siren2Sound(default) end
+
+--- Set the sound level of the vehicle's secondary siren. Taken from the
+--- primary siren set's `Volume` field, even though the tone itself comes from
+--- the auxiliary set.
+--- @param value number Source sound level (SNDLVL), not a 0-1 scale.
+--- @state server
+function ENTITY:SetPhotonNet_Siren2Volume(value) end
+
+--- The sound level of the vehicle's secondary siren.
+--- @param default number? Value to return if none has been networked yet.
+--- @return number level Source sound level (SNDLVL), not a 0-1 scale.
+--- @state shared
+function ENTITY:GetPhotonNet_Siren2Volume(default) end
+
+--- Set the sound playing on the vehicle's manual siren channel. Starting one
+--- ducks the primary siren rather than stopping it, so clearing this resumes
+--- the primary siren instead of replaying it from the start.
+--- @param value string Sound file or script to play, or `""` to stop.
+--- @state server
+function ENTITY:SetPhotonNet_ManualSound(value) end
+
+--- The sound playing on the vehicle's manual siren channel.
+--- @param default string? Value to return if none has been networked yet.
+--- @return string sound Sound file or script, or `""` when the channel is silent.
+--- @state shared
+function ENTITY:GetPhotonNet_ManualSound(default) end
+
+--- Set the sound level of the vehicle's manual siren, taken from the siren
+--- set's `Volume` field.
+--- @param value number Source sound level (SNDLVL), not a 0-1 scale.
+--- @state server
+function ENTITY:SetPhotonNet_ManualVolume(value) end
+
+--- The sound level of the vehicle's manual siren.
+--- @param default number? Value to return if none has been networked yet.
+--- @return number level Source sound level (SNDLVL), not a 0-1 scale.
+--- @state shared
+function ENTITY:GetPhotonNet_ManualVolume(default) end
+
+--- Set the sound playing on the vehicle's horn channel. Setting it starts
+--- playback; clearing it to an empty string stops the channel.
+--- @param value string Sound file or script to play, or `""` to stop.
+--- @state server
+function ENTITY:SetPhotonNet_HornSound(value) end
+
+--- The sound playing on the vehicle's horn channel.
+--- @param default string? Value to return if none has been networked yet.
+--- @return string sound Sound file or script, or `""` when the channel is silent.
+--- @state shared
+function ENTITY:GetPhotonNet_HornSound(default) end
+
+--- Set the sound level of the vehicle's horn, taken from the siren set's
+--- `Volume` field.
+--- @param value number Source sound level (SNDLVL), not a 0-1 scale.
+--- @state server
+function ENTITY:SetPhotonNet_HornVolume(value) end
+
+--- The sound level of the vehicle's horn.
+--- @param default number? Value to return if none has been networked yet.
+--- @return number level Source sound level (SNDLVL), not a 0-1 scale.
+--- @state shared
+function ENTITY:GetPhotonNet_HornVolume(default) end
+
 --- Set whether the vehicle's traffic advisor is on.
 --- @param value boolean Whether the traffic advisor is on.
 --- @state server
