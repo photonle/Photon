@@ -51,7 +51,10 @@ function Photon:SetupCar( ent, index )
 
 	function ent:CAR_Running( val )
 		if not IsValid( self ) then return false end
-		if (val!=nil) then self:SetPhotonNet_Running(val) end
+		if (val!=nil) then
+			self:SetPhotonNet_Running(val)
+		end
+
 		return self:GetPhotonNet_Running(false)
 	end
 
