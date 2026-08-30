@@ -185,6 +185,27 @@ function ENT:ELS_PresetOption(val)
 	return self:GetPhotonNet_Preset(0)
 end
 
+--- Gets/Sets whether the vehicle is blacked out, suppressing its running lights.
+--- A vehicle with no siren set cannot be blacked out.
+--- @param val boolean? New blackout state; omit to read the current one.
+--- @return boolean blackout The current blackout state.
+--- @state server
+function ENT:ELS_Blackout(val)
+	if not self:HasPhotonELS() or self:ELS_NoSiren() then
+		return self:Photon_Blackout()
+	end
+
+	if val ~= nil then
+		self:SetPhotonNet_Blackout(val and true or false)
+
+		-- Running lights are a separate networked value derived from blackout, so
+		-- recompute them here. Nothing else does until a player next gets in.
+		self:CAR_Running(not self:Photon_Blackout() and IsValid(self:GetDriver()))
+	end
+
+	return self:Photon_Blackout()
+end
+
 local illumination_allowed = GetConVar("photon_emv_useillum")
 local illumination_allowed_value = illumination_allowed:GetBool()
 cvars.AddChangeCallback("photon_emv_useillum", function()

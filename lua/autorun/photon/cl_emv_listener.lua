@@ -279,11 +279,11 @@ hook.Add("Think", "Photon.ButtonPress", function()
 	end
 
 	if not BLKOUTON_DOWN and keyDown(key_blackout) then
-		EMVU.Sounds:Panel(not emv:Photon_IsRunning())
+		EMVU.Sounds:Panel(emv:Photon_Blackout())
 		BLKOUTON_DOWN = true
 	elseif BLKOUTON_DOWN and not keyDown( key_blackout ) then
-		EMVU.Sounds:Panel(emv:Photon_IsRunning())
-		EMVU.Net:Blackout(emv:Photon_IsRunning())
+		EMVU.Sounds:Panel(not emv:Photon_Blackout())
+		EMVU.Net:Blackout(not emv:Photon_Blackout())
 		BLKOUTON_DOWN = false
 	end
 

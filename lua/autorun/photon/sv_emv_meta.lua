@@ -394,17 +394,6 @@ function EMVU:MakeEMV( ent, emv )
 		self:SetNW2Bool("PhotonLE.PARK_MODE", state)
 	end
 
-	function ent:ELS_Blackout( state )
-		if not IsValid( self ) then return end
-		if self:ELS_NoSiren() then return end
-		if state then
-			self.ELS.Blackout = true
-		elseif state == false then
-			self.ELS.Blackout = false
-		end
-		return self.ELS.Blackout
-	end
-
 	function ent:ELS_BlackoutToggle()
 		if not IsValid( self ) then return end
 		local state = true

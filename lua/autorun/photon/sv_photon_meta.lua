@@ -16,15 +16,7 @@ end
 
 function Photon:SetupCar( ent, index )
 	function ent:CAR_IsBlackedOut()
-		if self.IsEMV and self:IsEMV() then
-			// Lookup ELS Blackup State
-			local hasELS = self:HasPhotonELS()
-			if hasELS and self.ELS.Blackout then
-				return true
-			end
-		end
-
-		return false
+		return self:Photon_Blackout()
 	end
 
 	// whether car headlights are on or off
@@ -59,11 +51,7 @@ function Photon:SetupCar( ent, index )
 
 	function ent:CAR_Running( val )
 		if not IsValid( self ) then return false end
-		if (val!=nil) then
-			self:SetNW2Bool( "PhotonLE.CAR_RUNNING", val )
-			self:SetPhotonNet_Running(val)
-		end
-
+		if (val!=nil) then self:SetPhotonNet_Running(val) end
 		return self:GetPhotonNet_Running(false)
 	end
 

@@ -48,7 +48,11 @@ function ENT:Photon_IsBraking()
 end
 
 --- Gets the running lights state.
--- @rbool The running light state.
+--- @return boolean running The running light state.
+--- @note `Running` is a networked cache of something both realms can derive:
+--- a vehicle is running when someone is driving it and it is not blacked out.
+--- Computing it here would let `Photon.SNet` drop the mapping entirely, and let
+--- `ELS_Blackout` stop writing `CAR_Running` to keep the two in step.
 function ENT:Photon_IsRunning()
 	return self:GetPhotonNet_Running(false)
 end
