@@ -16,9 +16,23 @@ GITHUB_ANNOTATION_RE = re.compile(
     r'(?P<message>.*)$'
 )
 
+# The workflow falls back to the empty tree when a branch has no branch point to scope
+# against. It is a tree rather than a commit, so it is never worth a reachability check.
+EMPTY_TREE = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+
 
 def sh(*args):
     return subprocess.run(args, capture_output=True, text=True)
+
+
+def unresolvable(*revs):
+    """Returns the given revs that this checkout cannot resolve to a commit."""
+    return [
+        rev
+        for rev in revs
+        if rev != EMPTY_TREE
+        and sh("git", "rev-parse", "--verify", "--quiet", f"{rev}^{{commit}}").returncode != 0
+    ]
 
 
 def changed_lines_by_file(base, head):
@@ -44,6 +58,19 @@ def changed_lines_by_file(base, head):
 
 
 def gate_lint(base, head):
+    missing = unresolvable(base, head)
+    if missing:
+        # A force-push orphans the commit github.event.before named, and nothing refetches it,
+        # so there is no diff left to scope the lint to. That is a state of the CI harness
+        # rather than a fault in the code being pushed, so say so and pass instead of failing
+        # the run, which would read as a lint finding against the push.
+        print(
+            "::warning title=GLua lint skipped::Cannot resolve {} in this checkout, so there is "
+            "no diff to scope the lint to. Skipped - this is a CI harness condition, not a lint "
+            "finding.".format(", ".join(missing))
+        )
+        return 0
+
     changed = changed_lines_by_file(base, head)
     files = sorted(changed)
     if not files:
