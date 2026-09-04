@@ -1,5 +1,37 @@
 # Changelog
 
+## [76.7.0](https://github.com/photonle/Photon/compare/v76.6.0...v76.7.0) (2026-09-04)
+
+
+### Bug Fixes
+
+* isolate and validate siren files so one bad addon doesn't kill EMV init ([#259](https://github.com/photonle/Photon/issues/259)) ([0aed750](https://github.com/photonle/Photon/commit/0aed750ff821d75f248173df06d912af2dda4ce5))
+* Let the server accept a turn signal cancel again ([e7d30f4](https://github.com/photonle/Photon/commit/e7d30f434698ccb3466aa78b56384dee510e2c3b))
+* Migrate siren sound sync to Photon.SNet to fix duplicate/stuck sirens ([d1e27d7](https://github.com/photonle/Photon/commit/d1e27d7027e6e773135eab7b956348a46925632a))
+* Move vehicle blackout to Photon.SNet so it applies immediately ([f8a84ad](https://github.com/photonle/Photon/commit/f8a84adcfe415f9e223b42df93b076523e654c55))
+* Prioritize explicit PI ref over PHOTON_INHERIT ([#256](https://github.com/photonle/Photon/issues/256)) ([4c9ac79](https://github.com/photonle/Photon/commit/4c9ac7908bcd4fcb955bf68ae31c137d4281dd44)), closes [#164](https://github.com/photonle/Photon/issues/164)
+* Publish brake, reverse and signal state over SimpleNet ([091e976](https://github.com/photonle/Photon/commit/091e9768882abe8828d0844fcf0108c69edc3298))
+* Return an empty table when an illumination stage has no Lights defined ([#255](https://github.com/photonle/Photon/issues/255)) ([b0a5202](https://github.com/photonle/Photon/commit/b0a5202f39764cc9db7b6d969d5bbac8a144f744)), closes [#220](https://github.com/photonle/Photon/issues/220)
+* Stop CAR_TurnLeft(false) turning the signal on ([3f7b57f](https://github.com/photonle/Photon/commit/3f7b57f82373aceb4b43dd236c5bf22b40ea6f27))
+
+
+### Performance
+
+* Pool the light render queues ([#263](https://github.com/photonle/Photon/issues/263)) ([5b325f3](https://github.com/photonle/Photon/commit/5b325f38ae12703bf17d16986fc2b24271084e0e))
+* Reuse per-vehicle frame tables and light index keys ([#265](https://github.com/photonle/Photon/issues/265)) ([f99b038](https://github.com/photonle/Photon/commit/f99b03843c842d15a9ff00cdca6c6a5588a314e7))
+* Stop padding the car light render table with placeholders ([#267](https://github.com/photonle/Photon/issues/267)) ([a6745e2](https://github.com/photonle/Photon/commit/a6745e2713ad455612077b0a3e9164a9645ac756))
+* Sweep light submaterials in one hook instead of a timer each ([#264](https://github.com/photonle/Photon/issues/264)) ([9d95328](https://github.com/photonle/Photon/commit/9d95328721cfdcf6ae1f264e06e96ecb748e871e))
+* Trim per-light allocations in the render path ([#262](https://github.com/photonle/Photon/issues/262)) ([cb462e6](https://github.com/photonle/Photon/commit/cb462e6476bcaf59e57dbb7fd95cff66b35e3a07))
+* Use xpcall instead of ProtectedCall for quarantined dispatch ([#253](https://github.com/photonle/Photon/issues/253)) ([9701c35](https://github.com/photonle/Photon/commit/9701c35710540abe87a3660d993b03a12b734f57))
+
+
+### Internal Changes
+
+* add an event-driven vehicle registry ([868585e](https://github.com/photonle/Photon/commit/868585eaa4e61e7bb69d9531f20917e4d3e0f09b))
+* Delete the never-loaded regular lighting server meta and net ([ca3e27e](https://github.com/photonle/Photon/commit/ca3e27e917ceda402a8cea4d42103ed12a1eb65f))
+* Drop the unused WheelIndex SimpleNet mapping ([f08d9ab](https://github.com/photonle/Photon/commit/f08d9ab3949b58bd72a6885922cfa4984eb708d7))
+* move the Photon vehicle flag onto SimpleNet ([b8973fa](https://github.com/photonle/Photon/commit/b8973fa5e53398105204ce585699aef4b9fd2617))
+
 ## [76.6.0](https://github.com/photonle/Photon/compare/v76.5.0...v76.6.0) (2026-08-15)
 
 
