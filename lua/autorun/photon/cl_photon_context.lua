@@ -95,7 +95,7 @@ properties.Add("photon_liveries", {
             return false
         end
 
-        if ply:GetVehicle() ~= ent then
+        if Photon.GetPlayerVehicle(ply) ~= ent then
             return false
         end
 

@@ -20,7 +20,7 @@ end
 
 --- Write a siren set change to the server.
 -- @integer arg Change mode.
--- @ent[opt=LocalPlayer():GetVehicle()] ent Entity to change siren on.
+-- @ent[opt=Photon.GetPlayerVehicle(LocalPlayer())] ent Entity to change siren on.
 -- @bool[opt=false] If the aux siren should be set.
 function EMVU.Net:SirenSet(arg, ent, aux)
 	if aux == nil then
@@ -28,7 +28,7 @@ function EMVU.Net:SirenSet(arg, ent, aux)
 	end
 
 	if not ent then
-		ent = LocalPlayer():GetVehicle()
+		ent = Photon.GetPlayerVehicle(LocalPlayer())
 	end
 	if not IsValid(ent) then return end
 
@@ -229,7 +229,7 @@ concommand.Add("photon_debug_getbones", function()
 	local ply = LocalPlayer()
 	local ent = ply:GetEyeTrace().Entity
 	if not IsValid(ent) then
-		ent = ply:GetVehicle()
+		ent = Photon.GetPlayerVehicle(ply)
 	end
 	if not IsValid(ent) then
 		return

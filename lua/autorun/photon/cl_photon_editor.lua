@@ -396,7 +396,7 @@ concommand.Add("photon_cfgbld_savelocal", function()
 	local ply = LocalPlayer()
 	if not IsValid(ply) then return end
 
-	local ent = ply:GetVehicle()
+	local ent = Photon.GetPlayerVehicle(ply)
 	if not IsValid(ent) then
 		chat.AddText(Color(255, 128, 64), "[Photon] You must be driving the vehicle you wish to save the configuration from." )
 		return
@@ -435,7 +435,7 @@ local luaConfigInstructions = [[
 concommand.Add( "photon_cfgbld_getlua", function()
 	local ply = LocalPlayer()
 
-	local ent = ply:GetVehicle()
+	local ent = Photon.GetPlayerVehicle(ply)
 	if not IsValid( ent ) then
 		chat.AddText( Color(255, 128, 64), "[Photon] You must be driving the vehicle you wish to save the configuration from." )
 		return

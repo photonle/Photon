@@ -292,7 +292,7 @@ function PhotonDebugTarget( ply, args )
 		return
 	end
 
-	local ent = ply:GetVehicle() or ply:GetEyeTrace().Entity
+	local ent = Photon.GetPlayerVehicle(ply) or ply:GetEyeTrace().Entity
 	if not IsValid( ent ) then return end
 	PHOTON_DEBUG_TARGET = ent
 	PHOTON_DEBUG_NAME = ent.VehicleName
@@ -469,7 +469,7 @@ local function PhotonCompileCreatorData(prefName, prefCategory, prefSiren, prefL
 end
 
 function PhotonCopyConfiguration()
-	local car = LocalPlayer():GetVehicle()
+	local car = Photon.GetPlayerVehicle(LocalPlayer())
 	if not IsValid( car ) then LocalPlayer():ChatPrint( "[Photon] You must be driving the target vehicle." ) return end
 	local returnCode = PhotonCompileCreatorData(GetConVar("photon_creator_name"):GetString(), GetConVar("photon_creator_category"):GetString(), GetConVar("photon_creator_siren"):GetInt(), GetConVar("photon_creator_lightbar"):GetString(), car)
 	SetClipboardText( returnCode )

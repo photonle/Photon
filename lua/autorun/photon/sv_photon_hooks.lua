@@ -11,7 +11,8 @@ function Photon:RunningScan()
 		if IsValid( v ) then Photon.RunQuarantined( v, ScanRunningVehicle ) end
 	end
 end
-hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, v)
+hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, seat)
+	local v = Photon.GetVehicleEntity(seat)
 	if IsValid(v) then
 		if v:Photon() then
 			v:CAR_Running(not v:CAR_IsBlackedOut())
@@ -22,7 +23,8 @@ hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, v)
 	end
 end)
 
-hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, v)
+hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, seat)
+  local v = Photon.GetVehicleEntity(seat)
   if IsValid(v) then
     if v:Photon() then
       v:CAR_Running(false)
@@ -42,7 +44,7 @@ hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, v)
 end)
 
 hook.Add("KeyPress", "Photon.KeyPress.SGM", function(ply, key)
-	local v = ply:GetVehicle()
+	local v = Photon.GetPlayerVehicle(ply)
 	if IsValid(v) and v:Photon() then
 		if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
 		if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
@@ -50,7 +52,7 @@ hook.Add("KeyPress", "Photon.KeyPress.SGM", function(ply, key)
 end)
 
 hook.Add("KeyRelease", "Photon.KeyRelease.SGM", function(ply, key)
-	local v = ply:GetVehicle()
+	local v = Photon.GetPlayerVehicle(ply)
 	if IsValid(v) and v:Photon() then
 		if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
 		if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
@@ -90,7 +92,8 @@ end)
 -- dev functions --
 
 concommand.Add( "photon_mat", function( ply, cmd, args )
-	local veh = ply:GetVehicle()
+	local veh = Photon.GetPlayerVehicle(ply)
+	if not IsValid(veh) then return end
 	PrintTable( veh:GetMaterials() )
 end)
 
@@ -102,7 +105,7 @@ end )
 
 hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, ent )
 	if not IsValid( ent ) then return false end
-	local isDriver = ( ply:GetVehicle() == ent )
+	local isDriver = ( Photon.GetPlayerVehicle(ply) == ent )
 	local isOwner = ( ent:GetOwner() == ply )
 	local spawner = ent.PhotonVehicleSpawner
 	local isSpawner = ( IsValid( spawner ) and ( spawner == ply ) )
@@ -133,6 +136,20 @@ end )
 
 hook.Add( "PlayerSpawnedVehicle", "Photon.PlayerVehicleSpawn", function( ply, ent )
 	ent.PhotonVehicleSpawner = ply
+end)
+
+-- Glide seats are child ents; block the driver from switching away while Photon
+-- controls live on the chassis (same idea as Photon 2's Glide_CanSwitchSeat).
+timer.Simple(5, function()
+	if not Glide then return end
+	hook.Add("Glide_CanSwitchSeat", "Photon.GlideSwitchSeat", function(ply, _seat)
+		local chassis = Photon.GetPlayerVehicle(ply)
+		if not IsValid(chassis) then return end
+		if not chassis:Photon() and not chassis:IsEMV() then return end
+		if isfunction(chassis.GetSeatDriver) and chassis:GetSeatDriver(1) == ply then
+			return false
+		end
+	end)
 end)
 
 -- Photon.AutoSkins.FetchSkins = function( id )
