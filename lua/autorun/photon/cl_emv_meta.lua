@@ -53,7 +53,7 @@ end)
 
 function EMVU:MakeEMV( emv, name )
 
-	if not emv or not emv:IsValid() or not emv:IsVehicle() or not emv:IsEMV() then return false end
+	if not emv or not emv:IsValid() or not Photon.IsPhotonChassis(emv) or not emv:IsEMV() then return false end
 
 	if name == "1" then return end
 
@@ -779,7 +779,7 @@ function EMVU:MakeEMV( emv, name )
 			local validEnts = {}
 			for _, ent in pairs( ents.FindInCone( startPos, normDirection, 2048, 0 ) ) do
 				if IsValid( ent ) and
-					ent:IsVehicle() and
+					Photon.IsPhotonChassis(ent) and
 					ent != self and
 					-- self:IsLineOfSightClear( ent:GetPos() ) and
 					ent:Photon_GetSpeed() > .5 then
@@ -1021,7 +1021,7 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 			for idx, sirenType in ipairs(sirenTypes) do
 				local currentSiren = v[sirenType]
 				if currentSiren then
-					local driver = v:GetDriver()
+					local driver = Photon.GetVehicleDriver(v)
 					local spos = v:GetPos()
 					local doppler = ((pos:Distance(spos+camVel)-pos:Distance(spos+v:GetVelocity()))/200)
 					if IsValid(plyVeh) and plyVeh == v then
@@ -1030,10 +1030,10 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 					updateRate = FrameTime()
 
 					if (IsValid(driver) and driver ~= viewEnt) or !IsValid(driver) then
-						local distBehind = v:WorldToLocal(viewEnt:GetPos())[2]
+						local distBehind = Photon.GetForwardSpeedComponent(v, v:WorldToLocal(viewEnt:GetPos()))
 
 						if IsValid(plyVeh) then
-							if plyVeh:GetParent() == v then
+							if plyVeh == v then
 								if currentSiren:GetVolume() ~= thirdPersonVolume and plyVeh:GetThirdPersonMode() then
 									currentSiren:ChangeVolume(thirdPersonVolume, updateRate)
 								elseif currentSiren:GetVolume() ~= interiorVolume and !plyVeh:GetThirdPersonMode() then

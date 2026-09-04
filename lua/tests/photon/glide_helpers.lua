@@ -83,8 +83,35 @@ return {
 				local ent = NewEnt()
 				state.ent = ent
 				ent.IsGlideVehicle = true
-				-- prop_physics class after spawn; flag alone is enough for the Glide branch
 				expect(Photon.ResolveVehicleListClass(ent)).to.equal(ent:GetClass())
+			end
+		},
+		{
+			name = "IsPhotonChassis accepts Glide when IsVehicle is false",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				-- prop_physics is not an engine vehicle; helper must still accept Glide flag
+				expect(Photon.IsPhotonChassis(ent)).to.beTrue()
+			end
+		},
+		{
+			name = "LookupVehiclesEntry finds by VehicleName display Name",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				local key = "photon_glide_test_" .. ent:EntIndex()
+				list.Set("Vehicles", key, {
+					Name = "Photon Glide Test Car",
+					Model = "models/error.mdl",
+					Class = "prop_vehicle_jeep",
+				})
+				state.listKey = key
+				ent.VehicleName = "Photon Glide Test Car"
+				local entry = Photon.LookupVehiclesEntry(ent)
+				expect(entry).to.beA("table")
+				expect(entry.Name).to.equal("Photon Glide Test Car")
 			end
 		}
 	},
@@ -92,7 +119,11 @@ return {
 	afterEach = function(state)
 		if IsValid(state.ent) then state.ent:Remove() end
 		if IsValid(state.chassis) then state.chassis:Remove() end
+		if state.listKey then
+			list.Set("Vehicles", state.listKey, nil)
+		end
 		state.ent = nil
 		state.chassis = nil
+		state.listKey = nil
 	end,
 }

@@ -37,7 +37,7 @@ local function MirrorAngle( ang, method )
 end
 
 function EMVU:PlayerSpawnedVehicle( ply, ent ) -- deprecated function, only gives legacy support
-	if IsValid( ent ) and ent:IsVehicle() then EMVU:SpawnedVehicle( ent ) end
+	if IsValid( ent ) and Photon.IsPhotonChassis(ent) then EMVU:SpawnedVehicle( ent ) end
 end
 
 function EMVU:SpawnedVehicle( ent )
@@ -84,11 +84,11 @@ function EMVU:ProcessExpressVehicles()
 		local v = resultVehicle.VehicleDefinition
 		list.Set( "Vehicles", v.Name, {
 			Name = v.Name,
-			Class = "prop_vehicle_jeep",
+			Class = v.Class or "prop_vehicle_jeep",
 			Category = v.Category,
 			Author = v.Author,
 			Model = v.Model,
-			KeyValues = { ["vehiclescript"] = v.KeyValues.vehiclescript },
+			KeyValues = v.KeyValues or { ["vehiclescript"] = "" },
 			IsEMV = true,
 			EMV = resultVehicle,
 			HasPhoton = true,

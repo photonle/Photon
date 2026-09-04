@@ -11,7 +11,7 @@ properties.Add("photon_siren", {
             return false
         end
 
-        if not ent:IsVehicle() then
+        if not Photon.IsPhotonChassis(ent) then
             return false
         end
 

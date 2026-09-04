@@ -1,7 +1,7 @@
 function EMVU:MakeEMV( ent, emv )
 
 	-- Avoid any uncaught errors if a bad entity is passed in
-	if not ent or not IsValid( ent ) or not ent:IsVehicle() then
+	if not ent or not IsValid( ent ) or not Photon.IsPhotonChassis(ent) then
 		error("[Photon] Error while creating ent from " .. tostring(ent) .. ". Aborting...")
 		return
 	end

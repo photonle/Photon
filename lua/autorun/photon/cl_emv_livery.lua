@@ -172,7 +172,7 @@ end
 -- @string val Unit ID.
 -- @ent ent Vehicle to apply to.
 Photon.AutoLivery.Apply = function(id, val, ent)
-	if not IsValid(ent) or not ent:IsVehicle() then return end
+	if not IsValid(ent) or not Photon.IsPhotonChassis(ent) then return end
 	local carMdl = ent:GetModel()
 	local car = Photon.AutoLivery.TranslationTable[tostring(carMdl)]
 
