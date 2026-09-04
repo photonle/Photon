@@ -842,7 +842,7 @@ function EMVU:MakeEMV( emv, name )
 	end
 
 	function emv:Photon_RadarTick()
-		if not IsValid( LocalPlayer():GetVehicle() ) or not self == LocalPlayer():GetVehicle() then return end
+		if Photon.GetPlayerVehicle(LocalPlayer()) ~= self then return end
 		local rear = false
 		local fastest, nearest = self:Photon_RadarTargetSpeeds( rear )
 		PHOTON_RADAR_DISP_FAST = fastest or 0
@@ -1015,7 +1015,7 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 
 	local plyVeh = false
 	if viewEnt == ply then
-		plyVeh = ply:GetVehicle()
+		plyVeh = Photon.GetPlayerVehicle(ply)
 	end
 		for _,v in ipairs(EMVU:AllVehicles()) do
 			for idx, sirenType in ipairs(sirenTypes) do
@@ -1024,10 +1024,8 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 					local driver = v:GetDriver()
 					local spos = v:GetPos()
 					local doppler = ((pos:Distance(spos+camVel)-pos:Distance(spos+v:GetVelocity()))/200)
-					if IsValid(plyVeh) then
-						if plyVeh:GetParent() == v then
-							doppler = 0
-						end
+					if IsValid(plyVeh) and plyVeh == v then
+						doppler = 0
 					end
 					updateRate = FrameTime()
 

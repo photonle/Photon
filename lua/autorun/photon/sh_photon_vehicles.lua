@@ -4,6 +4,20 @@ local modelIgnore = {
 	["models/props_phx/carseat2.mdl"] = true,
 }
 
+--- Resolve the Vehicles-list key for an entity (stock class or Glide ent class).
+-- @ent ent
+-- @treturn string|nil
+function Photon.ResolveVehicleListClass(ent)
+	if not IsValid(ent) then return nil end
+	if Photon.IsGlideVehicle(ent) then
+		return ent:GetClass()
+	end
+	if ent.GetVehicleClass then
+		return ent:GetVehicleClass()
+	end
+	return ent:GetClass()
+end
+
 function Photon:RecoverVehicleName( ent )
 	if not IsValid( ent ) then return false end
 	local model = tostring(ent:GetModel())
@@ -12,16 +26,17 @@ function Photon:RecoverVehicleName( ent )
 		return PhotonIndex
 	end
 
-	if ent.GetVehicleClass and ent:GetVehicleClass() then
-		local vehicleClass = ent:GetVehicleClass()
+	local vehicleClass = Photon.ResolveVehicleListClass(ent)
+	if vehicleClass then
 		local vehicleTable = list.GetForEdit("Vehicles")[vehicleClass]
 		if vehicleTable and istable(vehicleTable) then
 			return vehicleClass
 		end
 	end
 
+	local modelLower = string.lower(model)
 	for key,car in pairs( list.GetForEdit("Vehicles") ) do
-		if string.lower(car.Model) == string.lower(model) then
+		if isstring(car.Model) and string.lower(car.Model) == modelLower then
 			return key
 		end
 	end
@@ -63,14 +78,7 @@ function Photon:EntityCreated( ent )
 						return
 					end
 
-					local base = ent.Base or ""
-					local class
-					if not string.find(base, "glide") and ent.GetVehicleClass then
-						class = ent:GetVehicleClass()
-					else
-						class = ent:GetClass()
-					end
-
+					local class = Photon.ResolveVehicleListClass(ent)
 					local lst = class and list.GetForEdit("Vehicles")[class]
 					if lst and istable(lst) then
 						ent.VehicleName = class
