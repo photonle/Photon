@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Entity</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../style.359524c0f6.css" type="text/css">
+</head>
+<body>
+<header class="ll-header">
+	<div class="ll-header-inner">
+		<a class="ll-brand" href="../index.html">
+			<img src="../assets/logos/photon.svg" alt="" width="26" height="26">
+			<span>Photon Documentation</span>
+		</a>
+		<a class="ll-repo-link" href="https://github.com/photonle/Photon" target="_blank" rel="noreferrer">Repository</a>
+	</div>
+</header>
+<div id="container">
+	<div id="main">
+		<div id="navigation">
+<div class="ll-search"><input type="search" id="ll-search-input" autocomplete="off" spellcheck="false" placeholder="Search docs… (/)" aria-label="Search documentation"><ul id="ll-search-results" class="ll-kind-body" hidden></ul></div>
+<div class="ll-contents-block"><div class="ll-kind-header"><h2>Contents</h2></div><ul class="ll-kind-body nowrap">
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Classes">Classes</a></li>
+</ul></div>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Topics</h2></div><span class="ll-count">2</span></summary>
+<ul class="ll-kind-body">
+<li><a href="../topics/doc-comments.html">Writing Doc Comments<svg class="ll-pin" viewBox="0 0 24 24" role="img"><title>Pinned</title><path d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg></a></li>
+<li><a href="../topics/design-constraints.html">Design Constraints</a></li>
+</ul></details>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Metatables</h2></div><span class="ll-count">1</span></summary>
+<ul class="ll-kind-body nowrap">
+<li><strong>Entity</strong></li>
+</ul>
+</details>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Modules</h2></div><span class="ll-count">28</span></summary>
+<ul class="ll-kind-body nowrap">
+<li><a href="../modules/Photon.Registry.html">Photon.Registry</a></li>
+<li><a href="../modules/Photon.SNet.html">Photon.SNet</a></li>
+<li><a href="../modules/autorun.emv_init.html">autorun.emv_init</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_airel.html">autorun.photon.cl_emv_airel</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_init.html">autorun.photon.cl_emv_init</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_listener.html">autorun.photon.cl_emv_listener</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_livery.html">autorun.photon.cl_emv_livery</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_meta.html">autorun.photon.cl_emv_meta</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_net.html">autorun.photon.cl_emv_net</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_builder.html">autorun.photon.cl_photon_builder</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_editor.html">autorun.photon.cl_photon_editor</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_eng.html">autorun.photon.cl_photon_eng</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_hooks.html">autorun.photon.cl_photon_hooks</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_hud.html">autorun.photon.cl_photon_hud</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_menu.html">autorun.photon.cl_photon_menu</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_meta.html">autorun.photon.cl_photon_meta</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_settings.html">autorun.photon.cl_photon_settings</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_config.html">autorun.photon.sh_emv_config</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_helper.html">autorun.photon.sh_emv_helper</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_init.html">autorun.photon.sh_emv_init</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_vehicles.html">autorun.photon.sh_emv_vehicles</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_init.html">autorun.photon.sh_photon_init</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_vehicles.html">autorun.photon.sh_photon_vehicles</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_xml.html">autorun.photon.sh_photon_xml</a></li>
+<li><a href="../modules/autorun.photon.shared.sh_functional.html">autorun.photon.shared.sh_functional</a></li>
+<li><a href="../modules/autorun.photon.shared.sh_logging.html">autorun.photon.shared.sh_logging</a></li>
+<li><a href="../modules/autorun.photon.sv_emv_net.html">autorun.photon.sv_emv_net</a></li>
+<li><a href="../modules/autorun.photon.sv_photon_hooks.html">autorun.photon.sv_photon_hooks</a></li>
+</ul>
+</details>
+<div class="ll-sidebar-footer"><p>Generated from LuaLS documentation JSON.</p><p>Theme by <a href="https://limelightgaming.info">Limelight Gaming</a>.</p></div>
+		</div>
+		<div id="content">
+<div class="ll-module-header"><h1>Entity</h1></div>
+<div class="ll-module-body"><p>Entity accessors generated by SimpleNet.</p>
+<p><code>Photon.SNet:Map</code> hangs a <code>Set</code>/<code>Get</code> pair off the <code>Entity</code> metatable for
+every variable it registers, at load time. Nothing declares them in source,
+so neither the editor nor the docs site can see them — this file declares
+them instead, mirroring what <code>sh_simplenet.lua</code> registers at the bottom.</p>
+<p>Definitions only: <code>--- @meta</code> marks the whole file as declarations rather
+than executable code, and nothing includes it — <code>lua/autorun/photon/meta/</code>
+is not on any load path, and its <code>.glualint.json</code> turns off the
+unused-variable warning every empty declaration in here would otherwise
+raise. Keep it in step with the <code>Photon.SNet:Map</code> calls in
+<a href="https://github.com/photonle/Photon/blob/development/lua/autorun/photon/shared/sh_simplenet.lua">sh_simplenet.lua</a> —
+a name that is registered but not declared here still works at runtime, it
+is only invisible to tooling.</p>
+<p>Every getter takes the value to fall back on when the client has not been
+told the real one yet, and every setter is serverside: a client that writes
+one changes only its own copy, until the next broadcast overwrites it.</p></div>
+<div class="ll-module-header"><h2 class="section-header"><a name="Functions"></a>Functions</h2></div>
+<div class="ll-module-body"><dl class="function">
+<h3 class="section-header">Emergency Lighting</h3>
+<dt><a name="Entity.GetPhotonNet_Blackout"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_Blackout<span class="ll-args">(default)</span><span class="ll-returns"> → boolean</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L182">Source ☍</a></dt>
+<dd>
+<p>Whether the vehicle is blacked out, suppressing its running lights.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">boolean?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">boolean</span><span class="ll-arg-desc">Whether the vehicle is blacked out.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_Enabled"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_Enabled<span class="ll-args">(default)</span><span class="ll-returns"> → boolean</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L138">Source ☍</a></dt>
+<dd>
+<p>Whether emergency lighting is enabled on the vehicle.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">boolean?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">boolean</span><span class="ll-arg-desc">Whether emergency lighting is enabled.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_LEStayOn"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_LEStayOn<span class="ll-args">(default)</span><span class="ll-returns"> → boolean</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L126">Source ☍</a></dt>
+<dd>
+<p>Whether the vehicle's emergency lighting stays on with the engine off.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">boolean?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">boolean</span><span class="ll-arg-desc">Whether lighting stays on.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_LightOn"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_LightOn<span class="ll-args">(default)</span><span class="ll-returns"> → boolean</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L149">Source ☍</a></dt>
+<dd>
+<p>Whether the vehicle's emergency lights are on.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">boolean?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">boolean</span><span class="ll-arg-desc">Whether the lights are on.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_LightOption"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_LightOption<span class="ll-args">(default)</span><span class="ll-returns"> → integer</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L160">Source ☍</a></dt>
+<dd>
+<p>The vehicle's active lighting stage.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">integer?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">integer</span><span class="ll-arg-desc">Lighting option index.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_Preset"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_Preset<span class="ll-args">(default)</span><span class="ll-returns"> → integer</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L171">Source ☍</a></dt>
+<dd>
+<p>The vehicle's active lighting preset.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">integer?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">integer</span><span class="ll-arg-desc">Preset index; 0 for none.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_Blackout"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_Blackout<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L176">Source ☍</a></dt>
+<dd>
+<p>Set whether the vehicle is blacked out.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">boolean</span><span class="ll-arg-desc">Whether the vehicle is blacked out.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_Enabled"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_Enabled<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L132">Source ☍</a></dt>
+<dd>
+<p>Set whether emergency lighting is enabled on the vehicle. Read through
+<code>Entity:ELS_Enabled</code>; whether the vehicle has Photon at all is <code>HasPhoton</code>.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">boolean</span><span class="ll-arg-desc">Whether emergency lighting is enabled.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_LEStayOn"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_LEStayOn<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L120">Source ☍</a></dt>
+<dd>
+<p>Set whether the vehicle's emergency lighting stays on with the engine off.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">boolean</span><span class="ll-arg-desc">Whether lighting stays on.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_LightOn"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_LightOn<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L143">Source ☍</a></dt>
+<dd>
+<p>Set whether the vehicle's emergency lights are on.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">boolean</span><span class="ll-arg-desc">Whether the lights are on.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_LightOption"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_LightOption<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L154">Source ☍</a></dt>
+<dd>
+<p>Set the vehicle's active lighting stage.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">integer</span><span class="ll-arg-desc">Lighting option index, 1-16.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_Preset"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_Preset<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L165">Source ☍</a></dt>
+<dd>
+<p>Set the vehicle's active lighting preset.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">integer</span><span class="ll-arg-desc">Preset index; 0 for none.</span></li>
+</ul>
+
+
+</dd>
+<h3 class="section-header">Identity</h3>
+<dt><a name="Entity.GetPhotonNet_LiveryID"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_LiveryID<span class="ll-args">(default)</span><span class="ll-returns"> → string</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L407">Source ☍</a></dt>
+<dd>
+<p>The vehicle's selected livery.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">string?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">string</span><span class="ll-arg-desc">Livery ID.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_SelectionString"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_SelectionString<span class="ll-args">(default)</span><span class="ll-returns"> → string</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L418">Source ☍</a></dt>
+<dd>
+<p>The vehicle's auto-livery selection, as a <code>.</code>-joined path of indices.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">string?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">string</span><span class="ll-arg-desc">Selection string.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_UnitNumber"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_UnitNumber<span class="ll-args">(default)</span><span class="ll-returns"> → string</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L396">Source ☍</a></dt>
+<dd>
+<p>The vehicle's displayed unit number.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">string?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">string</span><span class="ll-arg-desc">Unit number.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_VehicleIndex"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_VehicleIndex<span class="ll-args">(default)</span><span class="ll-returns"> → string</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L385">Source ☍</a></dt>
+<dd>
+<p>The registered name of the Photon vehicle this entity is running.
+Everything else about the vehicle is looked up from this, so a client that
+has not received it yet cannot render the vehicle at all.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">string?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">string</span><span class="ll-arg-desc">Vehicle index.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_LiveryID"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_LiveryID<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L401">Source ☍</a></dt>
+<dd>
+<p>Set the vehicle's selected livery.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">string</span><span class="ll-arg-desc">Livery ID.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_SelectionString"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_SelectionString<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L412">Source ☍</a></dt>
+<dd>
+<p>Set the vehicle's auto-livery selection, as a <code>.</code>-joined path of indices.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">string</span><span class="ll-arg-desc">Selection string.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_UnitNumber"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_UnitNumber<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L390">Source ☍</a></dt>
+<dd>
+<p>Set the vehicle's displayed unit number.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">string</span><span class="ll-arg-desc">Unit number.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_VehicleIndex"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_VehicleIndex<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L377">Source ☍</a></dt>
+<dd>
+<p>Set the registered name of the Photon vehicle this entity is running.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">string</span><span class="ll-arg-desc">Vehicle index, as registered in <code><a href="autorun.photon.sh_photon_init.html#Photon.Vehicles">Photon.Vehicles</a></code>.</span></li>
+</ul>
+
+
+</dd>
+<h3 class="section-header">Illumination</h3>
+<dt><a name="Entity.GetPhotonNet_IlluminationOn"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_IlluminationOn<span class="ll-args">(default)</span><span class="ll-returns"> → boolean</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L360">Source ☍</a></dt>
+<dd>
+<p>Whether the vehicle's scene illumination is on.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">boolean?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">boolean</span><span class="ll-arg-desc">Whether illumination is on.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_IlluminationOption"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_IlluminationOption<span class="ll-args">(default)</span><span class="ll-returns"> → integer</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L371">Source ☍</a></dt>
+<dd>
+<p>The vehicle's active illumination stage.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">integer?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">integer</span><span class="ll-arg-desc">Illumination option index.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_IlluminationOn"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_IlluminationOn<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L354">Source ☍</a></dt>
+<dd>
+<p>Set whether the vehicle's scene illumination is on.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">boolean</span><span class="ll-arg-desc">Whether illumination is on.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_IlluminationOption"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_IlluminationOption<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L365">Source ☍</a></dt>
+<dd>
+<p>Set the vehicle's active illumination stage.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">integer</span><span class="ll-arg-desc">Illumination option index, 1-16.</span></li>
+</ul>
+
+
+</dd>
+<h3 class="section-header">Siren</h3>
+<dt><a name="Entity.GetPhotonNet_AuxSirenSet"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_AuxSirenSet<span class="ll-args">(default)</span><span class="ll-returns"> → integer</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L227">Source ☍</a></dt>
+<dd>
+<p>The vehicle's auxiliary siren set.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">integer?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">integer</span><span class="ll-arg-desc">Siren set index.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_HornSound"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_HornSound<span class="ll-args">(default)</span><span class="ll-returns"> → string</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L313">Source ☍</a></dt>
+<dd>
+<p>The sound playing on the vehicle's horn channel.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">string?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">string</span><span class="ll-arg-desc">Sound file or script, or <code>&quot;&quot;</code> when the channel is silent.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_HornVolume"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_HornVolume<span class="ll-args">(default)</span><span class="ll-returns"> → number</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L325">Source ☍</a></dt>
+<dd>
+<p>The sound level of the vehicle's horn.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">number?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">number</span><span class="ll-arg-desc">Source sound level (SNDLVL), not a 0-1 scale.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_ManualSound"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_ManualSound<span class="ll-args">(default)</span><span class="ll-returns"> → string</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L289">Source ☍</a></dt>
+<dd>
+<p>The sound playing on the vehicle's manual siren channel.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">string?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">string</span><span class="ll-arg-desc">Sound file or script, or <code>&quot;&quot;</code> when the channel is silent.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_ManualVolume"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_ManualVolume<span class="ll-args">(default)</span><span class="ll-returns"> → number</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L301">Source ☍</a></dt>
+<dd>
+<p>The sound level of the vehicle's manual siren.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">number?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">number</span><span class="ll-arg-desc">Source sound level (SNDLVL), not a 0-1 scale.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_Siren2Sound"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_Siren2Sound<span class="ll-args">(default)</span><span class="ll-returns"> → string</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L263">Source ☍</a></dt>
+<dd>
+<p>The sound playing on the vehicle's secondary siren channel.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">string?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">string</span><span class="ll-arg-desc">Sound file or script, or <code>&quot;&quot;</code> when the channel is silent.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_Siren2Volume"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_Siren2Volume<span class="ll-args">(default)</span><span class="ll-returns"> → number</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L276">Source ☍</a></dt>
+<dd>
+<p>The sound level of the vehicle's secondary siren.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">number?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">number</span><span class="ll-arg-desc">Source sound level (SNDLVL), not a 0-1 scale.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_SirenOn"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_SirenOn<span class="ll-args">(default)</span><span class="ll-returns"> → boolean</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L194">Source ☍</a></dt>
+<dd>
+<p>Whether the vehicle's siren is on.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">boolean?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">boolean</span><span class="ll-arg-desc">Whether the siren is on.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_SirenOption"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_SirenOption<span class="ll-args">(default)</span><span class="ll-returns"> → integer</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L216">Source ☍</a></dt>
+<dd>
+<p>The vehicle's active siren tone.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">integer?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">integer</span><span class="ll-arg-desc">Siren option index.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_SirenSet"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_SirenSet<span class="ll-args">(default)</span><span class="ll-returns"> → integer</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L205">Source ☍</a></dt>
+<dd>
+<p>The vehicle's primary siren set.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">integer?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">integer</span><span class="ll-arg-desc">Siren set index.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_SirenSound"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_SirenSound<span class="ll-args">(default)</span><span class="ll-returns"> → string</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L239">Source ☍</a></dt>
+<dd>
+<p>The sound playing on the vehicle's primary siren channel.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">string?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">string</span><span class="ll-arg-desc">Sound file or script, or <code>&quot;&quot;</code> when the channel is silent.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_SirenVolume"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_SirenVolume<span class="ll-args">(default)</span><span class="ll-returns"> → number</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L251">Source ☍</a></dt>
+<dd>
+<p>The sound level of the vehicle's primary siren.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">number?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">number</span><span class="ll-arg-desc">Source sound level (SNDLVL), not a 0-1 scale.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_AuxSirenSet"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_AuxSirenSet<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L221">Source ☍</a></dt>
+<dd>
+<p>Set the vehicle's auxiliary siren set.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">integer</span><span class="ll-arg-desc">Siren set index, 1-1024.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_HornSound"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_HornSound<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L307">Source ☍</a></dt>
+<dd>
+<p>Set the sound playing on the vehicle's horn channel. Setting it starts
+playback; clearing it to an empty string stops the channel.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">string</span><span class="ll-arg-desc">Sound file or script to play, or <code>&quot;&quot;</code> to stop.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_HornVolume"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_HornVolume<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L319">Source ☍</a></dt>
+<dd>
+<p>Set the sound level of the vehicle's horn, taken from the siren set's
+<code>Volume</code> field.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">number</span><span class="ll-arg-desc">Source sound level (SNDLVL), not a 0-1 scale.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_ManualSound"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_ManualSound<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L283">Source ☍</a></dt>
+<dd>
+<p>Set the sound playing on the vehicle's manual siren channel. Starting one
+ducks the primary siren rather than stopping it, so clearing this resumes
+the primary siren instead of replaying it from the start.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">string</span><span class="ll-arg-desc">Sound file or script to play, or <code>&quot;&quot;</code> to stop.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_ManualVolume"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_ManualVolume<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L295">Source ☍</a></dt>
+<dd>
+<p>Set the sound level of the vehicle's manual siren, taken from the siren
+set's <code>Volume</code> field.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">number</span><span class="ll-arg-desc">Source sound level (SNDLVL), not a 0-1 scale.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_Siren2Sound"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_Siren2Sound<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L257">Source ☍</a></dt>
+<dd>
+<p>Set the sound playing on the vehicle's secondary siren channel, layered
+over the primary siren when the vehicle has an auxiliary siren set.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">string</span><span class="ll-arg-desc">Sound file or script to play, or <code>&quot;&quot;</code> to stop.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_Siren2Volume"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_Siren2Volume<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L270">Source ☍</a></dt>
+<dd>
+<p>Set the sound level of the vehicle's secondary siren. Taken from the
+primary siren set's <code>Volume</code> field, even though the tone itself comes from
+the auxiliary set.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">number</span><span class="ll-arg-desc">Source sound level (SNDLVL), not a 0-1 scale.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_SirenOn"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_SirenOn<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L188">Source ☍</a></dt>
+<dd>
+<p>Set whether the vehicle's siren is on.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">boolean</span><span class="ll-arg-desc">Whether the siren is on.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_SirenOption"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_SirenOption<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L210">Source ☍</a></dt>
+<dd>
+<p>Set the vehicle's active siren tone.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">integer</span><span class="ll-arg-desc">Siren option index, 1-16.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_SirenSet"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_SirenSet<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L199">Source ☍</a></dt>
+<dd>
+<p>Set the vehicle's primary siren set.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">integer</span><span class="ll-arg-desc">Siren set index, 1-1024.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_SirenSound"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_SirenSound<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L233">Source ☍</a></dt>
+<dd>
+<p>Set the sound playing on the vehicle's primary siren channel. Setting it
+starts playback; clearing it to an empty string stops the channel.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">string</span><span class="ll-arg-desc">Sound file or script to play, or <code>&quot;&quot;</code> to stop.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_SirenVolume"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_SirenVolume<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L245">Source ☍</a></dt>
+<dd>
+<p>Set the sound level of the vehicle's primary siren, taken from the siren
+set's <code>Volume</code> field.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">number</span><span class="ll-arg-desc">Source sound level (SNDLVL), not a 0-1 scale.</span></li>
+</ul>
+
+
+</dd>
+<h3 class="section-header">Traffic Advisor</h3>
+<dt><a name="Entity.GetPhotonNet_TrafficOn"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_TrafficOn<span class="ll-args">(default)</span><span class="ll-returns"> → boolean</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L337">Source ☍</a></dt>
+<dd>
+<p>Whether the vehicle's traffic advisor is on.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">boolean?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">boolean</span><span class="ll-arg-desc">Whether the traffic advisor is on.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_TrafficOption"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_TrafficOption<span class="ll-args">(default)</span><span class="ll-returns"> → integer</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L348">Source ☍</a></dt>
+<dd>
+<p>The vehicle's traffic advisor pattern.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">integer?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">integer</span><span class="ll-arg-desc">Traffic option index.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_TrafficOn"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_TrafficOn<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L331">Source ☍</a></dt>
+<dd>
+<p>Set whether the vehicle's traffic advisor is on.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">boolean</span><span class="ll-arg-desc">Whether the traffic advisor is on.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_TrafficOption"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_TrafficOption<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L342">Source ☍</a></dt>
+<dd>
+<p>Set the vehicle's traffic advisor pattern.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">integer</span><span class="ll-arg-desc">Traffic option index, 1-16.</span></li>
+</ul>
+
+
+</dd>
+<h3 class="section-header">Vehicle State</h3>
+<dt><a name="Entity.GetPhotonNet_Blinker"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_Blinker<span class="ll-args">(default)</span><span class="ll-returns"> → integer</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L68">Source ☍</a></dt>
+<dd>
+<p>The vehicle's blinker state.</p>
+<blockquote class="ll-alert ll-alert-ambiguous"><p class="ll-alert-title">Ambiguous</p><p>This entry is unclear or incomplete.</p><p>Registered, but nothing in the engine reads or writes it — the live signal state is <code>CurrentSignal</code>.</p></blockquote>
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">integer?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">integer</span><span class="ll-arg-desc">Current blinker value.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_Braking"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_Braking<span class="ll-args">(default)</span><span class="ll-returns"> → boolean</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L92">Source ☍</a></dt>
+<dd>
+<p>Whether the vehicle is braking.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">boolean?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">boolean</span><span class="ll-arg-desc">Whether the vehicle is braking.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_CurrentSignal"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_CurrentSignal<span class="ll-args">(default)</span><span class="ll-returns"> → integer</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L53">Source ☍</a></dt>
+<dd>
+<p>The vehicle's turn-signal state, as one of the <code>CAR_BLINKER_*</code> constants.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">integer?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">integer</span><span class="ll-arg-desc">Current signal value.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_HasPhoton"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_HasPhoton<span class="ll-args">(default)</span><span class="ll-returns"> → boolean</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L42">Source ☍</a></dt>
+<dd>
+<p>Whether the vehicle is a Photon vehicle. Prefer <code>Entity:Photon</code>, which is
+the supported way to ask and also covers the non-vehicle case.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">boolean?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">boolean</span><span class="ll-arg-desc">Whether the vehicle has Photon.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_Headlights"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_Headlights<span class="ll-args">(default)</span><span class="ll-returns"> → boolean</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L81">Source ☍</a></dt>
+<dd>
+<p>Whether the vehicle's headlights are on.</p>
+<blockquote class="ll-alert ll-alert-ambiguous"><p class="ll-alert-title">Ambiguous</p><p>This entry is unclear or incomplete.</p><p>Registered, but nothing in the engine reads or writes it.</p></blockquote>
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">boolean?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">boolean</span><span class="ll-arg-desc">Whether the headlights are on.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_Reversing"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_Reversing<span class="ll-args">(default)</span><span class="ll-returns"> → boolean</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L103">Source ☍</a></dt>
+<dd>
+<p>Whether the vehicle is reversing.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">boolean?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">boolean</span><span class="ll-arg-desc">Whether the vehicle is reversing.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.GetPhotonNet_Running"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>GetPhotonNet_Running<span class="ll-args">(default)</span><span class="ll-returns"> → boolean</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L114">Source ☍</a></dt>
+<dd>
+<p>Whether the vehicle's engine is running.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">default</span><span class="types">boolean?</span><span class="ll-arg-desc">Value to return if none has been networked yet.</span></li>
+</ul>
+<p class="ll-arg-label">Returns</p>
+<ol class="ll-args-list">
+<li><span></span><span class="types">boolean</span><span class="ll-arg-desc">Whether the engine is running.</span></li>
+</ol>
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_Blinker"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_Blinker<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L60">Source ☍</a></dt>
+<dd>
+<p>Set the vehicle's blinker state.</p>
+<blockquote class="ll-alert ll-alert-ambiguous"><p class="ll-alert-title">Ambiguous</p><p>This entry is unclear or incomplete.</p><p>Registered, but nothing in the engine reads or writes it — the live signal state is <code>CurrentSignal</code>.</p></blockquote>
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">integer</span><span class="ll-arg-desc">New blinker value.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_Braking"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_Braking<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L86">Source ☍</a></dt>
+<dd>
+<p>Set whether the vehicle is braking.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">boolean</span><span class="ll-arg-desc">Whether the vehicle is braking.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_CurrentSignal"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_CurrentSignal<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L47">Source ☍</a></dt>
+<dd>
+<p>Set the vehicle's turn-signal state, as one of the <code>CAR_BLINKER_*</code> constants.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">integer</span><span class="ll-arg-desc">New signal value.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_HasPhoton"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_HasPhoton<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L35">Source ☍</a></dt>
+<dd>
+<p>Set whether the vehicle is a Photon vehicle, i.e. whether <code><a href="autorun.photon.cl_photon_meta.html#Photon.SetupCar">Photon:SetupCar</a></code>
+has run on it. Set once during setup and never cleared.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">boolean</span><span class="ll-arg-desc">Whether the vehicle has Photon.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_Headlights"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_Headlights<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L74">Source ☍</a></dt>
+<dd>
+<p>Set whether the vehicle's headlights are on.</p>
+<blockquote class="ll-alert ll-alert-ambiguous"><p class="ll-alert-title">Ambiguous</p><p>This entry is unclear or incomplete.</p><p>Registered, but nothing in the engine reads or writes it.</p></blockquote>
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">boolean</span><span class="ll-arg-desc">Whether the headlights are on.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_Reversing"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_Reversing<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L97">Source ☍</a></dt>
+<dd>
+<p>Set whether the vehicle is reversing.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">boolean</span><span class="ll-arg-desc">Whether the vehicle is reversing.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Entity.SetPhotonNet_Running"></a><span class="ll-realm state-server" title="Server">Server</span><strong class="ll-symbol">Entity<span class="ll-sep">:</span>SetPhotonNet_Running<span class="ll-args">(value)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L108">Source ☍</a></dt>
+<dd>
+<p>Set whether the vehicle's engine is running.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">value</span><span class="types">boolean</span><span class="ll-arg-desc">Whether the engine is running.</span></li>
+</ul>
+
+
+</dd>
+</dl></div>
+<div class="ll-module-header"><h2 class="section-header"><a name="Classes"></a>Classes</h2></div>
+<div class="ll-module-body"><dl class="function">
+<dt><a name="Entity"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Entity</strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/meta/sh_simplenet.stubs.lua#L27">Source ☍</a></dt>
+<dd>
+
+
+
+
+</dd>
+</dl></div>
+		</div>
+	</div>
+</div>
+<script>
+var ROOT = "../";
+(function () {
+	var input = document.getElementById("ll-search-input");
+	var list = document.getElementById("ll-search-results");
+	if (!input || !list) { return; }
+	var index = null, loading = false;
+
+	function load() {
+		if (index || loading) { return; }
+		loading = true;
+		fetch(ROOT + "search.json").then(function (response) {
+			return response.json();
+		}).then(function (data) {
+			index = data;
+			loading = false;
+			render();
+		}).catch(function () {
+			loading = false;
+			list.innerHTML = "<li><p>Search index unavailable.</p></li>";
+			list.hidden = false;
+		});
+	}
+
+	// Lower is better: exact name, then prefix, then anywhere in the name, then
+	// only in the description.
+	function score(entry, query) {
+		var name = entry.n.toLowerCase();
+		if (name === query) { return 0; }
+		if (name.lastIndexOf(query, 0) === 0) { return 1; }
+		if (name.indexOf(query) > 0) { return 2; }
+		return (entry.d || "").toLowerCase().indexOf(query) >= 0 ? 3 : -1;
+	}
+
+	function escape(text) {
+		return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	}
+
+	function render() {
+		var query = input.value.trim().toLowerCase();
+		if (!query) { list.hidden = true; list.innerHTML = ""; return; }
+        if (!index) { return; }
+		var hits = [];
+		for (var i = 0; i < index.length; i++) {
+			var rank = score(index[i], query);
+			if (rank >= 0) { hits.push([rank, index[i].n.length, index[i]]); }
+		}
+		hits.sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; });
+		list.innerHTML = hits.slice(0, 20).map(function (hit) {
+			var entry = hit[2];
+			return '<li><a href="' + ROOT + entry.u + '">' + escape(entry.n)
+				+ '<span class="ll-search-kind">' + escape(entry.k) + "</span></a></li>";
+		}).join("") || "<li><p>No matches.</p></li>";
+		list.hidden = false;
+	}
+
+	input.addEventListener("focus", load);
+	input.addEventListener("input", function () { load(); render(); });
+	input.addEventListener("keydown", function (event) {
+		if (event.key === "Escape") { input.value = ""; render(); input.blur(); }
+		if (event.key === "Enter") {
+			var first = list.querySelector("a");
+			if (first) { window.location.href = first.href; }
+		}
+	});
+
+	// "/" jumps to the box, unless the reader is already typing somewhere -
+	// preventDefault stops the slash itself landing in the field.
+	document.addEventListener("keydown", function (event) {
+		if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) { return; }
+		var active = document.activeElement;
+		if (active && (active.isContentEditable
+			|| /^(input|textarea|select)$/i.test(active.tagName))) { return; }
+		event.preventDefault();
+		input.focus();
+		input.select();
+	});
+})();
+</script>
+</body>
+</html>

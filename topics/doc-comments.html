@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Writing Doc Comments</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../style.359524c0f6.css" type="text/css">
+</head>
+<body>
+<header class="ll-header">
+	<div class="ll-header-inner">
+		<a class="ll-brand" href="../index.html">
+			<img src="../assets/logos/photon.svg" alt="" width="26" height="26">
+			<span>Photon Documentation</span>
+		</a>
+		<a class="ll-repo-link" href="https://github.com/photonle/Photon" target="_blank" rel="noreferrer">Repository</a>
+	</div>
+</header>
+<div id="container">
+	<div id="main">
+		<div id="navigation">
+<div class="ll-search"><input type="search" id="ll-search-input" autocomplete="off" spellcheck="false" placeholder="Search docs… (/)" aria-label="Search documentation"><ul id="ll-search-results" class="ll-kind-body" hidden></ul></div>
+<div class="ll-contents-block"><div class="ll-kind-header"><h2>Contents</h2></div><ul class="ll-kind-body nowrap">
+<li><a href="#pipeline">Pipeline</a></li>
+<li><a href="#topic-files-and-folders">Topic files and folders</a></li>
+<li><a href="#function-level-use-real-luacats-annotations">Function-level: use real LuaCATS annotations</a></li>
+<li><a href="#function-level-this-codebases-own-tags">Function-level: this codebase&#x27;s own tags</a></li>
+<li><a href="#constant-families-alias-gathers-the-constants-it-names">Constant families: @alias gathers the constants it names</a></li>
+<li><a href="#class-pages-namespace-classname-gathers-a-classs-members">Class pages: @namespace &lt;ClassName&gt; gathers a class&#x27;s members</a></li>
+<li><a href="#file-header-tags">File-header tags</a></li>
+<li><a href="#porting-from-ldoc">Porting from LDoc</a></li>
+</ul></div>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Topics</h2></div><span class="ll-count">2</span></summary>
+<ul class="ll-kind-body">
+<li><strong>Writing Doc Comments<svg class="ll-pin" viewBox="0 0 24 24" role="img"><title>Pinned</title><path d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg></strong></li>
+<li><a href="../topics/design-constraints.html">Design Constraints</a></li>
+</ul></details>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Metatables</h2></div><span class="ll-count">1</span></summary>
+<ul class="ll-kind-body nowrap">
+<li><a href="../modules/Entity.html">Entity</a></li>
+</ul>
+</details>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Modules</h2></div><span class="ll-count">28</span></summary>
+<ul class="ll-kind-body nowrap">
+<li><a href="../modules/Photon.Registry.html">Photon.Registry</a></li>
+<li><a href="../modules/Photon.SNet.html">Photon.SNet</a></li>
+<li><a href="../modules/autorun.emv_init.html">autorun.emv_init</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_airel.html">autorun.photon.cl_emv_airel</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_init.html">autorun.photon.cl_emv_init</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_listener.html">autorun.photon.cl_emv_listener</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_livery.html">autorun.photon.cl_emv_livery</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_meta.html">autorun.photon.cl_emv_meta</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_net.html">autorun.photon.cl_emv_net</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_builder.html">autorun.photon.cl_photon_builder</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_editor.html">autorun.photon.cl_photon_editor</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_eng.html">autorun.photon.cl_photon_eng</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_hooks.html">autorun.photon.cl_photon_hooks</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_hud.html">autorun.photon.cl_photon_hud</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_menu.html">autorun.photon.cl_photon_menu</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_meta.html">autorun.photon.cl_photon_meta</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_settings.html">autorun.photon.cl_photon_settings</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_config.html">autorun.photon.sh_emv_config</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_helper.html">autorun.photon.sh_emv_helper</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_init.html">autorun.photon.sh_emv_init</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_vehicles.html">autorun.photon.sh_emv_vehicles</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_init.html">autorun.photon.sh_photon_init</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_vehicles.html">autorun.photon.sh_photon_vehicles</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_xml.html">autorun.photon.sh_photon_xml</a></li>
+<li><a href="../modules/autorun.photon.shared.sh_functional.html">autorun.photon.shared.sh_functional</a></li>
+<li><a href="../modules/autorun.photon.shared.sh_logging.html">autorun.photon.shared.sh_logging</a></li>
+<li><a href="../modules/autorun.photon.sv_emv_net.html">autorun.photon.sv_emv_net</a></li>
+<li><a href="../modules/autorun.photon.sv_photon_hooks.html">autorun.photon.sv_photon_hooks</a></li>
+</ul>
+</details>
+<div class="ll-sidebar-footer"><p>Generated from LuaLS documentation JSON.</p><p>Theme by <a href="https://limelightgaming.info">Limelight Gaming</a>.</p></div>
+		</div>
+		<div id="content">
+<div class="ll-module-header"><h1>Writing Doc Comments</h1></div><div class="ll-module-body"><p>This site is built by <a href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/tools/docs/generate.py"><code>tools/docs/generate.py</code></a> from two independent
+sources, so a doc comment lives or dies depending on which one actually reads it:</p>
+<ol>
+<li><strong><code>lua-language-server</code>'s <code>--doc</code> JSON export.</strong> LuaLS parses <code>lua/</code> and exports every doc comment
+it understands — that means real <a href="https://luals.github.io/wiki/annotations/">LuaCATS</a> annotations
+(<code>--- @param</code>, <code>--- @return</code>, <code>--- @class</code>, ...) attached <strong>immediately above</strong> a declaration,
+with no blank line in between. A blank line between the comment and the code it describes means
+LuaLS never associates the two, and the comment is silently dropped from the JSON entirely.</li>
+<li><strong><code>generate.py</code>'s own raw-source scan</strong>, used only for each file's <em>leading header comment</em>
+(description, <code>@namespace</code>, <code>@state</code>). This one tolerates a blank line before the code that
+follows. Write headers as <code>---</code> lines.</li>
+</ol>
+<p>Photon's comments were written for <a href="https://stevedonovan.github.io/ldoc/">LDoc</a>, which this pipeline
+replaced. LDoc's tags (<code>@module</code>, <code>@tparam</code>, <code>@treturn</code>, <code>@str</code>, <code>@int</code>, <code>@ent</code>, ...) mean nothing to
+LuaLS, so a file that still uses them lands on the site as a page named after its own path, with no
+types on anything. Converting a file means rewriting those tags — see
+<a href="#porting-from-ldoc">Porting from LDoc</a> at the bottom.</p>
+<h2 id="pipeline">Pipeline</h2>
+<pre><code class="language-bash"># 1. LuaLS walks lua/ and exports its own understanding of every doc comment.
+lua-language-server --doc=lua --doc_out_path=tools/docs/out \
+                    --configpath=tools/docs/luarc-docs.json
+
+# 2. generate.py turns that JSON (plus docs/**/*.md) into this site.
+python3 tools/docs/generate.py --json tools/docs/out/doc.json \
+                               --output tools/docs/build \
+                               --style-dir tools/docs/style \
+                               --topics docs
+</code></pre>
+<p>Step 1 needs the base-game type definitions, which are a submodule:</p>
+<pre><code class="language-bash">git submodule update --init tools/docs/vendor/glua-api-snippets
+</code></pre>
+<p>Everything under <code>lua/autorun/photon/library/</code>, <code>lua/tests/</code> and <code>lua/internet_benchmark/</code> is
+excluded from the export. The library tree is content — vehicles, components, sirens and presets
+registered as data tables — and listing it would bury the engine's own pages several times over.</p>
+<h3 id="publishing">Publishing</h3>
+<p><code>.github/workflows/docs.yml</code> runs both steps on every push and pull request, and on a push to
+<code>development</code> it also publishes the result to the <code>gh-pages</code> branch, which is what
+<a href="https://photonle.github.io/Photon/">photonle.github.io/Photon</a> serves. A push to <code>master</code> builds
+but does not publish: Pages serves one branch, and two publishing into it would overwrite each
+other.</p>
+<p>The deploy replaces <code>gh-pages</code> outright rather than committing on top of it. The site is a full
+rebuild every run, so anything already on the branch that the build did not just produce is stale by
+definition — a page whose module was renamed, a topic that moved into a folder, a previous build's
+content-hashed stylesheet. That also keeps the branch at one commit, so the repository isn't carrying
+a copy of the whole site for every push it has ever had.</p>
+<h3 id="definition-only-files">Definition-only files</h3>
+<p>Some of Photon's API is generated at load time — <code>Photon.SNet:Map</code> hangs a <code>Set</code>/<code>Get</code> pair off the
+<code>Entity</code> metatable for every variable it registers, and nothing declares those in source. Neither
+LuaLS nor your editor can see an API that only exists once the game is running, so those are declared
+by hand in <code>lua/autorun/photon/meta/</code>, as <code>--- @meta</code> files full of empty declarations.</p>
+<p>Nothing on any load path reads that folder; it exists to be read by tooling. It carries its own
+<code>.glualint.json</code> turning off <code>lint_unusedVars</code>, since every parameter in a declaration-only file is
+unused by construction — that exception is scoped to the folder, so it can't quietly cover real code.</p>
+<h3 id="seeing-every-feature-at-once">Seeing every feature at once</h3>
+<p><a href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/tools/docs/fixtures/stubs.lua"><code>tools/docs/fixtures/stubs.lua</code></a> is a stub file using every tag,
+realm, callout, type and section the site renders. It is never loaded by the game, and it sits
+outside <code>lua/</code> so its fake symbols can never reach the published site. Build just that file when
+changing <code>generate.py</code> or the stylesheet — it is far quicker than hunting for a real function that
+happens to use the feature you touched:</p>
+<pre><code class="language-bash">lua-language-server --doc=tools/docs/fixtures --doc_out_path=tools/docs/stub-out \
+                    --configpath=tools/docs/luarc-docs.json
+python3 tools/docs/generate.py --json tools/docs/stub-out/doc.json \
+                               --output tools/docs/stub-build \
+                               --style-dir tools/docs/style --topics docs \
+                               --source tools/docs/fixtures
+</code></pre>
+<p><code>test_generate.py</code> fails if the stub stops covering a callout kind, a realm, or the
+example/section/alias tags, so it cannot quietly fall behind the generator.</p>
+<h2 id="topic-files-and-folders">Topic files and folders</h2>
+<p>Every markdown file under <code>docs/</code> is published, and the folder it sits in decides where. Top-level
+files are listed directly under the sidebar's <strong>Topics</strong> heading. A subfolder becomes a single
+collapsed entry at the bottom of that same list, linking to the folder's index page —
+<code>docs/design/x.md</code> publishes to <code>topics/design/x.html</code>. The folder's pages only unfold in the
+sidebar while you're on one of them.</p>
+<p>Folders nest to any depth, and each level gets its own index page. There is no per-folder config;
+creating the folder is the whole step. Add an <code>index.md</code> to give the folder a name and an intro — its
+<code>title</code> becomes the sidebar label. The list of what's in the folder is always generated.</p>
+<p><code>topics/</code> mirrors <code>docs/</code>, so a relative link between two topic files stays correct on the site as
+well as on GitHub — <code>generate.py</code> only swaps the <code>.md</code> for <code>.html</code>. That mirroring cuts both ways:
+<strong>moving a doc into a folder changes its depth, so its own <code>../</code> links and everyone else's links to
+it need updating in the same change.</strong> A relative link that points <em>above</em> <code>docs/</code> — <code>../README.md</code>,
+<code>../lua/autorun/photon/shared/sh_simplenet.lua</code> — is rewritten to the repo browser rather than left
+to 404.</p>
+<p>A page's opening <code>&lt;h1&gt;</code> is dropped from the rendered HTML — the title already sits in the header bar
+above it. Keep writing the heading; it's what makes the file readable on GitHub, and it's the
+fallback when there's no front-matter <code>title</code>.</p>
+<h3 id="front-matter">Front matter</h3>
+<p>Any topic may open with a <code>---</code> block. It's flat <code>key: value</code> lines, not real YAML — the docs build
+has no YAML dependency, and a block that isn't in that shape is left in the page as ordinary
+markdown rather than silently swallowed.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Key</th>
+<th align="left">Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>title</code></td>
+<td align="left">Sidebar label, page header, and index row. Overrides the first heading.</td>
+</tr>
+<tr>
+<td align="left"><code>status</code></td>
+<td align="left">Index column. Free text — <code>Proposed</code>, <code>Landed</code>, <code>Implemented</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>date</code></td>
+<td align="left">Index column.</td>
+</tr>
+<tr>
+<td align="left"><code>description</code></td>
+<td align="left">Index column. One line on what the doc covers.</td>
+</tr>
+<tr>
+<td align="left"><code>pinned</code></td>
+<td align="left"><code>true</code>/<code>yes</code>/<code>1</code> lifts the doc to the top of its list, marked with a pin.</td>
+</tr>
+<tr>
+<td align="left"><code>featured</code></td>
+<td align="left"><code>true</code>/<code>yes</code>/<code>1</code> adds the doc to the <strong>Important Topics</strong> list on the front page.</td>
+</tr>
+<tr>
+<td align="left"><code>index</code></td>
+<td align="left"><code>true</code> promotes the doc to be its folder's landing page.</td>
+</tr>
+</tbody>
+</table>
+<p>Precedence for a folder's landing page, most deliberate first: a doc with <code>index: true</code>, then
+<code>index.md</code>, then a doc named after the folder it sits in, then a generated listing.</p>
+<h2 id="function-level-use-real-luacats-annotations">Function-level: use real LuaCATS annotations</h2>
+<p>Write these as <code>--- @tag ...</code> directly above the <code>function</code>/assignment they describe, no blank line.
+<code>generate.py</code> reads the native <code>args</code>/<code>returns</code> LuaLS already resolved from the function signature
+itself, so the types are accurate, and only borrows the tag's text for the human-readable
+description.</p>
+<p>Four rules decide whether an annotation counts at all. Break any one and it still looks fine in the
+diff and is silently dropped:</p>
+<ol>
+<li><strong>Three dashes, always.</strong> <code>--- @param</code> counts, <code>-- @param</code> does not.</li>
+<li><strong>Directly above the declaration, with no blank line.</strong></li>
+<li><strong>Description first, tags after.</strong></li>
+<li><strong>Names must match the real signature.</strong> <code>--- @param ent Entity</code> only binds if the function
+actually has a parameter called <code>ent</code>.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="left">Annotation</th>
+<th align="left">Syntax</th>
+<th align="left">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>@param</code></td>
+<td align="left"><code>--- @param &lt;name&gt; &lt;type[?]&gt; [description]</code></td>
+<td align="left">Name first, then type — the reverse of LDoc's <code>@tparam</code>. <code>?</code> on the type marks it optional.</td>
+</tr>
+<tr>
+<td align="left"><code>@return</code></td>
+<td align="left"><code>--- @return &lt;type&gt; [&lt;name&gt; [comment]]</code></td>
+<td align="left">One <code>@return</code> line per return value, in order.</td>
+</tr>
+<tr>
+<td align="left"><code>@class</code></td>
+<td align="left"><code>--- @class [(exact)] &lt;name&gt;[: &lt;parent&gt;...]</code></td>
+<td align="left">Defines a struct/type, optionally with inheritance.</td>
+</tr>
+<tr>
+<td align="left"><code>@field</code></td>
+<td align="left"><code>--- @field [scope] &lt;name&gt; &lt;type[?]&gt; [description]</code></td>
+<td align="left">Documents a field of a <code>@class</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>@type</code></td>
+<td align="left"><code>--- @type &lt;type&gt;</code></td>
+<td align="left">Declares the type of a variable, e.g. <code>--- @type string[]</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>@alias</code></td>
+<td align="left"><code>--- @alias &lt;name&gt; &lt;type&gt;</code></td>
+<td align="left">Names a type (or enum) for reuse elsewhere.</td>
+</tr>
+<tr>
+<td align="left"><code>@enum</code></td>
+<td align="left"><code>--- @enum [(key)] &lt;name&gt;</code></td>
+<td align="left">Marks a table as an enum, usable at runtime.</td>
+</tr>
+<tr>
+<td align="left"><code>@overload</code></td>
+<td align="left"><code>--- @overload fun([param: type...]): [return_type]</code></td>
+<td align="left">An additional call signature.</td>
+</tr>
+<tr>
+<td align="left"><code>@generic</code></td>
+<td align="left"><code>--- @generic &lt;name&gt; [:parent_type]</code></td>
+<td align="left">Generic type placeholder.</td>
+</tr>
+<tr>
+<td align="left"><code>@deprecated</code></td>
+<td align="left"><code>--- @deprecated [reason]</code></td>
+<td align="left">Also renders as a callout — see below.</td>
+</tr>
+<tr>
+<td align="left"><code>@nodiscard</code></td>
+<td align="left"><code>--- @nodiscard</code></td>
+<td align="left">Warns if the return value is ignored at the call site.</td>
+</tr>
+<tr>
+<td align="left"><code>@see</code></td>
+<td align="left"><code>--- @see &lt;symbol&gt;</code></td>
+<td align="left">Cross-reference to another documented symbol.</td>
+</tr>
+<tr>
+<td align="left"><code>@private</code> / <code>@protected</code> / <code>@package</code></td>
+<td align="left"><code>--- @private</code></td>
+<td align="left">Restricts where the item is considered accessible.</td>
+</tr>
+<tr>
+<td align="left"><code>@diagnostic</code></td>
+<td align="left"><code>--- @diagnostic &lt;state&gt;:&lt;diagnostic&gt;</code></td>
+<td align="left">Suppresses/enables a specific LuaLS diagnostic.</td>
+</tr>
+</tbody>
+</table>
+<p>Two annotations are explicitly <strong>not</strong> used here:</p>
+<ul>
+<li><strong><code>@module</code></strong> — LuaLS reserves this for its own <code>require()</code>-return-type inference and silently
+drops any doc comment that uses it. Use <a href="#file-header-tags"><code>@namespace</code></a> instead. Photon's
+LDoc-era headers all use <code>@module</code>, which is why so many pages are still named after a file path.</li>
+<li><strong><code>@vararg</code></strong> — deprecated by LuaLS itself in favour of <code>--- @param ... &lt;type&gt; [description]</code>.</li>
+</ul>
+<p>Minimal example:</p>
+<pre><code class="language-lua">--- Get the latest cached value of a networked variable on an entity.
+--- @param ent Entity The entity to read the value from.
+--- @param name string The registered variable name.
+--- @param default any? Value to return when nothing has been networked yet.
+--- @return any value The networked value, or `default`.
+function NET:Get(ent, name, default)
+	...
+end
+</code></pre>
+<h2 id="function-level-this-codebases-own-tags">Function-level: this codebase's own tags</h2>
+<p>These are custom to <code>generate.py</code>, not LuaCATS — but like <code>@param</code>/<code>@return</code>, they're written
+<strong>directly above the function or table they describe</strong>, with no blank line.</p>
+<blockquote class="ll-alert ll-alert-important"><p class="ll-alert-title">Important</p>
+<p>Write these with a space after the dashes — <code>--- @state server</code>, not <code>---@state server</code>.</p>
+<p>LuaLS parses <code>---@tag</code> as an annotation and drops any tag it doesn't recognise, so the tag never
+reaches <code>generate.py</code> and the whole line vanishes with no error. <code>--- @tag</code> is description text as
+far as LuaLS is concerned, which is exactly how these survive into the export.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="left">Tag</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>@section &lt;title&gt;</code></td>
+<td align="left">Starts a new named subsection on the module page. Every following item in the file (until the next <code>@section</code>) is grouped under it, so it's usually written once per group. The tag's own value is the heading — write it as you want it read. A one-word lowercase slug is title-cased.</td>
+</tr>
+<tr>
+<td align="left"><code>@state &lt;word&gt;</code></td>
+<td align="left">One of <code>client</code>, <code>server</code>, <code>menu</code>, <code>shared</code>, <code>global</code>, <code>clmenu</code> — drives the realm badge shown next to the item. Falls back to whatever <code>@state</code> the file header declared.</td>
+</tr>
+<tr>
+<td align="left"><code>@example &lt;code&gt;</code></td>
+<td align="left">Renders an &quot;Example&quot; code block after the parameters and returns. Continuation lines are kept as lines. Not <code>@usage</code>, which is an LDoc tag and renders nothing.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="callout-tags">Callout tags</h3>
+<p>Seven tags render as callout boxes, in the manner of the GMod wiki's note boxes. They always appear
+in this order on an entry — whether you should be using this at all, then what is wrong with it,
+then advisories — regardless of the order they were written in:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Tag</th>
+<th align="left">Box</th>
+<th align="left">Stock text when no text is given</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>@deprecated [text]</code></td>
+<td align="left">Deprecated</td>
+<td align="left">&quot;This function is deprecated and may be removed in a future version.&quot;</td>
+</tr>
+<tr>
+<td align="left"><code>@internal [text]</code></td>
+<td align="left">Internal</td>
+<td align="left">&quot;This function is internal. Whilst you can call it, you probably shouldn't.&quot;</td>
+</tr>
+<tr>
+<td align="left"><code>@bug &lt;text&gt;</code></td>
+<td align="left">Bug</td>
+<td align="left">—</td>
+</tr>
+<tr>
+<td align="left"><code>@warning &lt;text&gt;</code></td>
+<td align="left">Warning</td>
+<td align="left">—</td>
+</tr>
+<tr>
+<td align="left"><code>@ambig [text]</code></td>
+<td align="left">Ambiguous</td>
+<td align="left">&quot;This entry is unclear or incomplete.&quot;</td>
+</tr>
+<tr>
+<td align="left"><code>@validate [text]</code></td>
+<td align="left">Validate</td>
+<td align="left">&quot;This entry has not been checked against the code recently.&quot;</td>
+</tr>
+<tr>
+<td align="left"><code>@note &lt;text&gt;</code></td>
+<td align="left">Note</td>
+<td align="left">—</td>
+</tr>
+</tbody>
+</table>
+<p><code>@bugs</code>, <code>@warns</code>, <code>@notes</code> and <code>@ambiguous</code> are accepted as alternative spellings — <code>@warns</code> is the
+LDoc spelling Photon's older comments use, and it still works. Several spellings of the same tag on
+one function collapse into a single box. The text is rendered as markdown, so links and <code>code</code> work
+inside a callout.</p>
+<p>Topics can use any of these as GFM alerts too — <code>&gt; [!BUG]</code>, <code>&gt; [!DEPRECATED]</code> — alongside the
+standard <code>[!NOTE]</code>, <code>[!TIP]</code>, <code>[!IMPORTANT]</code>, <code>[!WARNING]</code> and <code>[!CAUTION]</code>.</p>
+<pre><code class="language-lua">--- Send the current value of a networked variable to a recipient.
+--- @param ent Entity The entity the value belongs to.
+--- @param name string The registered variable name.
+--- @internal
+--- @warning `name` must already be registered with `Photon.SNet:Map`.
+--- @state server
+function NET:SendChange(ent, name, val, to)
+	...
+end
+</code></pre>
+<h2 id="constant-families-alias-gathers-the-constants-it-names">Constant families: <code>@alias</code> gathers the constants it names</h2>
+<p>A page that declares a long run of prefixed constants would otherwise list every one of them as a
+top-level entry, interleaved alphabetically with everything else. An <code>@alias</code> over those constants
+turns them into a section of its own: the alias becomes the heading, its constants sit beneath it,
+and it gets its own line in the page's <strong>Contents</strong>.</p>
+<pre><code class="language-lua">--- The wire types a SimpleNet variable can be registered as.
+--- @section Network Types
+--- @alias PhotonNetType
+---| `Photon.SNet.BOOL`
+---| `Photon.SNet.INT`
+---| `Photon.SNet.UINT`
+---| `Photon.SNet.STR`
+</code></pre>
+<p>The constants must be documented on the same page as the alias, and two is the minimum — below that
+a heading costs more than it saves. An alias whose members are string literals or other types has no
+constants to gather, so it stays an ordinary entry, rendered as an <strong>Accepted values</strong> list.</p>
+<h2 id="class-pages-namespace-classname-gathers-a-classs-members">Class pages: <code>@namespace &lt;ClassName&gt;</code> gathers a class's members</h2>
+<p>Photon hangs methods off <code>Entity</code> from several files at once, and none of them owns the metatable.
+Each member would otherwise land on the page of whichever file happens to declare it, or on a page
+derived from a <em>different</em> file's path entirely.</p>
+<p>Declaring <code>@namespace &lt;ClassName&gt;</code> on one of the class's files makes that the class's page, and every
+<code>&lt;ClassName&gt;.member</code> follows it there, wherever it was written. A <code>@class</code> that exists to describe a
+library's own table declares no such namespace, so its fields stay on that library's page next to the
+thing they describe.</p>
+<p>Classes extended via <code>FindMetaTable(&quot;X&quot;)</code> are detected from the source and claim a page the same way
+without needing to declare a namespace; they're listed under <strong>Metatables</strong> in the sidebar rather
+than under Modules.</p>
+<h2 id="file-header-tags">File-header tags</h2>
+<p>The very first comment in a file (<code>---</code> line comments; a blank line before the code is fine) is
+scanned separately for these. They are <strong>not</strong> LuaCATS and LuaLS doesn't know about them:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Tag</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>@namespace &lt;name&gt;</code></td>
+<td align="left"><strong>Not <code>@module</code>.</strong> Groups every doc'd item in this file onto one page named <code>&lt;name&gt;</code>, merging with any other file that declares the same namespace (e.g. a <code>cl_*.lua</code>/<code>sv_*.lua</code> pair). Without it, the page falls back to the file's own dotted path (<code>autorun.photon.shared.sh_simplenet</code>). Must not contain <code>..</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>@state &lt;word&gt;</code></td>
+<td align="left">Same word list as the function-level tag. On a file header this becomes the <em>default</em> realm badge for every item in the file that doesn't declare its own.</td>
+</tr>
+<tr>
+<td align="left"><code>@copyright</code>, <code>@release</code>, <code>@author</code></td>
+<td align="left">Accepted and parsed, but <strong>not currently rendered</strong> on the site — keep them for humans reading the source.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-lua">--- Regular Simplified Networking.
+--- Easily optimise networking for setting local values on entities.
+--- @copyright Photon Team
+--- @author Photon Team
+--- @namespace Photon.SNet
+--- @state shared
+</code></pre>
+<h2 id="porting-from-ldoc">Porting from LDoc</h2>
+<p>Photon's comments predate this pipeline. A file is converted by rewriting its tags; the generator
+still understands the LDoc-era callout spellings (<code>@warns</code>, <code>@bugs</code>) and the <code>@state</code> tag, so those
+can stay as they are.</p>
+<table>
+<thead>
+<tr>
+<th align="left">LDoc</th>
+<th align="left">LuaCATS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>-- @tag</code> (two dashes)</td>
+<td align="left"><code>--- @tag</code> (three)</td>
+</tr>
+<tr>
+<td align="left"><code>@module Photon.SNet</code></td>
+<td align="left"><code>@namespace Photon.SNet</code> on the file header</td>
+</tr>
+<tr>
+<td align="left"><code>@tparam Entity ent Desc.</code></td>
+<td align="left"><code>@param ent Entity Desc.</code> — name first</td>
+</tr>
+<tr>
+<td align="left"><code>@str name Desc.</code></td>
+<td align="left"><code>@param name string Desc.</code></td>
+</tr>
+<tr>
+<td align="left"><code>@int n Desc.</code></td>
+<td align="left"><code>@param n integer Desc.</code></td>
+</tr>
+<tr>
+<td align="left"><code>@bool b Desc.</code></td>
+<td align="left"><code>@param b boolean Desc.</code></td>
+</tr>
+<tr>
+<td align="left"><code>@ent e Desc.</code> / <code>@ply p Desc.</code> / <code>@veh v Desc.</code></td>
+<td align="left"><code>@param e Entity Desc.</code> / <code>@param p Player Desc.</code> / <code>@param v Vehicle Desc.</code></td>
+</tr>
+<tr>
+<td align="left"><code>@tab t Desc.</code></td>
+<td align="left"><code>@param t table Desc.</code></td>
+</tr>
+<tr>
+<td align="left"><code>@param[opt] x Desc.</code></td>
+<td align="left"><code>@param x any? Desc.</code> — the <code>?</code> goes on the type</td>
+</tr>
+<tr>
+<td align="left"><code>@treturn int Desc.</code></td>
+<td align="left"><code>@return integer Desc.</code></td>
+</tr>
+<tr>
+<td align="left"><code>@rint Desc.</code> / <code>@rbool Desc.</code> / <code>@rstring Desc.</code></td>
+<td align="left"><code>@return integer Desc.</code> / <code>@return boolean Desc.</code> / <code>@return string Desc.</code></td>
+</tr>
+<tr>
+<td align="left"><code>@usage &lt;code&gt;</code></td>
+<td align="left"><code>@example &lt;code&gt;</code></td>
+</tr>
+<tr>
+<td align="left"><code>@alias NET</code> (LDoc's &quot;this table is the module&quot;)</td>
+<td align="left">Delete it — LuaCATS <code>@alias</code> means something else entirely</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/shared/sh_simplenet.lua"><code>lua/autorun/photon/shared/sh_simplenet.lua</code></a> is the
+worked example: it is fully converted, and its page is what a converted file looks like.</p></div>
+		</div>
+	</div>
+</div>
+<script>
+var ROOT = "../";
+(function () {
+	var input = document.getElementById("ll-search-input");
+	var list = document.getElementById("ll-search-results");
+	if (!input || !list) { return; }
+	var index = null, loading = false;
+
+	function load() {
+		if (index || loading) { return; }
+		loading = true;
+		fetch(ROOT + "search.json").then(function (response) {
+			return response.json();
+		}).then(function (data) {
+			index = data;
+			loading = false;
+			render();
+		}).catch(function () {
+			loading = false;
+			list.innerHTML = "<li><p>Search index unavailable.</p></li>";
+			list.hidden = false;
+		});
+	}
+
+	// Lower is better: exact name, then prefix, then anywhere in the name, then
+	// only in the description.
+	function score(entry, query) {
+		var name = entry.n.toLowerCase();
+		if (name === query) { return 0; }
+		if (name.lastIndexOf(query, 0) === 0) { return 1; }
+		if (name.indexOf(query) > 0) { return 2; }
+		return (entry.d || "").toLowerCase().indexOf(query) >= 0 ? 3 : -1;
+	}
+
+	function escape(text) {
+		return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	}
+
+	function render() {
+		var query = input.value.trim().toLowerCase();
+		if (!query) { list.hidden = true; list.innerHTML = ""; return; }
+        if (!index) { return; }
+		var hits = [];
+		for (var i = 0; i < index.length; i++) {
+			var rank = score(index[i], query);
+			if (rank >= 0) { hits.push([rank, index[i].n.length, index[i]]); }
+		}
+		hits.sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; });
+		list.innerHTML = hits.slice(0, 20).map(function (hit) {
+			var entry = hit[2];
+			return '<li><a href="' + ROOT + entry.u + '">' + escape(entry.n)
+				+ '<span class="ll-search-kind">' + escape(entry.k) + "</span></a></li>";
+		}).join("") || "<li><p>No matches.</p></li>";
+		list.hidden = false;
+	}
+
+	input.addEventListener("focus", load);
+	input.addEventListener("input", function () { load(); render(); });
+	input.addEventListener("keydown", function (event) {
+		if (event.key === "Escape") { input.value = ""; render(); input.blur(); }
+		if (event.key === "Enter") {
+			var first = list.querySelector("a");
+			if (first) { window.location.href = first.href; }
+		}
+	});
+
+	// "/" jumps to the box, unless the reader is already typing somewhere -
+	// preventDefault stops the slash itself landing in the field.
+	document.addEventListener("keydown", function (event) {
+		if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) { return; }
+		var active = document.activeElement;
+		if (active && (active.isContentEditable
+			|| /^(input|textarea|select)$/i.test(active.tagName))) { return; }
+		event.preventDefault();
+		input.focus();
+		input.select();
+	});
+})();
+</script>
+</body>
+</html>

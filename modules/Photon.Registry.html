@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Photon.Registry</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../style.359524c0f6.css" type="text/css">
+</head>
+<body>
+<header class="ll-header">
+	<div class="ll-header-inner">
+		<a class="ll-brand" href="../index.html">
+			<img src="../assets/logos/photon.svg" alt="" width="26" height="26">
+			<span>Photon Documentation</span>
+		</a>
+		<a class="ll-repo-link" href="https://github.com/photonle/Photon" target="_blank" rel="noreferrer">Repository</a>
+	</div>
+</header>
+<div id="container">
+	<div id="main">
+		<div id="navigation">
+<div class="ll-search"><input type="search" id="ll-search-input" autocomplete="off" spellcheck="false" placeholder="Search docs… (/)" aria-label="Search documentation"><ul id="ll-search-results" class="ll-kind-body" hidden></ul></div>
+<div class="ll-contents-block"><div class="ll-kind-header"><h2>Contents</h2></div><ul class="ll-kind-body nowrap">
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Classes">Classes</a></li>
+<li><a href="#Fields">Fields</a></li>
+<li><a href="#Photon.Registry.Set">Photon.Registry.Set</a></li>
+</ul></div>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Topics</h2></div><span class="ll-count">2</span></summary>
+<ul class="ll-kind-body">
+<li><a href="../topics/doc-comments.html">Writing Doc Comments<svg class="ll-pin" viewBox="0 0 24 24" role="img"><title>Pinned</title><path d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg></a></li>
+<li><a href="../topics/design-constraints.html">Design Constraints</a></li>
+</ul></details>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Metatables</h2></div><span class="ll-count">1</span></summary>
+<ul class="ll-kind-body nowrap">
+<li><a href="../modules/Entity.html">Entity</a></li>
+</ul>
+</details>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Modules</h2></div><span class="ll-count">28</span></summary>
+<ul class="ll-kind-body nowrap">
+<li><strong>Photon.Registry</strong></li>
+<li><a href="../modules/Photon.SNet.html">Photon.SNet</a></li>
+<li><a href="../modules/autorun.emv_init.html">autorun.emv_init</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_airel.html">autorun.photon.cl_emv_airel</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_init.html">autorun.photon.cl_emv_init</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_listener.html">autorun.photon.cl_emv_listener</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_livery.html">autorun.photon.cl_emv_livery</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_meta.html">autorun.photon.cl_emv_meta</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_net.html">autorun.photon.cl_emv_net</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_builder.html">autorun.photon.cl_photon_builder</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_editor.html">autorun.photon.cl_photon_editor</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_eng.html">autorun.photon.cl_photon_eng</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_hooks.html">autorun.photon.cl_photon_hooks</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_hud.html">autorun.photon.cl_photon_hud</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_menu.html">autorun.photon.cl_photon_menu</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_meta.html">autorun.photon.cl_photon_meta</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_settings.html">autorun.photon.cl_photon_settings</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_config.html">autorun.photon.sh_emv_config</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_helper.html">autorun.photon.sh_emv_helper</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_init.html">autorun.photon.sh_emv_init</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_vehicles.html">autorun.photon.sh_emv_vehicles</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_init.html">autorun.photon.sh_photon_init</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_vehicles.html">autorun.photon.sh_photon_vehicles</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_xml.html">autorun.photon.sh_photon_xml</a></li>
+<li><a href="../modules/autorun.photon.shared.sh_functional.html">autorun.photon.shared.sh_functional</a></li>
+<li><a href="../modules/autorun.photon.shared.sh_logging.html">autorun.photon.shared.sh_logging</a></li>
+<li><a href="../modules/autorun.photon.sv_emv_net.html">autorun.photon.sv_emv_net</a></li>
+<li><a href="../modules/autorun.photon.sv_photon_hooks.html">autorun.photon.sv_photon_hooks</a></li>
+</ul>
+</details>
+<div class="ll-sidebar-footer"><p>Generated from LuaLS documentation JSON.</p><p>Theme by <a href="https://limelightgaming.info">Limelight Gaming</a>.</p></div>
+		</div>
+		<div id="content">
+<div class="ll-module-header"><h1>Photon.Registry</h1></div>
+<div class="ll-module-body"><p>Vehicle Registry.
+Keeps a live list of every Photon vehicle, and of the emergency vehicles
+among them, without scanning the entity list to find them.</p>
+<p>Membership is derived from networked state, so it is maintained by
+subscribing to <code>Photon.SimpleNet.ValueChanged</code> rather than by polling.
+Neither <code>HasPhoton</code> nor <code>VehicleIndex</code> is knowable when an entity is
+created — both arrive later, over the wire — so entity-creation hooks are
+not a usable trigger and are deliberately not used here.</p></div>
+<div class="ll-module-header"><h2 class="section-header"><a name="Functions"></a>Functions</h2></div>
+<div class="ll-module-body"><dl class="function">
+<h3 class="section-header">Maintenance</h3>
+<dt><a name="Photon.Registry.Forget"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Photon.Registry.Forget<span class="ll-args">(ent)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/shared/sh_registry.lua#L149">Source ☍</a></dt>
+<dd>
+<p>Drop an entity from every set.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">ent</span><span class="types"><a href="Entity.html">Entity</a></span><span class="ll-arg-desc">Entity to drop.</span></li>
+</ul>
+
+
+</dd>
+<dt><a name="Photon.Registry.Rebuild"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Photon.Registry.Rebuild<span class="ll-args">()</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/shared/sh_registry.lua#L165">Source ☍</a></dt>
+<dd>
+<p>Rebuild both sets from the entity list.</p>
+<p>The one place the registry scans, run on load and on the events that can
+invalidate it wholesale. Idempotent, because <code>GM:OnReloaded</code> can fire more
+than once for a single refresh.</p>
+<p>Also the recovery path if a membership flag ever desyncs from its list,
+which is why it clears flags across the entity list rather than only
+through the lists themselves: an entity flagged as a member of a set that
+does not contain it would otherwise be skipped by <code>Add</code> forever.</p>
+
+
+
+
+</dd>
+<dt><a name="Photon.Registry.Update"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Photon.Registry.Update<span class="ll-args">(ent)</span></strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/shared/sh_registry.lua#L132">Source ☍</a></dt>
+<dd>
+<p>Recheck which sets an entity belongs to and correct both.</p>
+<p>Membership is recomputed from scratch every call rather than added to as
+values arrive. A resync sends an entity's fields in table order, so
+<code>VehicleIndex</code> can land before <code>HasPhoton</code>; deriving both answers together
+makes the result the same whichever order they turn up in.</p>
+<p>Safe to call repeatedly with no change, which it is: the client runs
+<code>Photon.SimpleNet.ValueChanged</code> on every receipt, not only on a change.</p>
+
+<p class="ll-arg-label">Parameters</p>
+<ul class="ll-args-list">
+<li><span class="parameter">ent</span><span class="types"><a href="Entity.html">Entity</a></span><span class="ll-arg-desc">Entity to recheck.</span></li>
+</ul>
+
+
+</dd>
+</dl></div>
+<div class="ll-module-header"><h2 class="section-header"><a name="Classes"></a>Classes</h2></div>
+<div class="ll-module-body"><dl class="function">
+<dt><a name="Photon.Registry"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Photon.Registry</strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/shared/sh_registry.lua#L19">Source ☍</a></dt>
+<dd>
+
+
+
+
+</dd>
+</dl></div>
+<div class="ll-module-header"><h2 class="section-header"><a name="Fields"></a>Fields</h2></div>
+<div class="ll-module-body"><dl class="function">
+<dt><a name="Photon.Registry"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Photon.Registry</strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/shared/sh_registry.lua#L21">Source ☍</a></dt>
+<dd>
+
+
+
+
+</dd>
+<h3 class="section-header">Sets</h3>
+<dt><a name="Photon.Registry.EMVs"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Photon.Registry.EMVs</strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/shared/sh_registry.lua#L44">Source ☍</a></dt>
+<dd>
+<p>Every registered vehicle that is also an emergency vehicle. A strict subset
+of <code><a href="Photon.Registry.html#Photon.Registry.Vehicles">Photon.Registry.Vehicles</a></code>.</p>
+
+
+
+
+</dd>
+<dt><a name="Photon.Registry.Vehicles"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Photon.Registry.Vehicles</strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/shared/sh_registry.lua#L38">Source ☍</a></dt>
+<dd>
+<p>Every vehicle <code><a href="autorun.photon.cl_photon_meta.html#Photon.SetupCar">Photon:SetupCar</a></code> has run on.</p>
+
+
+
+
+</dd>
+</dl></div>
+<div class="ll-module-header"><h2 class="section-header"><a name="Photon.Registry.Set"></a>Photon.Registry.Set</h2><span class="ll-family-meta">3 fields <a href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/shared/sh_registry.lua#L28">Source ☍</a></span></div>
+<div class="ll-module-body">
+<p>A set of vehicles, held as a dense array plus its length.</p>
+<p>The length is tracked rather than measured because <code>#</code> costs roughly as much
+as a loop iteration, and these are read every frame. <code>list</code> stays dense from
+<code>1</code> to <code>count</code>, so <code>#list</code> and <code>count</code> agree; prefer <code>count</code>.</p>
+
+<dl class="function">
+<dt><a name="Photon.Registry.Set.count"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Photon.Registry.Set.count</strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/shared/sh_registry.lua#L30">Source ☍</a></dt>
+<dd>
+<p>Number of members.</p>
+
+
+
+
+</dd>
+<dt><a name="Photon.Registry.Set.flag"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Photon.Registry.Set.flag</strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/shared/sh_registry.lua#L31">Source ☍</a></dt>
+<dd>
+<p>Field set on a member entity to mark it as one.</p>
+
+
+
+
+</dd>
+<dt><a name="Photon.Registry.Set.list"></a><span class="ll-realm state-client state-server" title="Server and Client">Shared</span><strong class="ll-symbol">Photon.Registry.Set.list</strong><a style="float:right;" href="https://github.com/photonle/Photon/blob/868585eaa4e61e7bb69d9531f20917e4d3e0f09b/lua/autorun/photon/shared/sh_registry.lua#L29">Source ☍</a></dt>
+<dd>
+<p>Members, <code>1</code> through <code>count</code>.</p>
+
+
+
+
+</dd>
+</dl>
+</div>
+		</div>
+	</div>
+</div>
+<script>
+var ROOT = "../";
+(function () {
+	var input = document.getElementById("ll-search-input");
+	var list = document.getElementById("ll-search-results");
+	if (!input || !list) { return; }
+	var index = null, loading = false;
+
+	function load() {
+		if (index || loading) { return; }
+		loading = true;
+		fetch(ROOT + "search.json").then(function (response) {
+			return response.json();
+		}).then(function (data) {
+			index = data;
+			loading = false;
+			render();
+		}).catch(function () {
+			loading = false;
+			list.innerHTML = "<li><p>Search index unavailable.</p></li>";
+			list.hidden = false;
+		});
+	}
+
+	// Lower is better: exact name, then prefix, then anywhere in the name, then
+	// only in the description.
+	function score(entry, query) {
+		var name = entry.n.toLowerCase();
+		if (name === query) { return 0; }
+		if (name.lastIndexOf(query, 0) === 0) { return 1; }
+		if (name.indexOf(query) > 0) { return 2; }
+		return (entry.d || "").toLowerCase().indexOf(query) >= 0 ? 3 : -1;
+	}
+
+	function escape(text) {
+		return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	}
+
+	function render() {
+		var query = input.value.trim().toLowerCase();
+		if (!query) { list.hidden = true; list.innerHTML = ""; return; }
+        if (!index) { return; }
+		var hits = [];
+		for (var i = 0; i < index.length; i++) {
+			var rank = score(index[i], query);
+			if (rank >= 0) { hits.push([rank, index[i].n.length, index[i]]); }
+		}
+		hits.sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; });
+		list.innerHTML = hits.slice(0, 20).map(function (hit) {
+			var entry = hit[2];
+			return '<li><a href="' + ROOT + entry.u + '">' + escape(entry.n)
+				+ '<span class="ll-search-kind">' + escape(entry.k) + "</span></a></li>";
+		}).join("") || "<li><p>No matches.</p></li>";
+		list.hidden = false;
+	}
+
+	input.addEventListener("focus", load);
+	input.addEventListener("input", function () { load(); render(); });
+	input.addEventListener("keydown", function (event) {
+		if (event.key === "Escape") { input.value = ""; render(); input.blur(); }
+		if (event.key === "Enter") {
+			var first = list.querySelector("a");
+			if (first) { window.location.href = first.href; }
+		}
+	});
+
+	// "/" jumps to the box, unless the reader is already typing somewhere -
+	// preventDefault stops the slash itself landing in the field.
+	document.addEventListener("keydown", function (event) {
+		if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) { return; }
+		var active = document.activeElement;
+		if (active && (active.isContentEditable
+			|| /^(input|textarea|select)$/i.test(active.tagName))) { return; }
+		event.preventDefault();
+		input.focus();
+		input.select();
+	});
+})();
+</script>
+</body>
+</html>
