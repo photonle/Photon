@@ -417,7 +417,7 @@ end
 function PhotonHUD:GetCurrentState()
 	local data = {}
 	local ply = LocalPlayer()
-	local ent = ply:GetVehicle()
+	local ent = Photon.GetPlayerVehicle(ply)
 	if not IsValid(ply) or not IsValid(ent) or not ent:Photon() or not ent:IsEMV() or not ent.Photon_Lights then return false end
 	data.EMV = ent:IsEMV()
 	local name = ent.VehicleName
@@ -669,7 +669,7 @@ local function PhotonRadar()
 	drawTexturedRect( x, y, 256, 256 )
 	if PHOTON_RADAR_DISP_FAST and PHOTON_RADAR_DISP_FAST > 0 then drawDigits( 2, PHOTON_RADAR_DISP_FAST ) end
 	if PHOTON_RADAR_DISP_NEAR and PHOTON_RADAR_DISP_NEAR > 0 then drawDigits( 1, PHOTON_RADAR_DISP_NEAR ) end
-	local ent = LocalPlayer():GetVehicle()
+	local ent = Photon.GetPlayerVehicle(LocalPlayer())
 	if IsValid( ent ) then
 		local mySpeed = math.Round( ent:Photon_AdjustedSpeed() )
 		drawDigits( 3, mySpeed )
@@ -677,7 +677,7 @@ local function PhotonRadar()
 
 end
 hook.Add( "HUDPaint", "Photon.RadarOverlay", function()
-	local ent = LocalPlayer():GetVehicle()
+	local ent = Photon.GetPlayerVehicle(LocalPlayer())
 	if not IsValid( ent ) or not ent:IsEMV() or not ( ent.Photon_RadarActive and ent:Photon_RadarActive() ) then return end
 	PhotonRadar()
 end)

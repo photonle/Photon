@@ -139,7 +139,7 @@ function Photon:SetupCar( ent, index )
 	function ent:Photon_BlinkOn()
 		if not IsValid( self ) then return false end
 		if not self.Lighting.LastBlink then self.Lighting.LastBlink = RealTime() end
-		local driving = (LocalPlayer():GetVehicle() == self)
+		local driving = (Photon.GetPlayerVehicle(LocalPlayer()) == self)
 		local result = nil
 		if (self.Lighting.LastBlink + self:Photon_GetBlinkRate()) <= RealTime() and RealTime() <= (self.Lighting.LastBlink + (self:Photon_GetBlinkRate() * 2)) then
 			result = false

@@ -31,8 +31,8 @@ local function TurnScan()
 	if not should_render then return end
 	if not should_render:GetBool() then return end
 	local ply = LocalPlayer()
-	if not ply or not ply:IsValid() or not ply:InVehicle() or not ply:GetVehicle() then return end
-	local car = ply:GetVehicle()
+	if not ply or not ply:IsValid() or not ply:InVehicle() then return end
+	local car = Photon.GetPlayerVehicle(ply)
 	if not IsValid( car ) then return end
 	if not car:Photon() then return end
 	if not car.Photon_TurningRight or not car.Lighting then return end

@@ -7,6 +7,8 @@ This is the official GitHub page for the Photon Lighting Engine. Code is license
 Pull requests are welcome, but code may be adjusted before publish. Anyone who contributes will be appropriately credited on the addon page.
 Before you contribute, be sure to read the [Contribution Guidelines](.github/CONTRIBUTING.md).
 
+Pack authors targeting [Glide](https://github.com/StyledStrike/gmod-glide) vehicles should read [docs/glide-vehicles.md](docs/glide-vehicles.md) (local-space axes and Vehicles-list registration).
+
 ## Branching Model
 Code under development is worked on in separate feature branches / forks. When this code is ready for testing, it's merged into development.
 

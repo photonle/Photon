@@ -6,7 +6,7 @@
 @alias ENT
 --]]--
 
-local ENT = FindMetaTable("Vehicle")
+local ENT = FindMetaTable("Entity")
 local lp = LocalPlayer
 
 
@@ -21,7 +21,8 @@ function ENT:Photon_IsReversing()
 	if not ply:IsPlayer() then return false end
 
 	if ply == lp() then
-		return self:Photon_WorldVelocity().y < 1 and ply:KeyDown(IN_BACK)
+		local forward = Photon.GetForwardSpeedComponent(self, self:Photon_WorldVelocity())
+		return forward < 1 and ply:KeyDown(IN_BACK)
 	end
 
 	return self:GetPhotonNet_Reversing(false)
@@ -40,8 +41,12 @@ function ENT:Photon_IsBraking()
 	if not ply:IsPlayer() then return false end
 
 	if ply == lp() then
-		local vel = self:Photon_WorldVelocity()
-		return (ply:KeyDown(IN_BACK) and vel.y > 1) or (ply:KeyDown(IN_FORWARD) and vel.y < -1) or ply:KeyDown(IN_JUMP)
+		local forward = Photon.GetForwardSpeedComponent(self, self:Photon_WorldVelocity())
+		-- Glide uses IN_FORWARD+IN_BACK as brake (Photon 2 parity).
+		if Photon.IsGlideVehicle(self) and ply:KeyDown(IN_FORWARD) and ply:KeyDown(IN_BACK) then
+			return true
+		end
+		return (ply:KeyDown(IN_BACK) and forward > 1) or (ply:KeyDown(IN_FORWARD) and forward < -1) or ply:KeyDown(IN_JUMP)
 	end
 
 	return self:GetPhotonNet_Braking(false)
