@@ -60,7 +60,7 @@ local function DrawVehicleCarLights(ent)
 	if not ent.Photon_RenderLights then
 		local vname = ent.VehicleName
 		if not isstring(vname) or vname == "" then
-			local vdata = list.GetForEdit("Vehicles")[ent:GetVehicleClass()]
+			local vdata = Photon.LookupVehiclesEntry(ent)
 			vname = vdata and vdata.Name
 		end
 		if vname then

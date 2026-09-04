@@ -91,7 +91,7 @@ function Photon:SetupCar( ent, index )
 	function ent:IsBraking( )
 		if not IsValid( self ) then return false end
 		if self:IsReversing() then return false end
-		local ply = self:GetDriver()
+		local ply = Photon.GetVehicleDriver(self)
 		if not IsValid(ply) then return false end
 		local forward = Photon.GetForwardSpeedComponent(self, self:WorldToLocal(self:GetVelocity()+self:GetPos()))
 		if Photon.IsGlideVehicle(self) and ply:KeyDown(IN_FORWARD) and ply:KeyDown(IN_BACK) then
@@ -105,8 +105,8 @@ function Photon:SetupCar( ent, index )
 
 	function ent:IsReversing()
 		if not IsValid( self ) then return false end
-		if self:GetDriver() and self:GetDriver():IsValid() and self:GetDriver():IsPlayer() then
-			local ply = self:GetDriver()
+		local ply = Photon.GetVehicleDriver(self)
+		if IsValid(ply) and ply:IsPlayer() then
 			local forward = Photon.GetForwardSpeedComponent(self, self:WorldToLocal(self:GetVelocity()+self:GetPos()))
 			if (forward < 1 and ply:KeyDown( IN_BACK )) then
 				return true

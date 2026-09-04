@@ -1,6 +1,7 @@
 
 local function ScanRunningVehicle( v )
-	if IsValid( v:GetDriver() ) and v:GetDriver():IsPlayer() and v:Photon() then
+	local driver = Photon.GetVehicleDriver(v)
+	if IsValid( driver ) and driver:IsPlayer() and v:Photon() then
 		if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
 		if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
 	end
@@ -73,7 +74,7 @@ timer.Create("Photon.SirenRunScan", 0.2, 0, function()
 end)
 
 function Photon:VehicleRemoved( ent )
-	if IsValid( ent ) and ent:IsVehicle() and ent:HasPhotonELS() then
+	if IsValid( ent ) and Photon.IsPhotonChassis(ent) and ent:HasPhotonELS() then
 		if ent.ELS.Manual then ent.ELS.Manual:Stop() end
 		ent:ELS_SirenOff()
 		ent:ELS_Horn( false )
@@ -117,8 +118,8 @@ hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, 
 end )
 
 local function ScanVehicleUnitNumber( ent )
-	if not IsValid( ent:GetDriver() ) then return end
-	local ply = ent:GetDriver()
+	local ply = Photon.GetVehicleDriver(ent)
+	if not IsValid( ply ) then return end
 	if ( ent:Photon_GetLiveryID() == "" and ( (not ent.PhotonUnitIDRequestTime) or ( RealTime() < ent.PhotonUnitIDRequestTime + 10 ) ) ) then
 		Photon.Net:RequestUnitNumber( ply )
 		ent.PhotonUnitIDRequestTime = RealTime()
@@ -136,6 +137,12 @@ end )
 
 hook.Add( "PlayerSpawnedVehicle", "Photon.PlayerVehicleSpawn", function( ply, ent )
 	ent.PhotonVehicleSpawner = ply
+end)
+
+hook.Add( "PlayerSpawnedSENT", "Photon.PlayerGlideSpawn", function( ply, ent )
+	if Photon.IsGlideVehicle(ent) then
+		ent.PhotonVehicleSpawner = ply
+	end
 end)
 
 -- Glide seats are child ents; block the driver from switching away while Photon
