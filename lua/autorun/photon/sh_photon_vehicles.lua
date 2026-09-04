@@ -4,20 +4,6 @@ local modelIgnore = {
 	["models/props_phx/carseat2.mdl"] = true,
 }
 
---- Resolve the Vehicles-list key for an entity (stock class or Glide ent class).
--- @ent ent
--- @treturn string|nil
-function Photon.ResolveVehicleListClass(ent)
-	if not IsValid(ent) then return nil end
-	if Photon.IsGlideVehicle(ent) then
-		return ent:GetClass()
-	end
-	if ent.GetVehicleClass then
-		return ent:GetVehicleClass()
-	end
-	return ent:GetClass()
-end
-
 function Photon:RecoverVehicleName( ent )
 	if not IsValid( ent ) then return false end
 	local model = tostring(ent:GetModel())
@@ -56,7 +42,7 @@ end
 
 function Photon:EntityCreated( ent )
 	timer.Simple(.05,function()
-		if  ent:IsVehicle() then
+		if Photon.IsPhotonChassis(ent) then
 			local timerId = ent:EntIndex() .. "-PHOTON-" .. CurTime()
 			timer.Create( timerId, .01, 10, function()
 				local vehicleTable = Photon:GetVehicleTable(ent)
@@ -271,18 +257,5 @@ function Photon:OverwriteIndex( name, data )
 end
 
 function Photon:GetVehicleTable(ent)
-	if not IsValid(ent) then return end
-
-	-- Backwards compatibility
-	if ent.VehicleTable and istable(ent.VehicleTable) then
-		return ent.VehicleTable
-	end
-
-	local vehicleName = ent.VehicleName
-	if isstring(vehicleName) and vehicleName ~= "" then
-		local vehicleTable = list.GetForEdit("Vehicles")[vehicleName] -- list.GetEntry("Vehicles", vehicleName)
-		if istable(vehicleTable) then
-			return vehicleTable
-		end
-	end
+	return Photon.LookupVehiclesEntry(ent)
 end

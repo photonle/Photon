@@ -25,6 +25,14 @@ end
 
 Photon.Editor.SetTargetTable = function( name )
 	local vehicleTable = list.Get( "Vehicles" )[ name ]
+	if not vehicleTable then
+		for _, car in pairs(list.Get("Vehicles") or {}) do
+			if istable(car) and car.Name == name then
+				vehicleTable = car
+				break
+			end
+		end
+	end
 	if not vehicleTable then return false end
 	Photon.Editor.TargetTable = vehicleTable.EMV
 end

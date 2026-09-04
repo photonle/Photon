@@ -30,8 +30,19 @@ Register Photon/EMV the same way as for any other vehicle:
 2. Model indexes in Photon's vehicle libraries, keyed to the chassis model Glide sets from
    `ChassisModel`.
 
-Photon resolves the Vehicles-list entry from `ent:GetClass()` on Glide entities and from
-`GetVehicleClass()` on stock vehicles.
+Photon resolves Vehicles-list entries via class, `VehicleName`, and chassis model (see
+`Photon.LookupVehiclesEntry`). Express Creator synthesises Class/Model from the entity when no
+Vehicles entry exists, and leaves `vehiclescript` empty for Glide.
+
+## Runtime helpers
+
+| Helper | Role |
+|--------|------|
+| `Photon.IsGlideVehicle` | Detect Glide chassis |
+| `Photon.IsPhotonChassis` | Stock vehicle **or** Glide chassis |
+| `Photon.GetPlayerVehicle` | Seat → chassis for the local/driving player |
+| `Photon.GetVehicleDriver` | Driver / Glide seat 1 |
+| `Photon.GetForwardSpeedComponent` | `.x` on Glide, `.y` on HL2 |
 
 ## Built-in Glide lights
 

@@ -16,7 +16,7 @@ local lp = LocalPlayer
 -- @warns Instead, a cached value is fetched from the server.
 -- @rbool
 function ENT:Photon_IsReversing()
-	local ply = self:GetDriver()
+	local ply = Photon.GetVehicleDriver(self)
 	if not IsValid(ply) then return false end
 	if not ply:IsPlayer() then return false end
 
@@ -36,7 +36,7 @@ end
 function ENT:Photon_IsBraking()
 	if self:Photon_IsReversing() then return false end
 
-	local ply = self:GetDriver()
+	local ply = Photon.GetVehicleDriver(self)
 	if not IsValid(ply) then return false end
 	if not ply:IsPlayer() then return false end
 

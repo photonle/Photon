@@ -200,7 +200,7 @@ function ENT:ELS_Blackout(val)
 
 		-- Running lights are a separate networked value derived from blackout, so
 		-- recompute them here. Nothing else does until a player next gets in.
-		self:CAR_Running(not self:Photon_Blackout() and IsValid(self:GetDriver()))
+		self:CAR_Running(not self:Photon_Blackout() and IsValid(Photon.GetVehicleDriver(self)))
 	end
 
 	return self:Photon_Blackout()

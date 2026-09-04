@@ -448,8 +448,24 @@ local function PhotonCompileCreatorData(prefName, prefCategory, prefSiren, prefL
 	local formatColor = string.format("Color(%s,%s,%s)", col.r, col.g, col.b)
 	if EMVU.GetSirenTable()[prefSiren] and EMVU.GetSirenTable()[prefSiren].ID then prefSiren = "\"" .. EMVU.GetSirenTable()[prefSiren].ID .. "\"" end
 
-	local vehicleClass = ent:GetVehicleClass()
-	local vehicleData = list.Get("Vehicles")[vehicleClass]
+	-- Stock jeeps live in list.Get("Vehicles"); Glide chassis often only exist as
+	-- scripted ents. Prefer the Vehicles entry when present, otherwise synthesise
+	-- Class/Model from the entity (and leave vehiclescript empty for Glide).
+	local vehicleData = Photon.LookupVehiclesEntry(ent)
+
+	local entClass, entModel, entScript
+	if istable(vehicleData) then
+		entClass = vehicleData.Class or Photon.ResolveVehicleListClass(ent) or "prop_vehicle_jeep"
+		entModel = vehicleData.Model or ent:GetModel()
+		entScript = vehicleData.KeyValues and vehicleData.KeyValues.vehiclescript or ""
+	elseif Photon.IsGlideVehicle(ent) then
+		entClass = ent:GetClass()
+		entModel = ent:GetModel()
+		entScript = ""
+	else
+		LocalPlayer():ChatPrint("[Photon] Could not resolve vehicle list data for this entity. Is it a registered Vehicles entry?")
+		return false
+	end
 
 	local injectTable = {
 		["PREF_NAME"] = prefName or "",
@@ -458,11 +474,11 @@ local function PhotonCompileCreatorData(prefName, prefCategory, prefSiren, prefL
 		["ENT_BODYGROUPS"] = FormatBodygroupChoices(ent),
 		["ENT_COLOR"] = formatColor,
 		["PREF_LIGHTBAR"] = FormatLightbarChoice(prefLightbar),
-		["ENT_CLASS"] = vehicleData.Class,
+		["ENT_CLASS"] = entClass,
 		["PREF_CATEGORY"] = prefCategory or "Emergency Vehicles",
-		["ENT_MODEL"] = vehicleData.Model,
+		["ENT_MODEL"] = entModel,
 		["AUTHOR_NAME"] = authorName,
-		["ENT_SCRIPT"] = vehicleData.KeyValues.vehiclescript,
+		["ENT_SCRIPT"] = entScript,
 		["PREF_INDEX"] = string.lower(string.Replace(prefName, " ", "_")) .. "_" .. string.Split(LocalPlayer():SteamID(), ":")[3]
 	}
 	return PhotonTemplateReplace(PHOTON_CREATOR_TEMPLATE, injectTable)
@@ -472,6 +488,7 @@ function PhotonCopyConfiguration()
 	local car = Photon.GetPlayerVehicle(LocalPlayer())
 	if not IsValid( car ) then LocalPlayer():ChatPrint( "[Photon] You must be driving the target vehicle." ) return end
 	local returnCode = PhotonCompileCreatorData(GetConVar("photon_creator_name"):GetString(), GetConVar("photon_creator_category"):GetString(), GetConVar("photon_creator_siren"):GetInt(), GetConVar("photon_creator_lightbar"):GetString(), car)
+	if not returnCode then return end
 	SetClipboardText( returnCode )
 	LocalPlayer():ChatPrint( "[Photon] Configuration copied to your clipboard.\nPaste the code into a text editor and save as a .lua file in your garrysmod/lua/autorun folder.\nYou will likely need to restart the game for the vehicle to appear for the first time." )
 end
