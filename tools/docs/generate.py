@@ -31,10 +31,10 @@ import textwrap
 from datetime import datetime, timezone
 from pathlib import Path
 
-import wenmode.presets
 from wenmode import Wenmode
+from wenmode.presets import github as github_rules
 
-MARKDOWN = Wenmode(rules=wenmode.presets.github)
+MARKDOWN = Wenmode(github_rules())
 
 
 # Every callout kind the site knows, whether it arrives as `> [!WARNING]` in a
