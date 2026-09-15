@@ -197,17 +197,14 @@ function ENT:ELS_Blackout(val)
 
 	if val ~= nil then
 		if Photon.IsGlideVehicle(self) then
-			-- On Glide, blackout is HeadlightState == 0. A boolean write maps to
-			-- Off or the preferred On/Fullbeam (never invents high beam).
+			-- Glide owns HeadlightState (manual H + auto-headlights). Photon's
+			-- Blackout bit is a mirror only — do not force beams on when ELS
+			-- clears blackout (that fought tunnels / auto-on). Explicit blackout
+			-- still turns Glide lights off.
 			self.PhotonGlideELSFlashing = false
 			if val then
 				if isfunction(self.SetHeadlightState) then
 					self:SetHeadlightState(0)
-				end
-			else
-				local preferred = self.PhotonGlidePreferredBeam or 1
-				if isfunction(self.SetHeadlightState) then
-					self:SetHeadlightState(preferred)
 				end
 			end
 			Photon.SyncPhotonBlackoutFromGlide(self, true)
@@ -226,10 +223,13 @@ function ENT:ELS_Blackout(val)
 	return self:Photon_Blackout()
 end
 
---- Glide: advance Off → On → Fullbeam. Stock: toggle blackout bool.
+--- Stock: toggle blackout. Glide: no-op for input (Glide KEY_H already cycles beams);
+--- still available if something needs a programmatic cycle.
 function ENT:ELS_BlackoutCycle()
 	if Photon.IsGlideVehicle(self) then
-		Photon.CycleGlideHeadlights(self)
+		-- Intentionally do not cycle — Glide's headlights bind shares KEY_H and
+		-- already advances Off → On → Fullbeam. Double-cycling skipped low beam.
+		Photon.SyncPhotonBlackoutFromGlide(self, true)
 		return self:Photon_Blackout()
 	end
 	return self:ELS_Blackout(not self:Photon_Blackout())

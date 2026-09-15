@@ -130,6 +130,10 @@ end
 
 -- Glide HeadlightState: 0 = off (Photon blackout), 1 = low / on, 2 = high / fullbeam.
 -- TurnSignalState matches Photon: 0 none, 1 left, 2 right, 3 hazard.
+--
+-- Glide already owns KEY_H for headlights (same default as Photon's blackout key) and
+-- has auto-headlights for dark areas. Photon must not drive HeadlightState from H or
+-- from a latched Blackout bit — only mirror Glide → Photon, and briefly pulse for ELS.
 
 --- Whether Photon should draw PI sprites for headlights/running/brakes/signals.
 -- Glide cars use native lighting for those; Photon still draws ELS props.
@@ -139,10 +143,11 @@ function Photon.UsesNativeVehicleLights(ent)
 	return Photon.IsGlideVehicle(ent)
 end
 
---- Sync Photon's Blackout / Running flags from Glide's HeadlightState.
--- Skips while ELS is flashing headlights so temporary Off frames do not latch blackout.
+--- Mirror Glide HeadlightState into Photon's Blackout / Running flags.
+-- Glide is authoritative. Do not call this to *force* Glide lights.
+-- Skips while ELS is mid-flash so temporary Off frames do not latch blackout.
 -- @ent ent
--- @tparam[opt] bool force Sync even while flashing (e.g. after an H cycle).
+-- @tparam[opt] bool force Sync even while flashing.
 function Photon.SyncPhotonBlackoutFromGlide(ent, force)
 	if not IsValid(ent) or not Photon.IsGlideVehicle(ent) then return end
 	if not isfunction(ent.GetHeadlightState) then return end
@@ -157,27 +162,31 @@ function Photon.SyncPhotonBlackoutFromGlide(ent, force)
 	if ent.SetPhotonNet_Blackout then
 		ent:SetPhotonNet_Blackout(blackout)
 	end
-	if ent.CAR_Running and isfunction(ent.CAR_Running) then
+	if isfunction(ent.CAR_Running) then
 		ent:CAR_Running(not blackout and IsValid(Photon.GetVehicleDriver(ent)))
 	end
 end
 
---- Advance Glide headlights Off → On → Fullbeam → Off (Photon H on Glide).
--- Mirrors Glide's own headlights input: ChangeHeadlightState(cur + 1).
+--- Advance Glide headlights Off → On → Fullbeam → Off.
+-- Prefer letting Glide's own headlights bind do this (also KEY_H by default).
+-- Kept for API / non-overlapping binds; Photon's H listener does not call this.
 -- @ent ent
 function Photon.CycleGlideHeadlights(ent)
 	if not IsValid(ent) or not Photon.IsGlideVehicle(ent) then return end
-	if not isfunction(ent.ChangeHeadlightState) and not isfunction(ent.SetHeadlightState) then return end
+	if not isfunction(ent.SetHeadlightState) and not isfunction(ent.ChangeHeadlightState) then return end
 
 	ent.PhotonGlideELSFlashing = false
 
 	local cur = isfunction(ent.GetHeadlightState) and (ent:GetHeadlightState() or 0) or 0
-	if isfunction(ent.ChangeHeadlightState) then
-		ent:ChangeHeadlightState(cur + 1)
-	else
-		local nextState = cur + 1
-		if nextState > 2 then nextState = 0 end
+	local nextState = cur + 1
+	if nextState > 2 then nextState = 0 end
+
+	-- SetHeadlightState avoids ChangeHeadlightState's CanSwitchHeadlights early-out
+	-- and click sound when Photon is not the primary input path.
+	if isfunction(ent.SetHeadlightState) then
 		ent:SetHeadlightState(nextState)
+	else
+		ent:ChangeHeadlightState(nextState, true)
 	end
 
 	Photon.SyncPhotonBlackoutFromGlide(ent, true)
@@ -231,31 +240,35 @@ function Photon.GlideSequenceUsesHeadlights(ent)
 	return false
 end
 
---- Drive Glide HeadlightState for ELS flash / restore preferred beam.
--- Call from a frequent server scan while a Photon Glide car has a driver.
+--- Pulse Glide headlights for ELS when the active stage asks for it.
+-- Never forces lights off for Photon blackout (that fought Glide auto-headlights).
+-- Only starts flashing when headlights are already on; Off stays Off.
 -- @ent ent
 function Photon.ApplyGlideELSHeadlights(ent)
 	if not IsValid(ent) or not Photon.IsGlideVehicle(ent) then return end
 	if not isfunction(ent.SetHeadlightState) or not isfunction(ent.GetHeadlightState) then return end
 
-	local preferred = ent.PhotonGlidePreferredBeam or 1
-	if preferred < 1 then preferred = 1 end
-	if preferred > 2 then preferred = 2 end
+	local state = ent:GetHeadlightState() or 0
+	local wantsFlash = Photon.GlideSequenceUsesHeadlights(ent)
 
-	if ent:Photon_Blackout() then
-		if ent:GetHeadlightState() ~= 0 then
-			ent:SetHeadlightState(0)
+	if wantsFlash then
+		-- Do not wake headlights from blackout / auto-off; only pulse an already-on beam.
+		if state == 0 and not ent.PhotonGlideELSFlashing then
+			return
 		end
-		ent.PhotonGlideELSFlashing = false
-		return
-	end
 
-	if Photon.GlideSequenceUsesHeadlights(ent) then
+		if state > 0 then
+			ent.PhotonGlidePreferredBeam = state
+		end
+
+		local preferred = ent.PhotonGlidePreferredBeam or 1
+		if preferred < 1 then preferred = 1 end
+		if preferred > 2 then preferred = 2 end
+
 		ent.PhotonGlideELSFlashing = true
-		-- ~2.5 Hz flash; SetHeadlightState avoids ChangeHeadlightState click spam.
 		local on = (CurTime() % 0.4) < 0.2
 		local target = on and preferred or 0
-		if ent:GetHeadlightState() ~= target then
+		if state ~= target then
 			ent:SetHeadlightState(target)
 		end
 		return
@@ -263,7 +276,10 @@ function Photon.ApplyGlideELSHeadlights(ent)
 
 	if ent.PhotonGlideELSFlashing then
 		ent.PhotonGlideELSFlashing = false
-		if ent:GetHeadlightState() ~= preferred then
+		local preferred = ent.PhotonGlidePreferredBeam or 1
+		if preferred < 1 then preferred = 1 end
+		if preferred > 2 then preferred = 2 end
+		if state ~= preferred then
 			ent:SetHeadlightState(preferred)
 		end
 		Photon.SyncPhotonBlackoutFromGlide(ent, true)

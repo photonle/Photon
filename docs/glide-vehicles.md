@@ -50,11 +50,11 @@ On Glide chassis, Photon **does not draw** PI sprites for headlights, running li
 reverse, or indicators. Those come from Glide. Photon still draws ELS props and emergency
 components as usual.
 
-| Photon / input | Glide |
+| Photon concept | Glide |
 |----------------|-------|
-| **H** (blackout key) | Cycles `HeadlightState`: **Off → On → Fullbeam → Off** |
-| Blackout (`Photon_Blackout`) | `HeadlightState == 0` |
-| Preferred beam | Last On (1) or Fullbeam (2) used while not blacked out |
+| **H** | Glide's own headlights bind (default **KEY_H**) — **Off → On → Fullbeam → Off**. Photon does **not** also handle H on Glide (that double-cycled and skipped low beam). |
+| Blackout (`Photon_Blackout`) | Mirror of `HeadlightState == 0` (including Glide auto-headlights) |
+| Preferred beam | Last On (1) or Fullbeam (2) while lights are on |
 | Turn signals / hazards | `TurnSignalState` 0–3 (same numbering as Photon) |
 | Brakes / reverse | Glide native; Photon still tracks them for ELS brake/reverse sequences |
 
@@ -63,8 +63,9 @@ Glide packs unless you intentionally want Photon sprites on top of Glide.
 
 ### ELS headlight flash (e.g. Stage 3 / 999)
 
-When primary lights are on and the active sequence asks for headlights, Photon flashes Glide's
-native `HeadlightState` (preferred beam ↔ Off) instead of drawing Photon headlight sprites.
+When primary lights are on and the active sequence asks for headlights, Photon pulses Glide's
+native beam (preferred ↔ Off) **only if headlights are already on**. Off / blackout stays off;
+Photon will not fight Glide auto-headlights by forcing state 0.
 
 Opt in with either:
 
@@ -76,5 +77,3 @@ Opt in with either:
 
 or a Components key whose name contains `"headlight"` (same as stock auto components such as
 `auto_fpiu16_headlights`).
-
-Blackout (Off) still wins: flashing stops while `HeadlightState` is 0 via **H**.

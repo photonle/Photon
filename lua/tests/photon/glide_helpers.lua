@@ -140,14 +140,23 @@ return {
 				ent._hs = 0
 				ent.GetHeadlightState = function(self) return self._hs end
 				ent.SetHeadlightState = function(self, s) self._hs = s end
-				ent.ChangeHeadlightState = function(self, s)
-					s = math.floor(s)
-					if s < 0 then s = 2 end
-					if s > 2 then s = 0 end
-					self._hs = s
-				end
 				ent.SetPhotonNet_Blackout = function() end
 				Photon.CycleGlideHeadlights(ent)
+				expect(ent._hs).to.equal(1)
+			end
+		},
+		{
+			name = "ApplyGlideELSHeadlights does not force off when blackout is latched",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				ent._hs = 1
+				ent.GetHeadlightState = function(self) return self._hs end
+				ent.SetHeadlightState = function(self, s) self._hs = s end
+				ent.Photon_Blackout = function() return true end
+				ent.HasPhotonELS = function() return false end
+				Photon.ApplyGlideELSHeadlights(ent)
 				expect(ent._hs).to.equal(1)
 			end
 		},

@@ -14,8 +14,9 @@ local function ScanGlideVehicleLights( v )
 	if not v:Photon() and not (v.HasPhotonELS and v:HasPhotonELS()) then return end
 	local driver = Photon.GetVehicleDriver(v)
 	if not IsValid(driver) or not driver:IsPlayer() then return end
-	Photon.ApplyGlideELSHeadlights(v)
+	-- Sync first so Blackout tracks Glide (including auto-headlights) before ELS flash.
 	Photon.SyncPhotonBlackoutFromGlide(v)
+	Photon.ApplyGlideELSHeadlights(v)
 end
 
 function Photon:RunningScan()
