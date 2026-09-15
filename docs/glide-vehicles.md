@@ -64,8 +64,8 @@ Glide packs unless you intentionally want Photon sprites on top of Glide.
 ### ELS headlight flash (e.g. Stage 3 / 999)
 
 When primary lights are on and the active sequence asks for headlights, Photon pulses Glide's
-native beam (preferred ↔ Off) **only if headlights are already on**. Off / blackout stays off;
-Photon will not fight Glide auto-headlights by forcing state 0.
+native beam (preferred ↔ Off). If headlights were Off, flash **wakes** them using the last
+preferred beam (or low beam). When the stage ends, that preferred beam is restored.
 
 Opt in with either:
 

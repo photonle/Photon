@@ -146,7 +146,7 @@ return {
 			end
 		},
 		{
-			name = "ApplyGlideELSHeadlights does not force off when blackout is latched",
+			name = "ApplyGlideELSHeadlights does not force off from latched blackout alone",
 			func = function(state)
 				local ent = NewEnt()
 				state.ent = ent

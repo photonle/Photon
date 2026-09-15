@@ -241,8 +241,8 @@ function Photon.GlideSequenceUsesHeadlights(ent)
 end
 
 --- Pulse Glide headlights for ELS when the active stage asks for it.
--- Never forces lights off for Photon blackout (that fought Glide auto-headlights).
--- Only starts flashing when headlights are already on; Off stays Off.
+-- Wakes from Off using the last preferred beam (or low beam). Does not treat
+-- Photon blackout as a latch that forces Glide off (that fought auto-headlights).
 -- @ent ent
 function Photon.ApplyGlideELSHeadlights(ent)
 	if not IsValid(ent) or not Photon.IsGlideVehicle(ent) then return end
@@ -252,11 +252,6 @@ function Photon.ApplyGlideELSHeadlights(ent)
 	local wantsFlash = Photon.GlideSequenceUsesHeadlights(ent)
 
 	if wantsFlash then
-		-- Do not wake headlights from blackout / auto-off; only pulse an already-on beam.
-		if state == 0 and not ent.PhotonGlideELSFlashing then
-			return
-		end
-
 		if state > 0 then
 			ent.PhotonGlidePreferredBeam = state
 		end
