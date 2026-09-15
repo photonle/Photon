@@ -113,7 +113,56 @@ return {
 				expect(entry).to.beA("table")
 				expect(entry.Name).to.equal("Photon Glide Test Car")
 			end
-		}
+		},
+		{
+			name = "UsesNativeVehicleLights is true for Glide",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				expect(Photon.UsesNativeVehicleLights(ent)).to.beTrue()
+			end
+		},
+		{
+			name = "UsesNativeVehicleLights is false for stock",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				expect(Photon.UsesNativeVehicleLights(ent)).to.beFalse()
+			end
+		},
+		{
+			name = "CycleGlideHeadlights advances Off to On",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				ent._hs = 0
+				ent.GetHeadlightState = function(self) return self._hs end
+				ent.SetHeadlightState = function(self, s) self._hs = s end
+				ent.ChangeHeadlightState = function(self, s)
+					s = math.floor(s)
+					if s < 0 then s = 2 end
+					if s > 2 then s = 0 end
+					self._hs = s
+				end
+				ent.SetPhotonNet_Blackout = function() end
+				Photon.CycleGlideHeadlights(ent)
+				expect(ent._hs).to.equal(1)
+			end
+		},
+		{
+			name = "SyncGlideTurnSignals writes TurnSignalState",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				ent._sig = 0
+				ent.SetTurnSignalState = function(self, s) self._sig = s end
+				Photon.SyncGlideTurnSignals(ent, 3)
+				expect(ent._sig).to.equal(3)
+			end
+		},
 	},
 
 	afterEach = function(state)

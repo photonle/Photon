@@ -5,9 +5,8 @@ description: Using Photon with StyledStrike's Glide vehicle base.
 
 # Glide Vehicles
 
-Photon supports [Glide](https://github.com/StyledStrike/gmod-glide) cars the same way Photon 2
-does: runtime hooks only. There is no automatic remapping of light positions and Photon does not
-suppress Glide's own headlight, signal, or siren sprites.
+Photon supports [Glide](https://github.com/StyledStrike/gmod-glide) cars with runtime hooks
+only. There is no automatic remapping of light positions.
 
 ## Local space
 
@@ -43,8 +42,39 @@ Vehicles entry exists, and leaves `vehiclescript` empty for Glide.
 | `Photon.GetPlayerVehicle` | Seat → chassis for the local/driving player |
 | `Photon.GetVehicleDriver` | Driver / Glide seat 1 |
 | `Photon.GetForwardSpeedComponent` | `.x` on Glide, `.y` on HL2 |
+| `Photon.UsesNativeVehicleLights` | Skip Photon PI sprites for car lights |
 
-## Built-in Glide lights
+## Native vehicle lights
 
-Photon leaves Glide lighting alone. If you want Photon-only lighting, clear or disable the
-sprites / siren tables on the Glide entity definition itself.
+On Glide chassis, Photon **does not draw** PI sprites for headlights, running lights, brakes,
+reverse, or indicators. Those come from Glide. Photon still draws ELS props and emergency
+components as usual.
+
+| Photon / input | Glide |
+|----------------|-------|
+| **H** (blackout key) | Cycles `HeadlightState`: **Off → On → Fullbeam → Off** |
+| Blackout (`Photon_Blackout`) | `HeadlightState == 0` |
+| Preferred beam | Last On (1) or Fullbeam (2) used while not blacked out |
+| Turn signals / hazards | `TurnSignalState` 0–3 (same numbering as Photon) |
+| Brakes / reverse | Glide native; Photon still tracks them for ELS brake/reverse sequences |
+
+Do **not** author a second Photon Positions set for headlights / running / brakes / indicators on
+Glide packs unless you intentionally want Photon sprites on top of Glide.
+
+### ELS headlight flash (e.g. Stage 3 / 999)
+
+When primary lights are on and the active sequence asks for headlights, Photon flashes Glide's
+native `HeadlightState` (preferred beam ↔ Off) instead of drawing Photon headlight sprites.
+
+Opt in with either:
+
+```lua
+-- On the primary sequence entry:
+{ Name = "STAGE 3", Stage = "M3", Headlights = true, Components = { … } }
+-- or GlideHeadlights = true
+```
+
+or a Components key whose name contains `"headlight"` (same as stock auto components such as
+`auto_fpiu16_headlights`).
+
+Blackout (Off) still wins: flashing stops while `HeadlightState` is 0 via **H**.

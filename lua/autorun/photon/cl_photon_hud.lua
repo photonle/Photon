@@ -479,7 +479,15 @@ function PhotonHUD:GetCurrentState()
 				Icon = "horn",
 				State = useState
 			}
-			if ent:Photon_Blackout() then useState = 2 else useState = 0 end
+			if Photon.IsGlideVehicle(ent) and isfunction(ent.GetHeadlightState) then
+				local hs = ent:GetHeadlightState() or 0
+				-- 0 Off (blackout highlight), 1 On, 2 Fullbeam (selected-style).
+				if hs == 0 then useState = 2 elseif hs == 2 then useState = 1 else useState = 0 end
+			elseif ent:Photon_Blackout() then
+				useState = 2
+			else
+				useState = 0
+			end
 			data.Functions[3] = {
 				Name = "",
 				Icon = "blackout",

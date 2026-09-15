@@ -279,8 +279,15 @@ hook.Add("Think", "Photon.ButtonPress", function()
 		EMVU.Sounds:Panel(emv:Photon_Blackout())
 		BLKOUTON_DOWN = true
 	elseif BLKOUTON_DOWN and not keyDown( key_blackout ) then
-		EMVU.Sounds:Panel(not emv:Photon_Blackout())
-		EMVU.Net:Blackout(not emv:Photon_Blackout())
+		-- Glide: each press advances Off → On → Fullbeam (server ignores the bool).
+		-- Stock: toggle blackout on/off.
+		if Photon.IsGlideVehicle(emv) then
+			EMVU.Sounds:Panel(true)
+			EMVU.Net:Blackout(false)
+		else
+			EMVU.Sounds:Panel(not emv:Photon_Blackout())
+			EMVU.Net:Blackout(not emv:Photon_Blackout())
+		end
 		BLKOUTON_DOWN = false
 	end
 

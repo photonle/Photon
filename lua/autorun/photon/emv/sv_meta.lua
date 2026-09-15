@@ -196,14 +196,43 @@ function ENT:ELS_Blackout(val)
 	end
 
 	if val ~= nil then
-		self:SetPhotonNet_Blackout(val and true or false)
+		if Photon.IsGlideVehicle(self) then
+			-- On Glide, blackout is HeadlightState == 0. A boolean write maps to
+			-- Off or the preferred On/Fullbeam (never invents high beam).
+			self.PhotonGlideELSFlashing = false
+			if val then
+				if isfunction(self.SetHeadlightState) then
+					self:SetHeadlightState(0)
+				end
+			else
+				local preferred = self.PhotonGlidePreferredBeam or 1
+				if isfunction(self.SetHeadlightState) then
+					self:SetHeadlightState(preferred)
+				end
+			end
+			Photon.SyncPhotonBlackoutFromGlide(self, true)
+		else
+			self:SetPhotonNet_Blackout(val and true or false)
 
-		-- Running lights are a separate networked value derived from blackout, so
-		-- recompute them here. Nothing else does until a player next gets in.
-		self:CAR_Running(not self:Photon_Blackout() and IsValid(Photon.GetVehicleDriver(self)))
+			-- Running lights are a separate networked value derived from blackout, so
+			-- recompute them here. Nothing else does until a player next gets in.
+			-- ELS-only vehicles never get Photon:SetupCar, so CAR_Running may be absent.
+			if isfunction(self.CAR_Running) then
+				self:CAR_Running(not self:Photon_Blackout() and IsValid(Photon.GetVehicleDriver(self)))
+			end
+		end
 	end
 
 	return self:Photon_Blackout()
+end
+
+--- Glide: advance Off → On → Fullbeam. Stock: toggle blackout bool.
+function ENT:ELS_BlackoutCycle()
+	if Photon.IsGlideVehicle(self) then
+		Photon.CycleGlideHeadlights(self)
+		return self:Photon_Blackout()
+	end
+	return self:ELS_Blackout(not self:Photon_Blackout())
 end
 
 local illumination_allowed = GetConVar("photon_emv_useillum")

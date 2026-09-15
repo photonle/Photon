@@ -7,15 +7,33 @@ local function ScanRunningVehicle( v )
 	end
 end
 
+local function ScanGlideVehicleLights( v )
+	if not Photon.IsGlideVehicle(v) then return end
+	-- ELS-only packs (no Photon = "PHOTON_INHERIT") never get SetupCar / Photon(),
+	-- but still need native headlight sync and ELS flash.
+	if not v:Photon() and not (v.HasPhotonELS and v:HasPhotonELS()) then return end
+	local driver = Photon.GetVehicleDriver(v)
+	if not IsValid(driver) or not driver:IsPlayer() then return end
+	Photon.ApplyGlideELSHeadlights(v)
+	Photon.SyncPhotonBlackoutFromGlide(v)
+end
+
 function Photon:RunningScan()
 	for k,v in pairs( self:AllVehicles() ) do
 		if IsValid( v ) then Photon.RunQuarantined( v, ScanRunningVehicle ) end
 	end
 end
+
+function Photon:GlideLightScan()
+	for _, v in pairs( self:AllVehicles() ) do
+		if IsValid( v ) then Photon.RunQuarantined( v, ScanGlideVehicleLights ) end
+	end
+end
+
 hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, seat)
 	local v = Photon.GetVehicleEntity(seat)
 	if IsValid(v) then
-		if v:Photon() then
+		if v:Photon() and isfunction(v.CAR_Running) and isfunction(v.CAR_IsBlackedOut) then
 			v:CAR_Running(not v:CAR_IsBlackedOut())
 		end
 		if v:HasPhotonELS() then
@@ -28,9 +46,9 @@ hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, seat)
   local v = Photon.GetVehicleEntity(seat)
   if IsValid(v) then
     if v:Photon() then
-      v:CAR_Running(false)
-      v:CAR_Braking(false)
-      v:CAR_Reversing(false)
+      if isfunction(v.CAR_Running) then v:CAR_Running(false) end
+      if isfunction(v.CAR_Braking) then v:CAR_Braking(false) end
+      if isfunction(v.CAR_Reversing) then v:CAR_Reversing(false) end
     end
 
     if v:HasPhotonELS() then
@@ -62,6 +80,11 @@ end)
 
 timer.Create("Photon.RunScan", 0.5, 0, function()
 	Photon:RunningScan()
+end)
+
+-- Faster than RunningScan so ELS headlight flash is visible (~2.5 Hz).
+timer.Create("Photon.GlideLightScan", 0.1, 0, function()
+	Photon:GlideLightScan()
 end)
 
 local function ContinueVehicleSiren( car )
