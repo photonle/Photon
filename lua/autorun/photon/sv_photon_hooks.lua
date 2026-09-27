@@ -22,7 +22,7 @@ hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, seat)
 	local v = Photon.GetVehicleEntity(seat)
 	if IsGlidePassengerSeat(seat, v) then return end
 	if IsValid(v) then
-		if v:Photon() then
+		if v:Photon() and isfunction(v.CAR_Running) and isfunction(v.CAR_IsBlackedOut) then
 			v:CAR_Running(not v:CAR_IsBlackedOut())
 		end
 		if v:HasPhotonELS() then
@@ -36,9 +36,9 @@ hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, seat)
   if IsGlidePassengerSeat(seat, v) then return end
   if IsValid(v) then
     if v:Photon() then
-      v:CAR_Running(false)
-      v:CAR_Braking(false)
-      v:CAR_Reversing(false)
+      if isfunction(v.CAR_Running) then v:CAR_Running(false) end
+      if isfunction(v.CAR_Braking) then v:CAR_Braking(false) end
+      if isfunction(v.CAR_Reversing) then v:CAR_Reversing(false) end
     end
 
     if v:HasPhotonELS() then
