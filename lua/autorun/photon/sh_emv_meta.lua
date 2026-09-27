@@ -49,7 +49,12 @@ end
 
 function ent:Photon_GetAutoSkinData()
 	if self:GetSkin() == 0 then
-		local submat = self:GetSubMaterial( self:Photon_GetAutoSkinIndex() )
+		local skinIndex = self:Photon_GetAutoSkinIndex()
+		-- No /skin|/skin0|/carpaint material (common on Glide packs with no livery options).
+		if not isnumber(skinIndex) then
+			return 0
+		end
+		local submat = self:GetSubMaterial(skinIndex)
 		return submat ~= "" and submat or 0
 	end
 	return self:GetSkin()

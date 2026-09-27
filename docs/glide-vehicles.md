@@ -22,15 +22,30 @@ chassis without editing the vectors will place lights on the wrong sides.
 
 ## Registration
 
-Register Photon/EMV the same way as for any other vehicle:
+Register Photon/EMV with a **unique** `list.Get("Vehicles")` key (Express uses
+`name_steamid`). Do **not** key the entry by the Glide entity class alone — that makes every
+spawn of that class look like the Photon pack.
 
-1. `list.Set("Vehicles", className, { … HasPhoton / IsEMV / Photon / EMV … })` using the **scripted
-   entity class** as the list key (Glide cars are not `prop_vehicle_jeep`), and/or
-2. Model indexes in Photon's vehicle libraries, keyed to the chassis model Glide sets from
-   `ChassisModel`.
+```lua
+list.Set("Vehicles", "my_f40_photon", {
+	Name = "F40 Photon",
+	Class = "glide_f40",           -- Glide SENT class
+	Model = "models/.../chassis.mdl", -- ChassisModel
+	IsEMV = true,
+	EMV = EMV,
+	HasPhoton = true,
+	Photon = "PHOTON_INHERIT",
+	-- KeyValues.vehiclescript can be empty for Glide
+})
+```
 
-Photon resolves Vehicles-list entries via class, `VehicleName`, and chassis model (see
-`Photon.LookupVehiclesEntry`). Express Creator synthesises Class/Model from the entity when no
+Spawn the Photon version from the **Vehicles** spawn menu (sandbox sets `VehicleName` to the
+list key). Spawning the same chassis from Glide's own menu leaves `VehicleName` unset, so Photon
+does **not** attach — same idea as keeping a stock jeep separate from its Photon twin.
+
+Photon resolves Vehicles entries via `VehicleTable` / `VehicleName` only on Glide. Class and
+chassis-model fallbacks are disabled for bare Glide SENTs so packs that reuse `ChassisModel`
+cannot hijack the civilian car. Express Creator synthesises Class/Model from the entity when no
 Vehicles entry exists, and leaves `vehiclescript` empty for Glide.
 
 ## Runtime helpers
@@ -42,6 +57,7 @@ Vehicles entry exists, and leaves `vehiclescript` empty for Glide.
 | `Photon.GetPlayerVehicle` | Seat → chassis for the local/driving player |
 | `Photon.GetVehicleDriver` | Driver / Glide seat 1 |
 | `Photon.GetForwardSpeedComponent` | `.x` on Glide, `.y` on HL2 |
+| `Photon.HasExplicitVehicleIdentity` | `VehicleName` / `VehicleTable` set by Vehicles spawn |
 | `Photon.UsesNativeVehicleLights` | Skip Photon PI sprites for car lights |
 
 ## Native vehicle lights

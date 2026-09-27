@@ -89,7 +89,20 @@ function Photon.GetForwardSpeedComponent(ent, localVec)
 	return localVec.y
 end
 
+--- Whether this entity was spawned with an explicit Vehicles-list identity.
+-- Sandbox vehicle spawns set VehicleName / VehicleTable to the list key. Glide's
+-- own spawn menu does not, so Photon must not invent one from class or model.
+-- @ent ent
+-- @treturn bool
+function Photon.HasExplicitVehicleIdentity(ent)
+	if not IsValid(ent) then return false end
+	if istable(ent.VehicleTable) then return true end
+	return isstring(ent.VehicleName) and ent.VehicleName ~= ""
+end
+
 --- Look up a `list.Get("Vehicles")` entry for an entity, with Glide-safe fallbacks.
+-- Bare Glide SENTs (no VehicleName) never match by class or chassis model — that
+-- would attach Photon/EMV to the civilian original whenever a pack reused ChassisModel.
 -- @ent ent
 -- @treturn table|nil
 function Photon.LookupVehiclesEntry(ent)
@@ -110,6 +123,10 @@ function Photon.LookupVehiclesEntry(ent)
 				return car
 			end
 		end
+		-- Explicit name that does not resolve still stops Glide class/model fallback.
+		if Photon.IsGlideVehicle(ent) then return nil end
+	elseif Photon.IsGlideVehicle(ent) then
+		return nil
 	end
 
 	local class = Photon.ResolveVehicleListClass(ent)

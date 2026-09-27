@@ -115,6 +115,47 @@ return {
 			end
 		},
 		{
+			name = "LookupVehiclesEntry ignores model match on bare Glide SENTs",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				ent:SetModel("models/error.mdl")
+				local key = "photon_glide_hijack_" .. ent:EntIndex()
+				list.Set("Vehicles", key, {
+					Name = "Photon Hijack Car",
+					Model = "models/error.mdl",
+					Class = "glide_fake",
+					HasPhoton = true,
+					IsEMV = true,
+				})
+				state.listKey = key
+				expect(Photon.LookupVehiclesEntry(ent)).to.beNil()
+				expect(Photon:RecoverVehicleName(ent)).to.beFalse()
+			end
+		},
+		{
+			name = "LookupVehiclesEntry still resolves Glide when VehicleName is set",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				ent:SetModel("models/error.mdl")
+				local key = "photon_glide_named_" .. ent:EntIndex()
+				list.Set("Vehicles", key, {
+					Name = "Photon Named Glide",
+					Model = "models/error.mdl",
+					Class = "glide_fake",
+					HasPhoton = true,
+				})
+				state.listKey = key
+				ent.VehicleName = key
+				local entry = Photon.LookupVehiclesEntry(ent)
+				expect(entry).to.beA("table")
+				expect(entry.Name).to.equal("Photon Named Glide")
+			end
+		},
+		{
 			name = "UsesNativeVehicleLights is true for Glide",
 			func = function(state)
 				local ent = NewEnt()
