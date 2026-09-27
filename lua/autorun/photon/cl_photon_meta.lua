@@ -204,8 +204,8 @@ function Photon:SetupCar( ent, index )
 				self.PhotonStateRenderTable = RenderTable
 			end
 
-			if headlights then
-				if Photon.Vehicles.States.Headlights[self.VehicleName] or pdebug then
+			if headlights or pdebug then
+				if Photon.Vehicles.States.Headlights[self.VehicleName] then
 					for _,l in pairs(Photon.Vehicles.States.Headlights[self.VehicleName]) do
 						RenderTable[l[1]] = l
 					end
