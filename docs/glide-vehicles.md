@@ -40,9 +40,20 @@ Vehicles entry exists, and leaves `vehiclescript` empty for Glide.
 |--------|------|
 | `Photon.IsGlideVehicle` | Detect Glide chassis |
 | `Photon.IsPhotonChassis` | Stock vehicle **or** Glide chassis |
-| `Photon.GetPlayerVehicle` | Seat → chassis for the local/driving player |
+| `Photon.GetPlayerVehicle` | Seat → chassis for the driver; passengers get their seat back |
 | `Photon.GetVehicleDriver` | Driver / Glide seat 1 |
 | `Photon.GetForwardSpeedComponent` | `.x` on Glide, `.y` on HL2 |
+
+## Seats
+
+Only the driver's seat (Glide seat 1) controls Photon, as on a stock vehicle. Passengers cannot
+work the lights, siren or signals, and a passenger getting in or out does not change the
+vehicle's running, brake or siren state.
+
+## Brake and reverse
+
+Photon reads brake and reverse state from Glide's own `IsBraking` and `IsReversing`, which follow
+Glide's brake input and gear rather than raw keys, so they respect Glide keybinds.
 
 ## Built-in Glide lights
 
