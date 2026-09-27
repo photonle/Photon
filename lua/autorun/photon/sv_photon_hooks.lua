@@ -12,8 +12,15 @@ function Photon:RunningScan()
 		if IsValid( v ) then Photon.RunQuarantined( v, ScanRunningVehicle ) end
 	end
 end
+-- Glide passengers sit in seats parented to the chassis, so they resolve to it
+-- too. Only the driver's seat getting in or out should change its state.
+local function IsGlidePassengerSeat(seat, vehicle)
+	return vehicle ~= seat and seat.GlideSeatIndex ~= 1
+end
+
 hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, seat)
 	local v = Photon.GetVehicleEntity(seat)
+	if IsGlidePassengerSeat(seat, v) then return end
 	if IsValid(v) then
 		if v:Photon() then
 			v:CAR_Running(not v:CAR_IsBlackedOut())
@@ -26,6 +33,7 @@ end)
 
 hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, seat)
   local v = Photon.GetVehicleEntity(seat)
+  if IsGlidePassengerSeat(seat, v) then return end
   if IsValid(v) then
     if v:Photon() then
       v:CAR_Running(false)
@@ -143,20 +151,6 @@ hook.Add( "PlayerSpawnedSENT", "Photon.PlayerGlideSpawn", function( ply, ent )
 	if Photon.IsGlideVehicle(ent) then
 		ent.PhotonVehicleSpawner = ply
 	end
-end)
-
--- Glide seats are child ents; block the driver from switching away while Photon
--- controls live on the chassis (same idea as Photon 2's Glide_CanSwitchSeat).
-timer.Simple(5, function()
-	if not Glide then return end
-	hook.Add("Glide_CanSwitchSeat", "Photon.GlideSwitchSeat", function(ply, _seat)
-		local chassis = Photon.GetPlayerVehicle(ply)
-		if not IsValid(chassis) then return end
-		if not chassis:Photon() and not chassis:IsEMV() then return end
-		if isfunction(chassis.GetSeatDriver) and chassis:GetSeatDriver(1) == ply then
-			return false
-		end
-	end)
 end)
 
 -- Photon.AutoSkins.FetchSkins = function( id )

@@ -56,12 +56,20 @@ function Photon.GetVehicleEntity(entOrSeat)
 	return entOrSeat
 end
 
---- The Photon vehicle the player is currently in (chassis when on Glide).
+--- The Photon vehicle the player is driving (chassis when on Glide).
+-- Every Glide seat is parented to the chassis, so only the driver's seat
+-- resolves to it. A passenger gets their seat back, which carries no Photon
+-- state, the same as a passenger pod on a stock vehicle.
 -- @tparam Player ply
 -- @treturn Entity|nil
 function Photon.GetPlayerVehicle(ply)
 	if not IsValid(ply) then return nil end
-	return Photon.GetVehicleEntity(ply:GetVehicle())
+	local seat = ply:GetVehicle()
+	local vehicle = Photon.GetVehicleEntity(seat)
+	if vehicle ~= seat and ply:GlideGetSeatIndex() ~= 1 then
+		return seat
+	end
+	return vehicle
 end
 
 --- Driver of a Photon chassis (Glide seat 1 when available).
