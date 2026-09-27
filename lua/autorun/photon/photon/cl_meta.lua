@@ -20,6 +20,9 @@ function ENT:Photon_IsReversing()
 	if not IsValid(ply) then return false end
 	if not ply:IsPlayer() then return false end
 
+	-- Glide networks its gear, so every client can read it without the cache.
+	if Photon.IsGlideVehicle(self) then return self:IsReversing() end
+
 	if ply == lp() then
 		local forward = Photon.GetForwardSpeedComponent(self, self:Photon_WorldVelocity())
 		return forward < 1 and ply:KeyDown(IN_BACK)
@@ -40,12 +43,11 @@ function ENT:Photon_IsBraking()
 	if not IsValid(ply) then return false end
 	if not ply:IsPlayer() then return false end
 
+	-- Glide networks its brake input, so every client can read it without the cache.
+	if Photon.IsGlideVehicle(self) then return self:IsBraking() end
+
 	if ply == lp() then
 		local forward = Photon.GetForwardSpeedComponent(self, self:Photon_WorldVelocity())
-		-- Glide uses IN_FORWARD+IN_BACK as brake (Photon 2 parity).
-		if Photon.IsGlideVehicle(self) and ply:KeyDown(IN_FORWARD) and ply:KeyDown(IN_BACK) then
-			return true
-		end
 		return (ply:KeyDown(IN_BACK) and forward > 1) or (ply:KeyDown(IN_FORWARD) and forward < -1) or ply:KeyDown(IN_JUMP)
 	end
 
