@@ -7,6 +7,15 @@ local function NewEnt()
 	return ent
 end
 
+-- Stands in for a player sitting in `seat`, as Glide's seat index reports it.
+local function FakePlayer(seat, seatIndex)
+	return {
+		IsValid = function() return true end,
+		GetVehicle = function() return seat end,
+		GlideGetSeatIndex = function() return seatIndex end,
+	}
+end
+
 return {
 	groupName = "Photon Glide helpers",
 
@@ -56,6 +65,38 @@ return {
 				chassis.IsGlideVehicle = true
 				seat:SetParent(chassis)
 				expect(Photon.GetVehicleEntity(seat)).to.equal(chassis)
+			end
+		},
+		{
+			name = "GetPlayerVehicle gives the Glide driver the chassis",
+			func = function(state)
+				local chassis = NewEnt()
+				local seat = NewEnt()
+				state.chassis = chassis
+				state.ent = seat
+				chassis.IsGlideVehicle = true
+				seat:SetParent(chassis)
+				expect(Photon.GetPlayerVehicle(FakePlayer(seat, 1))).to.equal(chassis)
+			end
+		},
+		{
+			name = "GetPlayerVehicle gives a Glide passenger their seat",
+			func = function(state)
+				local chassis = NewEnt()
+				local seat = NewEnt()
+				state.chassis = chassis
+				state.ent = seat
+				chassis.IsGlideVehicle = true
+				seat:SetParent(chassis)
+				expect(Photon.GetPlayerVehicle(FakePlayer(seat, 2))).to.equal(seat)
+			end
+		},
+		{
+			name = "GetPlayerVehicle ignores the Glide seat index on stock vehicles",
+			func = function(state)
+				local car = NewEnt()
+				state.ent = car
+				expect(Photon.GetPlayerVehicle(FakePlayer(car, 0))).to.equal(car)
 			end
 		},
 		{
