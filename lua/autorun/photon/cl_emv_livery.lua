@@ -146,6 +146,7 @@ Photon.AutoLivery.ApplyTexture = function(mat, ent, car, val, id)
 
 	local newLivery = CreateMaterial(string.format("photon_livery_%s_%s_%s", car, val, id), "VertexlitGeneric", matParams)
 	local applyIndex = ent:Photon_GetAutoSkinIndex()
+	if not isnumber(applyIndex) then return end
 	veh:SetSubMaterial(applyIndex, "!" .. tostring(newLivery:GetName()))
 
 	veh.Photon_LiveryData = {
