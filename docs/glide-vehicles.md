@@ -43,10 +43,11 @@ Spawn the Photon version from the **Vehicles** spawn menu (sandbox sets `Vehicle
 list key). Spawning the same chassis from Glide's own menu leaves `VehicleName` unset, so Photon
 does **not** attach — same idea as keeping a stock jeep separate from its Photon twin.
 
-Photon resolves Vehicles entries via `VehicleTable` / `VehicleName` only on Glide. Class and
-chassis-model fallbacks are disabled for bare Glide SENTs so packs that reuse `ChassisModel`
-cannot hijack the civilian car. Express Creator synthesises Class/Model from the entity when no
-Vehicles entry exists, and leaves `vehiclescript` empty for Glide.
+Photon resolves Vehicles entries via `VehicleTable`, or a `VehicleName` that is actually a
+Vehicles-list key / display Name. Class and chassis-model fallbacks stay off for Glide, including
+when some other system (CityRP item ids, Glide spawn) has already written a non-empty
+`VehicleName` that is not a Photon pack. Express Creator synthesises Class/Model from the entity
+when no Vehicles entry exists, and leaves `vehiclescript` empty for Glide.
 
 ## Runtime helpers
 
@@ -57,7 +58,7 @@ Vehicles entry exists, and leaves `vehiclescript` empty for Glide.
 | `Photon.GetPlayerVehicle` | Seat → chassis for the local/driving player |
 | `Photon.GetVehicleDriver` | Driver / Glide seat 1 |
 | `Photon.GetForwardSpeedComponent` | `.x` on Glide, `.y` on HL2 |
-| `Photon.HasExplicitVehicleIdentity` | `VehicleName` / `VehicleTable` set by Vehicles spawn |
+| `Photon.HasExplicitVehicleIdentity` | `VehicleTable`, or a Vehicles-list `VehicleName` (not a CityRP item id) |
 | `Photon.UsesNativeVehicleLights` | Skip Photon PI sprites for car lights |
 
 ## Native vehicle lights

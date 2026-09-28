@@ -7,10 +7,15 @@ local modelIgnore = {
 function Photon:RecoverVehicleName( ent )
 	if not IsValid( ent ) then return false end
 
-	-- Glide originals spawn without VehicleName. Inventing one from class/model
-	-- attaches Photon packs that share ChassisModel (or key by Glide class).
-	if Photon.IsGlideVehicle(ent) and not Photon.HasExplicitVehicleIdentity(ent) then
-		return false
+	-- Never invent a Glide pack from class or chassis model. CityRP sets
+	-- VehicleName to an item id; packs that reuse ChassisModel would hijack it.
+	if Photon.IsGlideVehicle(ent) then
+		if istable(ent.VehicleTable) then
+			return ent.VehicleTable.Name or false
+		end
+
+		local _, key = Photon.VehiclesEntryForName(ent.VehicleName)
+		return key or false
 	end
 
 	local model = tostring(ent:GetModel())

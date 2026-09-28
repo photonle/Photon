@@ -156,6 +156,53 @@ return {
 			end
 		},
 		{
+			name = "RecoverVehicleName ignores CityRP item VehicleName with matching chassis model",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				ent:SetModel("models/error.mdl")
+				ent.VehicleName = "cityrp_item_focus_rs"
+				local key = "photon_glide_els_" .. ent:EntIndex()
+				list.Set("Vehicles", key, {
+					Name = key,
+					Model = "models/error.mdl",
+					Class = "glide_fake",
+					HasPhoton = true,
+					IsEMV = true,
+				})
+				state.listKey = key
+				expect(Photon.HasExplicitVehicleIdentity(ent)).to.beFalse()
+				expect(Photon.LookupVehiclesEntry(ent)).to.beNil()
+				expect(Photon:RecoverVehicleName(ent)).to.beFalse()
+			end
+		},
+		{
+			name = "LookupVehiclesEntry uses VehicleTable when VehicleName is a CityRP item id",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				ent:SetModel("models/error.mdl")
+				local key = "photon_glide_table_" .. ent:EntIndex()
+				local listed = {
+					Name = key,
+					Model = "models/error.mdl",
+					Class = "glide_fake",
+					HasPhoton = true,
+					IsEMV = true,
+				}
+				list.Set("Vehicles", key, listed)
+				state.listKey = key
+				ent.VehicleName = "cityrp_item_focus_rs"
+				ent.VehicleTable = listed
+				local entry = Photon.LookupVehiclesEntry(ent)
+				expect(entry).to.beA("table")
+				expect(entry.Name).to.equal(key)
+				expect(Photon.HasExplicitVehicleIdentity(ent)).to.beTrue()
+			end
+		},
+		{
 			name = "UsesNativeVehicleLights is true for Glide",
 			func = function(state)
 				local ent = NewEnt()

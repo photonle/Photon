@@ -89,15 +89,38 @@ function Photon.GetForwardSpeedComponent(ent, localVec)
 	return localVec.y
 end
 
+--- Whether `name` is a `list.Get("Vehicles")` key or display Name.
+-- @tparam string|nil name
+-- @treturn table|nil entry
+-- @treturn string|nil key
+function Photon.VehiclesEntryForName(name)
+	if not isstring(name) or name == "" then return nil end
+
+	local vehicles = list.GetForEdit("Vehicles")
+	local byKey = vehicles[name]
+	if istable(byKey) then return byKey, name end
+
+	for key, car in pairs(vehicles) do
+		if istable(car) and car.Name == name then
+			return car, key
+		end
+	end
+end
+
 --- Whether this entity was spawned with an explicit Vehicles-list identity.
 -- Sandbox vehicle spawns set VehicleName / VehicleTable to the list key. Glide's
 -- own spawn menu does not, so Photon must not invent one from class or model.
+-- CityRP stamps VehicleName with an item/profile id that is not a Vehicles key;
+-- that must not count as Photon identity.
 -- @ent ent
 -- @treturn bool
 function Photon.HasExplicitVehicleIdentity(ent)
 	if not IsValid(ent) then return false end
 	if istable(ent.VehicleTable) then return true end
-	return isstring(ent.VehicleName) and ent.VehicleName ~= ""
+	if not (isstring(ent.VehicleName) and ent.VehicleName ~= "") then return false end
+	if not Photon.IsGlideVehicle(ent) then return true end
+
+	return Photon.VehiclesEntryForName(ent.VehicleName) ~= nil
 end
 
 --- Look up a `list.Get("Vehicles")` entry for an entity, with Glide-safe fallbacks.
