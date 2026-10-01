@@ -30,6 +30,31 @@ return {
 			end
 		},
 		{
+			name = "IsGlideVehicle reads the class definition before the entity's own fields exist",
+			func = function(state)
+				-- What a client sees in NetworkEntityCreated: a valid entity of a Glide class
+				-- whose IsGlideVehicle and Base cannot be read yet.
+				local early = {
+					IsValid = function() return true end,
+					GetClass = function() return "photon_test_early_glide" end,
+				}
+				local plain = {
+					IsValid = function() return true end,
+					GetClass = function() return "photon_test_plain" end,
+				}
+				local getStored = scripted_ents.GetStored
+				state.restoreGetStored = getStored
+				scripted_ents.GetStored = function(class)
+					if class == "photon_test_early_glide" then return {t = {Base = "base_glide_car"}} end
+					return getStored(class)
+				end
+
+				expect(Photon.IsGlideVehicle(early)).to.beTrue()
+				expect(Photon.IsPhotonChassis(setmetatable(early, {__index = {IsVehicle = function() return false end}}))).to.beTrue()
+				expect(Photon.IsGlideVehicle(plain)).to.beFalse()
+			end
+		},
+		{
 			name = "IsGlideVehicle is false for stock vehicles",
 			func = function(state)
 				local ent = NewEnt()
@@ -293,6 +318,10 @@ return {
 	},
 
 	afterEach = function(state)
+		if state.restoreGetStored then
+			scripted_ents.GetStored = state.restoreGetStored
+			state.restoreGetStored = nil
+		end
 		if IsValid(state.ent) then state.ent:Remove() end
 		if IsValid(state.chassis) then state.chassis:Remove() end
 		if state.listKey then

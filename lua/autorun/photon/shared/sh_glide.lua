@@ -14,6 +14,16 @@ function Photon.IsGlideVehicle(ent)
 	if not IsValid(ent) then return false end
 	if ent.IsGlideVehicle then return true end
 	local base = ent.Base
+	if base == nil then
+		-- NetworkEntityCreated fires on the client before a scripted entity's own fields can
+		-- be read, so a Glide car spawned in view looked like nothing and never asked for its
+		-- Photon state. The class definition is registered by then.
+		local stored = scripted_ents.GetStored(ent:GetClass())
+		if stored and stored.t then
+			if stored.t.IsGlideVehicle then return true end
+			base = stored.t.Base
+		end
+	end
 	return isstring(base) and string_find(base, "glide", 1, true) ~= nil
 end
 
