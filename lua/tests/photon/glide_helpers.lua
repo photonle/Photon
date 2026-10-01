@@ -178,6 +178,36 @@ return {
 			end
 		},
 		{
+			name = "PhotonVehicleName picks the preset while VehicleName stays the CityRP item id",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				ent:SetModel("models/error.mdl")
+				local key = "photon_glide_kit_" .. ent:EntIndex()
+				list.Set("Vehicles", key, {
+					Name = "Kit " .. key,
+					Model = "models/error.mdl",
+					Class = "glide_fake",
+					HasPhoton = true,
+					IsEMV = true,
+				})
+				state.listKey = key
+				ent.VehicleName = "cityrp_item_corolla"
+				expect(Photon.HasExplicitVehicleIdentity(ent)).to.beFalse()
+
+				ent.PhotonVehicleName = key
+				local entry = Photon.LookupVehiclesEntry(ent)
+				expect(entry).to.beA("table")
+				expect(entry.Name).to.equal("Kit " .. key)
+				expect(Photon.HasExplicitVehicleIdentity(ent)).to.beTrue()
+				expect(ent.VehicleName).to.equal("cityrp_item_corolla")
+
+				ent.PhotonVehicleName = "no_such_preset"
+				expect(Photon.LookupVehiclesEntry(ent)).to.beNil()
+			end
+		},
+		{
 			name = "LookupVehiclesEntry uses VehicleTable when VehicleName is a CityRP item id",
 			func = function(state)
 				local ent = NewEnt()

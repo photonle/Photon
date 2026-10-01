@@ -117,6 +117,9 @@ end
 function Photon.HasExplicitVehicleIdentity(ent)
 	if not IsValid(ent) then return false end
 	if istable(ent.VehicleTable) then return true end
+	if isstring(ent.PhotonVehicleName) and ent.PhotonVehicleName ~= "" then
+		return Photon.VehiclesEntryForName(ent.PhotonVehicleName) ~= nil
+	end
 	if not (isstring(ent.VehicleName) and ent.VehicleName ~= "") then return false end
 	if not Photon.IsGlideVehicle(ent) then return true end
 
@@ -126,6 +129,8 @@ end
 --- Look up a `list.Get("Vehicles")` entry for an entity, with Glide-safe fallbacks.
 -- Bare Glide SENTs (no VehicleName) never match by class or chassis model — that
 -- would attach Photon/EMV to the civilian original whenever a pack reused ChassisModel.
+-- `ent.PhotonVehicleName` (a Vehicles key or Name) wins over VehicleName: CityRP keeps
+-- VehicleName as the item id other systems key on, and names a fitted ELS kit here.
 -- @ent ent
 -- @treturn table|nil
 function Photon.LookupVehiclesEntry(ent)
@@ -133,6 +138,10 @@ function Photon.LookupVehiclesEntry(ent)
 
 	if ent.VehicleTable and istable(ent.VehicleTable) then
 		return ent.VehicleTable
+	end
+
+	if isstring(ent.PhotonVehicleName) and ent.PhotonVehicleName ~= "" then
+		return (Photon.VehiclesEntryForName(ent.PhotonVehicleName))
 	end
 
 	local vehicles = list.GetForEdit("Vehicles")
