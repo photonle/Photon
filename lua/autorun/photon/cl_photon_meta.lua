@@ -41,13 +41,7 @@ function Photon:SetupCar( ent, index )
 		if wheelOption.Model then
 			for index, wheelPosData in pairs( wheelPositions ) do
 				local prop = ClientsideModel( wheelOption.Model, RENDERGROUP_OPAQUE )
-				if isvector( p.Scale ) then
-					local mat = Matrix()
-					mat:Scale( p.Scale )
-					prop:EnableMatrix( "RenderMultiply", mat )
-				elseif isnumber( p.Scale ) then
-					prop:SetModelScale( p.Scale, 0 )
-				end
+				EMVU.Helper.ApplyModelScale( prop, p.Scale )
 				local attachmentIndex = wheelPosData.Attachment
 				if isstring( wheelPosData.Attachment ) then
 					attachmentIndex = self:LookupAttachment( wheelPosData.Attachment )
