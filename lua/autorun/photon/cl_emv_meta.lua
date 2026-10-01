@@ -584,16 +584,7 @@ function EMVU:MakeEMV( emv, name )
 			util.PrecacheModel( p.Model )
 			if not util.IsModelLoaded( p.Model ) then self:AlertPhotonMissingRequirements( p.Model ) end
 			local prop = ClientsideModel( p.Model, rendergroup )
-			if isvector( p.Scale ) then
-				local mat = Matrix()
-				mat:Scale( p.Scale )
-				prop:EnableMatrix( "RenderMultiply", mat )
-			elseif isnumber( p.Scale ) then
-				local mat = Matrix()
-				local scale = Vector( p.Scale, p.Scale, p.Scale )
-				mat:Scale( scale )
-				prop:EnableMatrix( "RenderMultiply", mat )
-			end
+			EMVU.Helper.ApplyModelScale( prop, p.Scale )
 			prop:SetParent( emv )
 			prop:SetPos( emv:LocalToWorld( p.Pos ) )
 			prop:SetAngles( emv:LocalToWorldAngles( p.Ang ) )
@@ -720,13 +711,7 @@ function EMVU:MakeEMV( emv, name )
 				end
 
 				if PHOTON_DEBUG or PHOTON_EXPRESS then
-					if isvector( emvProps[index].Scale ) then
-						local mat = Matrix()
-						mat:Scale( emvProps[index].Scale )
-						prop:EnableMatrix( "RenderMultiply", mat )
-					elseif isnumber( emvProps[index].Scale ) then
-						prop:SetModelScale( emvProps[index].Scale, 0 )
-					end
+					EMVU.Helper.ApplyModelScale( prop, emvProps[index].Scale )
 				end
 				if prop.AirEL then self.AirELEntity = prop end
 				if not IsValid( self.AirELEntity ) then self.AirELEntity = nil end
@@ -741,30 +726,30 @@ function EMVU:MakeEMV( emv, name )
 	-- For updating the props after saving the file
 	function emv:Photon_UpdateEMVProps()
 		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
-		if not emvProps or not istable( emvProps) then return end
+		if not emvProps or not istable( emvProps ) then return end
+		if not istable( self.EMVProps ) or #self.EMVProps ~= #emvProps then
+			self:Photon_RemoveEMVProps( true )
+			return
+		end
 
 		for index,prop in ipairs( self.EMVProps ) do
-			if not IsValid( prop ) then
+			local data = emvProps[index]
+			if not IsValid( prop ) or not data or ( data.Model and prop:GetModel() ~= data.Model ) then
 				self:Photon_RemoveEMVProps( true )
-				break
+				return
 			end
 
 			prop:SetParent( self )
-			prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
-			prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
+			prop:SetPos( self:LocalToWorld( data.Pos ) )
+			prop:SetAngles( self:LocalToWorldAngles( data.Ang ) )
+			prop.PhotonLocalAngs = data.Ang
 
-			if emvProps[index].AttachmentMerge then
+			if data.AttachmentMerge then
 				prop:SetParent(nil)
-				prop:SetParent(self, self:LookupAttachment(emvProps[index].AttachmentMerge))
+				prop:SetParent(self, self:LookupAttachment(data.AttachmentMerge))
 			end
 
-			if isvector( emvProps[index].Scale ) then
-				local mat = Matrix()
-				mat:Scale( emvProps[index].Scale )
-				prop:EnableMatrix( "RenderMultiply", mat )
-			elseif isnumber( emvProps[index].Scale ) then
-				prop:SetModelScale( emvProps[index].Scale, 0 )
-			end
+			EMVU.Helper.ApplyModelScale( prop, data.Scale )
 			if prop.AirEL then self.AirELEntity = prop end
 			if not IsValid( self.AirELEntity ) then self.AirELEntity = nil end
 		end
