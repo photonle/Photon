@@ -8,7 +8,7 @@ PHOTON_BANNED_UNIT_IDS = {
 	["n1g"] = true
 }
 
-_PHOTON_UPDATE = "76.6.0" -- x-release-please-version
+_PHOTON_UPDATE = "76.7.0" -- x-release-please-version
 PHOTON_UPDATE = string.match( _PHOTON_UPDATE, "^(%d+%.%d+)" ) or _PHOTON_UPDATE
 PHOTON_SERIES = "Johnstown"
 
