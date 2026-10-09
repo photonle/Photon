@@ -1,5 +1,12 @@
 # Changelog
 
+## [76.8.0](https://github.com/photonle/Photon/compare/v76.7.0...v76.8.0) (2026-10-09)
+
+
+### Bug Fixes
+
+* **ci:** Scope the GLua lint push diff to the branch point ([fc5c88d](https://github.com/photonle/Photon/commit/fc5c88daf5b9547cd77a27f9d6ed7036b77e8abf))
+
 ## [76.7.0](https://github.com/photonle/Photon/compare/v76.6.0...v76.7.0) (2026-10-09)
 
 
