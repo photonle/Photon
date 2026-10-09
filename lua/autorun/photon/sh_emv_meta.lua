@@ -68,7 +68,7 @@ function ent:Photon_SelectionOption( index )
 	if not istable( bgTable ) then return 1 end
 	if index > #bgTable then return 1 end
 	if index < 1 then return 1 end
-	return tonumber( bgTable[ index ] )
+	return tonumber( bgTable[ index ] ) or 1
 end
 
 function ent:Photon_ExportSelections()

@@ -361,7 +361,7 @@ properties.Add("photon_selection", {
 
             if #cat.Options == 2 and (cat.Options[1].Name == "None" or cat.Options[2].Name == "None") then
                 local selected = ent:Photon_SelectionOption(catIndex)
-                local isActive = cat.Options[selected].Name ~= "None"
+                local isActive = cat.Options[selected] ~= nil and cat.Options[selected].Name ~= "None"
                 local addedOption
 
                 if selected == 1 then
