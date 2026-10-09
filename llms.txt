@@ -1,0 +1,42 @@
+# Photon
+
+> Public API documentation for the Photon lighting engine, generated from LuaCATS comments. Treat this as the source of truth for Photon APIs; do not invent functions.
+
+Machine-readable index: https://photonle.github.io/Photon/api.json
+
+## Modules
+
+- [Entity](https://photonle.github.io/Photon/modules/Entity.html)
+- [Photon.Registry](https://photonle.github.io/Photon/modules/Photon.Registry.html)
+- [Photon.SNet](https://photonle.github.io/Photon/modules/Photon.SNet.html)
+- [autorun.emv_init](https://photonle.github.io/Photon/modules/autorun.emv_init.html)
+- [autorun.photon.cl_emv_airel](https://photonle.github.io/Photon/modules/autorun.photon.cl_emv_airel.html)
+- [autorun.photon.cl_emv_init](https://photonle.github.io/Photon/modules/autorun.photon.cl_emv_init.html)
+- [autorun.photon.cl_emv_listener](https://photonle.github.io/Photon/modules/autorun.photon.cl_emv_listener.html)
+- [autorun.photon.cl_emv_livery](https://photonle.github.io/Photon/modules/autorun.photon.cl_emv_livery.html)
+- [autorun.photon.cl_emv_meta](https://photonle.github.io/Photon/modules/autorun.photon.cl_emv_meta.html)
+- [autorun.photon.cl_emv_net](https://photonle.github.io/Photon/modules/autorun.photon.cl_emv_net.html)
+- [autorun.photon.cl_photon_builder](https://photonle.github.io/Photon/modules/autorun.photon.cl_photon_builder.html)
+- [autorun.photon.cl_photon_editor](https://photonle.github.io/Photon/modules/autorun.photon.cl_photon_editor.html)
+- [autorun.photon.cl_photon_eng](https://photonle.github.io/Photon/modules/autorun.photon.cl_photon_eng.html)
+- [autorun.photon.cl_photon_hooks](https://photonle.github.io/Photon/modules/autorun.photon.cl_photon_hooks.html)
+- [autorun.photon.cl_photon_hud](https://photonle.github.io/Photon/modules/autorun.photon.cl_photon_hud.html)
+- [autorun.photon.cl_photon_menu](https://photonle.github.io/Photon/modules/autorun.photon.cl_photon_menu.html)
+- [autorun.photon.cl_photon_meta](https://photonle.github.io/Photon/modules/autorun.photon.cl_photon_meta.html)
+- [autorun.photon.cl_photon_settings](https://photonle.github.io/Photon/modules/autorun.photon.cl_photon_settings.html)
+- [autorun.photon.sh_emv_config](https://photonle.github.io/Photon/modules/autorun.photon.sh_emv_config.html)
+- [autorun.photon.sh_emv_helper](https://photonle.github.io/Photon/modules/autorun.photon.sh_emv_helper.html)
+- [autorun.photon.sh_emv_init](https://photonle.github.io/Photon/modules/autorun.photon.sh_emv_init.html)
+- [autorun.photon.sh_emv_vehicles](https://photonle.github.io/Photon/modules/autorun.photon.sh_emv_vehicles.html)
+- [autorun.photon.sh_photon_init](https://photonle.github.io/Photon/modules/autorun.photon.sh_photon_init.html)
+- [autorun.photon.sh_photon_vehicles](https://photonle.github.io/Photon/modules/autorun.photon.sh_photon_vehicles.html)
+- [autorun.photon.sh_photon_xml](https://photonle.github.io/Photon/modules/autorun.photon.sh_photon_xml.html)
+- [autorun.photon.shared.sh_functional](https://photonle.github.io/Photon/modules/autorun.photon.shared.sh_functional.html)
+- [autorun.photon.shared.sh_logging](https://photonle.github.io/Photon/modules/autorun.photon.shared.sh_logging.html)
+- [autorun.photon.sv_emv_net](https://photonle.github.io/Photon/modules/autorun.photon.sv_emv_net.html)
+- [autorun.photon.sv_photon_hooks](https://photonle.github.io/Photon/modules/autorun.photon.sv_photon_hooks.html)
+
+## Topics
+
+- [Writing Doc Comments](https://photonle.github.io/Photon/topics/doc-comments.html)
+- [Design Constraints](https://photonle.github.io/Photon/topics/design-constraints.html)
