@@ -6,6 +6,13 @@ local modelIgnore = {
 
 function Photon:RecoverVehicleName( ent )
 	if not IsValid( ent ) then return false end
+
+	-- Glide chassis only take a Photon pack from an explicit identity, which
+	-- LookupVehiclesEntry has already tried. Anything found here would be a guess
+	-- from class or chassis model, and would overwrite a VehicleName that a
+	-- gamemode may be using for something else.
+	if Photon.IsGlideVehicle( ent ) then return false end
+
 	local model = tostring(ent:GetModel())
 	local PhotonIndex = Photon.GetDefaultMapping( model )
 	if PhotonIndex then
@@ -63,6 +70,9 @@ function Photon:EntityCreated( ent )
 						timer.Destroy( timerId )
 						return
 					end
+
+					-- Glide chassis do not take a pack from their class; see RecoverVehicleName.
+					if Photon.IsGlideVehicle(ent) then return end
 
 					local class = Photon.ResolveVehicleListClass(ent)
 					local lst = class and list.GetForEdit("Vehicles")[class]

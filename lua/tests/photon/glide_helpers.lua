@@ -179,6 +179,131 @@ return {
 				expect(entry).to.beA("table")
 				expect(entry.Name).to.equal("Photon Glide Test Car")
 			end
+		},
+		{
+			name = "LookupVehiclesEntry ignores a chassis model match on a bare Glide chassis",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				local key = "photon_glide_hijack_" .. ent:EntIndex()
+				list.Set("Vehicles", key, {
+					Name = "Photon Hijack Car",
+					Model = "models/error.mdl",
+					Class = "glide_fake",
+					HasPhoton = true,
+					IsEMV = true,
+				})
+				state.listKey = key
+				expect(Photon.LookupVehiclesEntry(ent)).to.beNil()
+				expect(Photon:RecoverVehicleName(ent)).to.beFalse()
+			end
+		},
+		{
+			name = "LookupVehiclesEntry resolves a Glide chassis by VehicleName",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				local key = "photon_glide_named_" .. ent:EntIndex()
+				list.Set("Vehicles", key, {
+					Name = "Photon Named Glide",
+					Model = "models/error.mdl",
+					Class = "glide_fake",
+					HasPhoton = true,
+				})
+				state.listKey = key
+				ent.VehicleName = key
+				local entry = Photon.LookupVehiclesEntry(ent)
+				expect(entry).to.beA("table")
+				expect(entry.Name).to.equal("Photon Named Glide")
+			end
+		},
+		{
+			name = "RecoverVehicleName does not guess for a Glide chassis with an unrelated VehicleName",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				ent.VehicleName = "cityrp_item_focus_rs"
+				local key = "photon_glide_els_" .. ent:EntIndex()
+				list.Set("Vehicles", key, {
+					Name = key,
+					Model = "models/error.mdl",
+					Class = "glide_fake",
+					HasPhoton = true,
+					IsEMV = true,
+				})
+				state.listKey = key
+				expect(Photon.LookupVehiclesEntry(ent)).to.beNil()
+				expect(Photon:RecoverVehicleName(ent)).to.beFalse()
+				expect(ent.VehicleName).to.equal("cityrp_item_focus_rs")
+			end
+		},
+		{
+			name = "PhotonVehicleName picks the pack without changing VehicleName",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				local key = "photon_glide_kit_" .. ent:EntIndex()
+				list.Set("Vehicles", key, {
+					Name = "Kit " .. key,
+					Model = "models/error.mdl",
+					Class = "glide_fake",
+					HasPhoton = true,
+					IsEMV = true,
+				})
+				state.listKey = key
+				ent.VehicleName = "cityrp_item_corolla"
+				expect(Photon.LookupVehiclesEntry(ent)).to.beNil()
+
+				ent.PhotonVehicleName = key
+				local entry = Photon.LookupVehiclesEntry(ent)
+				expect(entry).to.beA("table")
+				expect(entry.Name).to.equal("Kit " .. key)
+				expect(ent.VehicleName).to.equal("cityrp_item_corolla")
+			end
+		},
+		{
+			name = "An unresolved PhotonVehicleName stops the lookup even when VehicleName resolves",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				local key = "photon_glide_shadowed_" .. ent:EntIndex()
+				list.Set("Vehicles", key, {
+					Name = key,
+					Model = "models/error.mdl",
+					Class = "glide_fake",
+					HasPhoton = true,
+				})
+				state.listKey = key
+				ent.VehicleName = key
+				ent.PhotonVehicleName = "no_such_pack"
+				expect(Photon.LookupVehiclesEntry(ent)).to.beNil()
+			end
+		},
+		{
+			name = "LookupVehiclesEntry uses VehicleTable when VehicleName is unrelated",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				local key = "photon_glide_table_" .. ent:EntIndex()
+				local listed = {
+					Name = key,
+					Model = "models/error.mdl",
+					Class = "glide_fake",
+					HasPhoton = true,
+					IsEMV = true,
+				}
+				list.Set("Vehicles", key, listed)
+				state.listKey = key
+				ent.VehicleName = "cityrp_item_focus_rs"
+				ent.VehicleTable = listed
+				expect(Photon.LookupVehiclesEntry(ent)).to.equal(listed)
+			end
 		}
 	},
 

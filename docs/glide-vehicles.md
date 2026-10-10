@@ -23,16 +23,37 @@ chassis without editing the vectors will place lights on the wrong sides.
 
 ## Registration
 
-Register Photon/EMV the same way as for any other vehicle:
+Register Photon/EMV with a **unique** `list.Get("Vehicles")` key (Express uses
+`name_steamid`). Do **not** key the entry by the Glide entity class alone — that makes every
+spawn of that class look like the Photon pack.
 
-1. `list.Set("Vehicles", className, { … HasPhoton / IsEMV / Photon / EMV … })` using the **scripted
-   entity class** as the list key (Glide cars are not `prop_vehicle_jeep`), and/or
-2. Model indexes in Photon's vehicle libraries, keyed to the chassis model Glide sets from
-   `ChassisModel`.
+```lua
+list.Set("Vehicles", "my_f40_photon", {
+	Name = "F40 Photon",
+	Class = "glide_f40",           -- Glide SENT class
+	Model = "models/.../chassis.mdl", -- ChassisModel
+	IsEMV = true,
+	EMV = EMV,
+	HasPhoton = true,
+	Photon = "PHOTON_INHERIT",
+	-- KeyValues.vehiclescript can be empty for Glide
+})
+```
 
-Photon resolves Vehicles-list entries via class, `VehicleName`, and chassis model (see
-`Photon.LookupVehiclesEntry`). Express Creator synthesises Class/Model from the entity when no
-Vehicles entry exists, and leaves `vehiclescript` empty for Glide.
+Spawn the Photon version from the **Vehicles** spawn menu (sandbox sets `VehicleName` to the
+list key). Spawning the same chassis from Glide's own menu leaves `VehicleName` unset, so Photon
+does **not** attach — same idea as keeping a stock jeep separate from its Photon twin.
+
+A Glide chassis resolves its pack only from an explicit identity, checked in this order:
+
+1. `VehicleTable`.
+2. `PhotonVehicleName`, a Vehicles key or display Name. Use this when something else owns
+   `VehicleName` (CityRP keeps an item id there). If it is set but does not resolve, Photon
+   does not attach and does not fall back to `VehicleName`.
+3. `VehicleName`, when it is a Vehicles key or display Name.
+
+Class and chassis-model fallbacks stay off for Glide. Express Creator synthesises Class/Model
+from the entity when no Vehicles entry exists, and leaves `vehiclescript` empty for Glide.
 
 ## Runtime helpers
 

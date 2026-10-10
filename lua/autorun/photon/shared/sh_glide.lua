@@ -107,7 +107,31 @@ function Photon.GetForwardSpeedComponent(ent, localVec)
 	return localVec.y
 end
 
+--- Find a `list.Get("Vehicles")` entry by its key or display Name.
+-- @tparam string|nil name
+-- @treturn table|nil entry
+-- @treturn string|nil key
+function Photon.VehiclesEntryForName(name)
+	if not isstring(name) or name == "" then return nil end
+
+	local vehicles = list.GetForEdit("Vehicles")
+	local byKey = vehicles[name]
+	if istable(byKey) then return byKey, name end
+
+	for key, car in pairs(vehicles) do
+		if istable(car) and car.Name == name then
+			return car, key
+		end
+	end
+end
+
 --- Look up a `list.Get("Vehicles")` entry for an entity, with Glide-safe fallbacks.
+-- A Glide chassis only resolves from an explicit identity: `VehicleTable`,
+-- `PhotonVehicleName`, or a `VehicleName` that names a Vehicles entry. Glide's own
+-- spawn menu sets none of these, and guessing from class or chassis model would
+-- attach a Photon pack to every civilian spawn that shares its class or model.
+-- `PhotonVehicleName` wins over `VehicleName`, so a gamemode can keep `VehicleName`
+-- for its own use (CityRP stores an item id there) and still name a pack.
 -- @ent ent
 -- @treturn table|nil
 function Photon.LookupVehiclesEntry(ent)
@@ -117,18 +141,17 @@ function Photon.LookupVehiclesEntry(ent)
 		return ent.VehicleTable
 	end
 
-	local vehicles = list.GetForEdit("Vehicles")
-
-	local vehicleName = ent.VehicleName
-	if isstring(vehicleName) and vehicleName ~= "" then
-		local byKey = vehicles[vehicleName]
-		if istable(byKey) then return byKey end
-		for _, car in pairs(vehicles) do
-			if istable(car) and car.Name == vehicleName then
-				return car
-			end
-		end
+	-- A name that does not resolve still stops the fallbacks below.
+	if isstring(ent.PhotonVehicleName) and ent.PhotonVehicleName ~= "" then
+		return (Photon.VehiclesEntryForName(ent.PhotonVehicleName))
 	end
+
+	local named = Photon.VehiclesEntryForName(ent.VehicleName)
+	if named then return named end
+
+	if Photon.IsGlideVehicle(ent) then return nil end
+
+	local vehicles = list.GetForEdit("Vehicles")
 
 	local class = Photon.ResolveVehicleListClass(ent)
 	if class and istable(vehicles[class]) then
