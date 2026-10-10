@@ -60,7 +60,7 @@ local function DrawVehicleCarLights(ent)
 	if not ent.Photon_RenderLights then
 		local vname = ent.VehicleName
 		if not isstring(vname) or vname == "" then
-			local vdata = list.GetForEdit("Vehicles")[ent:GetVehicleClass()]
+			local vdata = Photon.LookupVehiclesEntry(ent)
 			vname = vdata and vdata.Name
 		end
 		if vname then
@@ -394,7 +394,7 @@ concommand.Add( "photon_debugprint", function()
 		local emergEnabled = GetConVar( "photon_emerg_enabled" )
 		local standEnabled = GetConVar( "photon_stand_enabled" )
 		local expEdit = GetConVar("photon_express_edit")
-		local car = LocalPlayer():GetVehicle()
+		local car = Photon.GetPlayerVehicle(LocalPlayer())
 
 		local l, w, e = Photon.Logging.ForceInfo, Photon.Logging.ForceWarning, Photon.Logging.ForceError
 		l( [[---------- PHOTON LIGHTING ENGINE DEBUG INFORMATION (CLIENT) ----------]] )

@@ -1,0 +1,170 @@
+--[[-- Glide vehicle compatibility helpers.
+@copyright Photon Team
+@module Photon
+--]]--
+
+local IsValid = IsValid
+local string_find = string.find
+
+--- Whether the entity is a Glide chassis (or inherits a Glide base).
+-- Mirrors Photon 2's Base-contains-"glide" heuristic, plus Glide's own flag.
+-- @ent ent
+-- @treturn bool
+function Photon.IsGlideVehicle(ent)
+	if not IsValid(ent) then return false end
+	if ent.IsGlideVehicle then return true end
+	local base = ent.Base
+	if base == nil then
+		-- NetworkEntityCreated fires on the client before a scripted entity's own fields can
+		-- be read, so a Glide car spawned in view looked like nothing and never asked for its
+		-- Photon state. The class definition is registered by then.
+		local stored = scripted_ents.GetStored(ent:GetClass())
+		if stored and stored.t then
+			if stored.t.IsGlideVehicle then return true end
+			base = stored.t.Base
+		end
+	end
+	return isstring(base) and string_find(base, "glide", 1, true) ~= nil
+end
+
+--- Whether Photon may treat this entity as a vehicle chassis.
+-- Prefers engine/Glide `IsVehicle()` (Glide patches the meta), and also accepts
+-- Glide chassis if that patch is absent or not yet applied.
+-- @ent ent
+-- @treturn bool
+function Photon.IsPhotonChassis(ent)
+	if not IsValid(ent) then return false end
+	if ent:IsVehicle() then return true end
+	return Photon.IsGlideVehicle(ent)
+end
+
+--- Resolve the Vehicles-list key for an entity (stock class or Glide ent class).
+-- @ent ent
+-- @treturn string|nil
+function Photon.ResolveVehicleListClass(ent)
+	if not IsValid(ent) then return nil end
+	if Photon.IsGlideVehicle(ent) then
+		return ent:GetClass()
+	end
+	if isfunction(ent.GetVehicleClass) then
+		return ent:GetVehicleClass()
+	end
+	return ent:GetClass()
+end
+
+--- Resolve a seat or vehicle entity to the Photon-bearing chassis.
+-- On Glide, players sit in child seats parented to the chassis; Photon state
+-- lives on the chassis. Stock HL2 vehicles are returned unchanged.
+-- @ent entOrSeat
+-- @treturn Entity|nil
+function Photon.GetVehicleEntity(entOrSeat)
+	if not IsValid(entOrSeat) then return entOrSeat end
+	local parent = entOrSeat:GetParent()
+	if IsValid(parent) and Photon.IsGlideVehicle(parent) then
+		return parent
+	end
+	return entOrSeat
+end
+
+--- The Photon vehicle the player is driving (chassis when on Glide).
+-- Every Glide seat is parented to the chassis, so only the driver's seat
+-- resolves to it. A passenger gets their seat back, which carries no Photon
+-- state, the same as a passenger pod on a stock vehicle.
+-- @tparam Player ply
+-- @treturn Entity|nil
+function Photon.GetPlayerVehicle(ply)
+	if not IsValid(ply) then return nil end
+	local seat = ply:GetVehicle()
+	local vehicle = Photon.GetVehicleEntity(seat)
+	if vehicle ~= seat and ply:GlideGetSeatIndex() ~= 1 then
+		return seat
+	end
+	return vehicle
+end
+
+--- Driver of a Photon chassis (Glide seat 1 when available).
+-- @ent ent
+-- @treturn Player|Entity|nil
+function Photon.GetVehicleDriver(ent)
+	if not IsValid(ent) then return nil end
+	if Photon.IsGlideVehicle(ent) and isfunction(ent.GetSeatDriver) then
+		return ent:GetSeatDriver(1)
+	end
+	if isfunction(ent.GetDriver) then
+		return ent:GetDriver()
+	end
+end
+
+--- Forward-axis component of a localised vector (velocity or position).
+-- HL2 jeeps use +Y forward; Glide chassis use +X forward.
+-- @ent ent
+-- @tparam Vector localVec Result of WorldToLocal(...).
+-- @treturn number
+function Photon.GetForwardSpeedComponent(ent, localVec)
+	if Photon.IsGlideVehicle(ent) then
+		return localVec.x
+	end
+	return localVec.y
+end
+
+--- Find a `list.Get("Vehicles")` entry by its key or display Name.
+-- @tparam string|nil name
+-- @treturn table|nil entry
+-- @treturn string|nil key
+function Photon.VehiclesEntryForName(name)
+	if not isstring(name) or name == "" then return nil end
+
+	local vehicles = list.GetForEdit("Vehicles")
+	local byKey = vehicles[name]
+	if istable(byKey) then return byKey, name end
+
+	for key, car in pairs(vehicles) do
+		if istable(car) and car.Name == name then
+			return car, key
+		end
+	end
+end
+
+--- Look up a `list.Get("Vehicles")` entry for an entity, with Glide-safe fallbacks.
+-- A Glide chassis only resolves from an explicit identity: `VehicleTable`,
+-- `PhotonVehicleName`, or a `VehicleName` that names a Vehicles entry. Glide's own
+-- spawn menu sets none of these, and guessing from class or chassis model would
+-- attach a Photon pack to every civilian spawn that shares its class or model.
+-- `PhotonVehicleName` wins over `VehicleName`, so a gamemode can keep `VehicleName`
+-- for its own use (CityRP stores an item id there) and still name a pack.
+-- @ent ent
+-- @treturn table|nil
+function Photon.LookupVehiclesEntry(ent)
+	if not IsValid(ent) then return nil end
+
+	if ent.VehicleTable and istable(ent.VehicleTable) then
+		return ent.VehicleTable
+	end
+
+	-- A name that does not resolve still stops the fallbacks below.
+	if isstring(ent.PhotonVehicleName) and ent.PhotonVehicleName ~= "" then
+		return (Photon.VehiclesEntryForName(ent.PhotonVehicleName))
+	end
+
+	local named = Photon.VehiclesEntryForName(ent.VehicleName)
+	if named then return named end
+
+	if Photon.IsGlideVehicle(ent) then return nil end
+
+	local vehicles = list.GetForEdit("Vehicles")
+
+	local class = Photon.ResolveVehicleListClass(ent)
+	if class and istable(vehicles[class]) then
+		return vehicles[class]
+	end
+
+	local model = ent:GetModel()
+	if isstring(model) then
+		local modelLower = string.lower(model)
+		for _, car in pairs(vehicles) do
+			if istable(car) and isstring(car.Model) and string.lower(car.Model) == modelLower then
+				return car
+			end
+		end
+	end
+end

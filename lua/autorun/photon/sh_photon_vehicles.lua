@@ -6,22 +6,30 @@ local modelIgnore = {
 
 function Photon:RecoverVehicleName( ent )
 	if not IsValid( ent ) then return false end
+
+	-- Glide chassis only take a Photon pack from an explicit identity, which
+	-- LookupVehiclesEntry has already tried. Anything found here would be a guess
+	-- from class or chassis model, and would overwrite a VehicleName that a
+	-- gamemode may be using for something else.
+	if Photon.IsGlideVehicle( ent ) then return false end
+
 	local model = tostring(ent:GetModel())
 	local PhotonIndex = Photon.GetDefaultMapping( model )
 	if PhotonIndex then
 		return PhotonIndex
 	end
 
-	if ent.GetVehicleClass and ent:GetVehicleClass() then
-		local vehicleClass = ent:GetVehicleClass()
+	local vehicleClass = Photon.ResolveVehicleListClass(ent)
+	if vehicleClass then
 		local vehicleTable = list.GetForEdit("Vehicles")[vehicleClass]
 		if vehicleTable and istable(vehicleTable) then
 			return vehicleClass
 		end
 	end
 
+	local modelLower = string.lower(model)
 	for key,car in pairs( list.GetForEdit("Vehicles") ) do
-		if string.lower(car.Model) == string.lower(model) then
+		if isstring(car.Model) and string.lower(car.Model) == modelLower then
 			return key
 		end
 	end
@@ -41,7 +49,7 @@ end
 
 function Photon:EntityCreated( ent )
 	timer.Simple(.05,function()
-		if  ent:IsVehicle() then
+		if Photon.IsPhotonChassis(ent) then
 			local timerId = ent:EntIndex() .. "-PHOTON-" .. CurTime()
 			timer.Create( timerId, .01, 10, function()
 				local vehicleTable = Photon:GetVehicleTable(ent)
@@ -63,14 +71,10 @@ function Photon:EntityCreated( ent )
 						return
 					end
 
-					local base = ent.Base or ""
-					local class
-					if not string.find(base, "glide") and ent.GetVehicleClass then
-						class = ent:GetVehicleClass()
-					else
-						class = ent:GetClass()
-					end
+					-- Glide chassis do not take a pack from their class; see RecoverVehicleName.
+					if Photon.IsGlideVehicle(ent) then return end
 
+					local class = Photon.ResolveVehicleListClass(ent)
 					local lst = class and list.GetForEdit("Vehicles")[class]
 					if lst and istable(lst) then
 						ent.VehicleName = class
@@ -263,18 +267,5 @@ function Photon:OverwriteIndex( name, data )
 end
 
 function Photon:GetVehicleTable(ent)
-	if not IsValid(ent) then return end
-
-	-- Backwards compatibility
-	if ent.VehicleTable and istable(ent.VehicleTable) then
-		return ent.VehicleTable
-	end
-
-	local vehicleName = ent.VehicleName
-	if isstring(vehicleName) and vehicleName ~= "" then
-		local vehicleTable = list.GetForEdit("Vehicles")[vehicleName] -- list.GetEntry("Vehicles", vehicleName)
-		if istable(vehicleTable) then
-			return vehicleTable
-		end
-	end
+	return Photon.LookupVehiclesEntry(ent)
 end

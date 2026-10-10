@@ -14,6 +14,13 @@ local insert = table.insert
 
 local printedErrors = {}
 
+--- Pack sequence document, or nil when the vehicle has no EMV sequences yet.
+--- @param name any
+--- @return table|nil
+local function sequenceData(name)
+	return istable(EMVU.Sequences) and EMVU.Sequences[name] or nil
+end
+
 --- Resolve a table, which is in either Map<idx, value>, (idx, value)[] or a mix, to be output in (idx, value)[] format, allowing for ipairs.
 -- @tab tab Input table.
 -- @rtab
@@ -239,6 +246,10 @@ function EMVU.Helper.GetReverseSequence( name, vehicle, resultTable )
 end
 
 function EMVU.Helper:GetSequence( name, option, vehicle )
+	local data = sequenceData(name)
+	if not istable(data) or not istable(data.Sequences) or not istable(data.Sequences[option]) then
+		return {}
+	end
 
 	local resultTable = {}
 
@@ -288,8 +299,8 @@ function EMVU.Helper:GetSequence( name, option, vehicle )
 end
 
 function EMVU.Helper:GetTASequence( name, option, vehicle )
-
-	if not istable( EMVU.Sequences[ name ].Traffic ) or not istable( EMVU.Sequences[ name ].Traffic[ option ]) then return end
+	local data = sequenceData(name)
+	if not istable(data) or not istable(data.Traffic) or not istable(data.Traffic[option]) then return end
 	local resultTable = {}
 
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["BG_Components"] ) then
@@ -449,11 +460,15 @@ function EMVU.Helper.FetchUsedLights(vehicle)
 end
 
 function EMVU.Helper:GetSequenceName( name, option )
-	return EMVU.Sequences[name]["Sequences"][option]["Name"]
+	local data = sequenceData(name)
+	local stage = istable(data) and istable(data.Sequences) and data.Sequences[option]
+	if istable(stage) then return stage.Name end
 end
 
 function EMVU.Helper:GetModeDisconnect( name, option )
-	if EMVU.Sequences[name]["Sequences"][option]["Disconnect"] then return EMVU.Sequences[name]["Sequences"][option]["Disconnect"] end
+	local data = sequenceData(name)
+	local stage = istable(data) and istable(data.Sequences) and data.Sequences[option]
+	if istable(stage) and stage.Disconnect then return stage.Disconnect end
 	return false
 end
 
@@ -612,6 +627,67 @@ function EMVU.Helper:GetAutoModel( id )
 	}
 end
 
+--- Build the vehicle-local Euler for an auto-component light.
+--- Kept in authored Euler space so sprite facing (which reads `.y` and then
+--- subtracts 90 from `.r`) stays aligned with the component model.
+--- `Matrix:GetAngles()` can re-express the same rotation with a flipped yaw,
+--- which turns that `.y` read into a backwards-facing sprite.
+--- @param component table
+--- @param localAng Angle Light angle in component space.
+--- @param autoAng Angle Component angle on the vehicle.
+--- @return Angle
+function EMVU.Helper.ComposeAutoLightAngle(component, localAng, autoAng)
+	local p, y, r = localAng.p, localAng.y, localAng.r
+	if component.ForwardTranslation then
+		p, y, r = -localAng.r, localAng.y, localAng.p
+	end
+
+	local yawAdjust = 0
+	if not component.NotLegacy then
+		yawAdjust = -90
+	end
+
+	return Angle(p + autoAng.p, y + autoAng.y + yawAdjust, r + autoAng.r)
+end
+
+--- Apply a uniform or per-axis scale to a model without stacking transforms.
+--- Spawn uses `EnableMatrix("RenderMultiply")`; a lua refresh used to call
+--- `SetModelScale` on top of that leftover matrix, so saving a vehicle file
+--- (even without touching Scale) compounded the size until the vehicle was
+--- respawned.
+--- @param ent Entity
+--- @param scale Vector|number|nil
+function EMVU.Helper.ApplyModelScale(ent, scale)
+	if not IsValid(ent) then return end
+
+	if CLIENT then
+		ent:DisableMatrix("RenderMultiply")
+	end
+	ent:SetModelScale(1, 0)
+
+	if isvector(scale) then
+		if scale.x == 1 and scale.y == 1 and scale.z == 1 then return end
+		if CLIENT then
+			local mat = Matrix()
+			mat:Scale(scale)
+			ent:EnableMatrix("RenderMultiply", mat)
+		else
+			ent:SetModelScale(scale.x, 0)
+		end
+		return
+	end
+
+	if isnumber(scale) and scale ~= 1 then
+		if CLIENT then
+			local mat = Matrix()
+			mat:Scale(Vector(scale, scale, scale))
+			ent:EnableMatrix("RenderMultiply", mat)
+		else
+			ent:SetModelScale(scale, 0)
+		end
+	end
+end
+
 function EMVU.Helper:BodygroupPreset( ent, index )
 	local presetData = EMVU.Helper:GetPresetData( ent.Name, index )
 	return presetData.Bodygroups or {}
@@ -628,8 +704,9 @@ function EMVU.Helper:GetIlluminationName( name, option )
 end
 
 function EMVU.Helper:GetIlluminationLights( name, option )
-	local stageData = EMVU.Sequences[name].Illumination[option]
-	if not istable( stageData ) then return {} end
+	local data = sequenceData(name)
+	local stageData = istable(data) and istable(data.Illumination) and data.Illumination[option]
+	if not istable(stageData) then return {} end
 	return stageData.Lights or {}
 end
 
@@ -638,16 +715,20 @@ function EMVU.Helper:GetLampMeta( name, index )
 end
 
 function EMVU.Helper:HasLamps( name )
-	if istable( EMVU.Sequences[name].Illumination ) and istable( EMVU.Sequences[name].Illumination[1] ) then return true end
+	local data = sequenceData(name)
+	if istable(data) and istable(data.Illumination) and istable(data.Illumination[1]) then return true end
 	return false
 end
 
 function EMVU.Helper:HasTrafficAdvisor( name )
-	if istable( EMVU.Sequences[name].Traffic ) and istable( EMVU.Sequences[name].Traffic[1] ) then return true end
+	local data = sequenceData(name)
+	if istable(data) and istable(data.Traffic) and istable(data.Traffic[1]) then return true end
 end
 
 function EMVU.Helper:GetTrafficAdvisorName( name, option )
-	return EMVU.Sequences[name]["Traffic"][option].Name
+	local data = sequenceData(name)
+	local stage = istable(data) and istable(data.Traffic) and data.Traffic[option]
+	if istable(stage) then return stage.Name end
 end
 
 function EMVU.Helper.GetLocalToWorld( posData )

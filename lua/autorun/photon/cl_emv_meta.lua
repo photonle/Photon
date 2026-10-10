@@ -53,7 +53,7 @@ end)
 
 function EMVU:MakeEMV( emv, name )
 
-	if not emv or not emv:IsValid() or not emv:IsVehicle() or not emv:IsEMV() then return false end
+	if not emv or not emv:IsValid() or not Photon.IsPhotonChassis(emv) or not emv:IsEMV() then return false end
 
 	if name == "1" then return end
 
@@ -584,16 +584,7 @@ function EMVU:MakeEMV( emv, name )
 			util.PrecacheModel( p.Model )
 			if not util.IsModelLoaded( p.Model ) then self:AlertPhotonMissingRequirements( p.Model ) end
 			local prop = ClientsideModel( p.Model, rendergroup )
-			if isvector( p.Scale ) then
-				local mat = Matrix()
-				mat:Scale( p.Scale )
-				prop:EnableMatrix( "RenderMultiply", mat )
-			elseif isnumber( p.Scale ) then
-				local mat = Matrix()
-				local scale = Vector( p.Scale, p.Scale, p.Scale )
-				mat:Scale( scale )
-				prop:EnableMatrix( "RenderMultiply", mat )
-			end
+			EMVU.Helper.ApplyModelScale( prop, p.Scale )
 			prop:SetParent( emv )
 			prop:SetPos( emv:LocalToWorld( p.Pos ) )
 			prop:SetAngles( emv:LocalToWorldAngles( p.Ang ) )
@@ -720,13 +711,7 @@ function EMVU:MakeEMV( emv, name )
 				end
 
 				if PHOTON_DEBUG or PHOTON_EXPRESS then
-					if isvector( emvProps[index].Scale ) then
-						local mat = Matrix()
-						mat:Scale( emvProps[index].Scale )
-						prop:EnableMatrix( "RenderMultiply", mat )
-					elseif isnumber( emvProps[index].Scale ) then
-						prop:SetModelScale( emvProps[index].Scale, 0 )
-					end
+					EMVU.Helper.ApplyModelScale( prop, emvProps[index].Scale )
 				end
 				if prop.AirEL then self.AirELEntity = prop end
 				if not IsValid( self.AirELEntity ) then self.AirELEntity = nil end
@@ -741,30 +726,30 @@ function EMVU:MakeEMV( emv, name )
 	-- For updating the props after saving the file
 	function emv:Photon_UpdateEMVProps()
 		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
-		if not emvProps or not istable( emvProps) then return end
+		if not emvProps or not istable( emvProps ) then return end
+		if not istable( self.EMVProps ) or #self.EMVProps ~= #emvProps then
+			self:Photon_RemoveEMVProps( true )
+			return
+		end
 
 		for index,prop in ipairs( self.EMVProps ) do
-			if not IsValid( prop ) then
+			local data = emvProps[index]
+			if not IsValid( prop ) or not data or ( data.Model and prop:GetModel() ~= data.Model ) then
 				self:Photon_RemoveEMVProps( true )
-				break
+				return
 			end
 
 			prop:SetParent( self )
-			prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
-			prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
+			prop:SetPos( self:LocalToWorld( data.Pos ) )
+			prop:SetAngles( self:LocalToWorldAngles( data.Ang ) )
+			prop.PhotonLocalAngs = data.Ang
 
-			if emvProps[index].AttachmentMerge then
+			if data.AttachmentMerge then
 				prop:SetParent(nil)
-				prop:SetParent(self, self:LookupAttachment(emvProps[index].AttachmentMerge))
+				prop:SetParent(self, self:LookupAttachment(data.AttachmentMerge))
 			end
 
-			if isvector( emvProps[index].Scale ) then
-				local mat = Matrix()
-				mat:Scale( emvProps[index].Scale )
-				prop:EnableMatrix( "RenderMultiply", mat )
-			elseif isnumber( emvProps[index].Scale ) then
-				prop:SetModelScale( emvProps[index].Scale, 0 )
-			end
+			EMVU.Helper.ApplyModelScale( prop, data.Scale )
 			if prop.AirEL then self.AirELEntity = prop end
 			if not IsValid( self.AirELEntity ) then self.AirELEntity = nil end
 		end
@@ -779,7 +764,7 @@ function EMVU:MakeEMV( emv, name )
 			local validEnts = {}
 			for _, ent in pairs( ents.FindInCone( startPos, normDirection, 2048, 0 ) ) do
 				if IsValid( ent ) and
-					ent:IsVehicle() and
+					Photon.IsPhotonChassis(ent) and
 					ent != self and
 					-- self:IsLineOfSightClear( ent:GetPos() ) and
 					ent:Photon_GetSpeed() > .5 then
@@ -842,7 +827,7 @@ function EMVU:MakeEMV( emv, name )
 	end
 
 	function emv:Photon_RadarTick()
-		if not IsValid( LocalPlayer():GetVehicle() ) or not self == LocalPlayer():GetVehicle() then return end
+		if Photon.GetPlayerVehicle(LocalPlayer()) ~= self then return end
 		local rear = false
 		local fastest, nearest = self:Photon_RadarTargetSpeeds( rear )
 		PHOTON_RADAR_DISP_FAST = fastest or 0
@@ -1015,27 +1000,25 @@ hook.Add("Think", "Photon.ELS_SirenDoppler", function()
 
 	local plyVeh = false
 	if viewEnt == ply then
-		plyVeh = ply:GetVehicle()
+		plyVeh = Photon.GetPlayerVehicle(ply)
 	end
 		for _,v in ipairs(EMVU:AllVehicles()) do
 			for idx, sirenType in ipairs(sirenTypes) do
 				local currentSiren = v[sirenType]
 				if currentSiren then
-					local driver = v:GetDriver()
+					local driver = Photon.GetVehicleDriver(v)
 					local spos = v:GetPos()
 					local doppler = ((pos:Distance(spos+camVel)-pos:Distance(spos+v:GetVelocity()))/200)
-					if IsValid(plyVeh) then
-						if plyVeh:GetParent() == v then
-							doppler = 0
-						end
+					if IsValid(plyVeh) and plyVeh == v then
+						doppler = 0
 					end
 					updateRate = FrameTime()
 
 					if (IsValid(driver) and driver ~= viewEnt) or !IsValid(driver) then
-						local distBehind = v:WorldToLocal(viewEnt:GetPos())[2]
+						local distBehind = Photon.GetForwardSpeedComponent(v, v:WorldToLocal(viewEnt:GetPos()))
 
 						if IsValid(plyVeh) then
-							if plyVeh:GetParent() == v then
+							if plyVeh == v then
 								if currentSiren:GetVolume() ~= thirdPersonVolume and plyVeh:GetThirdPersonMode() then
 									currentSiren:ChangeVolume(thirdPersonVolume, updateRate)
 								elseif currentSiren:GetVolume() ~= interiorVolume and !plyVeh:GetThirdPersonMode() then

@@ -31,8 +31,8 @@ local function TurnScan()
 	if not should_render then return end
 	if not should_render:GetBool() then return end
 	local ply = LocalPlayer()
-	if not ply or not ply:IsValid() or not ply:InVehicle() or not ply:GetVehicle() then return end
-	local car = ply:GetVehicle()
+	if not ply or not ply:IsValid() or not ply:InVehicle() then return end
+	local car = Photon.GetPlayerVehicle(ply)
 	if not IsValid( car ) then return end
 	if not car:Photon() then return end
 	if not car.Photon_TurningRight or not car.Lighting then return end
@@ -63,12 +63,12 @@ end
 hook.Add("Tick", "Photon.TurnScan", function() TurnScan() end)
 
 local function RemoveCarProps( ent )
-	if IsValid( ent ) and ent:IsVehicle() and ent:HasPhotonELS() and ent.EMVProps then
+	if IsValid( ent ) and Photon.IsPhotonChassis(ent) and ent:HasPhotonELS() and ent.EMVProps then
 		for _,prop in pairs( ent.EMVProps ) do
 			prop:Remove()
 		end
 	end
-	if IsValid( ent ) and ent:IsVehicle() and ent:Photon() and ent.PhotonWheelProps then
+	if IsValid( ent ) and Photon.IsPhotonChassis(ent) and ent:Photon() and ent.PhotonWheelProps then
 		for _,prop in pairs( ent.PhotonWheelProps ) do
 			prop:Remove()
 		end

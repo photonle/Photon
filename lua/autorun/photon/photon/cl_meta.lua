@@ -6,7 +6,7 @@
 @alias ENT
 --]]--
 
-local ENT = FindMetaTable("Vehicle")
+local ENT = FindMetaTable("Entity")
 local lp = LocalPlayer
 
 
@@ -16,12 +16,16 @@ local lp = LocalPlayer
 -- @warns Instead, a cached value is fetched from the server.
 -- @rbool
 function ENT:Photon_IsReversing()
-	local ply = self:GetDriver()
+	local ply = Photon.GetVehicleDriver(self)
 	if not IsValid(ply) then return false end
 	if not ply:IsPlayer() then return false end
 
+	-- Glide networks its gear, so every client can read it without the cache.
+	if Photon.IsGlideVehicle(self) then return self:IsReversing() end
+
 	if ply == lp() then
-		return self:Photon_WorldVelocity().y < 1 and ply:KeyDown(IN_BACK)
+		local forward = Photon.GetForwardSpeedComponent(self, self:Photon_WorldVelocity())
+		return forward < 1 and ply:KeyDown(IN_BACK)
 	end
 
 	return self:GetPhotonNet_Reversing(false)
@@ -35,13 +39,16 @@ end
 function ENT:Photon_IsBraking()
 	if self:Photon_IsReversing() then return false end
 
-	local ply = self:GetDriver()
+	local ply = Photon.GetVehicleDriver(self)
 	if not IsValid(ply) then return false end
 	if not ply:IsPlayer() then return false end
 
+	-- Glide networks its brake input, so every client can read it without the cache.
+	if Photon.IsGlideVehicle(self) then return self:IsBraking() end
+
 	if ply == lp() then
-		local vel = self:Photon_WorldVelocity()
-		return (ply:KeyDown(IN_BACK) and vel.y > 1) or (ply:KeyDown(IN_FORWARD) and vel.y < -1) or ply:KeyDown(IN_JUMP)
+		local forward = Photon.GetForwardSpeedComponent(self, self:Photon_WorldVelocity())
+		return (ply:KeyDown(IN_BACK) and forward > 1) or (ply:KeyDown(IN_FORWARD) and forward < -1) or ply:KeyDown(IN_JUMP)
 	end
 
 	return self:GetPhotonNet_Braking(false)

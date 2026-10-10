@@ -113,9 +113,11 @@ Photon.XML.ParseVehicleFromXML = function( inputXml )
 				if ( property.label == "author" ) then emv.VehicleDefinition.Author = tostring( property[1] ); continue end
 				if ( property.label == "model" ) then emv.VehicleDefinition.Model = tostring( property[1] ); continue end
 				if ( property.label == "script" ) then emv.VehicleDefinition.KeyValues = { vehiclescript = tostring( property[1] ) } continue end
+				if ( property.label == "class" ) then emv.VehicleDefinition.Class = tostring( property[1] ); continue end
 			end
 			emv.VehicleDefinition.Name = xt[1].xarg.name or ""
-			emv.VehicleDefinition.Class = "prop_vehicle_jeep"
+			emv.VehicleDefinition.Class = emv.VehicleDefinition.Class or "prop_vehicle_jeep"
+			emv.VehicleDefinition.KeyValues = emv.VehicleDefinition.KeyValues or { vehiclescript = "" }
 			emv.VehicleDefinition.IsEMV = true
 			emv.VehicleDefinition.EMV = self
 			emv.VehicleDefinition.HasPhoton = true
@@ -208,7 +210,7 @@ Photon.XML.ConvertToXML = function( emv )
 		<author>%s</author>
 		<model>%s</model>
 		<script>%s</script>
-]], tostring( emv.VehicleDefinition.Category ), tostring( emv.VehicleDefinition.Author ), tostring( emv.VehicleDefinition.Model ), tostring( emv.VehicleDefinition.KeyValues.vehiclescript ) )
+]], tostring( emv.VehicleDefinition.Category ), tostring( emv.VehicleDefinition.Author ), tostring( emv.VehicleDefinition.Model ), tostring( emv.VehicleDefinition.KeyValues and emv.VehicleDefinition.KeyValues.vehiclescript or "" ) )
 		result = result .. "\t</vehicledef>\n"
 	end
 

@@ -29,8 +29,8 @@ EMVU.Net = {}
 function EMVU.Net:Lights( ply, args )
 	if not ply:InVehicle() then return end
 
-	local emv = ply:GetVehicle()
-	if not emv:IsEMV() then return end
+	local emv = Photon.GetPlayerVehicle(ply)
+	if not IsValid(emv) or not emv:IsEMV() then return end
 
 	if args == EMVU_NET_ELS_ON then
 		emv:ELS_LightsOn()
@@ -53,8 +53,8 @@ local sirens = {
 	[EMVU_NET_SIREN_SET_4] = 4
 }
 function EMVU.Net:Siren( ply, args )
-	local emv = ply:GetVehicle()
-	if not emv:IsEMV() then return end
+	local emv = Photon.GetPlayerVehicle(ply)
+	if not IsValid(emv) or not emv:IsEMV() then return end
 
 	if args == EMVU_NET_SIREN_OFF then
 		emv:ELS_SirenOff()
@@ -80,8 +80,8 @@ net.Receive("emvu_siren", function( len, ply )
 end)
 
 function EMVU.Net:Illumination( ply, args )
-	local emv = ply:GetVehicle()
-	if not emv:IsEMV() then return end
+	local emv = Photon.GetPlayerVehicle(ply)
+	if not IsValid(emv) or not emv:IsEMV() then return end
 
 	if args == EMVU_NET_ILLUM_ON then
 		emv:ELS_IllumOn()
@@ -98,8 +98,8 @@ net.Receive("emvu_illum", function( len, ply )
 end)
 
 function EMVU.Net:Traffic( ply, args )
-	local emv = ply:GetVehicle()
-	if not emv:IsEMV() then return end
+	local emv = Photon.GetPlayerVehicle(ply)
+	if not IsValid(emv) or not emv:IsEMV() then return end
 	if args == "on" then
 		emv:ELS_TrafficOn()
 	elseif args == "off" then
@@ -173,8 +173,8 @@ net.Receive( "emvu_selection", function( len, ply )
 end)
 
 function EMVU.Net:Blackout( ply, arg )
-	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
-	local emv = ply:GetVehicle()
+	local emv = Photon.GetPlayerVehicle(ply)
+	if not IsValid(emv) or not emv:IsEMV() then return end
 	emv:ELS_Blackout( arg )
 end
 net.Receive( "emvu_blackout", function( len, ply )
@@ -182,8 +182,8 @@ net.Receive( "emvu_blackout", function( len, ply )
 end)
 
 function EMVU.Net:Horn( ply, arg )
-	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
-	local emv = ply:GetVehicle()
+	local emv = Photon.GetPlayerVehicle(ply)
+	if not IsValid(emv) or not emv:IsEMV() then return end
 	emv:ELS_Horn( arg )
 end
 net.Receive( "emvu_horn", function( len, ply )
@@ -191,8 +191,8 @@ net.Receive( "emvu_horn", function( len, ply )
 end)
 
 function EMVU.Net:Manual( ply, arg )
-	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
-	local emv = ply:GetVehicle()
+	local emv = Photon.GetPlayerVehicle(ply)
+	if not IsValid(emv) or not emv:IsEMV() then return end
 	emv:ELS_ManualSiren( arg )
 end
 net.Receive( "emvu_manual", function( len, ply )
@@ -200,7 +200,8 @@ net.Receive( "emvu_manual", function( len, ply )
 end)
 
 function EMVU.Net:Livery( ply, category, skin, unit )
-	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
+	local emv = Photon.GetPlayerVehicle(ply)
+	if not IsValid(emv) or not emv:IsEMV() then return end
 	if game.SinglePlayer() == false then
 		if not ply.LastLiveryChange then ply.LastLiveryChange = 0 end
 		if RealTime() < ply.LastLiveryChange + PHOTON_LIVERY_COOLDOWN then
@@ -210,7 +211,6 @@ function EMVU.Net:Livery( ply, category, skin, unit )
 		end
 	end
 	ply.LastLiveryChange = RealTime();
-	local emv = ply:GetVehicle()
 	emv:Photon_ApplyLivery( category, skin, unit )
 end
 net.Receive( "emvu_livery", function( len, ply )
@@ -225,8 +225,8 @@ function Photon.Net.IsValidSignal(signal)
 end
 
 function Photon.Net:Signal( ply )
-	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
-	local car = ply:GetVehicle()
+	local car = Photon.GetPlayerVehicle(ply)
+	if not IsValid(car) or not car:Photon() then return end
 	local signal = net.ReadInt(3)
 	if not Photon.Net.IsValidSignal(signal) then return false end
 	if signal == car:CAR_Signal() then car:CAR_StopSignals() return end
@@ -249,7 +249,7 @@ hook.Add( "PlayerSay", "Photon.MenuCheck", PhotonMenuCheck )
 
 concommand.Add( "photon_stick", function( ply, cmd, args )
 	if not IsValid( ply ) or not ply:IsAdmin() then return end
-	local car = ply:GetVehicle()
+	local car = Photon.GetPlayerVehicle(ply)
 	if not IsValid( car ) or not car:Photon() then return end
 	car:SetPhotonLEStayOn(!car:GetPhotonLEStayOn())
 end )
@@ -263,8 +263,8 @@ function Photon.Net:NotifyLiveryUpdate( id, unit, ent )
 end
 
 function Photon.Net:ReceiveUnitNumber( ply, unit )
-	if not IsValid( ply ) or not IsValid( ply:GetVehicle() ) or not ( ply:GetVehicle():IsEMV() ) then return end
-	local ent = ply:GetVehicle()
+	local ent = Photon.GetPlayerVehicle(ply)
+	if not IsValid( ply ) or not IsValid( ent ) or not ent:IsEMV() then return end
 	ent:Photon_SetUnitNumber( unit )
 end
 net.Receive( "photon_myunitnumber", function( len, ply )

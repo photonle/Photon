@@ -383,7 +383,7 @@ if SERVER then
 			-- Deliberately not gated on IsEMV: the map also covers regular car
 			-- variables (signals, headlights, brakes, engine), so an EMV-only
 			-- gate would drop resyncs for every non-emergency Photon vehicle.
-			if IsValid(ent) and ent:IsVehicle() then
+			if IsValid(ent) and Photon.IsPhotonChassis(ent) then
 				targets[#targets + 1] = ent
 			end
 		end
@@ -484,7 +484,7 @@ if CLIENT then
 		-- Gated on IsVehicle rather than IsEMV: IsEMV reads VehicleIndex, which
 		-- is exactly the value an unsynced client is missing, so an EMV gate
 		-- here can never recover a vehicle it has no state for.
-		if not IsValid(ent) or not ent:IsVehicle() then return end
+		if not IsValid(ent) or not Photon.IsPhotonChassis(ent) then return end
 
 		pending[ent] = true
 		if not flushQueued then

@@ -140,10 +140,8 @@ end
 -- @bool press If the key is going up or down.
 function EMVU:Listener(ply, bind, press)
 	if not should_render then return end
-	if not ply:InVehicle() or not ply:GetVehicle():Photon() then return end
-
-	local emv = ply:GetVehicle()
-	if not IsValid(emv) then return false end
+	local emv = Photon.GetPlayerVehicle(ply)
+	if not IsValid(emv) or not emv:Photon() then return end
 
 	if keyDown(key_signal_activate) and not keyDown(key_signal_deactivate) then
 		if keyDown(key_signal_left) then
@@ -164,9 +162,8 @@ end)
 
 hook.Add("Think", "Photon.ButtonPress", function()
 	if not should_render then return end
-	if not LocalPlayer():InVehicle() or not IsValid( LocalPlayer():GetVehicle() ) or not LocalPlayer():GetVehicle():IsEMV() then return end
-
-	local emv = LocalPlayer():GetVehicle()
+	local emv = Photon.GetPlayerVehicle(LocalPlayer())
+	if not IsValid(emv) or not emv:IsEMV() then return end
 
 	if not emv.Photon_Illumination or not emv.Photon_Lights or not emv.Photon_Siren then return end
 
@@ -348,7 +345,8 @@ end
 
 concommand.Add("emv_siren", function(ply, cmd, args)
 	if args[1] == nil then return end
-	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
+	local veh = Photon.GetPlayerVehicle(ply)
+	if not IsValid(veh) or not veh:IsEMV() then return end
 
 	local id = tonumber(args[1])
 	if id == nil then
@@ -384,12 +382,14 @@ end, SirenSuggestions, "[Photon] Overrides the default siren on an Emergency Veh
 
 concommand.Add("emv_illum", function(ply, cmd, args)
 	if not args[1] then return end
-	if not ply:InVehicle() or not ply:GetVehicle():IsEMV() then return end
+	local veh = Photon.GetPlayerVehicle(ply)
+	if not IsValid(veh) or not veh:IsEMV() then return end
 	EMVU.Net:Illuminate(args[1])
 end)
 
 concommand.Add("car_signal", function(ply, cmd, args)
-	if not ply:InVehicle() or not ply:GetVehicle():Photon() or not args[1] then return end
+	local veh = Photon.GetPlayerVehicle(ply)
+	if not IsValid(veh) or not veh:Photon() or not args[1] then return end
 	Photon:CarSignal(args[1])
 end)
 
@@ -398,10 +398,9 @@ end)
 function Photon:CarSignal(arg)
 	local lPly = LocalPlayer()
 	if not IsValid(lPly) then return end
-	if not lPly:InVehicle() then return end
 
-	local car = LocalPlayer():GetVehicle()
-	if not car:Photon() then return end
+	local car = Photon.GetPlayerVehicle(lPly)
+	if not IsValid(car) or not car:Photon() then return end
 
 	if not arg then return end
 	if not Photon.Vehicles.States.Blink_Left[car.VehicleName] or not Photon.Vehicles.States.Blink_Right[car.VehicleName] then return end

@@ -88,27 +88,33 @@ function Photon:SetupCar( ent, index )
 		self:CAR_Signal( 0 )
 	end
 
-	function ent:IsBraking( )
-		if not IsValid( self ) then return false end
-		if self:IsReversing() then return false end
-		--local speed = self:GetPhysicsObject():GetVelocity():Length()
-		local vel = self:WorldToLocal(self:GetVelocity()+self:GetPos())
-		if (self:GetDriver():KeyDown( IN_BACK ) and vel.y > 1) or (self:GetDriver():KeyDown( IN_FORWARD ) and vel.y < -1) or self:GetDriver():KeyDown( IN_JUMP ) then
-			return true
-		end
-		return false
-	end
-
-	function ent:IsReversing()
-		if not IsValid( self ) then return false end
-		if self:GetDriver() and self:GetDriver():IsValid() and self:GetDriver():IsPlayer() then
-			local ply = self:GetDriver()
-			local vel = self:WorldToLocal(self:GetVelocity()+self:GetPos())
-			if (vel.y < 1 and ply:KeyDown( IN_BACK )) then
+	-- Glide vehicles define their own IsBraking and IsReversing from their gear
+	-- and brake input, and Glide's lights and trailers read them back through
+	-- the entity table. Defining ours here would replace theirs.
+	if not Photon.IsGlideVehicle( ent ) then
+		function ent:IsBraking( )
+			if not IsValid( self ) then return false end
+			if self:IsReversing() then return false end
+			local ply = Photon.GetVehicleDriver(self)
+			if not IsValid(ply) then return false end
+			local forward = Photon.GetForwardSpeedComponent(self, self:WorldToLocal(self:GetVelocity()+self:GetPos()))
+			if (ply:KeyDown( IN_BACK ) and forward > 1) or (ply:KeyDown( IN_FORWARD ) and forward < -1) or ply:KeyDown( IN_JUMP ) then
 				return true
 			end
+			return false
 		end
-		return false
+
+		function ent:IsReversing()
+			if not IsValid( self ) then return false end
+			local ply = Photon.GetVehicleDriver(self)
+			if IsValid(ply) and ply:IsPlayer() then
+				local forward = Photon.GetForwardSpeedComponent(self, self:WorldToLocal(self:GetVelocity()+self:GetPos()))
+				if (forward < 1 and ply:KeyDown( IN_BACK )) then
+					return true
+				end
+			end
+			return false
+		end
 	end
 
 	function ent:GetPhotonLEStayOn()
