@@ -14,6 +14,13 @@ local insert = table.insert
 
 local printedErrors = {}
 
+--- Pack sequence document, or nil when the vehicle has no EMV sequences yet.
+--- @param name any
+--- @return table|nil
+local function sequenceData(name)
+	return istable(EMVU.Sequences) and EMVU.Sequences[name] or nil
+end
+
 --- Resolve a table, which is in either Map<idx, value>, (idx, value)[] or a mix, to be output in (idx, value)[] format, allowing for ipairs.
 -- @tab tab Input table.
 -- @rtab
@@ -239,6 +246,10 @@ function EMVU.Helper.GetReverseSequence( name, vehicle, resultTable )
 end
 
 function EMVU.Helper:GetSequence( name, option, vehicle )
+	local data = sequenceData(name)
+	if not istable(data) or not istable(data.Sequences) or not istable(data.Sequences[option]) then
+		return {}
+	end
 
 	local resultTable = {}
 
@@ -288,8 +299,8 @@ function EMVU.Helper:GetSequence( name, option, vehicle )
 end
 
 function EMVU.Helper:GetTASequence( name, option, vehicle )
-
-	if not istable( EMVU.Sequences[ name ].Traffic ) or not istable( EMVU.Sequences[ name ].Traffic[ option ]) then return end
+	local data = sequenceData(name)
+	if not istable(data) or not istable(data.Traffic) or not istable(data.Traffic[option]) then return end
 	local resultTable = {}
 
 	if IsValid( vehicle ) and istable( EMVU.Sequences[name]["Traffic"][option]["BG_Components"] ) then
@@ -449,11 +460,15 @@ function EMVU.Helper.FetchUsedLights(vehicle)
 end
 
 function EMVU.Helper:GetSequenceName( name, option )
-	return EMVU.Sequences[name]["Sequences"][option]["Name"]
+	local data = sequenceData(name)
+	local stage = istable(data) and istable(data.Sequences) and data.Sequences[option]
+	if istable(stage) then return stage.Name end
 end
 
 function EMVU.Helper:GetModeDisconnect( name, option )
-	if EMVU.Sequences[name]["Sequences"][option]["Disconnect"] then return EMVU.Sequences[name]["Sequences"][option]["Disconnect"] end
+	local data = sequenceData(name)
+	local stage = istable(data) and istable(data.Sequences) and data.Sequences[option]
+	if istable(stage) and stage.Disconnect then return stage.Disconnect end
 	return false
 end
 
@@ -689,8 +704,9 @@ function EMVU.Helper:GetIlluminationName( name, option )
 end
 
 function EMVU.Helper:GetIlluminationLights( name, option )
-	local stageData = EMVU.Sequences[name].Illumination[option]
-	if not istable( stageData ) then return {} end
+	local data = sequenceData(name)
+	local stageData = istable(data) and istable(data.Illumination) and data.Illumination[option]
+	if not istable(stageData) then return {} end
 	return stageData.Lights or {}
 end
 
@@ -699,16 +715,20 @@ function EMVU.Helper:GetLampMeta( name, index )
 end
 
 function EMVU.Helper:HasLamps( name )
-	if istable( EMVU.Sequences[name].Illumination ) and istable( EMVU.Sequences[name].Illumination[1] ) then return true end
+	local data = sequenceData(name)
+	if istable(data) and istable(data.Illumination) and istable(data.Illumination[1]) then return true end
 	return false
 end
 
 function EMVU.Helper:HasTrafficAdvisor( name )
-	if istable( EMVU.Sequences[name].Traffic ) and istable( EMVU.Sequences[name].Traffic[1] ) then return true end
+	local data = sequenceData(name)
+	if istable(data) and istable(data.Traffic) and istable(data.Traffic[1]) then return true end
 end
 
 function EMVU.Helper:GetTrafficAdvisorName( name, option )
-	return EMVU.Sequences[name]["Traffic"][option].Name
+	local data = sequenceData(name)
+	local stage = istable(data) and istable(data.Traffic) and data.Traffic[option]
+	if istable(stage) then return stage.Name end
 end
 
 function EMVU.Helper.GetLocalToWorld( posData )

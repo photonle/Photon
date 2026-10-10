@@ -423,15 +423,16 @@ function PhotonHUD:GetCurrentState()
 	local name = ent.VehicleName
 	if not name then return end
 	if data.EMV then
-		local primaryLights = EMVU.Sequences[name]["Sequences"]
+		local packSequences = istable(EMVU.Sequences) and EMVU.Sequences[name]
+		local primaryLights = istable(packSequences) and packSequences.Sequences
 		if istable(primaryLights) then
 			data.PrimaryLights = {}
 			data.PrimaryLights.Max = #primaryLights
 			data.PrimaryLights.Enabled = ent:Photon_Lights()
 			data.PrimaryLights.SelectedIndex = ent:Photon_LightOption()
-			data.PrimaryLights.Name = ent:Photon_ELS_GetSequenceName()
+			data.PrimaryLights.Name = ent:Photon_ELS_GetSequenceName() or ""
 		end
-		local auxLights = EMVU.Sequences[name]["Traffic"]
+		local auxLights = istable(packSequences) and packSequences.Traffic
 		if istable( auxLights ) then
 			data.AuxLights = {}
 			data.AuxLights.Max = #auxLights
