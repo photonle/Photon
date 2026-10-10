@@ -5,9 +5,8 @@ description: Using Photon with StyledStrike's Glide vehicle base.
 
 # Glide Vehicles
 
-Photon supports [Glide](https://github.com/StyledStrike/gmod-glide) cars the same way Photon 2
-does: runtime hooks only. There is no automatic remapping of light positions and Photon does not
-suppress Glide's own headlight, signal, or siren sprites.
+Photon supports [Glide](https://github.com/StyledStrike/gmod-glide) cars with runtime hooks
+only. There is no automatic remapping of light positions.
 
 ## Local space
 
@@ -64,6 +63,7 @@ from the entity when no Vehicles entry exists, and leaves `vehiclescript` empty 
 | `Photon.GetPlayerVehicle` | Seat → chassis for the driver; passengers get their seat back |
 | `Photon.GetVehicleDriver` | Driver / Glide seat 1 |
 | `Photon.GetForwardSpeedComponent` | `.x` on Glide, `.y` on HL2 |
+| `Photon.UsesNativeVehicleLights` | Skip Photon PI sprites for car lights |
 
 ## Seats
 
@@ -76,7 +76,36 @@ vehicle's running, brake or siren state.
 Photon reads brake and reverse state from Glide's own `IsBraking` and `IsReversing`, which follow
 Glide's brake input and gear rather than raw keys, so they respect Glide keybinds.
 
-## Built-in Glide lights
+## Native vehicle lights
 
-Photon leaves Glide lighting alone. If you want Photon-only lighting, clear or disable the
-sprites / siren tables on the Glide entity definition itself.
+On Glide chassis, Photon **does not draw** PI sprites for headlights, running lights, brakes,
+reverse, or indicators. Those come from Glide. Photon still draws ELS props and emergency
+components as usual.
+
+| Photon concept | Glide |
+|----------------|-------|
+| **H** | Glide's own headlights bind (default **KEY_H**) — **Off → On → Fullbeam → Off**. Photon does **not** also handle H on Glide (that double-cycled and skipped low beam). |
+| Blackout (`Photon_Blackout`) | Mirror of `HeadlightState == 0` (including Glide auto-headlights) |
+| Preferred beam | Last On (1) or Fullbeam (2) while lights are on |
+| Turn signals / hazards | `TurnSignalState` 0–3 (same numbering as Photon) |
+| Brakes / reverse | Glide native; Photon still tracks them for ELS brake/reverse sequences |
+
+Do **not** author a second Photon Positions set for headlights / running / brakes / indicators on
+Glide packs unless you intentionally want Photon sprites on top of Glide.
+
+### ELS headlight flash (e.g. Stage 3 / 999)
+
+When primary lights are on and the active sequence asks for headlights, Photon pulses Glide's
+native beam (preferred ↔ Off). If headlights were Off, flash **wakes** them using the last
+preferred beam (or low beam). When the stage ends, that preferred beam is restored.
+
+Opt in with either:
+
+```lua
+-- On the primary sequence entry:
+{ Name = "STAGE 3", Stage = "M3", Headlights = true, Components = { … } }
+-- or GlideHeadlights = true
+```
+
+or a Components key whose name contains `"headlight"` (same as stock auto components such as
+`auto_fpiu16_headlights`).

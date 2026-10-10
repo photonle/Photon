@@ -63,6 +63,7 @@ function Photon:SetupCar( ent, index )
 		if (val!=nil) then
 			self:SetNW2Int( "PhotonLE.CAR_BLINKER", val )
 			self:SetPhotonNet_CurrentSignal( val )
+			Photon.SyncGlideTurnSignals(self, val)
 		end
 
 		return self:GetPhotonNet_CurrentSignal( CAR_BLINKER_NONE )
