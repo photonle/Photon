@@ -175,7 +175,11 @@ end)
 function EMVU.Net:Blackout( ply, arg )
 	local emv = Photon.GetPlayerVehicle(ply)
 	if not IsValid(emv) or not emv:IsEMV() then return end
-	emv:ELS_Blackout( arg )
+	if Photon.IsGlideVehicle(emv) then
+		emv:ELS_BlackoutCycle()
+	else
+		emv:ELS_Blackout( arg )
+	end
 end
 net.Receive( "emvu_blackout", function( len, ply )
 	EMVU.Net:Blackout( ply, tobool( net.ReadBit() ) )

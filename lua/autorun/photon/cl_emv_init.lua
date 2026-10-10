@@ -67,7 +67,7 @@ local function DrawVehicleCarLights(ent)
 			Photon:SetupCar(ent, vname)
 		end
 	else
-		if should_render_reg:GetBool() then
+		if should_render_reg:GetBool() and not Photon.UsesNativeVehicleLights(ent) then
 			ent:Photon_RenderLights(
 				ent:Photon_HeadlightsOn(),
 				ent:Photon_IsRunning(),

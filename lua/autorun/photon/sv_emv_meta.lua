@@ -396,9 +396,13 @@ function EMVU:MakeEMV( ent, emv )
 
 	function ent:ELS_BlackoutToggle()
 		if not IsValid( self ) then return end
-		local state = true
-		if self:ELS_Blackout() then state = false end
-		self:ELS_Blackout( state )
+		if self.ELS_BlackoutCycle then
+			self:ELS_BlackoutCycle()
+		else
+			local state = true
+			if self:ELS_Blackout() then state = false end
+			self:ELS_Blackout( state )
+		end
 	end
 
 	function ent:ELS_NoSiren()
