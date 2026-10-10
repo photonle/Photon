@@ -7,11 +7,29 @@ local function ScanRunningVehicle( v )
 	end
 end
 
+local function ScanGlideVehicleLights( v )
+	if not Photon.IsGlideVehicle(v) then return end
+	-- ELS-only packs (no Photon = "PHOTON_INHERIT") never get SetupCar / Photon(),
+	-- but still need native headlight sync and ELS flash.
+	if not v:Photon() and not (v.HasPhotonELS and v:HasPhotonELS()) then return end
+	local driver = Photon.GetVehicleDriver(v)
+	if not IsValid(driver) or not driver:IsPlayer() then return end
+	-- Sync first so Blackout tracks Glide (including auto-headlights) before ELS flash.
+	Photon.SyncPhotonBlackoutFromGlide(v)
+	Photon.ApplyGlideELSHeadlights(v)
+end
+
 function Photon:RunningScan()
 	for k,v in pairs( self:AllVehicles() ) do
 		if IsValid( v ) then Photon.RunQuarantined( v, ScanRunningVehicle ) end
 	end
 end
+function Photon:GlideLightScan()
+	for _, v in pairs( self:AllVehicles() ) do
+		if IsValid( v ) then Photon.RunQuarantined( v, ScanGlideVehicleLights ) end
+	end
+end
+
 -- Glide passengers sit in seats parented to the chassis, so they resolve to it
 -- too. Only the driver's seat getting in or out should change its state.
 local function IsGlidePassengerSeat(seat, vehicle)
@@ -70,6 +88,11 @@ end)
 
 timer.Create("Photon.RunScan", 0.5, 0, function()
 	Photon:RunningScan()
+end)
+
+-- Faster than RunningScan so ELS headlight flash is visible (~2.5 Hz).
+timer.Create("Photon.GlideLightScan", 0.1, 0, function()
+	Photon:GlideLightScan()
 end)
 
 local function ContinueVehicleSiren( car )

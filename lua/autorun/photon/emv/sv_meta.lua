@@ -196,17 +196,43 @@ function ENT:ELS_Blackout(val)
 	end
 
 	if val ~= nil then
-		self:SetPhotonNet_Blackout(val and true or false)
+		if Photon.IsGlideVehicle(self) then
+			-- Glide owns HeadlightState (manual H + auto-headlights). Photon's
+			-- Blackout bit is a mirror only — do not force beams on when ELS
+			-- clears blackout (that fought tunnels / auto-on). Explicit blackout
+			-- still turns Glide lights off.
+			self.PhotonGlideELSFlashing = false
+			if val then
+				if isfunction(self.SetHeadlightState) then
+					self:SetHeadlightState(0)
+				end
+			end
+			Photon.SyncPhotonBlackoutFromGlide(self, true)
+		else
+			self:SetPhotonNet_Blackout(val and true or false)
 
-		-- Running lights are a separate networked value derived from blackout, so
-		-- recompute them here. Nothing else does until a player next gets in.
-		-- ELS-only vehicles never get Photon:SetupCar, so CAR_Running may be absent.
-		if isfunction(self.CAR_Running) then
-			self:CAR_Running(not self:Photon_Blackout() and IsValid(Photon.GetVehicleDriver(self)))
+			-- Running lights are a separate networked value derived from blackout, so
+			-- recompute them here. Nothing else does until a player next gets in.
+			-- ELS-only vehicles never get Photon:SetupCar, so CAR_Running may be absent.
+			if isfunction(self.CAR_Running) then
+				self:CAR_Running(not self:Photon_Blackout() and IsValid(Photon.GetVehicleDriver(self)))
+			end
 		end
 	end
 
 	return self:Photon_Blackout()
+end
+
+--- Stock: toggle blackout. Glide: no-op for input (Glide KEY_H already cycles beams);
+--- still available if something needs a programmatic cycle.
+function ENT:ELS_BlackoutCycle()
+	if Photon.IsGlideVehicle(self) then
+		-- Intentionally do not cycle — Glide's headlights bind shares KEY_H and
+		-- already advances Off → On → Fullbeam. Double-cycling skipped low beam.
+		Photon.SyncPhotonBlackoutFromGlide(self, true)
+		return self:Photon_Blackout()
+	end
+	return self:ELS_Blackout(not self:Photon_Blackout())
 end
 
 local illumination_allowed = GetConVar("photon_emv_useillum")

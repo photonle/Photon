@@ -304,7 +304,65 @@ return {
 				ent.VehicleTable = listed
 				expect(Photon.LookupVehiclesEntry(ent)).to.equal(listed)
 			end
-		}
+		},
+		{
+			name = "UsesNativeVehicleLights is true for Glide",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				expect(Photon.UsesNativeVehicleLights(ent)).to.beTrue()
+			end
+		},
+		{
+			name = "UsesNativeVehicleLights is false for stock",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				expect(Photon.UsesNativeVehicleLights(ent)).to.beFalse()
+			end
+		},
+		{
+			name = "CycleGlideHeadlights advances Off to On",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				ent._hs = 0
+				ent.GetHeadlightState = function(self) return self._hs end
+				ent.SetHeadlightState = function(self, s) self._hs = s end
+				ent.SetPhotonNet_Blackout = function() end
+				Photon.CycleGlideHeadlights(ent)
+				expect(ent._hs).to.equal(1)
+			end
+		},
+		{
+			name = "ApplyGlideELSHeadlights does not force off from latched blackout alone",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				ent._hs = 1
+				ent.GetHeadlightState = function(self) return self._hs end
+				ent.SetHeadlightState = function(self, s) self._hs = s end
+				ent.Photon_Blackout = function() return true end
+				ent.HasPhotonELS = function() return false end
+				Photon.ApplyGlideELSHeadlights(ent)
+				expect(ent._hs).to.equal(1)
+			end
+		},
+		{
+			name = "SyncGlideTurnSignals writes TurnSignalState",
+			func = function(state)
+				local ent = NewEnt()
+				state.ent = ent
+				ent.IsGlideVehicle = true
+				ent._sig = 0
+				ent.SetTurnSignalState = function(self, s) self._sig = s end
+				Photon.SyncGlideTurnSignals(ent, 3)
+				expect(ent._sig).to.equal(3)
+			end
+		},
 	},
 
 	afterEach = function(state)
