@@ -1,5 +1,13 @@
 # Changelog
 
+## [76.8.0](https://github.com/photonle/Photon/compare/v76.7.0...v76.8.0) (2026-10-20)
+
+
+### Bug Fixes
+
+* **ci:** Scope the GLua lint push diff to the branch point ([fc5c88d](https://github.com/photonle/Photon/commit/fc5c88daf5b9547cd77a27f9d6ed7036b77e8abf))
+* EMV props keep their own definition when a model-less component precedes them ([c1a1d09](https://github.com/photonle/Photon/commit/c1a1d0929ffc6b8534aed05a2fa5a9703c0970f7))
+
 ## [76.7.0](https://github.com/photonle/Photon/compare/v76.6.0...v76.7.0) (2026-10-09)
 
 
