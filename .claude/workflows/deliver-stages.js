@@ -40,7 +40,7 @@ issue: the conductor owns every forge write.
 ${ci
   ? `GLuaTest cannot run in this checkout: the pull request's CI runs the suites once the conductor
 pushes, and the conductor reads the results.`
-  : `GLuaTest runs locally with the runner .claude/agents/qa-tester.md names under "Run".`}
+  : `GLuaTest runs locally with bash .github/scripts/gluatest-local.sh, which runs every suite.`}
 
 The brief (the ticket, and the spec's testing seams):
 
@@ -205,8 +205,8 @@ glualint over them, read each case against the code it calls, and put in "failur
 message you expect CI to report for it: the conductor checks every one against CI's log.`
   : `Each case must fail for the right reason: an expectation about the missing behaviour, never a
 compile error, a missing function the case could have stubbed through a public seam, or leaked
-state. Run the suites with the local runner your instructions name and read the failure message
-before you call it red; a suite that shows zero cases failed to load.`
+state. Run bash .github/scripts/gluatest-local.sh and read the failure message before you call it
+red; exit 3 means a suite ran zero cases, so it failed to load.`
 
 // Read-only, so it can share the checkout with red: it gives green a head start, never a contract.
 const explore = () => agent(`You are the explorer for /deliver on photonle/Photon issue #${ticket}${epic ? `, part of #${epic}` : ''}.
