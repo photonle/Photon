@@ -24,19 +24,54 @@ jobs:
       -
         name: Determine Diff Range
         id: diff-range
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_HEAD: ${{ github.sha }}
+          PUSH_REF: ${{ github.ref }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            base="${{ github.event.pull_request.base.sha }}"
-            head="${{ github.event.pull_request.head.sha }}"
+          set -euo pipefail
+          # Diffing against the empty tree treats every line of every .lua file as touched.
+          empty_tree=4b825dc642cb6eb9a060e54bf8d69288fbee4904
+
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            base="$PR_BASE"
+            head="$PR_HEAD"
           else
-            base="${{ github.event.before }}"
-            head="${{ github.sha }}"
-            if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
-              # New branch or force-push with no known parent: diff against the empty tree so
-              # every line in every changed file is treated as touched.
-              base="4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+            head="$PUSH_HEAD"
+            # github.event.before names the ref's previous tip, and a force-push invalidates it
+            # in one of two ways. The old tip is usually unreachable, so git diff dies with
+            # "bad object" and nothing gets linted; when it does still resolve, it predates the
+            # rebase, so the diff spans every upstream commit the branch was replayed onto and
+            # the gate reports already-merged code as this push's own work.
+            #
+            # Scope against the branch point with the default branch instead. That answers
+            # "what is new on this branch", which rewriting the branch's history cannot
+            # invalidate, and it matches what the pull_request event already computes.
+            if [ "$PUSH_REF" = "refs/heads/${DEFAULT_BRANCH}" ]; then
+              # The push is to the default branch itself, so it has no branch point to scope
+              # against. Use event.before while it still resolves, and fall back to this push's
+              # first parent when a force-push has orphaned it.
+              if [ -n "$PUSH_BEFORE" ] \
+                && git rev-parse --verify --quiet "${PUSH_BEFORE}^{commit}" >/dev/null; then
+                base="$PUSH_BEFORE"
+              else
+                base="$(git rev-parse --verify --quiet "${head}~1" || true)"
+              fi
+            else
+              if ! git rev-parse --verify --quiet "refs/remotes/origin/${DEFAULT_BRANCH}" >/dev/null; then
+                git fetch --no-tags --quiet origin \
+                  "+refs/heads/${DEFAULT_BRANCH}:refs/remotes/origin/${DEFAULT_BRANCH}" || true
+              fi
+              base="$(git merge-base "refs/remotes/origin/${DEFAULT_BRANCH}" "$head" 2>/dev/null || true)"
             fi
+            # No branch point at all - an orphan branch, or the repository's first commit.
+            base="${base:-$empty_tree}"
           fi
+          echo "Diff range: ${base}..${head}"
           echo "base=${base}" >> "$GITHUB_OUTPUT"
           echo "head=${head}" >> "$GITHUB_OUTPUT"
       -
