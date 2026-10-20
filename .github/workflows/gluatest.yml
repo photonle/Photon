@@ -6,9 +6,59 @@ on:
     branches:
       - development
 
+# This is CFC-Servers/GLuaTest's reusable run_tests.yml (as of 735e52d), cut down to
+# the steps Photon uses and run on ubuntu-24.04. The reusable workflow hardcodes
+# `runs-on: ubuntu-latest`, and since ubuntu-latest moved to ubuntu-26.04 the
+# 32-bit srcds in the gluatest image can't create a socket there (socket() fails
+# with ENOSYS, "Couldn't allocate any server IP port") and crashes before any test
+# runs. Go back to `uses: CFC-Servers/GLuaTest/.github/workflows/run_tests.yml@main`
+# once that runs on 26.04.
 jobs:
   run-tests:
-    uses: CFC-Servers/GLuaTest/.github/workflows/run_tests.yml@main
-    with:
-      gamemode: sandbox
-      map: gm_construct
+    name: "run-tests / Run tests"
+    runs-on: ubuntu-24.04
+
+    env:
+      GMOD_BRANCH: public
+      GAMEMODE: sandbox
+      MAP: gm_construct
+      TIMEOUT: "2"
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v6
+        with:
+          path: project
+
+      - name: Set up output files
+        run: |
+          touch "$GITHUB_WORKSPACE/project/gluatest_requirements.txt"
+          echo "gluatest_github_output 1" >> "$GITHUB_WORKSPACE/project/gluatest_custom.cfg"
+
+      - name: Get GLuaTest
+        run: |
+          git clone --single-branch --depth 1 https://github.com/CFC-Servers/GLuaTest.git "$GITHUB_WORKSPACE/gluatest"
+          mkdir -p "$GITHUB_WORKSPACE/gluatest/docker/_gluatest_artifacts"
+
+      - name: Prepare the override directory
+        run: |
+          dest="$GITHUB_WORKSPACE/garrysmod_override/addons/project"
+          mkdir -p "$dest"
+          cp --recursive "$GITHUB_WORKSPACE"/project/* "$dest/"
+
+      - name: Pull GLuaTest Runner
+        working-directory: gluatest/docker
+        run: docker compose pull
+
+      - name: Run GLuaTest
+        working-directory: gluatest/docker
+        env:
+          REQUIREMENTS: ${{ github.workspace }}/project/gluatest_requirements.txt
+          CUSTOM_SERVER_CONFIG: ${{ github.workspace }}/project/gluatest_custom.cfg
+          PROJECT_DIR: ${{ github.workspace }}/garrysmod_override
+          GMOD_ARTIFACT_DIR: ${{ github.workspace }}/gluatest/docker/_gluatest_artifacts
+          EXTRA_STARTUP_ARGS: ""
+        run: |
+          # The image's filesystem is read-only, so the core pattern is set on the host.
+          echo "core" | sudo tee /proc/sys/kernel/core_pattern
+          docker compose up --pull never --no-log-prefix --exit-code-from runner
