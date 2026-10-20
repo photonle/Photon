@@ -11,7 +11,7 @@ properties.Add("photon_siren", {
             return false
         end
 
-        if not ent:IsVehicle() then
+        if not Photon.IsPhotonChassis(ent) then
             return false
         end
 
@@ -95,7 +95,7 @@ properties.Add("photon_liveries", {
             return false
         end
 
-        if ply:GetVehicle() ~= ent then
+        if Photon.GetPlayerVehicle(ply) ~= ent then
             return false
         end
 

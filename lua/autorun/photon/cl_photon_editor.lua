@@ -25,6 +25,14 @@ end
 
 Photon.Editor.SetTargetTable = function( name )
 	local vehicleTable = list.Get( "Vehicles" )[ name ]
+	if not vehicleTable then
+		for _, car in pairs(list.Get("Vehicles") or {}) do
+			if istable(car) and car.Name == name then
+				vehicleTable = car
+				break
+			end
+		end
+	end
 	if not vehicleTable then return false end
 	Photon.Editor.TargetTable = vehicleTable.EMV
 end
@@ -396,7 +404,7 @@ concommand.Add("photon_cfgbld_savelocal", function()
 	local ply = LocalPlayer()
 	if not IsValid(ply) then return end
 
-	local ent = ply:GetVehicle()
+	local ent = Photon.GetPlayerVehicle(ply)
 	if not IsValid(ent) then
 		chat.AddText(Color(255, 128, 64), "[Photon] You must be driving the vehicle you wish to save the configuration from." )
 		return
@@ -435,7 +443,7 @@ local luaConfigInstructions = [[
 concommand.Add( "photon_cfgbld_getlua", function()
 	local ply = LocalPlayer()
 
-	local ent = ply:GetVehicle()
+	local ent = Photon.GetPlayerVehicle(ply)
 	if not IsValid( ent ) then
 		chat.AddText( Color(255, 128, 64), "[Photon] You must be driving the vehicle you wish to save the configuration from." )
 		return

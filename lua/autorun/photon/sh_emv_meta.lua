@@ -8,14 +8,14 @@ local istable = istable
 
 function ent:IsEMV()
 	if not IsValid( self ) then return false end
-	if not self:IsVehicle() then return false end
+	if not Photon.IsPhotonChassis(self) then return false end
 	if not EMV_INDEX then return false end
 	if self:EMVName() ~= "" then return true end
 	return false
 end
 
 function ent:Photon()
-	return ( IsValid( self ) and self:IsVehicle() and self:GetPhotonNet_HasPhoton( false ) ) or false
+	return ( IsValid( self ) and Photon.IsPhotonChassis(self) and self:GetPhotonNet_HasPhoton( false ) ) or false
 end
 
 function ent:HasPhotonELS()
@@ -49,7 +49,12 @@ end
 
 function ent:Photon_GetAutoSkinData()
 	if self:GetSkin() == 0 then
-		local submat = self:GetSubMaterial( self:Photon_GetAutoSkinIndex() )
+		local skinIndex = self:Photon_GetAutoSkinIndex()
+		-- No /skin|/skin0|/carpaint material (common on Glide packs with no livery options).
+		if not isnumber(skinIndex) then
+			return 0
+		end
+		local submat = self:GetSubMaterial(skinIndex)
 		return submat ~= "" and submat or 0
 	end
 	return self:GetSkin()
@@ -58,7 +63,7 @@ end
 ent.LegacySetSkin = ent.LegacySetSkin or ent.SetSkin
 function ent:SetSkin( index )
 	self:LegacySetSkin( index )
-	if self:IsVehicle() and self:IsEMV() then
+	if Photon.IsPhotonChassis(self) and self:IsEMV() then
 		hook.Call( "Photon.EntityChangedSkin", GM, self, index )
 	end
 end

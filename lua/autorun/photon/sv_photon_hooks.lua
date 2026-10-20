@@ -1,9 +1,22 @@
 
 local function ScanRunningVehicle( v )
-	if IsValid( v:GetDriver() ) and v:GetDriver():IsPlayer() and v:Photon() then
+	local driver = Photon.GetVehicleDriver(v)
+	if IsValid( driver ) and driver:IsPlayer() and v:Photon() then
 		if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
 		if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
 	end
+end
+
+local function ScanGlideVehicleLights( v )
+	if not Photon.IsGlideVehicle(v) then return end
+	-- ELS-only packs (no Photon = "PHOTON_INHERIT") never get SetupCar / Photon(),
+	-- but still need native headlight sync and ELS flash.
+	if not v:Photon() and not (v.HasPhotonELS and v:HasPhotonELS()) then return end
+	local driver = Photon.GetVehicleDriver(v)
+	if not IsValid(driver) or not driver:IsPlayer() then return end
+	-- Sync first so Blackout tracks Glide (including auto-headlights) before ELS flash.
+	Photon.SyncPhotonBlackoutFromGlide(v)
+	Photon.ApplyGlideELSHeadlights(v)
 end
 
 function Photon:RunningScan()
@@ -11,9 +24,23 @@ function Photon:RunningScan()
 		if IsValid( v ) then Photon.RunQuarantined( v, ScanRunningVehicle ) end
 	end
 end
-hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, v)
+function Photon:GlideLightScan()
+	for _, v in pairs( self:AllVehicles() ) do
+		if IsValid( v ) then Photon.RunQuarantined( v, ScanGlideVehicleLights ) end
+	end
+end
+
+-- Glide passengers sit in seats parented to the chassis, so they resolve to it
+-- too. Only the driver's seat getting in or out should change its state.
+local function IsGlidePassengerSeat(seat, vehicle)
+	return vehicle ~= seat and seat.GlideSeatIndex ~= 1
+end
+
+hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, seat)
+	local v = Photon.GetVehicleEntity(seat)
+	if IsGlidePassengerSeat(seat, v) then return end
 	if IsValid(v) then
-		if v:Photon() then
+		if v:Photon() and isfunction(v.CAR_Running) and isfunction(v.CAR_IsBlackedOut) then
 			v:CAR_Running(not v:CAR_IsBlackedOut())
 		end
 		if v:HasPhotonELS() then
@@ -22,12 +49,14 @@ hook.Add("PlayerEnteredVehicle", "Photon.EnterVeh.SGM", function(ply, v)
 	end
 end)
 
-hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, v)
+hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, seat)
+  local v = Photon.GetVehicleEntity(seat)
+  if IsGlidePassengerSeat(seat, v) then return end
   if IsValid(v) then
     if v:Photon() then
-      v:CAR_Running(false)
-      v:CAR_Braking(false)
-      v:CAR_Reversing(false)
+      if isfunction(v.CAR_Running) then v:CAR_Running(false) end
+      if isfunction(v.CAR_Braking) then v:CAR_Braking(false) end
+      if isfunction(v.CAR_Reversing) then v:CAR_Reversing(false) end
     end
 
     if v:HasPhotonELS() then
@@ -42,7 +71,7 @@ hook.Add("PlayerLeaveVehicle", "Photon.LeaveVeh.SGM", function(ply, v)
 end)
 
 hook.Add("KeyPress", "Photon.KeyPress.SGM", function(ply, key)
-	local v = ply:GetVehicle()
+	local v = Photon.GetPlayerVehicle(ply)
 	if IsValid(v) and v:Photon() then
 		if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
 		if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
@@ -50,7 +79,7 @@ hook.Add("KeyPress", "Photon.KeyPress.SGM", function(ply, key)
 end)
 
 hook.Add("KeyRelease", "Photon.KeyRelease.SGM", function(ply, key)
-	local v = ply:GetVehicle()
+	local v = Photon.GetPlayerVehicle(ply)
 	if IsValid(v) and v:Photon() then
 		if v:IsBraking() then v:CAR_Braking(true) else v:CAR_Braking(false) end
 		if v:IsReversing() then v:CAR_Reversing(true) else v:CAR_Reversing(false) end
@@ -59,6 +88,11 @@ end)
 
 timer.Create("Photon.RunScan", 0.5, 0, function()
 	Photon:RunningScan()
+end)
+
+-- Faster than RunningScan so ELS headlight flash is visible (~2.5 Hz).
+timer.Create("Photon.GlideLightScan", 0.1, 0, function()
+	Photon:GlideLightScan()
 end)
 
 local function ContinueVehicleSiren( car )
@@ -71,7 +105,7 @@ timer.Create("Photon.SirenRunScan", 0.2, 0, function()
 end)
 
 function Photon:VehicleRemoved( ent )
-	if IsValid( ent ) and ent:IsVehicle() and ent:HasPhotonELS() then
+	if IsValid( ent ) and Photon.IsPhotonChassis(ent) and ent:HasPhotonELS() then
 		if ent.ELS.Manual then ent.ELS.Manual:Stop() end
 		ent:ELS_SirenOff()
 		ent:ELS_Horn( false )
@@ -90,7 +124,8 @@ end)
 -- dev functions --
 
 concommand.Add( "photon_mat", function( ply, cmd, args )
-	local veh = ply:GetVehicle()
+	local veh = Photon.GetPlayerVehicle(ply)
+	if not IsValid(veh) then return end
 	PrintTable( veh:GetMaterials() )
 end)
 
@@ -102,7 +137,7 @@ end )
 
 hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, ent )
 	if not IsValid( ent ) then return false end
-	local isDriver = ( ply:GetVehicle() == ent )
+	local isDriver = ( Photon.GetPlayerVehicle(ply) == ent )
 	local isOwner = ( ent:GetOwner() == ply )
 	local spawner = ent.PhotonVehicleSpawner
 	local isSpawner = ( IsValid( spawner ) and ( spawner == ply ) )
@@ -114,8 +149,8 @@ hook.Add( "Photon.CanPlayerModify", "Photon.DefaultModifyCheck", function( ply, 
 end )
 
 local function ScanVehicleUnitNumber( ent )
-	if not IsValid( ent:GetDriver() ) then return end
-	local ply = ent:GetDriver()
+	local ply = Photon.GetVehicleDriver(ent)
+	if not IsValid( ply ) then return end
 	if ( ent:Photon_GetLiveryID() == "" and ( (not ent.PhotonUnitIDRequestTime) or ( RealTime() < ent.PhotonUnitIDRequestTime + 10 ) ) ) then
 		Photon.Net:RequestUnitNumber( ply )
 		ent.PhotonUnitIDRequestTime = RealTime()
@@ -133,6 +168,12 @@ end )
 
 hook.Add( "PlayerSpawnedVehicle", "Photon.PlayerVehicleSpawn", function( ply, ent )
 	ent.PhotonVehicleSpawner = ply
+end)
+
+hook.Add( "PlayerSpawnedSENT", "Photon.PlayerGlideSpawn", function( ply, ent )
+	if Photon.IsGlideVehicle(ent) then
+		ent.PhotonVehicleSpawner = ply
+	end
 end)
 
 -- Photon.AutoSkins.FetchSkins = function( id )

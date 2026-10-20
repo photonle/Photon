@@ -7,6 +7,7 @@ local IsValid = IsValid
 local istable = istable
 local pairs = pairs
 local isnumber = isnumber
+local isvector = isvector
 local tonumber = tonumber
 
 local function MirrorVector( vec, method )
@@ -37,7 +38,7 @@ local function MirrorAngle( ang, method )
 end
 
 function EMVU:PlayerSpawnedVehicle( ply, ent ) -- deprecated function, only gives legacy support
-	if IsValid( ent ) and ent:IsVehicle() then EMVU:SpawnedVehicle( ent ) end
+	if IsValid( ent ) and Photon.IsPhotonChassis(ent) then EMVU:SpawnedVehicle( ent ) end
 end
 
 function EMVU:SpawnedVehicle( ent )
@@ -84,11 +85,11 @@ function EMVU:ProcessExpressVehicles()
 		local v = resultVehicle.VehicleDefinition
 		list.Set( "Vehicles", v.Name, {
 			Name = v.Name,
-			Class = "prop_vehicle_jeep",
+			Class = v.Class or "prop_vehicle_jeep",
 			Category = v.Category,
 			Author = v.Author,
 			Model = v.Model,
-			KeyValues = { ["vehiclescript"] = v.KeyValues.vehiclescript },
+			KeyValues = v.KeyValues or { ["vehiclescript"] = "" },
 			IsEMV = true,
 			EMV = resultVehicle,
 			HasPhoton = true,
@@ -440,13 +441,18 @@ function EMVU.LoadModeData( name, data )
 	EMVU.Sequences[ name ] = data
 end
 
-local function hashPosition( firstPos, lastPos, autoPos, autoAng )
-	if not istable( firstPos ) and istable( lastPos ) then return "" end
+local function hashPosition( firstPos, lastPos, autoPos, autoAng, autoScale )
+	if not istable( firstPos ) then return "" end
 	local result = ""
-	for _,dat in pairs( firstPos, lastPos ) do
+	for _,dat in pairs( firstPos ) do
 		result = result .. tostring( dat )
 	end
-	result = result .. tostring( autoPos ) .. tostring( autoAng )
+	if istable( lastPos ) then
+		for _,dat in pairs( lastPos ) do
+			result = result .. tostring( dat )
+		end
+	end
+	result = result .. tostring( autoPos ) .. tostring( autoAng ) .. tostring( autoScale )
 	return result
 end
 
@@ -609,13 +615,20 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 				end
 			end
 		end
+		local spriteScale = autoScale
+		if isvector( autoScale ) then
+			spriteScale = ( autoScale.x + autoScale.y + autoScale.z ) / 3
+		elseif not isnumber( autoScale ) then
+			spriteScale = 1
+		end
+
 		for id,metadata in pairs( component.Meta ) do -- add meta template data
 			local useId = tostring( tostring( id ) .. "_" .. tostring( i ) )
 			EMVU.LightMeta[ name ][ useId ]  = {}
 			for prop,val in pairs( metadata ) do
 				local resultVal = val
-				if prop == "W" then resultVal = val * autoScale end
-				if prop == "H" then resultVal = val * autoScale end
+				if prop == "W" then resultVal = val * spriteScale end
+				if prop == "H" then resultVal = val * spriteScale end
 				if prop == "EmitArray" and istable( val ) then
 					local newArray = {}
 					for arrayIdx,pos in pairs(val) do
@@ -841,7 +854,7 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 		if PHOTON_HASHCOMPONENTS and not component.RotationEnabled then
 			local firstPosData = component.Positions[ 1 ]
 			local lastPosData = component.Positions[ #component.Positions ]
-			local componentHash = hashPosition( firstPosData, lastPosData, autoPos, autoAng ) -- hash first and last values to determine if the offset can be recycled
+			local componentHash = hashPosition( firstPosData, lastPosData, autoPos, autoAng, autoScale ) -- hash first and last values to determine if the offset can be recycled
 			if not positionTable[ componentHash ] or not isnumber( positionTable[ componentHash ] ) then
 				offset = #EMVU.Positions[ name ]
 				positionTable[ componentHash ] = offset
@@ -891,25 +904,19 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 						)
 					end
 
-					-- Matrix:GetAngles() decomposes pitch via atan2() against a non-negative
-					-- term, so it can never return |pitch| > 90 - it silently re-expresses
-					-- angles like the mirrored-component convention Angle(180-p, -y, 180-r)
-					-- as an equivalent rotation with a ~180 degree different yaw. That's fine
-					-- for anything reading Forward()/Right()/Up(), but PrepareVehicleLight's
-					-- lightNormal calc reads .y directly, so the swap flips the sprite to face
-					-- backwards.
-					-- Yaw is the outermost axis in Source's Euler convention, so a pure-yaw
-					-- anchor (no pitch/roll) composes with the component angle the same way
-					-- whether you add onto .y directly or go through the matrix - provably,
-					-- not just usually. That case can skip the lossy round-trip entirely.
-					-- Anchors with real pitch/roll don't have that guarantee: true composition
-					-- and naive addition genuinely diverge there, and nothing in the numbers
-					-- says which one a given component's angle was authored against.
+					-- Position can go through a matrix (true composition of the
+					-- component frame and the light offset). The stored Euler
+					-- cannot: Matrix:GetAngles() re-expresses |pitch| > 90 as an
+					-- equivalent rotation with a ~180 degree different yaw, and
+					-- PrepareVehicleLight then reads .y / .r directly and
+					-- subtracts 90 from roll. That stored Euler has to stay in
+					-- the same space as the component model's SetAngles.
+					newAng = EMVU.Helper.ComposeAutoLightAngle( component, posData[2], autoAng )
+
 					if component.NotLegacy and autoAng.p == 0 and autoAng.r == 0 then
 						newPos = posData[1] * autoScaleVector
 						newPos:Rotate( Angle( 0, autoAng.y, 0 ) )
 						newPos:Add( autoPos )
-						newAng = Angle( schmAngle.p, schmAngle.y + autoAng.y, schmAngle.r )
 					else
 						local componentMatrix = Matrix()
 						componentMatrix:Translate(autoPos)
@@ -924,7 +931,6 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 						local out = componentMatrix * offsetMatrix
 
 						newPos = out:GetTranslation()
-						newAng = out:GetAngles()
 					end
 				end
 

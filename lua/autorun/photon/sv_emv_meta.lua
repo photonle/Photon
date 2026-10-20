@@ -1,7 +1,7 @@
 function EMVU:MakeEMV( ent, emv )
 
 	-- Avoid any uncaught errors if a bad entity is passed in
-	if not ent or not IsValid( ent ) or not ent:IsVehicle() then
+	if not ent or not IsValid( ent ) or not Photon.IsPhotonChassis(ent) then
 		error("[Photon] Error while creating ent from " .. tostring(ent) .. ". Aborting...")
 		return
 	end
@@ -396,9 +396,13 @@ function EMVU:MakeEMV( ent, emv )
 
 	function ent:ELS_BlackoutToggle()
 		if not IsValid( self ) then return end
-		local state = true
-		if self:ELS_Blackout() then state = false end
-		self:ELS_Blackout( state )
+		if self.ELS_BlackoutCycle then
+			self:ELS_BlackoutCycle()
+		else
+			local state = true
+			if self:ELS_Blackout() then state = false end
+			self:ELS_Blackout( state )
+		end
 	end
 
 	function ent:ELS_NoSiren()

@@ -417,21 +417,22 @@ end
 function PhotonHUD:GetCurrentState()
 	local data = {}
 	local ply = LocalPlayer()
-	local ent = ply:GetVehicle()
+	local ent = Photon.GetPlayerVehicle(ply)
 	if not IsValid(ply) or not IsValid(ent) or not ent:Photon() or not ent:IsEMV() or not ent.Photon_Lights then return false end
 	data.EMV = ent:IsEMV()
 	local name = ent.VehicleName
 	if not name then return end
 	if data.EMV then
-		local primaryLights = EMVU.Sequences[name]["Sequences"]
+		local packSequences = istable(EMVU.Sequences) and EMVU.Sequences[name]
+		local primaryLights = istable(packSequences) and packSequences.Sequences
 		if istable(primaryLights) then
 			data.PrimaryLights = {}
 			data.PrimaryLights.Max = #primaryLights
 			data.PrimaryLights.Enabled = ent:Photon_Lights()
 			data.PrimaryLights.SelectedIndex = ent:Photon_LightOption()
-			data.PrimaryLights.Name = ent:Photon_ELS_GetSequenceName()
+			data.PrimaryLights.Name = ent:Photon_ELS_GetSequenceName() or ""
 		end
-		local auxLights = EMVU.Sequences[name]["Traffic"]
+		local auxLights = istable(packSequences) and packSequences.Traffic
 		if istable( auxLights ) then
 			data.AuxLights = {}
 			data.AuxLights.Max = #auxLights
@@ -479,7 +480,15 @@ function PhotonHUD:GetCurrentState()
 				Icon = "horn",
 				State = useState
 			}
-			if ent:Photon_Blackout() then useState = 2 else useState = 0 end
+			if Photon.IsGlideVehicle(ent) and isfunction(ent.GetHeadlightState) then
+				local hs = ent:GetHeadlightState() or 0
+				-- 0 Off (blackout highlight), 1 On, 2 Fullbeam (selected-style).
+				if hs == 0 then useState = 2 elseif hs == 2 then useState = 1 else useState = 0 end
+			elseif ent:Photon_Blackout() then
+				useState = 2
+			else
+				useState = 0
+			end
 			data.Functions[3] = {
 				Name = "",
 				Icon = "blackout",
@@ -669,7 +678,7 @@ local function PhotonRadar()
 	drawTexturedRect( x, y, 256, 256 )
 	if PHOTON_RADAR_DISP_FAST and PHOTON_RADAR_DISP_FAST > 0 then drawDigits( 2, PHOTON_RADAR_DISP_FAST ) end
 	if PHOTON_RADAR_DISP_NEAR and PHOTON_RADAR_DISP_NEAR > 0 then drawDigits( 1, PHOTON_RADAR_DISP_NEAR ) end
-	local ent = LocalPlayer():GetVehicle()
+	local ent = Photon.GetPlayerVehicle(LocalPlayer())
 	if IsValid( ent ) then
 		local mySpeed = math.Round( ent:Photon_AdjustedSpeed() )
 		drawDigits( 3, mySpeed )
@@ -677,7 +686,7 @@ local function PhotonRadar()
 
 end
 hook.Add( "HUDPaint", "Photon.RadarOverlay", function()
-	local ent = LocalPlayer():GetVehicle()
+	local ent = Photon.GetPlayerVehicle(LocalPlayer())
 	if not IsValid( ent ) or not ent:IsEMV() or not ( ent.Photon_RadarActive and ent:Photon_RadarActive() ) then return end
 	PhotonRadar()
 end)
