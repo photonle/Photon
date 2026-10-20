@@ -66,8 +66,9 @@ missing seams, `/to-tickets` for missing acceptance criteria, `/triage` for a bu
 
 Then pick the **runner**, which decides where the suites run:
 
-- **`local`** when the local GLuaTest runner [`qa-tester`](../../agents/qa-tester.md) names under
-  "Run" exists in this checkout and `docker info` succeeds.
+- **`local`** when `docker info` succeeds, so
+  [`.github/scripts/gluatest-local.sh`](../../../.github/scripts/gluatest-local.sh) can run the
+  suites here.
 - **`ci`** otherwise. Nothing here runs a suite: the red cases are proven red by the pull request's
   CI before anything is built on them (step 3a), and CI is the first run of the implementation.
 
