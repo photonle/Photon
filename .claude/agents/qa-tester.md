@@ -37,23 +37,31 @@ Read these before writing a case. When this file and one of them disagrees, the 
 
 4. **Compile-check.** Lua 5.1's `luac -p <file>` (`/c/Program Files (x86)/Lua/5.1/luac.exe` on the maintainer's machine) is an instant syntax check, for files in plain Lua syntax; it rejects GLua's `!=`, `&&`, `||`, `!` and `//` comments, so keep suites in plain Lua. A suite that fails to load runs as zero cases.
 
-5. **Run.** The suites run in CI, on every pull request and every push to `development`. Pushing is the caller's: ask them to push, then read the result:
+5. **Run.** Locally first, with [`.github/scripts/gluatest-local.sh`](../../.github/scripts/gluatest-local.sh). It boots the same GLuaTest image CI runs, on `sandbox` / `gm_construct`, against the working tree, so uncommitted suites run without a commit. It needs Docker, takes about a minute, and runs every suite under `lua/tests/photon/`; run it in the background if your shell times out sooner.
+
+   ```bash
+   bash .github/scripts/gluatest-local.sh
+   ```
+
+   It prints every group and case with PASS or FAIL, the totals, and each failure as `file:line: reason` with GLuaTest's context for it. Exit 0 is green; 1 is a failed case or a broken run; 3 is a suite that ran no cases; 124 is the server timing out. Its header lists the overrides (`GLUATEST_VERBOSE=1` for the whole server log).
+
+   CI is the confirmation. It runs the same suites on every pull request and every push to `development`; pushing is the caller's, so after they push, read it:
 
    ```bash
    gh pr checks <pr> --repo photonle/Photon
    gh run view <run-id> --repo photonle/Photon --log-failed
    ```
 
-   There is no local GLuaTest runner yet. Until a push has run, compile-check, and say in your report that the suite was not run. A case passing under a desktop Lua interpreter with stand-ins for GMod's helpers proves nothing about the real ones.
+   When Docker is unavailable, compile-check and say in your report that the suite was not run. A case passing under a desktop Lua interpreter with stand-ins for GMod's helpers proves nothing about the real ones.
 
 6. **Read the result.** The exit state and the summary, plus these tells:
-   - A group printed under its file name with 0 cases: the file failed to load.
+   - A group printed under its file name with 0 cases: the file failed to load. GLuaTest, and so CI, still passes that run; the local runner exits 3 for it.
    - A pass you did not expect: check whether the stub reached the library (the `_G` rule above).
    - A real failure in Photon: keep the failing case and report it. Changing Photon's code is the caller's decision unless they asked for the fix. Never flip the assertion to match the bug.
 
 7. **Lint.** CI's glualint gate lints the changed hunks of every `.lua` file, suites included. Run `glualint lint <suite file>` yourself when `glualint` is installed.
 
-Done when the suite is green in CI (or compile-checked and reported as unrun), lint is clean, and your report lists every case by name with pass, fail or unrun, followed by every behaviour you left unpinned as a question, and every client-side check you could not write as a case.
+Done when the suite is green locally, and in CI once the caller has pushed (or compile-checked and reported as unrun when Docker is unavailable), lint is clean, and your report lists every case by name with pass, fail or unrun, followed by every behaviour you left unpinned as a question, and every client-side check you could not write as a case.
 
 ## Filing a bug
 
