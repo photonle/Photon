@@ -40,9 +40,73 @@ function EMVU:AddAutoComponent(component, name, base)
 	end
 end
 
-local autoFiles = file.Find( "autorun/photon/library/auto/*", "LUA" )
+--- Checks an auto component table for the fields whose absence would error at runtime.
+-- EMVU:CalculateAuto iterates Meta, Sections, Patterns, Positions and Modes.Primary
+-- unguarded, so a nil in any of them is a guaranteed error when a vehicle using the
+-- component spawns. Empty tables are safe there and are left to the component author:
+-- this checks that a component won't break, not that it does anything useful.
+-- Components loaded via Base inheritance are exempt, since they may legitimately rely
+-- on their base for every field checked here.
+-- @tparam table component The component table to check.
+-- @treturn bool Whether the component is valid.
+-- @treturn string|nil A description of the first missing/invalid field, if any.
+EMVU.ValidateAutoComponent = function(component)
+	if not istable(component) then return false, "component must be a table" end
+	if not isstring(component.Name) or component.Name == "" then return false, "missing required field 'Name'" end
+
+	if component.Model ~= nil and (not isstring(component.Model) or component.Model == "") then return false, "optional field 'Model' must be a non-empty string" end
+	if component.Category ~= nil and (not isstring(component.Category) or component.Category == "") then return false, "optional field 'Category' must be a non-empty string" end
+	if component.Skin ~= nil and not isnumber(component.Skin) then return false, "optional field 'Skin' must be a number" end
+
+	if component.Base then return true end
+
+	if not istable(component.Meta) then return false, "missing required field 'Meta'" end
+	if not istable(component.Sections) then return false, "missing required field 'Sections'" end
+	if not istable(component.Patterns) then return false, "missing required field 'Patterns'" end
+	if not istable(component.Positions) then return false, "missing required field 'Positions'" end
+	if not istable(component.Modes) then return false, "missing required field 'Modes'" end
+	if not istable(component.Modes.Primary) then return false, "missing required field 'Modes.Primary'" end
+
+	return true
+end
+
+--- Includes a single auto component file, isolating compile-time and runtime
+-- errors so one broken component doesn't abort the rest of EMV init.
+-- @tparam string component The file name, relative to autorun/photon/library/auto/.
+EMVU.IncludeAutoComponent = function(component)
+	local path = "autorun/photon/library/auto/" .. component
+	AddCSLuaFile(path)
+
+	local func = CompileFile(path)
+	if not func then
+		return PhotonError(
+			"Component file '" .. component .. "' failed to compile and has been skipped.\n",
+			"If you are the author, check your file for syntax errors (see the compile error above)."
+		)
+	end
+
+	-- Component files conventionally open with a bare AddCSLuaFile(). That form infers
+	-- its own path from the calling file, which only resolves under include() - run via
+	-- CompileFile it fails, erroring the chunk on line 1 and skipping the whole file.
+	-- We've already sent the file above, so point the no-argument form at the known path.
+	-- Writes still fall through to _G so the chunk behaves as it would under include().
+	setfenv(func, setmetatable({
+		AddCSLuaFile = function(target) return AddCSLuaFile(target or path) end
+	}, { __index = _G, __newindex = _G }))
+
+	local ok, err = pcall(func)
+	if not ok then
+		PhotonError(
+			"Component file '" .. component .. "' failed to load and has been skipped.\n",
+			"If you are the author, check your file for errors.\n",
+			tostring(err)
+		)
+	end
+end
+
+local autoFiles = file.Find( "autorun/photon/library/auto/*.lua", "LUA" )
 for _,_file in pairs( autoFiles ) do
-	include( "auto/" .. _file )
+	EMVU.IncludeAutoComponent( _file )
 end
 local changed, unchanged
 while changed ~= 0 do
@@ -72,11 +136,15 @@ while changed ~= 0 do
 	changed = 0
 	for name, component in SortedPairsByMemberValue(EMVU.Auto, "Name") do
 		local errored = false
-		if not errored and not component.Modes then
+		local valid, invalidReason = EMVU.ValidateAutoComponent(component)
+		if not errored and not valid then
 			errored = true
 			EMVU.Auto[name] = nil
 			EMVU.AutoStaging[name] = true
-			PhotonError(("Component %s is missing its Modes field."):format(name))
+			PhotonError(
+				("Component %s has an invalid format and has been skipped.\n"):format(name),
+				invalidReason .. ". Source: " .. tostring(component.Source)
+			)
 		end
 
 		if not errored and component.BaseClass and EMVU.AutoStaging[component.BaseClass.Name] then
