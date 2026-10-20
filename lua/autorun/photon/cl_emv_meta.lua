@@ -608,6 +608,9 @@ function EMVU:MakeEMV( emv, name )
 			prop.PhotonRotationEnabled = p.PhotonRotationEnabled or false
 			prop.PhotonBoneAnimationData = p.PhotonBoneAnimationData or false
 			prop.PhotonLocalAngs = p.Ang
+			-- Reference only: the definition is shared, so it must not be written to.
+			-- Setup skips model-less entries, so EMVProps does not line up with GetProps by index.
+			prop.PhotonSourceDef = p
 			prop:SetSolid( SOLID_NONE )
 			prop:SetMoveType( MOVETYPE_NONE )
 			prop:SetCollisionGroup( COLLISION_GROUP_IN_VEHICLE )
@@ -699,33 +702,35 @@ function EMVU:MakeEMV( emv, name )
 		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
 
 		if emvProps and istable( emvProps) then
-			for index,prop in ipairs( self.EMVProps ) do
+			for _,prop in ipairs( self.EMVProps ) do
 				if not IsValid( prop ) then
 					self:Photon_RemoveEMVProps( true )
 					break
 				end
+				local def = prop.PhotonSourceDef
+				if not def then continue end
 				--[[
 				recoded to only reparent when necessary, fixes detachment when vehicle leaves PVS - sgm
 				--]]
 				if !IsValid(prop:GetParent()) then
 					prop:SetParent( self )
-					prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
-					prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
+					prop:SetPos( self:LocalToWorld( def.Pos ) )
+					prop:SetAngles( self:LocalToWorldAngles( def.Ang ) )
 
-					if emvProps[index].AttachmentMerge then
+					if def.AttachmentMerge then
 						prop:SetParent(nil)
-						prop:SetParent(self, self:LookupAttachment(emvProps[index].AttachmentMerge))
+						prop:SetParent(self, self:LookupAttachment(def.AttachmentMerge))
 					end
 
 				end
 
 				if PHOTON_DEBUG or PHOTON_EXPRESS then
-					if isvector( emvProps[index].Scale ) then
+					if isvector( def.Scale ) then
 						local mat = Matrix()
-						mat:Scale( emvProps[index].Scale )
+						mat:Scale( def.Scale )
 						prop:EnableMatrix( "RenderMultiply", mat )
-					elseif isnumber( emvProps[index].Scale ) then
-						prop:SetModelScale( emvProps[index].Scale, 0 )
+					elseif isnumber( def.Scale ) then
+						prop:SetModelScale( def.Scale, 0 )
 					end
 				end
 				if prop.AirEL then self.AirELEntity = prop end
@@ -743,27 +748,36 @@ function EMVU:MakeEMV( emv, name )
 		local emvProps = EMVHelper:GetProps( self.VehicleName, self )
 		if not emvProps or not istable( emvProps) then return end
 
+		-- Same filter as Photon_SetupEMVProps, so the n-th prop gets the n-th modelled definition.
+		local defs = {}
+		for _,p in pairs( emvProps ) do
+			if p ~= true and p.Model then table.insert( defs, p ) end
+		end
+
 		for index,prop in ipairs( self.EMVProps ) do
 			if not IsValid( prop ) then
 				self:Photon_RemoveEMVProps( true )
 				break
 			end
 
+			local def = defs[index]
+			if not def then continue end
+			prop.PhotonSourceDef = def
 			prop:SetParent( self )
-			prop:SetPos( self:LocalToWorld( emvProps[index].Pos ) )
-			prop:SetAngles( self:LocalToWorldAngles( emvProps[index].Ang ) )
+			prop:SetPos( self:LocalToWorld( def.Pos ) )
+			prop:SetAngles( self:LocalToWorldAngles( def.Ang ) )
 
-			if emvProps[index].AttachmentMerge then
+			if def.AttachmentMerge then
 				prop:SetParent(nil)
-				prop:SetParent(self, self:LookupAttachment(emvProps[index].AttachmentMerge))
+				prop:SetParent(self, self:LookupAttachment(def.AttachmentMerge))
 			end
 
-			if isvector( emvProps[index].Scale ) then
+			if isvector( def.Scale ) then
 				local mat = Matrix()
-				mat:Scale( emvProps[index].Scale )
+				mat:Scale( def.Scale )
 				prop:EnableMatrix( "RenderMultiply", mat )
-			elseif isnumber( emvProps[index].Scale ) then
-				prop:SetModelScale( emvProps[index].Scale, 0 )
+			elseif isnumber( def.Scale ) then
+				prop:SetModelScale( def.Scale, 0 )
 			end
 			if prop.AirEL then self.AirELEntity = prop end
 			if not IsValid( self.AirELEntity ) then self.AirELEntity = nil end
