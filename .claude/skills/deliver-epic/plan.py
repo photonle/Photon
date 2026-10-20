@@ -9,9 +9,14 @@ Prints one JSON document:
     ok        true when every open sub-issue is ready; the plan is all or nothing
     stops     [{number, reason, skill}]: what stops the plan, and the skill that fixes it
     done      sub-issues already closed
-    tickets   [{number, title, criteria, resume_pr}] in delivery order; resume_pr marks one an
-              earlier run's draft already delivers, which the script leaves out
+    tickets   [{number, title, criteria, comments, open_references, resume_pr}] in delivery order:
+              criteria from the body or the latest triage brief; open_references, the open issues
+              and pull requests that mention it; resume_pr, delivered already by an earlier run's
+              draft, which the script leaves out
     script    the baked workflow, written only when ok
+
+Every baked brief, the Epic's included, carries the body, the whole comment thread and what mentions
+it: later decisions and follow-ups are recorded there, not in the body.
 A failed read exits 1 and prints nothing.
 """
 import argparse
@@ -30,6 +35,14 @@ query($number: Int!) {
       assignees(first: 5) { nodes { login } }
       blockedBy(first: 50) { nodes { number state } }
       subIssues(first: 100) { nodes { number } }
+      comments(first: 100) { nodes { author { login } createdAt body } }
+      timelineItems(first: 50, itemTypes: [CROSS_REFERENCED_EVENT]) {
+        nodes { ... on CrossReferencedEvent { source {
+          __typename
+          ... on Issue { number title state }
+          ... on PullRequest { number title state }
+        } } }
+      }
       issueFieldValues(first: 10) {
         nodes { ... on IssueFieldSingleSelectValue { name field { ... on IssueFieldSingleSelect { name } } } }
       }
@@ -60,6 +73,12 @@ def read_issue(number):
         "assignees": [a["login"] for a in issue["assignees"]["nodes"]],
         "blocked_by": [b["number"] for b in issue["blockedBy"]["nodes"] if b["state"] == "OPEN"],
         "children": [c["number"] for c in issue["subIssues"]["nodes"]],
+        "comments": [{"author": (c["author"] or {}).get("login", "ghost"), "at": c["createdAt"][:10], "body": c["body"]}
+                     for c in issue["comments"]["nodes"]],
+        "references": [{"kind": "pull request" if r["source"]["__typename"] == "PullRequest" else "issue",
+                        "number": r["source"]["number"], "title": r["source"]["title"],
+                        "state": r["source"]["state"].lower()}
+                       for r in issue["timelineItems"]["nodes"] if (r.get("source") or {}).get("number")],
     }
 
 
@@ -69,9 +88,45 @@ def section(body, name):
     return match.group(1).strip() if match else None
 
 
-def criteria(body):
-    text = section(body, "Acceptance criteria") or ""
-    return [m.group(1).strip() for m in re.finditer(r"^\s*-\s*\[[ xX]\]\s*(.+)$", text, re.M)]
+def checklist(text):
+    return [m.group(1).strip() for m in re.finditer(r"^\s*-\s*\[[ xX]\]\s*(.+)$", text or "", re.M)]
+
+
+def latest_brief(issue):
+    """The newest comment holding a `## Brief` heading, as /triage posts it, or None."""
+    briefs = [c["body"] for c in issue["comments"] if re.search(r"^##\s+Brief\s*$", c["body"], re.M)]
+    return briefs[-1] if briefs else None
+
+
+def brief_field(brief, name):
+    """The text after a `**<name>:**` line of a triage brief, up to the next bold field."""
+    match = re.search(rf"^\*\*{re.escape(name)}:\*\*(.*?)(?=^\*\*[^*\n]+:\*\*|\Z)", brief or "", re.M | re.S)
+    return match.group(1).strip() if match else None
+
+
+def criteria(issue):
+    """The body's `## Acceptance criteria`, or failing that the latest triage brief's."""
+    return (checklist(section(issue["body"], "Acceptance criteria"))
+            or checklist(brief_field(latest_brief(issue), "Acceptance criteria")))
+
+
+def seams(issue):
+    """The ticket's own testing seams: its `## Testing Decisions`, or a triage brief's key interfaces."""
+    return section(issue["body"], "Testing Decisions") or brief_field(latest_brief(issue), "Key interfaces")
+
+
+def context(issue):
+    """The issue as a whole: its body, the thread where later decisions land, and every issue and
+    pull request that mentions it, so a follow-up filed elsewhere is not missed."""
+    parts = [f"{issue['title']}\n\n{issue['body']}"]
+    if issue["comments"]:
+        parts.append("## Thread (oldest first; a later comment overrides an earlier one and the body)\n\n"
+                     + "\n\n".join(f"### {c['author']}, {c['at']}\n\n{c['body']}" for c in issue["comments"]))
+    if issue["references"]:
+        parts.append("## Issues and pull requests that mention it\n\nRead any still open before building: "
+                     "a follow-up may narrow or extend this one.\n\n"
+                     + "\n".join(f"- {r['kind']} #{r['number']} [{r['state']}] {r['title']}" for r in issue["references"]))
+    return "\n\n".join(parts)
 
 
 def closes_in(pr):
@@ -114,10 +169,10 @@ def plan(epic_number, login, resume_pr=None):
             stop(n, f"Stage is {child['stage'] or 'unset'}, not Triaged", "/triage")
         if any(a != login for a in child["assignees"]):
             stop(n, f"claimed by {', '.join(child['assignees'])}", None)
-        if not criteria(child["body"]):
-            stop(n, "no `## Acceptance criteria` checklist", "/to-tickets")
-        if not section(child["body"], "Testing Decisions") and not epic_seams:
-            stop(n, "no `## Testing Decisions` in the ticket or the Epic", "/to-spec")
+        if not criteria(child):
+            stop(n, "no acceptance criteria in its body or a triage brief", "/to-tickets")
+        if not seams(child) and not epic_seams:
+            stop(n, "no `## Testing Decisions` in the ticket or the Epic, and no brief's key interfaces", "/to-spec")
 
     siblings = {c["number"] for c in open_children}
     for child in open_children:
@@ -137,17 +192,19 @@ def plan(epic_number, login, resume_pr=None):
         placed.add(ready[0]["number"])
         remaining.remove(ready[0])
 
-    tickets = [{"number": c["number"], "title": c["title"], "criteria": criteria(c["body"]),
+    tickets = [{"number": c["number"], "title": c["title"], "criteria": criteria(c),
+                "comments": len(c["comments"]),
+                "open_references": [r["number"] for r in c["references"] if r["state"] == "open"],
                 "resume_pr": c["number"] in delivered} for c in ordered]
     result = {"ok": not stops, "stops": stops, "done": done, "tickets": tickets}
     result["_bake"] = {
         "epic": epic_number,
-        "epicBrief": f"{epic['title']}\n\n{epic['body']}",
+        "epicBrief": context(epic),
         "base": "origin/development",
         "tickets": [{
             "number": c["number"], "title": c["title"],
-            "brief": f"{c['title']}\n\n{c['body']}" + (
-                "" if section(c["body"], "Testing Decisions") else f"\n\n## Testing Decisions (from Epic #{epic_number})\n\n{epic_seams}"),
+            "brief": context(c) + (
+                "" if seams(c) else f"\n\n## Testing Decisions (from Epic #{epic_number})\n\n{epic_seams}"),
             "labels": {"type": c["type"], "priority": c["priority"], "effort": c["effort"]},
         } for c in ordered if c["number"] not in delivered],
     }

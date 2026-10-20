@@ -42,8 +42,9 @@ artifact decides and links any issue that prompted it.
 
 - A branch cut from `development`.
 - Conventional Commits on each commit, and on the PR title: `feat` for additions, `fix` for bug
-  fixes, `perf` for optimisations, `refactor` for internal changes. The PR title is the changelog
-  line, so write it for a server owner reading release notes.
+  fixes, `perf` for optimisations, `refactor` for internal changes. Pull requests land by squash,
+  merge or rebase, so release-please may read the title or every commit: write each as a changelog
+  line for a server owner reading release notes.
 - A **draft PR** opened once the first commit lands, marked ready when the work is done.
 - Before marking it ready, the changed Lua passes glualint (CI lints changed hunks only) and the
   GLuaTest suites under `lua/tests/photon/` pass; CI runs both on every pull request.

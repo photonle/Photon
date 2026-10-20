@@ -80,6 +80,13 @@ the rest of the ticket can still be built; it is a thing the pull request cannot
 step 4, and carry it to the pull request in step 7: an open item, and a step in the in-game test plan
 when a person in game can check it.
 
+Each ticket's baked brief carries its body, its whole comment thread and the issues and pull requests
+that mention it, and the Epic's brief its body and thread: later decisions and follow-ups are recorded
+there, not in the body. A ticket's `criteria` come from its body or, failing that, its latest triage
+brief. Read every ticket's `open_references` before step 4: an open issue that mentions a ticket may
+be a follow-up that changes what it should build. Name each to the human there, with what it says,
+and stop if one contradicts its ticket's acceptance criteria.
+
 On a resume, every ticket with `resume_pr` true is already delivered, and the script leaves it out:
 collect it for `delivered`, with its title and the summary under its `### #<n>` heading in the draft.
 With nothing left to deliver, skip step 4: only the final pass remains.
@@ -182,8 +189,9 @@ Push the branch: `git push -u origin HEAD`, or on a resume `git push --force-wit
 rebase rewrote it. On a fresh run, open a draft against `development` per
 [artifacts.md](../../docs/artifacts.md#code-implement-and-deliver):
 `gh pr create --draft --base development`, titled as a Conventional Commit for the Epic as a whole
-(`feat:` unless every ticket is a Bug). The pull request is squash-merged, so that title is the one
-changelog line the Epic gets. On a resume, rewrite the draft's description to match the new head. The
+(`feat:` unless every ticket is a Bug). Photon's pull requests land by squash, merge or rebase, so
+release-please reads either this title or every commit on the branch: step 6 already holds the
+commits to Conventional Commits, and the title gives a squash its one line. On a resume, rewrite the draft's description to match the new head. The
 description follows
 [§ What the PR description carries](../../docs/artifacts.md#what-the-pr-description-carries), in this
 order:

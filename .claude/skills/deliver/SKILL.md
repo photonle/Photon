@@ -93,7 +93,7 @@ Call the Workflow tool with `name: "deliver-stages"` and these `args`:
 | --- | --- |
 | `ticket` | The ticket's number |
 | `epic` | The Epic's number, or `null` |
-| `brief` | The ticket's title and body verbatim, then, when the spec is the Epic's, its `## Testing Decisions` section verbatim, or when it is a triage brief, that comment verbatim |
+| `brief` | The ticket's title and body verbatim; then its whole comment thread, oldest first, each comment headed with its author and date, since later decisions are recorded there and override the body; then a list of the issues and pull requests that mention it (its timeline's cross-references), any still open read for a follow-up that narrows or extends it; then, when the spec is the Epic's, its `## Testing Decisions` section and any thread comment that moves it, verbatim |
 | `labels` | `{ "type": …, "priority": …, "effort": … }`: the issue type and the Priority and Effort fields as GitHub shows them (`"Bug"`, `"High"`), or `null` where one is unset |
 | `base` | `"origin/development"` |
 | `runner` | `"local"` or `"ci"`, from step 1 |
@@ -151,9 +151,10 @@ A failure here ends the run at step 6, unpushed.
 Push the branch and open a draft against `development` per
 [artifacts.md](../../docs/artifacts.md#code-implement-and-deliver):
 `gh pr create --draft --base development`. Title it as a Conventional Commit, `fix:` for a Bug and
-`feat:` otherwise: the pull request is squash-merged, so its title is the commit release-please
-turns into the changelog line. Under `ci`, step 3a already opened it: push, retitle, and rewrite its
-description. The description follows
+`feat:` otherwise. Photon's pull requests land by squash, merge or rebase, so release-please reads
+either this title or every commit on the branch: both have to read as changelog lines, which step 4's
+history check already holds the commits to. Under `ci`, step 3a already opened it: push, retitle, and
+rewrite its description. The description follows
 [§ What the PR description carries](../../docs/artifacts.md#what-the-pr-description-carries), with
 these in its sections:
 
