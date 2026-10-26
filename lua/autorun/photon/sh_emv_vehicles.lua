@@ -671,6 +671,7 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 				local targetCopy = component.Modes.Primary.BRAKE
 				local sequence = EMVU.Sequences[ name ].Braking
 				if usesPresets then
+					if not istable( sequence.Preset_Components ) then sequence.Preset_Components = {} end
 					for __,presetIndex in pairs( usedPresets ) do
 						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
 						for componentIndex, patternIndex in pairs( targetCopy ) do
@@ -702,6 +703,7 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 				local targetCopy = component.Modes.Primary.REVERSE
 				local sequence = EMVU.Sequences[ name ].Reverse
 				if usesPresets then
+					if not istable( sequence.Preset_Components ) then sequence.Preset_Components = {} end
 					for __,presetIndex in pairs( usedPresets ) do
 						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
 						for componentIndex, patternIndex in pairs( targetCopy ) do
@@ -733,6 +735,7 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 				local targetCopy = component.Modes.Primary.PARK
 				local sequence = EMVU.Sequences[ name ].Park
 				if usesPresets then
+					if not istable( sequence.Preset_Components ) then sequence.Preset_Components = {} end
 					for __,presetIndex in pairs( usedPresets ) do
 						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
 						for componentIndex, patternIndex in pairs( targetCopy ) do
@@ -765,6 +768,7 @@ function EMVU:CalculateAuto( name, data, autoInsert )
 				local sequence = EMVU.Sequences[name].Alert
 
 				if usesPresets then
+					if not istable( sequence.Preset_Components ) then sequence.Preset_Components = {} end
 
 					for __,presetIndex in pairs( usedPresets ) do
 						if not sequence.Preset_Components[presetIndex] then sequence.Preset_Components[presetIndex] = {} end
