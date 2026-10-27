@@ -1,5 +1,26 @@
 # Changelog
 
+## [76.8.0](https://github.com/photonle/Photon/compare/v76.7.0...v76.8.0) (2026-10-27)
+
+
+### Features
+
+* validate auto component format at load time ([e0189c5](https://github.com/photonle/Photon/commit/e0189c59773cf1cef35068347777d8a156d25ba0))
+
+
+### Bug Fixes
+
+* Auto components no longer error on a vehicle's own Alert, Braking, Reverse or Park sequence ([05bca1a](https://github.com/photonle/Photon/commit/05bca1aa5be10d20d12c2137b92d50c6fad943f8))
+* **ci:** Scope the GLua lint push diff to the branch point ([fc5c88d](https://github.com/photonle/Photon/commit/fc5c88daf5b9547cd77a27f9d6ed7036b77e8abf))
+* EMV props keep their own definition when a model-less component precedes them ([c1a1d09](https://github.com/photonle/Photon/commit/c1a1d0929ffc6b8534aed05a2fa5a9703c0970f7))
+* isolate broken auto component files so one bad file doesn't kill EMV init ([bbb21d7](https://github.com/photonle/Photon/commit/bbb21d7436a2be2e07397df84a51050d9d2a1025))
+* keep bare AddCSLuaFile() working when components load via CompileFile ([6f27132](https://github.com/photonle/Photon/commit/6f2713229fa268fdb49b04099db0bbcc1fe80ddf))
+
+
+### Internal Changes
+
+* remove the dead DTVar constant block ([1ad25b4](https://github.com/photonle/Photon/commit/1ad25b40d9e025e2ad69b7036b201064e9a9f1c4))
+
 ## [76.7.0](https://github.com/photonle/Photon/compare/v76.6.0...v76.7.0) (2026-10-09)
 
 
