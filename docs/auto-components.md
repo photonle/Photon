@@ -184,7 +184,7 @@ that mode.
 | :--- | :--- | :--- | :--- |
 | `Modes.Primary` | `{ [stage] = { [section] = "pattern" } }` | Yes | Patterns for the vehicle's primary light modes. The stage keys match the `Stage` of the vehicle's `EMV.Sequences.Sequences`, conventionally `M1`, `M2` and `M3`. |
 | `Modes.Primary.ALERT` | `{ [section] = "pattern" }` | No | Patterns for the alert sequence. Without it, alert uses `M3`. |
-| `Modes.Primary.BRAKE`, `REVERSE`, `PARK` | `{ [section] = "pattern" }` | No | Patterns shown while braking, reversing or parked. Each pattern named must exist, or that section is left out. |
+| `Modes.Primary.BRAKE`, `REVERSE`, `PARK` | `{ [section] = "pattern" }` | No | Patterns shown while braking, reversing or parked. Each section named must exist in `Patterns`, or the component errors on every vehicle that places it. A pattern missing from a section that exists is skipped. |
 | `Modes.Auxiliary` | `{ [stage] = { [section] = "pattern" } }` | Keep it, even empty | Patterns for the traffic advisor. The stage keys match the vehicle's `EMV.Sequences.Traffic`, conventionally `L`, `D` and `R`. |
 | `Modes.Illumination` | `{ [stage] = { { position, "COLOR" }, ... } }` | No | Lights held on steady for an illumination mode such as takedown (`T`). Each entry is a position number and a colour, not a pattern. |
 
