@@ -2,9 +2,12 @@
 --
 -- Each topic under docs/ opens its first ```lua fence with a skeleton: a whole
 -- file a reader can copy and fill in. These cases pull that block out of the
--- Markdown, compile it, and run it against the real Photon library, so a
--- skeleton that drifts from what Photon accepts goes red here rather than on a
--- reader's server.
+-- Markdown and compile it. The vehicle lights, vehicle emergency lights and
+-- Auto component skeletons are also run, and what they hand to list.Set and
+-- EMVU:AddAutoComponent is fed through the real Photon library, so a skeleton
+-- that drifts from what Photon accepts goes red here rather than on a reader's
+-- server. The EMV Meta skeleton is a bare table with nothing to hand over, so
+-- it is only compiled.
 --
 -- The skeletons run in a sandbox environment whose __index is _G. Their side
 -- effects (EMVU:AddAutoComponent, list.Set) are captured there instead of
@@ -32,6 +35,24 @@ local VEHICLE_TABLES = {
 	"AutoInsert", "AutoIndex", "DisabledRadars",
 }
 
+-- A vehicle name no real definition uses, for the case that loads the vehicle
+-- lights skeleton into the Photon.Vehicles stores.
+local PI_VEHICLE = "photon_test_docs_skeleton_pi"
+
+-- The PI states Photon:OverwriteIndex copies, each into its own store under
+-- Photon.Vehicles.States.
+local PI_STATES = { "Headlights", "Brakes", "Blink_Left", "Blink_Right", "Reverse", "Running" }
+
+-- Every Photon.Vehicles store Photon:OverwriteIndex can write under a name
+-- (created in sh_photon_init.lua), as a function returning the store.
+local PI_STORES = {}
+for _, store in ipairs({ "Positions", "Meta", "WheelPositions", "WheelOptions", "Config", "StateMaterials" }) do
+	PI_STORES[#PI_STORES + 1] = function() return Photon.Vehicles[store] end
+end
+for _, state in ipairs(PI_STATES) do
+	PI_STORES[#PI_STORES + 1] = function() return Photon.Vehicles.States[state] end
+end
+
 -- The addon folder Photon is mounted from: "project" under both runners, found
 -- by looking for Photon's own files so another folder name still resolves.
 local function AddonRoot()
@@ -46,14 +67,9 @@ local function AddonRoot()
 	error("Could not find the addon folder Photon is mounted from (looked for addons/*" .. marker .. ")")
 end
 
--- The first block fenced with exactly ```lua in docs/<fileName>.
-local function Skeleton(fileName)
-	local path = AddonRoot() .. "/docs/" .. fileName
-	local markdown = file.Read(path, "GAME")
-	if not markdown then
-		error("docs/" .. fileName .. " does not exist (read " .. path .. ")")
-	end
-
+-- The first block fenced with exactly ```lua in a Markdown string; label names
+-- the source in errors.
+local function Extract(markdown, label)
 	local lines, inside = {}, false
 	for line in (markdown .. "\n"):gmatch("(.-)\n") do
 		line = line:gsub("\r$", "")
@@ -68,9 +84,19 @@ local function Skeleton(fileName)
 	end
 
 	if inside then
-		error("docs/" .. fileName .. ": the first ```lua block is never closed")
+		error(label .. ": the first ```lua block is never closed")
 	end
-	error("docs/" .. fileName .. " has no block fenced with ```lua")
+	error(label .. " has no block fenced with ```lua")
+end
+
+-- The skeleton in docs/<fileName>.
+local function Skeleton(fileName)
+	local path = AddonRoot() .. "/docs/" .. fileName
+	local markdown = file.Read(path, "GAME")
+	if not markdown then
+		error("docs/" .. fileName .. " does not exist (read " .. path .. ")")
+	end
+	return Extract(markdown, "docs/" .. fileName)
 end
 
 -- The skeleton compiled, or an error carrying the compiler's message.
@@ -137,15 +163,19 @@ local function AutoComponent()
 	return component, name
 end
 
+-- The key and entry of the one vehicle a topic's skeleton lists.
+local function ListEntry(key)
+	local _, listCalls = Run(TOPICS[key])
+	Check(#listCalls == 1, "docs/" .. TOPICS[key] .. "'s skeleton calls list.Set " .. #listCalls .. " times, not once")
+	Check(istable(listCalls[1][3]), "docs/" .. TOPICS[key] .. "'s skeleton lists a " .. type(listCalls[1][3]) .. ", not a table")
+	return listCalls[1][2], listCalls[1][3]
+end
+
 -- The EMV table of the vehicle the vehicle EMV skeleton lists.
 local function VehicleEMV()
-	local _, listCalls = Run(TOPICS.Vehicle)
-	Check(#listCalls == 1, "the vehicle EMV skeleton calls list.Set " .. #listCalls .. " times, not once")
-	Check(istable(listCalls[1][3]), "the vehicle EMV skeleton lists a " .. type(listCalls[1][3]) .. ", not a table")
-
-	local emv = listCalls[1][3].EMV
-	Check(istable(emv), "the vehicle EMV skeleton's vehicle has no EMV table")
-	return emv
+	local _, entry = ListEntry("Vehicle")
+	Check(istable(entry.EMV), "the vehicle EMV skeleton's vehicle has no EMV table")
+	return entry.EMV
 end
 
 local function CompilesCase(key, label)
@@ -170,6 +200,22 @@ local function ListsVehicleCase(key, label)
 	}
 end
 
+-- Photon:LoadVehicles and Photon:SpawnedVehicle key on HasPhoton and Name, and
+-- EMVU on IsEMV; flags lists the boolean fields that must be true.
+local function ListEntryFlagsCase(key, label, flags)
+	return {
+		name = "The " .. label .. " skeleton's list entry sets " .. table.concat(flags, " and ") .. " to true and Name to its list.Set key",
+		func = function()
+			local listKey, entry = ListEntry(key)
+			expect(entry.Name).to.beA("string")
+			expect(entry.Name).to.equal(listKey)
+			for _, flag in ipairs(flags) do
+				expect(entry[flag]).to.beTrue()
+			end
+		end
+	}
+end
+
 return {
 	groupName = "Docs lighting table skeletons",
 
@@ -181,6 +227,11 @@ return {
 			end
 		end
 		state.supported = EMVU.Configurations.Supported[VEHICLE]
+
+		state.savedPI = {}
+		for index, store in ipairs(PI_STORES) do
+			state.savedPI[index] = store()[PI_VEHICLE]
+		end
 	end,
 
 	afterEach = function(state)
@@ -194,22 +245,38 @@ return {
 		if state.autoId then
 			EMVU.Auto[state.autoId] = state.autoPrevious
 		end
+
+		for index, store in ipairs(PI_STORES) do
+			store()[PI_VEHICLE] = state.savedPI[index]
+		end
 	end,
 
 	cases = {
+		{
+			name = "The skeleton extractor takes only the first ```lua block, past other fences and CRLF line ends",
+			func = function()
+				local markdown = table.concat({
+					"# Topic",
+					"```",
+					"not lua",
+					"```",
+					"```lua",
+					"local first = 1",
+					"local second = 2",
+					"```",
+					"",
+					"```lua",
+					"local later = 3",
+					"```",
+				}, "\r\n")
+				expect(Extract(markdown, "inline")).to.equal("local first = 1\nlocal second = 2")
+			end
+		},
+
 		CompilesCase("PI", "vehicle lights"),
 		CompilesCase("Meta", "EMV Meta"),
 		CompilesCase("Vehicle", "vehicle emergency lights"),
 		CompilesCase("Auto", "Auto component"),
-
-		{
-			name = "The EMV Meta skeleton runs without error",
-			func = function()
-				local ok, err = Execute(TOPICS.Meta)
-				expect(err).to.beNil()
-				expect(ok).to.beTrue()
-			end
-		},
 
 		{
 			name = "The Auto component skeleton registers exactly one component under a string name",
@@ -244,6 +311,29 @@ return {
 
 		ListsVehicleCase("PI", "vehicle lights"),
 		ListsVehicleCase("Vehicle", "vehicle emergency lights"),
+		ListEntryFlagsCase("PI", "vehicle lights", { "HasPhoton" }),
+		ListEntryFlagsCase("Vehicle", "vehicle emergency lights", { "HasPhoton", "IsEMV" }),
+
+		{
+			name = "The vehicle lights skeleton's Photon table loads through Photon:OverwriteIndex on the server",
+			func = function()
+				local _, entry = ListEntry("PI")
+				local pi = entry.Photon
+				expect(pi).to.beA("table")
+				expect(pi.States).to.beA("table")
+
+				local ok, err = pcall(Photon.OverwriteIndex, Photon, PI_VEHICLE, pi)
+				expect(err).to.beNil()
+				expect(ok).to.beTrue()
+
+				expect(Photon.Vehicles.Positions[PI_VEHICLE]).to.equal(pi.Positions)
+				expect(Photon.Vehicles.Meta[PI_VEHICLE]).to.equal(pi.Meta)
+				for _, stateName in ipairs(PI_STATES) do
+					expect(pi.States[stateName]).to.beA("table")
+					expect(Photon.Vehicles.States[stateName][PI_VEHICLE]).to.equal(pi.States[stateName])
+				end
+			end
+		},
 
 		{
 			name = "Every EMV.Auto entry in the vehicle EMV skeleton has a string ID, a Vector Pos and an Angle Ang",
