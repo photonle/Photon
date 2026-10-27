@@ -133,7 +133,7 @@ without a guard on any vehicle with traffic advisor modes, and most have them.
 | `Bodygroups` | `{ { group, value }, ... }` | No | Bodygroups set on the prop. The spelling is `Bodygroups`, lower-case `g`: `BodyGroups` on a component is not read. A vehicle can override it, with its own spelling (see [Placing it on a vehicle](#placing-it-on-a-vehicle)). |
 | `Category` | string | No | The group the component is listed under in Photon's editor, such as `"Exterior"` or `"Interior"`. |
 | `DefaultColors` | `{ [n] = "COLOR" }` | No | The colour each `"_n"` placeholder in `Sections` takes when the vehicle does not set `Colorn`. Without it, no placeholder is replaced, the vehicle's `Colorn` values included, and each `"_n"` light draws white with a console warning. |
-| `NotLegacy` | boolean | No, but set it | Use the placement angle and each position's angle as written. Without it, Photon applies the legacy rotation older components were authored against (a 90° yaw turn, with pitch and roll swapped), and positions written for the current format come out pointing the wrong way. |
+| `NotLegacy` | boolean | No, but set it | Use the placement angle and each position's angle as written. Without it, Photon applies the legacy rotation older components were authored against (an extra 90° yaw turn), and positions written for the current format come out pointing the wrong way. |
 | `ForwardTranslation` | boolean | No | Reads each position's angle as (−roll, yaw, pitch) before placing it. The template's angles are written with it on; turn it off only together with angles written for that. |
 | `Base` | string | No | Inherit every field from another component by name, and override only the ones set here. See [Inheriting with Base](#inheriting-with-base). |
 
@@ -163,7 +163,7 @@ together:
 | :--- | :--- | :--- |
 | 1 | number | A position number from `Positions`. |
 | 2 | string | The colour: a name from [the colour list](emv-meta.md#colours), or `"_n"` to take colour `n` from the vehicle or `DefaultColors`. |
-| 3 | number, optional | Brightness. Default 1. |
+| 3 | number or table, optional | Brightness. Default 1. A table `{ speed, minimum, offset }` pulses the light instead. |
 
 Name sections with an `auto_` prefix by convention. A section name only has to be unique in this
 file.
@@ -238,4 +238,4 @@ EMVU:AddAutoComponent( COMPONENT, "Example Dome Light Amber" )
 
 The copy is shallow: setting `Modes` replaces the whole of the base's `Modes`, not just the keys
 you list. A component with `Base` is exempt from the required-field check, since its base supplies
-them. If the base never loads, the component is skipped with a warning naming it.
+them. If the base never loads, the component is skipped with a console warning.

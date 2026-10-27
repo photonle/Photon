@@ -129,7 +129,7 @@ vehicle's `Sequences` list only its own sections.
 | `IsEMV` | boolean | Yes | Marks the vehicle as one with emergency lights. |
 | `EMV` | table | Yes | The `EMV` table. |
 | `HasPhoton` | boolean | Yes | Marks the vehicle as one Photon manages. |
-| `Photon` | table or `"PHOTON_INHERIT"` | Yes | The vehicle's own non-emergency lights. `"PHOTON_INHERIT"` gives it none; a `PI` table gives it headlights, brake lights and indicators, as in [Vehicle Lights](vehicle-lights.md). |
+| `Photon` | table or `"PHOTON_INHERIT"` | Yes | The vehicle's own non-emergency lights. `"PHOTON_INHERIT"` uses Photon's built-in lights for the model if it has them, and none otherwise; a `PI` table gives it headlights, brake lights and indicators, as in [Vehicle Lights](vehicle-lights.md). |
 
 ## Field reference
 
@@ -159,7 +159,7 @@ together:
 | :--- | :--- | :--- |
 | 1 | number | A position number from `EMV.Positions`. |
 | 2 | string | The colour, from [the colour list](emv-meta.md#colours). |
-| 3 | number, optional | Brightness. Default 1. |
+| 3 | number or table, optional | Brightness. Default 1. A table `{ speed, minimum, offset }` pulses the light instead. |
 
 ### EMV.Patterns
 
