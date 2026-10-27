@@ -107,8 +107,9 @@ Photon finds the table through the vehicle's entry in the spawn list:
 The other fields (`Class`, `Category`, `Author`, `Model`, `KeyValues`) are Garry's Mod's own vehicle
 list fields, and are not Photon's.
 
-A vehicle with emergency lights and no lights of its own sets `Photon = "PHOTON_INHERIT"` instead,
-which gives it an empty `PI`.
+A vehicle with emergency lights and no `PI` of its own sets `Photon = "PHOTON_INHERIT"` instead.
+That uses Photon's built-in lights for the vehicle's model if Photon ships some, and an empty `PI`
+otherwise.
 
 ## Field reference
 
@@ -138,7 +139,7 @@ Each state is a list of the lights it turns on, as `{ position, "COLOR", brightn
 | :--- | :--- | :--- |
 | 1 | number | A position number from `PI.Positions`. |
 | 2 | string | The colour, from [the colour list](emv-meta.md#colours). An unknown name is not drawn. |
-| 3 | number, optional | Brightness. Default 1. A running light at `0.25` and a brake light at `1` on the same position is how one bulb shows both. |
+| 3 | number or table, optional | Brightness. Default 1. A table `{ speed, minimum, offset }` pulses the light instead. A running light at `0.25` and a brake light at `1` on the same position is how one bulb shows both. |
 
 These are the only state names Photon reads. Every one is optional; a state left out never lights
 anything.
