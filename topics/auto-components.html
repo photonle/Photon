@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Auto Components (Lightbars and Light Heads)</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../style.359524c0f6.css" type="text/css">
+</head>
+<body>
+<header class="ll-header">
+	<div class="ll-header-inner">
+		<a class="ll-brand" href="../index.html">
+			<img src="../assets/logos/photon.svg" alt="" width="26" height="26">
+			<span>Photon Documentation</span>
+		</a>
+		<a class="ll-repo-link" href="https://github.com/photonle/Photon" target="_blank" rel="noreferrer">Repository</a>
+	</div>
+</header>
+<div id="container">
+	<div id="main">
+		<div id="navigation">
+<div class="ll-search"><input type="search" id="ll-search-input" autocomplete="off" spellcheck="false" placeholder="Search docs… (/)" aria-label="Search documentation"><ul id="ll-search-results" class="ll-kind-body" hidden></ul></div>
+<div class="ll-contents-block"><div class="ll-kind-header"><h2>Contents</h2></div><ul class="ll-kind-body nowrap">
+<li><a href="#how-the-tables-connect">How the tables connect</a></li>
+<li><a href="#required-fields">Required fields</a></li>
+<li><a href="#field-reference">Field reference</a></li>
+<li><a href="#placing-it-on-a-vehicle">Placing it on a vehicle</a></li>
+<li><a href="#inheriting-with-base">Inheriting with Base</a></li>
+</ul></div>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Topics</h2></div><span class="ll-count">6</span></summary>
+<ul class="ll-kind-body">
+<li><a href="../topics/doc-comments.html">Writing Doc Comments<svg class="ll-pin" viewBox="0 0 24 24" role="img"><title>Pinned</title><path d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg></a></li>
+<li><strong>Auto Components (Lightbars and Light Heads)</strong></li>
+<li><a href="../topics/design-constraints.html">Design Constraints</a></li>
+<li><a href="../topics/emv-meta.html">Light Meta (Sprites and Glows)</a></li>
+<li><a href="../topics/vehicle-emergency-lights.html">Vehicle Emergency Lights (EMV)</a></li>
+<li><a href="../topics/vehicle-lights.html">Vehicle Lights (Headlights, Brakes and Indicators)</a></li>
+</ul></details>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Metatables</h2></div><span class="ll-count">1</span></summary>
+<ul class="ll-kind-body nowrap">
+<li><a href="../modules/Entity.html">Entity</a></li>
+</ul>
+</details>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Modules</h2></div><span class="ll-count">28</span></summary>
+<ul class="ll-kind-body nowrap">
+<li><a href="../modules/Photon.Registry.html">Photon.Registry</a></li>
+<li><a href="../modules/Photon.SNet.html">Photon.SNet</a></li>
+<li><a href="../modules/autorun.emv_init.html">autorun.emv_init</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_airel.html">autorun.photon.cl_emv_airel</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_init.html">autorun.photon.cl_emv_init</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_listener.html">autorun.photon.cl_emv_listener</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_livery.html">autorun.photon.cl_emv_livery</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_meta.html">autorun.photon.cl_emv_meta</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_net.html">autorun.photon.cl_emv_net</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_builder.html">autorun.photon.cl_photon_builder</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_editor.html">autorun.photon.cl_photon_editor</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_eng.html">autorun.photon.cl_photon_eng</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_hooks.html">autorun.photon.cl_photon_hooks</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_hud.html">autorun.photon.cl_photon_hud</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_menu.html">autorun.photon.cl_photon_menu</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_meta.html">autorun.photon.cl_photon_meta</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_settings.html">autorun.photon.cl_photon_settings</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_config.html">autorun.photon.sh_emv_config</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_helper.html">autorun.photon.sh_emv_helper</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_init.html">autorun.photon.sh_emv_init</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_vehicles.html">autorun.photon.sh_emv_vehicles</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_init.html">autorun.photon.sh_photon_init</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_vehicles.html">autorun.photon.sh_photon_vehicles</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_xml.html">autorun.photon.sh_photon_xml</a></li>
+<li><a href="../modules/autorun.photon.shared.sh_functional.html">autorun.photon.shared.sh_functional</a></li>
+<li><a href="../modules/autorun.photon.shared.sh_logging.html">autorun.photon.shared.sh_logging</a></li>
+<li><a href="../modules/autorun.photon.sv_emv_net.html">autorun.photon.sv_emv_net</a></li>
+<li><a href="../modules/autorun.photon.sv_photon_hooks.html">autorun.photon.sv_photon_hooks</a></li>
+</ul>
+</details>
+<div class="ll-sidebar-footer"><p>Generated from LuaLS documentation JSON.</p><p>Theme by <a href="https://limelightgaming.info">Limelight Gaming</a>.</p></div>
+		</div>
+		<div id="content">
+<div class="ll-module-header"><h1>Auto Components (Lightbars and Light Heads)</h1></div><div class="ll-module-body"><p>An auto component is a light you can bolt onto any vehicle: a lightbar, a dome light, a grille head.
+It carries its own model, its own lights and its own patterns, so a vehicle only has to say where
+it goes. Photon loads every file in <code>lua/autorun/photon/library/auto/</code>, from Photon itself and from
+any addon that ships files under that path.</p>
+<p>The template below is a complete component. Save it as a new file in that folder, change the name
+and model, and it loads. Every field in it is explained after it.</p>
+<pre><code class="language-lua">AddCSLuaFile()
+
+local name = &quot;Example Dome Light&quot;
+
+local COMPONENT = {}
+
+COMPONENT.Model = &quot;models/schmal/dome_light.mdl&quot;
+COMPONENT.Skin = 0
+COMPONENT.Bodygroups = {}
+COMPONENT.Category = &quot;Exterior&quot;
+COMPONENT.NotLegacy = true
+COMPONENT.ForwardTranslation = true
+
+-- &quot;_1&quot; and &quot;_2&quot; in Sections take these colours unless the vehicle overrides them.
+COMPONENT.DefaultColors = {
+	[1] = &quot;RED&quot;,
+	[2] = &quot;BLUE&quot;,
+}
+
+-- How each light looks. Positions name one of these.
+COMPONENT.Meta = {
+	example_dome = {
+		NoLegacy = true,
+		DirAxis = &quot;Up&quot;,
+		DirOffset = -90,
+		W = 6,
+		H = 8,
+		Sprite = &quot;sprites/emv/visionslr&quot;,
+		Scale = 2.75,
+		WMult = 1,
+	},
+}
+
+-- Where each light sits, relative to the component's model.
+COMPONENT.Positions = {
+	[1] = { Vector( -2, 0, 2.5 ), Angle( 0, -90, 0 ), &quot;example_dome&quot; },
+	[2] = { Vector( 2, 0, 2.5 ), Angle( 0, -90, 0 ), &quot;example_dome&quot; },
+}
+
+-- Frames: which lights are lit together, and in what colour.
+COMPONENT.Sections = {
+	[&quot;auto_example_dome&quot;] = {
+		[1] = { { 1, &quot;_1&quot; } },
+		[2] = { { 2, &quot;_2&quot; } },
+		[3] = { { 1, &quot;_1&quot; }, { 2, &quot;_2&quot; } },
+	},
+}
+
+-- Patterns: the order the frames play in. 0 is a dark frame.
+COMPONENT.Patterns = {
+	[&quot;auto_example_dome&quot;] = {
+		[&quot;steady&quot;] = { 3 },
+		[&quot;alternate&quot;] = { 1, 1, 0, 2, 2, 0 },
+		[&quot;flash&quot;] = { 3, 0, 3, 0, 0, 0 },
+	},
+}
+
+-- Which pattern each section plays in each of the vehicle's modes.
+COMPONENT.Modes = {
+	Primary = {
+		M1 = { [&quot;auto_example_dome&quot;] = &quot;steady&quot; },
+		M2 = { [&quot;auto_example_dome&quot;] = &quot;alternate&quot; },
+		M3 = { [&quot;auto_example_dome&quot;] = &quot;flash&quot; },
+	},
+	Auxiliary = {},
+	Illumination = {},
+}
+
+EMVU:AddAutoComponent( COMPONENT, name )
+</code></pre>
+<h2 id="how-the-tables-connect">How the tables connect</h2>
+<p>A light is drawn when its position appears in a frame that the current pattern is on:</p>
+<ol>
+<li><strong>Positions</strong> lists every light, by number. Each one names a <strong>Meta</strong> entry for how it looks.</li>
+<li><strong>Sections</strong> groups those numbers into frames. Frame 3 of <code>auto_example_dome</code> above is
+&quot;light 1 in colour 1, and light 2 in colour 2&quot;.</li>
+<li><strong>Patterns</strong> plays a section's frames in order, one step per tick (20 a second).</li>
+<li><strong>Modes</strong> picks a pattern for each section, for each mode the vehicle's driver can select.</li>
+</ol>
+<p>Photon renumbers everything when the component is placed, so the numbers and names here only have to
+be unique inside this file. Two copies of the same component on one vehicle do not collide.</p>
+<h2 id="required-fields">Required fields</h2>
+<p><code>EMVU.ValidateAutoComponent</code> checks every component once, at load. One that fails is skipped with an
+error in the console naming the field, and every vehicle that places it loads without it.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>Name</code></td>
+<td align="left">Always. Set for you from the second argument of <code>EMVU:AddAutoComponent</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>Meta</code></td>
+<td align="left">Unless <code>Base</code> is set. Must be a table.</td>
+</tr>
+<tr>
+<td align="left"><code>Sections</code></td>
+<td align="left">Unless <code>Base</code> is set. Must be a table.</td>
+</tr>
+<tr>
+<td align="left"><code>Patterns</code></td>
+<td align="left">Unless <code>Base</code> is set. Must be a table.</td>
+</tr>
+<tr>
+<td align="left"><code>Positions</code></td>
+<td align="left">Unless <code>Base</code> is set. Must be a table.</td>
+</tr>
+<tr>
+<td align="left"><code>Modes</code></td>
+<td align="left">Unless <code>Base</code> is set. Must be a table.</td>
+</tr>
+<tr>
+<td align="left"><code>Modes.Primary</code></td>
+<td align="left">Unless <code>Base</code> is set. Must be a table.</td>
+</tr>
+</tbody>
+</table>
+<p>Empty tables pass. The check is that the component will not error, not that it lights anything.</p>
+<p><code>Model</code> and <code>Category</code> are optional, but when present each must be a non-empty string. <code>Skin</code> is
+optional, but when present must be a number.</p>
+<p>Keep <code>Modes.Auxiliary</code> too, even when it is empty. It is not checked at load, but Photon reads it
+without a guard on any vehicle with traffic advisor modes, and most have them.</p>
+<h2 id="field-reference">Field reference</h2>
+<h3 id="file-level">File-level</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>name</code> (the second argument to <code>EMVU:AddAutoComponent</code>)</td>
+<td align="left">string</td>
+<td align="left">Yes</td>
+<td align="left">The component's ID. Vehicles place it by this name, and it must be unique across every installed addon.</td>
+</tr>
+<tr>
+<td align="left"><code>Model</code></td>
+<td align="left">model path</td>
+<td align="left">No</td>
+<td align="left">The prop spawned on the vehicle. Optional to the load check, but a component anyone is meant to see needs one.</td>
+</tr>
+<tr>
+<td align="left"><code>Skin</code></td>
+<td align="left">number</td>
+<td align="left">No</td>
+<td align="left">The prop's skin. Default 0. A vehicle can override it.</td>
+</tr>
+<tr>
+<td align="left"><code>Bodygroups</code></td>
+<td align="left"><code>{ { group, value }, ... }</code></td>
+<td align="left">No</td>
+<td align="left">Bodygroups set on the prop. The spelling is <code>Bodygroups</code>, lower-case <code>g</code>: <code>BodyGroups</code> on a component is not read. A vehicle can override it, with its own spelling (see <a href="#placing-it-on-a-vehicle">Placing it on a vehicle</a>).</td>
+</tr>
+<tr>
+<td align="left"><code>Category</code></td>
+<td align="left">string</td>
+<td align="left">No</td>
+<td align="left">The group the component is listed under in Photon's editor, such as <code>&quot;Exterior&quot;</code> or <code>&quot;Interior&quot;</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>DefaultColors</code></td>
+<td align="left"><code>{ [n] = &quot;COLOR&quot; }</code></td>
+<td align="left">No</td>
+<td align="left">The colour each <code>&quot;_n&quot;</code> placeholder in <code>Sections</code> takes when the vehicle does not set <code>Colorn</code>. Without it, no placeholder is replaced, the vehicle's <code>Colorn</code> values included, and each <code>&quot;_n&quot;</code> light draws white with a console warning.</td>
+</tr>
+<tr>
+<td align="left"><code>NotLegacy</code></td>
+<td align="left">boolean</td>
+<td align="left">No, but set it</td>
+<td align="left">Use the placement angle and each position's angle as written. Without it, Photon applies the legacy rotation older components were authored against (an extra 90° yaw turn), and positions written for the current format come out pointing the wrong way.</td>
+</tr>
+<tr>
+<td align="left"><code>ForwardTranslation</code></td>
+<td align="left">boolean</td>
+<td align="left">No</td>
+<td align="left">Reads each position's angle as (−roll, yaw, pitch) before placing it. The template's angles are written with it on; turn it off only together with angles written for that.</td>
+</tr>
+<tr>
+<td align="left"><code>Base</code></td>
+<td align="left">string</td>
+<td align="left">No</td>
+<td align="left">Inherit every field from another component by name, and override only the ones set here. See <a href="#inheriting-with-base">Inheriting with Base</a>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="meta">Meta</h3>
+<p><code>Meta</code> is a table of named light styles. Its fields are the same as a vehicle's own emergency light
+meta and are documented in <a href="emv-meta.html">Light Meta</a>. For auto components, <code>W</code>, <code>H</code> and <code>EmitArray</code>
+are multiplied by the vehicle's <code>Scale</code> for that placement.</p>
+<h3 id="positions">Positions</h3>
+<p>Each entry is <code>{ Vector position, Angle angle, &quot;metaName&quot; }</code>, numbered from 1 with no gaps.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Index</th>
+<th align="left">Type</th>
+<th align="left">What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">1</td>
+<td align="left">Vector</td>
+<td align="left">Where the light sits, relative to the component model's origin.</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">Angle</td>
+<td align="left">Which way the light faces, relative to the model.</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">string</td>
+<td align="left">The <code>Meta</code> entry the light is drawn with. A name with no matching entry draws nothing, silently.</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">number, optional</td>
+<td align="left">Also cast a dynamic light, when the player has dynamic lights on. Must be a number, not <code>true</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sections">Sections</h3>
+<p><code>Sections[sectionName]</code> is a list of frames, numbered from 1. Each frame is a list of lights lit
+together:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Index</th>
+<th align="left">Type</th>
+<th align="left">What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">1</td>
+<td align="left">number</td>
+<td align="left">A position number from <code>Positions</code>.</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">string</td>
+<td align="left">The colour: a name from <a href="emv-meta.html#colours">the colour list</a>, or <code>&quot;_n&quot;</code> to take colour <code>n</code> from the vehicle or <code>DefaultColors</code>.</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">number or table, optional</td>
+<td align="left">Brightness. Default 1. A table <code>{ speed, minimum, offset }</code> pulses the light instead.</td>
+</tr>
+</tbody>
+</table>
+<p>Name sections with an <code>auto_</code> prefix by convention. A section name only has to be unique in this
+file.</p>
+<h3 id="patterns">Patterns</h3>
+<p><code>Patterns[sectionName][patternName]</code> is a list of frame numbers from that section, played in order
+and looped. <code>0</code>, or any number with no frame, is a dark step. A pattern can be any length.</p>
+<p>Patterns whose name ends in a phase letter, such as <code>&quot;flashA&quot;</code> and <code>&quot;flashB&quot;</code>, are picked instead of
+<code>&quot;flash&quot;</code> when the vehicle sets <code>Phase = &quot;A&quot;</code> or <code>&quot;B&quot;</code> on a placement. Use them to make two copies of
+a component flash out of step. A placement with a <code>Phase</code> and no matching pattern draws nothing in
+that mode.</p>
+<h3 id="modes">Modes</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>Modes.Primary</code></td>
+<td align="left"><code>{ [stage] = { [section] = &quot;pattern&quot; } }</code></td>
+<td align="left">Yes</td>
+<td align="left">Patterns for the vehicle's primary light modes. The stage keys match the <code>Stage</code> of the vehicle's <code>EMV.Sequences.Sequences</code>, conventionally <code>M1</code>, <code>M2</code> and <code>M3</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>Modes.Primary.ALERT</code></td>
+<td align="left"><code>{ [section] = &quot;pattern&quot; }</code></td>
+<td align="left">No</td>
+<td align="left">Patterns for the alert sequence. Without it, alert uses <code>M3</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>Modes.Primary.BRAKE</code>, <code>REVERSE</code>, <code>PARK</code></td>
+<td align="left"><code>{ [section] = &quot;pattern&quot; }</code></td>
+<td align="left">No</td>
+<td align="left">Patterns shown while braking, reversing or parked. Each section named must exist in <code>Patterns</code>, or the component errors on every vehicle that places it. A pattern missing from a section that exists is skipped.</td>
+</tr>
+<tr>
+<td align="left"><code>Modes.Auxiliary</code></td>
+<td align="left"><code>{ [stage] = { [section] = &quot;pattern&quot; } }</code></td>
+<td align="left">Keep it, even empty</td>
+<td align="left">Patterns for the traffic advisor. The stage keys match the vehicle's <code>EMV.Sequences.Traffic</code>, conventionally <code>L</code>, <code>D</code> and <code>R</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>Modes.Illumination</code></td>
+<td align="left"><code>{ [stage] = { { position, &quot;COLOR&quot; }, ... } }</code></td>
+<td align="left">No</td>
+<td align="left">Lights held on steady for an illumination mode such as takedown (<code>T</code>). Each entry is a position number and a colour, not a pattern.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="placing-it-on-a-vehicle">Placing it on a vehicle</h2>
+<p>A vehicle places components through its <code>EMV.Auto</code> list. The full vehicle file is in
+<a href="vehicle-emergency-lights.html">Vehicle Emergency Lights</a>; the part that places this component is:</p>
+<pre><code class="language-lua">EMV.Auto = {
+	[1] = {
+		ID = &quot;Example Dome Light&quot;,
+		Scale = 1,
+		Pos = Vector( 0, -10, 80 ),
+		Ang = Angle( 0, 0, 0 ),
+		Color1 = &quot;AMBER&quot;,
+	},
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>ID</code></td>
+<td align="left">string</td>
+<td align="left">Yes</td>
+<td align="left">The component's <code>name</code>. An ID that matches no loaded component is skipped with a console message.</td>
+</tr>
+<tr>
+<td align="left"><code>Pos</code></td>
+<td align="left">Vector</td>
+<td align="left">Yes</td>
+<td align="left">Where the component's origin sits on the vehicle.</td>
+</tr>
+<tr>
+<td align="left"><code>Ang</code></td>
+<td align="left">Angle</td>
+<td align="left">Yes</td>
+<td align="left">The component's rotation on the vehicle.</td>
+</tr>
+<tr>
+<td align="left"><code>Scale</code></td>
+<td align="left">number</td>
+<td align="left">No</td>
+<td align="left">Size multiplier for the prop and its lights. Default 1.</td>
+</tr>
+<tr>
+<td align="left"><code>Color1</code>, <code>Color2</code>, ...</td>
+<td align="left">string</td>
+<td align="left">No</td>
+<td align="left">Overrides <code>DefaultColors[1]</code>, <code>[2]</code>, ... for this placement.</td>
+</tr>
+<tr>
+<td align="left"><code>Phase</code></td>
+<td align="left">string</td>
+<td align="left">No</td>
+<td align="left">Appended to every <code>Modes.Primary</code> pattern name for this placement. See <a href="#patterns">Patterns</a>.</td>
+</tr>
+<tr>
+<td align="left"><code>Skin</code></td>
+<td align="left">number</td>
+<td align="left">No</td>
+<td align="left">Overrides the component's <code>Skin</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>BodyGroups</code></td>
+<td align="left"><code>{ { group, value }, ... }</code></td>
+<td align="left">No</td>
+<td align="left">Overrides the component's <code>Bodygroups</code>. Here the spelling is <code>BodyGroups</code>, capital <code>G</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>SubMaterials</code></td>
+<td align="left"><code>{ [index] = &quot;material&quot; }</code></td>
+<td align="left">No</td>
+<td align="left">Submaterials set on the prop.</td>
+</tr>
+<tr>
+<td align="left"><code>RenderGroup</code>, <code>RenderMode</code></td>
+<td align="left">number</td>
+<td align="left">No</td>
+<td align="left">The prop's render group and mode.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="inheriting-with-base">Inheriting with Base</h2>
+<p>A component with <code>Base</code> copies every top-level field it does not set from the named component, so a
+colour variant only has to restate what differs:</p>
+<pre><code class="language-lua">AddCSLuaFile()
+
+local COMPONENT = {}
+COMPONENT.Base = &quot;Example Dome Light&quot;
+COMPONENT.DefaultColors = {
+	[1] = &quot;AMBER&quot;,
+	[2] = &quot;AMBER&quot;,
+}
+
+EMVU:AddAutoComponent( COMPONENT, &quot;Example Dome Light Amber&quot; )
+</code></pre>
+<p>The copy is shallow: setting <code>Modes</code> replaces the whole of the base's <code>Modes</code>, not just the keys
+you list. A component with <code>Base</code> is exempt from the required-field check, since its base supplies
+them. If the base never loads, the component is skipped with a console warning.</p></div>
+		</div>
+	</div>
+</div>
+<script>
+var ROOT = "../";
+(function () {
+	var input = document.getElementById("ll-search-input");
+	var list = document.getElementById("ll-search-results");
+	if (!input || !list) { return; }
+	var index = null, loading = false;
+
+	function load() {
+		if (index || loading) { return; }
+		loading = true;
+		fetch(ROOT + "search.json").then(function (response) {
+			return response.json();
+		}).then(function (data) {
+			index = data;
+			loading = false;
+			render();
+		}).catch(function () {
+			loading = false;
+			list.innerHTML = "<li><p>Search index unavailable.</p></li>";
+			list.hidden = false;
+		});
+	}
+
+	// Lower is better: exact name, then prefix, then anywhere in the name, then
+	// only in the description.
+	function score(entry, query) {
+		var name = entry.n.toLowerCase();
+		if (name === query) { return 0; }
+		if (name.lastIndexOf(query, 0) === 0) { return 1; }
+		if (name.indexOf(query) > 0) { return 2; }
+		return (entry.d || "").toLowerCase().indexOf(query) >= 0 ? 3 : -1;
+	}
+
+	function escape(text) {
+		return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	}
+
+	function render() {
+		var query = input.value.trim().toLowerCase();
+		if (!query) { list.hidden = true; list.innerHTML = ""; return; }
+        if (!index) { return; }
+		var hits = [];
+		for (var i = 0; i < index.length; i++) {
+			var rank = score(index[i], query);
+			if (rank >= 0) { hits.push([rank, index[i].n.length, index[i]]); }
+		}
+		hits.sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; });
+		list.innerHTML = hits.slice(0, 20).map(function (hit) {
+			var entry = hit[2];
+			return '<li><a href="' + ROOT + entry.u + '">' + escape(entry.n)
+				+ '<span class="ll-search-kind">' + escape(entry.k) + "</span></a></li>";
+		}).join("") || "<li><p>No matches.</p></li>";
+		list.hidden = false;
+	}
+
+	input.addEventListener("focus", load);
+	input.addEventListener("input", function () { load(); render(); });
+	input.addEventListener("keydown", function (event) {
+		if (event.key === "Escape") { input.value = ""; render(); input.blur(); }
+		if (event.key === "Enter") {
+			var first = list.querySelector("a");
+			if (first) { window.location.href = first.href; }
+		}
+	});
+
+	// "/" jumps to the box, unless the reader is already typing somewhere -
+	// preventDefault stops the slash itself landing in the field.
+	document.addEventListener("keydown", function (event) {
+		if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) { return; }
+		var active = document.activeElement;
+		if (active && (active.isContentEditable
+			|| /^(input|textarea|select)$/i.test(active.tagName))) { return; }
+		event.preventDefault();
+		input.focus();
+		input.select();
+	});
+})();
+</script>
+</body>
+</html>

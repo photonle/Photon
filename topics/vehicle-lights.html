@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Vehicle Lights (Headlights, Brakes and Indicators)</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../style.359524c0f6.css" type="text/css">
+</head>
+<body>
+<header class="ll-header">
+	<div class="ll-header-inner">
+		<a class="ll-brand" href="../index.html">
+			<img src="../assets/logos/photon.svg" alt="" width="26" height="26">
+			<span>Photon Documentation</span>
+		</a>
+		<a class="ll-repo-link" href="https://github.com/photonle/Photon" target="_blank" rel="noreferrer">Repository</a>
+	</div>
+</header>
+<div id="container">
+	<div id="main">
+		<div id="navigation">
+<div class="ll-search"><input type="search" id="ll-search-input" autocomplete="off" spellcheck="false" placeholder="Search docs… (/)" aria-label="Search documentation"><ul id="ll-search-results" class="ll-kind-body" hidden></ul></div>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Topics</h2></div><span class="ll-count">6</span></summary>
+<ul class="ll-kind-body">
+<li><a href="../topics/doc-comments.html">Writing Doc Comments<svg class="ll-pin" viewBox="0 0 24 24" role="img"><title>Pinned</title><path d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg></a></li>
+<li><a href="../topics/auto-components.html">Auto Components (Lightbars and Light Heads)</a></li>
+<li><a href="../topics/design-constraints.html">Design Constraints</a></li>
+<li><a href="../topics/emv-meta.html">Light Meta (Sprites and Glows)</a></li>
+<li><a href="../topics/vehicle-emergency-lights.html">Vehicle Emergency Lights (EMV)</a></li>
+<li><strong>Vehicle Lights (Headlights, Brakes and Indicators)</strong></li>
+</ul></details>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Metatables</h2></div><span class="ll-count">1</span></summary>
+<ul class="ll-kind-body nowrap">
+<li><a href="../modules/Entity.html">Entity</a></li>
+</ul>
+</details>
+<details class="ll-nav-group" open><summary><div class="ll-kind-header"><h2>Modules</h2></div><span class="ll-count">28</span></summary>
+<ul class="ll-kind-body nowrap">
+<li><a href="../modules/Photon.Registry.html">Photon.Registry</a></li>
+<li><a href="../modules/Photon.SNet.html">Photon.SNet</a></li>
+<li><a href="../modules/autorun.emv_init.html">autorun.emv_init</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_airel.html">autorun.photon.cl_emv_airel</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_init.html">autorun.photon.cl_emv_init</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_listener.html">autorun.photon.cl_emv_listener</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_livery.html">autorun.photon.cl_emv_livery</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_meta.html">autorun.photon.cl_emv_meta</a></li>
+<li><a href="../modules/autorun.photon.cl_emv_net.html">autorun.photon.cl_emv_net</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_builder.html">autorun.photon.cl_photon_builder</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_editor.html">autorun.photon.cl_photon_editor</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_eng.html">autorun.photon.cl_photon_eng</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_hooks.html">autorun.photon.cl_photon_hooks</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_hud.html">autorun.photon.cl_photon_hud</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_menu.html">autorun.photon.cl_photon_menu</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_meta.html">autorun.photon.cl_photon_meta</a></li>
+<li><a href="../modules/autorun.photon.cl_photon_settings.html">autorun.photon.cl_photon_settings</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_config.html">autorun.photon.sh_emv_config</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_helper.html">autorun.photon.sh_emv_helper</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_init.html">autorun.photon.sh_emv_init</a></li>
+<li><a href="../modules/autorun.photon.sh_emv_vehicles.html">autorun.photon.sh_emv_vehicles</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_init.html">autorun.photon.sh_photon_init</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_vehicles.html">autorun.photon.sh_photon_vehicles</a></li>
+<li><a href="../modules/autorun.photon.sh_photon_xml.html">autorun.photon.sh_photon_xml</a></li>
+<li><a href="../modules/autorun.photon.shared.sh_functional.html">autorun.photon.shared.sh_functional</a></li>
+<li><a href="../modules/autorun.photon.shared.sh_logging.html">autorun.photon.shared.sh_logging</a></li>
+<li><a href="../modules/autorun.photon.sv_emv_net.html">autorun.photon.sv_emv_net</a></li>
+<li><a href="../modules/autorun.photon.sv_photon_hooks.html">autorun.photon.sv_photon_hooks</a></li>
+</ul>
+</details>
+<div class="ll-sidebar-footer"><p>Generated from LuaLS documentation JSON.</p><p>Theme by <a href="https://limelightgaming.info">Limelight Gaming</a>.</p></div>
+		</div>
+		<div id="content">
+<div class="ll-module-header"><h1>Vehicle Lights (Headlights, Brakes and Indicators)</h1></div><div class="ll-module-body"><p><code>PI</code> (Photon Illumination) is the table for a vehicle's own lights: headlights, running lights, brake
+lights, reverse lights and indicators. Emergency lights are a separate table, covered in
+<a href="vehicle-emergency-lights.html">Vehicle Emergency Lights</a>; a vehicle can have either or both.</p>
+<p>The template below is a complete vehicle file. Save it under <code>lua/autorun/</code> in your addon, change
+the name, model and positions, and it loads. It uses the Half-Life 2 buggy so it works on any
+install. Every field is explained after it.</p>
+<pre><code class="language-lua">AddCSLuaFile()
+
+local name = &quot;Example Photon Buggy&quot;
+
+local DR = &quot;D_RED&quot;
+local A = &quot;AMBER&quot;
+local SW = &quot;S_WHITE&quot;
+
+local PI = {}
+
+-- How each light looks. Positions name one of these.
+PI.Meta = {
+	headlight = {
+		AngleOffset = -90,
+		Sprite = &quot;sprites/emv/crownvic_headlight&quot;,
+		W = 13,
+		H = 14,
+		Scale = 2,
+	},
+	tail_light = {
+		AngleOffset = 90,
+		Sprite = &quot;sprites/emv/crownvic_tail&quot;,
+		W = 8,
+		H = 8,
+		Scale = 1,
+		WMult = 1.5,
+	},
+	indicator = {
+		AngleOffset = -90,
+		Sprite = &quot;sprites/emv/crownvic_marker&quot;,
+		W = 8,
+		H = 8,
+		Scale = 2,
+	},
+}
+
+-- Where each light sits on the vehicle model. The numbers are used by States.
+PI.Positions = {
+	[1] = { Vector( -25, 75, 30 ), Angle( 0, 0, 0 ), &quot;headlight&quot; },
+	[2] = { Vector( 25, 75, 30 ), Angle( 0, 0, 0 ), &quot;headlight&quot; },
+	[3] = { Vector( -25, -70, 35 ), Angle( 0, 0, 0 ), &quot;tail_light&quot; },
+	[4] = { Vector( 25, -70, 35 ), Angle( 0, 0, 0 ), &quot;tail_light&quot; },
+	[5] = { Vector( -30, 70, 32 ), Angle( 0, 0, 0 ), &quot;indicator&quot; },
+	[6] = { Vector( 30, 70, 32 ), Angle( 0, 0, 0 ), &quot;indicator&quot; },
+}
+
+-- Which lights each state turns on: { position, colour, brightness }.
+PI.States = {}
+PI.States.Headlights = {
+	{ 1, SW }, { 2, SW },
+}
+PI.States.Running = {
+	{ 3, DR, 0.25 }, { 4, DR, 0.25 },
+}
+PI.States.Brakes = {
+	{ 3, DR, 1 }, { 4, DR, 1 },
+}
+PI.States.Reverse = {}
+PI.States.Blink_Left = {
+	{ 5, A }, { 3, A },
+}
+PI.States.Blink_Right = {
+	{ 6, A }, { 4, A },
+}
+
+list.Set( &quot;Vehicles&quot;, name, {
+	Name = name,
+	Class = &quot;prop_vehicle_jeep&quot;,
+	Category = &quot;Photon Examples&quot;,
+	Author = &quot;You&quot;,
+	Model = &quot;models/buggy.mdl&quot;,
+	KeyValues = { vehiclescript = &quot;scripts/vehicles/jeep_test.txt&quot; },
+	HasPhoton = true,
+	Photon = PI,
+} )
+</code></pre>
+<p>Photon reads the vehicle list once, a second after the map loads, so a new or edited vehicle file
+needs a map change before it shows.</p>
+<h2 id="handing-the-table-to-photon">Handing the table to Photon</h2>
+<p>Photon finds the table through the vehicle's entry in the spawn list:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>Name</code></td>
+<td align="left">string</td>
+<td align="left">Yes</td>
+<td align="left">The name Photon stores the lights under. Use the same string as the <code>list.Set</code> key.</td>
+</tr>
+<tr>
+<td align="left"><code>HasPhoton</code></td>
+<td align="left">boolean</td>
+<td align="left">Yes</td>
+<td align="left">Marks the vehicle as one Photon manages.</td>
+</tr>
+<tr>
+<td align="left"><code>Photon</code></td>
+<td align="left">table</td>
+<td align="left">Yes</td>
+<td align="left">The <code>PI</code> table. Without it, the vehicle spawns with no Photon lights at all.</td>
+</tr>
+</tbody>
+</table>
+<p>The other fields (<code>Class</code>, <code>Category</code>, <code>Author</code>, <code>Model</code>, <code>KeyValues</code>) are Garry's Mod's own vehicle
+list fields, and are not Photon's.</p>
+<p>A vehicle with emergency lights and no <code>PI</code> of its own sets <code>Photon = &quot;PHOTON_INHERIT&quot;</code> instead.
+That uses Photon's built-in lights for the vehicle's model if Photon ships some, and an empty <code>PI</code>
+otherwise.</p>
+<h2 id="field-reference">Field reference</h2>
+<h3 id="pimeta">PI.Meta</h3>
+<p>A table of named light styles, the same shape as emergency light meta. Every field is documented in
+<a href="emv-meta.html">Light Meta</a>. Required whenever <code>PI.Positions</code> is set: a vehicle with positions and no
+meta errors on its first frame.</p>
+<h3 id="pipositions">PI.Positions</h3>
+<p>Each entry is <code>{ Vector position, Angle angle, &quot;metaName&quot; }</code>, keyed by number.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Index</th>
+<th align="left">Type</th>
+<th align="left">What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">1</td>
+<td align="left">Vector</td>
+<td align="left">Where the light sits, relative to the vehicle model's origin.</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">Angle</td>
+<td align="left">Which way the light faces. With <code>AngleOffset</code> meta, the yaw is what counts.</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">string</td>
+<td align="left">The <code>PI.Meta</code> entry the light is drawn with. A name with no matching entry draws nothing, silently.</td>
+</tr>
+</tbody>
+</table>
+<p>Optional: a vehicle with no positions draws no lights and does not error.</p>
+<h3 id="pistates">PI.States</h3>
+<p>Each state is a list of the lights it turns on, as <code>{ position, &quot;COLOR&quot;, brightness }</code>:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Index</th>
+<th align="left">Type</th>
+<th align="left">What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">1</td>
+<td align="left">number</td>
+<td align="left">A position number from <code>PI.Positions</code>.</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">string</td>
+<td align="left">The colour, from <a href="emv-meta.html#colours">the colour list</a>. An unknown name is not drawn.</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">number or table, optional</td>
+<td align="left">Brightness. Default 1. A table <code>{ speed, minimum, offset }</code> pulses the light instead. A running light at <code>0.25</code> and a brake light at <code>1</code> on the same position is how one bulb shows both.</td>
+</tr>
+</tbody>
+</table>
+<p>These are the only state names Photon reads. Every one is optional; a state left out never lights
+anything.</p>
+<table>
+<thead>
+<tr>
+<th align="left">State</th>
+<th align="left">Lit when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>Headlights</code></td>
+<td align="left">The headlights are on.</td>
+</tr>
+<tr>
+<td align="left"><code>Running</code></td>
+<td align="left">Someone is driving the vehicle and it is not blacked out.</td>
+</tr>
+<tr>
+<td align="left"><code>Reverse</code></td>
+<td align="left">The vehicle is reversing.</td>
+</tr>
+<tr>
+<td align="left"><code>Brakes</code></td>
+<td align="left">The driver is braking.</td>
+</tr>
+<tr>
+<td align="left"><code>Blink_Left</code></td>
+<td align="left">On the blink, while the left indicator is on and the vehicle is running, or the hazards are on.</td>
+</tr>
+<tr>
+<td align="left"><code>Blink_Right</code></td>
+<td align="left">On the blink, while the right indicator is on and the vehicle is running, or the hazards are on.</td>
+</tr>
+</tbody>
+</table>
+<p>They apply in that order, so when two states light the same position, the later one wins: braking
+over running, an indicator over braking. Names like <code>Brake_Lights</code> or <code>Parking</code> are ignored without a
+warning. If both blink states are missing or empty, the indicator keys do nothing on that vehicle.</p>
+<h3 id="pistatematerials">PI.StateMaterials</h3>
+<p>Optional. Swaps a submaterial on the vehicle model instead of drawing a sprite, for lenses that
+should look lit:</p>
+<pre><code class="language-lua">PI.StateMaterials = {
+	[&quot;tail_lens&quot;] = {
+		Index = 4,
+		States = {
+			[0] = &quot;models/example/tail_lens_off&quot;,
+			[&quot;on&quot;] = &quot;models/example/tail_lens_on&quot;,
+		},
+	},
+}
+
+-- Then, in any state, an entry naming it with a leading underscore:
+PI.States.Running = {
+	{ 3, DR, 0.25 }, { 4, DR, 0.25 },
+	{ &quot;_tail_lens&quot;, &quot;on&quot; },
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>Index</code></td>
+<td align="left">number</td>
+<td align="left">The submaterial index on the vehicle model.</td>
+</tr>
+<tr>
+<td align="left"><code>States[0]</code></td>
+<td align="left">material path, optional</td>
+<td align="left">The material shown when no state uses this entry. Without it, the model's own material is restored.</td>
+</tr>
+<tr>
+<td align="left"><code>States[name]</code></td>
+<td align="left">material path</td>
+<td align="left">The material shown while a state holds <code>{ &quot;_key&quot;, &quot;name&quot; }</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>A <code>&quot;_key&quot;</code> in a state with no matching <code>StateMaterials</code> entry errors, and Photon stops drawing that
+vehicle's lights.</p>
+<h3 id="piconfig">PI.Config</h3>
+<p>Optional.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>BlinkRate</code></td>
+<td align="left">number</td>
+<td align="left">The indicator blink interval, in seconds. Default 0.4.</td>
+</tr>
+</tbody>
+</table></div>
+		</div>
+	</div>
+</div>
+<script>
+var ROOT = "../";
+(function () {
+	var input = document.getElementById("ll-search-input");
+	var list = document.getElementById("ll-search-results");
+	if (!input || !list) { return; }
+	var index = null, loading = false;
+
+	function load() {
+		if (index || loading) { return; }
+		loading = true;
+		fetch(ROOT + "search.json").then(function (response) {
+			return response.json();
+		}).then(function (data) {
+			index = data;
+			loading = false;
+			render();
+		}).catch(function () {
+			loading = false;
+			list.innerHTML = "<li><p>Search index unavailable.</p></li>";
+			list.hidden = false;
+		});
+	}
+
+	// Lower is better: exact name, then prefix, then anywhere in the name, then
+	// only in the description.
+	function score(entry, query) {
+		var name = entry.n.toLowerCase();
+		if (name === query) { return 0; }
+		if (name.lastIndexOf(query, 0) === 0) { return 1; }
+		if (name.indexOf(query) > 0) { return 2; }
+		return (entry.d || "").toLowerCase().indexOf(query) >= 0 ? 3 : -1;
+	}
+
+	function escape(text) {
+		return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	}
+
+	function render() {
+		var query = input.value.trim().toLowerCase();
+		if (!query) { list.hidden = true; list.innerHTML = ""; return; }
+        if (!index) { return; }
+		var hits = [];
+		for (var i = 0; i < index.length; i++) {
+			var rank = score(index[i], query);
+			if (rank >= 0) { hits.push([rank, index[i].n.length, index[i]]); }
+		}
+		hits.sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; });
+		list.innerHTML = hits.slice(0, 20).map(function (hit) {
+			var entry = hit[2];
+			return '<li><a href="' + ROOT + entry.u + '">' + escape(entry.n)
+				+ '<span class="ll-search-kind">' + escape(entry.k) + "</span></a></li>";
+		}).join("") || "<li><p>No matches.</p></li>";
+		list.hidden = false;
+	}
+
+	input.addEventListener("focus", load);
+	input.addEventListener("input", function () { load(); render(); });
+	input.addEventListener("keydown", function (event) {
+		if (event.key === "Escape") { input.value = ""; render(); input.blur(); }
+		if (event.key === "Enter") {
+			var first = list.querySelector("a");
+			if (first) { window.location.href = first.href; }
+		}
+	});
+
+	// "/" jumps to the box, unless the reader is already typing somewhere -
+	// preventDefault stops the slash itself landing in the field.
+	document.addEventListener("keydown", function (event) {
+		if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) { return; }
+		var active = document.activeElement;
+		if (active && (active.isContentEditable
+			|| /^(input|textarea|select)$/i.test(active.tagName))) { return; }
+		event.preventDefault();
+		input.focus();
+		input.select();
+	});
+})();
+</script>
+</body>
+</html>
